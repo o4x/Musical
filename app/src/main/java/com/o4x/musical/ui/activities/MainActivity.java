@@ -42,6 +42,7 @@ import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.base.AbsSlidingMusicPanelActivity;
 import com.o4x.musical.ui.activities.intro.AppIntroActivity;
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment;
+import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.LibraryFragment;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.PreferenceUtil;
@@ -59,8 +60,9 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int APP_INTRO_REQUEST = 100;
 
-    private static final int LIBRARY = 0;
-    private static final int FOLDERS = 1;
+    private static  final int HOME = 0;
+    private static final int LIBRARY = 1;
+    private static final int FOLDERS = 2;
 
     @BindView(R.id.navigation_view)
     NavigationView navigationView;
@@ -121,6 +123,10 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
 
         PreferenceUtil.getInstance(this).setLastMusicChooser(key);
         switch (key) {
+            case HOME:
+                navigationView.setCheckedItem(R.id.nav_home);
+                setCurrentFragment(HomeFragment.newInstance());
+                break;
             case LIBRARY:
                 navigationView.setCheckedItem(R.id.nav_library);
                 setCurrentFragment(LibraryFragment.newInstance());
@@ -175,6 +181,9 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawerLayout.closeDrawers();
             switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    new Handler().postDelayed(() -> setMusicChooser(HOME), 200);
+                    break;
                 case R.id.nav_library:
                     new Handler().postDelayed(() -> setMusicChooser(LIBRARY), 200);
                     break;
