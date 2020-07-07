@@ -17,7 +17,7 @@ import com.afollestad.materialcab.MaterialCab;
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.song.SongAdapter;
+import com.o4x.musical.ui.adapter.song.SongAdapter;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;

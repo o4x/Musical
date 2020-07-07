@@ -23,4 +23,41 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <View
+            android:id="@+id/header_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detail_header_height"
+            android:elevation="@dimen/toolbar_elevation"
+            tools:ignore="UnusedAttribute" />
+
+        <com.github.ksoichiro.android.observablescrollview.ObservableListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:scrollbars="none" >
+
+
+        </com.github.ksoichiro.android.observablescrollview.ObservableListView>
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/empty"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/empty_text_size" />
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

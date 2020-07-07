@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter;
+package com.o4x.musical.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;

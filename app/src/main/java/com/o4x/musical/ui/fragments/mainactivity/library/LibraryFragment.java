@@ -26,7 +26,7 @@ import com.kabouzeid.appthemehelper.common.ATHToolbarActivity;
 import com.kabouzeid.appthemehelper.util.TabLayoutUtil;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.MusicLibraryPagerAdapter;
+import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter;
 import com.o4x.musical.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SortOrder;

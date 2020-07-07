@@ -9,7 +9,7 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.PlaylistAdapter;
+import com.o4x.musical.ui.adapter.PlaylistAdapter;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.loader.PlaylistLoader;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;

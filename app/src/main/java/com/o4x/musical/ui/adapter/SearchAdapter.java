@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter;
+package com.o4x.musical.ui.adapter;
 
 import android.os.Build;
 import androidx.annotation.NonNull;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.glide.ArtistGlideRequest;
 import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;

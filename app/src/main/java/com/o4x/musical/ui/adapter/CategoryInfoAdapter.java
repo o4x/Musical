@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter;
+package com.o4x.musical.ui.adapter;
 
 import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
@@ -16,7 +16,6 @@ import com.o4x.musical.R;
 import com.o4x.musical.model.CategoryInfo;
 import com.o4x.musical.util.SwipeAndDragHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapter.ViewHolder> implements SwipeAndDragHelper.ActionCompletionContract {

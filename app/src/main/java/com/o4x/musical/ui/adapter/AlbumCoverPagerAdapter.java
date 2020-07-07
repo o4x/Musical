@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter;
+package com.o4x.musical.ui.adapter;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -128,7 +128,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
 
         private void loadAlbumCover() {
-            SongGlideRequest.Builder.from(Glide.with(this), song)
+            SongGlideRequest.Builder.from(Glide.with(getContext()), song)
                     .checkIgnoreMediaStore(getActivity())
                     .generatePalette(getActivity()).build()
                     .into(new PhonographColoredTarget(albumCover) {

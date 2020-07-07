@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter.song;
+package com.o4x.musical.ui.adapter.song;
 
 import android.os.Build;
 import androidx.annotation.NonNull;

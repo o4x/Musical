@@ -8,8 +8,8 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.song.ShuffleButtonSongAdapter;
-import com.o4x.musical.adapter.song.SongAdapter;
+import com.o4x.musical.ui.adapter.song.ShuffleButtonSongAdapter;
+import com.o4x.musical.ui.adapter.song.SongAdapter;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;

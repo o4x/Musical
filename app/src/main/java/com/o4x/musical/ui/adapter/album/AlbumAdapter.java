@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter.album;
+package com.o4x.musical.ui.adapter.album;
 
 import android.graphics.drawable.Drawable;
 import androidx.annotation.LayoutRes;
@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.base.AbsMultiSelectAdapter;
-import com.o4x.musical.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.glide.PhonographColoredTarget;
 import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.SortOrder;

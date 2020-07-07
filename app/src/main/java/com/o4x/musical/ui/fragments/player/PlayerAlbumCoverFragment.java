@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.AlbumCoverPagerAdapter;
+import com.o4x.musical.ui.adapter.AlbumCoverPagerAdapter;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
 import com.o4x.musical.misc.SimpleAnimatorListener;

@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter.song;
+package com.o4x.musical.ui.adapter.song;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -10,7 +10,6 @@ import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.MusicUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

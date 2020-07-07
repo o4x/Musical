@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter.album;
+package com.o4x.musical.ui.adapter.album;
 
 import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;

@@ -28,7 +28,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.song.AlbumSongAdapter;
+import com.o4x.musical.ui.adapter.song.AlbumSongAdapter;
 import com.o4x.musical.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.dialogs.DeleteSongsDialog;
 import com.o4x.musical.dialogs.SleepTimerDialog;

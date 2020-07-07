@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter;
+package com.o4x.musical.ui.adapter;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -8,13 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.o4x.musical.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {

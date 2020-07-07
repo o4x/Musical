@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter;
+package com.o4x.musical.ui.adapter;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -16,8 +16,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.base.AbsMultiSelectAdapter;
-import com.o4x.musical.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.glide.audiocover.AudioFileCover;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.util.ImageUtil;
@@ -25,7 +25,6 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewHolder, File> implements FastScrollRecyclerView.SectionedAdapter {

@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.SearchAdapter;
+import com.o4x.musical.ui.adapter.SearchAdapter;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.loader.ArtistLoader;

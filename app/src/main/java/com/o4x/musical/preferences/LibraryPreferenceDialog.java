@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.CategoryInfoAdapter;
+import com.o4x.musical.ui.adapter.CategoryInfoAdapter;
 import com.o4x.musical.model.CategoryInfo;
 import com.o4x.musical.util.PreferenceUtil;
 

@@ -1,4 +1,4 @@
-package com.o4x.musical.adapter;
+package com.o4x.musical.ui.adapter;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -17,8 +17,8 @@ import android.widget.Toast;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
-import com.o4x.musical.adapter.base.AbsMultiSelectAdapter;
-import com.o4x.musical.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.dialogs.ClearSmartPlaylistDialog;
 import com.o4x.musical.dialogs.DeletePlaylistDialog;
 import com.o4x.musical.helper.menu.PlaylistMenuHelper;
