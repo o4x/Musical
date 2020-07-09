@@ -24,11 +24,11 @@ import java.util.List;
  */
 public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAdapter<PlayingQueueAdapter.ViewHolder> {
 
-    private static final int HISTORY = 0;
-    private static final int CURRENT = 1;
-    private static final int UP_NEXT = 2;
+    protected static final int HISTORY = 0;
+    protected static final int CURRENT = 1;
+    protected static final int UP_NEXT = 2;
 
-    private int current;
+    protected int current;
 
     public PlayingQueueAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder) {
         super(activity, dataSet, itemLayoutRes, usePalette, cabHolder);

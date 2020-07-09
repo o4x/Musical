@@ -239,8 +239,8 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
         } else {
             if (navigationDrawerHeader != null) {
                 navigationView.removeHeaderView(navigationDrawerHeader);
-                navigationDrawerHeader = null;
-            }
+            navigationDrawerHeader = null;
+        }
         }
     }
 
