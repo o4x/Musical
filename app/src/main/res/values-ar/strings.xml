@@ -295,4 +295,6 @@
     <string name="sort_order_artist">الفنان</string>
     <string name="sort_order_album">الألبوم</string>
     <string name="sort_order_year">السنة</string>
+    <string name="dialog_ringtone_title">تعيين كنغمة الرنين</string>
+    <string name="dialog_ringtone_message">السماح لـphonograph بتعديل إعدادات الصوت</string>
 </resources>

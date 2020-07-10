@@ -16,7 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.util.DialogUtils;
@@ -32,7 +34,9 @@ import com.o4x.musical.R;
 import com.o4x.musical.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.MusicServiceEventListener;
+import com.o4x.musical.loader.LastAddedLoader;
 import com.o4x.musical.loader.SongLoader;
+import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.MainActivity;
@@ -52,11 +56,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class HomeFragment extends AbsMainActivityFragment implements MainActivity.MainActivityFragmentCallbacks, MusicServiceEventListener {
+public class HomeFragment extends AbsMainActivityFragment implements MainActivity.MainActivityFragmentCallbacks {
 
     private AbsMusicServiceActivity activity;
-
-    private final int headerViewHeight = 176;
 
     private Unbinder unbinder;
 
@@ -69,9 +71,17 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     @BindView(R.id.queue_recycler_view)
     RecyclerView queueView;
+    @BindView(R.id.recently_recycler_view)
+    RecyclerView recentlyView;
+    @BindView(R.id.new_recycler_view)
+    RecyclerView newView;
 
     private HomeAdapter queueAdapter;
     private LinearLayoutManager queueLayoutManager;
+    private QueueListener queueListener;
+
+    private HomeAdapter recentlyAdapter, newAdapter;
+    private GridLayoutManager recentlyLayoutManager, newLayoutManager;
 
     public static HomeFragment newInstance() { return new HomeFragment(); }
 
@@ -101,10 +111,11 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     @Override
     public void onDestroyView() {
-        activity.removeMusicServiceEventListener(this);
+        activity.removeMusicServiceEventListener(queueListener);
 
         queueAdapter = null;
         queueLayoutManager = null;
+        queueListener = null;
 
         super.onDestroyView();
         unbinder.unbind();
@@ -113,7 +124,8 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        activity.addMusicServiceEventListener(this);
+        queueListener = new QueueListener();
+        activity.addMusicServiceEventListener(queueListener);
 
         getMainActivity().setStatusbarColorAuto();
         getMainActivity().setNavigationbarColorAuto();
@@ -174,6 +186,8 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     private void setUpViews() {
         setUpQueueView();
+        setUpRecentlyView();
+        setUpNewView();
     }
 
     private void setUpQueueView() {
@@ -185,67 +199,100 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
                 MusicPlayerRemote.getPlayingQueue(),
                 MusicPlayerRemote.getPosition(),
                 R.layout.item_card_home,
+                null,
                 false
         );
         queueView.setAdapter(queueAdapter);
         queueView.setItemAnimator(animator);
-        queueAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (queueAdapter.getItemCount() == 0) getActivity().finish();
-            }
-        });
-        queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0);
+        queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition(), 0);
     }
 
-    @Override
-    public void onServiceConnected() {
-        updateQueue();
+    private void setUpRecentlyView() {
+        recentlyLayoutManager = new GridLayoutManager(getActivity(), 3);
+        recentlyView.setLayoutManager(recentlyLayoutManager);
+        recentlyAdapter = new HomeAdapter(
+                ((AppCompatActivity) getActivity()),
+                TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(getContext()),
+                0,
+                R.layout.item_card_home,
+                6,
+                false
+        );
+        recentlyView.setAdapter(recentlyAdapter);
     }
 
-    @Override
-    public void onServiceDisconnected() {
-
+    private void setUpNewView() {
+        newLayoutManager = new GridLayoutManager(getActivity(), 3);
+        newView.setLayoutManager(newLayoutManager);
+        newAdapter = new HomeAdapter(
+                ((AppCompatActivity) getActivity()),
+                LastAddedLoader.getLastAddedSongs(getContext()),
+                0,
+                R.layout.item_card_home,
+                9,
+                false
+        );
+        newView.setAdapter(newAdapter);
     }
 
-    @Override
-    public void onQueueChanged() {
-        updateQueue();
+    class QueueListener implements MusicServiceEventListener {
+        @Override
+        public void onServiceConnected() {
+            updateQueue();
+        }
+
+        @Override
+        public void onServiceDisconnected() {
+
+        }
+
+        @Override
+        public void onQueueChanged() {
+            updateQueue();
+        }
+
+        @Override
+        public void onPlayingMetaChanged() {
+            resetToCurrentPosition();
+        }
+
+        @Override
+        public void onPlayStateChanged() {
+
+        }
+
+        @Override
+        public void onRepeatModeChanged() {
+
+        }
+
+        @Override
+        public void onShuffleModeChanged() {
+
+        }
+
+        @Override
+        public void onMediaStoreChanged() {
+            updateQueue();
+        }
+
+        private void updateQueue() {
+            queueAdapter.swapDataSet(MusicPlayerRemote.getPlayingQueue(), MusicPlayerRemote.getPosition());
+            resetToCurrentPosition();
+        }
+
+        private void resetToCurrentPosition() {
+            queueView.stopScroll();
+            RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext()) {
+                @Override
+                protected int getHorizontalSnapPreference() {
+                    return LinearSmoothScroller.SNAP_TO_START;
+                }
+            };
+            smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition());
+            queueLayoutManager.startSmoothScroll(smoothScroller);
+        }
     }
 
-    @Override
-    public void onPlayingMetaChanged() {
-        updateQueue();
-    }
 
-    @Override
-    public void onPlayStateChanged() {
-
-    }
-
-    @Override
-    public void onRepeatModeChanged() {
-
-    }
-
-    @Override
-    public void onShuffleModeChanged() {
-
-    }
-
-    @Override
-    public void onMediaStoreChanged() {
-        updateQueue();
-    }
-
-    private void updateQueue() {
-        queueAdapter.swapDataSet(MusicPlayerRemote.getPlayingQueue(), MusicPlayerRemote.getPosition());
-        resetToCurrentPosition();
-    }
-
-    private void resetToCurrentPosition() {
-        queueView.stopScroll();
-        queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0);
-    }
 }

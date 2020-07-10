@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,9 +36,11 @@ import butterknife.ButterKnife;
 
 public class HomeAdapter extends PlayingQueueAdapter {
 
+    private final Integer limit;
 
-    public HomeAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, boolean usePalette) {
+    public HomeAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable Integer limit, boolean usePalette) {
         super(activity, dataSet, current, itemLayoutRes, usePalette, null);
+        this.limit = limit;
     }
 
     @Override
@@ -47,7 +50,22 @@ public class HomeAdapter extends PlayingQueueAdapter {
 
     @Override
     public int getItemCount() {
-        return dataSet.size();
+        if (limit == null) {
+            return dataSet.size();
+        } else {
+            if(dataSet.size() > limit){
+                return limit;
+            }
+            else
+            {
+                return dataSet.size();
+            }
+        }
+    }
+
+    @Override
+    protected void setAlpha(SongAdapter.ViewHolder holder, float alpha) {
+        // We don't need setAlpha
     }
 
     class ViewHolder extends SongAdapter.ViewHolder {
