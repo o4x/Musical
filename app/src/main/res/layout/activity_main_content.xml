@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <FrameLayout
@@ -10,8 +11,6 @@
         android:layout_height="wrap_content"
         android:elevation="0dp"
         tools:ignore="UnusedAttribute">
-
-        <include layout="@layout/status_bar" />
 
     </FrameLayout>
 

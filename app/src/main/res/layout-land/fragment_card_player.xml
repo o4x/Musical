@@ -11,9 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:fitsSystemWindows="true"
         tools:ignore="UselessParent">
-
-        <include layout="@layout/status_bar" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/player_toolbar"

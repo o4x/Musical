@@ -5,9 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:transitionGroup="true"
+    android:fitsSystemWindows="true"
     tools:ignore="UnusedAttribute">
-
-    <include layout="@layout/status_bar" />
 
     <FrameLayout
         android:layout_width="match_parent"

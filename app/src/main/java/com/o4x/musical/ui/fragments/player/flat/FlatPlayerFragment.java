@@ -61,8 +61,6 @@ public class FlatPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
 
     private Unbinder unbinder;
 
-    @BindView(R.id.player_status_bar)
-    View playerStatusBar;
     @Nullable
     @BindView(R.id.toolbar_container)
     FrameLayout toolbarContainer;
@@ -455,10 +453,9 @@ public class FlatPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
 
         public AnimatorSet createDefaultColorChangeAnimatorSet(int newColor) {
             Animator backgroundAnimator = ViewUtil.createBackgroundColorTransition(fragment.playbackControlsFragment.getView(), fragment.lastColor, newColor);
-            Animator statusBarAnimator = ViewUtil.createBackgroundColorTransition(fragment.playerStatusBar, fragment.lastColor, newColor);
 
             AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.playTogether(backgroundAnimator, statusBarAnimator);
+            animatorSet.playTogether(backgroundAnimator);
 
             if (!ATHUtil.isWindowBackgroundDark(fragment.getActivity())) {
                 int adjustedLastColor = ColorUtil.isColorLight(fragment.lastColor) ? ColorUtil.darkenColor(fragment.lastColor) : fragment.lastColor;

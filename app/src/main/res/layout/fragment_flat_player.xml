@@ -2,23 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <com.o4x.musical.views.StatusBarView
-            android:id="@+id/player_status_bar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/status_bar_padding" />
-
-        <com.o4x.musical.views.StatusBarView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/status_bar_padding"
-            android:background="@color/twenty_percent_black_overlay" />
-
-    </FrameLayout>
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"

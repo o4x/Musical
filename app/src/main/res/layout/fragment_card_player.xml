@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <!--The unused FrameLayout layout is necessary to prevent a crash on rotate-->
 
@@ -68,10 +69,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
-                    <com.o4x.musical.views.StatusBarView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/status_bar_padding" />
 
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/player_toolbar"
