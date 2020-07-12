@@ -3,6 +3,7 @@ package com.o4x.musical.ui.fragments.mainactivity.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ import com.o4x.musical.ui.adapter.home.HomeAdapter;
 import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
+import com.o4x.musical.util.Util;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -138,8 +140,8 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     private void setUpToolbar() {
         int primaryColor = ThemeStore.primaryColor(getActivity());
-        appbar.setBackgroundColor(primaryColor);
-        toolbar.setBackgroundColor(primaryColor);
+//        appbar.setBackgroundColor(primaryColor);
+//        toolbar.setBackgroundColor(primaryColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         getActivity().setTitle(R.string.app_name);
         getMainActivity().setSupportActionBar(toolbar);
@@ -192,7 +194,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     private void setUpQueueView() {
         final GeneralItemAnimator animator = new RefactoredDefaultItemAnimator();
-        queueLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        queueLayoutManager = getLinearLayoutManager();
         queueView.setLayoutManager(queueLayoutManager);
         queueAdapter = new HomeAdapter(
                 ((AppCompatActivity) getActivity()),
@@ -208,28 +210,28 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private void setUpRecentlyView() {
-        recentlyLayoutManager = new GridLayoutManager(getActivity(), 3);
+        recentlyLayoutManager = getGridLayoutManager();
         recentlyView.setLayoutManager(recentlyLayoutManager);
         recentlyAdapter = new HomeAdapter(
                 ((AppCompatActivity) getActivity()),
                 TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(getContext()),
                 0,
                 R.layout.item_card_home,
-                6,
+                getGridSize() * 2,
                 false
         );
         recentlyView.setAdapter(recentlyAdapter);
     }
 
     private void setUpNewView() {
-        newLayoutManager = new GridLayoutManager(getActivity(), 3);
+        newLayoutManager = getGridLayoutManager();
         newView.setLayoutManager(newLayoutManager);
         newAdapter = new HomeAdapter(
                 ((AppCompatActivity) getActivity()),
                 LastAddedLoader.getLastAddedSongs(getContext()),
                 0,
                 R.layout.item_card_home,
-                9,
+                getGridSize() * 3,
                 false
         );
         newView.setAdapter(newAdapter);
@@ -294,5 +296,52 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         }
     }
 
+    private int getGridSize() {
+        switch (
+                getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK
+        ) {
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                if (Util.isLandscape(getResources())) {
+                    return 6;
+                } else {
+                    return 4;
+                }
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                if (Util.isLandscape(getResources())) {
+                    return 9;
+                } else {
+                    return 5;
+                }
+            default:
+                if (Util.isLandscape(getResources())) {
+                    return 5;
+                } else {
+                    return 3;
+                }
+        }
+    }
 
+    private GridLayoutManager getGridLayoutManager() {
+        final int size = getGridSize();
+        return new GridLayoutManager(getActivity(), size) {
+            @Override
+            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
+                lp.width = getWidth() / size;
+                lp.height = (int) (lp.width * 1.5);
+                return super.checkLayoutParams(lp);
+            }
+        };
+    }
+
+    private LinearLayoutManager getLinearLayoutManager() {
+        final int size = getGridSize();
+        return new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false) {
+            @Override
+            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
+                lp.width = getWidth() / size;
+                lp.height = (int) (lp.width * 1.5);
+                return super.checkLayoutParams(lp);
+            }
+        };
+    }
 }

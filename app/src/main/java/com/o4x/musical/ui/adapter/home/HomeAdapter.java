@@ -1,19 +1,13 @@
 package com.o4x.musical.ui.adapter.home;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
@@ -22,17 +16,11 @@ import com.o4x.musical.R;
 import com.o4x.musical.glide.PhonographColoredTarget;
 import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.adapter.album.AlbumAdapter;
-import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
 import com.o4x.musical.ui.adapter.song.SongAdapter;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class HomeAdapter extends PlayingQueueAdapter {
 
