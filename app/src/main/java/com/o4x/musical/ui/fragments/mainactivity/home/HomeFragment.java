@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.fragments.mainactivity.home;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -50,6 +52,7 @@ import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 import com.o4x.musical.util.Util;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.xw.repo.widget.BounceScrollView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +74,8 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     @BindView(android.R.id.empty)
     View empty;
 
+    @BindView(R.id.nested_scroll_view)
+    BounceScrollView bounceScrollView;
     @BindView(R.id.queue_recycler_view)
     RecyclerView queueView;
     @BindView(R.id.recently_recycler_view)
@@ -140,8 +145,8 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     private void setUpToolbar() {
         int primaryColor = ThemeStore.primaryColor(getActivity());
-//        appbar.setBackgroundColor(primaryColor);
-//        toolbar.setBackgroundColor(primaryColor);
+        appbar.setBackgroundColor(primaryColor);
+        toolbar.setBackgroundColor(primaryColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         getActivity().setTitle(R.string.app_name);
         getMainActivity().setSupportActionBar(toolbar);
@@ -187,9 +192,43 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private void setUpViews() {
+        setUpBounceScrollView();
         setUpQueueView();
         setUpRecentlyView();
         setUpNewView();
+    }
+
+    private void setUpBounceScrollView() {
+        float dp = getResources().getDisplayMetrics().density;
+        float appbarHeight = 56 * dp;
+        float headerHeight = getResources().getDimension(R.dimen.home_header_height) - appbarHeight;
+        bounceScrollView.setOnScrollChangeListener(
+                (BounceScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                    if (scrollY > headerHeight) {
+                        if (scrollY > oldScrollY) {
+                            appbar.setY(
+                                    Math.max(
+                                            -appbarHeight , appbar.getY() + (oldScrollY - scrollY)
+                                    )
+                            );
+                        } else {
+                            appbar.setY(
+                                    Math.min(
+                                            0, appbar.getY() + (oldScrollY - scrollY)
+                                    )
+                            );
+                        }
+                    } else {
+                        appbar.setY(0);
+                    }
+                }
+        );
+
+        bounceScrollView.setOnOverScrollListener(
+                (fromStart, overScrolledDistance) -> {
+                    Log.d("sss", String.valueOf(overScrolledDistance) + ":" + fromStart);
+                }
+        );
     }
 
     private void setUpQueueView() {
@@ -235,6 +274,30 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
                 false
         );
         newView.setAdapter(newAdapter);
+    }
+
+    private GridLayoutManager getGridLayoutManager() {
+        final int size = getGridSize();
+        return new GridLayoutManager(getActivity(), size) {
+            @Override
+            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
+                lp.width = getWidth() / size;
+                lp.height = (int) (lp.width * 1.5);
+                return super.checkLayoutParams(lp);
+            }
+        };
+    }
+
+    private LinearLayoutManager getLinearLayoutManager() {
+        final int size = getGridSize();
+        return new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false) {
+            @Override
+            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
+                lp.width = getWidth() / size;
+                lp.height = (int) (lp.width * 1.5);
+                return super.checkLayoutParams(lp);
+            }
+        };
     }
 
     class QueueListener implements MusicServiceEventListener {
@@ -297,51 +360,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private int getGridSize() {
-        switch (
-                getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK
-        ) {
-            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                if (Util.isLandscape(getResources())) {
-                    return 6;
-                } else {
-                    return 4;
-                }
-            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-                if (Util.isLandscape(getResources())) {
-                    return 9;
-                } else {
-                    return 5;
-                }
-            default:
-                if (Util.isLandscape(getResources())) {
-                    return 5;
-                } else {
-                    return 3;
-                }
-        }
+        return getResources().getInteger(R.integer.home_grid_columns);
     }
 
-    private GridLayoutManager getGridLayoutManager() {
-        final int size = getGridSize();
-        return new GridLayoutManager(getActivity(), size) {
-            @Override
-            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
-                lp.width = getWidth() / size;
-                lp.height = (int) (lp.width * 1.5);
-                return super.checkLayoutParams(lp);
-            }
-        };
-    }
-
-    private LinearLayoutManager getLinearLayoutManager() {
-        final int size = getGridSize();
-        return new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false) {
-            @Override
-            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
-                lp.width = getWidth() / size;
-                lp.height = (int) (lp.width * 1.5);
-                return super.checkLayoutParams(lp);
-            }
-        };
-    }
 }

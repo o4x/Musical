@@ -9,26 +9,28 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
+        android:elevation="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/Toolbar"
-            android:elevation="0dp"
-            app:layout_scrollFlags="scroll|enterAlways">
 
-        </androidx.appcompat.widget.Toolbar>
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
-        <androidx.core.widget.NestedScrollView
+
+
+
+        <com.xw.repo.widget.BounceScrollView
+            android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none">
@@ -38,28 +40,35 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/home_header_height" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/queue_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="8dp"
-                    android:overScrollMode="never"/>
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="always"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recently_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
                     android:overScrollMode="never"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/new_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never"/>
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never" />
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </com.xw.repo.widget.BounceScrollView>
 
         <TextView
             android:id="@android:id/empty"
