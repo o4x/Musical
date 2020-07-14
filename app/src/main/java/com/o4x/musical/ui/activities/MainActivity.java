@@ -44,6 +44,7 @@ import com.o4x.musical.ui.activities.intro.AppIntroActivity;
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment;
 import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.LibraryFragment;
+import com.o4x.musical.ui.fragments.mainactivity.queue.QueueFragment;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.PreferenceUtil;
 
@@ -61,8 +62,9 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
     public static final int APP_INTRO_REQUEST = 100;
 
     private static  final int HOME = 0;
-    private static final int LIBRARY = 1;
-    private static final int FOLDERS = 2;
+    private static final int QUEUE = 1;
+    private static final int LIBRARY = 2;
+    private static final int FOLDERS = 3;
 
     @BindView(R.id.navigation_view)
     NavigationView navigationView;
@@ -80,12 +82,12 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setDrawUnderStatusbar();
+//        setDrawUnderStatusbar();
         ButterKnife.bind(this);
 
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            navigationView.setFitsSystemWindows(false); // for header to go below statusbar
-        }
+//        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+//            navigationView.setFitsSystemWindows(false); // for header to go below statusbar
+//        }
 
         setUpDrawerLayout();
 
@@ -126,6 +128,10 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
             case HOME:
                 navigationView.setCheckedItem(R.id.nav_home);
                 setCurrentFragment(HomeFragment.newInstance());
+                break;
+            case QUEUE:
+                navigationView.setCheckedItem(R.id.nav_queue);
+                setCurrentFragment(QueueFragment.newInstance());
                 break;
             case LIBRARY:
                 navigationView.setCheckedItem(R.id.nav_library);
@@ -183,6 +189,9 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
                     new Handler().postDelayed(() -> setMusicChooser(HOME), 200);
+                    break;
+                case R.id.nav_queue:
+                    new Handler().postDelayed(() -> setMusicChooser(QUEUE), 200);
                     break;
                 case R.id.nav_library:
                     new Handler().postDelayed(() -> setMusicChooser(LIBRARY), 200);

@@ -311,4 +311,8 @@
     <string name="finish_current_music_sleep_timer">Finish last song</string>
     <string name="dialog_ringtone_title">Set ringtone</string>
     <string name="dialog_ringtone_message">Allow phonograph to modify audio settings</string>
+    <string name="playing_queue">Playing queue</string>
+    <string name="open">OPEN</string>
+    <string name="recently_added">Recently added</string>
+    <string name="recently_played">Recently played</string>
 </resources>

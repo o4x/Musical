@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_baseline_home_white_24dp"
             android:title="@string/home" />
         <item
+            android:id="@+id/nav_queue"
+            android:icon="@drawable/ic_baseline_queue_white_24dp"
+            android:title="Queue" />
+        <item
             android:id="@+id/nav_library"
             android:icon="@drawable/ic_library_music_white_24dp"
             android:title="@string/library" />

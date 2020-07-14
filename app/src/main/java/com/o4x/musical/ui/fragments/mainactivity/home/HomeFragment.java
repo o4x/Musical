@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -156,7 +157,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private void setUpToolbar() {
-        int primaryColor = ThemeStore.primaryColor(getActivity());
+        int primaryColor = Color.TRANSPARENT;
         appbar.setBackgroundColor(primaryColor);
         toolbar.setBackgroundColor(primaryColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
@@ -170,7 +171,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         inflater.inflate(R.menu.menu_main, menu);
         Activity activity = getActivity();
         if (activity == null) return;
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getActivity(), toolbar, menu, ATHToolbarActivity.getToolbarBackgroundColor(toolbar));
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getActivity(), toolbar, menu, Color.TRANSPARENT);
     }
 
     @Override
@@ -209,6 +210,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         setUpQueueView();
         setUpRecentlyView();
         setUpNewView();
+        checkIsEmpty();
     }
 
     private void setUpHeights() {
@@ -345,6 +347,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         public void onServiceConnected() {
             updatePoster();
             updateQueue();
+            checkIsEmpty();
         }
 
         @Override
@@ -424,6 +427,17 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
             };
             smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition());
             queueLayoutManager.startSmoothScroll(smoothScroller);
+        }
+    }
+
+    private void checkIsEmpty() {
+        if (empty != null) {
+            empty.setVisibility(
+                    (queueAdapter == null || queueAdapter.getItemCount() == 0) &
+                    (recentlyAdapter == null || recentlyAdapter.getItemCount() == 0) &
+                    (newAdapter == null || newAdapter.getItemCount() == 0)
+                            ? View.VISIBLE : View.GONE
+            );
         }
     }
 
