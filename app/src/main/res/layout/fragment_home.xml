@@ -26,7 +26,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"/>
 
 
         <com.xw.repo.widget.BounceScrollView
@@ -41,8 +45,9 @@
                 android:orientation="vertical">
 
                 <View
+                    android:id="@+id/header"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/home_header_height" />
+                    android:layout_height="0dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/queue_recycler_view"

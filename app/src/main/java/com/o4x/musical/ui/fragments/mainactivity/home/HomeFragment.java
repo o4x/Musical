@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +29,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.util.DialogUtils;
+import com.bumptech.glide.Glide;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
@@ -35,6 +40,7 @@ import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.dialogs.CreatePlaylistDialog;
+import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.MusicServiceEventListener;
 import com.o4x.musical.loader.LastAddedLoader;
@@ -50,6 +56,7 @@ import com.o4x.musical.ui.adapter.home.HomeAdapter;
 import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
+import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.Util;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.xw.repo.widget.BounceScrollView;
@@ -73,6 +80,11 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     AppBarLayout appbar;
     @BindView(android.R.id.empty)
     View empty;
+
+    @BindView(R.id.header)
+    View header;
+    @BindView(R.id.poster)
+    ImageView poster;
 
     @BindView(R.id.nested_scroll_view)
     BounceScrollView bounceScrollView;
@@ -192,18 +204,40 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private void setUpViews() {
+        setUpHeights();
         setUpBounceScrollView();
         setUpQueueView();
         setUpRecentlyView();
         setUpNewView();
     }
 
+    private void setUpHeights() {
+        int displayHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        ViewGroup.LayoutParams params;
+
+        // Set up header height
+        params = header.getLayoutParams();
+        params.height = displayHeight / 3;
+        header.setLayoutParams(params);
+
+        // Set up poster image height
+        params = poster.getLayoutParams();
+        params.height = displayHeight / 2;
+        poster.setLayoutParams(params);
+
+    }
+
     private void setUpBounceScrollView() {
+        int displayHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         float dp = getResources().getDisplayMetrics().density;
         float appbarHeight = 56 * dp;
-        float headerHeight = getResources().getDimension(R.dimen.home_header_height) - appbarHeight;
+        float headerHeight = header.getLayoutParams().height - appbarHeight;
         bounceScrollView.setOnScrollChangeListener(
                 (BounceScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                    // Scroll poster
+                    poster.setY(-scrollY / (displayHeight * 2 / poster.getLayoutParams().height));
+
+                    // Scroll appbar
                     if (scrollY > headerHeight) {
                         if (scrollY > oldScrollY) {
                             appbar.setY(
@@ -226,7 +260,9 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
         bounceScrollView.setOnOverScrollListener(
                 (fromStart, overScrolledDistance) -> {
-                    Log.d("sss", String.valueOf(overScrolledDistance) + ":" + fromStart);
+                    float scale = 1 + ((float) overScrolledDistance / (float) displayHeight);
+                    poster.setScaleX(scale);
+                    poster.setScaleY(scale);
                 }
         );
     }
@@ -253,7 +289,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         recentlyView.setLayoutManager(recentlyLayoutManager);
         recentlyAdapter = new HomeAdapter(
                 ((AppCompatActivity) getActivity()),
-                TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(getContext()),
+                TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(activity),
                 0,
                 R.layout.item_card_home,
                 getGridSize() * 2,
@@ -300,9 +336,14 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         };
     }
 
+    private int getGridSize() {
+        return getResources().getInteger(R.integer.home_grid_columns);
+    }
+
     class QueueListener implements MusicServiceEventListener {
         @Override
         public void onServiceConnected() {
+            updatePoster();
             updateQueue();
         }
 
@@ -318,6 +359,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
         @Override
         public void onPlayingMetaChanged() {
+            updatePoster();
             resetToCurrentPosition();
         }
 
@@ -341,6 +383,32 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
             updateQueue();
         }
 
+        private void updatePoster() {
+            if (!MusicPlayerRemote.getPlayingQueue().isEmpty()) {
+                Song song = MusicPlayerRemote.getCurrentSong();
+//                if (navigationDrawerHeader == null) {
+//                    navigationDrawerHeader = navigationView.inflateHeaderView(R.layout.navigation_drawer_header);
+//                    //noinspection ConstantConditions
+//                    navigationDrawerHeader.setOnClickListener(v -> {
+//                        drawerLayout.closeDrawers();
+//                        if (getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+//                            expandPanel();
+//                        }
+//                    });
+//                }
+//                ((TextView) navigationDrawerHeader.findViewById(R.id.title)).setText(song.title);
+//                ((TextView) navigationDrawerHeader.findViewById(R.id.text)).setText(MusicUtil.getSongInfoString(song));
+                SongGlideRequest.Builder.from(Glide.with(activity), song)
+                        .checkIgnoreMediaStore(activity).build()
+                        .into(poster);
+            } else {
+//                if (navigationDrawerHeader != null) {
+//                    navigationView.removeHeaderView(navigationDrawerHeader);
+//                    navigationDrawerHeader = null;
+//                }
+            }
+        }
+
         private void updateQueue() {
             queueAdapter.swapDataSet(MusicPlayerRemote.getPlayingQueue(), MusicPlayerRemote.getPosition());
             resetToCurrentPosition();
@@ -357,10 +425,6 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
             smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition());
             queueLayoutManager.startSmoothScroll(smoothScroller);
         }
-    }
-
-    private int getGridSize() {
-        return getResources().getInteger(R.integer.home_grid_columns);
     }
 
 }
