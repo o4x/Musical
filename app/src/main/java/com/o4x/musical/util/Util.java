@@ -25,6 +25,15 @@ import com.o4x.musical.R;
  */
 public class Util {
 
+    public static int getStatusBarHeight(@NonNull Context context) {
+        int result = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     public static int getActionBarSize(@NonNull Context context) {
         TypedValue typedValue = new TypedValue();
         int[] textSizeAttr = new int[]{R.attr.actionBarSize};

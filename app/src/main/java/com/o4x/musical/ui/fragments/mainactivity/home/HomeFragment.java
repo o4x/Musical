@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,6 +61,7 @@ import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.Util;
+import com.o4x.musical.util.ViewUtil;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.xw.repo.widget.BounceScrollView;
 
@@ -103,6 +106,8 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     private HomeAdapter recentlyAdapter, newAdapter;
     private GridLayoutManager recentlyLayoutManager, newLayoutManager;
 
+    final int primaryColor = Color.TRANSPARENT;
+
     public static HomeFragment newInstance() { return new HomeFragment(); }
 
     @Override
@@ -124,6 +129,9 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        view.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        );
         unbinder = ButterKnife.bind(this, view);
 
         return view;
@@ -147,7 +155,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         queueListener = new QueueListener();
         activity.addMusicServiceEventListener(queueListener);
 
-        getMainActivity().setStatusbarColorAuto();
+        getMainActivity().setStatusbarColor(primaryColor);
         getMainActivity().setNavigationbarColorAuto();
         getMainActivity().setTaskDescriptionColorAuto();
 
@@ -157,7 +165,6 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private void setUpToolbar() {
-        int primaryColor = Color.TRANSPARENT;
         appbar.setBackgroundColor(primaryColor);
         toolbar.setBackgroundColor(primaryColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
@@ -171,7 +178,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         inflater.inflate(R.menu.menu_main, menu);
         Activity activity = getActivity();
         if (activity == null) return;
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getActivity(), toolbar, menu, Color.TRANSPARENT);
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getActivity(), toolbar, menu, primaryColor);
     }
 
     @Override
@@ -230,21 +237,28 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private void setUpBounceScrollView() {
-        int displayHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        float dp = getResources().getDisplayMetrics().density;
-        float appbarHeight = 56 * dp;
-        float headerHeight = header.getLayoutParams().height - appbarHeight;
+        final int displayHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        final int statusBarHeight = Util.getStatusBarHeight(activity);
+        final int appbarHeight = toolbar.getLayoutParams().height;
+
+
+        // get real header height
+        float headerHeight = header.getLayoutParams().height - appbarHeight - statusBarHeight;
+
         bounceScrollView.setOnScrollChangeListener(
                 (BounceScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+
                     // Scroll poster
-                    poster.setY(-scrollY / (displayHeight * 2 / poster.getLayoutParams().height));
+                    poster.setY(-scrollY / (displayHeight * 2 / (float) poster.getLayoutParams().height));
 
                     // Scroll appbar
                     if (scrollY > headerHeight) {
+                        getMainActivity().setStatusbarColor(Color.WHITE);
+                        appbar.setElevation(8);
                         if (scrollY > oldScrollY) {
                             appbar.setY(
                                     Math.max(
-                                            -appbarHeight , appbar.getY() + (oldScrollY - scrollY)
+                                            -appbarHeight, appbar.getY() + (oldScrollY - scrollY)
                                     )
                             );
                         } else {
@@ -255,6 +269,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
                             );
                         }
                     } else {
+                        getMainActivity().setStatusbarColor(primaryColor);
                         appbar.setY(0);
                     }
                 }

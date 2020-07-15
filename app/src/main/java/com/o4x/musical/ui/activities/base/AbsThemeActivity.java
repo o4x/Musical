@@ -1,10 +1,17 @@
 package com.o4x.musical.ui.activities.base;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.ColorInt;
 import android.view.View;
+
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
 
 import com.kabouzeid.appthemehelper.ATH;
 import com.kabouzeid.appthemehelper.ThemeStore;
@@ -44,17 +51,30 @@ public abstract class AbsThemeActivity extends ATHToolbarActivity {
     public void setStatusbarColor(int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             final View statusBar = getWindow().getDecorView().getRootView().findViewById(R.id.status_bar);
-            if (statusBar != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    statusBar.setBackgroundColor(ColorUtil.darkenColor(color));
-                    setLightStatusbarAuto(color);
-                } else {
-                    statusBar.setBackgroundColor(color);
+            int colorFrom = getWindow().getStatusBarColor();;
+            int colorTo = color;
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            colorAnimation.setDuration(5000); // milliseconds
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    getWindow().setStatusBarColor((int) animator.getAnimatedValue());
                 }
-            } else if (Build.VERSION.SDK_INT >= 21) {
-                getWindow().setStatusBarColor(ColorUtil.darkenColor(color));
-                setLightStatusbarAuto(color);
-            }
+
+            });
+            colorAnimation.start();
+//            if (statusBar != null) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    statusBar.setBackgroundColor(ColorUtil.darkenColor(color));
+//                    setLightStatusbarAuto(color);
+//                } else {
+//                    statusBar.setBackgroundColor(color);
+//                }
+//            } else if (Build.VERSION.SDK_INT >= 21) {
+//                getWindow().setStatusBarColor(ColorUtil.darkenColor(color));
+//                setLightStatusbarAuto(color);
+//            }
         }
     }
 
