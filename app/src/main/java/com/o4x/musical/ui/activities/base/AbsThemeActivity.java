@@ -1,7 +1,5 @@
 package com.o4x.musical.ui.activities.base;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
@@ -31,11 +29,8 @@ public abstract class AbsThemeActivity extends ATHToolbarActivity {
         MaterialDialogsUtil.updateMaterialDialogsThemeSingleton(this);
     }
 
-    protected void setDrawUnderStatusbar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            Util.setAllowDrawUnderStatusBar(getWindow());
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-            Util.setStatusBarTranslucent(getWindow());
+    protected void setDrawUnderBar() {
+        Util.setAllowDrawUnderBar(getWindow());
     }
 
     /**

@@ -116,7 +116,7 @@ public class AlbumDetailActivity extends AbsSlidingMusicPanelActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setDrawUnderStatusbar();
+        setDrawUnderBar();
         ButterKnife.bind(this);
 
         lastFMRestClient = new LastFMRestClient(this);

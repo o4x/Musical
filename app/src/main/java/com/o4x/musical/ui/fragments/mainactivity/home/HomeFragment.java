@@ -130,9 +130,6 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        view.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        );
         unbinder = ButterKnife.bind(this, view);
 
         return view;
