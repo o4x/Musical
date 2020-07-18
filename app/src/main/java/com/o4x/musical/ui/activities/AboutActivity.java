@@ -107,8 +107,8 @@ public class AboutActivity extends AbsBaseActivity implements View.OnClickListen
         setDrawUnderStatusbar();
         ButterKnife.bind(this);
 
-        setStatusbarColorAuto();
-        setNavigationbarColorAuto();
+        setStatusBarColorAuto();
+        setNavigationBarColorAuto();
         setTaskDescriptionColorAuto();
 
         setUpViews();

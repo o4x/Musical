@@ -3,7 +3,6 @@ package com.o4x.musical.ui.fragments.mainactivity.queue;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,19 +10,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
@@ -33,21 +28,14 @@ import com.kabouzeid.appthemehelper.common.ATHToolbarActivity;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.dialogs.CreatePlaylistDialog;
-import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.MusicServiceEventListener;
-import com.o4x.musical.loader.LastAddedLoader;
 import com.o4x.musical.loader.SongLoader;
-import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader;
-import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
-import com.o4x.musical.ui.adapter.home.HomeAdapter;
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
-import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment;
-import com.xw.repo.widget.BounceScrollView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -120,8 +108,8 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
         queueListener = new QueueFragment.QueueListener();
         activity.addMusicServiceEventListener(queueListener);
 
-        getMainActivity().setStatusbarColorAuto();
-        getMainActivity().setNavigationbarColorAuto();
+        getMainActivity().setStatusBarColorAuto();
+        getMainActivity().setNavigationBarColorAuto();
         getMainActivity().setTaskDescriptionColorAuto();
 
         setUpToolbar();

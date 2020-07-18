@@ -46,8 +46,8 @@ public class PurchaseActivity extends AbsBaseActivity implements BillingProcesso
         setDrawUnderStatusbar();
         ButterKnife.bind(this);
 
-        setStatusbarColor(ACTIVITY_COLOR);
-        setNavigationbarColor(ACTIVITY_COLOR);
+        setStatusBarColor(ACTIVITY_COLOR);
+        setNavigationBarColor(ACTIVITY_COLOR);
         setTaskDescriptionColor(ACTIVITY_COLOR);
 
         setSupportActionBar(toolbar);

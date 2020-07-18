@@ -74,8 +74,8 @@ public class PlaylistDetailActivity extends AbsSlidingMusicPanelActivity impleme
         setDrawUnderStatusbar();
         ButterKnife.bind(this);
 
-        setStatusbarColorAuto();
-        setNavigationbarColorAuto();
+        setStatusBarColorAuto();
+        setNavigationBarColorAuto();
         setTaskDescriptionColorAuto();
 
         playlist = getIntent().getExtras().getParcelable(EXTRA_PLAYLIST);

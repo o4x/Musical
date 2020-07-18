@@ -57,8 +57,8 @@ public class SearchActivity extends AbsMusicServiceActivity implements SearchVie
         setDrawUnderStatusbar();
         ButterKnife.bind(this);
 
-        setStatusbarColorAuto();
-        setNavigationbarColorAuto();
+        setStatusBarColorAuto();
+        setNavigationBarColorAuto();
         setTaskDescriptionColorAuto();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

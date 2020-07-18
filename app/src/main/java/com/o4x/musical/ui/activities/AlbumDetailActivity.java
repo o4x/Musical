@@ -181,12 +181,12 @@ public class AlbumDetailActivity extends AbsSlidingMusicPanelActivity implements
         toolbarColor = color;
         headerView.setBackgroundColor(color);
 
-        setNavigationbarColor(color);
+        setNavigationBarColor(color);
         setTaskDescriptionColor(color);
 
         toolbar.setBackgroundColor(color);
         setSupportActionBar(toolbar); // needed to auto readjust the toolbar content color
-        setStatusbarColor(color);
+        setStatusBarColor(color);
 
         int secondaryTextColor = MaterialValueHelper.getSecondaryTextColor(this, ColorUtil.isColorLight(color));
         artistIconImageView.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
@@ -400,9 +400,9 @@ public class AlbumDetailActivity extends AbsSlidingMusicPanelActivity implements
     }
 
     @Override
-    public void setStatusbarColor(int color) {
-        super.setStatusbarColor(color);
-        setLightStatusbar(false);
+    public void setStatusBarColor(int color) {
+        super.setStatusBarColor(color);
+        setLightStatusBar(false);
     }
 
     private void setAlbum(Album album) {

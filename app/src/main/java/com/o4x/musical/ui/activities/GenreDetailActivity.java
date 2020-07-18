@@ -62,8 +62,8 @@ public class GenreDetailActivity extends AbsSlidingMusicPanelActivity implements
         setDrawUnderStatusbar();
         ButterKnife.bind(this);
 
-        setStatusbarColorAuto();
-        setNavigationbarColorAuto();
+        setStatusBarColorAuto();
+        setNavigationBarColorAuto();
         setTaskDescriptionColorAuto();
 
         genre = getIntent().getExtras().getParcelable(EXTRA_GENRE);

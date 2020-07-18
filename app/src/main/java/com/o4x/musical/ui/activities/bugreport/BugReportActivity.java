@@ -104,8 +104,8 @@ public class BugReportActivity extends AbsThemeActivity {
         setContentView(R.layout.activity_bug_report);
         ButterKnife.bind(this);
 
-        setStatusbarColorAuto();
-        setNavigationbarColorAuto();
+        setStatusBarColorAuto();
+        setNavigationBarColorAuto();
         setTaskDescriptionColorAuto();
 
         initViews();

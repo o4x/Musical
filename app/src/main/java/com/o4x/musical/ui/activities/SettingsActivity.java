@@ -56,8 +56,8 @@ public class SettingsActivity extends AbsBaseActivity implements ColorChooserDia
         setDrawUnderStatusbar();
         ButterKnife.bind(this);
 
-        setStatusbarColorAuto();
-        setNavigationbarColorAuto();
+        setStatusBarColorAuto();
+        setNavigationBarColorAuto();
         setTaskDescriptionColorAuto();
 
         toolbar.setBackgroundColor(ThemeStore.primaryColor(this));

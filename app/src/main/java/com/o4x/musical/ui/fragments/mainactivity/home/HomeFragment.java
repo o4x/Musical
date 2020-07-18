@@ -1,12 +1,13 @@
 package com.o4x.musical.ui.fragments.mainactivity.home;
 
-import android.annotation.SuppressLint;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,29 +17,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.util.DialogUtils;
 import com.bumptech.glide.Glide;
-import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
 import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.common.ATHToolbarActivity;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
@@ -49,24 +46,17 @@ import com.o4x.musical.interfaces.MusicServiceEventListener;
 import com.o4x.musical.loader.LastAddedLoader;
 import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader;
-import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
-import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
 import com.o4x.musical.ui.adapter.home.HomeAdapter;
-import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
-import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
-import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.ViewUtil;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.xw.repo.widget.BounceScrollView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,8 +77,12 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     @BindView(R.id.header)
     View header;
+    @BindView(R.id.poster_parent)
+    FrameLayout posterParent;
     @BindView(R.id.poster)
     ImageView poster;
+    @BindView(R.id.poster_gradient)
+    View posterGradient;
 
     @BindView(R.id.nested_scroll_view)
     BounceScrollView bounceScrollView;
@@ -105,8 +99,6 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     private HomeAdapter recentlyAdapter, newAdapter;
     private GridLayoutManager recentlyLayoutManager, newLayoutManager;
-
-    final int primaryColor = Color.TRANSPARENT;
 
     public static HomeFragment newInstance() { return new HomeFragment(); }
 
@@ -155,8 +147,8 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         queueListener = new QueueListener();
         activity.addMusicServiceEventListener(queueListener);
 
-        getMainActivity().setStatusbarColor(primaryColor);
-        getMainActivity().setNavigationbarColorAuto();
+        getMainActivity().setStatusBarColor(transparentColor());
+        getMainActivity().setNavigationBarColorAuto();
         getMainActivity().setTaskDescriptionColorAuto();
 
         setUpToolbar();
@@ -164,9 +156,14 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         setUpViews();
     }
 
+    private int transparentColor() {
+        return ColorUtil.withAlpha(ThemeStore.primaryColor(activity), 0);
+    }
+
     private void setUpToolbar() {
-        appbar.setBackgroundColor(primaryColor);
-        toolbar.setBackgroundColor(primaryColor);
+        final int transparentColor = transparentColor();
+        appbar.setBackgroundColor(transparentColor);
+        toolbar.setBackgroundColor(transparentColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         getActivity().setTitle(R.string.app_name);
         getMainActivity().setSupportActionBar(toolbar);
@@ -178,7 +175,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         inflater.inflate(R.menu.menu_main, menu);
         Activity activity = getActivity();
         if (activity == null) return;
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getActivity(), toolbar, menu, primaryColor);
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getActivity(), toolbar, menu, ThemeStore.primaryColor(activity));
     }
 
     @Override
@@ -211,6 +208,22 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         return false;
     }
 
+    public void setAppbarColor(int color) {
+        int colorFrom = ViewUtil.getViewBackgroundColor(appbar);
+        int colorTo = color;
+        if (colorFrom == colorTo) return;
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(400); // milliseconds
+        colorAnimation.addUpdateListener(
+                animator -> {
+                    int background = (int) animator.getAnimatedValue();
+                    appbar.setBackgroundColor(background);
+                    toolbar.setBackgroundColor(background);
+                }
+        );
+        colorAnimation.start();
+    }
+
     private void setUpViews() {
         setUpHeights();
         setUpBounceScrollView();
@@ -219,6 +232,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         setUpNewView();
         checkIsEmpty();
     }
+
 
     private void setUpHeights() {
         int displayHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
@@ -231,9 +245,21 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
         // Set up poster image height
         params = poster.getLayoutParams();
-        params.height = displayHeight / 2;
+        params.height = (int) (displayHeight / 1.5f);
         poster.setLayoutParams(params);
 
+        // Set up posterGradient height
+        posterGradient.setLayoutParams(params);
+
+        // Set up posterGradient gradient
+        //create a new gradient color
+        int[] colors = {
+                Color.TRANSPARENT , Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT,
+                ThemeStore.primaryColor(activity)};
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM, colors);
+
+        posterGradient.setBackground(gd);
     }
 
     private void setUpBounceScrollView() {
@@ -243,18 +269,32 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
 
         // get real header height
-        float headerHeight = header.getLayoutParams().height - appbarHeight - statusBarHeight;
+        final float headerHeight = header.getLayoutParams().height - appbarHeight - statusBarHeight;
+
+        final int transparentColor = transparentColor();
+        AtomicBoolean isStatusFlat = new AtomicBoolean(false);
+        AtomicBoolean isAppbarFlat = new AtomicBoolean(false);
 
         bounceScrollView.setOnScrollChangeListener(
                 (BounceScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
 
                     // Scroll poster
-                    poster.setY(-scrollY / (displayHeight * 2 / (float) poster.getLayoutParams().height));
+                    posterParent.setY(
+                            // for quality cast to int
+                            (int) (-scrollY / (displayHeight * 2 / (float) poster.getLayoutParams().height))
+                    );
 
                     // Scroll appbar
-                    if (scrollY > headerHeight) {
-                        getMainActivity().setStatusbarColor(Color.WHITE);
+                    if (scrollY > headerHeight + appbarHeight && !isAppbarFlat.get()) {
+                        setAppbarColor(ThemeStore.primaryColor(getActivity()));
                         appbar.setElevation(8);
+                        isAppbarFlat.set(true);
+                    }
+                    if (scrollY > headerHeight) {
+                        if (!isStatusFlat.get()) {
+                            getMainActivity().setStatusBarColorAuto();
+                            isStatusFlat.set(true);
+                        }
                         if (scrollY > oldScrollY) {
                             appbar.setY(
                                     Math.max(
@@ -269,17 +309,31 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
                             );
                         }
                     } else {
-                        getMainActivity().setStatusbarColor(primaryColor);
+                        if (isStatusFlat.get()) {
+                            setAppbarColor(transparentColor);
+                            getMainActivity().setStatusBarColor(transparentColor);
+                            appbar.setElevation(0);
+                            isStatusFlat.set(false);
+                            isAppbarFlat.set(false);
+                        }
                         appbar.setY(0);
                     }
                 }
         );
 
+
+        // zooming poster in over scroll
+        final ViewGroup.LayoutParams params = poster.getLayoutParams();
+        final int width = params.width;
+        final int height = params.height;
         bounceScrollView.setOnOverScrollListener(
                 (fromStart, overScrolledDistance) -> {
-                    float scale = 1 + ((float) overScrolledDistance / (float) displayHeight);
-                    poster.setScaleX(scale);
-                    poster.setScaleY(scale);
+                    final float scale = 1 + (overScrolledDistance / (float) displayHeight);
+                    final ViewGroup.LayoutParams mParams =
+                            new FrameLayout.LayoutParams(width, (int) (height * scale));
+                    poster.setLayoutParams(mParams);
+                    posterParent.setLayoutParams(mParams);
+                    posterGradient.setLayoutParams(mParams);
                 }
         );
     }
@@ -358,6 +412,11 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     class QueueListener implements MusicServiceEventListener {
+
+        QueueListener() {
+            updatePoster();
+        }
+
         @Override
         public void onServiceConnected() {
             updatePoster();

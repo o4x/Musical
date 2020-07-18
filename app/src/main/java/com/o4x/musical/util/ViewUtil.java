@@ -95,4 +95,13 @@ public class ViewUtil {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return px / metrics.density;
     }
+
+    public static int getViewBackgroundColor(View view) {
+        int color = Color.TRANSPARENT;
+        Drawable background = view.getBackground();
+        if (background instanceof ColorDrawable)
+            color = ((ColorDrawable) background).getColor();
+
+        return color;
+    }
 }

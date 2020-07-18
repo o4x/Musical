@@ -12,11 +12,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/poster"
+        <FrameLayout
+            android:id="@+id/poster_parent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/poster"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop" >
+
+            </ImageView>
+
+            <View
+                android:id="@+id/poster_gradient"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
+
+        </FrameLayout>
 
 
         <com.xw.repo.widget.BounceScrollView
@@ -33,11 +47,17 @@
                 <View
                     android:id="@+id/header"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp" />
+                    android:layout_height="0dp"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="?android:attr/selectableItemBackground"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="?android:attr/selectableItemBackground">
 
                     <TextView
                         android:id="@+id/textView"
