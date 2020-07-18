@@ -53,6 +53,7 @@
                     android:background="?android:attr/selectableItemBackground"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/queue_parent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="true"
@@ -60,15 +61,15 @@
                     android:background="?android:attr/selectableItemBackground">
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/queue_playing_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
-                        android:text="@string/playing_queue"
-                        android:textColor="@color/md_light_appbar"
                         android:fontFamily="sans-serif-medium"
                         android:singleLine="true"
+                        android:text="@string/playing_queue"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/md_light_appbar"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -77,13 +78,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/button"
+                        app:layout_constraintEnd_toStartOf="@+id/open_queue_button"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textView"
+                        app:layout_constraintStart_toEndOf="@+id/queue_playing_text"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/open_queue_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minHeight="0dp"
@@ -109,6 +110,7 @@
                     android:layout_height="20dp" />
 
                 <RelativeLayout
+                    android:id="@+id/recently_parent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="true"
@@ -140,6 +142,7 @@
                     android:layout_height="20dp" />
 
                 <RelativeLayout
+                    android:id="@+id/newly_parent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="true"

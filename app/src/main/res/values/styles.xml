@@ -21,6 +21,16 @@
         <item name="android:focusable">false</item>
     </style>
 
+    <style name="OverFlowButtonMini">
+        <item name="srcCompat">@drawable/ic_more_vert_white_24dp</item>
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:background">?attr/roundSelector</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:focusable">false</item>
+    </style>
+
     <style name="Fab" parent="FabParent" />
 
     <style name="MusicProgressSlider" parent="MusicProgressSliderParent">

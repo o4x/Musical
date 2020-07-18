@@ -171,7 +171,7 @@ public final class PreferenceUtil {
     }
 
     public final int getLastMusicChooser() {
-        return mPreferences.getInt(LAST_MUSIC_CHOOSER, 0);
+        return mPreferences.getInt(LAST_MUSIC_CHOOSER, R.id.nav_home);
     }
 
     public final NowPlayingScreen getNowPlayingScreen() {

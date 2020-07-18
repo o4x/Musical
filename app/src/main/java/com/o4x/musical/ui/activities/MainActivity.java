@@ -61,10 +61,6 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int APP_INTRO_REQUEST = 100;
 
-    private static  final int HOME = 0;
-    private static final int QUEUE = 1;
-    private static final int LIBRARY = 2;
-    private static final int FOLDERS = 3;
 
     @BindView(R.id.navigation_view)
     NavigationView navigationView;
@@ -104,8 +100,8 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
         App.setOnProVersionChangedListener(() -> {
             // called if the cached value was outdated (should be a rare event)
             checkSetUpPro();
-            if (!App.isProVersion() && PreferenceUtil.getInstance(MainActivity.this).getLastMusicChooser() == FOLDERS) {
-                setMusicChooser(FOLDERS); // shows the purchase activity and switches to LIBRARY
+            if (!App.isProVersion() && PreferenceUtil.getInstance(MainActivity.this).getLastMusicChooser() == R.id.nav_folders) {
+                setMusicChooser(R.id.nav_folders); // shows the purchase activity and switches to LIBRARY
             }
         });
     }
@@ -116,29 +112,26 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
         App.setOnProVersionChangedListener(null);
     }
 
-    private void setMusicChooser(int key) {
-        if (!App.isProVersion() && key == FOLDERS) {
+    public void setMusicChooser(int id) {
+        if (!App.isProVersion() && id == R.id.nav_folders) {
             Toast.makeText(this, R.string.folder_view_is_a_pro_feature, Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, PurchaseActivity.class));
-            key = LIBRARY;
+            id = R.id.nav_library;
         }
 
-        PreferenceUtil.getInstance(this).setLastMusicChooser(key);
-        switch (key) {
-            case HOME:
-                navigationView.setCheckedItem(R.id.nav_home);
+        PreferenceUtil.getInstance(this).setLastMusicChooser(id);
+        navigationView.setCheckedItem(id);
+        switch (id) {
+            case R.id.nav_home:
                 setCurrentFragment(HomeFragment.newInstance());
                 break;
-            case QUEUE:
-                navigationView.setCheckedItem(R.id.nav_queue);
+            case R.id.nav_queue:
                 setCurrentFragment(QueueFragment.newInstance());
                 break;
-            case LIBRARY:
-                navigationView.setCheckedItem(R.id.nav_library);
+            case R.id.nav_library:
                 setCurrentFragment(LibraryFragment.newInstance());
                 break;
-            case FOLDERS:
-                navigationView.setCheckedItem(R.id.nav_folders);
+            case R.id.nav_folders:
                 setCurrentFragment(FoldersFragment.newInstance(this));
                 break;
         }
@@ -188,16 +181,16 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
             drawerLayout.closeDrawers();
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
-                    new Handler().postDelayed(() -> setMusicChooser(HOME), 200);
+                    new Handler().postDelayed(() -> setMusicChooser(R.id.nav_home), 200);
                     break;
                 case R.id.nav_queue:
-                    new Handler().postDelayed(() -> setMusicChooser(QUEUE), 200);
+                    new Handler().postDelayed(() -> setMusicChooser(R.id.nav_queue), 200);
                     break;
                 case R.id.nav_library:
-                    new Handler().postDelayed(() -> setMusicChooser(LIBRARY), 200);
+                    new Handler().postDelayed(() -> setMusicChooser(R.id.nav_library), 200);
                     break;
                 case R.id.nav_folders:
-                    new Handler().postDelayed(() -> setMusicChooser(FOLDERS), 200);
+                    new Handler().postDelayed(() -> setMusicChooser(R.id.nav_folders), 200);
                     break;
                 case R.id.buy_pro:
                     new Handler().postDelayed(() -> startActivity(new Intent(MainActivity.this, PurchaseActivity.class)), 200);
@@ -388,6 +381,7 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
             e.printStackTrace();
         }
     }
+
 
     public interface MainActivityFragmentCallbacks {
         boolean handleBackPress();

@@ -25,10 +25,12 @@ import java.util.List;
 public class HomeAdapter extends PlayingQueueAdapter {
 
     private final Integer limit;
+    private final boolean isQueue;
 
-    public HomeAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable Integer limit, boolean usePalette) {
+    public HomeAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable Integer limit, boolean usePalette, boolean isQueue) {
         super(activity, dataSet, current, itemLayoutRes, usePalette, null);
         this.limit = limit;
+        this.isQueue = isQueue;
     }
 
     @Override
@@ -64,7 +66,8 @@ public class HomeAdapter extends PlayingQueueAdapter {
 
         @Override
         protected int getSongMenuRes() {
-            return R.menu.menu_item_playing_queue_song;
+            if(isQueue) return R.menu.menu_item_playing_queue_song;
+            else return R.menu.menu_item_song;
         }
 
         @Override
@@ -75,6 +78,11 @@ public class HomeAdapter extends PlayingQueueAdapter {
                     return true;
             }
             return super.onSongMenuItemClick(item);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return menu.callOnClick();
         }
     }
 

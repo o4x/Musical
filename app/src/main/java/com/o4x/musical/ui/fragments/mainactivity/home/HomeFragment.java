@@ -2,30 +2,27 @@ package com.o4x.musical.ui.fragments.mainactivity.home;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -47,11 +44,14 @@ import com.o4x.musical.loader.LastAddedLoader;
 import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.model.smartplaylist.HistoryPlaylist;
+import com.o4x.musical.model.smartplaylist.LastAddedPlaylist;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.adapter.home.HomeAdapter;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
+import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.ViewUtil;
 import com.xw.repo.widget.BounceScrollView;
@@ -64,7 +64,7 @@ import butterknife.Unbinder;
 
 public class HomeFragment extends AbsMainActivityFragment implements MainActivity.MainActivityFragmentCallbacks {
 
-    private AbsMusicServiceActivity activity;
+    private MainActivity activity;
 
     private Unbinder unbinder;
 
@@ -93,6 +93,15 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     @BindView(R.id.new_recycler_view)
     RecyclerView newView;
 
+    @BindView(R.id.queue_parent)
+    ConstraintLayout queueParent;
+    @BindView(R.id.open_queue_button)
+    Button openQueueButton;
+    @BindView(R.id.recently_parent)
+    RelativeLayout recentlyParent;
+    @BindView(R.id.newly_parent)
+    RelativeLayout newlyParent;
+
     private HomeAdapter queueAdapter;
     private LinearLayoutManager queueLayoutManager;
     private QueueListener queueListener;
@@ -106,7 +115,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            activity = (AbsMusicServiceActivity) context;
+            activity = getMainActivity();
         } catch (ClassCastException e) {
             throw new RuntimeException(context.getClass().getSimpleName() + " must be an instance of " + AbsMusicServiceActivity.class.getSimpleName());
         }
@@ -147,9 +156,9 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         queueListener = new QueueListener();
         activity.addMusicServiceEventListener(queueListener);
 
-        getMainActivity().setStatusBarColor(transparentColor());
-        getMainActivity().setNavigationBarColorAuto();
-        getMainActivity().setTaskDescriptionColorAuto();
+        activity.setStatusBarColor(transparentColor());
+        activity.setNavigationBarColorAuto();
+        activity.setTaskDescriptionColorAuto();
 
         setUpToolbar();
 
@@ -165,23 +174,21 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         appbar.setBackgroundColor(transparentColor);
         toolbar.setBackgroundColor(transparentColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
-        getActivity().setTitle(R.string.app_name);
-        getMainActivity().setSupportActionBar(toolbar);
+        activity.setTitle(R.string.app_name);
+        activity.setSupportActionBar(toolbar);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main, menu);
-        Activity activity = getActivity();
         if (activity == null) return;
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getActivity(), toolbar, menu, ThemeStore.primaryColor(activity));
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity, toolbar, menu, ThemeStore.primaryColor(activity));
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        Activity activity = getActivity();
         if (activity == null) return;
         ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, toolbar);
     }
@@ -191,13 +198,13 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         int id = item.getItemId();
         switch (id) {
             case R.id.action_shuffle_all:
-                MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(getActivity()), true);
+                MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(activity), true);
                 return true;
             case R.id.action_new_playlist:
                 CreatePlaylistDialog.create().show(getChildFragmentManager(), "CREATE_PLAYLIST");
                 return true;
             case R.id.action_search:
-                startActivity(new Intent(getActivity(), SearchActivity.class));
+                startActivity(new Intent(activity, SearchActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -226,6 +233,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     private void setUpViews() {
         setUpHeights();
+        setUpOnClicks();
         setUpBounceScrollView();
         setUpQueueView();
         setUpRecentlyView();
@@ -262,6 +270,21 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         posterGradient.setBackground(gd);
     }
 
+    private  void setUpOnClicks() {
+        queueParent.setOnClickListener(view -> {
+            activity.setMusicChooser(R.id.nav_queue);
+        });
+        openQueueButton.setOnClickListener(view -> {
+            activity.setMusicChooser(R.id.nav_queue);
+        });
+        recentlyParent.setOnClickListener(view -> {
+            NavigationUtil.goToPlaylist(activity, new HistoryPlaylist(activity));
+        });
+        newlyParent.setOnClickListener(view -> {
+            NavigationUtil.goToPlaylist(activity, new LastAddedPlaylist(activity));
+        });
+    }
+
     private void setUpBounceScrollView() {
         final int displayHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         final int statusBarHeight = Util.getStatusBarHeight(activity);
@@ -286,13 +309,13 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
                     // Scroll appbar
                     if (scrollY > headerHeight + appbarHeight && !isAppbarFlat.get()) {
-                        setAppbarColor(ThemeStore.primaryColor(getActivity()));
+                        setAppbarColor(ThemeStore.primaryColor(activity));
                         appbar.setElevation(8);
                         isAppbarFlat.set(true);
                     }
                     if (scrollY > headerHeight) {
                         if (!isStatusFlat.get()) {
-                            getMainActivity().setStatusBarColorAuto();
+                            activity.setStatusBarColorAuto();
                             isStatusFlat.set(true);
                         }
                         if (scrollY > oldScrollY) {
@@ -311,7 +334,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
                     } else {
                         if (isStatusFlat.get()) {
                             setAppbarColor(transparentColor);
-                            getMainActivity().setStatusBarColor(transparentColor);
+                            activity.setStatusBarColor(transparentColor);
                             appbar.setElevation(0);
                             isStatusFlat.set(false);
                             isAppbarFlat.set(false);
@@ -343,13 +366,13 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         queueLayoutManager = getLinearLayoutManager();
         queueView.setLayoutManager(queueLayoutManager);
         queueAdapter = new HomeAdapter(
-                ((AppCompatActivity) getActivity()),
+                activity,
                 MusicPlayerRemote.getPlayingQueue(),
                 MusicPlayerRemote.getPosition(),
                 R.layout.item_card_home,
                 null,
-                false
-        );
+                false,
+                true);
         queueView.setAdapter(queueAdapter);
         queueView.setItemAnimator(animator);
         queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition(), 0);
@@ -359,13 +382,13 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         recentlyLayoutManager = getGridLayoutManager();
         recentlyView.setLayoutManager(recentlyLayoutManager);
         recentlyAdapter = new HomeAdapter(
-                ((AppCompatActivity) getActivity()),
+                activity,
                 TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(activity),
                 0,
                 R.layout.item_card_home,
                 getGridSize() * 2,
-                false
-        );
+                false,
+                false);
         recentlyView.setAdapter(recentlyAdapter);
     }
 
@@ -373,19 +396,19 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         newLayoutManager = getGridLayoutManager();
         newView.setLayoutManager(newLayoutManager);
         newAdapter = new HomeAdapter(
-                ((AppCompatActivity) getActivity()),
-                LastAddedLoader.getLastAddedSongs(getContext()),
+                activity,
+                LastAddedLoader.getLastAddedSongs(activity),
                 0,
                 R.layout.item_card_home,
                 getGridSize() * 3,
-                false
-        );
+                false,
+                false);
         newView.setAdapter(newAdapter);
     }
 
     private GridLayoutManager getGridLayoutManager() {
         final int size = getGridSize();
-        return new GridLayoutManager(getActivity(), size) {
+        return new GridLayoutManager(activity, size) {
             @Override
             public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
                 lp.width = getWidth() / size;
@@ -397,7 +420,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
     private LinearLayoutManager getLinearLayoutManager() {
         final int size = getGridSize();
-        return new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false) {
+        return new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false) {
             @Override
             public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
                 lp.width = getWidth() / size;
@@ -493,7 +516,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
         private void resetToCurrentPosition() {
             queueView.stopScroll();
-            RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext()) {
+            RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(activity) {
                 @Override
                 protected int getHorizontalSnapPreference() {
                     return LinearSmoothScroller.SNAP_TO_START;
