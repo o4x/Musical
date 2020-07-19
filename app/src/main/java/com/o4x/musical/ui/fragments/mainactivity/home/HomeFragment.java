@@ -229,6 +229,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private void setUpViews() {
+
         setUpHeights();
         setUpOnClicks();
         setUpBounceScrollView();

@@ -76,6 +76,7 @@ public abstract class AbsSlidingMusicPanelActivity extends AbsMusicServiceActivi
         //noinspection ConstantConditions
         miniPlayerFragment.getView().setOnClickListener(v -> expandPanel());
 
+
         slidingUpPanelLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
