@@ -37,6 +37,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
+import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
 import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
 import com.o4x.musical.dialogs.AddToPlaylistDialog;
@@ -54,7 +55,6 @@ import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.activities.base.AbsSlidingMusicPanelActivity;
 import com.o4x.musical.util.CustomArtistImageUtil;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
@@ -64,7 +64,7 @@ import com.o4x.musical.util.PreferenceUtil;
 /**
  * Be careful when changing things in this Activity!
  */
-public class ArtistDetailActivity extends AbsSlidingMusicPanelActivity implements PaletteColorHolder, CabHolder, LoaderManager.LoaderCallbacks<Artist> {
+public class ArtistDetailActivity extends AbsMusicPanelActivity implements PaletteColorHolder, CabHolder, LoaderManager.LoaderCallbacks<Artist> {
 
     private static final int LOADER_ID = LoaderIds.ARTIST_DETAIL_ACTIVITY;
     private static final int REQUEST_CODE_SELECT_IMAGE = 1000;

@@ -45,7 +45,7 @@ import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.activities.base.AbsSlidingMusicPanelActivity;
+import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity;
 import com.o4x.musical.util.MusicUtil;
@@ -65,7 +65,7 @@ import retrofit2.Response;
 /**
  * Be careful when changing things in this Activity!
  */
-public class AlbumDetailActivity extends AbsSlidingMusicPanelActivity implements PaletteColorHolder, CabHolder, LoaderManager.LoaderCallbacks<Album> {
+public class AlbumDetailActivity extends AbsMusicPanelActivity implements PaletteColorHolder, CabHolder, LoaderManager.LoaderCallbacks<Album> {
 
     private static final int TAG_EDITOR_REQUEST = 2001;
     private static final int LOADER_ID = LoaderIds.ALBUM_DETAIL_ACTIVITY;

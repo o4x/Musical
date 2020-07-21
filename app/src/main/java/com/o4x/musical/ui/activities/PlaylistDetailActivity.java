@@ -34,7 +34,7 @@ import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.activities.base.AbsSlidingMusicPanelActivity;
+import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.PlaylistsUtil;
 import com.o4x.musical.util.ViewUtil;
@@ -46,7 +46,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlaylistDetailActivity extends AbsSlidingMusicPanelActivity implements CabHolder, LoaderManager.LoaderCallbacks<List<Song>> {
+public class PlaylistDetailActivity extends AbsMusicPanelActivity implements CabHolder, LoaderManager.LoaderCallbacks<List<Song>> {
 
     private static final int LOADER_ID = LoaderIds.PLAYLIST_DETAIL_ACTIVITY;
 

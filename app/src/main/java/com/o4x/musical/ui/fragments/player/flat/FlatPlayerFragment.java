@@ -43,7 +43,7 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.model.lyrics.Lyrics;
-import com.o4x.musical.ui.activities.base.AbsSlidingMusicPanelActivity;
+import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
 import com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment;
 import com.o4x.musical.util.ImageUtil;
@@ -539,7 +539,7 @@ public class FlatPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
             }
             fragment.slidingUpPanelLayout.setPanelHeight(Math.max(minPanelHeight, availablePanelHeight));
 
-            ((AbsSlidingMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.slidingUpPanelLayout.findViewById(R.id.player_panel));
+            ((AbsMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.slidingUpPanelLayout.findViewById(R.id.player_panel));
         }
 
         @Override
@@ -568,7 +568,7 @@ public class FlatPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
 
         @Override
         public void setUpPanelAndAlbumCoverHeight() {
-            ((AbsSlidingMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.getView().findViewById(R.id.player_panel));
+            ((AbsMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.getView().findViewById(R.id.player_panel));
         }
 
         @Override

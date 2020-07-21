@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
         android:id="@+id/navigation_drawer_menu_category_sections"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_baseline_home_white_24dp"
-            android:title="@string/home" />
+            android:title="@string/home"
+            />
         <item
             android:id="@+id/nav_queue"
-            android:icon="@drawable/ic_baseline_queue_white_24dp"
             android:title="Queue" />
         <item
             android:id="@+id/nav_library"
-            android:icon="@drawable/ic_library_music_white_24dp"
             android:title="@string/library" />
         <item
             android:id="@+id/nav_folders"
-            android:icon="@drawable/ic_folder_white_24dp"
             android:title="@string/folders" />
     </group>
 
     <group android:checkableBehavior="none">
         <item
             android:id="@+id/action_scan"
-            android:icon="@drawable/ic_scanner_white_24dp"
             android:title="@string/scan_media" />
     </group>
 
@@ -35,11 +32,9 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings_white_24dp"
             android:title="@string/action_settings" />
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_help_white_24dp"
             android:title="@string/action_about" />
     </group>
 

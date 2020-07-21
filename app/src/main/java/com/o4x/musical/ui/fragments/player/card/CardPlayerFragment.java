@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +46,7 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.model.lyrics.Lyrics;
-import com.o4x.musical.ui.activities.base.AbsSlidingMusicPanelActivity;
+import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
 import com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment;
 import com.o4x.musical.util.ImageUtil;
@@ -573,7 +572,7 @@ public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
             }
             fragment.slidingUpPanelLayout.setPanelHeight(Math.max(minPanelHeight, availablePanelHeight));
 
-            ((AbsSlidingMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.slidingUpPanelLayout.findViewById(R.id.player_panel));
+            ((AbsMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.slidingUpPanelLayout.findViewById(R.id.player_panel));
         }
 
         @Override
@@ -609,7 +608,7 @@ public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
             int panelHeight = fragment.slidingUpPanelLayout.getHeight() - fragment.playbackControlsFragment.getView().getHeight();
             fragment.slidingUpPanelLayout.setPanelHeight(panelHeight);
 
-            ((AbsSlidingMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.slidingUpPanelLayout.findViewById(R.id.player_panel));
+            ((AbsMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.slidingUpPanelLayout.findViewById(R.id.player_panel));
         }
 
         @Override

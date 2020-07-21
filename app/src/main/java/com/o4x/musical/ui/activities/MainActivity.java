@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +36,7 @@ import com.o4x.musical.loader.ArtistLoader;
 import com.o4x.musical.loader.PlaylistSongLoader;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
-import com.o4x.musical.ui.activities.base.AbsSlidingMusicPanelActivity;
+import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.activities.intro.AppIntroActivity;
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment;
 import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment;
@@ -48,7 +50,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AbsSlidingMusicPanelActivity {
+public class MainActivity extends AbsMusicPanelActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int APP_INTRO_REQUEST = 100;
@@ -153,13 +155,22 @@ public class MainActivity extends AbsSlidingMusicPanelActivity {
         View contentView = getLayoutInflater().inflate(R.layout.activity_main_drawer_layout, null);
         ViewGroup drawerContent = contentView.findViewById(R.id.drawer_content_container);
         drawerContent.addView(wrapSlidingMusicPanel(R.layout.activity_main_content));
+
+        // To apply WindowInsets only for navigation view, not content and it's very important.
+        contentView.setOnApplyWindowInsetsListener((view, windowInsets) -> {
+            view.findViewById(R.id.navigation_view).onApplyWindowInsets(windowInsets);
+            return windowInsets;
+        });
+
         return contentView;
     }
 
     private void setUpNavigationView() {
         int accentColor = ThemeStore.accentColor(this);
-        NavigationViewUtil.setItemIconColors(navigationView, ATHUtil.resolveColor(this, R.attr.iconColor, ThemeStore.textColorSecondary(this)), accentColor);
+//        NavigationViewUtil.setItemIconColors(navigationView, ATHUtil.resolveColor(this, R.attr.iconColor, ThemeStore.textColorSecondary(this)), accentColor);
         NavigationViewUtil.setItemTextColors(navigationView, ThemeStore.textColorPrimary(this), accentColor);
+
+        navigationView.setItemIconTintList(null);
 
         checkSetUpPro();
         navigationView.setNavigationItemSelectedListener(menuItem -> {

@@ -17,6 +17,7 @@ import com.afollestad.materialcab.MaterialCab;
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
+import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.adapter.song.SongAdapter;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
@@ -25,7 +26,6 @@ import com.o4x.musical.loader.GenreLoader;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.activities.base.AbsSlidingMusicPanelActivity;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.ViewUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
@@ -36,7 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GenreDetailActivity extends AbsSlidingMusicPanelActivity implements CabHolder, LoaderManager.LoaderCallbacks<List<Song>> {
+public class GenreDetailActivity extends AbsMusicPanelActivity implements CabHolder, LoaderManager.LoaderCallbacks<List<Song>> {
 
     private static final int LOADER_ID = LoaderIds.GENRE_DETAIL_ACTIVITY;
 
