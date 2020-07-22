@@ -4,9 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -18,12 +23,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.afollestad.materialdialogs.Theme;
 import com.google.android.material.navigation.NavigationView;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
+import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.NavigationViewUtil;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
@@ -165,12 +173,19 @@ public class MainActivity extends AbsMusicPanelActivity {
         return contentView;
     }
 
+
     private void setUpNavigationView() {
         int accentColor = ThemeStore.accentColor(this);
-//        NavigationViewUtil.setItemIconColors(navigationView, ATHUtil.resolveColor(this, R.attr.iconColor, ThemeStore.textColorSecondary(this)), accentColor);
+        NavigationViewUtil.setItemIconColors(navigationView, ATHUtil.resolveColor(this, R.attr.iconColor, ThemeStore.textColorSecondary(this)), accentColor);
         NavigationViewUtil.setItemTextColors(navigationView, ThemeStore.textColorPrimary(this), accentColor);
 
-        navigationView.setItemIconTintList(null);
+        StateListDrawable stateListDrawable = (StateListDrawable) navigationView.getItemBackground();
+        LayerDrawable layerDrawable = (LayerDrawable) stateListDrawable.getStateDrawable(0);
+        GradientDrawable rectangle = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.rectangle);
+        GradientDrawable rectangleRadius = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.rectangle_radius);
+
+        rectangle.setColor(accentColor);
+        rectangleRadius.setColor(ColorUtil.withAlpha(ThemeStore.textColorSecondary(this), 0.1f));
 
         checkSetUpPro();
         navigationView.setNavigationItemSelectedListener(menuItem -> {
