@@ -521,6 +521,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         }
 
         private void resetToCurrentPosition() {
+            if (queueAdapter.getItemCount() == 0) return;
             queueView.stopScroll();
             RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(activity) {
                 @Override

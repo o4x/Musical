@@ -167,6 +167,7 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
 
     private void setUpViews() {
         setUpQueueView();
+        checkIsEmpty();
     }
 
     private void setUpQueueView() {
@@ -259,6 +260,7 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
         }
 
         private void resetToCurrentPosition() {
+            if (queueAdapter.getItemCount() == 0) return;
             queueView.stopScroll();
             RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext()) {
                 @Override
@@ -269,14 +271,14 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
             smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition());
             queueLayoutManager.startSmoothScroll(smoothScroller);
         }
+    }
 
-        private void checkIsEmpty() {
-            if (empty != null) {
-                empty.setVisibility(
-                        (queueAdapter == null || queueAdapter.getItemCount() == 0)
-                                ? View.VISIBLE : View.GONE
-                );
-            }
+    private void checkIsEmpty() {
+        if (empty != null) {
+            empty.setVisibility(
+                    (queueAdapter == null || queueAdapter.getItemCount() == 0)
+                            ? View.VISIBLE : View.GONE
+            );
         }
     }
 }
