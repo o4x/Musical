@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
 import com.kabouzeid.appthemehelper.ThemeStore;
@@ -92,6 +93,9 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     RecyclerView recentlyView;
     @BindView(R.id.new_recycler_view)
     RecyclerView newView;
+
+    @BindView(R.id.shuffle_btn)
+    FloatingActionButton shuffleBtn;
 
     @BindView(R.id.queue_parent)
     ConstraintLayout queueParent;
@@ -280,6 +284,9 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         newlyParent.setOnClickListener(view -> {
             NavigationUtil.goToPlaylist(activity, new LastAddedPlaylist(activity));
         });
+        shuffleBtn.setOnClickListener(view -> {
+            MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(activity), true);
+        });
     }
 
     private void setUpBounceScrollView() {
@@ -321,12 +328,14 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
                                             -appbarHeight, appbar.getY() + (oldScrollY - scrollY)
                                     )
                             );
+                            shuffleBtn.hide();
                         } else {
                             appbar.setY(
                                     Math.min(
                                             0, appbar.getY() + (oldScrollY - scrollY)
                                     )
                             );
+                            shuffleBtn.show();
                         }
                     } else {
                         if (isStatusFlat.get()) {
