@@ -255,6 +255,7 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
         private void updateQueue() {
             queueAdapter.swapDataSet(MusicPlayerRemote.getPlayingQueue(), MusicPlayerRemote.getPosition());
             resetToCurrentPosition();
+            checkIsEmpty();
         }
 
         private void resetToCurrentPosition() {
@@ -267,6 +268,15 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
             };
             smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition());
             queueLayoutManager.startSmoothScroll(smoothScroller);
+        }
+
+        private void checkIsEmpty() {
+            if (empty != null) {
+                empty.setVisibility(
+                        (queueAdapter == null || queueAdapter.getItemCount() == 0)
+                                ? View.VISIBLE : View.GONE
+                );
+            }
         }
     }
 }
