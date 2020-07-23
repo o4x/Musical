@@ -167,6 +167,8 @@ public class MainActivity extends AbsMusicPanelActivity {
         // To apply WindowInsets only for navigation view, not content and it's very important.
         contentView.setOnApplyWindowInsetsListener((view, windowInsets) -> {
             view.findViewById(R.id.navigation_view).onApplyWindowInsets(windowInsets);
+            view.findViewById(R.id.drawer_content_container).setPadding(
+                    0,0,0,windowInsets.getSystemWindowInsetBottom());
             return windowInsets;
         });
 

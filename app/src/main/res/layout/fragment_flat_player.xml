@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -45,7 +44,8 @@
                 android:id="@+id/toolbar_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_scrim_height"
-                android:background="@drawable/toolbar_gradient">
+                android:background="@drawable/toolbar_gradient"
+                android:fitsSystemWindows="true">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/player_toolbar"
