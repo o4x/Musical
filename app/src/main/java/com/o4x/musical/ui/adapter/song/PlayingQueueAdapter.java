@@ -4,13 +4,21 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
+import com.kabouzeid.appthemehelper.ThemeStore;
+import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
@@ -46,13 +54,14 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         if (holder.imageText != null) {
             holder.imageText.setText(String.valueOf(position - current));
         }
-        if (holder.getItemViewType() == HISTORY || holder.getItemViewType() == CURRENT) {
+        if (getItemType(position) == HISTORY) {
             setAlpha(holder, 0.5f);
+        } else {
+            setAlpha(holder, 1f);
         }
     }
 
-    @Override
-    public int getItemViewType(int position) {
+    public int getItemType(int position) {
         if (position < current) {
             return HISTORY;
         } else if (position > current) {
@@ -129,10 +138,15 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         @DraggableItemStateFlags
         private int mDragStateFlags;
 
+        @SuppressLint("ClickableViewAccessibility")
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             if (imageText != null) {
                 imageText.setVisibility(View.VISIBLE);
+                itemView.setBackgroundColor(ColorUtil.withAlpha(
+                        ThemeStore.primaryColor(activity), 0.6f));
+                // Set this for not focus in parent
+                imageText.setOnTouchListener((view, motionEvent) -> true);
             }
             if (image != null) {
                 image.setVisibility(View.GONE);

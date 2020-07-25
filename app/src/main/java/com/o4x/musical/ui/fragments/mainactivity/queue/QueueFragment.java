@@ -230,7 +230,7 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
 
         @Override
         public void onPlayingMetaChanged() {
-            resetToCurrentPosition();
+            updateQueue();
         }
 
         @Override
