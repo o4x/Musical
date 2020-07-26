@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.o4x.musical.R;
+import com.o4x.musical.views.IconImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,6 +21,10 @@ public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements Vie
     @Nullable
     @BindView(R.id.image)
     public ImageView image;
+
+    @Nullable
+    @BindView(R.id.icon)
+    public IconImageView icon;
 
     @Nullable
     @BindView(R.id.image_text)

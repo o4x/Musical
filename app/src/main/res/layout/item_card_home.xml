@@ -29,7 +29,15 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop" />
 
-
+                <com.o4x.musical.views.IconImageView
+                    android:id="@+id/icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="8dp"
+                    android:layout_gravity="bottom|end"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/ic_play_arrow_white_24dp"
+                    android:visibility="gone"/>
 
             </FrameLayout>
 

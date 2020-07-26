@@ -8,6 +8,8 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
@@ -16,7 +18,10 @@ import com.o4x.musical.R;
 import com.o4x.musical.glide.PhonographColoredTarget;
 import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
+import com.o4x.musical.interfaces.CabHolder;
+import com.o4x.musical.interfaces.MusicServiceEventListener;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
 import com.o4x.musical.ui.adapter.song.SongAdapter;
 
@@ -54,8 +59,16 @@ public class HomeAdapter extends PlayingQueueAdapter {
     }
 
     @Override
-    protected void setAlpha(SongAdapter.ViewHolder holder, float alpha) {
-        // We don't need setAlpha
+    protected void customizeItem(@NonNull SongAdapter.ViewHolder holder, int position) {
+        if (isQueue) {
+            final int visibility = position == MusicPlayerRemote.getPosition() ?
+                    View.VISIBLE : View.GONE;
+            holder.icon.setVisibility(visibility);
+
+            final int background = MusicPlayerRemote.isPlaying() ?
+                    R.drawable.ic_play_arrow_white_24dp : R.drawable.ic_pause_white_24dp;
+            holder.icon.setBackground(activity.getDrawable(background));
+        }
     }
 
     class ViewHolder extends SongAdapter.ViewHolder {

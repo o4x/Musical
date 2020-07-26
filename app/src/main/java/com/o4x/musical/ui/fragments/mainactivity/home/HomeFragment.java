@@ -466,12 +466,12 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         @Override
         public void onPlayingMetaChanged() {
             updatePoster();
-            resetToCurrentPosition();
+            updateQueue();
         }
 
         @Override
         public void onPlayStateChanged() {
-
+            updateQueue();
         }
 
         @Override

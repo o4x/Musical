@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -51,6 +52,10 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
     @Override
     public void onBindViewHolder(@NonNull SongAdapter.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
+        customizeItem(holder, position);
+    }
+
+    protected void customizeItem(@NonNull SongAdapter.ViewHolder holder, int position) {
         if (holder.imageText != null) {
             holder.imageText.setText(String.valueOf(position - current));
         }
@@ -59,9 +64,16 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         } else {
             setAlpha(holder, 1f);
         }
+
+        if (holder.title != null && holder.text != null) {
+            final Typeface typeface = position == MusicPlayerRemote.getPosition() ?
+                    Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
+            holder.title.setTypeface(typeface);
+            holder.text.setTypeface(typeface);
+        }
     }
 
-    public int getItemType(int position) {
+    protected int getItemType(int position) {
         if (position < current) {
             return HISTORY;
         } else if (position > current) {
@@ -86,7 +98,7 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         notifyDataSetChanged();
     }
 
-    protected void setAlpha(SongAdapter.ViewHolder holder, float alpha) {
+    private void setAlpha(SongAdapter.ViewHolder holder, float alpha) {
         if (holder.image != null) {
             holder.image.setAlpha(alpha);
         }
