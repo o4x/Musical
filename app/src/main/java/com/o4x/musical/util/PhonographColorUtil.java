@@ -1,7 +1,12 @@
 package com.o4x.musical.util;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
+
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
 
@@ -41,6 +46,21 @@ public class PhonographColorUtil {
             }
         }
         return fallback;
+    }
+
+    @ColorInt
+    public static int getWindowColor(@NonNull Activity activity) {
+        TypedValue a = new TypedValue();
+        activity.getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
+        if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+            // windowBackground is a color
+            int color = a.data;
+            return color;
+        } else {
+            // windowBackground is not a color, probably a drawable
+            Drawable d = activity.getResources().getDrawable(a.resourceId);
+            return 0;
+        }
     }
 
     private static class SwatchComparator implements Comparator<Palette.Swatch> {

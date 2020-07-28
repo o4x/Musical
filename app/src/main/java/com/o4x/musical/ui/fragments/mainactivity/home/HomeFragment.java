@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,6 +55,7 @@ import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.adapter.home.HomeAdapter;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 import com.o4x.musical.util.NavigationUtil;
+import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.ViewUtil;
 import com.xw.repo.widget.BounceScrollView;
@@ -264,7 +267,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         //create a new gradient color
         int[] colors = {
                 Color.TRANSPARENT , Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT,
-                ThemeStore.primaryColor(activity)};
+                PhonographColorUtil.getWindowColor(activity)};
         GradientDrawable gd = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM, colors);
 
@@ -523,13 +526,37 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         private void resetToCurrentPosition() {
             if (queueAdapter.getItemCount() == 0) return;
             queueView.stopScroll();
+
+            final int from = queueLayoutManager.findFirstVisibleItemPosition();
+            final int to = MusicPlayerRemote.getPosition();
+            final int delta = Math.abs(to - from);
+
+            final int limit = 150;
+            if (delta > limit) {
+                queueLayoutManager.scrollToPosition(
+                        to + (to > from ? -limit : limit)
+                );
+            }
+
+
             RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(activity) {
                 @Override
                 protected int getHorizontalSnapPreference() {
-                    return LinearSmoothScroller.SNAP_TO_START;
+                    return LinearSmoothScroller.SNAP_TO_ANY;
                 }
+
+                @Override
+                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                    if (delta < 20) {
+                        return super.calculateSpeedPerPixel(displayMetrics) * 5;
+                    } else {
+                        return super.calculateSpeedPerPixel(displayMetrics);
+                    }
+                }
+
+
             };
-            smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition());
+            smoothScroller.setTargetPosition(to);
             queueLayoutManager.startSmoothScroll(smoothScroller);
         }
     }

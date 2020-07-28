@@ -24,6 +24,7 @@ import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.ViewUtil;
 
 import java.util.List;
@@ -56,6 +57,10 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
     }
 
     protected void customizeItem(@NonNull SongAdapter.ViewHolder holder, int position) {
+
+        holder.itemView.setBackgroundColor(ColorUtil.withAlpha(
+                PhonographColorUtil.getWindowColor(activity), 0.8f));
+
         if (holder.imageText != null) {
             holder.imageText.setText(String.valueOf(position - current));
         }
@@ -155,8 +160,6 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
             super(itemView);
             if (imageText != null) {
                 imageText.setVisibility(View.VISIBLE);
-                itemView.setBackgroundColor(ColorUtil.withAlpha(
-                        ThemeStore.primaryColor(activity), 0.6f));
                 // Set this for not focus in parent
                 imageText.setOnTouchListener((view, motionEvent) -> true);
             }

@@ -264,8 +264,8 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
             queueView.stopScroll();
             RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(getContext()) {
                 @Override
-                protected int getHorizontalSnapPreference() {
-                    return LinearSmoothScroller.SNAP_TO_START;
+                protected int getVerticalSnapPreference() {
+                    return LinearSmoothScroller.SNAP_TO_ANY;
                 }
             };
             smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition());
