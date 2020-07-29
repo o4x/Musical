@@ -13,12 +13,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.audiocover.AudioFileCover;
 import com.o4x.musical.glide.palette.BitmapPaletteTranscoder;
 import com.o4x.musical.glide.palette.BitmapPaletteWrapper;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.MusicUtil;
-import com.o4x.musical.util.PreferenceUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -32,7 +30,6 @@ public class SongGlideRequest {
     public static class Builder {
         final RequestManager requestManager;
         final Song song;
-        boolean ignoreMediaStore;
 
         public static Builder from(@NonNull RequestManager requestManager, Song song) {
             return new Builder(requestManager, song);
@@ -51,18 +48,9 @@ public class SongGlideRequest {
             return new BitmapBuilder(this);
         }
 
-        public Builder checkIgnoreMediaStore(Context context) {
-            return ignoreMediaStore(PreferenceUtil.getInstance(context).ignoreMediaStoreArtwork());
-        }
-
-        public Builder ignoreMediaStore(boolean ignoreMediaStore) {
-            this.ignoreMediaStore = ignoreMediaStore;
-            return this;
-        }
-
         public DrawableRequestBuilder<GlideDrawable> build() {
             //noinspection unchecked
-            return createBaseRequest(requestManager, song, ignoreMediaStore)
+            return createBaseRequest(requestManager, song)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
                     .animate(DEFAULT_ANIMATION)
@@ -79,7 +67,7 @@ public class SongGlideRequest {
 
         public BitmapRequestBuilder<?, Bitmap> build() {
             //noinspection unchecked
-            return createBaseRequest(builder.requestManager, builder.song, builder.ignoreMediaStore)
+            return createBaseRequest(builder.requestManager, builder.song)
                     .asBitmap()
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
@@ -99,7 +87,7 @@ public class SongGlideRequest {
 
         public BitmapRequestBuilder<?, BitmapPaletteWrapper> build() {
             //noinspection unchecked
-            return createBaseRequest(builder.requestManager, builder.song, builder.ignoreMediaStore)
+            return createBaseRequest(builder.requestManager, builder.song)
                     .asBitmap()
                     .transcode(new BitmapPaletteTranscoder(context), BitmapPaletteWrapper.class)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
@@ -109,12 +97,8 @@ public class SongGlideRequest {
         }
     }
 
-    public static DrawableTypeRequest createBaseRequest(RequestManager requestManager, Song song, boolean ignoreMediaStore) {
-        if (ignoreMediaStore) {
-            return requestManager.load(new AudioFileCover(song.data));
-        } else {
-            return requestManager.loadFromMediaStore(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId));
-        }
+    public static DrawableTypeRequest createBaseRequest(RequestManager requestManager, Song song) {
+        return requestManager.loadFromMediaStore(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId));
     }
 
     public static Key createSignature(Song song) {

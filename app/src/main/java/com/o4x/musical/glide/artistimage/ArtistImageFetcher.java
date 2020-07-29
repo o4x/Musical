@@ -30,11 +30,10 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
     private InputStream stream;
 
-    private boolean ignoreMediaStore;
 
-    public ArtistImageFetcher(final ArtistImage model, boolean ignoreMediaStore) {
+
+    public ArtistImageFetcher(final ArtistImage model) {
         this.model = model;
-        this.ignoreMediaStore = ignoreMediaStore;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
         // never return NULL here!
         // this id is used to determine whether the image is already cached
         // we use the artist name as well as the album years + file paths
-        return model.toIdString() + "ignoremediastore:" + ignoreMediaStore;
+        return model.toIdString() + "ignoremediastore:";
     }
 
     @Override
@@ -66,10 +65,8 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
         try {
             for (final AlbumCover cover : albumCovers) {
                 byte[] picture = null;
-                if (!ignoreMediaStore) {
-                    retriever.setDataSource(cover.getFilePath());
-                    picture = retriever.getEmbeddedPicture();
-                }
+                retriever.setDataSource(cover.getFilePath());
+                picture = retriever.getEmbeddedPicture();
                 final InputStream stream;
                 if (picture != null) {
                     stream = new ByteArrayInputStream(picture);

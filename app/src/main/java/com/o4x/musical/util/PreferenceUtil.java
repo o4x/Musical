@@ -72,8 +72,6 @@ public final class PreferenceUtil {
     public static final String NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time";
     public static final String SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music";
 
-    public static final String IGNORE_MEDIA_STORE_ARTWORK = "ignore_media_store_artwork";
-
     public static final String LAST_CHANGELOG_VERSION = "last_changelog_version";
     public static final String INTRO_SHOWN = "intro_shown";
 
@@ -233,10 +231,6 @@ public final class PreferenceUtil {
 
     public final boolean blurredAlbumArt() {
         return mPreferences.getBoolean(BLURRED_ALBUM_ART, false);
-    }
-
-    public final boolean ignoreMediaStoreArtwork() {
-        return mPreferences.getBoolean(IGNORE_MEDIA_STORE_ARTWORK, false);
     }
 
     public final String getArtistSortOrder() {

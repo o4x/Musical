@@ -25,7 +25,7 @@ public class ArtistImageLoader implements StreamModelLoader<ArtistImage> {
     @Override
     public DataFetcher<InputStream> getResourceFetcher(final ArtistImage model, int width, int height) {
 
-        return new ArtistImageFetcher(model, PreferenceUtil.getInstance(context).ignoreMediaStoreArtwork());
+        return new ArtistImageFetcher(model);
     }
 
     public static class Factory implements ModelLoaderFactory<ArtistImage, InputStream> {

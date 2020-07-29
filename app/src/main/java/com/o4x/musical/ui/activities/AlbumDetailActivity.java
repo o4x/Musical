@@ -166,7 +166,6 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
 
     private void loadAlbumCover() {
         SongGlideRequest.Builder.from(Glide.with(this), getAlbum().safeGetFirstSong())
-                .checkIgnoreMediaStore(this)
                 .generatePalette(this).build()
                 .dontAnimate()
                 .into(new PhonographColoredTarget(albumArtImageView) {

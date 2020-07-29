@@ -87,11 +87,6 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         return CURRENT;
     }
 
-    @Override
-    protected void loadAlbumCover(Song song, SongAdapter.ViewHolder holder) {
-        // We don't want to load it in this adapter
-    }
-
     public void swapDataSet(List<Song> dataSet, int position) {
         this.dataSet = dataSet;
         current = position;

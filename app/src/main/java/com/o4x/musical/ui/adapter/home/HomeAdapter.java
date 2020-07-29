@@ -99,30 +99,6 @@ public class HomeAdapter extends PlayingQueueAdapter {
         }
     }
 
-    @Override
-    protected void loadAlbumCover(Song song, SongAdapter.ViewHolder holder) {
-        if (holder.image == null) return;
-
-        SongGlideRequest.Builder.from(Glide.with(activity), song)
-                .checkIgnoreMediaStore(activity)
-                .generatePalette(activity).build()
-                .into(new PhonographColoredTarget(holder.image) {
-                    @Override
-                    public void onLoadCleared(Drawable placeholder) {
-                        super.onLoadCleared(placeholder);
-                        setColors(getAlbumArtistFooterColor(), holder);
-                    }
-
-                    @Override
-                    public void onColorReady(int color) {
-                        if (usePalette)
-                            setColors(color, holder);
-                        else
-                            setColors(getAlbumArtistFooterColor(), holder);
-                    }
-                });
-    }
-
     protected void setColors(int color, SongAdapter.ViewHolder holder) {
         if (holder.paletteColorContainer != null) {
             holder.paletteColorContainer.setBackgroundColor(color);

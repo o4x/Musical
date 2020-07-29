@@ -129,7 +129,6 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
 
         private void loadAlbumCover() {
             SongGlideRequest.Builder.from(Glide.with(getContext()), song)
-                    .checkIgnoreMediaStore(getActivity())
                     .generatePalette(getActivity()).build()
                     .into(new PhonographColoredTarget(albumCover) {
                         @Override

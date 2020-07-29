@@ -508,7 +508,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.title)).setText(song.title);
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.text)).setText(MusicUtil.getSongInfoString(song));
                 SongGlideRequest.Builder.from(Glide.with(activity), song)
-                        .checkIgnoreMediaStore(activity).build()
+                        .build()
                         .into(poster);
             } else {
 //                if (navigationDrawerHeader != null) {
