@@ -1,22 +1,23 @@
 package com.o4x.musical.glide;
 
-import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.BitmapRequestBuilder;
-import com.bumptech.glide.DrawableRequestBuilder;
-import com.bumptech.glide.DrawableTypeRequest;
+
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.Key;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.palette.BitmapPaletteTranscoder;
-import com.o4x.musical.glide.palette.BitmapPaletteWrapper;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.MusicUtil;
+
+
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -40,20 +41,16 @@ public class SongGlideRequest {
             this.song = song;
         }
 
-        public PaletteBuilder generatePalette(Context context) {
-            return new PaletteBuilder(this, context);
-        }
-
         public BitmapBuilder asBitmap() {
             return new BitmapBuilder(this);
         }
 
-        public DrawableRequestBuilder<GlideDrawable> build() {
+        public RequestBuilder<Drawable> build() {
             //noinspection unchecked
-            return createBaseRequest(requestManager, song)
+            return requestManager.load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId))
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
-                    .animate(DEFAULT_ANIMATION)
+                    .transition(DrawableTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
                     .signature(createSignature(song));
         }
     }
@@ -65,40 +62,14 @@ public class SongGlideRequest {
             this.builder = builder;
         }
 
-        public BitmapRequestBuilder<?, Bitmap> build() {
+        public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
-            return createBaseRequest(builder.requestManager, builder.song)
-                    .asBitmap()
+            return builder.requestManager.asBitmap().load(MusicUtil.getMediaStoreAlbumCoverUri(builder.song.albumId))
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
-                    .animate(DEFAULT_ANIMATION)
+                    .transition(BitmapTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
                     .signature(createSignature(builder.song));
         }
-    }
-
-    public static class PaletteBuilder {
-        final Context context;
-        private final Builder builder;
-
-        public PaletteBuilder(Builder builder, Context context) {
-            this.builder = builder;
-            this.context = context;
-        }
-
-        public BitmapRequestBuilder<?, BitmapPaletteWrapper> build() {
-            //noinspection unchecked
-            return createBaseRequest(builder.requestManager, builder.song)
-                    .asBitmap()
-                    .transcode(new BitmapPaletteTranscoder(context), BitmapPaletteWrapper.class)
-                    .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
-                    .error(DEFAULT_ERROR_IMAGE)
-                    .animate(DEFAULT_ANIMATION)
-                    .signature(createSignature(builder.song));
-        }
-    }
-
-    public static DrawableTypeRequest createBaseRequest(RequestManager requestManager, Song song) {
-        return requestManager.loadFromMediaStore(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId));
     }
 
     public static Key createSignature(Song song) {

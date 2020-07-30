@@ -19,6 +19,8 @@ import com.o4x.musical.BuildConfig;
 import com.o4x.musical.helper.StackBlur;
 import com.o4x.musical.util.ImageUtil;
 
+import java.security.MessageDigest;
+
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
@@ -36,13 +38,18 @@ public class BlurTransformation extends BitmapTransformation {
     }
 
     private BlurTransformation(Builder builder) {
-        super(builder.context);
+        super();
         init(builder);
     }
 
     private BlurTransformation(Builder builder, BitmapPool bitmapPool) {
-        super(bitmapPool);
+        super();
         init(builder);
+    }
+
+    @Override
+    public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+
     }
 
     public static class Builder {
@@ -141,7 +148,7 @@ public class BlurTransformation extends BitmapTransformation {
         return StackBlur.blur(out, blurRadius);
     }
 
-    @Override
+
     public String getId() {
         return "BlurTransformation(radius=" + blurRadius + ", sampling=" + sampling + ")";
     }

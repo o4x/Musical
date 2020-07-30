@@ -43,7 +43,6 @@ import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
 import com.o4x.musical.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.dialogs.SleepTimerDialog;
 import com.o4x.musical.glide.ArtistGlideRequest;
-import com.o4x.musical.glide.PhonographColoredTarget;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;

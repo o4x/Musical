@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
-import com.o4x.musical.glide.PhonographColoredTarget;
 import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.HorizontalAdapterHelper;
 import com.o4x.musical.interfaces.CabHolder;

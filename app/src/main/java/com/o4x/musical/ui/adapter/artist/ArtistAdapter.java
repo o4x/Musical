@@ -18,7 +18,6 @@ import com.o4x.musical.R;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.glide.ArtistGlideRequest;
-import com.o4x.musical.glide.PhonographColoredTarget;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
 import com.o4x.musical.interfaces.CabHolder;

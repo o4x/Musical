@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.adapter.home;
 
-import android.graphics.drawable.Drawable;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -8,20 +7,12 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.PhonographColoredTarget;
-import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.interfaces.CabHolder;
-import com.o4x.musical.interfaces.MusicServiceEventListener;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
 import com.o4x.musical.ui.adapter.song.SongAdapter;
 

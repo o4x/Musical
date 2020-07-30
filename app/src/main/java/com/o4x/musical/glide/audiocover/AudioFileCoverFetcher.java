@@ -1,12 +1,17 @@
 package com.o4x.musical.glide.audiocover;
 
 import android.media.MediaMetadataRetriever;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.data.DataFetcher;
 
 /**
@@ -23,14 +28,7 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
     }
 
     @Override
-    public String getId() {
-        // makes sure we never ever return null here
-        return String.valueOf(model.filePath);
-    }
-
-    @Override
-    public InputStream loadData(final Priority priority) throws Exception {
-
+    public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
         final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
             retriever.setDataSource(model.filePath);
@@ -40,12 +38,14 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
             } else {
                 stream = AudioFileCoverUtils.fallback(model.filePath);
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } finally {
             retriever.release();
         }
-
-        return stream;
     }
+
+
 
     @Override
     public void cleanup() {
@@ -62,5 +62,23 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
     @Override
     public void cancel() {
         // cannot cancel
+    }
+
+    @NonNull
+    @Override
+    public Class<InputStream> getDataClass() {
+        return InputStream.class;
+    }
+
+    @NonNull
+    @Override
+    public DataSource getDataSource() {
+        return DataSource.LOCAL;
+    }
+
+
+    public String getId() {
+        // makes sure we never ever return null here
+        return String.valueOf(model.filePath);
     }
 }

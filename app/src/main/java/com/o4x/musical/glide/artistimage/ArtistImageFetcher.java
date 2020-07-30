@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.data.DataFetcher;
 import com.o4x.musical.glide.audiocover.AudioFileCoverUtils;
 import com.o4x.musical.util.ImageUtil;
@@ -30,26 +33,49 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
     private InputStream stream;
 
-
-
     public ArtistImageFetcher(final ArtistImage model) {
         this.model = model;
     }
 
     @Override
-    public String getId() {
-        Log.d("MOSAIC", "get id for" + model.artistName);
-        // never return NULL here!
-        // this id is used to determine whether the image is already cached
-        // we use the artist name as well as the album years + file paths
-        return model.toIdString() + "ignoremediastore:";
+    public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
+        Log.d("MOSAIC", "load data for" + model.artistName);
+        try {
+            stream = getMosaic(model.albumCovers);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public InputStream loadData(Priority priority) throws Exception {
-        Log.d("MOSAIC", "load data for" + model.artistName);
-        return stream = getMosaic(model.albumCovers);
+    public void cleanup() {
+        // already cleaned up in loadData and ByteArrayInputStream will be GC'd
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException ignore) {
+                // can't do much about it
+            }
+        }
     }
+
+    @Override
+    public void cancel() {
+
+    }
+
+    @NonNull
+    @Override
+    public Class<InputStream> getDataClass() {
+        return InputStream.class;
+    }
+
+    @NonNull
+    @Override
+    public DataSource getDataSource() {
+        return DataSource.LOCAL;
+    }
+
 
     private InputStream getMosaic(final List<AlbumCover> albumCovers) throws FileNotFoundException {
 
@@ -153,20 +179,12 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
         return result;
     }
 
-    @Override
-    public void cleanup() {
-        // already cleaned up in loadData and ByteArrayInputStream will be GC'd
-        if (stream != null) {
-            try {
-                stream.close();
-            } catch (IOException ignore) {
-                // can't do much about it
-            }
-        }
-    }
 
-    @Override
-    public void cancel() {
-
+    public String getId() {
+        Log.d("MOSAIC", "get id for" + model.artistName);
+        // never return NULL here!
+        // this id is used to determine whether the image is already cached
+        // we use the artist name as well as the album years + file paths
+        return model.toIdString() + "ignoremediastore:";
     }
 }
