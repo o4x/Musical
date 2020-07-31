@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
 import android.text.TextUtils;
@@ -13,14 +15,13 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.appwidgets.base.BaseAppWidget;
 import com.o4x.musical.glide.SongGlideRequest;
-import com.o4x.musical.glide.palette.BitmapPaletteWrapper;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
@@ -32,7 +33,7 @@ public class AppWidgetCard extends BaseAppWidget {
     private static AppWidgetCard mInstance;
     private static int imageSize = 0;
     private static float cardRadius = 0f;
-    private Target<BitmapPaletteWrapper> target; // for cancellation
+    private Target<Bitmap> target; // for cancellation
 
     public static synchronized AppWidgetCard getInstance() {
         if (mInstance == null) {
@@ -97,21 +98,27 @@ public class AppWidgetCard extends BaseAppWidget {
             @Override
             public void run() {
                 if (target != null) {
-                    Glide.clear(target);
+                    Glide.with(service).clear(target);
                 }
                 target = SongGlideRequest.Builder.from(Glide.with(service), song)
-                        .generatePalette(service).build()
+                        .asBitmap()
+                        .build()
                         .centerCrop()
-                        .into(new SimpleTarget<BitmapPaletteWrapper>(imageSize, imageSize) {
+                        .into(new CustomTarget<Bitmap>(imageSize, imageSize) {
                             @Override
-                            public void onResourceReady(BitmapPaletteWrapper resource, GlideAnimation<? super BitmapPaletteWrapper> glideAnimation) {
-                                Palette palette = resource.getPalette();
-                                update(resource.getBitmap(), palette.getVibrantColor(palette.getMutedColor(MaterialValueHelper.getSecondaryTextColor(service, true))));
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                Palette palette = Palette.from(resource).generate();
+                                update(resource, palette.getVibrantColor(palette.getMutedColor(MaterialValueHelper.getSecondaryTextColor(service, true))));
                             }
 
                             @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                super.onLoadFailed(e, errorDrawable);
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                            }
+
+                            @Override
+                            public void onLoadFailed(Drawable errorDrawable) {
+                                super.onLoadFailed(errorDrawable);
                                 update(null, MaterialValueHelper.getSecondaryTextColor(service, true));
                             }
 

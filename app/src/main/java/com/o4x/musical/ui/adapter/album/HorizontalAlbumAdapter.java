@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.glide.SongGlideRequest;
+import com.o4x.musical.glide.palette.PhonographColoredTarget;
 import com.o4x.musical.helper.HorizontalAdapterHelper;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Album;
@@ -54,7 +55,8 @@ public class HorizontalAlbumAdapter extends AlbumAdapter {
         if (holder.image == null) return;
 
         SongGlideRequest.Builder.from(Glide.with(activity), album.safeGetFirstSong())
-                .generatePalette(activity).build()
+                .asBitmap()
+                .build()
                 .into(new PhonographColoredTarget(holder.image) {
                     @Override
                     public void onLoadCleared(Drawable placeholder) {

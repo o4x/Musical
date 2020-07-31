@@ -7,6 +7,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.palette.graphics.Palette;
+
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -15,13 +18,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.palette.BitmapPaletteTranscoder;
-import com.o4x.musical.glide.palette.BitmapPaletteWrapper;
 import com.o4x.musical.lastfm.rest.LastFMRestClient;
 import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
@@ -107,26 +108,30 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
                     String url = LastFMUtil.getLargestAlbumImageUrl(lastFmAlbum.getAlbum().getImage());
                     if (!TextUtils.isEmpty(url) && url.trim().length() > 0) {
                         Glide.with(AlbumTagEditorActivity.this)
-                                .load(url)
                                 .asBitmap()
-                                .transcode(new BitmapPaletteTranscoder(AlbumTagEditorActivity.this), BitmapPaletteWrapper.class)
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .load(url)
+                                .diskCacheStrategy(DiskCacheStrategy.DATA)
                                 .error(R.drawable.default_album_art)
-                                .into(new SimpleTarget<BitmapPaletteWrapper>() {
+                                .into(new CustomTarget<Bitmap>() {
                                     @Override
-                                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                        super.onLoadFailed(e, errorDrawable);
-                                        e.printStackTrace();
-                                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void onResourceReady(BitmapPaletteWrapper resource, GlideAnimation<? super BitmapPaletteWrapper> glideAnimation) {
-                                        albumArtBitmap = ImageUtil.resizeBitmap(resource.getBitmap(), 2048);
-                                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(resource.getPalette(), ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
+                                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(Palette.from(resource).generate(), ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
                                         deleteAlbumArt = false;
                                         dataChanged();
                                         setResult(RESULT_OK);
+                                    }
+
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                                    }
+
+                                    @Override
+                                    public void onLoadFailed(Drawable errorDrawable) {
+                                        super.onLoadFailed(errorDrawable);
+//                                        e.printStackTrace();
+//                                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                                     }
                                 });
                         return;
@@ -191,27 +196,32 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
     @Override
     protected void loadImageFromFile(@NonNull final Uri selectedFileUri) {
         Glide.with(AlbumTagEditorActivity.this)
-                .load(selectedFileUri)
                 .asBitmap()
-                .transcode(new BitmapPaletteTranscoder(AlbumTagEditorActivity.this), BitmapPaletteWrapper.class)
+                .load(selectedFileUri)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(new SimpleTarget<BitmapPaletteWrapper>() {
+                .into(new CustomTarget<Bitmap>() {
                     @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        e.printStackTrace();
-                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onResourceReady(BitmapPaletteWrapper resource, GlideAnimation<? super BitmapPaletteWrapper> glideAnimation) {
-                        PhonographColorUtil.getColor(resource.getPalette(), Color.TRANSPARENT);
-                        albumArtBitmap = ImageUtil.resizeBitmap(resource.getBitmap(), 2048);
-                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(resource.getPalette(), ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        final Palette palette = Palette.from(resource).generate();
+                        PhonographColorUtil.getColor(palette, Color.TRANSPARENT);
+                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
+                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(palette, ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
                         deleteAlbumArt = false;
                         dataChanged();
                         setResult(RESULT_OK);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+//                        e.printStackTrace();
+//                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
     }

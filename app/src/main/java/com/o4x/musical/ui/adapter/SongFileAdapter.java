@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.o4x.musical.R;
@@ -121,7 +123,7 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .error(error)
                     .placeholder(error)
-                    .animate(android.R.anim.fade_in)
+                    .transition(DrawableTransitionOptions.withCrossFade(android.R.anim.fade_in))
                     .signature(new MediaStoreSignature("", file.lastModified(), 0))
                     .into(holder.image);
         }

@@ -92,18 +92,22 @@ public class ArtistGlideRequest {
     public static RequestBuilder<Drawable> createBaseRequest(RequestManager requestManager, Artist artist, boolean noCustomImage) {
         boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
         if (noCustomImage || !hasCustomImage) {
-            final List<AlbumCover> songs = new ArrayList<>();
-            for (final Album album : artist.albums) {
-                final Song song = album.safeGetFirstSong();
-                songs.add(new AlbumCover(album.getYear(), song.data));
-            }
-            return requestManager.load(new ArtistImage(artist.getName(), songs));
+            return requestManager.load(getUri(artist, noCustomImage));
         } else {
-            return requestManager.load(CustomArtistImageUtil.getFile(artist));
+            return requestManager.load(getUri(artist, false));
         }
     }
 
     public static RequestBuilder<Bitmap> createBaseRequestAsBitmap(RequestManager requestManager, Artist artist, boolean noCustomImage) {
+        boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
+        if (noCustomImage || !hasCustomImage) {
+            return requestManager.asBitmap().load(getUri(artist, noCustomImage));
+        } else {
+            return requestManager.asBitmap().load(getUri(artist, false));
+        }
+    }
+
+    public static Object getUri(Artist artist, boolean noCustomImage) {
         boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
         if (noCustomImage || !hasCustomImage) {
             final List<AlbumCover> songs = new ArrayList<>();
@@ -111,9 +115,9 @@ public class ArtistGlideRequest {
                 final Song song = album.safeGetFirstSong();
                 songs.add(new AlbumCover(album.getYear(), song.data));
             }
-            return requestManager.asBitmap().load(new ArtistImage(artist.getName(), songs));
+            return new ArtistImage(artist.getName(), songs);
         } else {
-            return requestManager.asBitmap().load(CustomArtistImageUtil.getFile(artist));
+            return CustomArtistImageUtil.getFile(artist);
         }
     }
 

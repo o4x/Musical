@@ -8,20 +8,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
 import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.R;
 import com.o4x.musical.glide.SongGlideRequest;
-import com.o4x.musical.glide.palette.BitmapPaletteWrapper;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
-import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.PreferenceUtil;
 
 import static com.o4x.musical.service.MusicService.ACTION_REWIND;
@@ -52,16 +53,23 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
 
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
         service.runOnUiThread(() -> SongGlideRequest.Builder.from(Glide.with(service), song)
-                .generatePalette(service).build()
-                .into(new SimpleTarget<BitmapPaletteWrapper>(bigNotificationImageSize, bigNotificationImageSize) {
+                .asBitmap()
+                .build()
+                .into(new CustomTarget<Bitmap>(bigNotificationImageSize, bigNotificationImageSize) {
                     @Override
-                    public void onResourceReady(BitmapPaletteWrapper resource, GlideAnimation<? super BitmapPaletteWrapper> glideAnimation) {
-                        Palette palette = resource.getPalette();
-                        update(resource.getBitmap(), palette.getVibrantColor(palette.getMutedColor(Color.TRANSPARENT)));
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Palette palette = Palette.from(resource).generate();
+                        update(resource, palette.getVibrantColor(palette.getMutedColor(Color.TRANSPARENT)));
                     }
 
                     @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
                         update(null, Color.TRANSPARENT);
                     }
 

@@ -8,14 +8,16 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.App;
 import com.o4x.musical.model.Artist;
 
@@ -51,20 +53,13 @@ public class CustomArtistImageUtil {
 
     public void setCustomArtistImage(final Artist artist, Uri uri) {
         Glide.with(App.getInstance())
-                .load(uri)
                 .asBitmap()
+                .load(uri)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .into(new SimpleTarget<Bitmap>() {
+                .into(new CustomTarget<Bitmap>() {
                     @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        e.printStackTrace();
-                        Toast.makeText(App.getInstance(), e.toString(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onResourceReady(final Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         new AsyncTask<Void, Void, Void>() {
                             @SuppressLint("ApplySharedPref")
                             @Override
@@ -94,6 +89,18 @@ public class CustomArtistImageUtil {
                                 return null;
                             }
                         }.execute();
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+//                        e.printStackTrace();
+//                        Toast.makeText(App.getInstance(), e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
     }

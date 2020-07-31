@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
+import com.o4x.musical.glide.palette.PhonographColoredTarget;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.glide.ArtistGlideRequest;
@@ -125,7 +126,8 @@ public class ArtistAdapter extends AbsMultiSelectAdapter<ArtistAdapter.ViewHolde
     protected void loadArtistImage(Artist artist, final ViewHolder holder) {
         if (holder.image == null) return;
         ArtistGlideRequest.Builder.from(Glide.with(activity), artist)
-                .generatePalette(activity).build()
+                .asBitmap()
+                .build()
                 .into(new PhonographColoredTarget(holder.image) {
                     @Override
                     public void onLoadCleared(Drawable placeholder) {

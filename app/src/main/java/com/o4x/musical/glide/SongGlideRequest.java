@@ -2,6 +2,7 @@ package com.o4x.musical.glide;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -47,7 +48,7 @@ public class SongGlideRequest {
 
         public RequestBuilder<Drawable> build() {
             //noinspection unchecked
-            return requestManager.load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId))
+            return requestManager.load(getUri(song))
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
                     .transition(DrawableTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
@@ -64,12 +65,20 @@ public class SongGlideRequest {
 
         public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
-            return builder.requestManager.asBitmap().load(MusicUtil.getMediaStoreAlbumCoverUri(builder.song.albumId))
+            return builder.requestManager.asBitmap().load(getUri(builder.song.albumId))
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
                     .transition(BitmapTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
                     .signature(createSignature(builder.song));
         }
+    }
+
+    public static Uri getUri(Song song) {
+        return MusicUtil.getMediaStoreAlbumCoverUri(song.albumId);
+    }
+
+    public static Uri getUri(int albumId) {
+        return MusicUtil.getMediaStoreAlbumCoverUri(albumId);
     }
 
     public static Key createSignature(Song song) {
