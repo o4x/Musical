@@ -126,7 +126,7 @@ public class ArtistAdapter extends AbsMultiSelectAdapter<ArtistAdapter.ViewHolde
 
     protected void loadArtistImage(Artist artist, final ViewHolder holder) {
         if (holder.image == null) return;
-        ArtistGlideRequest.Builder.from(GlideApp.with(activity), artist)
+        ArtistGlideRequest.Builder.from(Glide.with(activity), artist)
                 .asBitmap()
                 .build()
                 .into(new PhonographColoredTarget(holder.image) {

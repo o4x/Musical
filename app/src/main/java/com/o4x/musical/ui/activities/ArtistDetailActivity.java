@@ -251,7 +251,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
     }
 
     private void loadArtistImage() {
-        ArtistGlideRequest.Builder.from(GlideApp.with(this), artist)
+        ArtistGlideRequest.Builder.from(Glide.with(this), artist)
                 .asBitmap()
                 .build()
                 .dontAnimate()

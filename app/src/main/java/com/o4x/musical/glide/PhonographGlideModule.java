@@ -30,6 +30,7 @@ public class PhonographGlideModule extends AppGlideModule {
 
     @Override
     public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
+        builder.setLogLevel(Log.ERROR);
         super.applyOptions(context, builder);
     }
 
