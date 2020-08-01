@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
@@ -99,11 +99,16 @@ public class AppWidgetBig extends BaseAppWidget {
                 }
                 target = SongGlideRequest.Builder.from(Glide.with(appContext), song)
                         .asBitmap().build()
-                        .into(new SimpleTarget<Bitmap>(widgetImageSize, widgetImageSize) {
+                        .into(new CustomTarget<Bitmap>(widgetImageSize, widgetImageSize) {
 
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                 update(resource);
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+
                             }
 
                             @Override
