@@ -1,5 +1,7 @@
 package com.o4x.musical.glide.artistimage;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 

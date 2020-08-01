@@ -43,6 +43,7 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
         } finally {
             retriever.release();
         }
+        callback.onDataReady(stream);
     }
 
 
