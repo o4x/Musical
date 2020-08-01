@@ -27,7 +27,7 @@ public class SongGlideRequest {
 
     public static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.NONE;
     public static final int DEFAULT_ERROR_IMAGE = R.drawable.default_album_art;
-    public static final int DEFAULT_ANIMATION = android.R.anim.fade_in;
+    public static final int DEFAULT_ANIMATION = 300;
 
     public static class Builder {
         final RequestManager requestManager;
@@ -65,7 +65,7 @@ public class SongGlideRequest {
 
         public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
-            return builder.requestManager.asBitmap().load(getUri(builder.song.albumId))
+            return builder.requestManager.asBitmap().load(getUri(builder.song))
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
                     .transition(BitmapTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
@@ -75,10 +75,6 @@ public class SongGlideRequest {
 
     public static Uri getUri(Song song) {
         return MusicUtil.getMediaStoreAlbumCoverUri(song.albumId);
-    }
-
-    public static Uri getUri(int albumId) {
-        return MusicUtil.getMediaStoreAlbumCoverUri(albumId);
     }
 
     public static Key createSignature(Song song) {

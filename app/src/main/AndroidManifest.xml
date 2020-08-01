@@ -143,12 +143,6 @@
         <meta-data
             android:name="com.lge.support.SPLIT_WINDOW"
             android:value="true" />
-        <meta-data
-            android:name="com.o4x.musical.glide.PhonographGlideModule"
-            android:value="GlideModule" />
-        <meta-data
-            android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule"
-            android:value="GlideModule" />
 
         <!-- Widgets -->
         <receiver android:name=".appwidgets.BootReceiver">

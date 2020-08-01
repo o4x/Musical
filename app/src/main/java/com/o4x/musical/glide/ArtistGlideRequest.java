@@ -33,7 +33,7 @@ public class ArtistGlideRequest {
 
     private static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.ALL;
     private static final int DEFAULT_ERROR_IMAGE = R.drawable.default_artist_image;
-    public static final int DEFAULT_ANIMATION = android.R.anim.fade_in;
+    public static final int DEFAULT_ANIMATION = 300;
 
     public static class Builder {
         final RequestManager requestManager;

@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.o4x.musical.R;
+import com.o4x.musical.glide.GlideApp;
 import com.o4x.musical.glide.audiocover.AudioFileCover;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
@@ -118,12 +119,12 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
             holder.image.setImageResource(R.drawable.ic_folder_white_24dp);
         } else {
             Drawable error = ImageUtil.getTintedVectorDrawable(activity, R.drawable.ic_file_music_white_24dp, iconColor);
-            Glide.with(activity)
+            GlideApp.with(activity)
                     .load(new AudioFileCover(file.getPath()))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .error(error)
                     .placeholder(error)
-                    .transition(DrawableTransitionOptions.withCrossFade(android.R.anim.fade_in))
+                    .transition(DrawableTransitionOptions.withCrossFade(300))
                     .signature(new MediaStoreSignature("", file.lastModified(), 0))
                     .into(holder.image);
         }

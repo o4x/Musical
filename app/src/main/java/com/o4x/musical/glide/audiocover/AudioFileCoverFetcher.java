@@ -75,10 +75,4 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
     public DataSource getDataSource() {
         return DataSource.LOCAL;
     }
-
-
-    public String getId() {
-        // makes sure we never ever return null here
-        return String.valueOf(model.filePath);
-    }
 }
