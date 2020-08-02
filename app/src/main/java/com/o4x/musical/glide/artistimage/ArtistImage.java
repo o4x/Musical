@@ -25,4 +25,25 @@ public class ArtistImage {
         }
         return id.toString();
     }
+
+    @Override
+    public int hashCode() {
+        return Math.abs(toIdString().hashCode());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+
+        ArtistImage compare = (ArtistImage) obj;
+
+        try {
+            return (compare.artistName.equals(this.artistName) && compare.hashCode() == this.hashCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class ArtistGlideRequest {
 
-    private static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.ALL;
+    private static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.AUTOMATIC;
     private static final int DEFAULT_ERROR_IMAGE = R.drawable.default_artist_image;
     public static final int DEFAULT_ANIMATION = 300;
 

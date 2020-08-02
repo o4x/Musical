@@ -177,4 +177,34 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
         }
         return result;
     }
+
+
+    public String getId() {
+        Log.d("MOSAIC", "get id for" + model.artistName);
+        // never return NULL here!
+        // this id is used to determine whether the image is already cached
+        // we use the artist name as well as the album years + file paths
+        return model.toIdString();
+    }
+
+    @Override
+    public int hashCode() {
+        return Math.abs(getId().hashCode());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+
+        ArtistImageFetcher compare = (ArtistImageFetcher) obj;
+
+        try {
+            return (compare.getId().equals(this.getId()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

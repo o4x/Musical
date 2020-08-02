@@ -1,7 +1,6 @@
 package com.o4x.musical.glide.audiocover;
 
 import android.media.MediaMetadataRetriever;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
