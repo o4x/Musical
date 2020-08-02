@@ -128,6 +128,10 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation ("com.github.bumptech.glide:recyclerview-integration:4.11.0") {
+        // Excludes the support library because it's already included by Glide.
+        transitive = false
+    }
     implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
     implementation 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5'
 

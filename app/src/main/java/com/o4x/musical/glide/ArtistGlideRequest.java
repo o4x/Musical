@@ -32,7 +32,7 @@ import java.util.List;
 public class ArtistGlideRequest {
 
     private static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.AUTOMATIC;
-    private static final int DEFAULT_ERROR_IMAGE = R.drawable.default_artist_image;
+    private static final int DEFAULT_PLACEHOLDER_IMAGE = R.drawable.default_artist_image;
     public static final int DEFAULT_ANIMATION = 300;
 
     public static class Builder {
@@ -62,7 +62,7 @@ public class ArtistGlideRequest {
             //noinspection unchecked
             return createBaseRequest(requestManager, artist, noCustomImage)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
-                    .error(DEFAULT_ERROR_IMAGE)
+                    .placeholder(DEFAULT_PLACEHOLDER_IMAGE)
                     .transition(DrawableTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
                     .priority(Priority.LOW)
                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
@@ -81,7 +81,7 @@ public class ArtistGlideRequest {
             //noinspection unchecked
             return createBaseRequestAsBitmap(builder.requestManager, builder.artist, builder.noCustomImage)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
-                    .error(DEFAULT_ERROR_IMAGE)
+                    .placeholder(DEFAULT_PLACEHOLDER_IMAGE)
                     .transition(BitmapTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
                     .priority(Priority.LOW)
                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)

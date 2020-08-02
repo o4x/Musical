@@ -1,11 +1,16 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +18,10 @@ import android.view.ViewGroup;
 
 import com.afollestad.materialcab.MaterialCab;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.ListPreloader;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
@@ -31,12 +40,15 @@ import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, Song> implements MaterialCab.Callback, FastScrollRecyclerView.SectionedAdapter {
+
+    public static final int imageSize = 1024;
 
     protected final AppCompatActivity activity;
     protected List<Song> dataSet;
@@ -136,6 +148,7 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
         SongGlideRequest.Builder.from(Glide.with(activity), song)
                 .asBitmap()
                 .build()
+                .override(imageSize, imageSize)
                 .into(new PhonographColoredTarget(holder.image) {
                     @Override
                     public void onLoadCleared(Drawable placeholder) {
@@ -270,5 +283,37 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
         public boolean onLongClick(View view) {
             return toggleChecked(getAdapterPosition());
         }
+    }
+
+    private class SongPreloadModelProvider implements ListPreloader.PreloadModelProvider<Song> {
+        @Override
+        @NonNull
+        public List<Song> getPreloadItems(int position) {
+            try {
+                Song song = dataSet.get(position);
+                return Collections.singletonList(song);
+            } catch (Exception e) {
+                return  Collections.emptyList();
+            }
+        }
+
+        @Nullable
+        @Override
+        public RequestBuilder<Bitmap> getPreloadRequestBuilder(@NonNull Song song) {
+            return SongGlideRequest.Builder.from(Glide.with(activity), song)
+                    .asBitmap()
+                    .build()
+                    .override(imageSize, imageSize);
+        }
+    }
+
+    public void setPreloadProvider(@NonNull RecyclerView recyclerView) {
+        ListPreloader.PreloadSizeProvider sizeProvider =
+                new FixedPreloadSizeProvider(imageSize, imageSize);
+        ListPreloader.PreloadModelProvider modelProvider = new SongPreloadModelProvider();
+        RecyclerViewPreloader<?> preloader =
+                new RecyclerViewPreloader<>(
+                        Glide.with(activity), modelProvider, sizeProvider, 4 /*maxPreload*/);
+        recyclerView.addOnScrollListener(preloader);
     }
 }

@@ -26,8 +26,8 @@ import com.o4x.musical.util.MusicUtil;
 public class SongGlideRequest {
 
     public static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.NONE;
-    public static final int DEFAULT_ERROR_IMAGE = R.drawable.default_album_art;
-    public static final int DEFAULT_ANIMATION = 300;
+    public static final int DEFAULT_PLACEHOLDER_IMAGE = R.drawable.default_album_art;
+    public static final int DEFAULT_ANIMATION = 0;
 
     public static class Builder {
         final RequestManager requestManager;
@@ -50,7 +50,7 @@ public class SongGlideRequest {
             //noinspection unchecked
             return requestManager.load(getUri(song))
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
-                    .error(DEFAULT_ERROR_IMAGE)
+                    .placeholder(DEFAULT_PLACEHOLDER_IMAGE)
                     .transition(DrawableTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
                     .signature(createSignature(song));
         }
@@ -67,7 +67,7 @@ public class SongGlideRequest {
             //noinspection unchecked
             return builder.requestManager.asBitmap().load(getUri(builder.song))
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
-                    .error(DEFAULT_ERROR_IMAGE)
+                    .placeholder(DEFAULT_PLACEHOLDER_IMAGE)
                     .transition(BitmapTransitionOptions.withCrossFade(DEFAULT_ANIMATION))
                     .signature(createSignature(builder.song));
         }

@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.ListPreloader.*;
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
+import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
@@ -53,6 +57,7 @@ import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.adapter.home.HomeAdapter;
+import com.o4x.musical.ui.adapter.song.SongAdapter;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PhonographColorUtil;
@@ -385,6 +390,8 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         queueView.setAdapter(queueAdapter);
         queueView.setItemAnimator(animator);
         queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition(), 0);
+
+        queueAdapter.setPreloadProvider(queueView);
     }
 
     private void setUpRecentlyView() {

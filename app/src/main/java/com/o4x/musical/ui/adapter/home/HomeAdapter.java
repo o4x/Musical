@@ -115,4 +115,6 @@ public class HomeAdapter extends PlayingQueueAdapter {
     public List<Song> getDataSet() {
         return dataSet;
     }
+
+
 }

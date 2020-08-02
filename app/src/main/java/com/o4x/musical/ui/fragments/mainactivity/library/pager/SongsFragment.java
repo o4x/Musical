@@ -46,20 +46,25 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
         boolean usePalette = loadUsePalette();
         List<Song> dataSet = getAdapter() == null ? new ArrayList<>() : getAdapter().getDataSet();
 
+        SongAdapter songAdapter;
         if (getGridSize() <= getMaxGridSizeForList()) {
-            return new ShuffleButtonSongAdapter(
+            songAdapter = new ShuffleButtonSongAdapter(
+                    getLibraryFragment().getMainActivity(),
+                    dataSet,
+                    itemLayoutRes,
+                    usePalette,
+                    getLibraryFragment());
+        } else {
+            songAdapter = new SongAdapter(
                     getLibraryFragment().getMainActivity(),
                     dataSet,
                     itemLayoutRes,
                     usePalette,
                     getLibraryFragment());
         }
-        return new SongAdapter(
-                getLibraryFragment().getMainActivity(),
-                dataSet,
-                itemLayoutRes,
-                usePalette,
-                getLibraryFragment());
+
+        songAdapter.setPreloadProvider(getRecyclerView());
+        return songAdapter;
     }
 
     @Override
