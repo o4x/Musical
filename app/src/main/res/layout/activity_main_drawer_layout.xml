@@ -18,6 +18,6 @@
         android:layout_gravity="start"
         app:menu="@menu/menu_drawer"
         app:itemHorizontalPadding="48dp"
-        app:itemBackground="@drawable/menu_background_color"/>
+        app:itemBackground="@drawable/menu_background_color" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
