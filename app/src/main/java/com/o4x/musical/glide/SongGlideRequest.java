@@ -27,7 +27,7 @@ public class SongGlideRequest {
 
     public static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.NONE;
     public static final int DEFAULT_PLACEHOLDER_IMAGE = R.drawable.default_album_art;
-    public static final int DEFAULT_ANIMATION = 0;
+    public static final int DEFAULT_ANIMATION = 300;
 
     public static class Builder {
         final RequestManager requestManager;

@@ -43,12 +43,15 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import java.util.Collections;
 import java.util.List;
 
+import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
+
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, Song> implements MaterialCab.Callback, FastScrollRecyclerView.SectionedAdapter {
 
     public static final int imageSize = 1024;
+    private boolean isPreload = false;
 
     protected final AppCompatActivity activity;
     protected List<Song> dataSet;
@@ -145,25 +148,35 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
     protected void loadAlbumCover(Song song, final ViewHolder holder) {
         if (holder.image == null) return;
 
-        SongGlideRequest.Builder.from(Glide.with(activity), song)
-                .asBitmap()
-                .build()
-                .override(imageSize, imageSize)
-                .into(new PhonographColoredTarget(holder.image) {
-                    @Override
-                    public void onLoadCleared(Drawable placeholder) {
-                        super.onLoadCleared(placeholder);
-                        setColors(getDefaultFooterColor(), holder);
-                    }
+        PhonographColoredTarget target = new PhonographColoredTarget(holder.image) {
+            @Override
+            public void onLoadCleared(Drawable placeholder) {
+                super.onLoadCleared(placeholder);
+                setColors(getDefaultFooterColor(), holder);
+            }
 
-                    @Override
-                    public void onColorReady(int color) {
-                        if (usePalette)
-                            setColors(color, holder);
-                        else
-                            setColors(getDefaultFooterColor(), holder);
-                    }
-                });
+            @Override
+            public void onColorReady(int color) {
+                if (usePalette)
+                    setColors(color, holder);
+                else
+                    setColors(getDefaultFooterColor(), holder);
+            }
+        };
+
+        if (isPreload) {
+            SongGlideRequest.Builder.from(Glide.with(activity), song)
+                    .asBitmap()
+                    .build()
+                    .transition(withCrossFade(0))
+                    .override(imageSize, imageSize)
+                    .into(target);
+        } else {
+            SongGlideRequest.Builder.from(Glide.with(activity), song)
+                    .asBitmap()
+                    .build()
+                    .into(target);
+        }
     }
 
     protected String getSongTitle(Song song) {
@@ -303,11 +316,14 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
             return SongGlideRequest.Builder.from(Glide.with(activity), song)
                     .asBitmap()
                     .build()
+                    .transition(withCrossFade(0))
                     .override(imageSize, imageSize);
         }
     }
 
     public void setPreloadProvider(@NonNull RecyclerView recyclerView) {
+        isPreload = true;
+
         ListPreloader.PreloadSizeProvider sizeProvider =
                 new FixedPreloadSizeProvider(imageSize, imageSize);
         ListPreloader.PreloadModelProvider modelProvider = new SongPreloadModelProvider();
