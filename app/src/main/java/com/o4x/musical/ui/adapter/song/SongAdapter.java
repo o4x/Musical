@@ -1,49 +1,36 @@
 package com.o4x.musical.ui.adapter.song;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
+
 import com.afollestad.materialcab.MaterialCab;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.ListPreloader;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
-import com.bumptech.glide.util.FixedPreloadSizeProvider;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.palette.PhonographColoredTarget;
-import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
-import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.universalIL.BaseUniversalIL;
+import com.o4x.musical.universalIL.palette.PaletteImageLoadingListener;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
-import java.util.Collections;
 import java.util.List;
-
-import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -51,7 +38,6 @@ import static com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.wi
 public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, Song> implements MaterialCab.Callback, FastScrollRecyclerView.SectionedAdapter {
 
     public static final int imageSize = 1024;
-    private boolean isPreload = false;
 
     protected final AppCompatActivity activity;
     protected List<Song> dataSet;
@@ -148,35 +134,17 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
     protected void loadAlbumCover(Song song, final ViewHolder holder) {
         if (holder.image == null) return;
 
-        PhonographColoredTarget target = new PhonographColoredTarget(holder.image) {
-            @Override
-            public void onLoadCleared(Drawable placeholder) {
-                super.onLoadCleared(placeholder);
-                setColors(getDefaultFooterColor(), holder);
-            }
-
-            @Override
-            public void onColorReady(int color) {
-                if (usePalette)
-                    setColors(color, holder);
-                else
-                    setColors(getDefaultFooterColor(), holder);
-            }
-        };
-
-        if (isPreload) {
-            SongGlideRequest.Builder.from(Glide.with(activity), song)
-                    .asBitmap()
-                    .build()
-                    .transition(withCrossFade(0))
-                    .override(imageSize, imageSize)
-                    .into(target);
-        } else {
-            SongGlideRequest.Builder.from(Glide.with(activity), song)
-                    .asBitmap()
-                    .build()
-                    .into(target);
-        }
+        BaseUniversalIL.songImageLoader(song, holder.image,
+                new PaletteImageLoadingListener() {
+                    @Override
+                    public void onColorReady(int color) {
+                        if (usePalette)
+                            setColors(color, holder);
+                        else
+                            setColors(getDefaultFooterColor(activity), holder);
+                    }
+                }
+        );
     }
 
     protected String getSongTitle(Song song) {
@@ -296,40 +264,5 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
         public boolean onLongClick(View view) {
             return toggleChecked(getAdapterPosition());
         }
-    }
-
-    private class SongPreloadModelProvider implements ListPreloader.PreloadModelProvider<Song> {
-        @Override
-        @NonNull
-        public List<Song> getPreloadItems(int position) {
-            try {
-                Song song = dataSet.get(position);
-                return Collections.singletonList(song);
-            } catch (Exception e) {
-                return  Collections.emptyList();
-            }
-        }
-
-        @Nullable
-        @Override
-        public RequestBuilder<Bitmap> getPreloadRequestBuilder(@NonNull Song song) {
-            return SongGlideRequest.Builder.from(Glide.with(activity), song)
-                    .asBitmap()
-                    .build()
-                    .transition(withCrossFade(0))
-                    .override(imageSize, imageSize);
-        }
-    }
-
-    public void setPreloadProvider(@NonNull RecyclerView recyclerView) {
-        isPreload = true;
-
-        ListPreloader.PreloadSizeProvider sizeProvider =
-                new FixedPreloadSizeProvider(imageSize, imageSize);
-        ListPreloader.PreloadModelProvider modelProvider = new SongPreloadModelProvider();
-        RecyclerViewPreloader<?> preloader =
-                new RecyclerViewPreloader<>(
-                        Glide.with(activity), modelProvider, sizeProvider, 4 /*maxPreload*/);
-        recyclerView.addOnScrollListener(preloader);
     }
 }

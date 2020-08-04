@@ -42,3 +42,7 @@
 -keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
   *** rewind();
 }
+
+#UIL
+-keep class com.nostra13.universalimageloader.** { *; }
+-keepclassmembers class com.nostra13.universalimageloader.** {*;}

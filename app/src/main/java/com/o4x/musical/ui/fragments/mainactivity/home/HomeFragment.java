@@ -390,8 +390,6 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         queueView.setAdapter(queueAdapter);
         queueView.setItemAnimator(animator);
         queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition(), 0);
-
-        queueAdapter.setPreloadProvider(queueView);
     }
 
     private void setUpRecentlyView() {
