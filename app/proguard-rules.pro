@@ -20,6 +20,16 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-dontwarn java.lang.invoke.*
+-dontwarn **$$Lambda$*
+
+# RetroFit
+-dontwarn retrofit.**
+-keep class retrofit.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+-dontwarn javax.annotation.**
+
 # Glide settings
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep class * extends com.bumptech.glide.module.AppGlideModule {
@@ -29,6 +39,6 @@
   **[] $VALUES;
   public *;
 }
-#-keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
-#  *** rewind();
-#}
+-keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
+  *** rewind();
+}
