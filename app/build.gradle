@@ -106,7 +106,7 @@ dependencies {
     implementation 'com.github.kabouzeid:RecyclerView-FastScroll:1.0.16-kmod'
     implementation 'com.github.kabouzeid:SeekArc:1.2-kmod'
     implementation 'com.github.kabouzeid:AndroidSlidingUpPanel:6'
-    implementation 'com.afollestad.material-dialogs:core:2.1.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.afollestad:material-cab:0.1.12'
     implementation 'com.github.ksoichiro:android-observablescrollview:1.6.0'
@@ -137,4 +137,12 @@ dependencies {
 
     implementation 'com.github.AdrienPoupa:jaudiotagger:2.2.3'
     implementation 'com.github.woxingxiao:BounceScrollView:1.5-androidx'
+
+    def koin_version = "2.1.5"
+    implementation "org.koin:koin-core:$koin_version"
+    implementation "org.koin:koin-core-ext:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "org.koin:koin-androidx-fragment:$koin_version"
+    implementation "org.koin:koin-androidx-ext:$koin_version"
 }
