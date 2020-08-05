@@ -28,12 +28,12 @@ import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.glide.palette.PhonographColoredTarget;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.ui.adapter.song.AlbumSongAdapter;
 import com.o4x.musical.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.dialogs.DeleteSongsDialog;
 import com.o4x.musical.dialogs.SleepTimerDialog;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
@@ -165,16 +165,16 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     }
 
     private void loadAlbumCover() {
-        SongGlideRequest.Builder.from(Glide.with(this), getAlbum().safeGetFirstSong())
-                .asBitmap()
-                .build()
-                .dontAnimate()
-                .into(new PhonographColoredTarget(albumArtImageView) {
+        UniversalIL.songImageLoader(
+                getAlbum().safeGetFirstSong(),
+                albumArtImageView,
+                new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {
                         setColors(color);
                     }
-                });
+                }
+        );
     }
 
     private void setColors(int color) {

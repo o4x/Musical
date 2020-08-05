@@ -12,8 +12,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
-import com.o4x.musical.imageloader.glide.palette.PhonographColoredTarget;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.PreferenceUtil;
@@ -128,15 +128,16 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
 
         private void loadAlbumCover() {
-            SongGlideRequest.Builder.from(Glide.with(getContext()), song)
-                    .asBitmap()
-                    .build()
-                    .into(new PhonographColoredTarget(albumCover) {
+            UniversalIL.songImageLoader(
+                    song,
+                    albumCover,
+                    new PaletteImageLoadingListener() {
                         @Override
                         public void onColorReady(int color) {
                             setColor(color);
                         }
-                    });
+                    }
+            );
         }
 
         @Override

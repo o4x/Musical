@@ -24,7 +24,7 @@ import com.o4x.musical.util.MusicUtil;
 public class UniversalIL {
 
     private static final int DEFAULT_ARTIST_IMAGE = R.drawable.default_artist_image;
-    public static final int DEFAULT_ALBUM_IMAGE = R.drawable.default_album_art;
+    private static final int DEFAULT_ALBUM_IMAGE = R.drawable.default_album_art;
 
     private static final DisplayImageOptions.Builder options =
             new DisplayImageOptions.Builder()

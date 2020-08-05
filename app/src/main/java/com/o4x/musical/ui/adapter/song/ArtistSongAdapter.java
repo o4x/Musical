@@ -17,10 +17,10 @@ import android.widget.TextView;
 import com.afollestad.materialcab.MaterialCab;
 import com.bumptech.glide.Glide;
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.NavigationUtil;
@@ -86,9 +86,7 @@ public class ArtistSongAdapter extends ArrayAdapter<Song> implements MaterialCab
         songTitle.setText(song.title);
         songInfo.setText(song.albumName);
 
-        SongGlideRequest.Builder.from(Glide.with(activity), song)
-                .build()
-                .into(albumArt);
+        UniversalIL.songImageLoader(song, albumArt, null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             albumArt.setTransitionName(activity.getString(R.string.transition_album_art));

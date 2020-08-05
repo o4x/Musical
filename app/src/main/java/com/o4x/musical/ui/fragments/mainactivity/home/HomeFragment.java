@@ -39,8 +39,8 @@ import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.dialogs.CreatePlaylistDialog;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.interfaces.MusicServiceEventListener;
 import com.o4x.musical.loader.LastAddedLoader;
 import com.o4x.musical.loader.SongLoader;
@@ -506,9 +506,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 //                }
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.title)).setText(song.title);
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.text)).setText(MusicUtil.getSongInfoString(song));
-                SongGlideRequest.Builder.from(Glide.with(activity), song)
-                        .build()
-                        .into(poster);
+                UniversalIL.songImageLoader(song, poster, null);
             } else {
 //                if (navigationDrawerHeader != null) {
 //                    navigationView.removeHeaderView(navigationDrawerHeader);

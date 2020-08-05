@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
-import com.o4x.musical.imageloader.glide.palette.PhonographColoredTarget;
 import com.o4x.musical.helper.HorizontalAdapterHelper;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.util.MusicUtil;
@@ -54,24 +54,19 @@ public class HorizontalAlbumAdapter extends AlbumAdapter {
     protected void loadAlbumCover(Album album, final ViewHolder holder) {
         if (holder.image == null) return;
 
-        SongGlideRequest.Builder.from(Glide.with(activity), album.safeGetFirstSong())
-                .asBitmap()
-                .build()
-                .into(new PhonographColoredTarget(holder.image) {
-                    @Override
-                    public void onLoadCleared(Drawable placeholder) {
-                        super.onLoadCleared(placeholder);
-                        setColors(getAlbumArtistFooterColor(), holder);
-                    }
-
+        UniversalIL.songImageLoader(
+                album.safeGetFirstSong(),
+                holder.image,
+                new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {
                         if (usePalette)
                             setColors(color, holder);
                         else
-                            setColors(getAlbumArtistFooterColor(), holder);
+                            setColors(getAlbumArtistFooterColor(activity), holder);
                     }
-                });
+                }
+        );
     }
 
     @Override

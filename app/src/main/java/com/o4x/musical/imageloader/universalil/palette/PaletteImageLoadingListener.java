@@ -18,18 +18,21 @@ public abstract class PaletteImageLoadingListener extends SimpleImageLoadingList
     @Override
     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
         super.onLoadingFailed(imageUri, view, failReason);
+        if (view == null) return;
         onColorReady(getDefaultFooterColor(view.getContext()));
     }
 
     @Override
     public void onLoadingCancelled(String imageUri, View view) {
         super.onLoadingCancelled(imageUri, view);
+        if (view == null) return;
         onColorReady(getDefaultFooterColor(view.getContext()));
     }
 
     @Override
     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
         super.onLoadingComplete(imageUri, view, loadedImage);
+        if (view == null) return;
         onColorReady(
                 PhonographColorUtil.getColor(Palette.from(loadedImage).generate(),
                 getDefaultFooterColor(view.getContext()))
