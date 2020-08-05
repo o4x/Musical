@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.L;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.model.ArtistImage;
@@ -26,16 +27,21 @@ public class UniversalIL {
     private static final int DEFAULT_ARTIST_IMAGE = R.drawable.default_artist_image;
     private static final int DEFAULT_ALBUM_IMAGE = R.drawable.default_album_art;
 
-    private static final DisplayImageOptions.Builder options =
-            new DisplayImageOptions.Builder()
-            .imageScaleType(ImageScaleType.EXACTLY)
-            .cacheOnDisk(true)
-            .cacheInMemory(true);
+
+    private static DisplayImageOptions.Builder getOptions() {
+        return new DisplayImageOptions.Builder()
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .cacheOnDisk(true)
+                .cacheInMemory(true);
+    }
+
 
     public static void initImageLoader(@NonNull Context context) {
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-                .defaultDisplayImageOptions(options.build())
+                .defaultDisplayImageOptions(getOptions().build())
+                .diskCacheSize(1024 * 1024 * 100 /* 100MB */)
+                .memoryCacheSize(1024 * 1024 * 300 /* 300MB */)
                 .imageDownloader(new CustomImageDownloader(context))
                 .build();
 
@@ -54,7 +60,7 @@ public class UniversalIL {
         ImageLoader.getInstance().displayImage(
                 MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
                 image,
-                options
+                getOptions()
                         .showImageOnLoading(DEFAULT_ALBUM_IMAGE)
                         .showImageOnFail(DEFAULT_ALBUM_IMAGE)
                         .showImageForEmptyUri(DEFAULT_ALBUM_IMAGE)
@@ -69,12 +75,12 @@ public class UniversalIL {
             @NonNull ImageView image,
             @Nullable PaletteImageLoadingListener listener) {
 
-        String imageId = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.hashCode();
+        String imageId = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.filePath;
 
         ImageLoader.getInstance().displayImage(
                 imageId,
                 image,
-                options
+                getOptions()
                         .extraForDownloader(audioFileCover)
                         .showImageOnLoading(error)
                         .showImageOnFail(error)
@@ -97,7 +103,7 @@ public class UniversalIL {
         ImageLoader.getInstance().displayImage(
                 imageId,
                 image,
-                options
+                getOptions()
                         .extraForDownloader(artistImage)
                         .showImageOnLoading(DEFAULT_ARTIST_IMAGE)
                         .showImageOnFail(DEFAULT_ARTIST_IMAGE)

@@ -37,6 +37,7 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemA
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.o4x.musical.R;
 import com.o4x.musical.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
@@ -53,6 +54,7 @@ import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.adapter.home.HomeAdapter;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
+import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.Util;
@@ -467,7 +469,6 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
         @Override
         public void onPlayingMetaChanged() {
-            updatePoster();
             updateQueue();
         }
 
@@ -506,7 +507,10 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 //                }
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.title)).setText(song.title);
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.text)).setText(MusicUtil.getSongInfoString(song));
-                UniversalIL.songImageLoader(song, poster, null);
+                ImageLoader.getInstance().displayImage(
+                        MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
+                        poster
+                );
             } else {
 //                if (navigationDrawerHeader != null) {
 //                    navigationView.removeHeaderView(navigationDrawerHeader);
