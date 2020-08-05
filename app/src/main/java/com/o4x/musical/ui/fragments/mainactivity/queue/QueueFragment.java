@@ -268,8 +268,10 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
                     return LinearSmoothScroller.SNAP_TO_ANY;
                 }
             };
-            smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition());
-            queueLayoutManager.startSmoothScroll(smoothScroller);
+            try {
+                smoothScroller.setTargetPosition(MusicPlayerRemote.getPosition() + 2);
+                queueLayoutManager.startSmoothScroll(smoothScroller);
+            } catch (Exception e) {}
         }
     }
 
