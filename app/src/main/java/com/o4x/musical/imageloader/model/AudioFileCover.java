@@ -1,4 +1,4 @@
-package com.o4x.musical.glide.audiocover;
+package com.o4x.musical.imageloader.model;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)

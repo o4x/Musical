@@ -1,5 +1,10 @@
-package com.o4x.musical.glide.artistimage;
+package com.o4x.musical.imageloader.model;
 
+import com.o4x.musical.model.Album;
+import com.o4x.musical.model.Artist;
+import com.o4x.musical.model.Song;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,9 +17,18 @@ public class ArtistImage {
     public final List<AlbumCover> albumCovers;
 
     public ArtistImage(String artistName, final List<AlbumCover> albumCovers) {
-
         this.artistName = artistName;
         this.albumCovers = albumCovers;
+    }
+
+    static public ArtistImage fromArtist(Artist artist) {
+        final List<AlbumCover> covers = new ArrayList<>();
+        for (final Album album : artist.albums) {
+            final Song song = album.safeGetFirstSong();
+            covers.add(new AlbumCover(album.getYear(), song.data));
+        }
+
+        return new ArtistImage(artist.getName(), covers);
     }
 
     public String toIdString() {

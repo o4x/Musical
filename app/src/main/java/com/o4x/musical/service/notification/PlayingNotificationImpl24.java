@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.SongGlideRequest;
+import com.o4x.musical.imageloader.glide.SongGlideRequest;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;

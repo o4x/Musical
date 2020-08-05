@@ -1,4 +1,4 @@
-package com.o4x.musical.glide.palette;
+package com.o4x.musical.imageloader.glide.palette;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;

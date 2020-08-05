@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.afollestad.materialcab.MaterialCab;
 import com.bumptech.glide.Glide;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.SongGlideRequest;
+import com.o4x.musical.imageloader.glide.SongGlideRequest;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.helper.menu.SongsMenuHelper;

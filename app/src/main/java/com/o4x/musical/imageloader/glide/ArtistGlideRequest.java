@@ -1,4 +1,4 @@
-package com.o4x.musical.glide;
+package com.o4x.musical.imageloader.glide;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -15,8 +15,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.target.Target;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.artistimage.AlbumCover;
-import com.o4x.musical.glide.artistimage.ArtistImage;
+import com.o4x.musical.imageloader.model.AlbumCover;
+import com.o4x.musical.imageloader.model.ArtistImage;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
@@ -110,12 +110,7 @@ public class ArtistGlideRequest {
     public static Object getUri(Artist artist, boolean noCustomImage) {
         boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
         if (noCustomImage || !hasCustomImage) {
-            final List<AlbumCover> songs = new ArrayList<>();
-            for (final Album album : artist.albums) {
-                final Song song = album.safeGetFirstSong();
-                songs.add(new AlbumCover(album.getYear(), song.data));
-            }
-            return new ArtistImage(artist.getName(), songs);
+            return ArtistImage.fromArtist(artist);
         } else {
             return CustomArtistImageUtil.getFile(artist);
         }

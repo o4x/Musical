@@ -1,4 +1,4 @@
-package com.o4x.musical.glide.audiocover;
+package com.o4x.musical.imageloader.glide.audiocover;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +8,7 @@ import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoaderFactory;
 import com.bumptech.glide.load.model.MultiModelLoaderFactory;
 import com.bumptech.glide.signature.ObjectKey;
+import com.o4x.musical.imageloader.model.AudioFileCover;
 
 import java.io.InputStream;
 

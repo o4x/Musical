@@ -1,4 +1,4 @@
-package com.o4x.musical.glide.audiocover;
+package com.o4x.musical.imageloader.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

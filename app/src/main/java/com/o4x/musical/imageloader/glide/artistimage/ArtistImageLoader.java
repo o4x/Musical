@@ -1,6 +1,4 @@
-package com.o4x.musical.glide.artistimage;
-
-import android.util.Log;
+package com.o4x.musical.imageloader.glide.artistimage;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +10,7 @@ import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoaderFactory;
 import com.bumptech.glide.load.model.MultiModelLoaderFactory;
 import com.bumptech.glide.signature.ObjectKey;
+import com.o4x.musical.imageloader.model.ArtistImage;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)

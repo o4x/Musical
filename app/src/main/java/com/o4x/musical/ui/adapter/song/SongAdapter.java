@@ -23,8 +23,8 @@ import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.universalIL.BaseUniversalIL;
-import com.o4x.musical.universalIL.palette.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
@@ -134,7 +134,7 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
     protected void loadAlbumCover(Song song, final ViewHolder holder) {
         if (holder.image == null) return;
 
-        BaseUniversalIL.songImageLoader(song, holder.image,
+        UniversalIL.songImageLoader(song, holder.image,
                 new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {

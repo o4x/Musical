@@ -1,4 +1,4 @@
-package com.o4x.musical.universalIL.palette;
+package com.o4x.musical.imageloader.universalil.palette;
 
 import android.content.Context;
 import android.graphics.Bitmap;

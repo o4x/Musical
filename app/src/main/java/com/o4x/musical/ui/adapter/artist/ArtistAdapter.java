@@ -1,29 +1,28 @@
 package com.o4x.musical.ui.adapter.artist;
 
-import android.graphics.drawable.Drawable;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
+
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.palette.PhonographColoredTarget;
-import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
-import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.glide.ArtistGlideRequest;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
@@ -125,24 +124,19 @@ public class ArtistAdapter extends AbsMultiSelectAdapter<ArtistAdapter.ViewHolde
 
     protected void loadArtistImage(Artist artist, final ViewHolder holder) {
         if (holder.image == null) return;
-        ArtistGlideRequest.Builder.from(Glide.with(activity), artist)
-                .asBitmap()
-                .build()
-                .into(new PhonographColoredTarget(holder.image) {
-                    @Override
-                    public void onLoadCleared(Drawable placeholder) {
-                        super.onLoadCleared(placeholder);
-                        setColors(getDefaultFooterColor(), holder);
-                    }
-
+        UniversalIL.artistImageLoader(
+                artist,
+                holder.image,
+                new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {
                         if (usePalette)
                             setColors(color, holder);
                         else
-                            setColors(getDefaultFooterColor(), holder);
+                            setColors(getDefaultFooterColor(activity), holder);
                     }
-                });
+                }
+        );
     }
 
     @Override

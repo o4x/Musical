@@ -1,4 +1,4 @@
-package com.o4x.musical.glide.audiocover;
+package com.o4x.musical.imageloader.glide.audiocover;
 
 import android.media.MediaMetadataRetriever;
 
@@ -12,6 +12,8 @@ import java.io.InputStream;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.data.DataFetcher;
+import com.o4x.musical.imageloader.model.AudioFileCover;
+import com.o4x.musical.imageloader.util.AudioFileCoverUtils;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -22,7 +24,6 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
     private InputStream stream;
 
     public AudioFileCoverFetcher(AudioFileCover model) {
-
         this.model = model;
     }
 

@@ -1,4 +1,4 @@
-package com.o4x.musical.glide;
+package com.o4x.musical.imageloader.glide;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,10 +12,10 @@ import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
-import com.o4x.musical.glide.artistimage.ArtistImage;
-import com.o4x.musical.glide.artistimage.ArtistImageLoader;
-import com.o4x.musical.glide.audiocover.AudioFileCover;
-import com.o4x.musical.glide.audiocover.AudioFileCoverLoader;
+import com.o4x.musical.imageloader.model.ArtistImage;
+import com.o4x.musical.imageloader.glide.artistimage.ArtistImageLoader;
+import com.o4x.musical.imageloader.model.AudioFileCover;
+import com.o4x.musical.imageloader.glide.audiocover.AudioFileCoverLoader;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)

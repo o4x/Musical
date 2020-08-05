@@ -1,6 +1,4 @@
-package com.o4x.musical.glide.artistimage;
-
-import com.o4x.musical.model.Album;
+package com.o4x.musical.imageloader.model;
 
 /**
  * Used to define the artist cover

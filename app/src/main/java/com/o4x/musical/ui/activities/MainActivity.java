@@ -4,14 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -23,11 +19,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.afollestad.materialdialogs.Theme;
 import com.google.android.material.navigation.NavigationView;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
@@ -50,7 +44,7 @@ import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment;
 import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.LibraryFragment;
 import com.o4x.musical.ui.fragments.mainactivity.queue.QueueFragment;
-import com.o4x.musical.universalIL.BaseUniversalIL;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.ArrayList;
@@ -101,7 +95,7 @@ public class MainActivity extends AbsMusicPanelActivity {
             }
         });
 
-        BaseUniversalIL.initImageLoader(this);
+        UniversalIL.initImageLoader(this);
     }
 
     @Override

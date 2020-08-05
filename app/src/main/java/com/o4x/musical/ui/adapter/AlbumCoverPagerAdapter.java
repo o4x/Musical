@@ -12,8 +12,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.o4x.musical.R;
-import com.o4x.musical.glide.SongGlideRequest;
-import com.o4x.musical.glide.palette.PhonographColoredTarget;
+import com.o4x.musical.imageloader.glide.SongGlideRequest;
+import com.o4x.musical.imageloader.glide.palette.PhonographColoredTarget;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.PreferenceUtil;
