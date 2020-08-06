@@ -11,7 +11,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.utils.L;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.model.ArtistImage;
@@ -62,7 +61,6 @@ public class UniversalIL {
         imageLoader.init(config);
 
         L.writeDebugLogs(false);
-        L.disableLogging();
         L.writeLogs(false);
     }
 
