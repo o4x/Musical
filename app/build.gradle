@@ -138,7 +138,8 @@ dependencies {
     implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
     implementation 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5'
 
-    implementation 'com.github.AdrienPoupa:jaudiotagger:2.2.3'
+    implementation files('libs\\jaudiotagger-2.2.6-SNAPSHOT.jar')
+
     implementation 'com.github.woxingxiao:BounceScrollView:1.5-androidx'
 
     def koin_version = "2.1.5"

@@ -300,7 +300,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
                     publishProgress(++counter, info.filePaths.size());
                     try {
                         AudioFile audioFile = AudioFileIO.read(new File(filePath));
-                        Tag tag = audioFile.getTagOrCreateAndSetDefault();
+                        Tag tag = audioFile.getTagAndConvertOrCreateAndSetDefault();
 
                         if (info.fieldKeyValueMap != null) {
                             for (Map.Entry<FieldKey, String> entry : info.fieldKeyValueMap.entrySet()) {
@@ -435,7 +435,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected String getSongTitle() {
         try {
-            return getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirst(FieldKey.TITLE);
+            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.TITLE);
         } catch (Exception ignored) {
             return null;
         }
@@ -444,7 +444,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected String getAlbumTitle() {
         try {
-            return getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirst(FieldKey.ALBUM);
+            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.ALBUM);
         } catch (Exception ignored) {
             return null;
         }
@@ -453,7 +453,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected String getArtistName() {
         try {
-            return getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirst(FieldKey.ARTIST);
+            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.ARTIST);
         } catch (Exception ignored) {
             return null;
         }
@@ -462,7 +462,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected String getAlbumArtistName() {
         try {
-            return getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirst(FieldKey.ALBUM_ARTIST);
+            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.ALBUM_ARTIST);
         } catch (Exception ignored) {
             return null;
         }
@@ -471,7 +471,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected String getGenreName() {
         try {
-            return getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirst(FieldKey.GENRE);
+            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.GENRE);
         } catch (Exception ignored) {
             return null;
         }
@@ -480,7 +480,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected String getSongYear() {
         try {
-            return getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirst(FieldKey.YEAR);
+            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.YEAR);
         } catch (Exception ignored) {
             return null;
         }
@@ -489,7 +489,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected String getTrackNumber() {
         try {
-            return getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirst(FieldKey.TRACK);
+            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.TRACK);
         } catch (Exception ignored) {
             return null;
         }
@@ -498,7 +498,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected String getLyrics() {
         try {
-            return getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirst(FieldKey.LYRICS);
+            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.LYRICS);
         } catch (Exception ignored) {
             return null;
         }
@@ -507,7 +507,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     @Nullable
     protected Bitmap getAlbumArt() {
         try {
-            Artwork artworkTag = getAudioFile(songPaths.get(0)).getTagOrCreateAndSetDefault().getFirstArtwork();
+            Artwork artworkTag = getAudioFile(songPaths.get(0)).getTag().getFirstArtwork();
             if (artworkTag != null) {
                 byte[] artworkBinaryData = artworkTag.getBinaryData();
                 return BitmapFactory.decodeByteArray(artworkBinaryData, 0, artworkBinaryData.length);

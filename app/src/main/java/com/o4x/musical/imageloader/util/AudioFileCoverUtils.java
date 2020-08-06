@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.audio.mp3.MP3File;
@@ -30,11 +31,7 @@ public class AudioFileCoverUtils {
                 }
             }
             // If there are any exceptions, we ignore them and continue to the other fallback method
-        } catch (ReadOnlyFileException ignored) {
-        } catch (InvalidAudioFrameException ignored) {
-        } catch (TagException ignored) {
-        } catch (IOException ignored) {
-        }
+        } catch (ReadOnlyFileException | TagException | InvalidAudioFrameException | IOException | CannotReadException ignored) {}
 
         // Method 2: look for album art in external files
         final File parent = new File(path).getParentFile();
