@@ -46,3 +46,7 @@
 #UIL
 -keep class com.nostra13.universalimageloader.** { *; }
 -keepclassmembers class com.nostra13.universalimageloader.** {*;}
+
+#JAudioTagger
+-keep class org.jaudiotagger.** { *; }
+-dontwarn org.jaudiotagger.**
