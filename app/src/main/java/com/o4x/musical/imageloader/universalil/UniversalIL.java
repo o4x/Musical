@@ -28,6 +28,7 @@ public class UniversalIL {
     private static final int DEFAULT_ALBUM_IMAGE = R.drawable.default_album_art;
 
 
+
     private static DisplayImageOptions.Builder getOptions() {
         return new DisplayImageOptions.Builder()
                 .imageScaleType(ImageScaleType.EXACTLY)
@@ -35,8 +36,20 @@ public class UniversalIL {
                 .cacheInMemory(true);
     }
 
+    private static final DisplayImageOptions songOptions =
+            getOptions()
+                    .showImageOnLoading(DEFAULT_ALBUM_IMAGE)
+                    .showImageOnFail(DEFAULT_ALBUM_IMAGE)
+                    .showImageForEmptyUri(DEFAULT_ALBUM_IMAGE)
+                    .build();
+
+
+
+    private static ImageLoader imageLoader;
 
     public static void initImageLoader(@NonNull Context context) {
+
+        imageLoader = ImageLoader.getInstance();
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
                 .defaultDisplayImageOptions(getOptions().build())
@@ -46,7 +59,7 @@ public class UniversalIL {
                 .build();
 
 
-        ImageLoader.getInstance().init(config);
+        imageLoader.init(config);
 
         L.writeDebugLogs(false);
         L.disableLogging();
@@ -57,14 +70,10 @@ public class UniversalIL {
             @NonNull Song song,
             @NonNull ImageView image,
             @Nullable PaletteImageLoadingListener listener) {
-        ImageLoader.getInstance().displayImage(
+        imageLoader.displayImage(
                 MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
                 image,
-                getOptions()
-                        .showImageOnLoading(DEFAULT_ALBUM_IMAGE)
-                        .showImageOnFail(DEFAULT_ALBUM_IMAGE)
-                        .showImageForEmptyUri(DEFAULT_ALBUM_IMAGE)
-                        .build(),
+                songOptions,
                 listener
         );
     }
@@ -77,7 +86,7 @@ public class UniversalIL {
 
         String imageId = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.filePath;
 
-        ImageLoader.getInstance().displayImage(
+        imageLoader.displayImage(
                 imageId,
                 image,
                 getOptions()
@@ -100,7 +109,7 @@ public class UniversalIL {
 
         String imageId = CustomImageDownloader.SCHEME_ARTIST + artistImage.hashCode();
 
-        ImageLoader.getInstance().displayImage(
+        imageLoader.displayImage(
                 imageId,
                 image,
                 getOptions()
