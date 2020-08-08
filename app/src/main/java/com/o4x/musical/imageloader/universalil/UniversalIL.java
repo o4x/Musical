@@ -64,6 +64,10 @@ public class UniversalIL {
         L.writeLogs(false);
     }
 
+    public static ImageLoader getImageLoader() {
+        return imageLoader;
+    }
+
     public static void songImageLoader(
             @NonNull Song song,
             @NonNull ImageView image,

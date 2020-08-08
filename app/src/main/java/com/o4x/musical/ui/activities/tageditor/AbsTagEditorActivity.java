@@ -143,7 +143,9 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
                 .itemsCallback((dialog, view, which, text) -> {
                     switch (which) {
                         case 0:
-                            getImageFromLastFM();
+//                            getImageFromLastFM();
+                            Intent myIntent = new Intent(this, WebAlbumCoverActivity.class);
+                            this.startActivity(myIntent);
                             break;
                         case 1:
                             startImagePicker();

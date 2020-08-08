@@ -1,8 +1,7 @@
-package code.name.monkey.retromusic.network
+package com.o4x.musical.network.lastFm
 
 import com.o4x.musical.App
 import com.google.gson.Gson
-import com.o4x.musical.network.lastFm.LastFMService
 import okhttp3.Cache
 import okhttp3.ConnectionPool
 import okhttp3.Interceptor

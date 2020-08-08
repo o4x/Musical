@@ -507,7 +507,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 //                }
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.title)).setText(song.title);
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.text)).setText(MusicUtil.getSongInfoString(song));
-                ImageLoader.getInstance().displayImage(
+                UniversalIL.getImageLoader().displayImage(
                         MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
                         poster
                 );

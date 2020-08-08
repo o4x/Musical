@@ -314,4 +314,5 @@
     <string name="open">OPEN</string>
     <string name="recently_added">Recently added</string>
     <string name="recently_played">Recently played</string>
+    <string name="network_error">Check your network connection.</string>
 </resources>
