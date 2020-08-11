@@ -12,6 +12,7 @@ import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListen
 import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
 import com.o4x.musical.ui.activities.tageditor.OnlineAlbumCoverSearchActivity;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.ui.dialogs.SetTagsDialog;
 
 import java.util.List;
 
@@ -66,16 +67,17 @@ public class OnlineAlbumAdapter extends RecyclerView.Adapter<OnlineAlbumAdapter.
         @Override
         public void onClick(View v) {
             super.onClick(v);
-            activity.updateAlbumArt(
-                    data.get(getAdapterPosition()).artworkUrl100.replace("100x100", "500x500")
-                    /*,mBestMatchesModels.get(getAdapterPosition()).trackName,
-                    mBestMatchesModels.get(getAdapterPosition()).collectionName,
-                    mBestMatchesModels.get(getAdapterPosition()).artistName,
-                    mBestMatchesModels.get(getAdapterPosition()).primaryGenreName,
-                    mBestMatchesModels.get(getAdapterPosition()).releaseDate,
-                    mBestMatchesModels.get(getAdapterPosition()).trackNumber,
-                    mBestMatchesModels.get(getAdapterPosition()).trackCount*/
-            );
+            SetTagsDialog.create().show(activity.getSupportFragmentManager(), "aaaaaaaaaa");
+//            activity.updateAlbumArt(
+//                    data.get(getAdapterPosition()).artworkUrl100.replace("100x100", "500x500")
+//                    /*,mBestMatchesModels.get(getAdapterPosition()).trackName,
+//                    mBestMatchesModels.get(getAdapterPosition()).collectionName,
+//                    mBestMatchesModels.get(getAdapterPosition()).artistName,
+//                    mBestMatchesModels.get(getAdapterPosition()).primaryGenreName,
+//                    mBestMatchesModels.get(getAdapterPosition()).releaseDate,
+//                    mBestMatchesModels.get(getAdapterPosition()).trackNumber,
+//                    mBestMatchesModels.get(getAdapterPosition()).trackCount*/
+//            );
         }
     }
 }

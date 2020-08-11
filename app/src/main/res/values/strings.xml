@@ -315,4 +315,6 @@
     <string name="recently_added">Recently added</string>
     <string name="recently_played">Recently played</string>
     <string name="network_error">Check your network connection.</string>
+    <string name="download_tags">Download tags</string>
+    <string name="download_tags_message">Downloading all tags or just image</string>
 </resources>

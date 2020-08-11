@@ -149,6 +149,9 @@ public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity impl
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if (this.query != query) {
+            search(query);
+        }
         hideSoftKeyboard();
         return false;
     }

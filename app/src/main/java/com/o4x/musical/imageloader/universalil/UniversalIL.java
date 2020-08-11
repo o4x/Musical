@@ -2,6 +2,7 @@ package com.o4x.musical.imageloader.universalil;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -136,6 +137,7 @@ public class UniversalIL {
             @NonNull String url,
             @NonNull ImageView image,
             @Nullable PaletteImageLoadingListener listener) {
+        if (!TextUtils.isEmpty(url) && url.trim().length() > 0)
         imageLoader.displayImage(
                 url,
                 image,
