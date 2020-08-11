@@ -8,11 +8,10 @@ import android.text.Html;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.o4x.musical.R;
-import com.o4x.musical.dialogs.BlacklistFolderChooserDialog;
+import com.o4x.musical.ui.dialogs.BlacklistFolderChooserDialog;
 import com.o4x.musical.provider.BlacklistStore;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

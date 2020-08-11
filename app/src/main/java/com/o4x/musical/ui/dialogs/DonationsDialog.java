@@ -1,4 +1,4 @@
-package com.o4x.musical.dialogs;
+package com.o4x.musical.ui.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;

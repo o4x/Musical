@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.PopupMenu;
 
 import com.o4x.musical.R;
-import com.o4x.musical.dialogs.AddToPlaylistDialog;
-import com.o4x.musical.dialogs.DeleteSongsDialog;
-import com.o4x.musical.dialogs.SongDetailDialog;
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
+import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
+import com.o4x.musical.ui.dialogs.SongDetailDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.PaletteColorHolder;
 import com.o4x.musical.model.Song;

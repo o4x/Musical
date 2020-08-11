@@ -1,4 +1,4 @@
-package com.o4x.musical.dialogs;
+package com.o4x.musical.ui.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -8,27 +8,27 @@ import android.text.Html;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.o4x.musical.R;
-import com.o4x.musical.model.PlaylistSong;
-import com.o4x.musical.util.PlaylistsUtil;
+import com.o4x.musical.model.Song;
+import com.o4x.musical.util.MusicUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Karim Abou Zeid (kabouzeid)
+ * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
  */
-public class RemoveFromPlaylistDialog extends DialogFragment {
+public class DeleteSongsDialog extends DialogFragment {
 
     @NonNull
-    public static RemoveFromPlaylistDialog create(PlaylistSong song) {
-        List<PlaylistSong> list = new ArrayList<>();
+    public static DeleteSongsDialog create(Song song) {
+        List<Song> list = new ArrayList<>();
         list.add(song);
         return create(list);
     }
 
     @NonNull
-    public static RemoveFromPlaylistDialog create(List<PlaylistSong> songs) {
-        RemoveFromPlaylistDialog dialog = new RemoveFromPlaylistDialog();
+    public static DeleteSongsDialog create(List<Song> songs) {
+        DeleteSongsDialog dialog = new DeleteSongsDialog();
         Bundle args = new Bundle();
         args.putParcelableArrayList("songs", new ArrayList<>(songs));
         dialog.setArguments(args);
@@ -39,25 +39,25 @@ public class RemoveFromPlaylistDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //noinspection unchecked
-        final List<PlaylistSong> songs = getArguments().getParcelableArrayList("songs");
+        final List<Song> songs = getArguments().getParcelableArrayList("songs");
         int title;
         CharSequence content;
         if (songs.size() > 1) {
-            title = R.string.remove_songs_from_playlist_title;
-            content = Html.fromHtml(getString(R.string.remove_x_songs_from_playlist, songs.size()));
+            title = R.string.delete_songs_title;
+            content = Html.fromHtml(getString(R.string.delete_x_songs, songs.size()));
         } else {
-            title = R.string.remove_song_from_playlist_title;
-            content = Html.fromHtml(getString(R.string.remove_song_x_from_playlist, songs.get(0).title));
+            title = R.string.delete_song_title;
+            content = Html.fromHtml(getString(R.string.delete_song_x, songs.get(0).title));
         }
         return new MaterialDialog.Builder(getActivity())
                 .title(title)
                 .content(content)
-                .positiveText(R.string.remove_action)
+                .positiveText(R.string.delete_action)
                 .negativeText(android.R.string.cancel)
                 .onPositive((dialog, which) -> {
                     if (getActivity() == null)
                         return;
-                    PlaylistsUtil.removeFromPlaylist(getActivity(), songs);
+                    MusicUtil.deleteTracks(getActivity(), songs);
                 })
                 .build();
     }

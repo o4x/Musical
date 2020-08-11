@@ -32,7 +32,6 @@ import java.util.Locale;
 import com.afollestad.materialcab.MaterialCab;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.util.DialogUtils;
-import com.bumptech.glide.Glide;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
@@ -42,8 +41,8 @@ import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListen
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
 import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
-import com.o4x.musical.dialogs.AddToPlaylistDialog;
-import com.o4x.musical.dialogs.SleepTimerDialog;
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
+import com.o4x.musical.ui.dialogs.SleepTimerDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;

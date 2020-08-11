@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import com.o4x.musical.App;
 import com.o4x.musical.R;
-import com.o4x.musical.dialogs.AddToPlaylistDialog;
-import com.o4x.musical.dialogs.DeletePlaylistDialog;
-import com.o4x.musical.dialogs.RenamePlaylistDialog;
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
+import com.o4x.musical.ui.dialogs.DeletePlaylistDialog;
+import com.o4x.musical.ui.dialogs.RenamePlaylistDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.loader.PlaylistSongLoader;
 import com.o4x.musical.misc.WeakContextAsyncTask;

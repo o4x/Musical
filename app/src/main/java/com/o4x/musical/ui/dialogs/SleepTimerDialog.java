@@ -1,4 +1,4 @@
-package com.o4x.musical.dialogs;
+package com.o4x.musical.ui.dialogs;
 
 import android.app.AlarmManager;
 import android.app.Dialog;

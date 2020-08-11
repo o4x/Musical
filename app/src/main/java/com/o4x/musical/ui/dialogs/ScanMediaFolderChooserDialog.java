@@ -1,4 +1,4 @@
-package com.o4x.musical.dialogs;
+package com.o4x.musical.ui.dialogs;
 
 import android.Manifest;
 import android.app.Activity;

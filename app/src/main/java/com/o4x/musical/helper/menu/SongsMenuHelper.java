@@ -4,12 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.o4x.musical.R;
-import com.o4x.musical.dialogs.AddToPlaylistDialog;
-import com.o4x.musical.dialogs.DeleteSongsDialog;
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
+import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.model.Song;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
