@@ -1,31 +1,42 @@
 package com.o4x.musical.ui.activities.tageditor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
 import com.o4x.musical.network.temp.Lastfmapi.ApiClient;
 import com.o4x.musical.network.temp.Lastfmapi.LastFmInterface;
 import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
-import com.o4x.musical.model.Song;
 import com.o4x.musical.network.temp.Lastfmapi.CachingControlInterceptor;
+import com.o4x.musical.ui.activities.SearchActivity;
+import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.adapter.BestMatchesAdapter;
+import com.o4x.musical.util.Util;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,88 +44,149 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WebAlbumCoverActivity extends AppCompatActivity {
+public class WebAlbumCoverActivity extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
 
-    @BindView(R.id.edit_text_search)
-    EditText mBestMatchesEdiText;
-    @BindView(R.id.text_view_no_matches_found)
-    TextView mNoMatchesFoundTextView;
+    public static final String QUERY = "query";
+    public static String EXTRA_SONG_NAME = "EXTRA_SONG_NAME";
 
-    @BindView(R.id.best_matches_recycler_view)
-    public RecyclerView mBestMatchesRecyclerView;
-    private BestMatchesAdapter mBestMatchesAdapter;
-    private List<BestMatchesModel.Results> results;
-    private String SONG_NAME = "1000";
+    private static final String TAG = WebAlbumCoverActivity.class.getSimpleName();
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    SearchView searchView;
+    @BindView(R.id.empty)
+    TextView empty;
     @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-    Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            fetchBestMatches(mBestMatchesEdiText.getText().toString().trim());
-        }
-    };
-    @BindView(R.id.image_button_cross)
-    ImageView mCrossImageViewButton;
-    @BindView(R.id.image_back_button)
-    ImageView mBackImageViewButton;
-    private Handler mHandler;
+    ProgressBar progressBar;
 
-    TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    @BindView(R.id.results_recycler_view)
+    public RecyclerView resultsRecyclerView;
+    private BestMatchesAdapter bestMatchesAdapter;
 
-        }
+    private List<BestMatchesModel.Results> results;
+    private String query = "";
 
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s.toString().length() == 0) {
-                mCrossImageViewButton.setVisibility(View.INVISIBLE);
-            } else {
-                mCrossImageViewButton.setVisibility(View.VISIBLE);
-            }
-            mHandler.removeCallbacks(mRunnable);
-            mHandler.postDelayed(mRunnable, 600);
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
+    private Handler handler;
+    private Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_album_cover);
+        setDrawUnderBar();
         ButterKnife.bind(this);
 
-        mHandler = new Handler();
+        setStatusBarColorAuto();
+        setNavigationBarColorAuto();
+        setTaskDescriptionColorAuto();
 
-        mCrossImageViewButton.setOnClickListener(v -> mBestMatchesEdiText.setText(""));
-
-
-        if (SONG_NAME.length() > 0) {
-            mCrossImageViewButton.setVisibility(View.VISIBLE);
+        setup();
+        getExtra();
+        if (savedInstanceState != null) {
+            search(savedInstanceState.getString(QUERY));
         }
+    }
 
-        mBestMatchesEdiText.setText(SONG_NAME);
-        mBestMatchesEdiText.setSelection(SONG_NAME.length());
-        mBestMatchesEdiText.addTextChangedListener(mTextWatcher);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(QUERY, query);
+    }
 
-        mBestMatchesRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        mBestMatchesAdapter = new BestMatchesAdapter(this, null);
-        mBestMatchesRecyclerView.setAdapter(mBestMatchesAdapter);
+    private void getExtra() {
+        search(getIntent().getStringExtra(EXTRA_SONG_NAME));
+    }
 
-        fetchBestMatches(SONG_NAME);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.search);
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchItem.expandActionView();
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                onBackPressed();
+                return false;
+            }
+        });
+
+        searchView.setQuery(query, false);
+        searchView.post(() -> searchView.setOnQueryTextListener(WebAlbumCoverActivity.this));
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void setup() {
+        setupHandler();
+        setUpToolBar();
+        setupResultRecycler();
+    }
+
+    private void setUpToolBar() {
+        toolbar.setBackgroundColor(ThemeStore.primaryColor(this));
+        setSupportActionBar(toolbar);
+        //noinspection ConstantConditions
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupResultRecycler() {
+        resultsRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        bestMatchesAdapter = new BestMatchesAdapter(this, null);
+        resultsRecyclerView.setAdapter(bestMatchesAdapter);
+        resultsRecyclerView.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        hideSoftKeyboard();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        search(newText);
+        return false;
+    }
+
+    private void setupHandler() {
+        handler = new Handler();
+        runnable = () -> fetchBestMatches(query.trim());
+    }
+
+    private void search(@NonNull String query) {
+        this.query = query;
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, 600);
+    }
+
+    private void hideSoftKeyboard() {
+        Util.hideSoftKeyboard(WebAlbumCoverActivity.this);
+        if (searchView != null) {
+            searchView.clearFocus();
+        }
     }
 
     private void fetchBestMatches(String songName) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mBestMatchesRecyclerView.setVisibility(View.INVISIBLE);
-        mNoMatchesFoundTextView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        resultsRecyclerView.setVisibility(View.INVISIBLE);
+        empty.setVisibility(View.INVISIBLE);
 
         if (!CachingControlInterceptor.isOnline(getApplicationContext())) {
-            Toast.makeText(mProgressBar.getContext(), R.string.network_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(progressBar.getContext(), R.string.network_error, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -124,23 +196,21 @@ public class WebAlbumCoverActivity extends AppCompatActivity {
             public void onResponse(Call<BestMatchesModel> call, Response<BestMatchesModel> response) {
                 if (response.isSuccessful()) {
                     results = response.body().results;
-                    mBestMatchesAdapter.updateData(results);
-                    mProgressBar.setVisibility(View.INVISIBLE);
+                    bestMatchesAdapter.updateData(results);
+                    progressBar.setVisibility(View.INVISIBLE);
                     if (results != null && results.size() == 0) {
-                        mNoMatchesFoundTextView.setVisibility(View.VISIBLE);
-                        mBestMatchesRecyclerView.setVisibility(View.INVISIBLE);
+                        empty.setVisibility(View.VISIBLE);
+                        resultsRecyclerView.setVisibility(View.INVISIBLE);
                     } else {
-                        mNoMatchesFoundTextView.setVisibility(View.INVISIBLE);
-                        mBestMatchesRecyclerView.setVisibility(View.VISIBLE);
+                        empty.setVisibility(View.INVISIBLE);
+                        resultsRecyclerView.setVisibility(View.VISIBLE);
                     }
-                } else {
-
                 }
             }
 
             @Override
-            public void onFailure(Call<BestMatchesModel> call, Throwable t) {
-                Log.e("FIALED", t.getMessage());
+            public void onFailure(@NotNull Call<BestMatchesModel> call, @NotNull Throwable t) {
+                Log.e(TAG, Objects.requireNonNull(t.getMessage()));
             }
         });
     }

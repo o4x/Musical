@@ -27,7 +27,6 @@ public class UniversalIL {
     private static final int DEFAULT_ALBUM_IMAGE = R.drawable.default_album_art;
 
 
-
     private static DisplayImageOptions.Builder getOptions() {
         return new DisplayImageOptions.Builder()
                 .imageScaleType(ImageScaleType.EXACTLY)
@@ -42,6 +41,15 @@ public class UniversalIL {
                     .showImageForEmptyUri(DEFAULT_ALBUM_IMAGE)
                     .build();
 
+
+    private static final DisplayImageOptions onlineOptions =
+            new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .imageScaleType(ImageScaleType.EXACTLY)
+                    .showImageOnLoading(DEFAULT_ALBUM_IMAGE)
+                    .showImageOnFail(DEFAULT_ALBUM_IMAGE)
+                    .showImageForEmptyUri(DEFAULT_ALBUM_IMAGE)
+                    .build();
 
 
     private static ImageLoader imageLoader;
@@ -120,6 +128,18 @@ public class UniversalIL {
                         .showImageOnFail(DEFAULT_ARTIST_IMAGE)
                         .showImageForEmptyUri(DEFAULT_ARTIST_IMAGE)
                         .build(),
+                listener
+        );
+    }
+
+    public static void onlineAlbumImageLoader(
+            @NonNull String url,
+            @NonNull ImageView image,
+            @Nullable PaletteImageLoadingListener listener) {
+        imageLoader.displayImage(
+                url,
+                image,
+                onlineOptions,
                 listener
         );
     }

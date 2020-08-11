@@ -1,91 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="1dp">
+    android:fitsSystemWindows="true">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/best_matches"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:elevation="4dp"
-        app:cardElevation="4dp"
-        app:cardMaxElevation="4dp">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content" />
 
-            <ImageButton
-                android:id="@+id/image_back_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:background="?selectableItemBackground"
-                android:padding="12dp"
-                android:tint="@color/md_pink_500"
-                app:srcCompat="@drawable/ic_play_arrow_white_24dp" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <EditText
-                android:id="@+id/edit_text_search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_toLeftOf="@+id/image_button_cross"
-                android:layout_toRightOf="@+id/image_back_button"
-                android:background="@null"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/md_dark_dividers" />
-
-            <ImageButton
-                android:id="@+id/image_button_cross"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="?selectableItemBackground"
-                android:padding="12dp"
-                android:tint="@color/md_dark_dividers"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/ic_library_add_white_24dp" />
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/best_matches_recycler_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/best_matches"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        tools:listitem="@layout/item_grid" />
+        android:layout_height="match_parent">
 
-<!--    <View-->
-<!--        android:id="@+id/shadow"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="4dp"-->
-<!--        android:layout_below="@+id/best_matches"-->
-<!--        android:background="@drawable/drawable_drop_shadow" />-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/results_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            tools:listitem="@layout/item_grid" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:layout_constraintBottom_toBottomOf="@+id/results_recycler_view"
+            app:layout_constraintEnd_toEndOf="@+id/results_recycler_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/results_recycler_view" />
 
-    <TextView
-        android:id="@+id/text_view_no_matches_found"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/empty"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/empty"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/results_recycler_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/results_recycler_view" />
 
-</RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

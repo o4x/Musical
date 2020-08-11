@@ -144,8 +144,9 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
                     switch (which) {
                         case 0:
 //                            getImageFromLastFM();
-                            Intent myIntent = new Intent(this, WebAlbumCoverActivity.class);
-                            this.startActivity(myIntent);
+                            Intent intent = new Intent(this, WebAlbumCoverActivity.class);
+                            intent.putExtra(WebAlbumCoverActivity.EXTRA_SONG_NAME, getAlbumTitle());
+                            this.startActivity(intent);
                             break;
                         case 1:
                             startImagePicker();

@@ -1,16 +1,14 @@
 package com.o4x.musical.ui.adapter;
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
 import com.o4x.musical.ui.activities.tageditor.WebAlbumCoverActivity;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
@@ -21,7 +19,6 @@ public class BestMatchesAdapter extends RecyclerView.Adapter<BestMatchesAdapter.
 
     private WebAlbumCoverActivity activity;
     private List<BestMatchesModel.Results> data;
-
 
 
     public BestMatchesAdapter(WebAlbumCoverActivity activity, List<BestMatchesModel.Results> bestMatchesModels) {
@@ -38,29 +35,9 @@ public class BestMatchesAdapter extends RecyclerView.Adapter<BestMatchesAdapter.
     @Override
     public void onBindViewHolder(ItemHolder holder, int position) {
         String url = data.get(position).artworkUrl100.replace("100x100", "300x300");
-        UniversalIL.getImageLoader().displayImage(url, holder.image, new ImageLoadingListener() {
+        UniversalIL.onlineAlbumImageLoader(url, holder.image, new PaletteImageLoadingListener() {
             @Override
-            public void onLoadingStarted(String imageUri, View view) {
-                holder.image.setImageResource(R.drawable.default_album_art);
-//                int padding = MusicUtils.getDPFromPixel(20);
-//                holder.image.setPadding(padding, padding, padding, padding);
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                holder.image.setImageResource(R.drawable.default_album_art);
-//                int padding = MusicUtils.getDPFromPixel(20);
-//                holder.image.setPadding(padding, padding, padding, padding);
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                int padding = MusicUtils.getDPFromPixel(0);
-//                holder.image.setPadding(padding, padding, padding, padding);
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
+            public void onColorReady(int color) {
 
             }
         });

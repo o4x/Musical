@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -50,6 +51,7 @@ public class SearchActivity extends AbsMusicServiceActivity implements SearchVie
     private SearchAdapter adapter;
     private String query;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
