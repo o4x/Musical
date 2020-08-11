@@ -1,7 +1,6 @@
 package com.o4x.musical.ui.activities.tageditor;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -10,14 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,9 +23,8 @@ import com.o4x.musical.network.temp.Lastfmapi.ApiClient;
 import com.o4x.musical.network.temp.Lastfmapi.LastFmInterface;
 import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
 import com.o4x.musical.network.temp.Lastfmapi.CachingControlInterceptor;
-import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
-import com.o4x.musical.ui.adapter.BestMatchesAdapter;
+import com.o4x.musical.ui.adapter.OnlineAlbumAdapter;
 import com.o4x.musical.util.Util;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,12 +38,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WebAlbumCoverActivity extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
+public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
 
     public static final String QUERY = "query";
     public static String EXTRA_SONG_NAME = "EXTRA_SONG_NAME";
 
-    private static final String TAG = WebAlbumCoverActivity.class.getSimpleName();
+    private static final String TAG = OnlineAlbumCoverSearchActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -61,7 +55,7 @@ public class WebAlbumCoverActivity extends AbsMusicServiceActivity implements Se
 
     @BindView(R.id.results_recycler_view)
     public RecyclerView resultsRecyclerView;
-    private BestMatchesAdapter bestMatchesAdapter;
+    private OnlineAlbumAdapter onlineAlbumAdapter;
 
     private List<BestMatchesModel.Results> results;
     private String query = "";
@@ -121,7 +115,7 @@ public class WebAlbumCoverActivity extends AbsMusicServiceActivity implements Se
         });
 
         searchView.setQuery(query, false);
-        searchView.post(() -> searchView.setOnQueryTextListener(WebAlbumCoverActivity.this));
+        searchView.post(() -> searchView.setOnQueryTextListener(OnlineAlbumCoverSearchActivity.this));
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -141,9 +135,12 @@ public class WebAlbumCoverActivity extends AbsMusicServiceActivity implements Se
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupResultRecycler() {
-        resultsRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        bestMatchesAdapter = new BestMatchesAdapter(this, null);
-        resultsRecyclerView.setAdapter(bestMatchesAdapter);
+        resultsRecyclerView.setLayoutManager(new GridLayoutManager(
+                this,
+                getResources().getInteger(R.integer.home_grid_columns)
+        ));
+        onlineAlbumAdapter = new OnlineAlbumAdapter(this, null);
+        resultsRecyclerView.setAdapter(onlineAlbumAdapter);
         resultsRecyclerView.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
@@ -174,7 +171,7 @@ public class WebAlbumCoverActivity extends AbsMusicServiceActivity implements Se
     }
 
     private void hideSoftKeyboard() {
-        Util.hideSoftKeyboard(WebAlbumCoverActivity.this);
+        Util.hideSoftKeyboard(OnlineAlbumCoverSearchActivity.this);
         if (searchView != null) {
             searchView.clearFocus();
         }
@@ -196,7 +193,7 @@ public class WebAlbumCoverActivity extends AbsMusicServiceActivity implements Se
             public void onResponse(Call<BestMatchesModel> call, Response<BestMatchesModel> response) {
                 if (response.isSuccessful()) {
                     results = response.body().results;
-                    bestMatchesAdapter.updateData(results);
+                    onlineAlbumAdapter.updateData(results);
                     progressBar.setVisibility(View.INVISIBLE);
                     if (results != null && results.size() == 0) {
                         empty.setVisibility(View.VISIBLE);

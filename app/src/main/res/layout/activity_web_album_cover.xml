@@ -26,8 +26,7 @@
             android:id="@+id/results_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:scrollbars="vertical"
             tools:listitem="@layout/item_grid" />
 
         <ProgressBar

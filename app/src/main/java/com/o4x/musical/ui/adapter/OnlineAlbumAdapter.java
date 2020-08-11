@@ -10,18 +10,18 @@ import com.o4x.musical.R;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
-import com.o4x.musical.ui.activities.tageditor.WebAlbumCoverActivity;
+import com.o4x.musical.ui.activities.tageditor.OnlineAlbumCoverSearchActivity;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 
 import java.util.List;
 
-public class BestMatchesAdapter extends RecyclerView.Adapter<BestMatchesAdapter.ItemHolder> {
+public class OnlineAlbumAdapter extends RecyclerView.Adapter<OnlineAlbumAdapter.ItemHolder> {
 
-    private WebAlbumCoverActivity activity;
+    private OnlineAlbumCoverSearchActivity activity;
     private List<BestMatchesModel.Results> data;
 
 
-    public BestMatchesAdapter(WebAlbumCoverActivity activity, List<BestMatchesModel.Results> bestMatchesModels) {
+    public OnlineAlbumAdapter(OnlineAlbumCoverSearchActivity activity, List<BestMatchesModel.Results> bestMatchesModels) {
         this.activity = activity;
         data = bestMatchesModels;
     }
