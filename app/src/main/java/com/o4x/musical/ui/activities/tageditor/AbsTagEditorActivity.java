@@ -135,7 +135,8 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
                 getString(R.string.download_from_last_fm),
                 getString(R.string.pick_from_local_storage),
                 getString(R.string.web_search),
-                getString(R.string.remove_cover)
+                getString(R.string.remove_cover),
+                getString(R.string.search_online)
         };
         image.setOnClickListener(v -> new MaterialDialog.Builder(AbsTagEditorActivity.this)
                 .title(R.string.update_image)
@@ -143,10 +144,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
                 .itemsCallback((dialog, view, which, text) -> {
                     switch (which) {
                         case 0:
-//                            getImageFromLastFM();
-                            Intent intent = new Intent(this, OnlineAlbumCoverSearchActivity.class);
-                            intent.putExtra(OnlineAlbumCoverSearchActivity.EXTRA_SONG_NAME, getAlbumTitle());
-                            this.startActivity(intent);
+                            getImageFromLastFM();
                             break;
                         case 1:
                             startImagePicker();
@@ -156,6 +154,9 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
                             break;
                         case 3:
                             deleteImage();
+                            break;
+                        case 4:
+                            searchOnline();
                             break;
                     }
                 }).show());
@@ -174,6 +175,8 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     protected abstract void searchImageOnWeb();
 
     protected abstract void deleteImage();
+
+    protected abstract void searchOnline();
 
     private void setUpFab() {
         fab.setScaleX(0);
@@ -424,6 +427,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
     }
 
     protected abstract void loadImageFromFile(Uri selectedFile);
+    protected abstract void loadImageFromUrl(String url);
 
     @NonNull
     private AudioFile getAudioFile(@NonNull String path) {

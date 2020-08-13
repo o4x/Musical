@@ -2,6 +2,7 @@ package com.o4x.musical.network.temp.Lastfmapi.Models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class BestMatchesModel {
@@ -13,7 +14,7 @@ public class BestMatchesModel {
     @SerializedName("results")
     public List<Results> results;
 
-    public static class Results {
+    public static class Results implements Serializable {
         @SerializedName("wrapperType")
         public String wrapperType;
         @SerializedName("kind")

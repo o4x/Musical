@@ -123,6 +123,16 @@ public class SongTagEditorActivity extends AbsTagEditorActivity implements TextW
     }
 
     @Override
+    protected void loadImageFromUrl(String url) {
+
+    }
+
+    @Override
+    protected void searchOnline() {
+        
+    }
+
+    @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }

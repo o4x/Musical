@@ -316,5 +316,8 @@
     <string name="recently_played">Recently played</string>
     <string name="network_error">Check your network connection.</string>
     <string name="download_tags">Download tags</string>
-    <string name="download_tags_message">Downloading all tags or just image</string>
+    <string name="download_tags_message">You want download all tags or just need image?</string>
+    <string name="just_image">Just image</string>
+    <string name="all_tags">All tags</string>
+    <string name="search_online">Search online</string>
 </resources>

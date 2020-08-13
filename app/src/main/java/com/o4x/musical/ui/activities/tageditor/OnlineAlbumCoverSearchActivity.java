@@ -41,6 +41,9 @@ import retrofit2.Response;
 public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
 
     public static final String QUERY = "query";
+    public static int REQUEST_CODE = 2000;
+    public static String EXTRA_RESULT_ALL = "EXTRA_RESULT_ALL";
+    public static String EXTRA_RESULT_COVER = "EXTRA_RESULT_COVER";
     public static String EXTRA_SONG_NAME = "EXTRA_SONG_NAME";
 
     private static final String TAG = OnlineAlbumCoverSearchActivity.class.getSimpleName();
@@ -213,10 +216,5 @@ public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity impl
                 Log.e(TAG, Objects.requireNonNull(t.getMessage()));
             }
         });
-    }
-
-
-    public void updateAlbumArt(String url) {
-        Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
     }
 }

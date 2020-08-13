@@ -1,5 +1,7 @@
 package com.o4x.musical.ui.activities.tageditor;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ import androidx.palette.graphics.Palette;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import com.o4x.musical.lastfm.rest.LastFMRestClient;
 import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.LastFMUtil;
 import com.o4x.musical.util.PhonographColorUtil;
@@ -45,6 +49,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AlbumTagEditorActivity extends AbsTagEditorActivity implements TextWatcher {
+
+    private static final String TAG = AlbumTagEditorActivity.class.getSimpleName();
 
     @BindView(R.id.title)
     EditText albumTitle;
@@ -85,6 +91,14 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
         year.setText(getSongYear());
     }
 
+    private void fillViewsWithResult(BestMatchesModel.Results result) {
+        loadImageFromUrl(result.artworkUrl100);
+        albumTitle.setText(result.collectionName);
+        albumArtist.setText(result.artistName);
+        genre.setText(result.primaryGenreName);
+        year.setText(result.releaseDate);
+    }
+
     @Override
     protected void loadCurrentImage() {
         Bitmap bitmap = getAlbumArt();
@@ -107,33 +121,7 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
                 if (lastFmAlbum.getAlbum() != null) {
                     String url = LastFMUtil.getLargestAlbumImageUrl(lastFmAlbum.getAlbum().getImage());
                     if (!TextUtils.isEmpty(url) && url.trim().length() > 0) {
-                        Glide.with(AlbumTagEditorActivity.this)
-                                .asBitmap()
-                                .load(url)
-                                .diskCacheStrategy(DiskCacheStrategy.DATA)
-                                .error(R.drawable.default_album_art)
-                                .into(new CustomTarget<Bitmap>() {
-                                    @Override
-                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
-                                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(Palette.from(resource).generate(), ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
-                                        deleteAlbumArt = false;
-                                        dataChanged();
-                                        setResult(RESULT_OK);
-                                    }
-
-                                    @Override
-                                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                                    }
-
-                                    @Override
-                                    public void onLoadFailed(Drawable errorDrawable) {
-                                        super.onLoadFailed(errorDrawable);
-//                                        e.printStackTrace();
-//                                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                        loadImageFromUrl(url);
                         return;
                     }
                 }
@@ -162,6 +150,36 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
         setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.default_album_art), ATHUtil.resolveColor(this, R.attr.defaultFooterColor));
         deleteAlbumArt = true;
         dataChanged();
+    }
+
+    @Override
+    protected void searchOnline() {
+        Intent intent = new Intent(this, OnlineAlbumCoverSearchActivity.class);
+        intent.putExtra(OnlineAlbumCoverSearchActivity.EXTRA_SONG_NAME, getAlbumTitle());
+        this.startActivityForResult(intent, OnlineAlbumCoverSearchActivity.REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == OnlineAlbumCoverSearchActivity.REQUEST_CODE) {
+            Bundle extras = data.getExtras();
+            if (resultCode == Activity.RESULT_OK) {
+                if (extras.containsKey(OnlineAlbumCoverSearchActivity.EXTRA_RESULT_ALL)) {
+                    BestMatchesModel.Results result = (BestMatchesModel.Results)
+                            extras.getSerializable(OnlineAlbumCoverSearchActivity.EXTRA_RESULT_ALL);
+                    fillViewsWithResult(result);
+                    Toast.makeText(this, result.collectionName, Toast.LENGTH_LONG).show();
+                } else if (extras.containsKey(OnlineAlbumCoverSearchActivity.EXTRA_RESULT_COVER)) {
+                    loadImageFromUrl(
+                            extras.getString(OnlineAlbumCoverSearchActivity.EXTRA_RESULT_COVER)
+                    );
+                }
+            } else {
+                Log.i(TAG, "ResultCode = " + resultCode);
+            }
+        }
     }
 
     @Override
@@ -194,10 +212,10 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
     }
 
     @Override
-    protected void loadImageFromFile(@NonNull final Uri selectedFileUri) {
+    protected void loadImageFromFile(Uri selectedFile) {
         Glide.with(AlbumTagEditorActivity.this)
                 .asBitmap()
-                .load(selectedFileUri)
+                .load(selectedFile)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(new CustomTarget<Bitmap>() {
@@ -222,6 +240,37 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
                         super.onLoadFailed(errorDrawable);
 //                        e.printStackTrace();
 //                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    @Override
+    protected void loadImageFromUrl(String url) {
+        Glide.with(AlbumTagEditorActivity.this)
+                .asBitmap()
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .error(R.drawable.default_album_art)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
+                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(Palette.from(resource).generate(), ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
+                        deleteAlbumArt = false;
+                        dataChanged();
+                        setResult(RESULT_OK);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+//                                        e.printStackTrace();
+//                                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
     }

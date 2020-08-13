@@ -137,7 +137,6 @@ public class UniversalIL {
             @NonNull String url,
             @NonNull ImageView image,
             @Nullable PaletteImageLoadingListener listener) {
-        if (!TextUtils.isEmpty(url) && url.trim().length() > 0)
         imageLoader.displayImage(
                 url,
                 image,
