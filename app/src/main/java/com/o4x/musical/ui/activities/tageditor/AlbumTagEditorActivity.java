@@ -31,6 +31,7 @@ import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
+import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.LastFMUtil;
 import com.o4x.musical.util.PhonographColorUtil;
@@ -154,26 +155,25 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
 
     @Override
     protected void searchOnline() {
-        Intent intent = new Intent(this, OnlineAlbumCoverSearchActivity.class);
-        intent.putExtra(OnlineAlbumCoverSearchActivity.EXTRA_SONG_NAME, getAlbumTitle());
-        this.startActivityForResult(intent, OnlineAlbumCoverSearchActivity.REQUEST_CODE);
+        Intent intent = new Intent(this, AlbumSearchActivity.class);
+        intent.putExtra(AlbumSearchActivity.EXTRA_SONG_NAME, getAlbumTitle());
+        this.startActivityForResult(intent, AlbumSearchActivity.REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == OnlineAlbumCoverSearchActivity.REQUEST_CODE) {
+        if (requestCode == AlbumSearchActivity.REQUEST_CODE) {
             Bundle extras = data.getExtras();
             if (resultCode == Activity.RESULT_OK) {
-                if (extras.containsKey(OnlineAlbumCoverSearchActivity.EXTRA_RESULT_ALL)) {
+                if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_ALL)) {
                     BestMatchesModel.Results result = (BestMatchesModel.Results)
-                            extras.getSerializable(OnlineAlbumCoverSearchActivity.EXTRA_RESULT_ALL);
+                            extras.getSerializable(AlbumSearchActivity.EXTRA_RESULT_ALL);
                     fillViewsWithResult(result);
-                    Toast.makeText(this, result.collectionName, Toast.LENGTH_LONG).show();
-                } else if (extras.containsKey(OnlineAlbumCoverSearchActivity.EXTRA_RESULT_COVER)) {
+                } else if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_COVER)) {
                     loadImageFromUrl(
-                            extras.getString(OnlineAlbumCoverSearchActivity.EXTRA_RESULT_COVER)
+                            extras.getString(AlbumSearchActivity.EXTRA_RESULT_COVER)
                     );
                 }
             } else {

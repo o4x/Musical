@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Musical.Light"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.activities.tageditor.OnlineAlbumCoverSearchActivity"></activity>
+        <activity android:name=".ui.activities.tageditor.onlinesearch.AlbumSearchActivity"></activity>
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,12 @@
-package com.o4x.musical.ui.activities.tageditor;
+package com.o4x.musical.ui.activities.tageditor.onlinesearch;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -6,47 +14,26 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
-import com.o4x.musical.network.temp.Lastfmapi.ApiClient;
-import com.o4x.musical.network.temp.Lastfmapi.LastFmInterface;
-import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
-import com.o4x.musical.network.temp.Lastfmapi.CachingControlInterceptor;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
-import com.o4x.musical.ui.adapter.OnlineAlbumAdapter;
+import com.o4x.musical.ui.adapter.online.OnlineSearchAdapter;
 import com.o4x.musical.util.Util;
 
-import org.jetbrains.annotations.NotNull;
-
+import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
+public abstract class AbsOnlineSearch <A extends OnlineSearchAdapter, LR extends List<? extends Serializable>>
+        extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
 
     public static final String QUERY = "query";
     public static int REQUEST_CODE = 2000;
     public static String EXTRA_RESULT_ALL = "EXTRA_RESULT_ALL";
     public static String EXTRA_RESULT_COVER = "EXTRA_RESULT_COVER";
     public static String EXTRA_SONG_NAME = "EXTRA_SONG_NAME";
-
-    private static final String TAG = OnlineAlbumCoverSearchActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -57,10 +44,10 @@ public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity impl
     ProgressBar progressBar;
 
     @BindView(R.id.results_recycler_view)
-    public RecyclerView resultsRecyclerView;
-    private OnlineAlbumAdapter onlineAlbumAdapter;
+    RecyclerView resultsRecyclerView;
+    protected A onlineSearchAdapter;
 
-    private List<BestMatchesModel.Results> results;
+    protected LR results;
     private String query = "";
 
     private Handler handler;
@@ -118,7 +105,7 @@ public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity impl
         });
 
         searchView.setQuery(query, false);
-        searchView.post(() -> searchView.setOnQueryTextListener(OnlineAlbumCoverSearchActivity.this));
+        searchView.post(() -> searchView.setOnQueryTextListener(this));
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -142,8 +129,8 @@ public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity impl
                 this,
                 getResources().getInteger(R.integer.home_grid_columns)
         ));
-        onlineAlbumAdapter = new OnlineAlbumAdapter(this, null);
-        resultsRecyclerView.setAdapter(onlineAlbumAdapter);
+        onlineSearchAdapter = getAdapter();
+        resultsRecyclerView.setAdapter(onlineSearchAdapter);
         resultsRecyclerView.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
@@ -177,44 +164,13 @@ public class OnlineAlbumCoverSearchActivity extends AbsMusicServiceActivity impl
     }
 
     private void hideSoftKeyboard() {
-        Util.hideSoftKeyboard(OnlineAlbumCoverSearchActivity.this);
+        Util.hideSoftKeyboard(this);
         if (searchView != null) {
             searchView.clearFocus();
         }
     }
 
-    private void fetchBestMatches(String songName) {
-        progressBar.setVisibility(View.VISIBLE);
-        resultsRecyclerView.setVisibility(View.INVISIBLE);
-        empty.setVisibility(View.INVISIBLE);
-
-        if (!CachingControlInterceptor.isOnline(getApplicationContext())) {
-            Toast.makeText(progressBar.getContext(), R.string.network_error, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ApiClient.getClient().create(LastFmInterface.class)
-                .getITunesSong(ApiClient.ITUNES_API_URL, songName, "song").enqueue(new Callback<BestMatchesModel>() {
-            @Override
-            public void onResponse(Call<BestMatchesModel> call, Response<BestMatchesModel> response) {
-                if (response.isSuccessful()) {
-                    results = response.body().results;
-                    onlineAlbumAdapter.updateData(results);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    if (results != null && results.size() == 0) {
-                        empty.setVisibility(View.VISIBLE);
-                        resultsRecyclerView.setVisibility(View.INVISIBLE);
-                    } else {
-                        empty.setVisibility(View.INVISIBLE);
-                        resultsRecyclerView.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<BestMatchesModel> call, @NotNull Throwable t) {
-                Log.e(TAG, Objects.requireNonNull(t.getMessage()));
-            }
-        });
-    }
+    @NonNull
+    protected abstract A getAdapter();
+    protected abstract void fetchBestMatches(String songName);
 }
