@@ -62,13 +62,13 @@ public class SongTagEditorActivity extends AbsTagEditorActivity implements TextW
     }
 
     private void fillViewsWithFileTags() {
-        songTitle.setText(getSongTitle());
-        albumTitle.setText(getAlbumTitle());
-        artist.setText(getArtistName());
-        genre.setText(getGenreName());
-        year.setText(getSongYear());
-        trackNumber.setText(getTrackNumber());
-        lyrics.setText(getLyrics());
+        songTitle.setText(tagUtil.getSongTitle());
+        albumTitle.setText(tagUtil.getAlbumTitle());
+        artist.setText(tagUtil.getArtistName());
+        genre.setText(tagUtil.getGenreName());
+        year.setText(tagUtil.getSongYear());
+        trackNumber.setText(tagUtil.getTrackNumber());
+        lyrics.setText(tagUtil.getLyrics());
     }
 
     @Override
@@ -101,7 +101,7 @@ public class SongTagEditorActivity extends AbsTagEditorActivity implements TextW
         fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
         fieldKeyValueMap.put(FieldKey.TRACK, trackNumber.getText().toString());
         fieldKeyValueMap.put(FieldKey.LYRICS, lyrics.getText().toString());
-        writeValuesToFiles(fieldKeyValueMap, null);
+        tagUtil.writeValuesToFiles(fieldKeyValueMap, null);
     }
 
     @Override

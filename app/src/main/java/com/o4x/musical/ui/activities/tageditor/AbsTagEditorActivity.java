@@ -1,57 +1,33 @@
 package com.o4x.musical.ui.activities.tageditor;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.TintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.misc.DialogAsyncTask;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
-import com.o4x.musical.misc.UpdateToastMediaScannerCompletionListener;
 import com.o4x.musical.ui.activities.base.AbsBaseActivity;
-import com.o4x.musical.util.MusicUtil;
+import com.o4x.musical.util.TagUtil;
 import com.o4x.musical.util.Util;
 
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.images.Artwork;
-import org.jaudiotagger.tag.images.ArtworkFactory;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,7 +69,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
             image.setTranslationY(scrollY / 2);
         }
     };
-    private List<String> songPaths;
+    protected TagUtil tagUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +79,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
 
         getIntentExtras();
 
-        songPaths = getSongPaths();
-        if (songPaths.isEmpty()) {
-            finish();
-            return;
-        }
+        createTagUtil();
 
         headerVariableSpace = getResources().getDimensionPixelSize(R.dimen.tagEditorHeaderVariableSpace);
 
@@ -117,6 +89,15 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void createTagUtil() {
+        List<String> songPaths = getSongPaths();
+        if (songPaths.isEmpty()) {
+            finish();
+            return;
+        }
+        tagUtil = new TagUtil(this, songPaths);
     }
 
     private void setUpViews() {
@@ -268,147 +249,6 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
         setTaskDescriptionColor(paletteColorPrimary);
     }
 
-    protected void writeValuesToFiles(@NonNull final Map<FieldKey, String> fieldKeyValueMap, @Nullable final ArtworkInfo artworkInfo) {
-        Util.hideSoftKeyboard(this);
-
-        new WriteTagsAsyncTask(this).execute(new WriteTagsAsyncTask.LoadingInfo(getSongPaths(), fieldKeyValueMap, artworkInfo));
-    }
-
-    private static class WriteTagsAsyncTask extends DialogAsyncTask<WriteTagsAsyncTask.LoadingInfo, Integer, String[]> {
-        Context applicationContext;
-
-        public WriteTagsAsyncTask(Context context) {
-            super(context);
-            applicationContext = context;
-        }
-
-        @Override
-        protected String[] doInBackground(LoadingInfo... params) {
-            try {
-                LoadingInfo info = params[0];
-
-                Artwork artwork = null;
-                File albumArtFile = null;
-                if (info.artworkInfo != null && info.artworkInfo.artwork != null) {
-                    try {
-                        albumArtFile = MusicUtil.createAlbumArtFile().getCanonicalFile();
-                        info.artworkInfo.artwork.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(albumArtFile));
-                        artwork = ArtworkFactory.createArtworkFromFile(albumArtFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                int counter = 0;
-                boolean wroteArtwork = false;
-                boolean deletedArtwork = false;
-                for (String filePath : info.filePaths) {
-                    publishProgress(++counter, info.filePaths.size());
-                    try {
-                        AudioFile audioFile = AudioFileIO.read(new File(filePath));
-                        Tag tag = audioFile.getTagAndConvertOrCreateAndSetDefault();
-
-                        if (info.fieldKeyValueMap != null) {
-                            for (Map.Entry<FieldKey, String> entry : info.fieldKeyValueMap.entrySet()) {
-                                try {
-                                    tag.setField(entry.getKey(), entry.getValue());
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        if (info.artworkInfo != null) {
-                            if (info.artworkInfo.artwork == null) {
-                                tag.deleteArtworkField();
-                                deletedArtwork = true;
-                            } else if (artwork != null) {
-                                tag.deleteArtworkField();
-                                tag.setField(artwork);
-                                wroteArtwork = true;
-                            }
-                        }
-
-                        audioFile.commit();
-                    } catch (@NonNull CannotReadException | IOException | CannotWriteException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                Context context = getContext();
-                if (context != null) {
-                    if (wroteArtwork) {
-                        MusicUtil.insertAlbumArt(context, info.artworkInfo.albumId, albumArtFile.getPath());
-                    } else if (deletedArtwork) {
-                        MusicUtil.deleteAlbumArt(context, info.artworkInfo.albumId);
-                    }
-                }
-
-                return info.filePaths.toArray(new String[info.filePaths.size()]);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String[] toBeScanned) {
-            super.onPostExecute(toBeScanned);
-            scan(toBeScanned);
-        }
-
-        @Override
-        protected void onCancelled(String[] toBeScanned) {
-            super.onCancelled(toBeScanned);
-            scan(toBeScanned);
-        }
-
-        private void scan(String[] toBeScanned) {
-            Context context = getContext();
-            MediaScannerConnection.scanFile(applicationContext, toBeScanned, null, context instanceof Activity ? new UpdateToastMediaScannerCompletionListener((Activity) context, toBeScanned) : null);
-        }
-
-        @Override
-        protected Dialog createDialog(@NonNull Context context) {
-            return new MaterialDialog.Builder(context)
-                    .title(R.string.saving_changes)
-                    .cancelable(false)
-                    .progress(false, 0)
-                    .build();
-        }
-
-        @Override
-        protected void onProgressUpdate(@NonNull Dialog dialog, Integer... values) {
-            super.onProgressUpdate(dialog, values);
-            ((MaterialDialog) dialog).setMaxProgress(values[1]);
-            ((MaterialDialog) dialog).setProgress(values[0]);
-        }
-
-        public static class LoadingInfo {
-            public final Collection<String> filePaths;
-            @Nullable
-            public final Map<FieldKey, String> fieldKeyValueMap;
-            @Nullable
-            private ArtworkInfo artworkInfo;
-
-            private LoadingInfo(Collection<String> filePaths, @Nullable Map<FieldKey, String> fieldKeyValueMap, @Nullable ArtworkInfo artworkInfo) {
-                this.filePaths = filePaths;
-                this.fieldKeyValueMap = fieldKeyValueMap;
-                this.artworkInfo = artworkInfo;
-            }
-        }
-    }
-
-    public static class ArtworkInfo {
-        public final int albumId;
-        public final Bitmap artwork;
-
-        public ArtworkInfo(int albumId, Bitmap artwork) {
-            this.albumId = albumId;
-            this.artwork = artwork;
-        }
-    }
-
     protected int getId() {
         return id;
     }
@@ -428,100 +268,4 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
 
     protected abstract void loadImageFromFile(Uri selectedFile);
     protected abstract void loadImageFromUrl(String url);
-
-    @NonNull
-    private AudioFile getAudioFile(@NonNull String path) {
-        try {
-            return AudioFileIO.read(new File(path));
-        } catch (Exception e) {
-            Log.e(TAG, "Could not read audio file " + path, e);
-            return new AudioFile();
-        }
-    }
-
-    @Nullable
-    protected String getSongTitle() {
-        try {
-            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.TITLE);
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    @Nullable
-    protected String getAlbumTitle() {
-        try {
-            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.ALBUM);
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    @Nullable
-    protected String getArtistName() {
-        try {
-            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.ARTIST);
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    @Nullable
-    protected String getAlbumArtistName() {
-        try {
-            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.ALBUM_ARTIST);
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    @Nullable
-    protected String getGenreName() {
-        try {
-            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.GENRE);
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    @Nullable
-    protected String getSongYear() {
-        try {
-            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.YEAR);
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    @Nullable
-    protected String getTrackNumber() {
-        try {
-            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.TRACK);
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    @Nullable
-    protected String getLyrics() {
-        try {
-            return getAudioFile(songPaths.get(0)).getTag().getFirst(FieldKey.LYRICS);
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
-
-    @Nullable
-    protected Bitmap getAlbumArt() {
-        try {
-            Artwork artworkTag = getAudioFile(songPaths.get(0)).getTag().getFirstArtwork();
-            if (artworkTag != null) {
-                byte[] artworkBinaryData = artworkTag.getBinaryData();
-                return BitmapFactory.decodeByteArray(artworkBinaryData, 0, artworkBinaryData.length);
-            }
-            return null;
-        } catch (Exception ignored) {
-            return null;
-        }
-    }
 }

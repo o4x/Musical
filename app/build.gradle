@@ -139,7 +139,7 @@ dependencies {
     implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
     implementation 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5'
 
-    implementation files('libs\\jaudiotagger-2.2.6-SNAPSHOT.jar')
+    implementation files('libs/jaudiotagger-2.2.6-SNAPSHOT.jar')
 
     implementation 'com.github.woxingxiao:BounceScrollView:1.5-androidx'
 

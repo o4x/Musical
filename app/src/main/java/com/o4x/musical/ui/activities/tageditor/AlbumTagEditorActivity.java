@@ -35,6 +35,7 @@ import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.LastFMUtil;
 import com.o4x.musical.util.PhonographColorUtil;
+import com.o4x.musical.util.TagUtil;
 
 import org.jaudiotagger.tag.FieldKey;
 
@@ -86,10 +87,10 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
 
 
     private void fillViewsWithFileTags() {
-        albumTitle.setText(getAlbumTitle());
-        albumArtist.setText(getAlbumArtistName());
-        genre.setText(getGenreName());
-        year.setText(getSongYear());
+        albumTitle.setText(tagUtil.getAlbumTitle());
+        albumArtist.setText(tagUtil.getAlbumArtistName());
+        genre.setText(tagUtil.getGenreName());
+        year.setText(tagUtil.getSongYear());
     }
 
     private void fillViewsWithResult(BestMatchesModel.Results result) {
@@ -102,7 +103,7 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
 
     @Override
     protected void loadCurrentImage() {
-        Bitmap bitmap = getAlbumArt();
+        Bitmap bitmap = tagUtil.getAlbumArt();
         setImageBitmap(bitmap, PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(bitmap), ATHUtil.resolveColor(this, R.attr.defaultFooterColor)));
         deleteAlbumArt = false;
     }
@@ -156,7 +157,7 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
     @Override
     protected void searchOnline() {
         Intent intent = new Intent(this, AlbumSearchActivity.class);
-        intent.putExtra(AlbumSearchActivity.EXTRA_SONG_NAME, getAlbumTitle());
+        intent.putExtra(AlbumSearchActivity.EXTRA_SONG_NAME, tagUtil.getAlbumTitle());
         this.startActivityForResult(intent, AlbumSearchActivity.REQUEST_CODE);
     }
 
@@ -192,7 +193,7 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
         fieldKeyValueMap.put(FieldKey.GENRE, genre.getText().toString());
         fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
 
-        writeValuesToFiles(fieldKeyValueMap, deleteAlbumArt ? new ArtworkInfo(getId(), null) : albumArtBitmap == null ? null : new ArtworkInfo(getId(), albumArtBitmap));
+        tagUtil.writeValuesToFiles(fieldKeyValueMap, deleteAlbumArt ? new TagUtil.ArtworkInfo(getId(), null) : albumArtBitmap == null ? null : new TagUtil.ArtworkInfo(getId(), albumArtBitmap));
     }
 
     @Override
