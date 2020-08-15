@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.activities.tageditor;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.loader.SongLoader;
+import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
+import com.o4x.musical.ui.activities.tageditor.onlinesearch.SongSearchActivity;
 
 import org.jaudiotagger.tag.FieldKey;
 
@@ -51,6 +54,19 @@ public class SongTagEditorActivity extends AbsTagEditorActivity {
         getSupportActionBar().setTitle(R.string.action_tag_editor);
     }
 
+    @Override
+    protected int getContentViewLayout() {
+        return R.layout.activity_song_tag_editor;
+    }
+
+    @NonNull
+    @Override
+    protected List<String> getSongPaths() {
+        List<String> paths = new ArrayList<>(1);
+        paths.add(SongLoader.getSong(this, getId()).data);
+        return paths;
+    }
+
     private void setUpViews() {
         fillViewsWithFileTags();
         songTitle.addTextChangedListener(textWatcher);
@@ -73,6 +89,19 @@ public class SongTagEditorActivity extends AbsTagEditorActivity {
     }
 
     @Override
+    protected void save() {
+        Map<FieldKey, String> fieldKeyValueMap = new EnumMap<>(FieldKey.class);
+        fieldKeyValueMap.put(FieldKey.TITLE, songTitle.getText().toString());
+        fieldKeyValueMap.put(FieldKey.ALBUM, albumTitle.getText().toString());
+        fieldKeyValueMap.put(FieldKey.ARTIST, artist.getText().toString());
+        fieldKeyValueMap.put(FieldKey.GENRE, genre.getText().toString());
+        fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
+        fieldKeyValueMap.put(FieldKey.TRACK, trackNumber.getText().toString());
+        fieldKeyValueMap.put(FieldKey.LYRICS, lyrics.getText().toString());
+        tagUtil.writeValuesToFiles(fieldKeyValueMap, null);
+    }
+
+    @Override
     protected void loadCurrentImage() {
 
     }
@@ -92,31 +121,7 @@ public class SongTagEditorActivity extends AbsTagEditorActivity {
 
     }
 
-    @Override
-    protected void save() {
-        Map<FieldKey, String> fieldKeyValueMap = new EnumMap<>(FieldKey.class);
-        fieldKeyValueMap.put(FieldKey.TITLE, songTitle.getText().toString());
-        fieldKeyValueMap.put(FieldKey.ALBUM, albumTitle.getText().toString());
-        fieldKeyValueMap.put(FieldKey.ARTIST, artist.getText().toString());
-        fieldKeyValueMap.put(FieldKey.GENRE, genre.getText().toString());
-        fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
-        fieldKeyValueMap.put(FieldKey.TRACK, trackNumber.getText().toString());
-        fieldKeyValueMap.put(FieldKey.LYRICS, lyrics.getText().toString());
-        tagUtil.writeValuesToFiles(fieldKeyValueMap, null);
-    }
 
-    @Override
-    protected int getContentViewLayout() {
-        return R.layout.activity_song_tag_editor;
-    }
-
-    @NonNull
-    @Override
-    protected List<String> getSongPaths() {
-        List<String> paths = new ArrayList<>(1);
-        paths.add(SongLoader.getSong(this, getId()).data);
-        return paths;
-    }
 
     @Override
     protected void fillViewsWithResult(Serializable result) {
@@ -135,7 +140,9 @@ public class SongTagEditorActivity extends AbsTagEditorActivity {
 
     @Override
     protected void searchOnline() {
-        
+        Intent intent = new Intent(this, SongSearchActivity.class);
+        intent.putExtra(SongSearchActivity.EXTRA_SONG_NAME, tagUtil.getSongTitle());
+        this.startActivityForResult(intent, SongSearchActivity.REQUEST_CODE);
     }
 
 

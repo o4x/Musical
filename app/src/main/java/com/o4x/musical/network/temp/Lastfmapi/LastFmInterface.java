@@ -4,7 +4,7 @@ package com.o4x.musical.network.temp.Lastfmapi;
 
 import com.o4x.musical.network.temp.Lastfmapi.Models.AlbumModel;
 import com.o4x.musical.network.temp.Lastfmapi.Models.ArtistModel;
-import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
+import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesResultModel;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -28,7 +28,7 @@ public interface LastFmInterface {
     Call<ITunesArtistModel> getITunesAlbum(@Url String url, @Query("term") String termName, @Query("entity") String entityName);
 */
     @POST
-    Call<BestMatchesModel> getITunesSong(@Url String url, @Query("term") String termName, @Query("entity") String entityName);
+    Call<ITunesResultModel> getITunesSong(@Url String url, @Query("term") String termName, @Query("entity") String entityName);
 
     @POST
     Call<ResponseBody> getJustin(@Url String url);

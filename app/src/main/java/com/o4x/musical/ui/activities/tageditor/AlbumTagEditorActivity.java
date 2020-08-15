@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.activities.tageditor;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,10 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
 
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,8 +26,7 @@ import com.o4x.musical.lastfm.rest.LastFMRestClient;
 import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
-import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
+import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesResultModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.LastFMUtil;
@@ -51,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AlbumTagEditorActivity extends AbsTagEditorActivity<BestMatchesModel.Results> {
+public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesResultModel.Results> {
 
     private static final String TAG = AlbumTagEditorActivity.class.getSimpleName();
 
@@ -111,12 +106,12 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<BestMatchesMode
     }
 
     @Override
-    protected void fillViewsWithResult(BestMatchesModel.Results result) {
-        loadImageFromUrl(result.artworkUrl100);
+    protected void fillViewsWithResult(ITunesResultModel.Results result) {
+        loadImageFromUrl(result.getBigArtworkUrl());
         albumTitle.setText(result.collectionName);
         albumArtist.setText(result.artistName);
         genre.setText(result.primaryGenreName);
-        year.setText(result.releaseDate);
+        year.setText(result.getYear());
     }
 
     @Override

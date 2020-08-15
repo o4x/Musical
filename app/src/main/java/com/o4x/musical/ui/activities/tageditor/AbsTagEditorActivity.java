@@ -28,7 +28,6 @@ import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.TintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
-import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
 import com.o4x.musical.ui.activities.base.AbsBaseActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;

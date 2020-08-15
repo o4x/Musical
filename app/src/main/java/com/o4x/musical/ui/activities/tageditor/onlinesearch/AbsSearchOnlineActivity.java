@@ -56,7 +56,7 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_album_cover);
+        setContentView(R.layout.activity_search_online);
         setDrawUnderBar();
         ButterKnife.bind(this);
 

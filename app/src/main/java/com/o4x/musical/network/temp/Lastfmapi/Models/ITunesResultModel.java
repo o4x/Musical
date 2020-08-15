@@ -1,11 +1,13 @@
 package com.o4x.musical.network.temp.Lastfmapi.Models;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class BestMatchesModel {
+public class ITunesResultModel {
 
 
     @SerializedName("resultCount")
@@ -75,7 +77,16 @@ public class BestMatchesModel {
         public String currency;
         @SerializedName("primaryGenreName")
         public String primaryGenreName;
-        @SerializedName("isStreamable")
-        public boolean isStreamable;
+
+
+        public String getBigArtworkUrl() {
+            return artworkUrl100
+                    .replace("100x100", "1000x1000");
+        }
+
+
+        public String getYear() {
+            return releaseDate.split("-")[0];
+        }
     }
 }
