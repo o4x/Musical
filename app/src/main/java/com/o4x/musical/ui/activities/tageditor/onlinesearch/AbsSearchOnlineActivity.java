@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
-import com.o4x.musical.ui.adapter.online.OnlineSearchAdapter;
+import com.o4x.musical.ui.adapter.online.SearchOnlineAdapter;
 import com.o4x.musical.util.Util;
 
 import java.io.Serializable;
@@ -26,14 +26,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class AbsOnlineSearch <A extends OnlineSearchAdapter, LR extends List<? extends Serializable>>
+public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR extends List<? extends Serializable>>
         extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
 
     public static final String QUERY = "query";
-    public static int REQUEST_CODE = 2000;
-    public static String EXTRA_RESULT_ALL = "EXTRA_RESULT_ALL";
-    public static String EXTRA_RESULT_COVER = "EXTRA_RESULT_COVER";
-    public static String EXTRA_SONG_NAME = "EXTRA_SONG_NAME";
+    public static final int REQUEST_CODE = 2000;
+    public static final String EXTRA_RESULT_ALL = "EXTRA_RESULT_ALL";
+    public static final String EXTRA_RESULT_COVER = "EXTRA_RESULT_COVER";
+    public static final String EXTRA_SONG_NAME = "EXTRA_SONG_NAME";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

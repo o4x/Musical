@@ -1,159 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
-        android:id="@+id/observableScrollView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <RelativeLayout
+        <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+            android:id="@+id/observableScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.o4x.musical.views.WidthFitSquareLayout
-                android:id="@+id/image_container"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/image"
+                <com.o4x.musical.views.WidthFitSquareLayout
+                    android:id="@+id/image_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/default_album_art"
-                    android:transitionName="@string/transition_album_art"
-                    tools:ignore="ContentDescription,UnusedAttribute" />
+                    android:layout_height="match_parent">
 
-            </com.o4x.musical.views.WidthFitSquareLayout>
-
-            <LinearLayout
-                android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/image_container"
-                android:elevation="@dimen/toolbar_elevation"
-                android:minHeight="@dimen/title_view_height"
-                android:orientation="vertical"
-                android:paddingBottom="8dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp"
-                tools:ignore="UnusedAttribute">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/title"
+                    <ImageView
+                        android:id="@+id/image"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center_vertical"
-                        android:hint="@string/album"
-                        android:inputType="text|textCapWords"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/ate_primary_text_dark" />
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/default_album_art"
+                        android:transitionName="@string/transition_album_art"
+                        tools:ignore="ContentDescription,UnusedAttribute" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </com.o4x.musical.views.WidthFitSquareLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/editables"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/header"
-                android:background="?android:attr/windowBackground"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
+                    android:id="@+id/header"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/image_container"
+                    android:elevation="@dimen/toolbar_elevation"
+                    android:minHeight="@dimen/title_view_height"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp"
+                    tools:ignore="UnusedAttribute">
 
-                    <EditText
-                        android:id="@+id/album_artist"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center_vertical"
-                        android:hint="@string/album_artist"
-                        android:inputType="text|textCapWords"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        android:layout_height="wrap_content">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <EditText
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center_vertical"
+                            android:hint="@string/album"
+                            android:inputType="text|textCapWords"
+                            android:singleLine="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                            android:textColor="@color/ate_primary_text_dark" />
 
-                <com.google.android.material.textfield.TextInputLayout
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/editables"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/header"
+                    android:background="?android:attr/windowBackground"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <EditText
-                        android:id="@+id/genre"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center_vertical"
-                        android:hint="@string/genre"
-                        android:inputType="text|textCapWords"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        android:layout_height="wrap_content">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <EditText
+                            android:id="@+id/album_artist"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
+                            android:hint="@string/album_artist"
+                            android:inputType="text|textCapWords"
+                            android:singleLine="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <EditText
-                        android:id="@+id/year"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center_vertical"
-                        android:hint="@string/year"
-                        android:inputType="text|number"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                        android:layout_height="wrap_content">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <EditText
+                            android:id="@+id/genre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
+                            android:hint="@string/genre"
+                            android:inputType="text|textCapWords"
+                            android:singleLine="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-            </LinearLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        </RelativeLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-    </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+                        <EditText
+                            android:id="@+id/year"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
+                            android:hint="@string/year"
+                            android:inputType="text|number"
+                            android:singleLine="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-    <View
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@drawable/shadow_down" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/Toolbar"
+            android:background="#00000000"
+            android:gravity="start|left"
+            tools:ignore="RtlHardcoded" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/play_pause_fab"
+            style="@style/Fab"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin_top_left_right"
+            app:srcCompat="@drawable/ic_save_white_24dp" />
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/search_online_btn"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@drawable/shadow_down" />
+        android:layout_height="wrap_content"
+        android:text="@string/search_online"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/Toolbar"
-        android:background="#00000000"
-        android:gravity="start|left"
-        tools:ignore="RtlHardcoded" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/play_pause_fab"
-        style="@style/Fab"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin_top_left_right"
-        app:srcCompat="@drawable/ic_save_white_24dp" />
-
-</FrameLayout>
+</LinearLayout>
 

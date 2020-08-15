@@ -10,8 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsOnlineSearch;
+import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.ui.dialogs.SetTagsDialog;
 
@@ -20,14 +19,14 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class OnlineSearchAdapter<A extends AbsOnlineSearch, RM extends List<? extends Serializable>>
-        extends RecyclerView.Adapter<OnlineSearchAdapter.ViewHolder> {
+public abstract class SearchOnlineAdapter<A extends AbsSearchOnlineActivity, RM extends List<? extends Serializable>>
+        extends RecyclerView.Adapter<SearchOnlineAdapter.ViewHolder> {
 
     private A activity;
     protected RM data;
 
 
-    public OnlineSearchAdapter(A activity, RM resultsModels) {
+    public SearchOnlineAdapter(A activity, RM resultsModels) {
         this.activity = activity;
         data = resultsModels;
     }

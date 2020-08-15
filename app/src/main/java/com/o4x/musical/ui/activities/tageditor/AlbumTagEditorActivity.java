@@ -31,6 +31,7 @@ import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.network.temp.Lastfmapi.Models.BestMatchesModel;
+import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.LastFMUtil;
@@ -50,7 +51,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AlbumTagEditorActivity extends AbsTagEditorActivity implements TextWatcher {
+public class AlbumTagEditorActivity extends AbsTagEditorActivity<BestMatchesModel.Results> {
 
     private static final String TAG = AlbumTagEditorActivity.class.getSimpleName();
 
@@ -77,12 +78,28 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
         setUpViews();
     }
 
+    @Override
+    protected int getContentViewLayout() {
+        return R.layout.activity_album_tag_editor;
+    }
+
+    @NonNull
+    @Override
+    protected List<String> getSongPaths() {
+        List<Song> songs = AlbumLoader.getAlbum(this, getId()).songs;
+        List<String> paths = new ArrayList<>(songs.size());
+        for (Song song : songs) {
+            paths.add(song.data);
+        }
+        return paths;
+    }
+
     private void setUpViews() {
         fillViewsWithFileTags();
-        albumTitle.addTextChangedListener(this);
-        albumArtist.addTextChangedListener(this);
-        genre.addTextChangedListener(this);
-        year.addTextChangedListener(this);
+        albumTitle.addTextChangedListener(textWatcher);
+        albumArtist.addTextChangedListener(textWatcher);
+        genre.addTextChangedListener(textWatcher);
+        year.addTextChangedListener(textWatcher);
     }
 
 
@@ -93,7 +110,8 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
         year.setText(tagUtil.getSongYear());
     }
 
-    private void fillViewsWithResult(BestMatchesModel.Results result) {
+    @Override
+    protected void fillViewsWithResult(BestMatchesModel.Results result) {
         loadImageFromUrl(result.artworkUrl100);
         albumTitle.setText(result.collectionName);
         albumArtist.setText(result.artistName);
@@ -102,10 +120,108 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
     }
 
     @Override
+    protected void save() {
+        Map<FieldKey, String> fieldKeyValueMap = new EnumMap<>(FieldKey.class);
+        fieldKeyValueMap.put(FieldKey.ALBUM, albumTitle.getText().toString());
+        //android seems not to recognize album_artist field so we additionally write the normal artist field
+        fieldKeyValueMap.put(FieldKey.ARTIST, albumArtist.getText().toString());
+        fieldKeyValueMap.put(FieldKey.ALBUM_ARTIST, albumArtist.getText().toString());
+        fieldKeyValueMap.put(FieldKey.GENRE, genre.getText().toString());
+        fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
+
+        tagUtil.writeValuesToFiles(fieldKeyValueMap, deleteAlbumArt ? new TagUtil.ArtworkInfo(getId(), null) : albumArtBitmap == null ? null : new TagUtil.ArtworkInfo(getId(), albumArtBitmap));
+    }
+
+    @Override
+    protected void setColors(int color) {
+        super.setColors(color);
+        albumTitle.setTextColor(ToolbarContentTintHelper.toolbarTitleColor(this, color));
+    }
+
+    @Override
     protected void loadCurrentImage() {
         Bitmap bitmap = tagUtil.getAlbumArt();
         setImageBitmap(bitmap, PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(bitmap), ATHUtil.resolveColor(this, R.attr.defaultFooterColor)));
         deleteAlbumArt = false;
+    }
+
+    @Override
+    protected void deleteImage() {
+        setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.default_album_art), ATHUtil.resolveColor(this, R.attr.defaultFooterColor));
+        deleteAlbumArt = true;
+        dataChanged();
+    }
+
+    @Override
+    protected void searchImageOnWeb() {
+        searchWebFor(albumTitle.getText().toString(), albumArtist.getText().toString());
+    }
+
+    @Override
+    protected void searchOnline() {
+        Intent intent = new Intent(this, AlbumSearchActivity.class);
+        intent.putExtra(AlbumSearchActivity.EXTRA_SONG_NAME, tagUtil.getAlbumTitle());
+        this.startActivityForResult(intent, AlbumSearchActivity.REQUEST_CODE);
+    }
+
+    @Override
+    protected void loadImageFromFile(Uri selectedFile) {
+        Glide.with(AlbumTagEditorActivity.this)
+                .asBitmap()
+                .load(selectedFile)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        final Palette palette = Palette.from(resource).generate();
+                        PhonographColorUtil.getColor(palette, Color.TRANSPARENT);
+                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
+                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(palette, ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
+                        deleteAlbumArt = false;
+                        dataChanged();
+                        setResult(RESULT_OK);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+                    }
+                });
+    }
+
+    @Override
+    protected void loadImageFromUrl(String url) {
+        Glide.with(AlbumTagEditorActivity.this)
+                .asBitmap()
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .error(R.drawable.default_album_art)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
+                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(Palette.from(resource).generate(), ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
+                        deleteAlbumArt = false;
+                        dataChanged();
+                        setResult(RESULT_OK);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+                    }
+                });
     }
 
     @Override
@@ -140,160 +256,5 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity implements Text
                         R.string.could_not_download_album_cover, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    protected void searchImageOnWeb() {
-        searchWebFor(albumTitle.getText().toString(), albumArtist.getText().toString());
-    }
-
-    @Override
-    protected void deleteImage() {
-        setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.default_album_art), ATHUtil.resolveColor(this, R.attr.defaultFooterColor));
-        deleteAlbumArt = true;
-        dataChanged();
-    }
-
-    @Override
-    protected void searchOnline() {
-        Intent intent = new Intent(this, AlbumSearchActivity.class);
-        intent.putExtra(AlbumSearchActivity.EXTRA_SONG_NAME, tagUtil.getAlbumTitle());
-        this.startActivityForResult(intent, AlbumSearchActivity.REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == AlbumSearchActivity.REQUEST_CODE) {
-            Bundle extras = data.getExtras();
-            if (resultCode == Activity.RESULT_OK) {
-                if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_ALL)) {
-                    BestMatchesModel.Results result = (BestMatchesModel.Results)
-                            extras.getSerializable(AlbumSearchActivity.EXTRA_RESULT_ALL);
-                    fillViewsWithResult(result);
-                } else if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_COVER)) {
-                    loadImageFromUrl(
-                            extras.getString(AlbumSearchActivity.EXTRA_RESULT_COVER)
-                    );
-                }
-            } else {
-                Log.i(TAG, "ResultCode = " + resultCode);
-            }
-        }
-    }
-
-    @Override
-    protected void save() {
-        Map<FieldKey, String> fieldKeyValueMap = new EnumMap<>(FieldKey.class);
-        fieldKeyValueMap.put(FieldKey.ALBUM, albumTitle.getText().toString());
-        //android seems not to recognize album_artist field so we additionally write the normal artist field
-        fieldKeyValueMap.put(FieldKey.ARTIST, albumArtist.getText().toString());
-        fieldKeyValueMap.put(FieldKey.ALBUM_ARTIST, albumArtist.getText().toString());
-        fieldKeyValueMap.put(FieldKey.GENRE, genre.getText().toString());
-        fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
-
-        tagUtil.writeValuesToFiles(fieldKeyValueMap, deleteAlbumArt ? new TagUtil.ArtworkInfo(getId(), null) : albumArtBitmap == null ? null : new TagUtil.ArtworkInfo(getId(), albumArtBitmap));
-    }
-
-    @Override
-    protected int getContentViewLayout() {
-        return R.layout.activity_album_tag_editor;
-    }
-
-    @NonNull
-    @Override
-    protected List<String> getSongPaths() {
-        List<Song> songs = AlbumLoader.getAlbum(this, getId()).songs;
-        List<String> paths = new ArrayList<>(songs.size());
-        for (Song song : songs) {
-            paths.add(song.data);
-        }
-        return paths;
-    }
-
-    @Override
-    protected void loadImageFromFile(Uri selectedFile) {
-        Glide.with(AlbumTagEditorActivity.this)
-                .asBitmap()
-                .load(selectedFile)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        final Palette palette = Palette.from(resource).generate();
-                        PhonographColorUtil.getColor(palette, Color.TRANSPARENT);
-                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
-                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(palette, ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
-                        deleteAlbumArt = false;
-                        dataChanged();
-                        setResult(RESULT_OK);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-
-                    @Override
-                    public void onLoadFailed(Drawable errorDrawable) {
-                        super.onLoadFailed(errorDrawable);
-//                        e.printStackTrace();
-//                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
-
-    @Override
-    protected void loadImageFromUrl(String url) {
-        Glide.with(AlbumTagEditorActivity.this)
-                .asBitmap()
-                .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.DATA)
-                .error(R.drawable.default_album_art)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
-                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(Palette.from(resource).generate(), ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
-                        deleteAlbumArt = false;
-                        dataChanged();
-                        setResult(RESULT_OK);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-
-                    @Override
-                    public void onLoadFailed(Drawable errorDrawable) {
-                        super.onLoadFailed(errorDrawable);
-//                                        e.printStackTrace();
-//                                        Toast.makeText(AlbumTagEditorActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        dataChanged();
-    }
-
-    @Override
-    protected void setColors(int color) {
-        super.setColors(color);
-        albumTitle.setTextColor(ToolbarContentTintHelper.toolbarTitleColor(this, color));
     }
 }

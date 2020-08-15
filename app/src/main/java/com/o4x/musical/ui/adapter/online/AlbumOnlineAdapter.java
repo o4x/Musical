@@ -1,5 +1,7 @@
 package com.o4x.musical.ui.adapter.online;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.imageloader.universalil.UniversalIL;
@@ -11,7 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class AlbumOnlineAdapter
-        extends OnlineSearchAdapter<AlbumSearchActivity, List<BestMatchesModel.Results>> {
+        extends SearchOnlineAdapter<AlbumSearchActivity, List<BestMatchesModel.Results>> {
+
+    private static final String TAG = AlbumOnlineAdapter.class.getSimpleName();
 
     public AlbumOnlineAdapter(AlbumSearchActivity activity,
                               List<BestMatchesModel.Results> resultsModels) {
@@ -19,14 +23,18 @@ public class AlbumOnlineAdapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OnlineSearchAdapter.ViewHolder holder, int position) {
-        String url = getArtUrl(position);
-        assert holder.image != null;
-        UniversalIL.onlineAlbumImageLoader(url, holder.image, null);
-        assert holder.title != null;
-        holder.title.setText(data.get(position).trackName);
-        assert holder.text != null;
-        holder.text.setText(data.get(position).artistName);
+    public void onBindViewHolder(@NonNull SearchOnlineAdapter.ViewHolder holder, int position) {
+        try {
+            String url = getArtUrl(position);
+            assert holder.image != null;
+            UniversalIL.onlineAlbumImageLoader(url, holder.image, null);
+            assert holder.title != null;
+            holder.title.setText(data.get(position).trackName);
+            assert holder.text != null;
+            holder.text.setText(data.get(position).artistName);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @NotNull

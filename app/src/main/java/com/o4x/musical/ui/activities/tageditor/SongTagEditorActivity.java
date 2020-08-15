@@ -13,6 +13,7 @@ import com.o4x.musical.loader.SongLoader;
 
 import org.jaudiotagger.tag.FieldKey;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SongTagEditorActivity extends AbsTagEditorActivity implements TextWatcher {
+public class SongTagEditorActivity extends AbsTagEditorActivity {
 
     @BindView(R.id.title1)
     EditText songTitle;
@@ -52,13 +53,13 @@ public class SongTagEditorActivity extends AbsTagEditorActivity implements TextW
 
     private void setUpViews() {
         fillViewsWithFileTags();
-        songTitle.addTextChangedListener(this);
-        albumTitle.addTextChangedListener(this);
-        artist.addTextChangedListener(this);
-        genre.addTextChangedListener(this);
-        year.addTextChangedListener(this);
-        trackNumber.addTextChangedListener(this);
-        lyrics.addTextChangedListener(this);
+        songTitle.addTextChangedListener(textWatcher);
+        albumTitle.addTextChangedListener(textWatcher);
+        artist.addTextChangedListener(textWatcher);
+        genre.addTextChangedListener(textWatcher);
+        year.addTextChangedListener(textWatcher);
+        trackNumber.addTextChangedListener(textWatcher);
+        lyrics.addTextChangedListener(textWatcher);
     }
 
     private void fillViewsWithFileTags() {
@@ -118,6 +119,11 @@ public class SongTagEditorActivity extends AbsTagEditorActivity implements TextW
     }
 
     @Override
+    protected void fillViewsWithResult(Serializable result) {
+
+    }
+
+    @Override
     protected void loadImageFromFile(Uri imageFilePath) {
 
     }
@@ -132,20 +138,6 @@ public class SongTagEditorActivity extends AbsTagEditorActivity implements TextW
         
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        dataChanged();
-    }
 
     @Override
     protected void setColors(int color) {
