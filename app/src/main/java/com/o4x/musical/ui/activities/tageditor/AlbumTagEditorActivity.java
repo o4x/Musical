@@ -1,46 +1,24 @@
 package com.o4x.musical.ui.activities.tageditor;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.palette.graphics.Palette;
 
 import android.text.TextUtils;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.lastfm.rest.LastFMRestClient;
 import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesResultModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
-import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.LastFMUtil;
-import com.o4x.musical.util.PhonographColorUtil;
-import com.o4x.musical.util.TagUtil;
-
-import org.jaudiotagger.tag.FieldKey;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;

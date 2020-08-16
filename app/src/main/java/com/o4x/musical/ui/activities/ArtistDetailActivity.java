@@ -39,6 +39,9 @@ import com.o4x.musical.R;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
+import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
+import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity;
+import com.o4x.musical.ui.activities.tageditor.ArtistTagEditorActivity;
 import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
 import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
@@ -67,6 +70,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
 
     private static final int LOADER_ID = LoaderIds.ARTIST_DETAIL_ACTIVITY;
     private static final int REQUEST_CODE_SELECT_IMAGE = 1000;
+    private static final int TAG_EDITOR_REQUEST = 2001;
 
     public static final String EXTRA_ARTIST_ID = "extra_artist_id";
 
@@ -370,6 +374,11 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
             case R.id.action_reset_artist_image:
                 Toast.makeText(ArtistDetailActivity.this, getResources().getString(R.string.updating), Toast.LENGTH_SHORT).show();
                 CustomArtistImageUtil.getInstance(ArtistDetailActivity.this).resetCustomArtistImage(artist);
+                return true;
+            case R.id.action_tag_editor:
+                Intent editor = new Intent(this, ArtistTagEditorActivity.class);
+                editor.putExtra(AbsTagEditorActivity.EXTRA_ID, getArtist().getId());
+                startActivityForResult(editor, TAG_EDITOR_REQUEST);
                 return true;
             case R.id.action_colored_footers:
                 item.setChecked(!item.isChecked());

@@ -37,7 +37,7 @@ import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.TintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesResultModel;
+import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesModel;
 import com.o4x.musical.ui.activities.base.AbsBaseActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
@@ -272,7 +272,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
         lyrics.setText(tagUtil.getLyrics());
     }
 
-    protected void fillViewsWithResult(ITunesResultModel.Results result) {
+    protected void fillViewsWithResult(ITunesModel.Results result) {
         loadImageFromUrl(result.getBigArtworkUrl());
         if (songName != null)
         songName.setText(result.trackName);
@@ -318,7 +318,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
                         Bundle extras = data.getExtras();
                         if (extras != null) {
                             if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_ALL)) {
-                                ITunesResultModel.Results result = (ITunesResultModel.Results)
+                                ITunesModel.Results result = (ITunesModel.Results)
                                         extras.getSerializable(AbsSearchOnlineActivity.EXTRA_RESULT_ALL);
                                 if (result != null)
                                 fillViewsWithResult(result);

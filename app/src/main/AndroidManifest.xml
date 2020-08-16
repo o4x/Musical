@@ -24,8 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Musical.Light"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.activities.tageditor.onlinesearch.AlbumSearchActivity" />
-        <activity android:name=".ui.activities.tageditor.onlinesearch.SongSearchActivity" />
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -109,6 +107,12 @@
         <activity
             android:name=".ui.activities.tageditor.AlbumTagEditorActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.activities.tageditor.ArtistTagEditorActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.activities.tageditor.onlinesearch.SongSearchActivity" />
+        <activity android:name=".ui.activities.tageditor.onlinesearch.AlbumSearchActivity" />
+        <activity android:name=".ui.activities.tageditor.onlinesearch.ArtistSearchActivity" />
         <activity android:name=".ui.activities.SearchActivity" />
         <activity
             android:name=".ui.activities.SettingsActivity"

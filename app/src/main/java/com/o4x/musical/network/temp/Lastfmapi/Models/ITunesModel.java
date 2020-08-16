@@ -7,8 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class ITunesResultModel {
-
+public class ITunesModel {
 
     @SerializedName("resultCount")
     public int resultCount;
@@ -81,7 +80,9 @@ public class ITunesResultModel {
         public boolean isStreamable;
 
 
+        @Nullable
         public String getBigArtworkUrl() {
+            if (artworkUrl100 == null) return null;
             return artworkUrl100
                     .replace("100x100", "1000x1000");
         }

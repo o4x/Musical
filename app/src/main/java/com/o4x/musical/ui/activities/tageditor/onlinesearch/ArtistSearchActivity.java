@@ -11,8 +11,7 @@ import com.o4x.musical.network.temp.Lastfmapi.ApiClient;
 import com.o4x.musical.network.temp.Lastfmapi.CachingControlInterceptor;
 import com.o4x.musical.network.temp.Lastfmapi.ITunesService;
 import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesModel;
-import com.o4x.musical.ui.adapter.online.AlbumOnlineAdapter;
-import com.o4x.musical.ui.adapter.online.SongOnlineAdapter;
+import com.o4x.musical.ui.adapter.online.ArtistOnlineAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,19 +22,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AlbumSearchActivity
-        extends AbsSearchOnlineActivity<AlbumOnlineAdapter, List<ITunesModel.Results>> {
+public class ArtistSearchActivity
+        extends AbsSearchOnlineActivity<ArtistOnlineAdapter, List<ITunesModel.Results>> {
 
-    private static final String TAG = AlbumSearchActivity.class.getSimpleName();
+    private static final String TAG = ArtistSearchActivity.class.getSimpleName();
 
     @NonNull
     @Override
-    protected AlbumOnlineAdapter getAdapter() {
-        return new AlbumOnlineAdapter(this, null);
+    protected ArtistOnlineAdapter getAdapter() {
+        return new ArtistOnlineAdapter(this, null);
     }
 
     @Override
-    protected void fetchBestMatches(String albumName) {
+    protected void fetchBestMatches(String artistName) {
         progressBar.setVisibility(View.VISIBLE);
         resultsRecyclerView.setVisibility(View.INVISIBLE);
         empty.setVisibility(View.INVISIBLE);
@@ -46,7 +45,7 @@ public class AlbumSearchActivity
         }
 
         ApiClient.getClient().create(ITunesService.class)
-                .searchITunes(albumName, ITunesService.ENTITY_ALBUM).enqueue(new Callback<ITunesModel>() {
+                .searchITunes(artistName, ITunesService.ENTITY_ARTIST).enqueue(new Callback<ITunesModel>() {
             @Override
             public void onResponse(Call<ITunesModel> call, Response<ITunesModel> response) {
                 if (response.isSuccessful()) {
@@ -69,4 +68,5 @@ public class AlbumSearchActivity
             }
         });
     }
+
 }

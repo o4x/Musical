@@ -9,9 +9,8 @@ import androidx.annotation.NonNull;
 import com.o4x.musical.R;
 import com.o4x.musical.network.temp.Lastfmapi.ApiClient;
 import com.o4x.musical.network.temp.Lastfmapi.CachingControlInterceptor;
-import com.o4x.musical.network.temp.Lastfmapi.LastFmInterface;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesResultModel;
-import com.o4x.musical.ui.adapter.online.AlbumOnlineAdapter;
+import com.o4x.musical.network.temp.Lastfmapi.ITunesService;
+import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesModel;
 import com.o4x.musical.ui.adapter.online.SongOnlineAdapter;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SongSearchActivity
-        extends AbsSearchOnlineActivity<SongOnlineAdapter, List<ITunesResultModel.Results>> {
+        extends AbsSearchOnlineActivity<SongOnlineAdapter, List<ITunesModel.Results>> {
 
     private static final String TAG = SongSearchActivity.class.getSimpleName();
 
@@ -45,10 +44,10 @@ public class SongSearchActivity
             return;
         }
 
-        ApiClient.getClient().create(LastFmInterface.class)
-                .getITunesSong(ApiClient.ITUNES_API_URL, songName, "song").enqueue(new Callback<ITunesResultModel>() {
+        ApiClient.getClient().create(ITunesService.class)
+                .searchITunes(songName, ITunesService.ENTITY_TRACK).enqueue(new Callback<ITunesModel>() {
             @Override
-            public void onResponse(Call<ITunesResultModel> call, Response<ITunesResultModel> response) {
+            public void onResponse(Call<ITunesModel> call, Response<ITunesModel> response) {
                 if (response.isSuccessful()) {
                     results = response.body().results;
                     onlineSearchAdapter.updateData(results);
@@ -64,7 +63,7 @@ public class SongSearchActivity
             }
 
             @Override
-            public void onFailure(@NotNull Call<ITunesResultModel> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<ITunesModel> call, @NotNull Throwable t) {
                 Log.e(TAG, Objects.requireNonNull(t.getMessage()));
             }
         });
