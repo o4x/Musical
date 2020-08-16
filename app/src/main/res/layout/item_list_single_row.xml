@@ -42,7 +42,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/image_text"
+                android:id="@+id/track_number"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:fontFamily="sans-serif"
@@ -55,7 +55,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/album_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

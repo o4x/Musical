@@ -104,7 +104,7 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
         public ViewHolder(View view) {
             super(view);
             checkBox = view.findViewById(R.id.checkbox);
-            title = view.findViewById(R.id.title);
+            title = view.findViewById(R.id.album_name);
             dragView = view.findViewById(R.id.drag_view);
         }
     }

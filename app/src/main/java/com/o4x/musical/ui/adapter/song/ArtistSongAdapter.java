@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialcab.MaterialCab;
-import com.bumptech.glide.Glide;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
@@ -68,7 +67,7 @@ public class ArtistSongAdapter extends ArrayAdapter<Song> implements MaterialCab
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_list, parent, false);
         }
 
-        final TextView songTitle = convertView.findViewById(R.id.title);
+        final TextView songTitle = convertView.findViewById(R.id.album_name);
         final TextView songInfo = convertView.findViewById(R.id.text);
         final ImageView albumArt = convertView.findViewById(R.id.image);
         final View shortSeparator = convertView.findViewById(R.id.short_separator);

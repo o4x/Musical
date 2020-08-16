@@ -27,11 +27,11 @@ public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements Vie
     public IconImageView icon;
 
     @Nullable
-    @BindView(R.id.image_text)
+    @BindView(R.id.track_number)
     public TextView imageText;
 
     @Nullable
-    @BindView(R.id.title)
+    @BindView(R.id.album_name)
     public TextView title;
 
     @Nullable

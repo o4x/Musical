@@ -77,6 +77,8 @@ public class ITunesResultModel {
         public String currency;
         @SerializedName("primaryGenreName")
         public String primaryGenreName;
+        @SerializedName("isStreamable")
+        public boolean isStreamable;
 
 
         public String getBigArtworkUrl() {

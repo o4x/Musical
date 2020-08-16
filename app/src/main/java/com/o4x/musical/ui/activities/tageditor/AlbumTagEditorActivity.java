@@ -46,21 +46,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesResultModel.Results> {
+public class AlbumTagEditorActivity extends AbsTagEditorActivity {
 
-    private static final String TAG = AlbumTagEditorActivity.class.getSimpleName();
 
-    @BindView(R.id.title)
-    EditText albumTitle;
-    @BindView(R.id.album_artist)
-    EditText albumArtist;
-    @BindView(R.id.genre)
-    EditText genre;
-    @BindView(R.id.year)
-    EditText year;
-
-    private Bitmap albumArtBitmap;
-    private boolean deleteAlbumArt;
     private LastFMRestClient lastFMRestClient;
 
     @Override
@@ -69,8 +57,6 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesResultMod
         ButterKnife.bind(this);
 
         lastFMRestClient = new LastFMRestClient(this);
-
-        setUpViews();
     }
 
     @Override
@@ -89,67 +75,15 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesResultMod
         return paths;
     }
 
-    private void setUpViews() {
-        fillViewsWithFileTags();
-        albumTitle.addTextChangedListener(textWatcher);
-        albumArtist.addTextChangedListener(textWatcher);
-        genre.addTextChangedListener(textWatcher);
-        year.addTextChangedListener(textWatcher);
-    }
-
-
-    private void fillViewsWithFileTags() {
-        albumTitle.setText(tagUtil.getAlbumTitle());
-        albumArtist.setText(tagUtil.getAlbumArtistName());
-        genre.setText(tagUtil.getGenreName());
-        year.setText(tagUtil.getSongYear());
-    }
-
-    @Override
-    protected void fillViewsWithResult(ITunesResultModel.Results result) {
-        loadImageFromUrl(result.getBigArtworkUrl());
-        albumTitle.setText(result.collectionName);
-        albumArtist.setText(result.artistName);
-        genre.setText(result.primaryGenreName);
-        year.setText(result.getYear());
-    }
-
-    @Override
-    protected void save() {
-        Map<FieldKey, String> fieldKeyValueMap = new EnumMap<>(FieldKey.class);
-        fieldKeyValueMap.put(FieldKey.ALBUM, albumTitle.getText().toString());
-        //android seems not to recognize album_artist field so we additionally write the normal artist field
-        fieldKeyValueMap.put(FieldKey.ARTIST, albumArtist.getText().toString());
-        fieldKeyValueMap.put(FieldKey.ALBUM_ARTIST, albumArtist.getText().toString());
-        fieldKeyValueMap.put(FieldKey.GENRE, genre.getText().toString());
-        fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
-
-        tagUtil.writeValuesToFiles(fieldKeyValueMap, deleteAlbumArt ? new TagUtil.ArtworkInfo(getId(), null) : albumArtBitmap == null ? null : new TagUtil.ArtworkInfo(getId(), albumArtBitmap));
-    }
-
     @Override
     protected void setColors(int color) {
         super.setColors(color);
-        albumTitle.setTextColor(ToolbarContentTintHelper.toolbarTitleColor(this, color));
-    }
-
-    @Override
-    protected void loadCurrentImage() {
-        Bitmap bitmap = tagUtil.getAlbumArt();
-        setImageBitmap(bitmap, PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(bitmap), ATHUtil.resolveColor(this, R.attr.defaultFooterColor)));
-        deleteAlbumArt = false;
-    }
-
-    @Override
-    protected void deleteImage() {
-        setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.default_album_art), ATHUtil.resolveColor(this, R.attr.defaultFooterColor));
-        deleteAlbumArt = true;
-        dataChanged();
+        albumName.setTextColor(ToolbarContentTintHelper.toolbarTitleColor(this, color));
     }
 
     @Override
     protected void searchImageOnWeb() {
-        searchWebFor(albumTitle.getText().toString(), albumArtist.getText().toString());
+        searchWebFor(albumName.getText().toString(), artistName.getText().toString());
     }
 
     @Override
@@ -160,69 +94,9 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesResultMod
     }
 
     @Override
-    protected void loadImageFromFile(Uri selectedFile) {
-        Glide.with(AlbumTagEditorActivity.this)
-                .asBitmap()
-                .load(selectedFile)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        final Palette palette = Palette.from(resource).generate();
-                        PhonographColorUtil.getColor(palette, Color.TRANSPARENT);
-                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
-                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(palette, ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
-                        deleteAlbumArt = false;
-                        dataChanged();
-                        setResult(RESULT_OK);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-
-                    @Override
-                    public void onLoadFailed(Drawable errorDrawable) {
-                        super.onLoadFailed(errorDrawable);
-                    }
-                });
-    }
-
-    @Override
-    protected void loadImageFromUrl(String url) {
-        Glide.with(AlbumTagEditorActivity.this)
-                .asBitmap()
-                .load(url)
-                .diskCacheStrategy(DiskCacheStrategy.DATA)
-                .error(R.drawable.default_album_art)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
-                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(Palette.from(resource).generate(), ATHUtil.resolveColor(AlbumTagEditorActivity.this, R.attr.defaultFooterColor)));
-                        deleteAlbumArt = false;
-                        dataChanged();
-                        setResult(RESULT_OK);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-
-                    @Override
-                    public void onLoadFailed(Drawable errorDrawable) {
-                        super.onLoadFailed(errorDrawable);
-                    }
-                });
-    }
-
-    @Override
     protected void getImageFromLastFM() {
-        String albumTitleStr = albumTitle.getText().toString();
-        String albumArtistNameStr = albumArtist.getText().toString();
+        String albumTitleStr = albumName.getText().toString();
+        String albumArtistNameStr = artistName.getText().toString();
         if (albumArtistNameStr.trim().equals("") || albumTitleStr.trim().equals("")) {
             Toast.makeText(this, getResources().getString(R.string.album_or_artist_empty), Toast.LENGTH_SHORT).show();
             return;

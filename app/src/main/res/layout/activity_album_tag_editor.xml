@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/title"
+                            android:id="@+id/album_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-medium"
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/album_artist"
+                            android:id="@+id/artist_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -105,7 +105,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/genre"
+                            android:id="@+id/genre_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

@@ -223,7 +223,7 @@ public class DonationsDialog extends DialogFragment implements BillingProcessor.
         }
 
         static class ViewHolder {
-            @BindView(R.id.title)
+            @BindView(R.id.album_name)
             TextView title;
             @BindView(R.id.text)
             TextView text;

@@ -12,6 +12,7 @@ import com.o4x.musical.ui.activities.tageditor.onlinesearch.SongSearchActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SongOnlineAdapter
         extends SearchOnlineAdapter<SongSearchActivity, List<ITunesResultModel.Results>> {
@@ -27,14 +28,14 @@ public class SongOnlineAdapter
     public void onBindViewHolder(@NonNull SearchOnlineAdapter.ViewHolder holder, int position) {
         try {
             String url = getArtUrl(position);
-            assert holder.image != null;
+            if (holder.image != null)
             UniversalIL.onlineAlbumImageLoader(url, holder.image, null);
-            assert holder.title != null;
+            if (holder.title != null)
             holder.title.setText(data.get(position).trackName);
-            assert holder.text != null;
+            if (holder.text != null)
             holder.text.setText(data.get(position).artistName);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getMessage()));
         }
     }
 

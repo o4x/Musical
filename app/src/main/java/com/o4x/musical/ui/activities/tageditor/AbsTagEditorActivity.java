@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -19,23 +22,35 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.palette.graphics.Palette;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kabouzeid.appthemehelper.ThemeStore;
+import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.TintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
+import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesResultModel;
 import com.o4x.musical.ui.activities.base.AbsBaseActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
+import com.o4x.musical.util.ImageUtil;
+import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.TagUtil;
-import com.o4x.musical.util.Util;
 
-import java.io.Serializable;
+import org.jaudiotagger.tag.FieldKey;
+
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,12 +58,14 @@ import butterknife.ButterKnife;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsBaseActivity {
+public abstract class AbsTagEditorActivity extends AbsBaseActivity {
 
     public static final String EXTRA_ID = "extra_id";
     public static final String EXTRA_PALETTE = "extra_palette";
     private static final String TAG = AbsTagEditorActivity.class.getSimpleName();
     private static final int REQUEST_CODE_SELECT_IMAGE = 1000;
+
+
     @BindView(R.id.play_pause_fab)
     FloatingActionButton fab;
     @BindView(R.id.search_online_btn)
@@ -61,28 +78,41 @@ public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsB
     ImageView image;
     @BindView(R.id.header)
     LinearLayout header;
+
+    @Nullable
+    @BindView(R.id.song_name)
+    EditText songName;
+    @Nullable
+    @BindView(R.id.album_name)
+    EditText albumName;
+    @Nullable
+    @BindView(R.id.artist_name)
+    EditText artistName;
+    @Nullable
+    @BindView(R.id.genre_name)
+    EditText genreName;
+    @Nullable
+    @BindView(R.id.year)
+    EditText year;
+    @Nullable
+    @BindView(R.id.track_number)
+    EditText trackNumber;
+    @Nullable
+    @BindView(R.id.lyrics)
+    EditText lyrics;
+
     private int id;
     private int headerVariableSpace;
     private int paletteColorPrimary;
-    private boolean isInNoImageMode;
     private final SimpleObservableScrollViewCallbacks observableScrollViewCallbacks = new SimpleObservableScrollViewCallbacks() {
         @Override
         public void onScrollChanged(int scrollY, boolean b, boolean b2) {
             float alpha;
-            if (!isInNoImageMode) {
-                alpha = 1 - (float) Math.max(0, headerVariableSpace - scrollY) / headerVariableSpace;
-            } else {
-                header.setTranslationY(scrollY);
-                alpha = 1;
-            }
+            alpha = 1 - (float) Math.max(0, headerVariableSpace - scrollY) / headerVariableSpace;
             toolbar.setBackgroundColor(ColorUtil.withAlpha(paletteColorPrimary, alpha));
             image.setTranslationY(scrollY / 2f);
         }
     };
-
-
-    protected TagUtil tagUtil;
-
     protected TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,6 +130,11 @@ public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsB
         }
     };
 
+    private Bitmap albumArtBitmap;
+    private boolean deleteAlbumArt;
+    protected TagUtil tagUtil;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +151,7 @@ public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsB
 
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setTitle(R.string.action_tag_editor);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -141,6 +176,7 @@ public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsB
         setupFab();
         setupSearchButton();
         setupImageView();
+        setupEditTexts();
     }
 
     private void setupScrollView() {
@@ -201,15 +237,55 @@ public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsB
         return super.onOptionsItemSelected(item);
     }
 
-    protected void setNoImageMode() {
-        isInNoImageMode = true;
-        image.setVisibility(View.GONE);
-        image.setEnabled(false);
-        observableScrollView.setPadding(0, Util.getActionBarSize(this), 0, 0);
-        observableScrollViewCallbacks.onScrollChanged(observableScrollView.getCurrentScrollY(), false, false);
+    private void setupEditTexts() {
+        fillViewsWithFileTags();
+        if (songName != null)
+        songName.addTextChangedListener(textWatcher);
+        if (albumName != null)
+        albumName.addTextChangedListener(textWatcher);
+        if (artistName != null)
+        artistName.addTextChangedListener(textWatcher);
+        if (genreName != null)
+        genreName.addTextChangedListener(textWatcher);
+        if (year != null)
+        year.addTextChangedListener(textWatcher);
+        if (trackNumber != null)
+        trackNumber.addTextChangedListener(textWatcher);
+        if (lyrics != null)
+        lyrics.addTextChangedListener(textWatcher);
+    }
 
-        setColors(getIntent().getIntExtra(EXTRA_PALETTE, ThemeStore.primaryColor(this)));
-        toolbar.setBackgroundColor(paletteColorPrimary);
+    private void fillViewsWithFileTags() {
+        if (songName != null)
+        songName.setText(tagUtil.getSongTitle());
+        if (albumName != null)
+        albumName.setText(tagUtil.getAlbumTitle());
+        if (artistName != null)
+        artistName.setText(tagUtil.getArtistName());
+        if (genreName != null)
+        genreName.setText(tagUtil.getGenreName());
+        if (year != null)
+        year.setText(tagUtil.getSongYear());
+        if (trackNumber != null)
+        trackNumber.setText(tagUtil.getTrackNumber());
+        if (lyrics != null)
+        lyrics.setText(tagUtil.getLyrics());
+    }
+
+    protected void fillViewsWithResult(ITunesResultModel.Results result) {
+        loadImageFromUrl(result.getBigArtworkUrl());
+        if (songName != null)
+        songName.setText(result.trackName);
+        if (albumName != null)
+        albumName.setText(result.collectionName);
+        if (artistName != null)
+        artistName.setText(result.artistName);
+        if (genreName != null)
+        genreName.setText(result.primaryGenreName);
+        if (year != null)
+        year.setText(result.getYear());
+        if (trackNumber != null)
+        trackNumber.setText(String.valueOf(result.trackNumber));
     }
 
     protected void dataChanged() {
@@ -227,7 +303,7 @@ public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsB
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_CODE_SELECT_IMAGE:
@@ -240,21 +316,23 @@ public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsB
                 try {
                     if (resultCode == Activity.RESULT_OK) {
                         Bundle extras = data.getExtras();
-                        assert extras != null;
-                        if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_ALL)) {
-                            RE result = (RE)
-                                    extras.getSerializable(AbsSearchOnlineActivity.EXTRA_RESULT_ALL);
-                            fillViewsWithResult(result);
-                        } else if (extras.containsKey(AbsSearchOnlineActivity.EXTRA_RESULT_COVER)) {
-                            loadImageFromUrl(
-                                    extras.getString(AbsSearchOnlineActivity.EXTRA_RESULT_COVER)
-                            );
+                        if (extras != null) {
+                            if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_ALL)) {
+                                ITunesResultModel.Results result = (ITunesResultModel.Results)
+                                        extras.getSerializable(AbsSearchOnlineActivity.EXTRA_RESULT_ALL);
+                                if (result != null)
+                                fillViewsWithResult(result);
+                            } else if (extras.containsKey(AbsSearchOnlineActivity.EXTRA_RESULT_COVER)) {
+                                loadImageFromUrl(
+                                        extras.getString(AbsSearchOnlineActivity.EXTRA_RESULT_COVER)
+                                );
+                            }
                         }
                     } else {
                         Log.i(TAG, "ResultCode = " + resultCode);
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
+                    Log.e(TAG, Objects.requireNonNull(e.getMessage()));
                 }
                 break;
             default:
@@ -303,25 +381,111 @@ public abstract class AbsTagEditorActivity<RE extends Serializable> extends AbsB
         startActivityForResult(Intent.createChooser(intent, getString(R.string.pick_from_local_storage)), REQUEST_CODE_SELECT_IMAGE);
     }
 
+
+    protected void loadCurrentImage() {
+        Bitmap bitmap = tagUtil.getAlbumArt();
+        setImageBitmap(bitmap, PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(bitmap), ATHUtil.resolveColor(this, R.attr.defaultFooterColor)));
+        deleteAlbumArt = false;
+    }
+
+
+
+
+    protected void deleteImage() {
+        setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.default_album_art), ATHUtil.resolveColor(this, R.attr.defaultFooterColor));
+        deleteAlbumArt = true;
+        dataChanged();
+    }
+
+
+    protected void save() {
+        Map<FieldKey, String> fieldKeyValueMap = new EnumMap<>(FieldKey.class);
+        if (songName != null)
+        fieldKeyValueMap.put(FieldKey.TITLE, songName.getText().toString());
+        if (albumName != null)
+        fieldKeyValueMap.put(FieldKey.ALBUM, albumName.getText().toString());
+        if (artistName != null)
+        fieldKeyValueMap.put(FieldKey.ARTIST, artistName.getText().toString());
+        if (genreName != null)
+        fieldKeyValueMap.put(FieldKey.GENRE, genreName.getText().toString());
+        if (year != null)
+        fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
+        if (trackNumber != null)
+        fieldKeyValueMap.put(FieldKey.TRACK, trackNumber.getText().toString());
+        if (lyrics != null)
+        fieldKeyValueMap.put(FieldKey.LYRICS, lyrics.getText().toString());
+        tagUtil.writeValuesToFiles(fieldKeyValueMap, deleteAlbumArt ? new TagUtil.ArtworkInfo(getId(), null) : albumArtBitmap == null ? null : new TagUtil.ArtworkInfo(getId(), albumArtBitmap));
+    }
+
+
+    protected void loadImageFromFile(Uri selectedFile) {
+        Glide.with(AbsTagEditorActivity.this)
+                .asBitmap()
+                .load(selectedFile)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        final Palette palette = Palette.from(resource).generate();
+                        PhonographColorUtil.getColor(palette, Color.TRANSPARENT);
+                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
+                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(palette, ATHUtil.resolveColor(AbsTagEditorActivity.this, R.attr.defaultFooterColor)));
+                        deleteAlbumArt = false;
+                        dataChanged();
+                        setResult(RESULT_OK);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+                    }
+                });
+    }
+
+
+    protected void loadImageFromUrl(String url) {
+        Glide.with(AbsTagEditorActivity.this)
+                .asBitmap()
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .error(R.drawable.default_album_art)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048);
+                        setImageBitmap(albumArtBitmap, PhonographColorUtil.getColor(Palette.from(resource).generate(), ATHUtil.resolveColor(AbsTagEditorActivity.this, R.attr.defaultFooterColor)));
+                        deleteAlbumArt = false;
+                        dataChanged();
+                        setResult(RESULT_OK);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(Drawable errorDrawable) {
+                        super.onLoadFailed(errorDrawable);
+                    }
+                });
+    }
+
+
     protected abstract int getContentViewLayout();
 
     @NonNull
     protected abstract List<String> getSongPaths();
 
-    protected abstract void fillViewsWithResult(RE result);
-
-    protected abstract void loadCurrentImage();
-
     protected abstract void getImageFromLastFM();
 
     protected abstract void searchImageOnWeb();
 
-    protected abstract void deleteImage();
-
     protected abstract void searchOnline();
-
-    protected abstract void save();
-
-    protected abstract void loadImageFromFile(Uri selectedFile);
-    protected abstract void loadImageFromUrl(String url);
 }

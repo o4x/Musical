@@ -52,7 +52,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
             notificationLayout.setViewVisibility(R.id.media_titles, View.INVISIBLE);
         } else {
             notificationLayout.setViewVisibility(R.id.media_titles, View.VISIBLE);
-            notificationLayout.setTextViewText(R.id.title, song.title);
+            notificationLayout.setTextViewText(R.id.album_name, song.title);
             notificationLayout.setTextViewText(R.id.text, song.artistName);
         }
 
@@ -60,7 +60,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
             notificationLayoutBig.setViewVisibility(R.id.media_titles, View.INVISIBLE);
         } else {
             notificationLayoutBig.setViewVisibility(R.id.media_titles, View.VISIBLE);
-            notificationLayoutBig.setTextViewText(R.id.title, song.title);
+            notificationLayoutBig.setTextViewText(R.id.album_name, song.title);
             notificationLayoutBig.setTextViewText(R.id.text, song.artistName);
             notificationLayoutBig.setTextViewText(R.id.text2, song.albumName);
         }
@@ -144,13 +144,13 @@ public class PlayingNotificationImpl extends PlayingNotification {
                                 Bitmap next = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_next_white_24dp, primary), 1.5f);
                                 Bitmap playPause = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, isPlaying ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp, primary), 1.5f);
 
-                                notificationLayout.setTextColor(R.id.title, primary);
+                                notificationLayout.setTextColor(R.id.album_name, primary);
                                 notificationLayout.setTextColor(R.id.text, secondary);
                                 notificationLayout.setImageViewBitmap(R.id.action_prev, prev);
                                 notificationLayout.setImageViewBitmap(R.id.action_next, next);
                                 notificationLayout.setImageViewBitmap(R.id.action_play_pause, playPause);
 
-                                notificationLayoutBig.setTextColor(R.id.title, primary);
+                                notificationLayoutBig.setTextColor(R.id.album_name, primary);
                                 notificationLayoutBig.setTextColor(R.id.text, secondary);
                                 notificationLayoutBig.setTextColor(R.id.text2, secondary);
                                 notificationLayoutBig.setImageViewBitmap(R.id.action_prev, prev);

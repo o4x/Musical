@@ -79,7 +79,7 @@ public class AppWidgetSmall extends BaseAppWidget {
             }
 
             appWidgetView.setViewVisibility(R.id.media_titles, View.VISIBLE);
-            appWidgetView.setTextViewText(R.id.title, song.title);
+            appWidgetView.setTextViewText(R.id.album_name, song.title);
             appWidgetView.setTextViewText(R.id.text, song.artistName);
         }
 

@@ -23,26 +23,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/image"
+                <com.o4x.musical.views.WidthFitSquareLayout
+                    android:id="@+id/image_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/default_album_art"
-                    tools:ignore="ContentDescription" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/default_album_art"
+                        android:transitionName="@string/transition_album_art"
+                        tools:ignore="ContentDescription,UnusedAttribute" />
+
+                </com.o4x.musical.views.WidthFitSquareLayout>
 
                 <LinearLayout
                     android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/image"
+                    android:layout_below="@+id/image_container"
                     android:elevation="@dimen/toolbar_elevation"
                     android:minHeight="@dimen/title_view_height"
                     android:orientation="vertical"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp"
                     tools:ignore="UnusedAttribute">
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -50,7 +58,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/title1"
+                            android:id="@+id/song_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-medium"
@@ -68,7 +76,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/title2"
+                            android:id="@+id/album_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-medium"
@@ -96,7 +104,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/artist"
+                            android:id="@+id/artist_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -114,7 +122,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/genre"
+                            android:id="@+id/genre_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -150,7 +158,7 @@
                         android:layout_height="wrap_content">
 
                         <EditText
-                            android:id="@+id/image_text"
+                            android:id="@+id/track_number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

@@ -73,7 +73,7 @@ public class AppWidgetClassic extends BaseAppWidget {
             appWidgetView.setViewVisibility(R.id.media_titles, View.INVISIBLE);
         } else {
             appWidgetView.setViewVisibility(R.id.media_titles, View.VISIBLE);
-            appWidgetView.setTextViewText(R.id.title, song.title);
+            appWidgetView.setTextViewText(R.id.album_name, song.title);
             appWidgetView.setTextViewText(R.id.text, getSongArtistAndAlbum(song));
         }
 
