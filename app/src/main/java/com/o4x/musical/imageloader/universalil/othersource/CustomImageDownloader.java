@@ -65,8 +65,7 @@ public class CustomImageDownloader extends BaseImageDownloader {
 
     private InputStream getStreamFromArtist(ArtistImage artistImage) {
         Log.d("MOSAIC", "load data for" + artistImage.artistName);
-        InputStream stream = null;
-        stream = getMosaic(artistImage.albumCovers);
+        InputStream stream = getMosaic(artistImage.albumCovers);
         return stream;
     }
 }
