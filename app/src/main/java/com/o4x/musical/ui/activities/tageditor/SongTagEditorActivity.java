@@ -7,12 +7,13 @@ import androidx.annotation.NonNull;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.loader.SongLoader;
+import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.SongSearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongTagEditorActivity extends AbsTagEditorActivity {
+public class SongTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Results> {
 
 
     @Override
@@ -26,6 +27,23 @@ public class SongTagEditorActivity extends AbsTagEditorActivity {
         List<String> paths = new ArrayList<>(1);
         paths.add(SongLoader.getSong(this, getId()).data);
         return paths;
+    }
+
+    @Override
+    protected void fillViewsWithResult(ITunesModel.Results result) {
+        loadImageFromUrl(result.getBigArtworkUrl());
+        if (songName != null)
+            songName.setText(result.trackName);
+        if (albumName != null)
+            albumName.setText(result.collectionName);
+        if (artistName != null)
+            artistName.setText(result.artistName);
+        if (genreName != null)
+            genreName.setText(result.primaryGenreName);
+        if (year != null)
+            year.setText(result.getYear());
+        if (trackNumber != null)
+            trackNumber.setText(String.valueOf(result.trackNumber));
     }
 
     @Override

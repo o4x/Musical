@@ -1,4 +1,4 @@
-package com.o4x.musical.network.temp.Lastfmapi.Models;
+package com.o4x.musical.network.Models;
 
 import androidx.annotation.Nullable;
 

@@ -38,9 +38,10 @@ import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.network.ApiClient;
+import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
-import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.ArtistTagEditorActivity;
 import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
 import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
@@ -50,8 +51,7 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.interfaces.PaletteColorHolder;
-import com.o4x.musical.lastfm.rest.LastFMRestClient;
-import com.o4x.musical.lastfm.rest.model.LastFmArtist;
+import com.o4x.musical.network.Models.LastFmArtist;
 import com.o4x.musical.loader.ArtistLoader;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
@@ -112,8 +112,6 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
     private HorizontalAlbumAdapter albumAdapter;
     private ArtistSongAdapter songAdapter;
 
-    private LastFMRestClient lastFMRestClient;
-
     private final SimpleObservableScrollViewCallbacks observableScrollViewCallbacks = new SimpleObservableScrollViewCallbacks() {
         @Override
         public void onScrollChanged(int scrollY, boolean b, boolean b2) {
@@ -136,7 +134,6 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
         setDrawUnderBar();
         ButterKnife.bind(this);
 
-        lastFMRestClient = new LastFMRestClient(this);
         usePalette = PreferenceUtil.getInstance(this).albumArtistColoredFooters();
 
         initViews();
@@ -215,7 +212,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
     private void loadBiography(@Nullable final String lang) {
         biography = null;
 
-        lastFMRestClient.getApiService()
+        ApiClient.getClient(this).create(LastFMService.class)
                 .getArtistInfo(getArtist().getName(), lang, null)
                 .enqueue(new Callback<LastFmArtist>() {
                     @Override

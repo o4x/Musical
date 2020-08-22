@@ -7,12 +7,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.R;
-import com.o4x.musical.network.temp.Lastfmapi.ApiClient;
-import com.o4x.musical.network.temp.Lastfmapi.CachingControlInterceptor;
-import com.o4x.musical.network.temp.Lastfmapi.ITunesService;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesModel;
+import com.o4x.musical.network.ApiClient;
+import com.o4x.musical.network.CachingControlInterceptor;
+import com.o4x.musical.network.service.ITunesService;
+import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.ui.adapter.online.AlbumOnlineAdapter;
-import com.o4x.musical.ui.adapter.online.SongOnlineAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +44,7 @@ public class AlbumSearchActivity
             return;
         }
 
-        ApiClient.getClient().create(ITunesService.class)
+        ApiClient.getClient(this).create(ITunesService.class)
                 .searchITunes(albumName, ITunesService.ENTITY_ALBUM).enqueue(new Callback<ITunesModel>() {
             @Override
             public void onResponse(Call<ITunesModel> call, Response<ITunesModel> response) {

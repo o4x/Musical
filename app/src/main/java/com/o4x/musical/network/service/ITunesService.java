@@ -1,10 +1,7 @@
-package com.o4x.musical.network.temp.Lastfmapi;
+package com.o4x.musical.network.service;
 
 
-
-import com.o4x.musical.network.temp.Lastfmapi.Models.AlbumModel;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ArtistModel;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesModel;
+import com.o4x.musical.network.Models.ITunesModel;
 
 import retrofit2.Call;
 import retrofit2.http.POST;
@@ -21,16 +18,9 @@ import retrofit2.http.Query;
 public interface ITunesService {
 
     String ITUNES_API_URL = "https://itunes.apple.com/search?";
-
     String ENTITY_TRACK = "musicTrack";
     String ENTITY_ALBUM = "album";
     String ENTITY_ARTIST = "musicArtist";
-
-    @POST(ApiClient.BASE_PARAMETERS_ARTIST)
-    Call<ArtistModel> getArtist(@Query("artist") String artistName);
-
-    @POST(ApiClient.BASE_PARAMETERS_ALBUM)
-    Call<AlbumModel> getAlbum(@Query("album") String albumName, @Query("artist") String artistName);
 
     @POST(ITUNES_API_URL)
     Call<ITunesModel> searchITunes(

@@ -1,9 +1,9 @@
-package com.o4x.musical.lastfm.rest.service;
+package com.o4x.musical.network.service;
 
 import androidx.annotation.Nullable;
 
-import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
-import com.o4x.musical.lastfm.rest.model.LastFmArtist;
+import com.o4x.musical.network.Models.LastFmAlbum;
+import com.o4x.musical.network.Models.LastFmArtist;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

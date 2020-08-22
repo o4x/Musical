@@ -1,4 +1,4 @@
-package com.o4x.musical.lastfm.rest.model;
+package com.o4x.musical.network.Models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

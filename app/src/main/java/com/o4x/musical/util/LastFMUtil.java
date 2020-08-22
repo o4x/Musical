@@ -1,7 +1,7 @@
 package com.o4x.musical.util;
 
-import com.o4x.musical.lastfm.rest.model.LastFmAlbum.Album;
-import com.o4x.musical.lastfm.rest.model.LastFmArtist.Artist;
+import com.o4x.musical.network.Models.LastFmAlbum.Album;
+import com.o4x.musical.network.Models.LastFmArtist.Artist;
 
 import java.util.HashMap;
 import java.util.List;

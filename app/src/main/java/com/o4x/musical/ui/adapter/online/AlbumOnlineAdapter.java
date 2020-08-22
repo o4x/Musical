@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesModel;
+import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 
 import org.jetbrains.annotations.NotNull;

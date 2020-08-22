@@ -29,6 +29,8 @@ import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.network.ApiClient;
+import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.ui.adapter.song.AlbumSongAdapter;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
@@ -37,8 +39,7 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.interfaces.PaletteColorHolder;
-import com.o4x.musical.lastfm.rest.LastFMRestClient;
-import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
+import com.o4x.musical.network.Models.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
@@ -110,15 +111,12 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     @Nullable
     private Spanned wiki;
     private MaterialDialog wikiDialog;
-    private LastFMRestClient lastFMRestClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setDrawUnderBar();
         ButterKnife.bind(this);
-
-        lastFMRestClient = new LastFMRestClient(this);
 
         setUpObservableListViewParams();
         setUpToolBar();
@@ -251,7 +249,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     private void loadWiki(@Nullable final String lang) {
         wiki = null;
 
-        lastFMRestClient.getApiService()
+        ApiClient.getClient(this).create(LastFMService.class)
                 .getAlbumInfo(getAlbum().getTitle(), getAlbum().getArtistName(), lang)
                 .enqueue(new Callback<LastFmAlbum>() {
                     @Override

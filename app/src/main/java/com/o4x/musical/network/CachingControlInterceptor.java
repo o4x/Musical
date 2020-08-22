@@ -1,4 +1,4 @@
-package com.o4x.musical.network.temp.Lastfmapi;
+package com.o4x.musical.network;
 
 import android.app.Activity;
 import android.content.Context;

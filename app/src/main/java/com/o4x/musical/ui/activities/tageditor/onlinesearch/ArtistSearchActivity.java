@@ -7,10 +7,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.R;
-import com.o4x.musical.network.temp.Lastfmapi.ApiClient;
-import com.o4x.musical.network.temp.Lastfmapi.CachingControlInterceptor;
-import com.o4x.musical.network.temp.Lastfmapi.ITunesService;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesModel;
+import com.o4x.musical.network.ApiClient;
+import com.o4x.musical.network.CachingControlInterceptor;
+import com.o4x.musical.network.service.DeezerService;
+import com.o4x.musical.network.service.ITunesService;
+import com.o4x.musical.network.Models.DeezerArtistModel;
 import com.o4x.musical.ui.adapter.online.ArtistOnlineAdapter;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +24,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ArtistSearchActivity
-        extends AbsSearchOnlineActivity<ArtistOnlineAdapter, List<ITunesModel.Results>> {
+        extends AbsSearchOnlineActivity<ArtistOnlineAdapter, List<DeezerArtistModel.Data>> {
 
     private static final String TAG = ArtistSearchActivity.class.getSimpleName();
 
@@ -44,12 +45,12 @@ public class ArtistSearchActivity
             return;
         }
 
-        ApiClient.getClient().create(ITunesService.class)
-                .searchITunes(artistName, ITunesService.ENTITY_ARTIST).enqueue(new Callback<ITunesModel>() {
+        ApiClient.getClient(this).create(DeezerService.class)
+                .searchDeezerArtist(artistName).enqueue(new Callback<DeezerArtistModel>() {
             @Override
-            public void onResponse(Call<ITunesModel> call, Response<ITunesModel> response) {
+            public void onResponse(Call<DeezerArtistModel> call, Response<DeezerArtistModel> response) {
                 if (response.isSuccessful()) {
-                    results = response.body().results;
+                    results = response.body().data;
                     onlineSearchAdapter.updateData(results);
                     progressBar.setVisibility(View.INVISIBLE);
                     if (results != null && results.size() == 0) {
@@ -63,7 +64,7 @@ public class ArtistSearchActivity
             }
 
             @Override
-            public void onFailure(@NotNull Call<ITunesModel> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<DeezerArtistModel> call, @NotNull Throwable t) {
                 Log.e(TAG, Objects.requireNonNull(t.getMessage()));
             }
         });

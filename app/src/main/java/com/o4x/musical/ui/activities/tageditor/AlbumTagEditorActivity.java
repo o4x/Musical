@@ -9,10 +9,12 @@ import android.widget.Toast;
 
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.lastfm.rest.LastFMRestClient;
-import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
+import com.o4x.musical.network.ApiClient;
+import com.o4x.musical.network.Models.ITunesModel;
+import com.o4x.musical.network.Models.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 import com.o4x.musical.util.LastFMUtil;
 
@@ -24,17 +26,30 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AlbumTagEditorActivity extends AbsTagEditorActivity {
+public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Results> {
 
-
-    private LastFMRestClient lastFMRestClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+    }
 
-        lastFMRestClient = new LastFMRestClient(this);
+    @Override
+    protected void fillViewsWithResult(ITunesModel.Results result) {
+        loadImageFromUrl(result.getBigArtworkUrl());
+        if (songName != null)
+            songName.setText(result.trackName);
+        if (albumName != null)
+            albumName.setText(result.collectionName);
+        if (artistName != null)
+            artistName.setText(result.artistName);
+        if (genreName != null)
+            genreName.setText(result.primaryGenreName);
+        if (year != null)
+            year.setText(result.getYear());
+        if (trackNumber != null)
+            trackNumber.setText(String.valueOf(result.trackNumber));
     }
 
     @Override
@@ -79,7 +94,8 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity {
             Toast.makeText(this, getResources().getString(R.string.album_or_artist_empty), Toast.LENGTH_SHORT).show();
             return;
         }
-        lastFMRestClient.getApiService().getAlbumInfo(albumTitleStr, albumArtistNameStr, null).enqueue(new Callback<LastFmAlbum>() {
+        ApiClient.getClient(this).create(LastFMService.class)
+                .getAlbumInfo(albumTitleStr, albumArtistNameStr, null).enqueue(new Callback<LastFmAlbum>() {
             @Override
             public void onResponse(Call<LastFmAlbum> call, Response<LastFmAlbum> response) {
                 LastFmAlbum lastFmAlbum = response.body();

@@ -37,7 +37,7 @@ import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.TintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
-import com.o4x.musical.network.temp.Lastfmapi.Models.ITunesModel;
+import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.ui.activities.base.AbsBaseActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
@@ -47,6 +47,7 @@ import com.o4x.musical.util.TagUtil;
 
 import org.jaudiotagger.tag.FieldKey;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ import butterknife.ButterKnife;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public abstract class AbsTagEditorActivity extends AbsBaseActivity {
+public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsBaseActivity {
 
     public static final String EXTRA_ID = "extra_id";
     public static final String EXTRA_PALETTE = "extra_palette";
@@ -272,21 +273,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
         lyrics.setText(tagUtil.getLyrics());
     }
 
-    protected void fillViewsWithResult(ITunesModel.Results result) {
-        loadImageFromUrl(result.getBigArtworkUrl());
-        if (songName != null)
-        songName.setText(result.trackName);
-        if (albumName != null)
-        albumName.setText(result.collectionName);
-        if (artistName != null)
-        artistName.setText(result.artistName);
-        if (genreName != null)
-        genreName.setText(result.primaryGenreName);
-        if (year != null)
-        year.setText(result.getYear());
-        if (trackNumber != null)
-        trackNumber.setText(String.valueOf(result.trackNumber));
-    }
+    protected abstract void fillViewsWithResult(RM result);
 
     protected void dataChanged() {
         showFab();
@@ -318,7 +305,7 @@ public abstract class AbsTagEditorActivity extends AbsBaseActivity {
                         Bundle extras = data.getExtras();
                         if (extras != null) {
                             if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_ALL)) {
-                                ITunesModel.Results result = (ITunesModel.Results)
+                                RM result = (RM)
                                         extras.getSerializable(AbsSearchOnlineActivity.EXTRA_RESULT_ALL);
                                 if (result != null)
                                 fillViewsWithResult(result);

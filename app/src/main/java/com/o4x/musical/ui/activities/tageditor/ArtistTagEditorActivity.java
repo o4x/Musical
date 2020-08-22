@@ -1,31 +1,20 @@
 package com.o4x.musical.ui.activities.tageditor;
 
 import android.content.Intent;
-import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.lastfm.rest.model.LastFmAlbum;
-import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.loader.ArtistLoader;
-import com.o4x.musical.model.Album;
-import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
+import com.o4x.musical.network.Models.DeezerArtistModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.ArtistSearchActivity;
-import com.o4x.musical.util.LastFMUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class ArtistTagEditorActivity extends AbsTagEditorActivity {
+public class ArtistTagEditorActivity extends AbsTagEditorActivity<DeezerArtistModel.Data> {
 
     @Override
     protected int getContentViewLayout() {
@@ -41,6 +30,13 @@ public class ArtistTagEditorActivity extends AbsTagEditorActivity {
             paths.add(song.data);
         }
         return paths;
+    }
+
+    @Override
+    protected void fillViewsWithResult(DeezerArtistModel.Data result) {
+        loadImageFromUrl(result.pictureXl);
+        if (artistName != null)
+            artistName.setText(result.name);
     }
 
     @Override
