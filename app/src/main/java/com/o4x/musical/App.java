@@ -14,6 +14,8 @@ import com.o4x.musical.appshortcuts.DynamicShortcutManager;
 
 import java.lang.ref.WeakReference;
 
+import com.o4x.musical.BuildConfig;
+
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
