@@ -5,7 +5,7 @@
     <application>
         <activity android:name=".common.ATHToolbarActivity" />
         <activity android:name=".ATHActivity" />
-        <activity android:name=".common.ATHActionBarActivity"></activity>
+        <activity android:name=".common.ATHActionBarActivity" />
     </application>
 
 </manifest>
