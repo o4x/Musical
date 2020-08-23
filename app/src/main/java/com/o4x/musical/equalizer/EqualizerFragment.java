@@ -74,9 +74,6 @@ public class EqualizerFragment extends AbsMainActivityFragment implements MainAc
 
     FrameLayout equalizerBlocker;
 
-
-    Context ctx;
-
     public EqualizerFragment() {
         // Required empty public constructor
     }
@@ -138,12 +135,6 @@ public class EqualizerFragment extends AbsMainActivityFragment implements MainAc
         else {
             mEqualizer.usePreset((short) Settings.presetPos);
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        ctx = context;
     }
 
     @Override
@@ -438,7 +429,8 @@ public class EqualizerFragment extends AbsMainActivityFragment implements MainAc
 
     public void equalizeSound() {
         ArrayList<String> equalizerPresetNames = new ArrayList<>();
-        ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<>(ctx,
+        ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<>(
+                getContext(),
                 R.layout.spinner_item,
                 equalizerPresetNames);
         equalizerPresetSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -476,7 +468,7 @@ public class EqualizerFragment extends AbsMainActivityFragment implements MainAc
                         chart.notifyDataUpdate();
                     }
                 } catch (Exception e) {
-                    Toast.makeText(ctx, "Error while updating Equalizer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error while updating Equalizer", Toast.LENGTH_SHORT).show();
                 }
                 Settings.equalizerModel.setPresetPos(position);
             }
@@ -512,13 +504,13 @@ public class EqualizerFragment extends AbsMainActivityFragment implements MainAc
         Settings.isEditing = false;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
-    }
-
     @Override
     public boolean handleBackPress() {
         return false;
+    }
+
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     public static class Builder {
