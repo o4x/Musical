@@ -84,4 +84,10 @@
     <style name="Widget.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:contentDescription">@string/abc_action_menu_overflow_description</item>
     </style>
+
+    <style name="CustomSwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">#C95E5E</item>
+        <item name="colorSwitchThumbNormal">#565656</item>
+        <item name="android:colorForeground">#383838</item>
+    </style>
 </resources>

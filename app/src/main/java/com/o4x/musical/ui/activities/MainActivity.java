@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -29,6 +30,7 @@ import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.NavigationViewUtil;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
+import com.o4x.musical.equalizer.EqualizerFragment;
 import com.o4x.musical.ui.dialogs.ChangelogDialog;
 import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
@@ -126,6 +128,14 @@ public class MainActivity extends AbsMusicPanelActivity {
             case R.id.nav_folders:
                 setCurrentFragment(FoldersFragment.newInstance(this));
                 break;
+            case R.id.nav_eq:
+                setCurrentFragment(
+                        EqualizerFragment.newBuilder()
+                        .setAccentColor(Color.parseColor("#4caf50"))
+                        .setAudioSessionId(MusicPlayerRemote.getAudioSessionId())
+                        .build()
+                );
+                break;
         }
     }
 
@@ -202,6 +212,8 @@ public class MainActivity extends AbsMusicPanelActivity {
                 case R.id.nav_folders:
                     new Handler().postDelayed(() -> setMusicChooser(R.id.nav_folders), 200);
                     break;
+                case R.id.nav_eq:
+                    new Handler().postDelayed(() -> setMusicChooser(R.id.nav_eq), 200);
                 case R.id.buy_pro:
                     new Handler().postDelayed(() -> startActivity(new Intent(MainActivity.this, PurchaseActivity.class)), 200);
                     break;
