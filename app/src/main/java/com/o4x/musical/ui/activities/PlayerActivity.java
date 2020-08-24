@@ -5,6 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.animation.PathInterpolator;
 
+import androidx.annotation.ColorInt;
+
 import com.o4x.musical.R;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
@@ -102,5 +104,24 @@ public class PlayerActivity extends AbsMusicServiceActivity implements CardPlaye
             navigationBarColorAnimator.addUpdateListener(animation -> PlayerActivity.super.setNavigationBarColor((Integer) animation.getAnimatedValue()));
             navigationBarColorAnimator.start();
         }
+    }
+
+    @Override
+    public void setNavigationBarColor(int color) {
+        this.navigationBarColor = color;
+        if (navigationBarColorAnimator != null) navigationBarColorAnimator.cancel();
+        super.setNavigationBarColor(color);
+    }
+
+    @Override
+    public void setLightStatusBar(boolean enabled) {
+        lightStatusBar = enabled;
+        super.setLightStatusBar(enabled);
+    }
+
+    @Override
+    public void setTaskDescriptionColor(@ColorInt int color) {
+        this.taskColor = color;
+        super.setTaskDescriptionColor(color);
     }
 }
