@@ -338,18 +338,6 @@ public class MainActivity extends AbsMusicPanelActivity {
         return id;
     }
 
-    @Override
-    public void onPanelExpanded(View view) {
-        super.onPanelExpanded(view);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
-    @Override
-    public void onPanelCollapsed(View view) {
-        super.onPanelCollapsed(view);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
-
     private boolean checkShowIntro() {
         if (!PreferenceUtil.getInstance(this).introShown()) {
             PreferenceUtil.getInstance(this).setIntroShown();

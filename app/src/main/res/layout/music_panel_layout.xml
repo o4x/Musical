@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
@@ -15,22 +14,16 @@
         android:layout_height="match_parent" />
 
     <FrameLayout
-        android:id="@+id/sliding_panel"
+        android:id="@+id/panel_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:colorBackground">
-
-        <FrameLayout
-            android:id="@+id/player_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+        android:layout_height="wrap_content"
+        sothree:layout_anchor="@+id/content_container"
+        sothree:layout_anchorGravity="bottom|center" >
         <fragment
-            android:id="@+id/mini_player_fragment"
             class="com.o4x.musical.ui.fragments.player.MiniPlayerFragment"
+            android:id="@+id/mini_player_fragment"
             android:layout_width="match_parent"
             android:layout_height="@dimen/mini_player_height" />
-
     </FrameLayout>
 
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

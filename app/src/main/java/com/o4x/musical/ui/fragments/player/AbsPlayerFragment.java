@@ -2,22 +2,23 @@ package com.o4x.musical.ui.fragments.player;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+
 import com.o4x.musical.R;
-import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
-import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
-import com.o4x.musical.ui.dialogs.SleepTimerDialog;
-import com.o4x.musical.ui.dialogs.SongDetailDialog;
-import com.o4x.musical.ui.dialogs.SongShareDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.PaletteColorHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity;
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
+import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
+import com.o4x.musical.ui.dialogs.SleepTimerDialog;
+import com.o4x.musical.ui.dialogs.SongDetailDialog;
+import com.o4x.musical.ui.dialogs.SongShareDialog;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
@@ -36,6 +37,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
             throw new RuntimeException(context.getClass().getSimpleName() + " must implement " + Callbacks.class.getSimpleName());
         }
     }
+
 
     @Override
     public void onDetach() {

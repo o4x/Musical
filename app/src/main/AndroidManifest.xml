@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Musical.Light"
         tools:ignore="UnusedAttribute">
+        <activity android:name=".ui.activities.PlayerActivity"></activity>
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

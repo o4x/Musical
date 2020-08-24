@@ -9,14 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +21,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
@@ -38,15 +39,14 @@ import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
-import com.o4x.musical.ui.dialogs.LyricsDialog;
-import com.o4x.musical.ui.dialogs.SongShareDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.model.lyrics.Lyrics;
-import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
+import com.o4x.musical.ui.dialogs.LyricsDialog;
+import com.o4x.musical.ui.dialogs.SongShareDialog;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
 import com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment;
 import com.o4x.musical.util.ImageUtil;
@@ -120,6 +120,10 @@ public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
 
         setUpPlayerToolbar();
         setUpSubFragments();
+        // setting fragments values
+        setMenuVisibility(true);
+        setUserVisibleHint(true);
+        onShow();
 
         setUpRecyclerView();
 
@@ -571,8 +575,6 @@ public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
                 albumCoverContainer.forceSquare(false);
             }
             fragment.slidingUpPanelLayout.setPanelHeight(Math.max(minPanelHeight, availablePanelHeight));
-
-            ((AbsMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.slidingUpPanelLayout.findViewById(R.id.player_panel));
         }
 
         @Override
@@ -607,8 +609,6 @@ public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
         public void setUpPanelAndAlbumCoverHeight() {
             int panelHeight = fragment.slidingUpPanelLayout.getHeight() - fragment.playbackControlsFragment.getView().getHeight();
             fragment.slidingUpPanelLayout.setPanelHeight(panelHeight);
-
-            ((AbsMusicPanelActivity) fragment.getActivity()).setAntiDragView(fragment.slidingUpPanelLayout.findViewById(R.id.player_panel));
         }
 
         @Override
