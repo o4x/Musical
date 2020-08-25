@@ -28,6 +28,43 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     private Callbacks callbacks;
     private static boolean isToolbarShown = true;
 
+//    protected Unbinder unbinder;
+//
+//    @Nullable
+//    @BindView(R.id.toolbar_container)
+//    protected FrameLayout toolbarContainer;
+//    @BindView(R.id.player_toolbar)
+//    protected Toolbar toolbar;
+//    @BindView(R.id.player_sliding_layout)
+//    protected SlidingUpPanelLayout slidingUpPanelLayout;
+//    @BindView(R.id.player_recycler_view)
+//    protected RecyclerView recyclerView;
+//    @BindView(R.id.playing_queue_card)
+//    protected CardView playingQueueCard;
+//    @BindView(R.id.color_background)
+//    protected View colorBackground;
+//    @BindView(R.id.player_queue_sub_header)
+//    protected TextView playerQueueSubHeader;
+//
+//    protected int lastColor;
+//
+//    protected CardPlayerPlaybackControlsFragment playbackControlsFragment;
+//    protected PlayerAlbumCoverFragment playerAlbumCoverFragment;
+//
+//    protected LinearLayoutManager layoutManager;
+//
+//    protected PlayingQueueAdapter playingQueueAdapter;
+//
+//    protected RecyclerView.Adapter wrappedAdapter;
+//    protected RecyclerViewDragDropManager recyclerViewDragDropManager;
+//
+//    protected AsyncTask updateIsFavoriteTask;
+//    protected AsyncTask updateLyricsAsyncTask;
+//
+//    protected Lyrics lyrics;
+//
+//    protected Impl impl;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -154,5 +191,15 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
 
     public interface Callbacks {
         void onPaletteColorChanged();
+    }
+
+    protected interface Impl {
+        void init();
+
+        void updateCurrentSong(Song song);
+
+        void animateColorChange(final int newColor);
+
+        void setUpPanelAndAlbumCoverHeight();
     }
 }
