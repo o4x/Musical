@@ -321,4 +321,5 @@
     <string name="all_tags">All tags</string>
     <string name="search_online">Search online</string>
     <string name="eq">Equalizer</string>
+    <string name="full">Full</string>
 </resources>

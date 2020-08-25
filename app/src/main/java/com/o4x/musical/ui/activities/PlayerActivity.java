@@ -13,6 +13,7 @@ import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
 import com.o4x.musical.ui.fragments.player.NowPlayingScreen;
 import com.o4x.musical.ui.fragments.player.card.CardPlayerFragment;
 import com.o4x.musical.ui.fragments.player.flat.FlatPlayerFragment;
+import com.o4x.musical.ui.fragments.player.full.FullPlayerFragment;
 import com.o4x.musical.util.PreferenceUtil;
 import com.o4x.musical.util.ViewUtil;
 
@@ -34,6 +35,8 @@ public class PlayerActivity extends AbsMusicServiceActivity implements CardPlaye
 
         currentNowPlayingScreen = PreferenceUtil.getInstance(this).getNowPlayingScreen();
         switch (currentNowPlayingScreen) {
+            case Full:
+                playerFragment = new FullPlayerFragment();
             case FLAT:
                 playerFragment = new FlatPlayerFragment();
                 break;
