@@ -2,102 +2,36 @@ package com.o4x.musical.ui.fragments.player.card;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.app.Activity;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
-import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
-import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
-import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.model.lyrics.Lyrics;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
-import com.o4x.musical.ui.dialogs.LyricsDialog;
 import com.o4x.musical.ui.dialogs.SongShareDialog;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
-import com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment;
-import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.ViewUtil;
 import com.o4x.musical.views.WidthFitSquareLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
-public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbumCoverFragment.Callbacks, SlidingUpPanelLayout.PanelSlideListener {
-
-    private Unbinder unbinder;
-
-    @Nullable
-    @BindView(R.id.toolbar_container)
-    FrameLayout toolbarContainer;
-    @BindView(R.id.player_toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.player_sliding_layout)
-    SlidingUpPanelLayout slidingUpPanelLayout;
-    @BindView(R.id.player_recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.playing_queue_card)
-    CardView playingQueueCard;
-    @BindView(R.id.color_background)
-    View colorBackground;
-    @BindView(R.id.player_queue_sub_header)
-    TextView playerQueueSubHeader;
-
-    private int lastColor;
-
-    private CardPlayerPlaybackControlsFragment playbackControlsFragment;
-    private PlayerAlbumCoverFragment playerAlbumCoverFragment;
-
-    private LinearLayoutManager layoutManager;
-
-    private PlayingQueueAdapter playingQueueAdapter;
-
-    private RecyclerView.Adapter wrappedAdapter;
-    private RecyclerViewDragDropManager recyclerViewDragDropManager;
-
-    private AsyncTask updateIsFavoriteTask;
-    private AsyncTask updateLyricsAsyncTask;
-
-    private Lyrics lyrics;
-
-    private Impl impl;
+public class CardPlayerFragment extends AbsPlayerFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,316 +41,20 @@ public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
             impl = new PortraitImpl(this);
         }
 
-        View view = inflater.inflate(R.layout.fragment_card_player, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_card_player;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        impl.init();
-
-        setUpPlayerToolbar();
-        setUpSubFragments();
-        // setting fragments values
-        setMenuVisibility(true);
-        setUserVisibleHint(true);
-        onShow();
-
-        setUpRecyclerView();
-
-        slidingUpPanelLayout.addPanelSlideListener(this);
-        slidingUpPanelLayout.setAntiDragView(view.findViewById(R.id.draggable_area));
-
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                impl.setUpPanelAndAlbumCoverHeight();
-            }
-        });
-
         // for some reason the xml attribute doesn't get applied here.
         playingQueueCard.setCardBackgroundColor(ATHUtil.resolveColor(getActivity(), R.attr.cardBackgroundColor));
-    }
-
-    @Override
-    public void onDestroyView() {
-        if (slidingUpPanelLayout != null) {
-            slidingUpPanelLayout.removePanelSlideListener(this);
-        }
-        if (recyclerViewDragDropManager != null) {
-            recyclerViewDragDropManager.release();
-            recyclerViewDragDropManager = null;
-        }
-
-        if (recyclerView != null) {
-            recyclerView.setItemAnimator(null);
-            recyclerView.setAdapter(null);
-            recyclerView = null;
-        }
-
-        if (wrappedAdapter != null) {
-            WrapperAdapterUtils.releaseAll(wrappedAdapter);
-            wrappedAdapter = null;
-        }
-        playingQueueAdapter = null;
-        layoutManager = null;
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
-    public void onPause() {
-        if (recyclerViewDragDropManager != null) {
-            recyclerViewDragDropManager.cancelDrag();
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        checkToggleToolbar(toolbarContainer);
-    }
-
-    @Override
-    public void onServiceConnected() {
-        updateQueue();
-        updateCurrentSong();
-        updateIsFavorite();
-        updateLyrics();
-    }
-
-    @Override
-    public void onPlayingMetaChanged() {
-        updateCurrentSong();
-        updateIsFavorite();
-        updateQueuePosition();
-        updateLyrics();
-    }
-
-    @Override
-    public void onQueueChanged() {
-        updateQueue();
-    }
-
-    @Override
-    public void onMediaStoreChanged() {
-        updateQueue();
-        updateIsFavorite();
-    }
-
-    private void updateQueue() {
-        playingQueueAdapter.swapDataSet(MusicPlayerRemote.getPlayingQueue(), MusicPlayerRemote.getPosition());
-        playerQueueSubHeader.setText(getUpNextAndQueueTime());
-        if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-            resetToCurrentPosition();
-        }
-    }
-
-    private void updateQueuePosition() {
-        playingQueueAdapter.setCurrent(MusicPlayerRemote.getPosition());
-        playerQueueSubHeader.setText(getUpNextAndQueueTime());
-        if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-            resetToCurrentPosition();
-        }
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    private void updateCurrentSong() {
-        impl.updateCurrentSong(MusicPlayerRemote.getCurrentSong());
-    }
-
-    private void setUpSubFragments() {
-        playbackControlsFragment = (CardPlayerPlaybackControlsFragment) getChildFragmentManager().findFragmentById(R.id.playback_controls_fragment);
-        playerAlbumCoverFragment = (PlayerAlbumCoverFragment) getChildFragmentManager().findFragmentById(R.id.player_album_cover_fragment);
-
-        playerAlbumCoverFragment.setCallbacks(this);
-    }
-
-    private void setUpPlayerToolbar() {
-        toolbar.inflateMenu(R.menu.menu_player);
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-        toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
-        toolbar.setOnMenuItemClickListener(this);
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_show_lyrics:
-                if (lyrics != null)
-                    LyricsDialog.create(lyrics).show(getFragmentManager(), "LYRICS");
-                return true;
-        }
-        return super.onMenuItemClick(item);
-    }
-
-    private void setUpRecyclerView() {
-        recyclerViewDragDropManager = new RecyclerViewDragDropManager();
-        final GeneralItemAnimator animator = new RefactoredDefaultItemAnimator();
-
-        playingQueueAdapter = new PlayingQueueAdapter(
-                ((AppCompatActivity) getActivity()),
-                MusicPlayerRemote.getPlayingQueue(),
-                MusicPlayerRemote.getPosition(),
-                R.layout.item_list,
-                false,
-                null);
-        wrappedAdapter = recyclerViewDragDropManager.createWrappedAdapter(playingQueueAdapter);
-
-        layoutManager = new LinearLayoutManager(getActivity());
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(wrappedAdapter);
-        recyclerView.setItemAnimator(animator);
-
-        recyclerViewDragDropManager.attachRecyclerView(recyclerView);
-
-        layoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0);
-    }
-
-    private void updateIsFavorite() {
-        if (updateIsFavoriteTask != null) updateIsFavoriteTask.cancel(false);
-        updateIsFavoriteTask = new AsyncTask<Song, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(Song... params) {
-                Activity activity = getActivity();
-                if (activity != null) {
-                    return MusicUtil.isFavorite(getActivity(), params[0]);
-                } else {
-                    cancel(false);
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Boolean isFavorite) {
-                Activity activity = getActivity();
-                if (activity != null) {
-                    int res = isFavorite ? R.drawable.ic_favorite_white_24dp : R.drawable.ic_favorite_border_white_24dp;
-                    int color = ToolbarContentTintHelper.toolbarContentColor(activity, Color.TRANSPARENT);
-                    Drawable drawable = ImageUtil.getTintedVectorDrawable(activity, res, color);
-                    toolbar.getMenu().findItem(R.id.action_toggle_favorite)
-                            .setIcon(drawable)
-                            .setTitle(isFavorite ? getString(R.string.action_remove_from_favorites) : getString(R.string.action_add_to_favorites));
-                }
-            }
-        }.execute(MusicPlayerRemote.getCurrentSong());
-    }
-
-    private void updateLyrics() {
-        if (updateLyricsAsyncTask != null) updateLyricsAsyncTask.cancel(false);
-        final Song song = MusicPlayerRemote.getCurrentSong();
-        updateLyricsAsyncTask = new AsyncTask<Void, Void, Lyrics>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                lyrics = null;
-                playerAlbumCoverFragment.setLyrics(null);
-                toolbar.getMenu().removeItem(R.id.action_show_lyrics);
-            }
-
-            @Override
-            protected Lyrics doInBackground(Void... params) {
-                String data = MusicUtil.getLyrics(song);
-                if (TextUtils.isEmpty(data)) {
-                    return null;
-                }
-                return Lyrics.parse(song, data);
-            }
-
-            @Override
-            protected void onPostExecute(Lyrics l) {
-                lyrics = l;
-                playerAlbumCoverFragment.setLyrics(lyrics);
-                if (lyrics == null) {
-                    if (toolbar != null) {
-                        toolbar.getMenu().removeItem(R.id.action_show_lyrics);
-                    }
-                } else {
-                    Activity activity = getActivity();
-                    if (toolbar != null && activity != null)
-                        if (toolbar.getMenu().findItem(R.id.action_show_lyrics) == null) {
-                            int color = ToolbarContentTintHelper.toolbarContentColor(activity, Color.TRANSPARENT);
-                            Drawable drawable = ImageUtil.getTintedVectorDrawable(activity, R.drawable.ic_comment_text_outline_white_24dp, color);
-                            toolbar.getMenu()
-                                    .add(Menu.NONE, R.id.action_show_lyrics, Menu.NONE, R.string.action_show_lyrics)
-                                    .setIcon(drawable)
-                                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-                        }
-                }
-            }
-
-            @Override
-            protected void onCancelled(Lyrics s) {
-                onPostExecute(null);
-            }
-        }.execute();
-    }
-
-    @Override
-    @ColorInt
-    public int getPaletteColor() {
-        return lastColor;
-    }
-
-    private void animateColorChange(final int newColor) {
-        impl.animateColorChange(newColor);
-        lastColor = newColor;
-    }
-
-    @Override
-    protected void toggleFavorite(Song song) {
-        super.toggleFavorite(song);
-        if (song.id == MusicPlayerRemote.getCurrentSong().id) {
-            if (MusicUtil.isFavorite(getActivity(), song)) {
-                playerAlbumCoverFragment.showHeartAnimation();
-            }
-            updateIsFavorite();
-        }
-    }
-
-    @Override
-    public void onShow() {
-        playbackControlsFragment.show();
-    }
-
-    @Override
-    public void onHide() {
-        playbackControlsFragment.hide();
-        onBackPressed();
-    }
-
-    @Override
-    public boolean onBackPressed() {
-        boolean wasExpanded = false;
-        if (slidingUpPanelLayout != null) {
-            wasExpanded = slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED;
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        }
-
-        return wasExpanded;
-    }
-
-    @Override
-    public void onColorChanged(int color) {
-        animateColorChange(color);
-        playbackControlsFragment.setDark(ColorUtil.isColorLight(color));
-        getCallbacks().onPaletteColorChanged();
-    }
-
-    @Override
-    public void onFavoriteToggled() {
-        toggleFavorite(MusicPlayerRemote.getCurrentSong());
-    }
-
-    @Override
-    public void onToolbarToggled() {
-        toggleToolbar(toolbarContainer);
     }
 
     @Override
@@ -436,37 +74,6 @@ public class CardPlayerFragment extends AbsPlayerFragment implements PlayerAlbum
 
     private boolean isValidElevation(float elevation) {
         return elevation >= -Float.MAX_VALUE && elevation <= Float.MAX_VALUE;
-    }
-
-    @Override
-    public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-        switch (newState) {
-            case COLLAPSED:
-                onPanelCollapsed(panel);
-                break;
-            case ANCHORED:
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED); // this fixes a bug where the panel would get stuck for some reason
-                break;
-        }
-    }
-
-    public void onPanelCollapsed(View panel) {
-        resetToCurrentPosition();
-    }
-
-    private void resetToCurrentPosition() {
-        recyclerView.stopScroll();
-        layoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0);
-    }
-
-    interface Impl {
-        void init();
-
-        void updateCurrentSong(Song song);
-
-        void animateColorChange(final int newColor);
-
-        void setUpPanelAndAlbumCoverHeight();
     }
 
     private static abstract class BaseImpl implements Impl {
