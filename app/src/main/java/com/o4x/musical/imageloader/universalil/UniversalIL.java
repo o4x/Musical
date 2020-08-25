@@ -2,7 +2,6 @@ package com.o4x.musical.imageloader.universalil;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -64,6 +63,7 @@ public class UniversalIL {
                 .diskCacheSize(1024 * 1024 * 100 /* 100MB */)
                 .memoryCacheSize(1024 * 1024 * 300 /* 300MB */)
                 .imageDownloader(new CustomImageDownloader(context))
+                .denyCacheImageMultipleSizesInMemory()
                 .build();
 
 
