@@ -2,9 +2,23 @@
 
     <style name="Theme.Musical" parent="Theme.Musical.Base" />
 
-    <style name="Theme.Musical.Light" parent="Theme.Musical.Base.Light" />
+    <style name="Theme.Musical.Light" parent="Theme.Musical.Base.Light">
+        <item name="android:windowBackground">@color/window_color_light</item>
+        <item name="android:scrollbars">none</item>
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
 
-    <style name="Theme.Musical.Black" parent="Theme.Musical.Base.Black" />
+    <style name="Theme.Musical.Black" parent="Theme.Musical.Base.Black">
+        <item name="android:windowBackground">@color/window_color_dark</item>
+        <item name="android:scrollbars">none</item>
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
+
+    <style name="Theme.Musical.FollowSystem" parent="Theme.Musical.Base.Adaptive">
+        <item name="android:windowBackground">@color/window_color</item>
+        <item name="android:scrollbars">none</item>
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
 
     <style name="Theme.Musical.Notification" parent="@android:style/TextAppearance.StatusBar.EventContent" />
 
@@ -12,7 +26,6 @@
 
     <style name="OverFlowButton">
         <item name="srcCompat">@drawable/ic_more_vert_white_24dp</item>
-        <item name="android:layout_margin">8dp</item>
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:scaleType">center</item>
@@ -31,8 +44,6 @@
         <item name="android:focusable">false</item>
     </style>
 
-    <style name="Fab" parent="FabParent" />
-
     <style name="MusicProgressSlider" parent="MusicProgressSliderParent">
         <item name="android:thumbOffset">0dp</item>
     </style>
@@ -44,6 +55,185 @@
         <item name="popupTheme">?toolbarPopupTheme</item>
         <item name="android:elevation" tools:ignore="NewApi">@dimen/toolbar_elevation</item>
         <item name="android:transitionName" tools:ignore="NewApi">toolbar</item>
+    </style>
+
+
+    <style name="ToolbarTextAppearanceSearch" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ToolbarTextAppearanceNormal">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0.0125</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="ToolbarTextAppearanceNormal.Library" parent="ToolbarTextAppearanceNormal">
+        <item name="android:textAppearance">@style/TextViewHeadline6</item>
+    </style>
+
+    <style name="BigTitleTextAppearanceToolbar">
+        <item name="android:textAppearance">@style/TextViewHeadline6</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="SubTitleTextAppearance">
+        <item name="android:textAppearance">@style/TextViewOverline</item>
+        <item name="android:layout_gravity">start|center_vertical</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BottomSheetItemTextAppearance" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="Fab" parent="FabParent" />
+
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabIndicator">@drawable/tab_indicator</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabIndicatorAnimationDuration">@integer/anim_duration_medium</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="tabInlineLabel">true</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ErrorHandlingTheme" parent="Theme.MaterialComponents.Light.NoActionBar" />
+
+    <style name="TextViewNormal" parent="">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextViewHeadline4" parent="TextAppearance.MaterialComponents.Headline4" />
+
+    <style name="TextViewHeadline5" parent="TextAppearance.MaterialComponents.Headline5" />
+
+    <style name="TextViewCaption" parent="TextAppearance.MaterialComponents.Caption" />
+
+    <style name="TextViewHeadline6" parent="TextAppearance.MaterialComponents.Headline6" />
+
+    <style name="TextViewHeadline3" parent="TextAppearance.MaterialComponents.Headline3" />
+
+    <style name="TextViewHeadline2" parent="TextAppearance.MaterialComponents.Headline2" />
+
+    <style name="TextViewSubtitle1" parent="TextAppearance.MaterialComponents.Subtitle1" />
+
+    <style name="TextViewSubtitle2" parent="TextAppearance.MaterialComponents.Subtitle2" />
+
+    <style name="TextViewBody1" parent="TextAppearance.MaterialComponents.Body1" />
+
+    <style name="TextViewButton" parent="TextAppearance.MaterialComponents.Button" />
+
+    <style name="TextViewBody2" parent="TextAppearance.MaterialComponents.Body2" />
+
+    <style name="TextViewOverline" parent="TextAppearance.MaterialComponents.Overline" />
+
+    <style name="TopCornerCardView">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeTopRight">16dp</item>
+    </style>
+
+    <style name="ClassicThemeOverLay">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">0dp</item>
+    </style>
+
+    <style name="TopCornerCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlayCardViewTopCorners</item>
+    </style>
+
+
+    <style name="ShapeAppearanceOverlayCardViewTopCorners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="CircularShapeAppearance" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">22dp</item>
+    </style>
+
+    <style name="BigCircularShapeAppearance" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">56dp</item>
+    </style>
+
+    <style name="ExtraBigCircularShapeAppearance" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">78dp</item>
+    </style>
+
+    <style name="RetroSliderTooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="backgroundColor">@color/md_white_1000</item>
+        <item name="background">@color/md_white_1000</item>
+        <item name="android:background">@color/md_white_1000</item>
+        <item name="android:textColor">@color/md_red_400</item>
+    </style>
+
+    <style name="MaterialPopupMenuStyle" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_background</item>
+    </style>
+
+    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:dialogCornerRadius" tools:targetApi="p">12dp</item>
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/AppTextAppearance.MaterialAlertDialog.Body
+        </item>
+        <item name="materialAlertDialogTitleTextStyle">
+            @style/AppTextAppearance.MaterialAlertDialog.Title
+        </item>
+        <item name="buttonBarPositiveButtonStyle">
+            @style/AppTextAppearance.MaterialAlertDialog.Button
+        </item>
+        <item name="buttonBarNegativeButtonStyle">
+            @style/AppTextAppearance.MaterialAlertDialog.Button
+        </item>
+        <item name="buttonBarNeutralButtonStyle">
+            @style/AppTextAppearance.MaterialAlertDialog.Button
+        </item>
+    </style>
+
+    <style name="AppTextAppearance.MaterialAlertDialog.Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AppTextAppearance.MaterialAlertDialog.Body" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AppTextAppearance.MaterialAlertDialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MaterialButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">6dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTint">?attr/colorControlNormal</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textAppearance">@style/TextViewNormal</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
 </resources>

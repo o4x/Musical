@@ -14,4 +14,6 @@
 
     <integer name="detail_header_tile_maxLines">3</integer>
 
+    <integer name="anim_duration_medium">200</integer>
+
 </resources>
