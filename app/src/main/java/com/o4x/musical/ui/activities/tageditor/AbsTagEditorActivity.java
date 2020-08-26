@@ -334,6 +334,7 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
     private void setupColors() {
         paletteColorPrimary = ThemeStore.primaryColor(this);
         header.setBackgroundColor(paletteColorPrimary);
+        toolbar.setBackgroundColor(paletteColorPrimary);
         setStatusBarColor(paletteColorPrimary);
         setNavigationBarColor(paletteColorPrimary);
         setTaskDescriptionColor(paletteColorPrimary);

@@ -41,7 +41,7 @@ public abstract class AbsThemeActivity extends ATHToolbarActivity {
      */
     public void setStatusBarColor(int color) {
         int colorFrom = getWindow().getStatusBarColor();
-        int colorTo = ColorUtil.darkenColor(color);
+        int colorTo = color;
         if (colorFrom == colorTo) return;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);

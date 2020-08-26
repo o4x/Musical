@@ -22,7 +22,8 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -70,6 +71,23 @@
                     android:background="?android:attr/windowBackground"
                     android:orientation="vertical"
                     android:padding="16dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/albumTitleContainer"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:hintEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/albumText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="@string/album"
+                            android:inputType="text|textCapWords"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -148,11 +166,6 @@
             </RelativeLayout>
 
         </androidx.core.widget.NestedScrollView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="@drawable/shadow_down" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/play_pause_fab"
