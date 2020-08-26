@@ -552,12 +552,4 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
 
         void setUpPanelAndAlbumCoverHeight();
     }
-
-
-    @SuppressWarnings("ConstantConditions")
-    private static abstract class BaseImpl implements Impl {}
-    @SuppressWarnings("ConstantConditions")
-    private static abstract class PortraitImpl extends BaseImpl {}
-    @SuppressWarnings("ConstantConditions")
-    private static abstract class LandscapeImpl extends BaseImpl {}
 }

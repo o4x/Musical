@@ -1,3 +1,4 @@
+include ':appthemehelper'
 include ':app'
 include ':apptheme'
 rootProject.name = "Musical"
