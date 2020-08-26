@@ -2,18 +2,17 @@ package com.o4x.musical.ui.activities.tageditor;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
+import androidx.annotation.NonNull;
+
 import com.o4x.musical.R;
+import com.o4x.musical.loader.AlbumLoader;
+import com.o4x.musical.model.Song;
 import com.o4x.musical.network.ApiClient;
 import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.network.Models.LastFmAlbum;
-import com.o4x.musical.loader.AlbumLoader;
-import com.o4x.musical.model.Song;
 import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 import com.o4x.musical.util.LastFMUtil;
@@ -66,12 +65,6 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Res
             paths.add(song.data);
         }
         return paths;
-    }
-
-    @Override
-    protected void setColors(int color) {
-        super.setColors(color);
-        albumName.setTextColor(ToolbarContentTintHelper.toolbarTitleColor(this, color));
     }
 
     @Override

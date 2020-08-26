@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
-import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.loader.ArtistLoader;
 import com.o4x.musical.model.Song;
@@ -37,12 +36,6 @@ public class ArtistTagEditorActivity extends AbsTagEditorActivity<DeezerArtistMo
         loadImageFromUrl(result.pictureXl);
         if (artistName != null)
             artistName.setText(result.name);
-    }
-
-    @Override
-    protected void setColors(int color) {
-        super.setColors(color);
-        artistName.setTextColor(ToolbarContentTintHelper.toolbarTitleColor(this, color));
     }
 
     @Override

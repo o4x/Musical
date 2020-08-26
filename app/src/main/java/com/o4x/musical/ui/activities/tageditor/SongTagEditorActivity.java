@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
-import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.network.Models.ITunesModel;
@@ -44,14 +43,6 @@ public class SongTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Resu
             year.setText(result.getYear());
         if (trackNumber != null)
             trackNumber.setText(String.valueOf(result.trackNumber));
-    }
-
-    @Override
-    protected void setColors(int color) {
-        super.setColors(color);
-        int toolbarTitleColor = ToolbarContentTintHelper.toolbarTitleColor(this, color);
-        songName.setTextColor(toolbarTitleColor);
-        albumName.setTextColor(toolbarTitleColor);
     }
 
     @Override

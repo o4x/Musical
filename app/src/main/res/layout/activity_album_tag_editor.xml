@@ -5,17 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
+        app:navigationIcon="@drawable/ic_keyboard_backspace_black"
+        app:title="@string/action_tag_editor" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
-            android:id="@+id/observableScrollView"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -35,7 +40,7 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/default_album_art"
                         android:transitionName="@string/transition_album_art"
-                        tools:ignore="ContentDescription,UnusedAttribute" />
+                        tools:ignore="ContentDescription" />
 
                 </com.o4x.musical.views.WidthFitSquareLayout>
 
@@ -52,6 +57,19 @@
                     android:paddingRight="16dp"
                     android:paddingBottom="8dp"
                     tools:ignore="UnusedAttribute">
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/editables"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/header"
+                    android:background="?android:attr/windowBackground"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -70,17 +88,6 @@
                             android:textColor="@color/ate_primary_text_dark" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/editables"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/header"
-                    android:background="?android:attr/windowBackground"
-                    android:orientation="vertical"
-                    android:padding="16dp">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -140,19 +147,12 @@
 
             </RelativeLayout>
 
-        </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@drawable/shadow_down" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/Toolbar"
-            android:background="#00000000"
-            android:gravity="start|left"
-            tools:ignore="RtlHardcoded" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/play_pause_fab"

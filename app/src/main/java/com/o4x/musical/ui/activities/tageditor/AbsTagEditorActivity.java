@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.palette.graphics.Palette;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -29,15 +30,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.TintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
-import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.ui.activities.base.AbsBaseActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
@@ -71,8 +68,8 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
     FloatingActionButton fab;
     @BindView(R.id.search_online_btn)
     AppCompatButton searchBtn;
-    @BindView(R.id.observableScrollView)
-    ObservableScrollView observableScrollView;
+    @BindView(R.id.nested_scroll_view)
+    NestedScrollView scrollView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.image)
@@ -105,15 +102,6 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
     private int id;
     private int headerVariableSpace;
     private int paletteColorPrimary;
-    private final SimpleObservableScrollViewCallbacks observableScrollViewCallbacks = new SimpleObservableScrollViewCallbacks() {
-        @Override
-        public void onScrollChanged(int scrollY, boolean b, boolean b2) {
-            float alpha;
-            alpha = 1 - (float) Math.max(0, headerVariableSpace - scrollY) / headerVariableSpace;
-            toolbar.setBackgroundColor(ColorUtil.withAlpha(paletteColorPrimary, alpha));
-            image.setTranslationY(scrollY / 2f);
-        }
-    };
     protected TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -174,6 +162,7 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
 
     private void setupViews() {
         setupScrollView();
+        setupColors();
         setupFab();
         setupSearchButton();
         setupImageView();
@@ -181,7 +170,14 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
     }
 
     private void setupScrollView() {
-        observableScrollView.setScrollViewCallbacks(observableScrollViewCallbacks);
+        scrollView.setOnScrollChangeListener(
+                new NestedScrollView.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        image.setTranslationY(scrollY / 2f);
+                    }
+                }
+        );
     }
 
     private void setupFab() {
@@ -333,12 +329,10 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
         } else {
             image.setImageBitmap(bitmap);
         }
-        setColors(bgColor);
     }
 
-    protected void setColors(int color) {
-        paletteColorPrimary = color;
-        observableScrollViewCallbacks.onScrollChanged(observableScrollView.getCurrentScrollY(), false, false);
+    private void setupColors() {
+        paletteColorPrimary = ThemeStore.primaryColor(this);
         header.setBackgroundColor(paletteColorPrimary);
         setStatusBarColor(paletteColorPrimary);
         setNavigationBarColor(paletteColorPrimary);
