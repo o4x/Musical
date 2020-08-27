@@ -19,31 +19,34 @@
 
     <style name="Theme.Musical.Base" parent="Theme.MaterialComponents.NoActionBar">
 
+        <item name="md_background_color">@color/darkColorSurface</item>
         <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowActivityTransitions">true</item>
         <item name="windowActionBarOverlay">true</item>
+        <item name="toolbarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="mcab_popup_theme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="roundSelector">@drawable/round_selector</item>
+        <item name="rectSelector">@drawable/rect_selector</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="windowActionBar">false</item>
+        <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
+        <item name="colorSurface">@color/darkColorSurface</item>
+        <item name="android:windowBackground">@color/window_color_dark</item>
+        <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
+
+
+
 
         <item name="md_dark_theme">true</item>
-
-        <item name="roundSelector">@drawable/round_selector_dark</item>
-        <item name="rectSelector">@drawable/rect_selector_dark</item>
         <item name="rectSelectorStrong">@drawable/rect_selector_strong_dark</item>
-
         <item name="cardBackgroundColor">@color/md_grey_800</item>
-
         <item name="defaultFooterColor">@color/md_grey_900</item>
-
         <item name="dividerColor">@color/md_divider_white</item>
         <item name="iconColor">@color/ate_secondary_text_dark</item>
-
-        <item name="toolbarPopupTheme">@style/ThemeOverlay.AppCompat</item>
-
         <!-- just in case-->
         <item name="colorAccent">@android:color/white</item>
-
-        <!-- necessary to find the overflow button later in the layout-->
-        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
-
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
