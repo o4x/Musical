@@ -101,7 +101,7 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
 
     private int id;
     private int headerVariableSpace;
-    private int paletteColorPrimary;
+    private int colorPrimary;
     protected TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -332,12 +332,12 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
     }
 
     private void setupColors() {
-        paletteColorPrimary = ThemeStore.primaryColor(this);
-        header.setBackgroundColor(paletteColorPrimary);
-        toolbar.setBackgroundColor(paletteColorPrimary);
-        setStatusBarColor(paletteColorPrimary);
-        setNavigationBarColor(paletteColorPrimary);
-        setTaskDescriptionColor(paletteColorPrimary);
+        colorPrimary = ATHUtil.resolveColor(this, R.attr.colorSurface);
+        header.setBackgroundColor(colorPrimary);
+        toolbar.setBackgroundColor(colorPrimary);
+        setStatusBarColor(colorPrimary);
+        setNavigationBarColor(colorPrimary);
+        setTaskDescriptionColor(colorPrimary);
     }
 
     protected int getId() {
