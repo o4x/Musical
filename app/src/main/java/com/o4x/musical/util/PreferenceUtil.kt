@@ -4,12 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import android.preference.PreferenceManager
 import androidx.annotation.StyleRes
-import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
-import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.CategoryInfo
@@ -103,16 +102,6 @@ class PreferenceUtil private constructor(context: Context) {
     fun coloredNotification(): Boolean {
         return sharedPreferences.getBoolean(COLORED_NOTIFICATION, true)
     }
-
-    var isDesaturatedColor
-        get() = sharedPreferences.getBoolean(
-            DESATURATED_COLOR, false
-        )
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean(DESATURATED_COLOR, value)
-            editor.apply()
-        }
 
     fun classicNotification(): Boolean {
         return sharedPreferences.getBoolean(CLASSIC_NOTIFICATION, false)
@@ -513,7 +502,6 @@ class PreferenceUtil private constructor(context: Context) {
         const val INITIALIZED_BLACKLIST = "initialized_blacklist"
         const val LIBRARY_CATEGORIES = "library_categories"
         const val ALBUM_COVER_STYLE = "album_cover_style_id"
-        const val DESATURATED_COLOR = "desaturated_color"
         private const val REMEMBER_SHUFFLE = "remember_shuffle"
         private var sInstance: PreferenceUtil? = null
         @JvmStatic
