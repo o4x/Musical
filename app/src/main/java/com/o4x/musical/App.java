@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
-import android.os.Handler;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
@@ -13,8 +12,6 @@ import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.appshortcuts.DynamicShortcutManager;
 
 import java.lang.ref.WeakReference;
-
-import com.o4x.musical.BuildConfig;
 
 
 /**
@@ -89,6 +86,9 @@ public class App extends Application {
     }
 
     public static App getInstance() {
+        return app;
+    }
+    public static App getContext() {
         return app;
     }
 

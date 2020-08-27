@@ -14,7 +14,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.animation.OvershootInterpolator;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -31,9 +30,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.kabouzeid.appthemehelper.util.ATHUtil;
-import com.kabouzeid.appthemehelper.util.TintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.ui.activities.base.AbsBaseActivity;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity;
@@ -52,6 +51,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.util.TintHelper;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -79,28 +79,29 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
 
     @Nullable
     @BindView(R.id.song_name)
-    EditText songName;
+    TextInputEditText songName;
     @Nullable
     @BindView(R.id.album_name)
-    EditText albumName;
+    TextInputEditText albumName;
     @Nullable
     @BindView(R.id.artist_name)
-    EditText artistName;
+    TextInputEditText artistName;
     @Nullable
     @BindView(R.id.genre_name)
-    EditText genreName;
+    TextInputEditText genreName;
     @Nullable
     @BindView(R.id.year)
-    EditText year;
+    TextInputEditText year;
     @Nullable
     @BindView(R.id.track_number)
-    EditText trackNumber;
+    TextInputEditText trackNumber;
     @Nullable
     @BindView(R.id.lyrics)
-    EditText lyrics;
+    TextInputEditText lyrics;
 
     private int id;
     private int headerVariableSpace;
+    private int paletteColorPrimary;
     private int colorPrimary;
     protected TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -162,11 +163,10 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
 
     private void setupViews() {
         setupScrollView();
-        setupColors();
         setupFab();
         setupSearchButton();
         setupImageView();
-        setupEditTexts();
+        setupTextInputEditTexts();
     }
 
     private void setupScrollView() {
@@ -234,7 +234,7 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupEditTexts() {
+    private void setupTextInputEditTexts() {
         fillViewsWithFileTags();
         if (songName != null)
         songName.addTextChangedListener(textWatcher);
@@ -329,9 +329,26 @@ public abstract class AbsTagEditorActivity<RM extends Serializable> extends AbsB
         } else {
             image.setImageBitmap(bitmap);
         }
+        setColors(bgColor);
     }
 
-    private void setupColors() {
+    private void setColors(int color) {
+        paletteColorPrimary = color;
+        if (songName != null)
+            TintHelper.colorHandles(songName, color);
+        if (albumName != null)
+            TintHelper.colorHandles(albumName, color);
+        if (artistName != null)
+            TintHelper.colorHandles(artistName, color);
+        if (genreName != null)
+            TintHelper.colorHandles(genreName, color);
+        if (year != null)
+            TintHelper.colorHandles(year, color);
+        if (trackNumber != null)
+            TintHelper.colorHandles(trackNumber, color);
+        if (lyrics != null)
+            TintHelper.colorHandles(lyrics, color);
+
         colorPrimary = ATHUtil.resolveColor(this, R.attr.colorSurface);
         header.setBackgroundColor(colorPrimary);
         toolbar.setBackgroundColor(colorPrimary);

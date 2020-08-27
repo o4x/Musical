@@ -67,92 +67,88 @@
                 android:padding="16dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/albumTitleContainer"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:hintEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/albumText"
+                        android:id="@+id/album_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:hint="@string/album"
                         android:inputType="text|textCapWords"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/album_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:fontFamily="sans-serif-medium"
                         android:gravity="center_vertical"
-                        android:hint="@string/album"
-                        android:inputType="text|textCapWords"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@color/ate_primary_text_dark" />
-
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/artist_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center_vertical"
+                        android:background="@null"
                         android:hint="@string/album_artist"
                         android:inputType="text|textCapWords"
                         android:singleLine="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center_vertical"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <EditText
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/genre_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center_vertical"
+                        android:background="@null"
                         android:hint="@string/genre"
                         android:inputType="text|textCapWords"
                         android:singleLine="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center_vertical"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="true">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/year"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="sans-serif"
-                        android:gravity="center_vertical"
+                        android:background="@null"
                         android:hint="@string/year"
-                        android:inputType="text|number"
+                        android:inputType="text|textCapWords"
                         android:singleLine="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center_vertical"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
