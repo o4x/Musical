@@ -13,6 +13,7 @@ import com.o4x.musical.R
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment
+import com.o4x.musical.ui.fragments.player.AlbumCoverStyle
 import com.o4x.musical.ui.fragments.player.NowPlayingScreen
 import java.io.File
 import java.util.*
@@ -64,6 +65,22 @@ class PreferenceUtil private constructor(context: Context) {
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putInt(LAST_MUSIC_CHOOSER, value)
+            editor.apply()
+        }
+
+    var albumCoverStyle: AlbumCoverStyle
+        get() {
+            val id: Int = sharedPreferences.getInt(ALBUM_COVER_STYLE, 0)
+            for (albumCoverStyle in AlbumCoverStyle.values()) {
+                if (albumCoverStyle.id == id) {
+                    return albumCoverStyle
+                }
+            }
+            return AlbumCoverStyle.Card
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putInt(ALBUM_COVER_STYLE, value.id)
             editor.apply()
         }
 
@@ -484,6 +501,7 @@ class PreferenceUtil private constructor(context: Context) {
         const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
         const val INITIALIZED_BLACKLIST = "initialized_blacklist"
         const val LIBRARY_CATEGORIES = "library_categories"
+        const val ALBUM_COVER_STYLE = "album_cover_style_id"
         private const val REMEMBER_SHUFFLE = "remember_shuffle"
         private var sInstance: PreferenceUtil? = null
         @JvmStatic

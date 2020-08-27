@@ -322,4 +322,8 @@
     <string name="search_online">Search online</string>
     <string name="eq">Equalizer</string>
     <string name="full">Full</string>
+    <string name="circular">Circular</string>
+    <string name="full_card">Full card</string>
+    <string name="material">Material</string>
+    <string name="normal">Normal</string>
 </resources>
