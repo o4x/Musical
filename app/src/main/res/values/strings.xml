@@ -330,4 +330,20 @@
     <string name="set">Set</string>
     <string name="pro">Pro</string>
     <string name="free">Free</string>
+    <string name="musical_pro">Musical Pro</string>
+    <string name="pro_summary">Black theme, Now playing themes, Carousel effect and more..</string>
+    <string name="buy_now">Buy now</string>
+    <string name="general_settings_summary">Change the theme and colors of the app</string>
+    <string name="general_settings_title">Look and feel</string>
+    <string name="now_playing_summary">Customize the now playing screen</string>
+    <string name="now_playing">Now playing</string>
+    <string name="audio_settings_summary">Change the sound settings and adjust the equalizer controls</string>
+    <string name="personalize_settings_summary">Customize your now playing and UI controls</string>
+    <string name="personalize">Personalize</string>
+    <string name="image_settings_summary">Change artist image download settings</string>
+    <string name="notification_settings_summary">Customize the notification style</string>
+    <string name="notification">Notification</string>
+    <string name="other_settings_summary">Advanced testing features</string>
+    <string name="others">Other</string>
+    <string name="about_settings_summary">Team, social links</string>
 </resources>
