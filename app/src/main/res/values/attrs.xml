@@ -11,5 +11,4 @@
 
     <attr name="iconColor" format="color" />
     <attr name="dividerColor" format="color" />
-
 </resources>

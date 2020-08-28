@@ -63,5 +63,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="app_widget_card_radius">2dp</dimen>
 
     <dimen name="card_on_app_bar_side_padding">8dp</dimen>
+    <dimen name="adaptive_icon_padding">12dp</dimen>
+    <dimen name="adaptive_icon_size">46dp</dimen>
 
 </resources>

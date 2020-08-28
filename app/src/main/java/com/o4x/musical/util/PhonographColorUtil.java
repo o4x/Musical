@@ -2,6 +2,7 @@ package com.o4x.musical.util;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 
@@ -19,6 +20,14 @@ import java.util.Comparator;
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class PhonographColorUtil {
+    public static int desaturateColor(int color, float ratio) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+
+        hsv[1] = (hsv[1] / 1 * ratio) + (0.2f * (1.0f - ratio));
+
+        return Color.HSVToColor(hsv);
+    }
 
     @Nullable
     public static Palette generatePalette(Bitmap bitmap) {
