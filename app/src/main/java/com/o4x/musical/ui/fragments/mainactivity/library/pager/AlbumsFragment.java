@@ -57,12 +57,12 @@ public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
 
     @Override
     protected String loadSortOrder() {
-        return PreferenceUtil.getInstance(getActivity()).getAlbumSortOrder();
+        return PreferenceUtil.getAlbumSortOrder();
     }
 
     @Override
     protected void saveSortOrder(String sortOrder) {
-        PreferenceUtil.getInstance(getActivity()).setAlbumSortOrder(sortOrder);
+        PreferenceUtil.setAlbumSortOrder(sortOrder);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
 
     @Override
     public boolean loadUsePalette() {
-        return PreferenceUtil.getInstance(getActivity()).albumColoredFooters();
+        return PreferenceUtil.albumColoredFooters();
     }
 
     @Override
@@ -88,27 +88,27 @@ public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
 
     @Override
     protected int loadGridSize() {
-        return PreferenceUtil.getInstance(getActivity()).getAlbumGridSize(getActivity());
+        return PreferenceUtil.getAlbumGridSize(getActivity());
     }
 
     @Override
     protected void saveGridSize(int gridSize) {
-        PreferenceUtil.getInstance(getActivity()).setAlbumGridSize(gridSize);
+        PreferenceUtil.setAlbumGridSize(gridSize);
     }
 
     @Override
     protected int loadGridSizeLand() {
-        return PreferenceUtil.getInstance(getActivity()).getAlbumGridSizeLand(getActivity());
+        return PreferenceUtil.getAlbumGridSizeLand(getActivity());
     }
 
     @Override
     protected void saveGridSizeLand(int gridSize) {
-        PreferenceUtil.getInstance(getActivity()).setAlbumGridSizeLand(gridSize);
+        PreferenceUtil.setAlbumGridSizeLand(gridSize);
     }
 
     @Override
     protected void saveUsePalette(boolean usePalette) {
-        PreferenceUtil.getInstance(getActivity()).setAlbumColoredFooters(usePalette);
+        PreferenceUtil.setAlbumColoredFooters(usePalette);
     }
 
     @Override

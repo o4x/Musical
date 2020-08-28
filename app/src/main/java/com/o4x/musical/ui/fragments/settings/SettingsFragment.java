@@ -90,13 +90,13 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
         super.onViewCreated(view, savedInstanceState);
         getListView().setPadding(0, 0, 0, 0);
         invalidateSettings();
-        PreferenceUtil.getInstance(getActivity()).registerOnSharedPreferenceChangedListener(this);
+        PreferenceUtil.registerOnSharedPreferenceChangedListener(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        PreferenceUtil.getInstance(getActivity()).unregisterOnSharedPreferenceChangedListener(this);
+        PreferenceUtil.unregisterOnSharedPreferenceChangedListener(this);
     }
 
     public void invalidateSettings() {
@@ -175,22 +175,22 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             classicNotification.setVisible(false);
         } else {
-            classicNotification.setChecked(PreferenceUtil.getInstance(getActivity()).classicNotification());
+            classicNotification.setChecked(PreferenceUtil.classicNotification());
             classicNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 // Save preference
-                PreferenceUtil.getInstance(getActivity()).setClassicNotification((Boolean) newValue);
+                PreferenceUtil.setClassicNotification((Boolean) newValue);
                 return true;
             });
         }
 
         final TwoStatePreference coloredNotification = (TwoStatePreference) findPreference("colored_notification");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            coloredNotification.setEnabled(PreferenceUtil.getInstance(getActivity()).classicNotification());
+            coloredNotification.setEnabled(PreferenceUtil.classicNotification());
         } else {
-            coloredNotification.setChecked(PreferenceUtil.getInstance(getActivity()).coloredNotification());
+            coloredNotification.setChecked(PreferenceUtil.coloredNotification());
             coloredNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 // Save preference
-                PreferenceUtil.getInstance(getActivity()).setColoredNotification((Boolean) newValue);
+                PreferenceUtil.setColoredNotification((Boolean) newValue);
                 return true;
             });
         }
@@ -199,10 +199,10 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             colorAppShortcuts.setVisible(false);
         } else {
-            colorAppShortcuts.setChecked(PreferenceUtil.getInstance(getActivity()).coloredAppShortcuts());
+            colorAppShortcuts.setChecked(PreferenceUtil.coloredAppShortcuts());
             colorAppShortcuts.setOnPreferenceChangeListener((preference, newValue) -> {
                 // Save preference
-                PreferenceUtil.getInstance(getActivity()).setColoredAppShortcuts((Boolean) newValue);
+                PreferenceUtil.setColoredAppShortcuts((Boolean) newValue);
 
                 // Update app shortcuts
                 new DynamicShortcutManager(getActivity()).updateDynamicShortcuts();
@@ -246,6 +246,6 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
     }
 
     private void updateNowPlayingScreenSummary() {
-        findPreference("now_playing_screen_id").setSummary(PreferenceUtil.getInstance(getActivity()).getNowPlayingScreen().titleRes);
+        findPreference("now_playing_screen_id").setSummary(PreferenceUtil.getNowPlayingScreen().titleRes);
     }
 }

@@ -80,7 +80,7 @@ public class MainActivity extends AbsMusicPanelActivity {
         setUpDrawerLayout();
 
         if (savedInstanceState == null) {
-            setMusicChooser(PreferenceUtil.getInstance(this).getLastMusicChooser());
+            setMusicChooser(PreferenceUtil.getLastMusicChooser());
         } else {
             restoreCurrentFragment();
         }
@@ -92,7 +92,7 @@ public class MainActivity extends AbsMusicPanelActivity {
         App.setOnProVersionChangedListener(() -> {
             // called if the cached value was outdated (should be a rare event)
             checkSetUpPro();
-            if (!App.isProVersion() && PreferenceUtil.getInstance(MainActivity.this).getLastMusicChooser() == R.id.nav_folders) {
+            if (!App.isProVersion() && PreferenceUtil.getLastMusicChooser() == R.id.nav_folders) {
                 setMusicChooser(R.id.nav_folders); // shows the purchase activity and switches to LIBRARY
             }
         });
@@ -113,7 +113,7 @@ public class MainActivity extends AbsMusicPanelActivity {
             id = R.id.nav_library;
         }
 
-        PreferenceUtil.getInstance(this).setLastMusicChooser(id);
+        PreferenceUtil.setLastMusicChooser(id);
         navigationView.setCheckedItem(id);
         switch (id) {
             case R.id.nav_home:
@@ -339,8 +339,8 @@ public class MainActivity extends AbsMusicPanelActivity {
     }
 
     private boolean checkShowIntro() {
-        if (!PreferenceUtil.getInstance(this).introShown()) {
-            PreferenceUtil.getInstance(this).setIntroShown();
+        if (!PreferenceUtil.introShown()) {
+            PreferenceUtil.setIntroShown();
             ChangelogDialog.setChangelogRead(this);
             blockRequestPermissions = true;
             new Handler().postDelayed(() -> startActivityForResult(new Intent(MainActivity.this, AppIntroActivity.class), APP_INTRO_REQUEST), 50);
@@ -353,7 +353,7 @@ public class MainActivity extends AbsMusicPanelActivity {
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             int currentVersion = pInfo.versionCode;
-            if (currentVersion != PreferenceUtil.getInstance(this).getLastChangelogVersion()) {
+            if (currentVersion != PreferenceUtil.getLastChangelogVersion()) {
                 ChangelogDialog.create().show(getSupportFragmentManager(), "CHANGE_LOG_DIALOG");
             }
         } catch (PackageManager.NameNotFoundException e) {

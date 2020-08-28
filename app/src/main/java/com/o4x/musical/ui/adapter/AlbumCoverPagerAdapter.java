@@ -114,15 +114,15 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
             super.onViewCreated(view, savedInstanceState);
             forceSquareAlbumCover(false);
             // TODO
-//            forceSquareAlbumCover(PreferenceUtil.getInstance(getContext()).forceSquareAlbumCover());
-            PreferenceUtil.getInstance(getActivity()).registerOnSharedPreferenceChangedListener(this);
+//            forceSquareAlbumCover(PreferenceUtil.forceSquareAlbumCover());
+            PreferenceUtil.registerOnSharedPreferenceChangedListener(this);
             loadAlbumCover();
         }
 
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            PreferenceUtil.getInstance(getActivity()).unregisterOnSharedPreferenceChangedListener(this);
+            PreferenceUtil.unregisterOnSharedPreferenceChangedListener(this);
             unbinder.unbind();
             colorReceiver = null;
         }
@@ -145,7 +145,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
             switch (key) {
                 case PreferenceUtil.FORCE_SQUARE_ALBUM_COVER:
                     // TODO
-//                    forceSquareAlbumCover(PreferenceUtil.getInstance(getActivity()).forceSquareAlbumCover());
+//                    forceSquareAlbumCover(PreferenceUtil.forceSquareAlbumCover());
                     break;
             }
         }

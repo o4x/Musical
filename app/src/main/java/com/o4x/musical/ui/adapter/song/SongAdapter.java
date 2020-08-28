@@ -183,7 +183,7 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
         }
 
         @Nullable String sectionName = null;
-        switch (PreferenceUtil.getInstance(activity).getSongSortOrder()) {
+        switch (PreferenceUtil.getSongSortOrder()) {
             case SortOrder.SongSortOrder.SONG_A_Z:
             case SortOrder.SongSortOrder.SONG_Z_A:
                 sectionName = dataSet.get(position).title;

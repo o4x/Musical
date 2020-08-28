@@ -2,16 +2,17 @@ package com.o4x.musical.preferences;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.adapter.CategoryInfoAdapter;
 import com.o4x.musical.model.CategoryInfo;
+import com.o4x.musical.ui.adapter.CategoryInfoAdapter;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class LibraryPreferenceDialog extends DialogFragment {
         if (savedInstanceState != null) {
             categoryInfos = savedInstanceState.getParcelableArrayList(PreferenceUtil.LIBRARY_CATEGORIES);
         } else {
-            categoryInfos = PreferenceUtil.getInstance(getContext()).getLibraryCategoryInfos();
+            categoryInfos = PreferenceUtil.getLibraryCategoryInfos();
         }
         adapter = new CategoryInfoAdapter(categoryInfos);
 
@@ -51,7 +52,7 @@ public class LibraryPreferenceDialog extends DialogFragment {
                 .negativeText(android.R.string.cancel)
                 .neutralText(R.string.reset_action)
                 .autoDismiss(false)
-                .onNeutral((dialog, action) -> adapter.setCategoryInfos(PreferenceUtil.getInstance(getContext()).getDefaultLibraryCategoryInfos()))
+                .onNeutral((dialog, action) -> adapter.setCategoryInfos(PreferenceUtil.getDefaultLibraryCategoryInfos()))
                 .onNegative((dialog, action) -> dismiss())
                 .onPositive((dialog, action) -> {
                     updateCategories(adapter.getCategoryInfos());
@@ -69,7 +70,7 @@ public class LibraryPreferenceDialog extends DialogFragment {
     private void updateCategories(List<CategoryInfo> categories) {
         if (getSelected(categories) == 0) return;
 
-        PreferenceUtil.getInstance(getContext()).setLibraryCategoryInfos(categories);
+        PreferenceUtil.setLibraryCategoryInfos(categories);
     }
 
     private int getSelected(List<CategoryInfo> categories) {

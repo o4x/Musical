@@ -172,7 +172,7 @@ public class ArtistAdapter extends AbsMultiSelectAdapter<ArtistAdapter.ViewHolde
     @Override
     public String getSectionName(int position) {
         @Nullable String sectionName = null;
-        switch (PreferenceUtil.getInstance(activity).getArtistSortOrder()) {
+        switch (PreferenceUtil.getArtistSortOrder()) {
             case SortOrder.ArtistSortOrder.ARTIST_A_Z:
             case SortOrder.ArtistSortOrder.ARTIST_Z_A:
                 sectionName = dataSet.get(position).getName();

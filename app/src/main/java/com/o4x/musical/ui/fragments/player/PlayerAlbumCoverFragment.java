@@ -2,8 +2,6 @@ package com.o4x.musical.ui.fragments.player;
 
 import android.animation.Animator;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,13 +13,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
 import com.o4x.musical.R;
-import com.o4x.musical.ui.adapter.AlbumCoverPagerAdapter;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
 import com.o4x.musical.misc.SimpleAnimatorListener;
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics;
 import com.o4x.musical.model.lyrics.Lyrics;
+import com.o4x.musical.ui.adapter.AlbumCoverPagerAdapter;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.util.PreferenceUtil;
 import com.o4x.musical.util.ViewUtil;
@@ -177,7 +178,7 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
     }
 
     private boolean isLyricsLayoutVisible() {
-        return lyrics != null && lyrics.isSynchronized() && lyrics.isValid() && PreferenceUtil.getInstance(getActivity()).synchronizedLyricsShow();
+        return lyrics != null && lyrics.isSynchronized() && lyrics.isValid() && PreferenceUtil.synchronizedLyricsShow();
     }
 
     private boolean isLyricsLayoutBound() {
