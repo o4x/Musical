@@ -2,13 +2,16 @@ package com.o4x.musical.util;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.media.audiofx.AudioEffect;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
-import android.widget.Toast;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
@@ -18,6 +21,7 @@ import com.o4x.musical.ui.activities.AlbumDetailActivity;
 import com.o4x.musical.ui.activities.ArtistDetailActivity;
 import com.o4x.musical.ui.activities.GenreDetailActivity;
 import com.o4x.musical.ui.activities.PlaylistDetailActivity;
+import com.o4x.musical.ui.activities.PurchaseActivity;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -76,5 +80,10 @@ public class NavigationUtil {
                 Toast.makeText(activity, activity.getResources().getString(R.string.no_equalizer), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    public static void goToProVersion(@NonNull Context context) {
+        ActivityCompat.startActivity(context, new Intent(context, PurchaseActivity.class), null);
     }
 }
