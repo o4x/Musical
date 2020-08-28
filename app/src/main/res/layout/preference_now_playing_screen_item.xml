@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:ignore="ContentDescription">
 
@@ -22,5 +23,19 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         tools:src="@drawable/tutorial_queue_swipe_up" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/proText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/pro"
+        android:textAppearance="@style/TextViewHeadline6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </LinearLayout>
