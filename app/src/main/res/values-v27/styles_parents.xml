@@ -14,7 +14,7 @@
 
 <resources>
 
-    <style name="Theme.RetroMusic.Base.Adaptive" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Musical.Base.Adaptive" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="windowActionBarOverlay">true</item>
@@ -29,7 +29,7 @@
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
     </style>
 
-    <style name="Theme.RetroMusic.Base" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.Musical.Base" parent="Theme.MaterialComponents.NoActionBar">
         <item name="md_background_color">@color/darkColorPrimary</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActivityTransitions">true</item>
