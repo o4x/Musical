@@ -116,7 +116,7 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 // Set the new theme so that updateAppShortcuts can pull it
-                getActivity().setTheme(PreferenceUtil.getThemeResFromPrefValue(themeName));
+                getActivity().setTheme(PreferenceUtil.themeResFromPrefValue(themeName));
                 new DynamicShortcutManager(getActivity()).updateDynamicShortcuts();
             }
 
@@ -199,7 +199,7 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
             colorAppShortcuts.setVisible(false);
         } else {
-            colorAppShortcuts.setChecked(PreferenceUtil.coloredAppShortcuts());
+            colorAppShortcuts.setChecked(PreferenceUtil.isColoredAppShortcuts());
             colorAppShortcuts.setOnPreferenceChangeListener((preference, newValue) -> {
                 // Save preference
                 PreferenceUtil.setColoredAppShortcuts((Boolean) newValue);
