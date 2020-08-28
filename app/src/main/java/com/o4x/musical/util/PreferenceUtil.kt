@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
-import android.preference.PreferenceManager
 import androidx.annotation.StyleRes
+import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -19,7 +19,7 @@ import com.o4x.musical.ui.fragments.player.NowPlayingScreen
 import java.io.File
 import java.util.*
 
-class PreferenceUtil private constructor(context: Context) {
+class PreferenceUtil {
 
     private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.getContext())
 
@@ -43,7 +43,7 @@ class PreferenceUtil private constructor(context: Context) {
     fun setGeneralTheme(theme: String?) {
         val editor = sharedPreferences.edit()
         editor.putString(GENERAL_THEME, theme)
-        editor.commit()
+        editor.apply()
     }
 
     fun rememberLastTab(): Boolean {
@@ -108,7 +108,7 @@ class PreferenceUtil private constructor(context: Context) {
         set(nowPlayingScreen) {
             val editor = sharedPreferences.edit()
             editor.putInt(NOW_PLAYING_SCREEN_ID, nowPlayingScreen.id)
-            editor.commit()
+            editor.apply()
         }
 
     fun coloredNotification(): Boolean {
@@ -165,7 +165,7 @@ class PreferenceUtil private constructor(context: Context) {
         set(sortOrder) {
             val editor = sharedPreferences.edit()
             editor.putString(ARTIST_SORT_ORDER, sortOrder)
-            editor.commit()
+            editor.apply()
         }
 
     val artistSongSortOrder: String?
@@ -188,7 +188,7 @@ class PreferenceUtil private constructor(context: Context) {
         set(sortOrder) {
             val editor = sharedPreferences.edit()
             editor.putString(ALBUM_SORT_ORDER, sortOrder)
-            editor.commit()
+            editor.apply()
         }
 
     val albumSongSortOrder: String?
@@ -383,7 +383,7 @@ class PreferenceUtil private constructor(context: Context) {
     @SuppressLint("CommitPrefEdits")
     fun setIntroShown() {
         // don't use apply here
-        sharedPreferences.edit().putBoolean(INTRO_SHOWN, true).commit()
+        sharedPreferences.edit().putBoolean(INTRO_SHOWN, true).apply()
     }
 
     fun introShown(): Boolean {
@@ -520,7 +520,7 @@ class PreferenceUtil private constructor(context: Context) {
         @JvmStatic
         fun getInstance(context: Context): PreferenceUtil? {
             if (sInstance == null) {
-                sInstance = PreferenceUtil(context.applicationContext)
+                sInstance = PreferenceUtil()
             }
             return sInstance
         }
