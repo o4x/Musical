@@ -65,6 +65,8 @@ object PreferenceUtil {
     const val INITIALIZED_BLACKLIST = "initialized_blacklist"
     const val LIBRARY_CATEGORIES = "library_categories"
     const val ALBUM_COVER_STYLE = "album_cover_style_id"
+    const val CIRCULAR_ALBUM_ART = "circular_album_art"
+    const val CAROUSEL_EFFECT = "carousel_effect"
     const val DESATURATED_COLOR = "desaturated_color"
     const val BLACK_THEME = "black_theme"
     private const val REMEMBER_SHUFFLE = "remember_shuffle"

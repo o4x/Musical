@@ -346,4 +346,5 @@
     <string name="other_settings_summary">Advanced testing features</string>
     <string name="others">Other</string>
     <string name="about_settings_summary">Team, social links</string>
+    <string name="pref_title_toggle_carousel_effect">Carousel effect</string>
 </resources>
