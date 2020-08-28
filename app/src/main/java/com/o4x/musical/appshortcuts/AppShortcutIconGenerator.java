@@ -23,7 +23,7 @@ import com.o4x.musical.util.PreferenceUtil;
 public final class AppShortcutIconGenerator {
 
     public static Icon generateThemedIcon(Context context, int iconId) {
-        if (PreferenceUtil.coloredAppShortcuts()) {
+        if (PreferenceUtil.isColoredAppShortcuts()) {
             return generateUserThemedIcon(context, iconId).toIcon();
         } else {
             return generateDefaultThemedIcon(context, iconId).toIcon();

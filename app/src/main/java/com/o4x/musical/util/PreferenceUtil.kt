@@ -89,7 +89,7 @@ object PreferenceUtil {
 
     @JvmStatic
     @StyleRes
-    fun getThemeResFromPrefValue(themePrefValue: String?): Int {
+    fun themeResFromPrefValue(themePrefValue: String?): Int {
         return when (themePrefValue) {
             "dark" -> R.style.Theme_Musical
             "black" -> R.style.Theme_Musical_Black
@@ -114,7 +114,7 @@ object PreferenceUtil {
     @JvmStatic
     @get:StyleRes
     val generalTheme: Int
-        get() = getThemeResFromPrefValue(
+        get() = themeResFromPrefValue(
             sharedPreferences.getString(
                 GENERAL_THEME,
                 "light"
@@ -214,16 +214,13 @@ object PreferenceUtil {
         }
 
     @JvmStatic
-    fun setColoredAppShortcuts(value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(COLORED_APP_SHORTCUTS, value)
-        editor.apply()
-    }
-
-    @JvmStatic
-    fun coloredAppShortcuts(): Boolean {
-        return sharedPreferences.getBoolean(COLORED_APP_SHORTCUTS, true)
-    }
+    var isColoredAppShortcuts
+        get() = sharedPreferences.getBoolean(
+            COLORED_APP_SHORTCUTS, true
+        )
+        set(value) = sharedPreferences.edit {
+            putBoolean(COLORED_APP_SHORTCUTS, value)
+        }
 
     @JvmStatic
     fun gaplessPlayback(): Boolean {
