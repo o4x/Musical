@@ -33,7 +33,7 @@ public class PlayerActivity extends AbsMusicServiceActivity implements CardPlaye
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-        currentNowPlayingScreen = PreferenceUtil.getInstance(this).getNowPlayingScreen();
+        currentNowPlayingScreen = PreferenceUtil.getNowPlayingScreen();
         switch (currentNowPlayingScreen) {
             case FULL:
                 playerFragment = new FullPlayerFragment();
@@ -53,7 +53,7 @@ public class PlayerActivity extends AbsMusicServiceActivity implements CardPlaye
     @Override
     protected void onResume() {
         super.onResume();
-        if (currentNowPlayingScreen != PreferenceUtil.getInstance(this).getNowPlayingScreen()) {
+        if (currentNowPlayingScreen != PreferenceUtil.getNowPlayingScreen()) {
             postRecreate();
         }
     }

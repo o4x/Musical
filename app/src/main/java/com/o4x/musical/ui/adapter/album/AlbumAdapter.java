@@ -186,7 +186,7 @@ public class AlbumAdapter extends AbsMultiSelectAdapter<AlbumAdapter.ViewHolder,
     @Override
     public String getSectionName(int position) {
         @Nullable String sectionName = null;
-        switch (PreferenceUtil.getInstance(activity).getAlbumSortOrder()) {
+        switch (PreferenceUtil.getAlbumSortOrder()) {
             case SortOrder.AlbumSortOrder.ALBUM_A_Z:
             case SortOrder.AlbumSortOrder.ALBUM_Z_A:
                 sectionName = dataSet.get(position).getTitle();

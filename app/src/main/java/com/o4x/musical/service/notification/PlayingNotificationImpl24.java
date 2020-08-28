@@ -102,7 +102,7 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             builder.setStyle(new MediaStyle().setMediaSession(service.getMediaSession().getSessionToken()).setShowActionsInCompactView(0, 1, 2))
                                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-                            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O && PreferenceUtil.getInstance(service).coloredNotification())
+                            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O && PreferenceUtil.coloredNotification())
                                 builder.setColor(color);
                         }
 

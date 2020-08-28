@@ -69,14 +69,14 @@ public class SleepTimerDialog extends DialogFragment {
                         return;
                     }
 
-                    PreferenceUtil.getInstance(getActivity()).setSleepTimerFinishMusic(shouldFinishLastSong.isChecked());
+                    PreferenceUtil.setSleepTimerFinishMusic(shouldFinishLastSong.isChecked());
 
                     final int minutes = seekArcProgress;
 
                     PendingIntent pi = makeTimerPendingIntent(PendingIntent.FLAG_CANCEL_CURRENT);
 
                     final long nextSleepTimerElapsedTime = SystemClock.elapsedRealtime() + minutes * 60 * 1000;
-                    PreferenceUtil.getInstance(getActivity()).setNextSleepTimerElapsedRealtime(nextSleepTimerElapsedTime);
+                    PreferenceUtil.setNextSleepTimerElapsedRealtime(nextSleepTimerElapsedTime);
                     AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                     am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, nextSleepTimerElapsedTime, pi);
 
@@ -114,7 +114,7 @@ public class SleepTimerDialog extends DialogFragment {
 
         ButterKnife.bind(this, materialDialog.getCustomView());
 
-        boolean finishMusic = PreferenceUtil.getInstance(getActivity()).getSleepTimerFinishMusic();
+        boolean finishMusic = PreferenceUtil.getSleepTimerFinishMusic();
         shouldFinishLastSong.setChecked(finishMusic);
 
         seekArc.setProgressColor(ThemeSingleton.get().positiveColor.getDefaultColor());
@@ -130,7 +130,7 @@ public class SleepTimerDialog extends DialogFragment {
             seekArc.setLayoutParams(layoutParams);
         });
 
-        seekArcProgress = PreferenceUtil.getInstance(getActivity()).getLastSleepTimerValue();
+        seekArcProgress = PreferenceUtil.getLastSleepTimerValue();
         updateTimeDisplayTime();
         seekArc.setProgress(seekArcProgress);
 
@@ -152,7 +152,7 @@ public class SleepTimerDialog extends DialogFragment {
 
             @Override
             public void onStopTrackingTouch(SeekArc seekArc) {
-                PreferenceUtil.getInstance(getActivity()).setLastSleepTimerValue(seekArcProgress);
+                PreferenceUtil.setLastSleepTimerValue(seekArcProgress);
             }
         });
 
@@ -186,7 +186,7 @@ public class SleepTimerDialog extends DialogFragment {
 
     private class TimerUpdater extends CountDownTimer {
         public TimerUpdater() {
-            super(PreferenceUtil.getInstance(getActivity()).getNextSleepTimerElapsedRealTime() - SystemClock.elapsedRealtime(), 1000);
+            super(PreferenceUtil.getNextSleepTimerElapsedRealTime() - SystemClock.elapsedRealtime(), 1000);
         }
 
         @Override

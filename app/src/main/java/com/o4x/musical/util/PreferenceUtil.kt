@@ -19,18 +19,93 @@ import com.o4x.musical.ui.fragments.player.NowPlayingScreen
 import java.io.File
 import java.util.*
 
-class PreferenceUtil {
+object PreferenceUtil {
+    const val GENERAL_THEME = "general_theme"
+    const val REMEMBER_LAST_TAB = "remember_last_tab"
+    const val LAST_PAGE = "last_start_page"
+    const val LAST_MUSIC_CHOOSER = "last_music_chooser"
+    const val NOW_PLAYING_SCREEN_ID = "now_playing_screen_id"
+    const val ARTIST_SORT_ORDER = "artist_sort_order"
+    const val ARTIST_SONG_SORT_ORDER = "artist_song_sort_order"
+    const val ARTIST_ALBUM_SORT_ORDER = "artist_album_sort_order"
+    const val ALBUM_SORT_ORDER = "album_sort_order"
+    const val ALBUM_SONG_SORT_ORDER = "album_song_sort_order"
+    const val SONG_SORT_ORDER = "song_sort_order"
+    const val GENRE_SORT_ORDER = "genre_sort_order"
+    const val ALBUM_GRID_SIZE = "album_grid_size"
+    const val ALBUM_GRID_SIZE_LAND = "album_grid_size_land"
+    const val SONG_GRID_SIZE = "song_grid_size"
+    const val SONG_GRID_SIZE_LAND = "song_grid_size_land"
+    const val ARTIST_GRID_SIZE = "artist_grid_size"
+    const val ARTIST_GRID_SIZE_LAND = "artist_grid_size_land"
+    const val ALBUM_COLORED_FOOTERS = "album_colored_footers"
+    const val SONG_COLORED_FOOTERS = "song_colored_footers"
+    const val ARTIST_COLORED_FOOTERS = "artist_colored_footers"
+    const val ALBUM_ARTIST_COLORED_FOOTERS = "album_artist_colored_footers"
+    const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
+    const val COLORED_NOTIFICATION = "colored_notification"
+    const val CLASSIC_NOTIFICATION = "classic_notification"
+    const val COLORED_APP_SHORTCUTS = "colored_app_shortcuts"
+    const val AUDIO_DUCKING = "audio_ducking"
+    const val GAPLESS_PLAYBACK = "gapless_playback"
+    const val LAST_ADDED_CUTOFF = "last_added_interval"
+    const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
+    const val BLURRED_ALBUM_ART = "blurred_album_art"
+    const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
+    const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
+    const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
+    const val LAST_CHANGELOG_VERSION = "last_changelog_version"
+    const val INTRO_SHOWN = "intro_shown"
+    const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"
+    const val START_DIRECTORY = "start_directory"
+    const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
+    const val INITIALIZED_BLACKLIST = "initialized_blacklist"
+    const val LIBRARY_CATEGORIES = "library_categories"
+    const val ALBUM_COVER_STYLE = "album_cover_style_id"
+    const val DESATURATED_COLOR = "desaturated_color"
+    private const val REMEMBER_SHUFFLE = "remember_shuffle"
+
+    @JvmStatic
+    fun isAllowedToDownloadMetadata(context: Context): Boolean {
+        return when (autoDownloadImagesPolicy()) {
+            "always" -> true
+            "only_wifi" -> {
+                val connectivityManager =
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val netInfo =
+                    connectivityManager.activeNetworkInfo
+                netInfo != null && netInfo.type == ConnectivityManager.TYPE_WIFI && netInfo.isConnectedOrConnecting
+            }
+            "never" -> false
+            else -> false
+        }
+    }
+
+    @JvmStatic
+    @StyleRes
+    fun getThemeResFromPrefValue(themePrefValue: String?): Int {
+        return when (themePrefValue) {
+            "dark" -> R.style.Theme_Musical
+            "black" -> R.style.Theme_Musical_Black
+            "light" -> R.style.Theme_Musical_Light
+            else -> R.style.Theme_Musical_Light
+        }
+    }
+
 
     private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.getContext())
 
+    @JvmStatic
     fun registerOnSharedPreferenceChangedListener(sharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener?) {
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
+    @JvmStatic
     fun unregisterOnSharedPreferenceChangedListener(sharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener?) {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
+    @JvmStatic
     @get:StyleRes
     val generalTheme: Int
         get() = getThemeResFromPrefValue(
@@ -40,16 +115,19 @@ class PreferenceUtil {
             )
         )
 
+    @JvmStatic
     fun setGeneralTheme(theme: String?) {
         val editor = sharedPreferences.edit()
         editor.putString(GENERAL_THEME, theme)
         editor.apply()
     }
 
+    @JvmStatic
     fun rememberLastTab(): Boolean {
         return sharedPreferences.getBoolean(REMEMBER_LAST_TAB, true)
     }
 
+    @JvmStatic
     var lastPage: Int
         get() = sharedPreferences.getInt(LAST_PAGE, 0)
         set(value) {
@@ -58,6 +136,7 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     var lastMusicChooser: Int
         get() = sharedPreferences.getInt(
             LAST_MUSIC_CHOOSER,
@@ -69,6 +148,7 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     var albumCoverStyle: AlbumCoverStyle
         get() {
             val id: Int = sharedPreferences.getInt(ALBUM_COVER_STYLE, 0)
@@ -85,6 +165,7 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     var isDesaturatedColor
         get() = sharedPreferences.getBoolean(
             DESATURATED_COLOR, false
@@ -96,6 +177,7 @@ class PreferenceUtil {
         }
 
 
+    @JvmStatic
     @set:SuppressLint("CommitPrefEdits")
     var nowPlayingScreen: NowPlayingScreen
         get() {
@@ -111,52 +193,63 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     fun coloredNotification(): Boolean {
         return sharedPreferences.getBoolean(COLORED_NOTIFICATION, true)
     }
 
+    @JvmStatic
     fun classicNotification(): Boolean {
         return sharedPreferences.getBoolean(CLASSIC_NOTIFICATION, false)
     }
 
+    @JvmStatic
     fun setColoredNotification(value: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean(COLORED_NOTIFICATION, value)
         editor.apply()
     }
 
+    @JvmStatic
     fun setClassicNotification(value: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean(CLASSIC_NOTIFICATION, value)
         editor.apply()
     }
 
+    @JvmStatic
     fun setColoredAppShortcuts(value: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean(COLORED_APP_SHORTCUTS, value)
         editor.apply()
     }
 
+    @JvmStatic
     fun coloredAppShortcuts(): Boolean {
         return sharedPreferences.getBoolean(COLORED_APP_SHORTCUTS, true)
     }
 
+    @JvmStatic
     fun gaplessPlayback(): Boolean {
         return sharedPreferences.getBoolean(GAPLESS_PLAYBACK, false)
     }
 
+    @JvmStatic
     fun audioDucking(): Boolean {
         return sharedPreferences.getBoolean(AUDIO_DUCKING, true)
     }
 
+    @JvmStatic
     fun albumArtOnLockscreen(): Boolean {
         return sharedPreferences.getBoolean(ALBUM_ART_ON_LOCKSCREEN, true)
     }
 
+    @JvmStatic
     fun blurredAlbumArt(): Boolean {
         return sharedPreferences.getBoolean(BLURRED_ALBUM_ART, false)
     }
 
+    @JvmStatic
     var artistSortOrder: String?
         get() = sharedPreferences.getString(
             ARTIST_SORT_ORDER,
@@ -168,18 +261,21 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     val artistSongSortOrder: String?
         get() = sharedPreferences.getString(
             ARTIST_SONG_SORT_ORDER,
             SortOrder.ArtistSongSortOrder.SONG_A_Z
         )
 
+    @JvmStatic
     val artistAlbumSortOrder: String?
         get() = sharedPreferences.getString(
             ARTIST_ALBUM_SORT_ORDER,
             SortOrder.ArtistAlbumSortOrder.ALBUM_YEAR
         )
 
+    @JvmStatic
     var albumSortOrder: String?
         get() = sharedPreferences.getString(
             ALBUM_SORT_ORDER,
@@ -191,12 +287,14 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     val albumSongSortOrder: String?
         get() = sharedPreferences.getString(
             ALBUM_SONG_SORT_ORDER,
             SortOrder.AlbumSongSortOrder.SONG_TRACK_LIST
         )
 
+    @JvmStatic
     var songSortOrder: String?
         get() = sharedPreferences.getString(
             SONG_SORT_ORDER,
@@ -208,12 +306,14 @@ class PreferenceUtil {
             editor.commit()
         }
 
+    @JvmStatic
     val genreSortOrder: String?
         get() = sharedPreferences.getString(
             GENRE_SORT_ORDER,
             SortOrder.GenreSortOrder.GENRE_A_Z
         )
 
+    @JvmStatic
     val lastAddedCutoff: Long
         get() {
             val calendarUtil = CalendarUtil()
@@ -230,6 +330,7 @@ class PreferenceUtil {
             return (System.currentTimeMillis() - interval) / 1000
         }
 
+    @JvmStatic
     var lastSleepTimerValue: Int
         get() = sharedPreferences.getInt(LAST_SLEEP_TIMER_VALUE, 30)
         set(value) {
@@ -238,15 +339,18 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     val nextSleepTimerElapsedRealTime: Long
         get() = sharedPreferences.getLong(NEXT_SLEEP_TIMER_ELAPSED_REALTIME, -1)
 
+    @JvmStatic
     fun setNextSleepTimerElapsedRealtime(value: Long) {
         val editor = sharedPreferences.edit()
         editor.putLong(NEXT_SLEEP_TIMER_ELAPSED_REALTIME, value)
         editor.apply()
     }
 
+    @JvmStatic
     var sleepTimerFinishMusic: Boolean
         get() = sharedPreferences.getBoolean(SLEEP_TIMER_FINISH_SONG, false)
         set(value) {
@@ -255,12 +359,14 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     fun setAlbumGridSize(gridSize: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt(ALBUM_GRID_SIZE, gridSize)
         editor.apply()
     }
 
+    @JvmStatic
     fun getAlbumGridSize(context: Context): Int {
         return sharedPreferences.getInt(
             ALBUM_GRID_SIZE,
@@ -268,12 +374,14 @@ class PreferenceUtil {
         )
     }
 
+    @JvmStatic
     fun setSongGridSize(gridSize: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt(SONG_GRID_SIZE, gridSize)
         editor.apply()
     }
 
+    @JvmStatic
     fun getSongGridSize(context: Context): Int {
         return sharedPreferences.getInt(
             SONG_GRID_SIZE,
@@ -281,12 +389,14 @@ class PreferenceUtil {
         )
     }
 
+    @JvmStatic
     fun setArtistGridSize(gridSize: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt(ARTIST_GRID_SIZE, gridSize)
         editor.apply()
     }
 
+    @JvmStatic
     fun getArtistGridSize(context: Context): Int {
         return sharedPreferences.getInt(
             ARTIST_GRID_SIZE,
@@ -294,12 +404,14 @@ class PreferenceUtil {
         )
     }
 
+    @JvmStatic
     fun setAlbumGridSizeLand(gridSize: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt(ALBUM_GRID_SIZE_LAND, gridSize)
         editor.apply()
     }
 
+    @JvmStatic
     fun getAlbumGridSizeLand(context: Context): Int {
         return sharedPreferences.getInt(
             ALBUM_GRID_SIZE_LAND,
@@ -307,12 +419,14 @@ class PreferenceUtil {
         )
     }
 
+    @JvmStatic
     fun setSongGridSizeLand(gridSize: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt(SONG_GRID_SIZE_LAND, gridSize)
         editor.apply()
     }
 
+    @JvmStatic
     fun getSongGridSizeLand(context: Context): Int {
         return sharedPreferences.getInt(
             SONG_GRID_SIZE_LAND,
@@ -320,12 +434,14 @@ class PreferenceUtil {
         )
     }
 
+    @JvmStatic
     fun setArtistGridSizeLand(gridSize: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt(ARTIST_GRID_SIZE_LAND, gridSize)
         editor.apply()
     }
 
+    @JvmStatic
     fun getArtistGridSizeLand(context: Context): Int {
         return sharedPreferences.getInt(
             ARTIST_GRID_SIZE_LAND,
@@ -333,67 +449,81 @@ class PreferenceUtil {
         )
     }
 
+    @JvmStatic
     fun setAlbumColoredFooters(value: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean(ALBUM_COLORED_FOOTERS, value)
         editor.apply()
     }
 
+    @JvmStatic
     fun albumColoredFooters(): Boolean {
         return sharedPreferences.getBoolean(ALBUM_COLORED_FOOTERS, true)
     }
 
+    @JvmStatic
     fun setAlbumArtistColoredFooters(value: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean(ALBUM_ARTIST_COLORED_FOOTERS, value)
         editor.apply()
     }
 
+    @JvmStatic
     fun albumArtistColoredFooters(): Boolean {
         return sharedPreferences.getBoolean(ALBUM_ARTIST_COLORED_FOOTERS, true)
     }
 
+    @JvmStatic
     fun setSongColoredFooters(value: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean(SONG_COLORED_FOOTERS, value)
         editor.apply()
     }
 
+    @JvmStatic
     fun songColoredFooters(): Boolean {
         return sharedPreferences.getBoolean(SONG_COLORED_FOOTERS, true)
     }
 
+    @JvmStatic
     fun setArtistColoredFooters(value: Boolean) {
         val editor = sharedPreferences.edit()
         editor.putBoolean(ARTIST_COLORED_FOOTERS, value)
         editor.apply()
     }
 
+    @JvmStatic
     fun artistColoredFooters(): Boolean {
         return sharedPreferences.getBoolean(ARTIST_COLORED_FOOTERS, true)
     }
 
+    @JvmStatic
     fun setLastChangeLogVersion(version: Int) {
         sharedPreferences.edit().putInt(LAST_CHANGELOG_VERSION, version).apply()
     }
 
+    @JvmStatic
     val lastChangelogVersion: Int
         get() = sharedPreferences.getInt(LAST_CHANGELOG_VERSION, -1)
 
+    @JvmStatic
     @SuppressLint("CommitPrefEdits")
     fun setIntroShown() {
         // don't use apply here
         sharedPreferences.edit().putBoolean(INTRO_SHOWN, true).apply()
     }
 
+    @JvmStatic
     fun introShown(): Boolean {
         return sharedPreferences.getBoolean(INTRO_SHOWN, false)
     }
 
+    @JvmStatic
     fun rememberShuffle(): Boolean {
         return sharedPreferences.getBoolean(REMEMBER_SHUFFLE, true)
     }
 
+    @JvmStatic
     fun autoDownloadImagesPolicy(): String? {
         return sharedPreferences.getString(
             AUTO_DOWNLOAD_IMAGES_POLICY,
@@ -401,6 +531,7 @@ class PreferenceUtil {
         )
     }
 
+    @JvmStatic
     var startDirectory: File?
         get() = File(
             sharedPreferences.getString(
@@ -417,20 +548,24 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     fun synchronizedLyricsShow(): Boolean {
         return sharedPreferences.getBoolean(SYNCHRONIZED_LYRICS_SHOW, true)
     }
 
+    @JvmStatic
     fun setInitializedBlacklist() {
         val editor = sharedPreferences.edit()
         editor.putBoolean(INITIALIZED_BLACKLIST, true)
         editor.apply()
     }
 
+    @JvmStatic
     fun initializedBlacklist(): Boolean {
         return sharedPreferences.getBoolean(INITIALIZED_BLACKLIST, false)
     }
 
+    @JvmStatic
     var libraryCategoryInfos: List<CategoryInfo?>?
         get() {
             val data =
@@ -459,6 +594,7 @@ class PreferenceUtil {
             editor.apply()
         }
 
+    @JvmStatic
     val defaultLibraryCategoryInfos: List<CategoryInfo>
         get() {
             val defaultCategoryInfos: MutableList<CategoryInfo> =
@@ -470,87 +606,5 @@ class PreferenceUtil {
             defaultCategoryInfos.add(CategoryInfo(CategoryInfo.Category.PLAYLISTS, true))
             return defaultCategoryInfos
         }
-
-    companion object {
-        const val GENERAL_THEME = "general_theme"
-        const val REMEMBER_LAST_TAB = "remember_last_tab"
-        const val LAST_PAGE = "last_start_page"
-        const val LAST_MUSIC_CHOOSER = "last_music_chooser"
-        const val NOW_PLAYING_SCREEN_ID = "now_playing_screen_id"
-        const val ARTIST_SORT_ORDER = "artist_sort_order"
-        const val ARTIST_SONG_SORT_ORDER = "artist_song_sort_order"
-        const val ARTIST_ALBUM_SORT_ORDER = "artist_album_sort_order"
-        const val ALBUM_SORT_ORDER = "album_sort_order"
-        const val ALBUM_SONG_SORT_ORDER = "album_song_sort_order"
-        const val SONG_SORT_ORDER = "song_sort_order"
-        const val GENRE_SORT_ORDER = "genre_sort_order"
-        const val ALBUM_GRID_SIZE = "album_grid_size"
-        const val ALBUM_GRID_SIZE_LAND = "album_grid_size_land"
-        const val SONG_GRID_SIZE = "song_grid_size"
-        const val SONG_GRID_SIZE_LAND = "song_grid_size_land"
-        const val ARTIST_GRID_SIZE = "artist_grid_size"
-        const val ARTIST_GRID_SIZE_LAND = "artist_grid_size_land"
-        const val ALBUM_COLORED_FOOTERS = "album_colored_footers"
-        const val SONG_COLORED_FOOTERS = "song_colored_footers"
-        const val ARTIST_COLORED_FOOTERS = "artist_colored_footers"
-        const val ALBUM_ARTIST_COLORED_FOOTERS = "album_artist_colored_footers"
-        const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
-        const val COLORED_NOTIFICATION = "colored_notification"
-        const val CLASSIC_NOTIFICATION = "classic_notification"
-        const val COLORED_APP_SHORTCUTS = "colored_app_shortcuts"
-        const val AUDIO_DUCKING = "audio_ducking"
-        const val GAPLESS_PLAYBACK = "gapless_playback"
-        const val LAST_ADDED_CUTOFF = "last_added_interval"
-        const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
-        const val BLURRED_ALBUM_ART = "blurred_album_art"
-        const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
-        const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
-        const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
-        const val LAST_CHANGELOG_VERSION = "last_changelog_version"
-        const val INTRO_SHOWN = "intro_shown"
-        const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"
-        const val START_DIRECTORY = "start_directory"
-        const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
-        const val INITIALIZED_BLACKLIST = "initialized_blacklist"
-        const val LIBRARY_CATEGORIES = "library_categories"
-        const val ALBUM_COVER_STYLE = "album_cover_style_id"
-        const val DESATURATED_COLOR = "desaturated_color"
-        private const val REMEMBER_SHUFFLE = "remember_shuffle"
-        private var sInstance: PreferenceUtil? = null
-        @JvmStatic
-        fun getInstance(context: Context): PreferenceUtil? {
-            if (sInstance == null) {
-                sInstance = PreferenceUtil()
-            }
-            return sInstance
-        }
-
-        @JvmStatic
-        fun isAllowedToDownloadMetadata(context: Context): Boolean {
-            return when (getInstance(context)!!.autoDownloadImagesPolicy()) {
-                "always" -> true
-                "only_wifi" -> {
-                    val connectivityManager =
-                        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                    val netInfo =
-                        connectivityManager.activeNetworkInfo
-                    netInfo != null && netInfo.type == ConnectivityManager.TYPE_WIFI && netInfo.isConnectedOrConnecting
-                }
-                "never" -> false
-                else -> false
-            }
-        }
-
-        @JvmStatic
-        @StyleRes
-        fun getThemeResFromPrefValue(themePrefValue: String?): Int {
-            return when (themePrefValue) {
-                "dark" -> R.style.Theme_Musical
-                "black" -> R.style.Theme_Musical_Black
-                "light" -> R.style.Theme_Musical_Light
-                else -> R.style.Theme_Musical_Light
-            }
-        }
-    }
 
 }

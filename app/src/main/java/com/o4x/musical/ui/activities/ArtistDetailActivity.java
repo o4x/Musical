@@ -134,7 +134,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
         setDrawUnderBar();
         ButterKnife.bind(this);
 
-        usePalette = PreferenceUtil.getInstance(this).albumArtistColoredFooters();
+        usePalette = PreferenceUtil.albumArtistColoredFooters();
 
         initViews();
         setUpObservableListViewParams();
@@ -197,7 +197,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
 
     protected void setUsePalette(boolean usePalette) {
         albumAdapter.usePalette(usePalette);
-        PreferenceUtil.getInstance(this).setAlbumArtistColoredFooters(usePalette);
+        PreferenceUtil.setAlbumArtistColoredFooters(usePalette);
         this.usePalette = usePalette;
     }
 

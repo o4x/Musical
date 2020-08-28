@@ -19,7 +19,7 @@ import java.util.List;
 public class AlbumLoader {
 
     public static String getSongLoaderSortOrder(Context context) {
-        return PreferenceUtil.getInstance(context).getAlbumSortOrder() + ", " + PreferenceUtil.getInstance(context).getAlbumSongSortOrder();
+        return PreferenceUtil.getAlbumSortOrder() + ", " + PreferenceUtil.getAlbumSongSortOrder();
     }
 
     @NonNull
