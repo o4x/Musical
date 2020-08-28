@@ -9,6 +9,7 @@ import androidx.annotation.StyleRes
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.CategoryInfo
@@ -20,7 +21,7 @@ import java.util.*
 
 class PreferenceUtil private constructor(context: Context) {
 
-    private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.getContext())
 
     fun registerOnSharedPreferenceChangedListener(sharedPreferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener?) {
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
@@ -83,6 +84,17 @@ class PreferenceUtil private constructor(context: Context) {
             editor.putInt(ALBUM_COVER_STYLE, value.id)
             editor.apply()
         }
+
+    var isDesaturatedColor
+        get() = sharedPreferences.getBoolean(
+            DESATURATED_COLOR, false
+        )
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(DESATURATED_COLOR, value)
+            editor.apply()
+        }
+
 
     @set:SuppressLint("CommitPrefEdits")
     var nowPlayingScreen: NowPlayingScreen
@@ -502,6 +514,7 @@ class PreferenceUtil private constructor(context: Context) {
         const val INITIALIZED_BLACKLIST = "initialized_blacklist"
         const val LIBRARY_CATEGORIES = "library_categories"
         const val ALBUM_COVER_STYLE = "album_cover_style_id"
+        const val DESATURATED_COLOR = "desaturated_color"
         private const val REMEMBER_SHUFFLE = "remember_shuffle"
         private var sInstance: PreferenceUtil? = null
         @JvmStatic
