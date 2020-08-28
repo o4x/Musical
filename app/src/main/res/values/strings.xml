@@ -359,4 +359,13 @@
     <string name="pref_dialog_corner_title">Dialog corner</string>
     <string name="pref_language_name">Select language</string>
     <string name="pref_title_blacklist">Blacklist</string>
+    <string name="pref_title_home_artist_grid_style">Home artist grid</string>
+    <string name="pref_summary_home_banner">Toggle home banner style</string>
+    <string name="pref_title_home_banner">Home banner</string>
+    <string name="pref_title_tab_text_mode">Tab titles mode</string>
+    <string name="window">Window</string>
+    <string name="pref_summary_toggle_full_screen">Immersive mode</string>
+    <string name="pref_title_toggle_full_screen">Fullscreen app</string>
+    <string name="pref_summary_lock_screen">Use Retro Music\'s custom lockscreen controls</string>
+    <string name="pref_title_lock_screen">Fullscreen controls</string>
 </resources>
