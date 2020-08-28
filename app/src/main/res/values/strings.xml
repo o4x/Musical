@@ -326,4 +326,8 @@
     <string name="full_card">Full card</string>
     <string name="material">Material</string>
     <string name="normal">Normal</string>
+    <string name="pref_title_album_cover_style">Album cover theme</string>
+    <string name="set">Set</string>
+    <string name="pro">Pro</string>
+    <string name="free">Free</string>
 </resources>
