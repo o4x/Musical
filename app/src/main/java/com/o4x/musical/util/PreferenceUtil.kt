@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import androidx.annotation.StyleRes
 import androidx.preference.PreferenceManager
+import com.o4x.musical.extensions.getStringOrDefault
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -16,6 +17,7 @@ import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment
 import com.o4x.musical.ui.fragments.player.AlbumCoverStyle
 import com.o4x.musical.ui.fragments.player.NowPlayingScreen
+import com.o4x.musical.util.theme.ThemeMode
 import java.io.File
 import java.util.*
 
@@ -63,6 +65,7 @@ object PreferenceUtil {
     const val LIBRARY_CATEGORIES = "library_categories"
     const val ALBUM_COVER_STYLE = "album_cover_style_id"
     const val DESATURATED_COLOR = "desaturated_color"
+    const val BLACK_THEME = "black_theme"
     private const val REMEMBER_SHUFFLE = "remember_shuffle"
 
     @JvmStatic
@@ -565,6 +568,11 @@ object PreferenceUtil {
         return sharedPreferences.getBoolean(INITIALIZED_BLACKLIST, false)
     }
 
+    private val isBlackMode
+        get() = sharedPreferences.getBoolean(
+            BLACK_THEME, false
+        )
+
     @JvmStatic
     var libraryCategoryInfos: List<CategoryInfo?>?
         get() {
@@ -606,5 +614,26 @@ object PreferenceUtil {
             defaultCategoryInfos.add(CategoryInfo(CategoryInfo.Category.PLAYLISTS, true))
             return defaultCategoryInfos
         }
+
+
+    @JvmStatic
+    fun getGeneralThemeValue(isSystemDark: Boolean): ThemeMode {
+        val themeMode: String =
+            sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
+        return if (isBlackMode && isSystemDark) {
+            ThemeMode.BLACK
+        } else {
+            if (isBlackMode && themeMode == "dark") {
+                ThemeMode.BLACK
+            } else {
+                when (themeMode) {
+                    "light" -> ThemeMode.LIGHT
+                    "dark" -> ThemeMode.DARK
+                    "auto" -> ThemeMode.AUTO
+                    else -> ThemeMode.AUTO
+                }
+            }
+        }
+    }
 
 }
