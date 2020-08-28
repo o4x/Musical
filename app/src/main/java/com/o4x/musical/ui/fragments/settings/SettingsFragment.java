@@ -175,7 +175,7 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             classicNotification.setVisible(false);
         } else {
-            classicNotification.setChecked(PreferenceUtil.classicNotification());
+            classicNotification.setChecked(PreferenceUtil.isClassicNotification());
             classicNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 // Save preference
                 PreferenceUtil.setClassicNotification((Boolean) newValue);
@@ -185,9 +185,9 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
 
         final TwoStatePreference coloredNotification = (TwoStatePreference) findPreference("colored_notification");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            coloredNotification.setEnabled(PreferenceUtil.classicNotification());
+            coloredNotification.setEnabled(PreferenceUtil.isClassicNotification());
         } else {
-            coloredNotification.setChecked(PreferenceUtil.coloredNotification());
+            coloredNotification.setChecked(PreferenceUtil.isColoredNotification());
             coloredNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 // Save preference
                 PreferenceUtil.setColoredNotification((Boolean) newValue);

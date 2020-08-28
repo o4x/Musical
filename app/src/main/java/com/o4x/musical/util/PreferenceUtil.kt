@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import androidx.annotation.StyleRes
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.o4x.musical.extensions.getStringOrDefault
 import com.google.gson.Gson
@@ -197,28 +198,18 @@ object PreferenceUtil {
         }
 
     @JvmStatic
-    fun coloredNotification(): Boolean {
-        return sharedPreferences.getBoolean(COLORED_NOTIFICATION, true)
-    }
+    var isClassicNotification
+        get() = sharedPreferences.getBoolean(CLASSIC_NOTIFICATION, false)
+        set(value) = sharedPreferences.edit { putBoolean(CLASSIC_NOTIFICATION, value) }
 
     @JvmStatic
-    fun classicNotification(): Boolean {
-        return sharedPreferences.getBoolean(CLASSIC_NOTIFICATION, false)
-    }
-
-    @JvmStatic
-    fun setColoredNotification(value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(COLORED_NOTIFICATION, value)
-        editor.apply()
-    }
-
-    @JvmStatic
-    fun setClassicNotification(value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(CLASSIC_NOTIFICATION, value)
-        editor.apply()
-    }
+    var isColoredNotification
+        get() = sharedPreferences.getBoolean(
+            COLORED_NOTIFICATION, true
+        )
+        set(value) = sharedPreferences.edit {
+            putBoolean(COLORED_NOTIFICATION, value)
+        }
 
     @JvmStatic
     fun setColoredAppShortcuts(value: Boolean) {
