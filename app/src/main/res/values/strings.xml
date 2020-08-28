@@ -347,4 +347,16 @@
     <string name="others">Other</string>
     <string name="about_settings_summary">Team, social links</string>
     <string name="pref_title_toggle_carousel_effect">Carousel effect</string>
+    <string name="pref_header_advanced">Advanced</string>
+    <string name="pref_header_blacklist">Blacklist</string>
+    <string name="pref_filter_song_summary"><![CDATA[<string name=\"pref_filter_song_summary\">Filter songs by length</string>]]></string>
+    <string name="pref_filter_song_title">Filter song duration</string>
+    <string name="pref_keep_pause_on_zero_volume_summary">Pauses the song when the volume decreases to zero and starts playing back when the volume level rises. Also works outside the app</string>
+    <string name="pref_keep_pause_on_zero_volume_title">Pause on zero</string>
+    <string name="pref_keep_screen_on_summary">Keep in mind that enabling this feature may affect battery life</string>
+    <string name="pref_keep_screen_on_title">Keep the screen on</string>
+    <string name="pref_dialog_corner_summary">Adjust the bottom sheet dialog corners</string>
+    <string name="pref_dialog_corner_title">Dialog corner</string>
+    <string name="pref_language_name">Select language</string>
+    <string name="pref_title_blacklist">Blacklist</string>
 </resources>
