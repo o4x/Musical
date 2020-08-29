@@ -42,28 +42,6 @@ import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.ViewUtil
 
-class AlbumCoverStylePreference @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = -1,
-    defStyleRes: Int = -1
-) : ATEDialogPreference(context, attrs, defStyleAttr, defStyleRes) {
-
-    private val mLayoutRes = R.layout.preference_dialog_now_playing_screen
-
-    override fun getDialogLayoutResource(): Int {
-        return mLayoutRes
-    }
-
-    init {
-        icon?.colorFilter =
-            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                context.colorControlNormal(),
-                SRC_IN
-            )
-    }
-}
-
 class AlbumCoverStylePreferenceDialog : DialogFragment(),
     ViewPager.OnPageChangeListener {
 

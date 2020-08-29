@@ -35,13 +35,13 @@ public class PlayerActivity extends AbsMusicServiceActivity implements CardPlaye
 
         currentNowPlayingScreen = PreferenceUtil.getNowPlayingScreen();
         switch (currentNowPlayingScreen) {
-            case FULL:
+            case Full:
                 playerFragment = new FullPlayerFragment();
                 break;
-            case FLAT:
+            case Flat:
                 playerFragment = new FlatPlayerFragment();
                 break;
-            case CARD:
+            case Card:
             default:
                 playerFragment = new CardPlayerFragment();
                 break;
