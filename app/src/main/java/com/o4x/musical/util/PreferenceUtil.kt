@@ -113,6 +113,40 @@ object PreferenceUtil {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
     }
 
+
+    @JvmStatic
+    val defaultCategories = listOf(
+        CategoryInfo(CategoryInfo.Category.SONGS, true),
+        CategoryInfo(CategoryInfo.Category.ALBUMS, true),
+        CategoryInfo(CategoryInfo.Category.ARTISTS, true),
+        CategoryInfo(CategoryInfo.Category.GENRES, true),
+        CategoryInfo(CategoryInfo.Category.PLAYLISTS, true)
+    )
+
+    @JvmStatic
+    var libraryCategory: List<CategoryInfo>
+        get() {
+            val gson = Gson()
+            val collectionType = object : TypeToken<List<CategoryInfo>>() {}.type
+
+            val data = sharedPreferences.getStringOrDefault(
+                LIBRARY_CATEGORIES,
+                gson.toJson(this.defaultCategories, collectionType)
+            )
+            return try {
+                Gson().fromJson(data, collectionType)
+            } catch (e: JsonSyntaxException) {
+                e.printStackTrace()
+                return this.defaultCategories
+            }
+        }
+        set(value) {
+            val collectionType = object : TypeToken<List<CategoryInfo?>?>() {}.type
+            sharedPreferences.edit {
+                putString(LIBRARY_CATEGORIES, Gson().toJson(value, collectionType))
+            }
+        }
+
     @JvmStatic
     @get:StyleRes
     val generalTheme: Int
@@ -566,48 +600,6 @@ object PreferenceUtil {
         get() = sharedPreferences.getBoolean(
             BLACK_THEME, false
         )
-
-    @JvmStatic
-    var libraryCategoryInfos: List<CategoryInfo?>?
-        get() {
-            val data =
-                sharedPreferences.getString(LIBRARY_CATEGORIES, null)
-            if (data != null) {
-                val gson = Gson()
-                val collectionType =
-                    object : TypeToken<List<CategoryInfo?>?>() {}.type
-                try {
-                    return gson.fromJson<List<CategoryInfo>>(data, collectionType)
-                } catch (e: JsonSyntaxException) {
-                    e.printStackTrace()
-                }
-            }
-            return defaultLibraryCategoryInfos
-        }
-        set(categories) {
-            val gson = Gson()
-            val collectionType =
-                object : TypeToken<List<CategoryInfo?>?>() {}.type
-            val editor = sharedPreferences.edit()
-            editor.putString(
-                LIBRARY_CATEGORIES,
-                gson.toJson(categories, collectionType)
-            )
-            editor.apply()
-        }
-
-    @JvmStatic
-    val defaultLibraryCategoryInfos: List<CategoryInfo>
-        get() {
-            val defaultCategoryInfos: MutableList<CategoryInfo> =
-                ArrayList(5)
-            defaultCategoryInfos.add(CategoryInfo(CategoryInfo.Category.SONGS, true))
-            defaultCategoryInfos.add(CategoryInfo(CategoryInfo.Category.ALBUMS, true))
-            defaultCategoryInfos.add(CategoryInfo(CategoryInfo.Category.ARTISTS, true))
-            defaultCategoryInfos.add(CategoryInfo(CategoryInfo.Category.GENRES, true))
-            defaultCategoryInfos.add(CategoryInfo(CategoryInfo.Category.PLAYLISTS, true))
-            return defaultCategoryInfos
-        }
 
 
     @JvmStatic

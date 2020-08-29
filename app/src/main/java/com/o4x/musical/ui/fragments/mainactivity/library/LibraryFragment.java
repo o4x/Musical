@@ -101,7 +101,7 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         if (PreferenceUtil.LIBRARY_CATEGORIES.equals(key)) {
             Fragment current = getCurrentFragment();
-            pagerAdapter.setCategoryInfos(PreferenceUtil.getLibraryCategoryInfos());
+            pagerAdapter.setCategoryInfos(PreferenceUtil.getLibraryCategory());
             pager.setOffscreenPageLimit(pagerAdapter.getCount() - 1);
             int position = pagerAdapter.getItemPosition(current);
             if (position < 0) position = 0;
