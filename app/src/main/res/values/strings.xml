@@ -399,4 +399,11 @@
     <string name="plain">Plain</string>
     <string name="simple">Simple</string>
     <string name="tiny">Tiny</string>
+    <string name="pref_summary_toggle_headset">Start playing immediately after headphones are connected</string>
+    <string name="pref_title_toggle_toggle_headset">Auto-play</string>
+    <string name="pref_summary_toggle_shuffle">Shuffle mode will turn off when playing a new list of songs</string>
+    <string name="pref_title_toggle_toggle_shuffle">Shuffle mode</string>
+    <string name="pref_summary_bluetooth_playback">Start playing as soon as connected to bluetooth device</string>
+    <string name="pref_title_bluetooth_playback">Bluetooth playback</string>
+    <string name="done">Done</string>
 </resources>
