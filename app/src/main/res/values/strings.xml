@@ -406,4 +406,7 @@
     <string name="pref_summary_bluetooth_playback">Start playing as soon as connected to bluetooth device</string>
     <string name="pref_title_bluetooth_playback">Bluetooth playback</string>
     <string name="done">Done</string>
+    <string name="pref_title_auto_download_artist_images">Auto-download artist images</string>
+    <string name="pref_summary_ignore_media_store_artwork">Can increase the album cover quality, but causes slower image loading times. Only enable this if you have problems with low resolution artworks</string>
+
 </resources>
