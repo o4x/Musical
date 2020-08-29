@@ -246,6 +246,6 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
     }
 
     private void updateNowPlayingScreenSummary() {
-        findPreference("now_playing_screen_id").setSummary(PreferenceUtil.getNowPlayingScreen().titleRes);
+        findPreference("now_playing_screen_id").setSummary(PreferenceUtil.getNowPlayingScreen().getTitleRes());
     }
 }

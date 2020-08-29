@@ -197,7 +197,7 @@ object PreferenceUtil {
             for (nowPlayingScreen in NowPlayingScreen.values()) {
                 if (nowPlayingScreen.id == id) return nowPlayingScreen
             }
-            return NowPlayingScreen.CARD
+            return NowPlayingScreen.Card
         }
         set(nowPlayingScreen) {
             val editor = sharedPreferences.edit()
