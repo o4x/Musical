@@ -408,5 +408,31 @@
     <string name="done">Done</string>
     <string name="pref_title_auto_download_artist_images">Auto-download artist images</string>
     <string name="pref_summary_ignore_media_store_artwork">Can increase the album cover quality, but causes slower image loading times. Only enable this if you have problems with low resolution artworks</string>
+    <string name="changelog_summary">Changelog maintained on the Telegram channel</string>
+    <string name="pref_summary_open_source_licences">License details for open source software</string>
+    <string name="pref_title_open_source_licences">Open source licences</string>
+    <string name="made_with_love">Made with ❤️ in India</string>
+    <string name="credit_title">"Members and contributors "</string>
+    <string name="git_hub_summary">Fork the project on GitHub</string>
+    <string name="translate_community">Help us translate the app to your language</string>
+    <string name="rate_app">Rate the app</string>
+    <string name="bug_report_summary">An unexpected error occurred. Sorry you found this bug, if it keeps crashing \"Clear app data\" or send an Email </string>
+    <string name="report_bug">Report bug</string>
+    <string name="share_summary">Share the app with your friends and family</string>
+    <string name="help_summary">Need more help?</string>
+    <string name="faq">FAQ</string>
+    <string name="social">Social</string>
+    <string name="pinterest_page_summary">Follow Pinterest page for Retro Music design inspiration</string>
+    <string name="pinterest_page">Pinterest</string>
+    <string name="instagram_page_summary">Share your Retro Music setup to showcase on Instagram</string>
+    <string name="instagram_page">Instagram</string>
+    <string name="twitter_page_summary">Share your design with Retro Music</string>
+    <string name="twitter_page">Twitter</string>
+    <string name="telegram_group_summary">Join the Telegram group to discuss bugs, make suggestions, show off and more</string>
+    <string name="telegram_group">Telegram</string>
+    <string name="share_app">Share app</string>
+    <string name="app_share">Hey check out this cool music player at: https://play.google.com/store/apps/details?id=%s</string>
+    <string name="donation_header">Buy me a:</string>
+    <string name="restored_previous_purchases">Restored previous purchases.</string>
 
 </resources>
