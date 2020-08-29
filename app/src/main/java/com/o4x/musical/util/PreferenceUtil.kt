@@ -69,11 +69,13 @@ object PreferenceUtil {
     const val CAROUSEL_EFFECT = "carousel_effect"
     const val DESATURATED_COLOR = "desaturated_color"
     const val BLACK_THEME = "black_theme"
+    const val KEEP_SCREEN_ON = "keep_screen_on"
+    const val LANGUAGE_NAME = "language_name"
     private const val REMEMBER_SHUFFLE = "remember_shuffle"
 
     @JvmStatic
     fun isAllowedToDownloadMetadata(context: Context): Boolean {
-        return when (autoDownloadImagesPolicy()) {
+        return when (autoDownloadImagesPolicy) {
             "always" -> true
             "only_wifi" -> {
                 val connectivityManager =
@@ -132,6 +134,10 @@ object PreferenceUtil {
     fun rememberLastTab(): Boolean {
         return sharedPreferences.getBoolean(REMEMBER_LAST_TAB, true)
     }
+
+    val isScreenOnEnabled get() = sharedPreferences.getBoolean(KEEP_SCREEN_ON, false)
+
+    val languageCode get() = sharedPreferences.getString(LANGUAGE_NAME, "auto")
 
     @JvmStatic
     var lastPage: Int
@@ -266,6 +272,12 @@ object PreferenceUtil {
         get() = sharedPreferences.getString(
             ARTIST_ALBUM_SORT_ORDER,
             SortOrder.ArtistAlbumSortOrder.ALBUM_YEAR
+        )
+
+    val autoDownloadImagesPolicy
+        get() = sharedPreferences.getStringOrDefault(
+            AUTO_DOWNLOAD_IMAGES_POLICY,
+            "only_wifi"
         )
 
     @JvmStatic
@@ -514,14 +526,6 @@ object PreferenceUtil {
     @JvmStatic
     fun rememberShuffle(): Boolean {
         return sharedPreferences.getBoolean(REMEMBER_SHUFFLE, true)
-    }
-
-    @JvmStatic
-    fun autoDownloadImagesPolicy(): String? {
-        return sharedPreferences.getString(
-            AUTO_DOWNLOAD_IMAGES_POLICY,
-            "only_wifi"
-        )
     }
 
     @JvmStatic

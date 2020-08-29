@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -214,7 +213,7 @@ public abstract class AbsMusicServiceActivity extends AbsBaseActivity implements
 
     @Nullable
     @Override
-    protected String[] getPermissionsToRequest() {
+    public String[] getPermissionsToRequest() {
         return new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     }
 }

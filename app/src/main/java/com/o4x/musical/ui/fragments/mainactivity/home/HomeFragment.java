@@ -321,7 +321,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
                     }
                     if (scrollY > headerHeight) {
                         if (!isStatusFlat.get()) {
-                            activity.setStatusBarColorAuto();
+                            activity.setStatusBarColorAutoWithAnim();
                             isStatusFlat.set(true);
                         }
                         if (scrollY > oldScrollY) {
@@ -342,7 +342,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
                     } else {
                         if (isStatusFlat.get()) {
                             setAppbarColor(transparentColor);
-                            activity.setStatusBarColor(transparentColor);
+                            activity.setStatusBarColorWithAnim(transparentColor);
                             appbar.setElevation(0);
                             isStatusFlat.set(false);
                             isAppbarFlat.set(false);
