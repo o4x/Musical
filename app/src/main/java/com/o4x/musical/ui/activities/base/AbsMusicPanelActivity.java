@@ -76,7 +76,7 @@ public abstract class AbsMusicPanelActivity extends AbsMusicServiceActivity {
     }
 
     @Override
-    protected View getSnackBarContainer() {
+    public View getSnackBarContainer() {
         return findViewById(R.id.content_container);
     }
 

@@ -232,7 +232,7 @@ public class CardPlayerFragment extends AbsPlayerFragment {
 
             AnimatorSet animatorSet = createDefaultColorChangeAnimatorSet(newColor);
             animatorSet.play(ViewUtil.createBackgroundColorTransition(fragment.toolbar, fragment.lastColor, newColor))
-                    .with(ViewUtil.createBackgroundColorTransition(fragment.getView().findViewById(R.id.status_bar), ColorUtil.darkenColor(fragment.lastColor), ColorUtil.darkenColor(newColor)));
+                    .with(ViewUtil.createBackgroundColorTransition(null /* statusBar */, ColorUtil.darkenColor(fragment.lastColor), ColorUtil.darkenColor(newColor)));
             animatorSet.start();
         }
     }
