@@ -123,6 +123,7 @@ dependencies {
     }
 
     implementation 'com.jakewharton:butterknife:10.2.1'
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
