@@ -211,6 +211,7 @@ public final class TintHelper {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     public static void setTint(@NonNull EditText editText, @ColorInt int color, boolean useDarker) {
         final ColorStateList editTextColorStateList = new ColorStateList(new int[][]{
                 new int[]{-android.R.attr.state_enabled},

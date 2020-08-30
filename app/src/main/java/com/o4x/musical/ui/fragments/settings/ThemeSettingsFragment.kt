@@ -29,6 +29,7 @@ import com.o4x.musical.R
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.PreferenceUtil.DESATURATED_COLOR
+import kotlinx.android.synthetic.main.fragment_equalizer.*
 
 /**
  * @author Hemanth S (h4h13).
@@ -53,19 +54,6 @@ class ThemeSettingsFragment : AbsSettingsFragment() {
             }
         }
 
-        val accentColorPref: ATEColorPreference = findPreference("accent_color")!!
-        val accentColor = ThemeStore.accentColor(requireContext())
-        accentColorPref.setColor(accentColor, ColorUtil.darkenColor(accentColor))
-
-        accentColorPref.setOnPreferenceClickListener {
-            ColorChooserDialog.Builder(requireContext(), R.string.accent_color)
-                .accentMode(true)
-                .allowUserColorInput(true)
-                .allowUserColorInputAlpha(false)
-                .preselect(accentColor)
-                .show(requireActivity())
-            return@setOnPreferenceClickListener true
-        }
         val blackTheme: ATESwitchPreference? = findPreference("black_theme")
         blackTheme?.setOnPreferenceChangeListener { _, _ ->
             if (!App.isProVersion()) {
@@ -79,6 +67,20 @@ class ThemeSettingsFragment : AbsSettingsFragment() {
             }
             requireActivity().recreate()
             true
+        }
+
+        val accentColorPref: ATEColorPreference = findPreference("accent_color")!!
+        val accentColor = ThemeStore.accentColor(requireContext())
+        accentColorPref.setColor(accentColor, ColorUtil.darkenColor(accentColor))
+
+        accentColorPref.setOnPreferenceClickListener {
+            ColorChooserDialog.Builder(requireContext(), R.string.accent_color)
+                .accentMode(true)
+                .allowUserColorInput(true)
+                .allowUserColorInputAlpha(false)
+                .preselect(accentColor)
+                .show(requireActivity())
+            return@setOnPreferenceClickListener true
         }
 
         val desaturatedColor: ATESwitchPreference? = findPreference(DESATURATED_COLOR)
