@@ -31,8 +31,9 @@
         android:layout_marginStart="8dp"
         android:padding="@dimen/adaptive_icon_padding"
         app:iconBackgroundColor="@color/md_blue_A400"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/title"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_theme_palette" />
 
     <com.google.android.material.textview.MaterialTextView
