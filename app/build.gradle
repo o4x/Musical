@@ -3,6 +3,7 @@ import javax.annotation.Nullable
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 static def gitBranch() {
     def branch = 'GitHub'
@@ -34,6 +35,7 @@ def getProperties(String fileName) {
 static def getProperty(@Nullable Properties properties, String name) {
     return properties.getProperty(name) ?: "$name missing"
 }
+
 
 android {
     compileSdkVersion 30
@@ -88,6 +90,13 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+kapt {
+    generateStubs = true
 }
 
 dependencies {
@@ -122,9 +131,8 @@ dependencies {
         transitive = true
     }
 
-    implementation 'com.jakewharton:butterknife:10.2.1'
+
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
@@ -169,4 +177,9 @@ dependencies {
     def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    def butter_version = "10.2.3"
+    implementation "com.jakewharton:butterknife:$butter_version"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butter_version"
+    kapt "com.jakewharton:butterknife-compiler:$butter_version"
 }
