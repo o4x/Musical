@@ -46,7 +46,7 @@ class ColorIconsImageView @JvmOverloads constructor(
 
     fun setIconBackgroundColor(color: Int) {
         background = ContextCompat.getDrawable(context, R.drawable.color_circle_gradient)
-        if (ATHUtil.isWindowBackgroundDark(context) && PreferenceUtil.isDesaturatedColor) {
+        if (ATHUtil.isWindowBackgroundDark(context)) {
             val desaturatedColor = PhonographColorUtil.desaturateColor(color, 0.4f)
             backgroundTintList = ColorStateList.valueOf(desaturatedColor)
             imageTintList =

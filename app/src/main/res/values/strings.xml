@@ -121,7 +121,6 @@
     <string name="pref_header_playlists">Playlists</string>
     <string name="pref_header_notification">Notification</string>
     <string name="pref_title_navigation_bar">Colored navigation bar</string>
-    <string name="pref_title_app_shortcuts">Colored app shortcuts</string>
     <string name="pref_title_album_art_on_lockscreen">Show album cover</string>
     <string name="pref_title_auto_download_metadata">Auto download metadata</string>
     <string name="pref_title_blurred_album_art">Blur album cover</string>
@@ -163,7 +162,6 @@
     <string name="pref_summary_colored_notification">"Colors the notification in the album cover\u2019s vibrant color."</string>
     <string name="pref_summary_gapless_playback">"Can cause playback issues on some devices."</string>
     <string name="pref_summary_colored_navigation_bar">Colors the navigation bar in the primary color.</string>
-    <string name="pref_summary_colored_app_shortcuts">Colors the app shortcuts in the primary color.</string>
     <string name="pref_summary_audio_ducking">Notifications, navigation etc.</string>
     <string name="pref_summary_synchronized_lyrics_show">Currently only synchronized lyrics in LRC format are supported. Either embedded or as a separate file.</string>
     <string name="pref_summary_remember_last_tab">Go to the last opened tab on launch</string>
@@ -370,12 +368,6 @@
     <string name="pref_title_lock_screen">Fullscreen controls</string>
     <string name="pref_header_general">Theme</string>
     <string name="colors">Colors</string>
-    <string name="pref_summary_desaturated_color">As per Material Design guide lines in dark mode colors should be desaturated</string>
-    <string name="pref_title_desaturated_color">Desaturated color</string>
-    <string name="pref_summary_colored_app">The background and control button colors change according to the album art from the now playing screen</string>
-    <string name="pref_title_colored_app">Adaptive color</string>
-    <string name="pref_summary_extra_song_info">Show extra Song information, such as file format, bitrate and frequency</string>
-    <string name="pref_title_extra_song_info">Song info</string>
     <string name="pref_header_album">Album style</string>
     <string name="pref_title_album_cover_transform">Album cover skip</string>
     <string name="pref_summary_carousel_effect">Carousel effect for the album art in the now playing screen. Note that Card and Blur Card themes won\'t work</string>
