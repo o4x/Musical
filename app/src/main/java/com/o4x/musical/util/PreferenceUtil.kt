@@ -48,7 +48,6 @@ object PreferenceUtil {
     const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
     const val COLORED_NOTIFICATION = "colored_notification"
     const val CLASSIC_NOTIFICATION = "classic_notification"
-    const val COLORED_APP_SHORTCUTS = "colored_app_shortcuts"
     const val AUDIO_DUCKING = "audio_ducking"
     const val GAPLESS_PLAYBACK = "gapless_playback"
     const val LAST_ADDED_CUTOFF = "last_added_interval"
@@ -67,7 +66,6 @@ object PreferenceUtil {
     const val ALBUM_COVER_STYLE = "album_cover_style_id"
     const val CIRCULAR_ALBUM_ART = "circular_album_art"
     const val CAROUSEL_EFFECT = "carousel_effect"
-    const val DESATURATED_COLOR = "desaturated_color"
     const val BLACK_THEME = "black_theme"
     const val KEEP_SCREEN_ON = "keep_screen_on"
     const val LANGUAGE_NAME = "language_name"
@@ -211,17 +209,6 @@ object PreferenceUtil {
             editor.apply()
         }
 
-    @JvmStatic
-    var isDesaturatedColor
-        get() = sharedPreferences.getBoolean(
-            DESATURATED_COLOR, false
-        )
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean(DESATURATED_COLOR, value)
-            editor.apply()
-        }
-
 
     @JvmStatic
     @set:SuppressLint("CommitPrefEdits")
@@ -251,15 +238,6 @@ object PreferenceUtil {
         )
         set(value) = sharedPreferences.edit {
             putBoolean(COLORED_NOTIFICATION, value)
-        }
-
-    @JvmStatic
-    var isColoredAppShortcuts
-        get() = sharedPreferences.getBoolean(
-            COLORED_APP_SHORTCUTS, true
-        )
-        set(value) = sharedPreferences.edit {
-            putBoolean(COLORED_APP_SHORTCUTS, value)
         }
 
     @JvmStatic

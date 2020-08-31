@@ -48,8 +48,6 @@ abstract class AbsSettingsFragment : ATEPreferenceFragmentCompat() {
         }
     }
 
-    abstract fun invalidateSettings()
-
     protected fun setSummary(preference: Preference?) {
         preference?.let {
             setSummary(
@@ -91,4 +89,7 @@ abstract class AbsSettingsFragment : ATEPreferenceFragmentCompat() {
             else -> super.onDisplayPreferenceDialog(preference)
         }
     }
+
+
+    abstract fun invalidateSettings()
 }

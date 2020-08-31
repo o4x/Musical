@@ -36,25 +36,5 @@
             android:title="@string/accent_color"
             app:icon="@drawable/ic_colorize" />
 
-        <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
-            android:defaultValue="false"
-            android:key="desaturated_color"
-            android:layout="@layout/list_item_view_switch"
-            android:summary="@string/pref_summary_desaturated_color"
-            android:title="@string/pref_title_desaturated_color" />
-
-        <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
-            android:defaultValue="false"
-            android:key="adaptive_color_app"
-            android:layout="@layout/list_item_view_switch"
-            android:summary="@string/pref_summary_colored_app"
-            android:title="@string/pref_title_colored_app" />
-
-        <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
-            android:defaultValue="false"
-            android:key="should_color_app_shortcuts"
-            android:layout="@layout/list_item_view_switch"
-            android:summary="@string/pref_summary_colored_app_shortcuts"
-            android:title="@string/pref_title_app_shortcuts" />
     </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>
 </androidx.preference.PreferenceScreen>

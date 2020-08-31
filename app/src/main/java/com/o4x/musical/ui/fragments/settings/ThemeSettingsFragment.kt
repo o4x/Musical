@@ -29,7 +29,6 @@ import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.util.PreferenceUtil.DESATURATED_COLOR
 import kotlinx.android.synthetic.main.fragment_equalizer.*
 
 /**
@@ -37,6 +36,11 @@ import kotlinx.android.synthetic.main.fragment_equalizer.*
  */
 
 class ThemeSettingsFragment : AbsSettingsFragment() {
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.pref_general)
+    }
+
     override fun invalidateSettings() {
         val generalTheme: Preference? = findPreference("general_theme")
         generalTheme?.let {
@@ -84,34 +88,5 @@ class ThemeSettingsFragment : AbsSettingsFragment() {
                 .show(requireActivity())
             return@setOnPreferenceClickListener true
         }
-
-        val desaturatedColor: ATESwitchPreference? = findPreference(DESATURATED_COLOR)
-        desaturatedColor?.setOnPreferenceChangeListener { _, value ->
-            val desaturated = value as Boolean
-            ThemeStore.prefs(requireContext())
-                .edit()
-                .putBoolean("desaturated_color", desaturated)
-                .apply()
-            PreferenceUtil.isDesaturatedColor = desaturated
-            requireActivity().recreate()
-            true
-        }
-
-
-        val colorAppShortcuts: TwoStatePreference = findPreference("should_color_app_shortcuts")!!
-        if (!VersionUtils.hasNougatMR()) {
-            colorAppShortcuts.isVisible = false
-        } else {
-            colorAppShortcuts.isChecked = PreferenceUtil.isColoredAppShortcuts
-            colorAppShortcuts.setOnPreferenceChangeListener { _, newValue ->
-                PreferenceUtil.isColoredAppShortcuts = newValue as Boolean
-                DynamicShortcutManager(requireContext()).updateDynamicShortcuts()
-                true
-            }
-        }
-    }
-
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.pref_general)
     }
 }

@@ -14,7 +14,6 @@ import androidx.core.graphics.drawable.IconCompat;
 import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
 import com.o4x.musical.util.ImageUtil;
-import com.o4x.musical.util.PreferenceUtil;
 
 /**
  * @author Adrian Campos
@@ -23,19 +22,7 @@ import com.o4x.musical.util.PreferenceUtil;
 public final class AppShortcutIconGenerator {
 
     public static Icon generateThemedIcon(Context context, int iconId) {
-        if (PreferenceUtil.isColoredAppShortcuts()) {
-            return generateUserThemedIcon(context, iconId).toIcon();
-        } else {
-            return generateDefaultThemedIcon(context, iconId).toIcon();
-        }
-    }
-
-    private static IconCompat generateDefaultThemedIcon(Context context, int iconId) {
-        // Return an Icon of iconId with default colors
-        return generateThemedIcon(context, iconId,
-                context.getColor(R.color.app_shortcut_default_foreground),
-                context.getColor(R.color.app_shortcut_default_background)
-        );
+        return generateUserThemedIcon(context, iconId).toIcon();
     }
 
     private static IconCompat generateUserThemedIcon(Context context, int iconId) {
