@@ -16,8 +16,11 @@ package com.o4x.musical.ui.fragments.settings
 
 import android.os.Build
 import android.os.Bundle
+import androidx.core.graphics.toColor
 import androidx.preference.Preference
 import androidx.preference.TwoStatePreference
+import code.name.monkey.appthemehelper.PRIMARY_COLORS
+import code.name.monkey.appthemehelper.PRIMARY_COLORS_SUB
 import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEColorPreference
 import code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
@@ -75,6 +78,7 @@ class ThemeSettingsFragment : AbsSettingsFragment() {
 
         accentColorPref.setOnPreferenceClickListener {
             ColorChooserDialog.Builder(requireContext(), R.string.accent_color)
+                .customColors(PRIMARY_COLORS.copyOfRange(0, 5), PRIMARY_COLORS_SUB)
                 .accentMode(true)
                 .allowUserColorInput(true)
                 .allowUserColorInputAlpha(false)
