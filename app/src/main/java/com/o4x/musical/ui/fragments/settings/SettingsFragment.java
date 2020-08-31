@@ -62,7 +62,6 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.pref_library);
-        addPreferencesFromResource(R.xml.pref_colors);
         addPreferencesFromResource(R.xml.pref_notification);
         addPreferencesFromResource(R.xml.pref_now_playing_screen);
         addPreferencesFromResource(R.xml.pref_images);
@@ -191,22 +190,6 @@ public class SettingsFragment extends ATEPreferenceFragmentCompat implements Sha
             coloredNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 // Save preference
                 PreferenceUtil.setColoredNotification((Boolean) newValue);
-                return true;
-            });
-        }
-
-        final TwoStatePreference colorAppShortcuts = (TwoStatePreference) findPreference("should_color_app_shortcuts");
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) {
-            colorAppShortcuts.setVisible(false);
-        } else {
-            colorAppShortcuts.setChecked(PreferenceUtil.isColoredAppShortcuts());
-            colorAppShortcuts.setOnPreferenceChangeListener((preference, newValue) -> {
-                // Save preference
-                PreferenceUtil.setColoredAppShortcuts((Boolean) newValue);
-
-                // Update app shortcuts
-                new DynamicShortcutManager(getActivity()).updateDynamicShortcuts();
-
                 return true;
             });
         }
