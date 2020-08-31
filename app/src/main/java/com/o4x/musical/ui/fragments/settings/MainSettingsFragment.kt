@@ -14,66 +14,252 @@
 
 package com.o4x.musical.ui.fragments.settings
 
-import android.content.res.ColorStateList
+import android.content.Intent
+import android.content.SharedPreferences
+import android.media.audiofx.AudioEffect
+import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.preference.Preference
+import androidx.preference.TwoStatePreference
+import code.name.monkey.appthemehelper.ColorPalette
 import code.name.monkey.appthemehelper.ThemeStore
-import com.o4x.musical.extensions.hide
-import com.o4x.musical.extensions.show
-import com.o4x.musical.util.NavigationUtil
+import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEColorPreference
+import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
+import code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
+import code.name.monkey.appthemehelper.util.ColorUtil
+import com.afollestad.materialdialogs.color.ColorChooserDialog
 import com.o4x.musical.App
 import com.o4x.musical.R
-import kotlinx.android.synthetic.main.fragment_main_settings.*
+import com.o4x.musical.appshortcuts.DynamicShortcutManager
+import com.o4x.musical.util.NavigationUtil
+import com.o4x.musical.util.PreferenceUtil
 
-class MainSettingsFragment : Fragment(), View.OnClickListener {
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.generalSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_themeSettingsFragment)
-            R.id.audioSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_audioSettings)
-            R.id.personalizeSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_personalizeSettingsFragment)
-            R.id.imageSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_imageSettingFragment)
-            R.id.notificationSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_notificationSettingsFragment)
-            R.id.otherSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_otherSettingsFragment)
-            R.id.aboutSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_aboutActivity)
-            R.id.nowPlayingSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_nowPlayingSettingsFragment)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_main_settings, container, false)
-    }
+class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        PreferenceUtil.registerOnSharedPreferenceChangedListener(this)
+    }
 
-        generalSettings.setOnClickListener(this)
-        audioSettings.setOnClickListener(this)
-        nowPlayingSettings.setOnClickListener(this)
-        personalizeSettings.setOnClickListener(this)
-        imageSettings.setOnClickListener(this)
-        notificationSettings.setOnClickListener(this)
-        otherSettings.setOnClickListener(this)
-        aboutSettings.setOnClickListener(this)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        PreferenceUtil.unregisterOnSharedPreferenceChangedListener(this)
+    }
 
-        buyProContainer.apply {
-            if (!App.isProVersion()) show() else hide()
-            setOnClickListener {
-                NavigationUtil.goToProVersion(requireContext())
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        // THEME PREFS //
+        addPreferencesFromResource(R.xml.pref_theme)
+        // NOW PLAYING SCREEN PREFS //
+        addPreferencesFromResource(R.xml.pref_now_playing_screen)
+        // AUDIO PREFS //
+        addPreferencesFromResource(R.xml.pref_audio)
+        // UI PREFS //
+        addPreferencesFromResource(R.xml.pref_ui)
+        // IMAGE PREFS //
+        addPreferencesFromResource(R.xml.pref_images)
+        // NOTIFICATION PREFS //
+        addPreferencesFromResource(R.xml.pref_notification)
+        // ADVANCED PREFS //
+        addPreferencesFromResource(R.xml.pref_advanced)
+    }
+
+    override fun invalidateSettings() {
+          ////////////////////
+         // THEME SETTINGS //
+        ////////////////////
+        val generalTheme: Preference? = findPreference("general_theme")
+        generalTheme?.let {
+            setSummary(it)
+            it.setOnPreferenceChangeListener { _, newValue ->
+                val theme = newValue as String
+                setSummary(it, newValue)
+                ThemeStore.markChanged(requireContext())
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    requireActivity().setTheme(PreferenceUtil.themeResFromPrefValue(theme))
+                    DynamicShortcutManager(requireContext()).updateDynamicShortcuts()
+                }
+                requireActivity().recreate()
+                true
             }
         }
-        buyPremium.setOnClickListener {
-            NavigationUtil.goToProVersion(requireContext())
+
+        val blackTheme: ATESwitchPreference? = findPreference("black_theme")
+        blackTheme?.setOnPreferenceChangeListener { _, _ ->
+            if (!App.isProVersion()) {
+                showProToastAndNavigate("Just Black theme")
+                return@setOnPreferenceChangeListener false
+            }
+            ThemeStore.markChanged(requireContext())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                requireActivity().setTheme(PreferenceUtil.themeResFromPrefValue("black"))
+                DynamicShortcutManager(requireContext()).updateDynamicShortcuts()
+            }
+            requireActivity().recreate()
+            true
         }
-        ThemeStore.accentColor(requireContext()).let {
-            buyPremium.setTextColor(it)
-            diamondIcon.imageTintList = ColorStateList.valueOf(it)
+
+        val accentColorPref: ATEColorPreference = findPreference("accent_color")!!
+        val accentColor = ThemeStore.accentColor(requireContext())
+        accentColorPref.setColor(accentColor, ColorUtil.darkenColor(accentColor))
+
+        accentColorPref.setOnPreferenceClickListener {
+            ColorChooserDialog.Builder(requireContext(), R.string.accent_color)
+                .customColors(ColorPalette(requireActivity()).materialColorsPrimary, ColorPalette(requireActivity()).materialColors)
+                .accentMode(true)
+                .allowUserColorInput(true)
+                .allowUserColorInputAlpha(false)
+                .preselect(accentColor)
+                .show(requireActivity())
+            return@setOnPreferenceClickListener true
         }
+
+          /////////////////////////////////
+         // NOW PLAYING SCREEN SETTINGS //
+        /////////////////////////////////
+
+        val nowScreenPreference: Preference? = findPreference(PreferenceUtil.NOW_PLAYING_SCREEN_ID)
+        nowScreenPreference?.setSummary(PreferenceUtil.nowPlayingScreen.titleRes)
+
+        val albumCoverPreference: Preference? = findPreference(PreferenceUtil.ALBUM_COVER_STYLE)
+        albumCoverPreference?.setSummary(PreferenceUtil.albumCoverStyle.titleRes)
+
+        val carouselEffect: TwoStatePreference = findPreference("carousel_effect")!!
+        carouselEffect.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue as Boolean && !App.isProVersion()) {
+                showProToastAndNavigate(getString(R.string.pref_title_toggle_carousel_effect))
+                return@setOnPreferenceChangeListener false
+            }
+            return@setOnPreferenceChangeListener true
+        }
+
+        val albumTransformPreference: Preference? = findPreference("album_cover_transform")
+        albumTransformPreference?.setOnPreferenceChangeListener { albumPrefs, newValue ->
+            setSummary(albumPrefs, newValue)
+            true
+        }
+
+          ////////////////////
+         // AUDIO SETTINGS //
+        ////////////////////
+
+        val findPreference: Preference = findPreference("equalizer")!!
+        if (!hasEqualizer()) {
+            findPreference.isEnabled = false
+            findPreference.summary = resources.getString(R.string.no_equalizer)
+        } else {
+            findPreference.isEnabled = true
+        }
+        findPreference.setOnPreferenceClickListener {
+            NavigationUtil.openEqualizer(requireActivity())
+            true
+        }
+
+        val homeArtistStyle: ATEListPreference? = findPreference("home_artist_grid_style")
+        homeArtistStyle?.setOnPreferenceChangeListener { preference, newValue ->
+            setSummary(preference, newValue)
+            true
+        }
+        val tabTextMode: ATEListPreference? = findPreference("tab_text_mode")
+        tabTextMode?.setOnPreferenceChangeListener { prefs, newValue ->
+            setSummary(prefs, newValue)
+            true
+        }
+
+          ////////////////////
+         // IMAGE SETTINGS //
+        ////////////////////
+
+        val autoDownloadImagesPolicy: Preference = findPreference("auto_download_images_policy")!!
+        setSummary(autoDownloadImagesPolicy)
+        autoDownloadImagesPolicy.setOnPreferenceChangeListener { _, o ->
+            setSummary(autoDownloadImagesPolicy, o)
+            true
+        }
+
+          ///////////////////////////
+         // NOTIFICATION SETTINGS //
+        ///////////////////////////
+
+        val classicNotification: TwoStatePreference? = findPreference("classic_notification")
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            classicNotification?.isVisible = false
+        } else {
+            classicNotification?.apply {
+                isChecked = PreferenceUtil.isClassicNotification
+                setOnPreferenceChangeListener { _, newValue ->
+                    // Save preference
+                    PreferenceUtil.isClassicNotification = newValue as Boolean
+                    invalidateSettings()
+                    true
+                }
+            }
+        }
+
+        val coloredNotification: TwoStatePreference? = findPreference("colored_notification")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            coloredNotification?.isEnabled = PreferenceUtil.isClassicNotification
+        } else {
+            coloredNotification?.apply {
+                isChecked = PreferenceUtil.isColoredNotification
+                setOnPreferenceChangeListener { _, newValue ->
+                    PreferenceUtil.isColoredNotification = newValue as Boolean
+                    true
+                }
+            }
+        }
+
+          ///////////////////////
+         // ADVANCED SETTINGS //
+        ///////////////////////
+
+        val preference: Preference? = findPreference("last_added_interval")
+        preference?.setOnPreferenceChangeListener { lastAdded, newValue ->
+            setSummary(lastAdded, newValue)
+            true
+        }
+        val languagePreference: Preference? = findPreference("language_name")
+        languagePreference?.setOnPreferenceChangeListener { prefs, newValue ->
+            setSummary(prefs, newValue)
+            requireActivity().recreate()
+            true
+        }
+    }
+
+    override fun onClick(view: View) {
+//        when (view.id) {
+//            R.id.generalSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_themeSettingsFragment)
+//            R.id.audioSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_audioSettings)
+//            R.id.personalizeSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_personalizeSettingsFragment)
+//            R.id.imageSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_imageSettingFragment)
+//            R.id.notificationSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_notificationSettingsFragment)
+//            R.id.otherSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_otherSettingsFragment)
+//            R.id.aboutSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_aboutActivity)
+//            R.id.nowPlayingSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_nowPlayingSettingsFragment)
+//        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        when (key) {
+            PreferenceUtil.NOW_PLAYING_SCREEN_ID -> invalidateSettings()
+            PreferenceUtil.ALBUM_COVER_STYLE -> invalidateSettings()
+            PreferenceUtil.CIRCULAR_ALBUM_ART, PreferenceUtil.CAROUSEL_EFFECT -> invalidateSettings()
+            PreferenceUtil.CLASSIC_NOTIFICATION -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    findPreference<Preference>("colored_notification")?.isEnabled =
+                        sharedPreferences?.getBoolean(key, false)!!
+                }
+            }
+        }
+    }
+
+
+    private fun hasEqualizer(): Boolean {
+        val effects = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
+
+        val pm = requireActivity().packageManager
+        val ri = pm.resolveActivity(effects, 0)
+        return ri != null
     }
 }
