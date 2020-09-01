@@ -70,6 +70,7 @@
             app:showSeekBarValue="true" />
 
     </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>
+
     <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
         android:defaultValue="auto"
         android:entries="@array/pref_language_names"
@@ -80,4 +81,12 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_language_name"
         app:icon="@drawable/ic_language" />
+
+    <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreference
+        android:key="about"
+        android:layout="@layout/list_item_view"
+        android:title="@string/action_about"
+        android:summary="@string/about_settings_summary"
+        app:icon="@drawable/ic_info_outline" />
+
 </androidx.preference.PreferenceScreen>

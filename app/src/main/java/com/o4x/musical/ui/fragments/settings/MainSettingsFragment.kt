@@ -20,6 +20,7 @@ import android.media.audiofx.AudioEffect
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.TwoStatePreference
 import code.name.monkey.appthemehelper.ColorPalette
@@ -223,6 +224,11 @@ class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, Shared
         languagePreference?.setOnPreferenceChangeListener { prefs, newValue ->
             setSummary(prefs, newValue)
             requireActivity().recreate()
+            true
+        }
+        val aboutPreference: Preference? = findPreference("about")
+        aboutPreference?.setOnPreferenceClickListener {
+            findNavController().navigate(R.id.action_mainSettingsFragment_to_aboutActivity)
             true
         }
     }
