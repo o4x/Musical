@@ -39,7 +39,7 @@ static def getProperty(@Nullable Properties properties, String name) {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.0"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.o4x.musical"
@@ -105,9 +105,9 @@ dependencies {
     implementation project(':appthemehelper')
 
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.core:core:1.3.1'
     implementation 'androidx.fragment:fragment:1.2.5'
     implementation 'androidx.legacy:legacy-support-core-ui:1.0.0'
@@ -155,7 +155,7 @@ dependencies {
 
     implementation 'com.github.woxingxiao:BounceScrollView:1.5-androidx'
 
-    def koin_version = "2.1.5"
+    def koin_version = "2.1.6"
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-core-ext:$koin_version"
     implementation "org.koin:koin-androidx-scope:$koin_version"
@@ -172,7 +172,7 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     implementation 'com.diogobernardino:williamchart:2.2'
-    implementation 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.0'
+    implementation 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
 
     def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -182,4 +182,13 @@ dependencies {
     implementation "com.jakewharton:butterknife:$butter_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butter_version"
     kapt "com.jakewharton:butterknife-compiler:$butter_version"
+
+    implementation 'com.bluelinelabs:conductor:3.0.0-rc5'
+
+    def conductor_version = "3.0.0-rc5"
+    implementation "com.bluelinelabs:conductor-androidx-transition:$conductor_version"
+    implementation "com.bluelinelabs:conductor-viewpager:$conductor_version"
+    implementation "com.bluelinelabs:conductor-rxlifecycle2:$conductor_version"
+    implementation "com.bluelinelabs:conductor-autodispose:$conductor_version"
+    implementation "com.bluelinelabs:conductor-archlifecycle:$conductor_version"
 }
