@@ -9,6 +9,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -20,21 +21,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
-import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.util.ATHUtil;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.NavigationViewUtil;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
 import com.o4x.musical.equalizer.EqualizerFragment;
-import com.o4x.musical.ui.dialogs.ChangelogDialog;
-import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SearchQueryHelper;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.loader.ArtistLoader;
 import com.o4x.musical.loader.PlaylistSongLoader;
@@ -42,11 +39,12 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.activities.intro.AppIntroActivity;
+import com.o4x.musical.ui.dialogs.ChangelogDialog;
+import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog;
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment;
 import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.LibraryFragment;
 import com.o4x.musical.ui.fragments.mainactivity.queue.QueueFragment;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.ArrayList;
@@ -54,6 +52,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.util.ATHUtil;
+import code.name.monkey.appthemehelper.util.ColorUtil;
+import code.name.monkey.appthemehelper.util.NavigationViewUtil;
 
 public class MainActivity extends AbsMusicPanelActivity {
 
@@ -183,10 +185,11 @@ public class MainActivity extends AbsMusicPanelActivity {
     }
 
 
+
     private void setUpNavigationView() {
-        int accentColor = ThemeStore.accentColor(this);
-        NavigationViewUtil.setItemIconColors(navigationView, ATHUtil.resolveColor(this, R.attr.iconColor, ThemeStore.textColorSecondary(this)), accentColor);
-        NavigationViewUtil.setItemTextColors(navigationView, ThemeStore.textColorPrimary(this), accentColor);
+        int accentColor = ThemeStore.Companion.accentColor(this);
+        NavigationViewUtil.INSTANCE.setItemIconColors(navigationView, ATHUtil.INSTANCE.resolveColor(this, R.attr.iconColor, ThemeStore.Companion.textColorSecondary(this)), accentColor);
+        NavigationViewUtil.INSTANCE.setItemTextColors(navigationView, ThemeStore.Companion.textColorPrimary(this), accentColor);
 
         StateListDrawable stateListDrawable = (StateListDrawable) navigationView.getItemBackground();
         LayerDrawable layerDrawable = (LayerDrawable) stateListDrawable.getStateDrawable(0);
@@ -194,7 +197,7 @@ public class MainActivity extends AbsMusicPanelActivity {
         GradientDrawable rectangleRadius = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.rectangle_radius);
 
         rectangle.setColor(accentColor);
-        rectangleRadius.setColor(ColorUtil.withAlpha(ThemeStore.textColorSecondary(this), 0.1f));
+        rectangleRadius.setColor(ColorUtil.INSTANCE.withAlpha(ThemeStore.Companion.textColorSecondary(this), 0.1f));
 
         checkSetUpPro();
         navigationView.setNavigationItemSelectedListener(menuItem -> {

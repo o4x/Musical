@@ -7,11 +7,12 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.palette.graphics.Palette;
 
-import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.o4x.musical.R;
 import com.o4x.musical.util.PhonographColorUtil;
+
+import code.name.monkey.appthemehelper.util.ATHUtil;
 
 public abstract class PaletteImageLoadingListener extends SimpleImageLoadingListener {
 
@@ -40,11 +41,11 @@ public abstract class PaletteImageLoadingListener extends SimpleImageLoadingList
     }
 
     protected int getDefaultFooterColor(@NonNull Context context) {
-        return ATHUtil.resolveColor(context, R.attr.defaultFooterColor);
+        return ATHUtil.INSTANCE.resolveColor(context, R.attr.defaultFooterColor);
     }
 
     protected int getAlbumArtistFooterColor(@NonNull Context context) {
-        return ATHUtil.resolveColor(context, R.attr.cardBackgroundColor);
+        return ATHUtil.INSTANCE.resolveColor(context, R.attr.cardBackgroundColor);
     }
 
     public abstract void onColorReady(int color);

@@ -48,7 +48,7 @@
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
             android:textAppearance="@style/TextViewSubtitle1"
-            android:textColor="@color/md_white_1000"
+            android:textColor="@color/white"
             tools:text="@tools:sample/full_names" />
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

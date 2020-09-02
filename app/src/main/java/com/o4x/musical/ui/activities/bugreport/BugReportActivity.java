@@ -8,13 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringDef;
-import androidx.annotation.StringRes;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,9 +16,15 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.Toolbar;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.util.TintHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.o4x.musical.R;
 import com.o4x.musical.misc.DialogAsyncTask;
 import com.o4x.musical.ui.activities.base.AbsThemeActivity;
@@ -46,6 +45,8 @@ import java.lang.annotation.RetentionPolicy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.util.TintHelper;
 
 public class BugReportActivity extends AbsThemeActivity {
 
@@ -119,8 +120,8 @@ public class BugReportActivity extends AbsThemeActivity {
     }
 
     private void initViews() {
-        final int accentColor = ThemeStore.accentColor(this);
-        final int primaryColor = ThemeStore.primaryColor(this);
+        final int accentColor = ThemeStore.Companion.accentColor(this);
+        final int primaryColor = ThemeStore.Companion.primaryColor(this);
         toolbar.setBackgroundColor(primaryColor);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions

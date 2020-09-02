@@ -1,19 +1,21 @@
 package com.o4x.musical.ui.adapter.song;
 
 import android.graphics.Typeface;
+import android.view.View;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
 
-import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 
 import java.util.List;
+
+import code.name.monkey.appthemehelper.ThemeStore;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -32,7 +34,7 @@ public class ShuffleButtonSongAdapter extends AbsOffsetSongAdapter {
     @Override
     public void onBindViewHolder(@NonNull final SongAdapter.ViewHolder holder, int position) {
         if (holder.getItemViewType() == OFFSET_ITEM) {
-            int accentColor = ThemeStore.accentColor(activity);
+            int accentColor = ThemeStore.Companion.accentColor(activity);
             if (holder.title != null) {
                 holder.title.setText(activity.getResources().getString(R.string.action_shuffle_all).toUpperCase());
                 holder.title.setTextColor(accentColor);

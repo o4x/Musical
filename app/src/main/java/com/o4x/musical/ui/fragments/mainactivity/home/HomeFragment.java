@@ -33,11 +33,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
-import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.interfaces.MusicServiceEventListener;
@@ -51,6 +47,7 @@ import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.adapter.home.HomeAdapter;
+import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
@@ -64,6 +61,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.util.ColorUtil;
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 public class HomeFragment extends AbsMainActivityFragment implements MainActivity.MainActivityFragmentCallbacks {
 
@@ -169,7 +169,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private int transparentColor() {
-        return ColorUtil.withAlpha(ThemeStore.primaryColor(activity), 0);
+        return ColorUtil.INSTANCE.withAlpha(ThemeStore.Companion.primaryColor(activity), 0);
     }
 
     private void setUpToolbar() {
@@ -186,7 +186,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main, menu);
         if (activity == null) return;
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity, toolbar, menu, ThemeStore.primaryColor(activity));
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity, toolbar, menu, ThemeStore.Companion.primaryColor(activity));
     }
 
     @Override
@@ -315,7 +315,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
                     // Scroll appbar
                     if (scrollY > headerHeight + appbarHeight && !isAppbarFlat.get()) {
-                        setAppbarColor(ThemeStore.primaryColor(activity));
+                        setAppbarColor(ThemeStore.Companion.primaryColor(activity));
                         appbar.setElevation(8);
                         isAppbarFlat.set(true);
                     }

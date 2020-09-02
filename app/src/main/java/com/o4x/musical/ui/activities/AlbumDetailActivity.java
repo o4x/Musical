@@ -4,13 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.Menu;
@@ -20,34 +13,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.afollestad.materialcab.MaterialCab;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.util.DialogUtils;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
+import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
-import com.o4x.musical.network.ApiClient;
-import com.o4x.musical.network.service.LastFMService;
-import com.o4x.musical.ui.adapter.song.AlbumSongAdapter;
-import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
-import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
-import com.o4x.musical.ui.dialogs.SleepTimerDialog;
-import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.interfaces.PaletteColorHolder;
-import com.o4x.musical.network.Models.LastFmAlbum;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.network.ApiClient;
+import com.o4x.musical.network.Models.LastFmAlbum;
+import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity;
+import com.o4x.musical.ui.adapter.song.AlbumSongAdapter;
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
+import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
+import com.o4x.musical.ui.dialogs.SleepTimerDialog;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PhonographColorUtil;
@@ -58,6 +57,8 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.util.ColorUtil;
+import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -137,7 +138,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
 
             // Change alpha of overlay
             float headerAlpha = Math.max(0, Math.min(1, (float) 2 * scrollY / headerViewHeight));
-            headerOverlay.setBackgroundColor(ColorUtil.withAlpha(toolbarColor, headerAlpha));
+            headerOverlay.setBackgroundColor(ColorUtil.INSTANCE.withAlpha(toolbarColor, headerAlpha));
 
             // Translate name text
             headerView.setTranslationY(Math.max(-scrollY, -headerViewHeight));
@@ -185,12 +186,12 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
         setSupportActionBar(toolbar); // needed to auto readjust the toolbar content color
         setStatusBarColor(color);
 
-        int secondaryTextColor = MaterialValueHelper.getSecondaryTextColor(this, ColorUtil.isColorLight(color));
+        int secondaryTextColor = MaterialValueHelper.getSecondaryTextColor(this, ColorUtil.INSTANCE.isColorLight(color));
         artistIconImageView.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
         durationIconImageView.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
         songCountIconImageView.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
         albumYearIconImageView.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
-        artistTextView.setTextColor(MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(color)));
+        artistTextView.setTextColor(MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.INSTANCE.isColorLight(color)));
         durationTextView.setTextColor(secondaryTextColor);
         songCountTextView.setTextColor(secondaryTextColor);
         albumYearTextView.setTextColor(secondaryTextColor);

@@ -3,10 +3,6 @@ package com.o4x.musical.ui.adapter;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.kabouzeid.appthemehelper.util.ATHUtil;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.o4x.musical.App;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
-import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.ui.dialogs.ClearSmartPlaylistDialog;
-import com.o4x.musical.ui.dialogs.DeletePlaylistDialog;
 import com.o4x.musical.helper.menu.PlaylistMenuHelper;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
 import com.o4x.musical.interfaces.CabHolder;
@@ -31,6 +27,10 @@ import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.model.smartplaylist.AbsSmartPlaylist;
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist;
+import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.ui.dialogs.ClearSmartPlaylistDialog;
+import com.o4x.musical.ui.dialogs.DeletePlaylistDialog;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PlaylistsUtil;
@@ -38,6 +38,8 @@ import com.o4x.musical.util.PlaylistsUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import code.name.monkey.appthemehelper.util.ATHUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -225,7 +227,7 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
                 if (shortSeparator != null) {
                     shortSeparator.setVisibility(View.GONE);
                 }
-                itemView.setBackgroundColor(ATHUtil.resolveColor(activity, R.attr.cardBackgroundColor));
+                itemView.setBackgroundColor(ATHUtil.INSTANCE.resolveColor(activity, R.attr.cardBackgroundColor));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     itemView.setElevation(activity.getResources().getDimensionPixelSize(R.dimen.card_elevation));
                 }
@@ -234,7 +236,7 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
             if (image != null) {
                 int iconPadding = activity.getResources().getDimensionPixelSize(R.dimen.list_item_image_icon_padding);
                 image.setPadding(iconPadding, iconPadding, iconPadding, iconPadding);
-                image.setColorFilter(ATHUtil.resolveColor(activity, R.attr.iconColor), PorterDuff.Mode.SRC_IN);
+                image.setColorFilter(ATHUtil.INSTANCE.resolveColor(activity, R.attr.iconColor), PorterDuff.Mode.SRC_IN);
             }
 
             if (menu != null) {

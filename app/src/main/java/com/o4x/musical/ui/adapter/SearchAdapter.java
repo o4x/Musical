@@ -1,29 +1,30 @@
 package com.o4x.musical.ui.adapter;
 
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.kabouzeid.appthemehelper.util.ATHUtil;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import code.name.monkey.appthemehelper.util.ATHUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -102,7 +103,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             itemView.setOnLongClickListener(null);
 
             if (itemViewType != HEADER) {
-                itemView.setBackgroundColor(ATHUtil.resolveColor(activity, R.attr.cardBackgroundColor));
+                itemView.setBackgroundColor(ATHUtil.INSTANCE.resolveColor(activity, R.attr.cardBackgroundColor));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     itemView.setElevation(activity.getResources().getDimensionPixelSize(R.dimen.card_elevation));
                 }

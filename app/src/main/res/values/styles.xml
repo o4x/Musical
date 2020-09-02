@@ -185,10 +185,10 @@
     </style>
 
     <style name="RetroSliderTooltip" parent="Widget.MaterialComponents.Tooltip">
-        <item name="backgroundColor">@color/md_white_1000</item>
-        <item name="background">@color/md_white_1000</item>
-        <item name="android:background">@color/md_white_1000</item>
-        <item name="android:textColor">@color/md_red_400</item>
+        <item name="backgroundColor">@color/white</item>
+        <item name="background">@color/white</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/red_400</item>
     </style>
 
     <style name="MaterialPopupMenuStyle" parent="Widget.MaterialComponents.PopupMenu">

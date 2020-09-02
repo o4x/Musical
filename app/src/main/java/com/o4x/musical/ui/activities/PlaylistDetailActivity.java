@@ -19,11 +19,7 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
-import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.adapter.song.OrderablePlaylistSongAdapter;
-import com.o4x.musical.ui.adapter.song.PlaylistSongAdapter;
-import com.o4x.musical.ui.adapter.song.SongAdapter;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.PlaylistMenuHelper;
 import com.o4x.musical.interfaces.CabHolder;
@@ -35,6 +31,9 @@ import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
+import com.o4x.musical.ui.adapter.song.OrderablePlaylistSongAdapter;
+import com.o4x.musical.ui.adapter.song.PlaylistSongAdapter;
+import com.o4x.musical.ui.adapter.song.SongAdapter;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.PlaylistsUtil;
 import com.o4x.musical.util.ViewUtil;
@@ -45,6 +44,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.ThemeStore;
 
 public class PlaylistDetailActivity extends AbsMusicPanelActivity implements CabHolder, LoaderManager.LoaderCallbacks<List<Song>> {
 
@@ -93,7 +93,7 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
     }
 
     private void setUpRecyclerView() {
-        ViewUtil.setUpFastScrollRecyclerViewColor(this, ((FastScrollRecyclerView) recyclerView), ThemeStore.accentColor(this));
+        ViewUtil.setUpFastScrollRecyclerViewColor(this, ((FastScrollRecyclerView) recyclerView), ThemeStore.Companion.accentColor(this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         if (playlist instanceof AbsCustomPlaylist) {
             adapter = new PlaylistSongAdapter(this, new ArrayList<>(), R.layout.item_list, false, this);
@@ -126,7 +126,7 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
     }
 
     private void setUpToolbar() {
-        toolbar.setBackgroundColor(ThemeStore.primaryColor(this));
+        toolbar.setBackgroundColor(ThemeStore.Companion.primaryColor(this));
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -165,7 +165,7 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
         cab = new MaterialCab(this, R.id.cab_stub)
                 .setMenu(menu)
                 .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.primaryColor(this)))
+                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.Companion.primaryColor(this)))
                 .start(callback);
         return cab;
     }

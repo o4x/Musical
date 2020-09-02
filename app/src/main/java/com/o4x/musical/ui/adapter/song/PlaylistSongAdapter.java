@@ -1,14 +1,14 @@
 package com.o4x.musical.ui.adapter.song;
 
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.kabouzeid.appthemehelper.ThemeStore;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
+
 import com.o4x.musical.R;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
@@ -16,6 +16,8 @@ import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 
 import java.util.List;
+
+import code.name.monkey.appthemehelper.ThemeStore;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -35,7 +37,7 @@ public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
     @Override
     public void onBindViewHolder(@NonNull final SongAdapter.ViewHolder holder, int position) {
         if (holder.getItemViewType() == OFFSET_ITEM) {
-            int textColor = ThemeStore.textColorSecondary(activity);
+            int textColor = ThemeStore.Companion.textColorSecondary(activity);
             if (holder.title != null) {
                 holder.title.setText(MusicUtil.getPlaylistInfoString(activity, dataSet));
                 holder.title.setTextColor(textColor);

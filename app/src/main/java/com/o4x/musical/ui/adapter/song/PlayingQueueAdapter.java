@@ -1,25 +1,19 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.annotation.SuppressLint;
+import android.graphics.Typeface;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Toast;
-
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
-import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
@@ -28,6 +22,8 @@ import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.ViewUtil;
 
 import java.util.List;
+
+import code.name.monkey.appthemehelper.util.ColorUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -58,7 +54,7 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
 
     protected void customizeItem(@NonNull SongAdapter.ViewHolder holder, int position) {
 
-        holder.itemView.setBackgroundColor(ColorUtil.withAlpha(
+        holder.itemView.setBackgroundColor(ColorUtil.INSTANCE.withAlpha(
                 PhonographColorUtil.getWindowColor(activity), 0.8f));
 
         if (holder.imageText != null) {

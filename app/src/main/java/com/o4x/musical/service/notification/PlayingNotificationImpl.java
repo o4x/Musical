@@ -8,22 +8,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.palette.graphics.Palette;
 
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.RemoteViews;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.glide.SongGlideRequest;
 import com.o4x.musical.model.Song;
@@ -32,6 +29,9 @@ import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.PreferenceUtil;
+
+import code.name.monkey.appthemehelper.util.ColorUtil;
+import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
 public class PlayingNotificationImpl extends PlayingNotification {
 
@@ -124,7 +124,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
                                     bgColor = Color.WHITE;
                                 }
                                 setBackgroundColor(bgColor);
-                                setNotificationContent(ColorUtil.isColorLight(bgColor));
+                                setNotificationContent(ColorUtil.INSTANCE.isColorLight(bgColor));
 
                                 if (stopped)
                                     return; // notification has been stopped before loading was finished

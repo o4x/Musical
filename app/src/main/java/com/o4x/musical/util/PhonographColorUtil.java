@@ -11,10 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
 
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-
 import java.util.Collections;
 import java.util.Comparator;
+
+import code.name.monkey.appthemehelper.util.ColorUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -90,16 +90,16 @@ public class PhonographColorUtil {
 
     @ColorInt
     public static int shiftBackgroundColorForLightText(@ColorInt int backgroundColor) {
-        while (ColorUtil.isColorLight(backgroundColor)) {
-            backgroundColor = ColorUtil.darkenColor(backgroundColor);
+        while (ColorUtil.INSTANCE.isColorLight(backgroundColor)) {
+            backgroundColor = ColorUtil.INSTANCE.darkenColor(backgroundColor);
         }
         return backgroundColor;
     }
 
     @ColorInt
     public static int shiftBackgroundColorForDarkText(@ColorInt int backgroundColor) {
-        while (!ColorUtil.isColorLight(backgroundColor)) {
-            backgroundColor = ColorUtil.lightenColor(backgroundColor);
+        while (!ColorUtil.INSTANCE.isColorLight(backgroundColor)) {
+            backgroundColor = ColorUtil.INSTANCE.lightenColor(backgroundColor);
         }
         return backgroundColor;
     }

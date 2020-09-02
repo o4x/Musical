@@ -22,6 +22,8 @@ import androidx.core.widget.NestedScrollView
 import androidx.palette.graphics.Palette
 import butterknife.BindView
 import butterknife.ButterKnife
+import code.name.monkey.appthemehelper.ThemeStore
+import code.name.monkey.appthemehelper.util.ATHUtil
 import code.name.monkey.appthemehelper.util.TintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
@@ -30,8 +32,6 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
-import com.kabouzeid.appthemehelper.ThemeStore
-import com.kabouzeid.appthemehelper.util.ATHUtil
 import com.o4x.musical.R
 import com.o4x.musical.extensions.appHandleColor
 import com.o4x.musical.ui.activities.base.AbsBaseActivity

@@ -2,28 +2,30 @@ package com.o4x.musical.ui.adapter;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kabouzeid.appthemehelper.util.ATHUtil;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.model.AudioFileCover;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.interfaces.CabHolder;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.util.ImageUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
+
+import code.name.monkey.appthemehelper.util.ATHUtil;
 
 public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewHolder, File> implements FastScrollRecyclerView.SectionedAdapter {
 
@@ -108,7 +110,7 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
 
     @SuppressWarnings("ConstantConditions")
     protected void loadFileImage(File file, final ViewHolder holder) {
-        final int iconColor = ATHUtil.resolveColor(activity, R.attr.iconColor);
+        final int iconColor = ATHUtil.INSTANCE.resolveColor(activity, R.attr.iconColor);
         if (file.isDirectory()) {
             holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
             holder.image.setImageResource(R.drawable.ic_folder_white_24dp);
