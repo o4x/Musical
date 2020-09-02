@@ -13,7 +13,7 @@
         android:elevation="@dimen/toolbar_elevation"
         tools:ignore="UnusedAttribute">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             style="@style/Toolbar"
             android:background="@android:color/transparent" />
