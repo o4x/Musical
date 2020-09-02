@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    app:cardBackgroundColor="?cardBackgroundColor"
-    app:cardUseCompatPadding="true">
+    android:layout_gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +25,7 @@
                 android:src="@drawable/icon_web"
                 tools:ignore="ContentDescription" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -65,13 +63,13 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/version"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/app_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -101,7 +99,7 @@
                 app:srcCompat="@drawable/ic_restore_white_24dp"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
@@ -132,7 +130,7 @@
                 app:srcCompat="@drawable/ic_assignment_turned_in_white_24dp"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
@@ -163,7 +161,7 @@
                 app:srcCompat="@drawable/ic_github_circle_white_24dp"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
@@ -194,7 +192,7 @@
                 app:srcCompat="@drawable/ic_description_white_24dp"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
@@ -208,4 +206,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

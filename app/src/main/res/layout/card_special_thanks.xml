@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    app:cardBackgroundColor="?cardBackgroundColor"
-    app:cardUseCompatPadding="true">
+    android:layout_gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -44,13 +42,13 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/aidan_follestad"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/aidan_follestad_summary"
@@ -63,7 +61,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/aidan_follestad_git_hub"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
@@ -94,13 +92,13 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/michael_cook_cookicons"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/michael_cook_summary"
@@ -113,7 +111,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/michael_cook_website"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
@@ -144,13 +142,13 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/maarten_corpel"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/maarten_corpel_summary"
@@ -163,7 +161,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/maarten_corpel_website"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
@@ -171,7 +169,7 @@
                     android:text="@string/website"
                     android:textColor="#4183c4" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/maarten_corpel_twitter"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
@@ -203,13 +201,13 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/aleksandar_tesic"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/aleksandar_tesic_summary"
@@ -222,7 +220,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/aleksandar_tesic_twitter"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
@@ -255,13 +253,13 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/eugene_cheung"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/eugene_cheung_summary"
@@ -274,7 +272,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/eugene_cheung_website"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
@@ -282,7 +280,7 @@
                     android:text="@string/website"
                     android:textColor="#4183c4" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/eugene_cheung_git_hub"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
@@ -314,13 +312,13 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/adrian"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/adrian_summary"
@@ -333,7 +331,7 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/adrian_twitter"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
@@ -347,4 +345,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
