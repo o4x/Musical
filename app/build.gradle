@@ -184,11 +184,4 @@ dependencies {
     kapt "com.jakewharton:butterknife-compiler:$butter_version"
 
     implementation 'com.bluelinelabs:conductor:3.0.0-rc5'
-
-    def conductor_version = "3.0.0-rc5"
-    implementation "com.bluelinelabs:conductor-androidx-transition:$conductor_version"
-    implementation "com.bluelinelabs:conductor-viewpager:$conductor_version"
-    implementation "com.bluelinelabs:conductor-rxlifecycle2:$conductor_version"
-    implementation "com.bluelinelabs:conductor-autodispose:$conductor_version"
-    implementation "com.bluelinelabs:conductor-archlifecycle:$conductor_version"
 }
