@@ -5,13 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,20 +13,24 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.afollestad.materialcab.MaterialCab;
-import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.common.ATHToolbarActivity;
-import com.kabouzeid.appthemehelper.util.TabLayoutUtil;
-import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter;
-import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.activities.SearchActivity;
+import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter;
+import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.AbsLibraryPagerRecyclerViewCustomGridSizeFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.AlbumsFragment;
@@ -47,6 +44,9 @@ import com.o4x.musical.util.Util;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.common.ATHToolbarActivity;
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 public class LibraryFragment extends AbsMainActivityFragment implements CabHolder, MainActivity.MainActivityFragmentCallbacks, ViewPager.OnPageChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -113,7 +113,7 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
     }
 
     private void setUpToolbar() {
-        int primaryColor = ThemeStore.primaryColor(getActivity());
+        int primaryColor = ThemeStore.Companion.primaryColor(getActivity());
         appbar.setBackgroundColor(primaryColor);
         toolbar.setBackgroundColor(primaryColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
@@ -128,12 +128,12 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
 
         tabs.setupWithViewPager(pager);
 
-        int primaryColor = ThemeStore.primaryColor(getActivity());
+        int primaryColor = ThemeStore.Companion.primaryColor(getActivity());
         int normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(getActivity(), primaryColor);
         int selectedColor = ToolbarContentTintHelper.toolbarTitleColor(getActivity(), primaryColor);
-        TabLayoutUtil.setTabIconColors(tabs, normalColor, selectedColor);
+//        TabLayoutUtil.setTabIconColors(tabs, normalColor, selectedColor);
         tabs.setTabTextColors(normalColor, selectedColor);
-        tabs.setSelectedTabIndicatorColor(ThemeStore.accentColor(getActivity()));
+        tabs.setSelectedTabIndicatorColor(ThemeStore.Companion.accentColor(getActivity()));
 
         updateTabVisibility();
 
@@ -163,7 +163,7 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
         cab = new MaterialCab(getMainActivity(), R.id.cab_stub)
                 .setMenu(menuRes)
                 .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.primaryColor(getActivity())))
+                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.Companion.primaryColor(getActivity())))
                 .start(callback);
         return cab;
     }

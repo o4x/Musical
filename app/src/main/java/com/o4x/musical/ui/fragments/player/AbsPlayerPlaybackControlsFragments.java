@@ -18,7 +18,6 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
-import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
@@ -35,6 +34,7 @@ import java.util.LinkedList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
 public abstract class AbsPlayerPlaybackControlsFragments extends AbsMusicServiceFragment implements MusicProgressViewUpdateHelper.Callback {
 

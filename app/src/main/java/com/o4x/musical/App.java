@@ -8,10 +8,11 @@ import androidx.annotation.NonNull;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.appshortcuts.DynamicShortcutManager;
 
 import java.lang.ref.WeakReference;
+
+import code.name.monkey.appthemehelper.ThemeStore;
 
 
 /**
@@ -32,10 +33,10 @@ public class App extends Application {
         app = this;
 
         // default theme
-        if (!ThemeStore.isConfigured(this, 1)) {
-            ThemeStore.editTheme(this)
-                    .primaryColorRes(R.color.md_indigo_500)
-                    .accentColorRes(R.color.md_pink_A400)
+        if (!ThemeStore.Companion.isConfigured(this, 1)) {
+            ThemeStore.Companion.editTheme(this)
+                    .primaryColorRes(R.color.indigo_500)
+                    .accentColorRes(R.color.pink_A400)
                     .commit();
         }
 

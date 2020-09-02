@@ -15,9 +15,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.util.ATHUtil;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
@@ -30,6 +27,10 @@ import com.o4x.musical.util.Util;
 import com.o4x.musical.util.ViewUtil;
 import com.o4x.musical.views.WidthFitSquareLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.util.ATHUtil;
+import code.name.monkey.appthemehelper.util.ColorUtil;
 
 public class CardPlayerFragment extends AbsPlayerFragment {
 
@@ -54,7 +55,7 @@ public class CardPlayerFragment extends AbsPlayerFragment {
         super.onViewCreated(view, savedInstanceState);
 
         // for some reason the xml attribute doesn't get applied here.
-        playingQueueCard.setCardBackgroundColor(ATHUtil.resolveColor(getActivity(), R.attr.cardBackgroundColor));
+        playingQueueCard.setCardBackgroundColor(ATHUtil.INSTANCE.resolveColor(getActivity(), R.attr.cardBackgroundColor));
     }
 
     @Override
@@ -101,9 +102,9 @@ public class CardPlayerFragment extends AbsPlayerFragment {
 
             animatorSet.play(backgroundAnimator);
 
-            if (!ATHUtil.isWindowBackgroundDark(fragment.getActivity())) {
-                int adjustedLastColor = ColorUtil.isColorLight(fragment.lastColor) ? ColorUtil.darkenColor(fragment.lastColor) : fragment.lastColor;
-                int adjustedNewColor = ColorUtil.isColorLight(newColor) ? ColorUtil.darkenColor(newColor) : newColor;
+            if (!ATHUtil.INSTANCE.isWindowBackgroundDark(fragment.getActivity())) {
+                int adjustedLastColor = ColorUtil.INSTANCE.isColorLight(fragment.lastColor) ? ColorUtil.INSTANCE.darkenColor(fragment.lastColor) : fragment.lastColor;
+                int adjustedNewColor = ColorUtil.INSTANCE.isColorLight(newColor) ? ColorUtil.INSTANCE.darkenColor(newColor) : newColor;
                 Animator subHeaderAnimator = ViewUtil.createTextColorTransition(fragment.playerQueueSubHeader, adjustedLastColor, adjustedNewColor);
                 animatorSet.play(subHeaderAnimator);
             }
@@ -114,8 +115,8 @@ public class CardPlayerFragment extends AbsPlayerFragment {
 
         @Override
         public void animateColorChange(int newColor) {
-            if (ATHUtil.isWindowBackgroundDark(fragment.getActivity())) {
-                fragment.playerQueueSubHeader.setTextColor(ThemeStore.textColorSecondary(fragment.getActivity()));
+            if (ATHUtil.INSTANCE.isWindowBackgroundDark(fragment.getActivity())) {
+                fragment.playerQueueSubHeader.setTextColor(ThemeStore.Companion.textColorSecondary(fragment.getActivity()));
             }
         }
     }
@@ -136,7 +137,7 @@ public class CardPlayerFragment extends AbsPlayerFragment {
             currentSongViewHolder.separator.setVisibility(View.VISIBLE);
             currentSongViewHolder.shortSeparator.setVisibility(View.GONE);
             currentSongViewHolder.image.setScaleType(ImageView.ScaleType.CENTER);
-            currentSongViewHolder.image.setColorFilter(ATHUtil.resolveColor(fragment.getActivity(), R.attr.iconColor, ThemeStore.textColorSecondary(fragment.getActivity())), PorterDuff.Mode.SRC_IN);
+            currentSongViewHolder.image.setColorFilter(ATHUtil.INSTANCE.resolveColor(fragment.getActivity(), R.attr.iconColor, ThemeStore.Companion.textColorSecondary(fragment.getActivity())), PorterDuff.Mode.SRC_IN);
             currentSongViewHolder.image.setImageResource(R.drawable.ic_volume_up_white_24dp);
             currentSongViewHolder.itemView.setOnClickListener(v -> {
                 // toggle the panel
@@ -232,7 +233,7 @@ public class CardPlayerFragment extends AbsPlayerFragment {
 
             AnimatorSet animatorSet = createDefaultColorChangeAnimatorSet(newColor);
             animatorSet.play(ViewUtil.createBackgroundColorTransition(fragment.toolbar, fragment.lastColor, newColor))
-                    .with(ViewUtil.createBackgroundColorTransition(null /* statusBar */, ColorUtil.darkenColor(fragment.lastColor), ColorUtil.darkenColor(newColor)));
+                    .with(ViewUtil.createBackgroundColorTransition(null /* statusBar */, ColorUtil.INSTANCE.darkenColor(fragment.lastColor), ColorUtil.INSTANCE.darkenColor(newColor)));
             animatorSet.start();
         }
     }

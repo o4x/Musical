@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +16,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDTintHelper;
 import com.afollestad.materialdialogs.internal.ThemeSingleton;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.SkuDetails;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.util.ATHUtil;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
 
@@ -37,6 +36,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.util.ATHUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -197,8 +198,8 @@ public class DonationsDialog extends DialogFragment implements BillingProcessor.
             viewHolder.price.setText(skuDetails.priceText);
 
             final boolean purchased = donationsDialog.billingProcessor.isPurchased(skuDetails.productId);
-            int titleTextColor = purchased ? ATHUtil.resolveColor(getContext(), android.R.attr.textColorHint) : ThemeStore.textColorPrimary(getContext());
-            int contentTextColor = purchased ? titleTextColor : ThemeStore.textColorSecondary(getContext());
+            int titleTextColor = purchased ? ATHUtil.INSTANCE.resolveColor(getContext(), android.R.attr.textColorHint) : ThemeStore.Companion.textColorPrimary(getContext());
+            int contentTextColor = purchased ? titleTextColor : ThemeStore.Companion.textColorSecondary(getContext());
 
             //noinspection ResourceAsColor
             viewHolder.title.setTextColor(titleTextColor);

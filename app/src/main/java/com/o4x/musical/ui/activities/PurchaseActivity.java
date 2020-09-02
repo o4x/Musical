@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.kabouzeid.appthemehelper.color.MaterialColor;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
 import com.o4x.musical.ui.activities.base.AbsBaseActivity;
@@ -27,7 +26,6 @@ public class PurchaseActivity extends AbsBaseActivity implements BillingProcesso
 
     public static final String TAG = PurchaseActivity.class.getSimpleName();
 
-    private static final int ACTIVITY_COLOR = MaterialColor.Green._500.getAsColor();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -46,6 +44,7 @@ public class PurchaseActivity extends AbsBaseActivity implements BillingProcesso
         setDrawUnderBar();
         ButterKnife.bind(this);
 
+        final int ACTIVITY_COLOR = getResources().getColor(R.color.green_300);
         setStatusBarColor(ACTIVITY_COLOR);
         setNavigationBarColor(ACTIVITY_COLOR);
         setTaskDescriptionColor(ACTIVITY_COLOR);

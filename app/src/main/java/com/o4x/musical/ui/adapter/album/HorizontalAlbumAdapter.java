@@ -1,16 +1,13 @@
 package com.o4x.musical.ui.adapter.album;
 
-import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.helper.HorizontalAdapterHelper;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
@@ -19,6 +16,9 @@ import com.o4x.musical.model.Album;
 import com.o4x.musical.util.MusicUtil;
 
 import java.util.List;
+
+import code.name.monkey.appthemehelper.util.ColorUtil;
+import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -42,10 +42,10 @@ public class HorizontalAlbumAdapter extends AlbumAdapter {
             CardView card=(CardView)holder.itemView;
             card.setCardBackgroundColor(color);
             if (holder.title != null) {
-                    holder.title.setTextColor(MaterialValueHelper.getPrimaryTextColor(activity, ColorUtil.isColorLight(color)));
+                    holder.title.setTextColor(MaterialValueHelper.getPrimaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
             }
             if (holder.text != null) {
-                    holder.text.setTextColor(MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.isColorLight(color)));
+                    holder.text.setTextColor(MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
             }
         }
     }

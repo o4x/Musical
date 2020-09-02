@@ -5,8 +5,6 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.kabouzeid.appthemehelper.ThemeStore;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+
 import com.o4x.musical.R;
 
 import java.io.File;
@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import code.name.monkey.appthemehelper.ThemeStore;
 
 /**
  * @author Aidan Follestad (afollestad), modified for Musical by Karim Abou Zeid (kabouzeid)
@@ -134,8 +136,8 @@ public class BreadCrumbLayout extends HorizontalScrollView implements View.OnCli
     private SelectionCallback mCallback;
 
     private void init() {
-        contentColorActivated = ThemeStore.textColorPrimary(getContext());
-        contentColorDeactivated = ThemeStore.textColorSecondary(getContext());
+        contentColorActivated = ThemeStore.Companion.textColorPrimary(getContext());
+        contentColorDeactivated = ThemeStore.Companion.textColorSecondary(getContext());
         setMinimumHeight((int) getResources().getDimension(R.dimen.tab_height));
         setClipToPadding(false);
         setHorizontalScrollBarEnabled(false);

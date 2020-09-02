@@ -32,8 +32,6 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.PaletteColorHolder;
@@ -57,6 +55,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import code.name.monkey.appthemehelper.util.ColorUtil;
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implements Toolbar.OnMenuItemClickListener, PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks, SlidingUpPanelLayout.PanelSlideListener {
 
@@ -417,7 +417,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     @Override
     public void onColorChanged(int color) {
         animateColorChange(color);
-        playbackControlsFragment.setDark(ColorUtil.isColorLight(color));
+        playbackControlsFragment.setDark(ColorUtil.INSTANCE.isColorLight(color));
         getCallbacks().onPaletteColorChanged();
     }
 

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
@@ -17,7 +18,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.io.InputStream;
 
-import com.kabouzeid.appthemehelper.util.TintHelper;
+import code.name.monkey.appthemehelper.util.TintHelper;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)

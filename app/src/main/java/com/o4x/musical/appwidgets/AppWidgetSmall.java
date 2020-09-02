@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
 import com.o4x.musical.appwidgets.base.BaseAppWidget;
 import com.o4x.musical.imageloader.glide.SongGlideRequest;
@@ -26,6 +25,8 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.util.ImageUtil;
+
+import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
 public class AppWidgetSmall extends BaseAppWidget {
     public static final String NAME = "app_widget_small";

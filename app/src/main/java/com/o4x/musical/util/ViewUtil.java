@@ -12,17 +12,19 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
-import androidx.annotation.ColorInt;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.PathInterpolator;
 import android.widget.TextView;
 
-import com.kabouzeid.appthemehelper.util.ATHUtil;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
+import androidx.annotation.ColorInt;
+
 import com.o4x.musical.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+
+import code.name.monkey.appthemehelper.util.ATHUtil;
+import code.name.monkey.appthemehelper.util.ColorUtil;
+import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -81,9 +83,9 @@ public class ViewUtil {
 
     public static void setUpFastScrollRecyclerViewColor(Context context, FastScrollRecyclerView recyclerView, int accentColor) {
         recyclerView.setPopupBgColor(accentColor);
-        recyclerView.setPopupTextColor(MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(accentColor)));
+        recyclerView.setPopupTextColor(MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.INSTANCE.isColorLight(accentColor)));
         recyclerView.setThumbColor(accentColor);
-        recyclerView.setTrackColor(ColorUtil.withAlpha(ATHUtil.resolveColor(context, R.attr.colorControlNormal), 0.12f));
+        recyclerView.setTrackColor(ColorUtil.INSTANCE.withAlpha(ATHUtil.INSTANCE.resolveColor(context, R.attr.colorControlNormal), 0.12f));
     }
 
     public static float convertDpToPixel(float dp, Resources resources) {

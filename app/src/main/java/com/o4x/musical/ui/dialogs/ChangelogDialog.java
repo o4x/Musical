@@ -7,24 +7,25 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.ThemeSingleton;
-import com.kabouzeid.appthemehelper.util.ATHUtil;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.o4x.musical.R;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import code.name.monkey.appthemehelper.util.ATHUtil;
+import code.name.monkey.appthemehelper.util.ColorUtil;
 
 /**
  * @author Aidan Follestad (afollestad)
@@ -72,13 +73,13 @@ public class ChangelogDialog extends DialogFragment {
             in.close();
 
             // Inject color values for WebView body background and links
-            final String backgroundColor = colorToCSS(ATHUtil.resolveColor(getActivity(), R.attr.md_background_color, Color.parseColor(ThemeSingleton.get().darkTheme ? "#424242" : "#ffffff")));
+            final String backgroundColor = colorToCSS(ATHUtil.INSTANCE.resolveColor(getActivity(), R.attr.md_background_color, Color.parseColor(ThemeSingleton.get().darkTheme ? "#424242" : "#ffffff")));
             final String contentColor = colorToCSS(Color.parseColor(ThemeSingleton.get().darkTheme ? "#ffffff" : "#000000"));
             final String changeLog = buf.toString()
                     .replace("{style-placeholder}",
                             String.format("body { background-color: %s; color: %s; }", backgroundColor, contentColor))
                     .replace("{link-color}", colorToCSS(ThemeSingleton.get().positiveColor.getDefaultColor()))
-                    .replace("{link-color-active}", colorToCSS(ColorUtil.lightenColor(ThemeSingleton.get().positiveColor.getDefaultColor())));
+                    .replace("{link-color-active}", colorToCSS(ColorUtil.INSTANCE.lightenColor(ThemeSingleton.get().positiveColor.getDefaultColor())));
             webView.loadData(changeLog, "text/html", "UTF-8");
         } catch (Throwable e) {
             webView.loadData("<h1>Unable to load</h1><p>" + e.getLocalizedMessage() + "</p>", "text/html", "UTF-8");

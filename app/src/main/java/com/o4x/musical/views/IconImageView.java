@@ -2,11 +2,13 @@ package com.o4x.musical.views;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-import com.kabouzeid.appthemehelper.util.ATHUtil;
+import androidx.appcompat.widget.AppCompatImageView;
+
 import com.o4x.musical.R;
+
+import code.name.monkey.appthemehelper.util.ATHUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -29,6 +31,6 @@ public class IconImageView extends AppCompatImageView {
 
     private void init(Context context) {
         if (context == null) return;
-        setColorFilter(ATHUtil.resolveColor(context, R.attr.iconColor), PorterDuff.Mode.SRC_IN);
+        setColorFilter(ATHUtil.INSTANCE.resolveColor(context, R.attr.iconColor), PorterDuff.Mode.SRC_IN);
     }
 }

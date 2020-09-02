@@ -3,28 +3,28 @@ package com.o4x.musical.ui.activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kabouzeid.appthemehelper.ThemeStore;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.o4x.musical.R;
-import com.o4x.musical.ui.adapter.SearchAdapter;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.loader.ArtistLoader;
 import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
+import com.o4x.musical.ui.adapter.SearchAdapter;
 import com.o4x.musical.util.Util;
 
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.ThemeStore;
 
 public class SearchActivity extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<List<Object>> {
 
@@ -95,7 +96,7 @@ public class SearchActivity extends AbsMusicServiceActivity implements SearchVie
     }
 
     private void setUpToolBar() {
-        toolbar.setBackgroundColor(ThemeStore.primaryColor(this));
+        toolbar.setBackgroundColor(ThemeStore.Companion.primaryColor(this));
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

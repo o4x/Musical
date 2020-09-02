@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -20,25 +21,25 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import java.util.List;
-import java.util.Locale;
 
 import com.afollestad.materialcab.MaterialCab;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.util.DialogUtils;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
-import com.kabouzeid.appthemehelper.util.ColorUtil;
-import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.o4x.musical.R;
+import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.interfaces.CabHolder;
+import com.o4x.musical.interfaces.LoaderIds;
+import com.o4x.musical.interfaces.PaletteColorHolder;
+import com.o4x.musical.loader.ArtistLoader;
+import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
+import com.o4x.musical.misc.WrappedAsyncTaskLoader;
+import com.o4x.musical.model.Artist;
+import com.o4x.musical.model.Song;
 import com.o4x.musical.network.ApiClient;
+import com.o4x.musical.network.Models.LastFmArtist;
 import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
@@ -47,21 +48,22 @@ import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
 import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.ui.dialogs.SleepTimerDialog;
-import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.interfaces.CabHolder;
-import com.o4x.musical.interfaces.LoaderIds;
-import com.o4x.musical.interfaces.PaletteColorHolder;
-import com.o4x.musical.network.Models.LastFmArtist;
-import com.o4x.musical.loader.ArtistLoader;
-import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
-import com.o4x.musical.misc.WrappedAsyncTaskLoader;
-import com.o4x.musical.model.Artist;
-import com.o4x.musical.model.Song;
 import com.o4x.musical.util.CustomArtistImageUtil;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.PreferenceUtil;
+
+import java.util.List;
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.util.ColorUtil;
+import code.name.monkey.appthemehelper.util.MaterialValueHelper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Be careful when changing things in this Activity!
@@ -119,7 +121,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
 
             // Change alpha of overlay
             float headerAlpha = Math.max(0, Math.min(1, (float) 2 * scrollY / headerViewHeight));
-            headerOverlay.setBackgroundColor(ColorUtil.withAlpha(toolbarColor, headerAlpha));
+            headerOverlay.setBackgroundColor(ColorUtil.INSTANCE.withAlpha(toolbarColor, headerAlpha));
 
             // Translate name text
             headerView.setTranslationY(Math.max(-scrollY, -headerViewHeight));
@@ -295,7 +297,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
         setSupportActionBar(toolbar); // needed to auto readjust the toolbar content color
         setStatusBarColor(color);
 
-        int secondaryTextColor = MaterialValueHelper.getSecondaryTextColor(this, ColorUtil.isColorLight(color));
+        int secondaryTextColor = MaterialValueHelper.getSecondaryTextColor(this, ColorUtil.INSTANCE.isColorLight(color));
         durationIconImageView.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
         songCountIconImageView.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);
         albumCountIconImageView.setColorFilter(secondaryTextColor, PorterDuff.Mode.SRC_IN);

@@ -23,11 +23,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
-import com.kabouzeid.appthemehelper.ThemeStore;
-import com.kabouzeid.appthemehelper.common.ATHToolbarActivity;
-import com.kabouzeid.appthemehelper.util.ToolbarContentTintHelper;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.MusicServiceEventListener;
 import com.o4x.musical.loader.SongLoader;
@@ -35,11 +31,15 @@ import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
+import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.common.ATHToolbarActivity;
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 public class QueueFragment extends AbsMainActivityFragment implements MainActivity.MainActivityFragmentCallbacks {
     private AbsMusicServiceActivity activity;
@@ -118,7 +118,7 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
     }
 
     private void setUpToolbar() {
-        int primaryColor = ThemeStore.primaryColor(getActivity());
+        int primaryColor = ThemeStore.Companion.primaryColor(getActivity());
         appbar.setBackgroundColor(primaryColor);
         toolbar.setBackgroundColor(primaryColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);

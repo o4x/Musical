@@ -11,9 +11,10 @@ import android.util.TypedValue;
 import androidx.annotation.RequiresApi;
 import androidx.core.graphics.drawable.IconCompat;
 
-import com.kabouzeid.appthemehelper.ThemeStore;
 import com.o4x.musical.R;
 import com.o4x.musical.util.ImageUtil;
+
+import code.name.monkey.appthemehelper.ThemeStore;
 
 /**
  * @author Adrian Campos
@@ -32,7 +33,7 @@ public final class AppShortcutIconGenerator {
 
         // Return an Icon of iconId with those colors
         return generateThemedIcon(context, iconId,
-                ThemeStore.primaryColor(context),
+                ThemeStore.Companion.primaryColor(context),
                 typedColorBackground.data
         );
     }
