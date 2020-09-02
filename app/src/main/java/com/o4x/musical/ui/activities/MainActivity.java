@@ -226,9 +226,6 @@ public class MainActivity extends AbsMusicPanelActivity {
                 case R.id.nav_settings:
                     new Handler().postDelayed(() -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)), 200);
                     break;
-                case R.id.nav_about:
-                    new Handler().postDelayed(() -> startActivity(new Intent(MainActivity.this, AboutActivity.class)), 200);
-                    break;
             }
             return true;
         });

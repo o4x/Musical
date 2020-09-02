@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    app:cardBackgroundColor="?cardBackgroundColor"
-    app:cardUseCompatPadding="true">
+    android:layout_gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +12,7 @@
         android:layout_marginBottom="8dp"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -53,13 +51,13 @@
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/karim_abou_zeid"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/aachen_germany"
@@ -88,7 +86,7 @@
                 app:srcCompat="@drawable/ic_email_white_24dp"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
@@ -119,7 +117,7 @@
                 app:srcCompat="@drawable/ic_twitter_white_24dp"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
@@ -150,7 +148,7 @@
                 app:srcCompat="@drawable/ic_open_in_browser_white_24dp"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
@@ -164,4 +162,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
