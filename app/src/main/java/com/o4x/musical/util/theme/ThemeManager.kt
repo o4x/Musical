@@ -17,7 +17,6 @@ object ThemeManager {
         DARK -> R.style.Theme_Musical_Base
         BLACK -> R.style.Theme_Musical_Black
         AUTO -> R.style.Theme_Musical_FollowSystem
-        else -> R.style.Theme_Musical_Base
     }
 
     fun getNightMode(
@@ -27,7 +26,6 @@ object ThemeManager {
         AUTO -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         DARK,
         BLACK -> AppCompatDelegate.MODE_NIGHT_YES
-        else -> AppCompatDelegate.MODE_NIGHT_YES
     }
 }
 
