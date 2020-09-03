@@ -113,7 +113,7 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
     }
 
     private void setUpToolbar() {
-        int primaryColor = ThemeStore.Companion.primaryColor(getActivity());
+        int primaryColor = ThemeStore.Companion.themeColor(getActivity());
         appbar.setBackgroundColor(primaryColor);
         toolbar.setBackgroundColor(primaryColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
@@ -128,12 +128,12 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
 
         tabs.setupWithViewPager(pager);
 
-        int primaryColor = ThemeStore.Companion.primaryColor(getActivity());
+        int primaryColor = ThemeStore.Companion.themeColor(getActivity());
         int normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(getActivity(), primaryColor);
         int selectedColor = ToolbarContentTintHelper.toolbarTitleColor(getActivity(), primaryColor);
 //        TabLayoutUtil.setTabIconColors(tabs, normalColor, selectedColor);
         tabs.setTabTextColors(normalColor, selectedColor);
-        tabs.setSelectedTabIndicatorColor(ThemeStore.Companion.accentColor(getActivity()));
+        tabs.setSelectedTabIndicatorColor(ThemeStore.Companion.themeColor(getActivity()));
 
         updateTabVisibility();
 
@@ -163,7 +163,7 @@ public class LibraryFragment extends AbsMainActivityFragment implements CabHolde
         cab = new MaterialCab(getMainActivity(), R.id.cab_stub)
                 .setMenu(menuRes)
                 .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.Companion.primaryColor(getActivity())))
+                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.Companion.themeColor(getActivity())))
                 .start(callback);
         return cab;
     }

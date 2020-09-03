@@ -82,7 +82,7 @@ public class GenreDetailActivity extends AbsMusicPanelActivity implements CabHol
     }
 
     private void setUpRecyclerView() {
-        ViewUtil.setUpFastScrollRecyclerViewColor(this, ((FastScrollRecyclerView) recyclerView), ThemeStore.Companion.accentColor(this));
+        ViewUtil.setUpFastScrollRecyclerViewColor(this, ((FastScrollRecyclerView) recyclerView), ThemeStore.Companion.themeColor(this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new SongAdapter(this, new ArrayList<>(), R.layout.item_list, false, this);
@@ -98,7 +98,7 @@ public class GenreDetailActivity extends AbsMusicPanelActivity implements CabHol
     }
 
     private void setUpToolBar() {
-        toolbar.setBackgroundColor(ThemeStore.Companion.primaryColor(this));
+        toolbar.setBackgroundColor(ThemeStore.Companion.themeColor(this));
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(genre.name);
@@ -132,7 +132,7 @@ public class GenreDetailActivity extends AbsMusicPanelActivity implements CabHol
         cab = new MaterialCab(this, R.id.cab_stub)
                 .setMenu(menu)
                 .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.Companion.primaryColor(this)))
+                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.Companion.themeColor(this)))
                 .start(callback);
         return cab;
     }

@@ -169,7 +169,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
     }
 
     private int transparentColor() {
-        return ColorUtil.INSTANCE.withAlpha(ThemeStore.Companion.primaryColor(activity), 0);
+        return ColorUtil.INSTANCE.withAlpha(ThemeStore.Companion.themeColor(activity), 0);
     }
 
     private void setUpToolbar() {
@@ -186,7 +186,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main, menu);
         if (activity == null) return;
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity, toolbar, menu, ThemeStore.Companion.primaryColor(activity));
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity, toolbar, menu, ThemeStore.Companion.themeColor(activity));
     }
 
     @Override
@@ -315,7 +315,7 @@ public class HomeFragment extends AbsMainActivityFragment implements MainActivit
 
                     // Scroll appbar
                     if (scrollY > headerHeight + appbarHeight && !isAppbarFlat.get()) {
-                        setAppbarColor(ThemeStore.Companion.primaryColor(activity));
+                        setAppbarColor(ThemeStore.Companion.themeColor(activity));
                         appbar.setElevation(8);
                         isAppbarFlat.set(true);
                     }

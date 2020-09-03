@@ -396,7 +396,7 @@ public final class ToolbarContentTintHelper {
     }
 
     public static void handleOnPrepareOptionsMenu(Activity activity, Toolbar toolbar) {
-        handleOnPrepareOptionsMenu(activity, toolbar, ThemeStore.Companion.accentColor(activity));
+        handleOnPrepareOptionsMenu(activity, toolbar, ThemeStore.Companion.themeColor(activity));
     }
 
     public static void handleOnPrepareOptionsMenu(Activity activity, Toolbar toolbar,
@@ -494,7 +494,7 @@ public final class ToolbarContentTintHelper {
             @Nullable Menu menu,
             int toolbarColor) {
         setToolbarContentColorBasedOnToolbarColor(context, toolbar, menu, toolbarColor,
-                ThemeStore.Companion.accentColor(context));
+                ThemeStore.Companion.themeColor(context));
     }
 
     public static void setToolbarContentColorBasedOnToolbarColor(

@@ -29,45 +29,17 @@ private constructor(private val mContext: Context) : ThemeStorePrefKeys, ThemeSt
         return this
     }
 
-    override fun primaryColor(@ColorInt color: Int): ThemeStore {
-        mEditor.putInt(ThemeStorePrefKeys.KEY_PRIMARY_COLOR, color)
-        if (autoGeneratePrimaryDark(mContext))
-            primaryColorDark(ColorUtil.darkenColor(color))
+    override fun themeColor(@ColorInt color: Int): ThemeStore {
+        mEditor.putInt(ThemeStorePrefKeys.KEY_THEME_COLOR, color)
         return this
     }
 
-    override fun primaryColorRes(@ColorRes colorRes: Int): ThemeStore {
-        return primaryColor(ContextCompat.getColor(mContext, colorRes))
+    override fun themeColorRes(@ColorRes colorRes: Int): ThemeStore {
+        return themeColor(ContextCompat.getColor(mContext, colorRes))
     }
 
-    override fun primaryColorAttr(@AttrRes colorAttr: Int): ThemeStore {
-        return primaryColor(ATHUtil.resolveColor(mContext, colorAttr))
-    }
-
-    override fun primaryColorDark(@ColorInt color: Int): ThemeStore {
-        mEditor.putInt(ThemeStorePrefKeys.KEY_PRIMARY_COLOR_DARK, color)
-        return this
-    }
-
-    override fun primaryColorDarkRes(@ColorRes colorRes: Int): ThemeStore {
-        return primaryColorDark(ContextCompat.getColor(mContext, colorRes))
-    }
-
-    override fun primaryColorDarkAttr(@AttrRes colorAttr: Int): ThemeStore {
-        return primaryColorDark(ATHUtil.resolveColor(mContext, colorAttr))
-    }
-
-    override fun accentColor(@ColorInt color: Int): ThemeStore {
-        mEditor.putInt(ThemeStorePrefKeys.KEY_ACCENT_COLOR, color)
-        return this
-    }
-
-    override fun accentColorRes(@ColorRes colorRes: Int): ThemeStore {
-        return accentColor(ContextCompat.getColor(mContext, colorRes))
-    }
-
-    override fun accentColorAttr(@AttrRes colorAttr: Int): ThemeStore {
-        return accentColor(ATHUtil.resolveColor(mContext, colorAttr))
+    override fun themeColorAttr(@AttrRes colorAttr: Int): ThemeStore {
+        return themeColor(ATHUtil.resolveColor(mContext, colorAttr))
     }
 
     override fun statusBarColor(@ColorInt color: Int): ThemeStore {
@@ -162,11 +134,6 @@ private constructor(private val mContext: Context) : ThemeStorePrefKeys, ThemeSt
         return this
     }
 
-    override fun autoGeneratePrimaryDark(autoGenerate: Boolean): ThemeStore {
-        mEditor.putBoolean(ThemeStorePrefKeys.KEY_AUTO_GENERATE_PRIMARYDARK, autoGenerate)
-        return this
-    }
-
     override fun commit() {
         mEditor.putLong(ThemeStorePrefKeys.VALUES_CHANGED, System.currentTimeMillis())
             .putBoolean(ThemeStorePrefKeys.IS_CONFIGURED_KEY, true)
@@ -199,19 +166,10 @@ private constructor(private val mContext: Context) : ThemeStorePrefKeys, ThemeSt
 
         @CheckResult
         @ColorInt
-        fun primaryColor(context: Context): Int {
-            return prefs(context).getInt(
-                ThemeStorePrefKeys.KEY_PRIMARY_COLOR,
-                ATHUtil.resolveColor(context, R.attr.colorPrimary, Color.parseColor("#455A64"))
-            )
-        }
-
-        @CheckResult
-        @ColorInt
-        fun accentColor(context: Context): Int {
+        fun themeColor(context: Context): Int {
             val desaturatedColor = prefs(context).getBoolean("desaturated_color", false)
             val color = prefs(context).getInt(
-                ThemeStorePrefKeys.KEY_ACCENT_COLOR,
+                ThemeStorePrefKeys.KEY_THEME_COLOR,
                 ATHUtil.resolveColor(context, R.attr.colorAccent, Color.parseColor("#263238"))
             )
             return if (ATHUtil.isWindowBackgroundDark(context) && desaturatedColor) ColorUtil.desaturateColor(
@@ -227,7 +185,7 @@ private constructor(private val mContext: Context) : ThemeStorePrefKeys, ThemeSt
                 Color.BLACK
             } else prefs(context).getInt(
                 ThemeStorePrefKeys.KEY_NAVIGATION_BAR_COLOR,
-                primaryColor(context)
+                themeColor(context)
             )
         }
 

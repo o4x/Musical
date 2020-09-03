@@ -9,7 +9,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -45,7 +43,6 @@ import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment;
 import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.LibraryFragment;
 import com.o4x.musical.ui.fragments.mainactivity.queue.QueueFragment;
-import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.ArrayList;
@@ -134,7 +131,7 @@ public class MainActivity extends AbsMusicPanelActivity {
             case R.id.nav_eq:
                 setCurrentFragment(
                         EqualizerFragment.newBuilder()
-                        .setAccentColor(Color.parseColor("#4caf50"))
+                        .setthemeColor(Color.parseColor("#4caf50"))
                         .setAudioSessionId(MusicPlayerRemote.getAudioSessionId())
                         .build()
                 );
@@ -188,16 +185,16 @@ public class MainActivity extends AbsMusicPanelActivity {
 
 
     private void setUpNavigationView() {
-        int accentColor = ThemeStore.Companion.accentColor(this);
-        NavigationViewUtil.INSTANCE.setItemIconColors(navigationView, ATHUtil.INSTANCE.resolveColor(this, R.attr.iconColor, ThemeStore.Companion.textColorSecondary(this)), accentColor);
-        NavigationViewUtil.INSTANCE.setItemTextColors(navigationView, ThemeStore.Companion.textColorPrimary(this), accentColor);
+        int themeColor = ThemeStore.Companion.themeColor(this);
+        NavigationViewUtil.INSTANCE.setItemIconColors(navigationView, ATHUtil.INSTANCE.resolveColor(this, R.attr.iconColor, ThemeStore.Companion.textColorSecondary(this)), themeColor);
+        NavigationViewUtil.INSTANCE.setItemTextColors(navigationView, ThemeStore.Companion.textColorPrimary(this), themeColor);
 
         StateListDrawable stateListDrawable = (StateListDrawable) navigationView.getItemBackground();
         LayerDrawable layerDrawable = (LayerDrawable) stateListDrawable.getStateDrawable(0);
         GradientDrawable rectangle = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.rectangle);
         GradientDrawable rectangleRadius = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.rectangle_radius);
 
-        rectangle.setColor(accentColor);
+        rectangle.setColor(themeColor);
         rectangleRadius.setColor(ColorUtil.INSTANCE.withAlpha(ThemeStore.Companion.textColorSecondary(this), 0.1f));
 
         checkSetUpPro();

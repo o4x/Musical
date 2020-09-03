@@ -521,7 +521,7 @@ public class EqualizerFragment extends AbsMainActivityFragment implements MainAc
             return this;
         }
 
-        public Builder setAccentColor(int color) {
+        public Builder setthemeColor(int color) {
             themeColor = color;
             return this;
         }

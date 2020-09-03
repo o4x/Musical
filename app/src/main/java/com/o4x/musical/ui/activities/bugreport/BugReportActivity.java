@@ -120,14 +120,12 @@ public class BugReportActivity extends AbsThemeActivity {
     }
 
     private void initViews() {
-        final int accentColor = ThemeStore.Companion.accentColor(this);
-        final int primaryColor = ThemeStore.Companion.primaryColor(this);
-        toolbar.setBackgroundColor(primaryColor);
+        final int themeColor = ThemeStore.Companion.themeColor(this);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TintHelper.setTintAuto(optionUseAccount, accentColor, false);
+        TintHelper.setTintAuto(optionUseAccount, themeColor, false);
         optionUseAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +145,7 @@ public class BugReportActivity extends AbsThemeActivity {
                 });
             }
         });
-        TintHelper.setTintAuto(optionManual, accentColor, false);
+        TintHelper.setTintAuto(optionManual, themeColor, false);
         optionManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,13 +176,13 @@ public class BugReportActivity extends AbsThemeActivity {
 
         textDeviceInfo.setOnClickListener(v -> copyDeviceInfoToClipBoard());
 
-        TintHelper.setTintAuto(sendFab, accentColor, true);
+        TintHelper.setTintAuto(sendFab, themeColor, true);
         sendFab.setOnClickListener(v -> reportIssue());
 
-        TintHelper.setTintAuto(inputTitle, accentColor, false);
-        TintHelper.setTintAuto(inputDescription, accentColor, false);
-        TintHelper.setTintAuto(inputUsername, accentColor, false);
-        TintHelper.setTintAuto(inputPassword, accentColor, false);
+        TintHelper.setTintAuto(inputTitle, themeColor, false);
+        TintHelper.setTintAuto(inputDescription, themeColor, false);
+        TintHelper.setTintAuto(inputUsername, themeColor, false);
+        TintHelper.setTintAuto(inputPassword, themeColor, false);
     }
 
     private void reportIssue() {

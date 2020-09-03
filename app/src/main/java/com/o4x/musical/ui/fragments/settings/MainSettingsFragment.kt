@@ -101,32 +101,17 @@ class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, Shared
             true
         }
 
-        val accentColorPref: ATEColorPreference = findPreference("accent_color")!!
-        val accentColor = ThemeStore.accentColor(requireContext())
-        accentColorPref.setColor(accentColor, ColorUtil.darkenColor(accentColor))
+        val themeColorPref: ATEColorPreference = findPreference("theme_color")!!
+        val themeColor = ThemeStore.themeColor(requireContext())
+        themeColorPref.setColor(themeColor, ColorUtil.darkenColor(themeColor))
 
-        accentColorPref.setOnPreferenceClickListener {
-            ColorChooserDialog.Builder(requireContext(), R.string.accent_color)
+        themeColorPref.setOnPreferenceClickListener {
+            ColorChooserDialog.Builder(requireContext(), R.string.theme_color)
                 .customColors(ColorPalette(requireActivity()).materialColorsPrimary, ColorPalette(requireActivity()).materialColors)
                 .accentMode(true)
                 .allowUserColorInput(true)
                 .allowUserColorInputAlpha(false)
-                .preselect(accentColor)
-                .show(requireActivity())
-            return@setOnPreferenceClickListener true
-        }
-
-        val primaryColorPref: ATEColorPreference = findPreference("primary_color")!!
-        val primaryColor = ThemeStore.primaryColor(requireContext())
-        primaryColorPref.setColor(primaryColor, ColorUtil.darkenColor(primaryColor))
-
-        primaryColorPref.setOnPreferenceClickListener {
-            ColorChooserDialog.Builder(requireContext(), R.string.primary_color)
-                .customColors(ColorPalette(requireActivity()).materialColorsPrimary, ColorPalette(requireActivity()).materialColors)
-                .accentMode(true)
-                .allowUserColorInput(true)
-                .allowUserColorInputAlpha(false)
-                .preselect(primaryColor)
+                .preselect(themeColor)
                 .show(requireActivity())
             return@setOnPreferenceClickListener true
         }

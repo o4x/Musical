@@ -22,7 +22,7 @@ object NavigationViewUtil {
         val drawable = navigationView.itemBackground
         navigationView.itemBackground = TintHelper.createTintedDrawable(
             drawable,
-            ColorUtil.withAlpha(ThemeStore.accentColor(navigationView.context), 0.2f)
+            ColorUtil.withAlpha(ThemeStore.themeColor(navigationView.context), 0.2f)
         )
     }
 

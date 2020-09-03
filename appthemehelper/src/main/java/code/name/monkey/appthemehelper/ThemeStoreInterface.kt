@@ -14,29 +14,13 @@ internal interface ThemeStoreInterface {
 
     fun activityTheme(@StyleRes theme: Int): ThemeStore
 
-    // Primary colors
-
-    fun primaryColor(@ColorInt color: Int): ThemeStore
-
-    fun primaryColorRes(@ColorRes colorRes: Int): ThemeStore
-
-    fun primaryColorAttr(@AttrRes colorAttr: Int): ThemeStore
-
-    fun autoGeneratePrimaryDark(autoGenerate: Boolean): ThemeStore
-
-    fun primaryColorDark(@ColorInt color: Int): ThemeStore
-
-    fun primaryColorDarkRes(@ColorRes colorRes: Int): ThemeStore
-
-    fun primaryColorDarkAttr(@AttrRes colorAttr: Int): ThemeStore
-
     // Accent colors
 
-    fun accentColor(@ColorInt color: Int): ThemeStore
+    fun themeColor(@ColorInt color: Int): ThemeStore
 
-    fun accentColorRes(@ColorRes colorRes: Int): ThemeStore
+    fun themeColorRes(@ColorRes colorRes: Int): ThemeStore
 
-    fun accentColorAttr(@AttrRes colorAttr: Int): ThemeStore
+    fun themeColorAttr(@AttrRes colorAttr: Int): ThemeStore
 
     // Status bar color
 

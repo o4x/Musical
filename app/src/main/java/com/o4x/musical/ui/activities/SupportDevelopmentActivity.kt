@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +22,6 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.SkuDetails
 import com.anjlab.android.iab.v3.TransactionDetails
-import com.o4x.musical.BuildConfig
 import com.o4x.musical.R
 import com.o4x.musical.extensions.textColorPrimary
 import com.o4x.musical.extensions.textColorSecondary
@@ -68,8 +66,8 @@ class SupportDevelopmentActivity : AbsBaseActivity(), BillingProcessor.IBillingH
         setupToolbar()
 
 //        billingProcessor = BillingProcessor(this, BuildConfig.GOOGLE_PLAY_LICENSING_KEY, this)
-        TintHelper.setTint(progress, ThemeStore.accentColor(this))
-        donation.setTextColor(ThemeStore.accentColor(this))
+        TintHelper.setTint(progress, ThemeStore.themeColor(this))
+        donation.setTextColor(ThemeStore.themeColor(this))
     }
 
     private fun setupToolbar() {
