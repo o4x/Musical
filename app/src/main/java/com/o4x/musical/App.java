@@ -35,8 +35,7 @@ public class App extends Application {
         // default theme
         if (!ThemeStore.Companion.isConfigured(this, 1)) {
             ThemeStore.Companion.editTheme(this)
-                    .primaryColorRes(R.color.indigo_500)
-                    .accentColorRes(R.color.pink_A400)
+                    .themeColorRes(R.color.blue_grey_600)
                     .commit();
         }
 

@@ -76,7 +76,7 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
 
     private void setUpMiniPlayer() {
         setUpPlayPauseButton();
-        progressBar.setSupportProgressTintList(ColorStateList.valueOf(ThemeStore.Companion.accentColor(getActivity())));
+        progressBar.setSupportProgressTintList(ColorStateList.valueOf(ThemeStore.Companion.themeColor(getActivity())));
     }
 
     private void setUpPlayPauseButton() {

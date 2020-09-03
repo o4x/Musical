@@ -31,6 +31,6 @@ class ATESeekBarPreference @JvmOverloads constructor(
     override fun onBindViewHolder(view: PreferenceViewHolder) {
         super.onBindViewHolder(view)
         val seekBar = view.findViewById(R.id.seekbar) as SeekBar
-        TintHelper.setTintAuto(seekBar, ThemeStore.accentColor(context), false)
+        TintHelper.setTintAuto(seekBar, ThemeStore.themeColor(context), false)
     }
 }

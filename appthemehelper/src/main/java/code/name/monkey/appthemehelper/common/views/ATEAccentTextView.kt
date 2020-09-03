@@ -27,6 +27,6 @@ class ATEAccentTextView @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     init {
-        setTextColor(ThemeStore.accentColor(context))
+        setTextColor(ThemeStore.themeColor(context))
     }
 }

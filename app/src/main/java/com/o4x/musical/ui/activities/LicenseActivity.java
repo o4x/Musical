@@ -73,9 +73,9 @@ public class LicenseActivity extends AbsBaseActivity {
             final String changeLog = buf.toString()
                     .replace("{style-placeholder}",
                             String.format("body { background-color: %s; color: %s; }", backgroundColor, contentColor))
-                    .replace("{link-color}", colorToCSS(ThemeStore.Companion.accentColor(this)))
+                    .replace("{link-color}", colorToCSS(ThemeStore.Companion.themeColor(this)))
                     .replace("{link-color-active}",
-                            colorToCSS(ColorUtil.INSTANCE.lightenColor(ThemeStore.Companion.accentColor(this))));
+                            colorToCSS(ColorUtil.INSTANCE.lightenColor(ThemeStore.Companion.themeColor(this))));
 
             webView.loadData(changeLog, "text/html", "UTF-8");
         } catch (Throwable e) {

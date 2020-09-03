@@ -162,11 +162,11 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         fab!!.scaleY = 0f
         fab!!.isEnabled = false
         fab!!.setOnClickListener { save() }
-        TintHelper.setTintAuto(fab!!, ThemeStore.accentColor(this), true)
+        TintHelper.setTintAuto(fab!!, ThemeStore.themeColor(this), true)
     }
 
     private fun setupSearchButton() {
-        searchBtn!!.setBackgroundColor(ThemeStore.primaryColor(this))
+        searchBtn!!.setBackgroundColor(ThemeStore.themeColor(this))
         searchBtn!!.setOnClickListener { searchOnline() }
     }
 

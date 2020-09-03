@@ -25,7 +25,7 @@ class ATESwitch : SwitchCompat {
     }
 
     private fun init(context: Context) {
-        ATH.setTint(this, ThemeStore.accentColor(context))
+        ATH.setTint(this, ThemeStore.themeColor(context))
     }
 
     override fun isShown(): Boolean {

@@ -13,9 +13,7 @@ internal interface ThemeStorePrefKeys {
 
         const val KEY_ACTIVITY_THEME = "activity_theme"
 
-        const val KEY_PRIMARY_COLOR = "primary_color"
-        const val KEY_PRIMARY_COLOR_DARK = "primary_color_dark"
-        const val KEY_ACCENT_COLOR = "accent_color"
+        const val KEY_THEME_COLOR = "accent_color"
         const val KEY_STATUS_BAR_COLOR = "status_bar_color"
         const val KEY_NAVIGATION_BAR_COLOR = "navigation_bar_color"
 

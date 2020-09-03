@@ -15,7 +15,7 @@ object MaterialDialogsUtil {
         md.titleColor = ThemeStore.textColorPrimary(context)
         md.contentColor = ThemeStore.textColorSecondary(context)
         md.itemColor = md.titleColor
-        md.widgetColor = ThemeStore.accentColor(context)
+        md.widgetColor = ThemeStore.themeColor(context)
         md.linkColor = ColorStateList.valueOf(md.widgetColor)
         md.positiveColor = ColorStateList.valueOf(md.widgetColor)
         md.neutralColor = ColorStateList.valueOf(md.widgetColor)

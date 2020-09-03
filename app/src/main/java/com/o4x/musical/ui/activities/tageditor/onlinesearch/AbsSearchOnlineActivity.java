@@ -117,7 +117,7 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     }
 
     private void setUpToolBar() {
-        toolbar.setBackgroundColor(ThemeStore.Companion.primaryColor(this));
+        toolbar.setBackgroundColor(ThemeStore.Companion.themeColor(this));
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

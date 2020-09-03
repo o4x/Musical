@@ -47,9 +47,9 @@ fun Toolbar.backgroundTintList() {
     backgroundTintList = colorStateList
 }
 
-fun Context.accentColor() = ThemeStore.accentColor(this)
+fun Context.themeColor() = ThemeStore.themeColor(this)
 
-fun Fragment.accentColor() = ThemeStore.accentColor(requireContext())
+fun Fragment.themeColor() = ThemeStore.themeColor(requireContext())
 
 fun Context.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
 
@@ -77,18 +77,18 @@ fun Dialog.resolveColor(@AttrRes attr: Int, fallBackColor: Int = 0) =
     ATHUtil.resolveColor(context, attr, fallBackColor)
 
 
-fun CheckBox.addAccentColor() {
-    buttonTintList = ColorStateList.valueOf(ThemeStore.accentColor(context))
+fun CheckBox.addthemeColor() {
+    buttonTintList = ColorStateList.valueOf(ThemeStore.themeColor(context))
 }
 
-fun SeekBar.addAccentColor() {
-    val colorState = ColorStateList.valueOf(ThemeStore.accentColor(context))
+fun SeekBar.addthemeColor() {
+    val colorState = ColorStateList.valueOf(ThemeStore.themeColor(context))
     progressTintList = colorState
     thumbTintList = colorState
 }
 
 fun Button.accentTextColor() {
-    setTextColor(ThemeStore.accentColor(App.getContext()))
+    setTextColor(ThemeStore.themeColor(App.getContext()))
 }
 
 fun SeekBar.applyColor(@ColorInt color: Int) {
@@ -97,8 +97,8 @@ fun SeekBar.applyColor(@ColorInt color: Int) {
     progressBackgroundTintList = ColorStateList.valueOf(color)
 }
 
-fun ExtendedFloatingActionButton.accentColor() {
-    val color = ThemeStore.accentColor(context)
+fun ExtendedFloatingActionButton.themeColor() {
+    val color = ThemeStore.themeColor(context)
     val textColor = MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(color))
     val colorStateList = ColorStateList.valueOf(color)
     val textColorStateList = ColorStateList.valueOf(textColor)
@@ -120,14 +120,14 @@ fun MaterialButton.applyColor(color: Int) {
     iconTint = textColorColorStateList
 }
 
-fun TextInputLayout.accentColor() {
-    val accentColor = ThemeStore.accentColor(context)
-    val colorState = ColorStateList.valueOf(accentColor)
-    boxStrokeColor = accentColor
+fun TextInputLayout.themeColor() {
+    val themeColor = ThemeStore.themeColor(context)
+    val colorState = ColorStateList.valueOf(themeColor)
+    boxStrokeColor = themeColor
     defaultHintTextColor = colorState
     isHintAnimationEnabled = true
 }
 
-fun TextInputEditText.accentColor() {
+fun TextInputEditText.themeColor() {
 
 }

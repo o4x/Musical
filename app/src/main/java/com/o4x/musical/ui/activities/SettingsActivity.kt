@@ -38,13 +38,8 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
 
     override fun onColorSelection(dialog: ColorChooserDialog, selectedColor: Int) {
         when (dialog.title) {
-            R.string.accent_color -> {
-                ThemeStore.editTheme(this).accentColor(selectedColor).commit()
-                if (VersionUtils.hasNougatMR())
-                    DynamicShortcutManager(this).updateDynamicShortcuts()
-            }
-            R.string.primary_color -> {
-                ThemeStore.editTheme(this).primaryColor(selectedColor).commit()
+            R.string.theme_color -> {
+                ThemeStore.editTheme(this).themeColor(selectedColor).commit()
                 if (VersionUtils.hasNougatMR())
                     DynamicShortcutManager(this).updateDynamicShortcuts()
             }

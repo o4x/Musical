@@ -168,7 +168,7 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
     }
 
     private void setUpAppbarColor() {
-        int primaryColor = ThemeStore.Companion.primaryColor(getActivity());
+        int primaryColor = ThemeStore.Companion.themeColor(getActivity());
         appbar.setBackgroundColor(primaryColor);
         toolbar.setBackgroundColor(primaryColor);
         breadCrumbs.setBackgroundColor(primaryColor);
@@ -187,7 +187,7 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
     }
 
     private void setUpRecyclerView() {
-        ViewUtil.setUpFastScrollRecyclerViewColor(getActivity(), recyclerView, ThemeStore.Companion.accentColor(getActivity()));
+        ViewUtil.setUpFastScrollRecyclerViewColor(getActivity(), recyclerView, ThemeStore.Companion.themeColor(getActivity()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -240,7 +240,7 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
         cab = new MaterialCab(getMainActivity(), R.id.cab_stub)
                 .setMenu(menuRes)
                 .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.Companion.primaryColor(getActivity())))
+                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(ThemeStore.Companion.themeColor(getActivity())))
                 .start(callback);
         return cab;
     }
@@ -319,7 +319,7 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
                 } else {
                     Snackbar.make(coordinatorLayout, Html.fromHtml(String.format(getString(R.string.not_listed_in_media_store), canonicalFile.getName())), Snackbar.LENGTH_LONG)
                             .setAction(R.string.action_scan, v -> scanPaths(new String[]{canonicalFile.getPath()}))
-                            .setActionTextColor(ThemeStore.Companion.accentColor(getActivity()))
+                            .setActionTextColor(ThemeStore.Companion.themeColor(getActivity()))
                             .show();
                 }
             }).execute(new ListSongsAsyncTask.LoadingInfo(toList(canonicalFile.getParentFile()), fileFilter, getFileComparator()));
@@ -342,7 +342,7 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
                             }
                             scanPaths(paths);
                         })
-                        .setActionTextColor(ThemeStore.Companion.accentColor(getActivity()))
+                        .setActionTextColor(ThemeStore.Companion.themeColor(getActivity()))
                         .show();
             }
         }).execute(new ListSongsAsyncTask.LoadingInfo(files, AUDIO_FILE_FILTER, getFileComparator()));
@@ -418,7 +418,7 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
                             } else {
                                 Snackbar.make(coordinatorLayout, Html.fromHtml(String.format(getString(R.string.not_listed_in_media_store), file.getName())), Snackbar.LENGTH_LONG)
                                         .setAction(R.string.action_scan, v -> scanPaths(new String[]{FileUtil.safeGetCanonicalPath(file)}))
-                                        .setActionTextColor(ThemeStore.Companion.accentColor(getActivity()))
+                                        .setActionTextColor(ThemeStore.Companion.themeColor(getActivity()))
                                         .show();
                             }
                         }).execute(new ListSongsAsyncTask.LoadingInfo(toList(file), AUDIO_FILE_FILTER, getFileComparator()));

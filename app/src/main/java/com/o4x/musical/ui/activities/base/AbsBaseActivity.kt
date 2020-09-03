@@ -114,7 +114,7 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
                             Snackbar.LENGTH_INDEFINITE
                         )
                             .setAction(R.string.action_grant) { requestPermissions() }
-                            .setActionTextColor(ThemeStore.accentColor(this)).show()
+                            .setActionTextColor(ThemeStore.themeColor(this)).show()
                     } else {
                         // User has deny permission and checked never show permission dialog so you can redirect to Application settings page
                         Snackbar.make(
@@ -131,7 +131,7 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
                             )
                             intent.data = uri
                             startActivity(intent)
-                        }.setActionTextColor(ThemeStore.accentColor(this)).show()
+                        }.setActionTextColor(ThemeStore.themeColor(this)).show()
                     }
                     return
                 }

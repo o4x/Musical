@@ -71,7 +71,7 @@ object ATH {
     }
 
     fun setActivityToolbarColorAuto(activity: Activity, toolbar: Toolbar?) {
-        setActivityToolbarColor(activity, toolbar, ThemeStore.primaryColor(activity))
+        setActivityToolbarColor(activity, toolbar, ThemeStore.themeColor(activity))
     }
 
     fun setActivityToolbarColor(
@@ -86,7 +86,7 @@ object ATH {
     }
 
     fun setTaskDescriptionColorAuto(activity: Activity) {
-        setTaskDescriptionColor(activity, ThemeStore.primaryColor(activity))
+        setTaskDescriptionColor(activity, ThemeStore.themeColor(activity))
     }
 
     fun setTaskDescriptionColor(activity: Activity, @ColorInt color: Int) {

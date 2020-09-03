@@ -118,7 +118,7 @@ public class QueueFragment extends AbsMainActivityFragment implements MainActivi
     }
 
     private void setUpToolbar() {
-        int primaryColor = ThemeStore.Companion.primaryColor(getActivity());
+        int primaryColor = ThemeStore.Companion.themeColor(getActivity());
         appbar.setBackgroundColor(primaryColor);
         toolbar.setBackgroundColor(primaryColor);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);

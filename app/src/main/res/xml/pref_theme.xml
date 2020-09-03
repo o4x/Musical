@@ -21,32 +21,17 @@
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
             android:key="black_theme"
             android:layout="@layout/list_item_view_switch_no_title"
-            android:title="@string/black_theme_name" />
-
-    </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>
-
-    <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory
-        android:key="category_color"
-        android:layout="@layout/preference_category_title"
-        android:title="@string/colors"
-        app:allowDividerBelow="false">
-
-        <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEColorPreference
-            android:key="primary_color"
-            android:layout="@layout/list_item_color_view"
-            android:persistent="false"
-            android:summary="@string/primary_color_desc"
-            android:title="@string/primary_color"
-            app:icon="@drawable/ic_colorize"
+            android:title="@string/black_theme_name"
             app:allowDividerBelow="false"/>
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEColorPreference
-            android:key="accent_color"
+            android:key="theme_color"
             android:layout="@layout/list_item_color_view"
             android:persistent="false"
-            android:summary="@string/accent_color_desc"
-            android:title="@string/accent_color"
+            android:summary="@string/theme_color_desc"
+            android:title="@string/theme_color"
             app:icon="@drawable/ic_colorize" />
 
     </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>
+
 </androidx.preference.PreferenceScreen>
