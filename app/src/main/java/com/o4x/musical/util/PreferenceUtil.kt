@@ -94,7 +94,7 @@ object PreferenceUtil {
             "dark" -> R.style.Theme_Musical
             "black" -> R.style.Theme_Musical_Black
             "light" -> R.style.Theme_Musical_Light
-            else -> R.style.Theme_Musical_Light
+            else -> R.style.Theme_Musical
         }
     }
 
@@ -144,23 +144,6 @@ object PreferenceUtil {
                 putString(LIBRARY_CATEGORIES, Gson().toJson(value, collectionType))
             }
         }
-
-    @JvmStatic
-    @get:StyleRes
-    val generalTheme: Int
-        get() = themeResFromPrefValue(
-            sharedPreferences.getString(
-                GENERAL_THEME,
-                "light"
-            )
-        )
-
-    @JvmStatic
-    fun setGeneralTheme(theme: String?) {
-        val editor = sharedPreferences.edit()
-        editor.putString(GENERAL_THEME, theme)
-        editor.apply()
-    }
 
     @JvmStatic
     fun rememberLastTab(): Boolean {
@@ -576,7 +559,7 @@ object PreferenceUtil {
 
     private val isBlackMode
         get() = sharedPreferences.getBoolean(
-            BLACK_THEME, false
+            BLACK_THEME, true
         )
 
 

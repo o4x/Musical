@@ -45,6 +45,7 @@ import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment;
 import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.LibraryFragment;
 import com.o4x.musical.ui.fragments.mainactivity.queue.QueueFragment;
+import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.ArrayList;
