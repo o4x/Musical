@@ -116,6 +116,21 @@ class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, Shared
             return@setOnPreferenceClickListener true
         }
 
+        val primaryColorPref: ATEColorPreference = findPreference("primary_color")!!
+        val primaryColor = ThemeStore.primaryColor(requireContext())
+        primaryColorPref.setColor(primaryColor, ColorUtil.darkenColor(primaryColor))
+
+        primaryColorPref.setOnPreferenceClickListener {
+            ColorChooserDialog.Builder(requireContext(), R.string.primary_color)
+                .customColors(ColorPalette(requireActivity()).materialColorsPrimary, ColorPalette(requireActivity()).materialColors)
+                .accentMode(true)
+                .allowUserColorInput(true)
+                .allowUserColorInputAlpha(false)
+                .preselect(primaryColor)
+                .show(requireActivity())
+            return@setOnPreferenceClickListener true
+        }
+
           /////////////////////////////////
          // NOW PLAYING SCREEN SETTINGS //
         /////////////////////////////////

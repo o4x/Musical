@@ -43,6 +43,11 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
                 if (VersionUtils.hasNougatMR())
                     DynamicShortcutManager(this).updateDynamicShortcuts()
             }
+            R.string.primary_color -> {
+                ThemeStore.editTheme(this).primaryColor(selectedColor).commit()
+                if (VersionUtils.hasNougatMR())
+                    DynamicShortcutManager(this).updateDynamicShortcuts()
+            }
         }
         recreate()
     }
