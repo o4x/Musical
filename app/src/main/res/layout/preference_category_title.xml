@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/pref_title_padding"
-        android:paddingTop="16dp"
+        android:paddingTop="24dp"
         android:paddingEnd="16dp"
         android:textAppearance="@style/TextViewOverline"
         tools:text="@tools:sample/full_names" />

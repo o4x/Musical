@@ -3,19 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory
         android:layout="@layout/preference_category_title"
-        android:title="@string/pref_header_blacklist">
+        android:title="@string/pref_header_lists"
+        app:allowDividerBelow="false">
 
         <com.o4x.musical.preferences.BlacklistPreference
             android:key="blacklist"
             android:layout="@layout/list_item_view"
             android:summary="@string/pref_summary_blacklist"
             android:title="@string/pref_title_blacklist"
-            app:icon="@drawable/ic_music_note_off" />
-
-    </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>
-    <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory
-        android:layout="@layout/preference_category_title"
-        android:title="@string/pref_header_playlists">
+            app:icon="@drawable/ic_music_note_off"
+            app:allowDividerBelow="false"/>
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
             android:defaultValue="this_month"
@@ -29,9 +26,11 @@
             app:icon="@drawable/ic_playlist_add" />
 
     </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>
+
     <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory
         android:layout="@layout/preference_category_title"
-        android:title="@string/pref_header_advanced">
+        android:title="@string/pref_header_advanced"
+        app:allowDividerBelow="false">
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESeekBarPreference
             android:defaultValue="30"
@@ -41,7 +40,8 @@
             android:summary="@string/pref_filter_song_summary"
             android:title="@string/pref_filter_song_title"
             app:icon="@drawable/ic_filter_song"
-            app:showSeekBarValue="true" />
+            app:showSeekBarValue="true"
+            app:allowDividerBelow="false"/>
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
             android:defaultValue="false"
@@ -49,7 +49,8 @@
             android:layout="@layout/list_item_view_switch"
             android:summary="@string/pref_keep_pause_on_zero_volume_summary"
             android:title="@string/pref_keep_pause_on_zero_volume_title"
-            app:icon="@drawable/ic_pause" />
+            app:icon="@drawable/ic_pause"
+            app:allowDividerBelow="false"/>
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
             android:defaultValue="false"
@@ -57,7 +58,8 @@
             android:layout="@layout/list_item_view_switch"
             android:summary="@string/pref_keep_screen_on_summary"
             android:title="@string/pref_keep_screen_on_title"
-            app:icon="@drawable/ic_settings_brigntness" />
+            app:icon="@drawable/ic_settings_brigntness"
+            app:allowDividerBelow="false"/>
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESeekBarPreference
             android:defaultValue="16"
@@ -80,7 +82,8 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_language_name"
-        app:icon="@drawable/ic_language" />
+        app:icon="@drawable/ic_language"
+        app:allowDividerBelow="false" />
 
     <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreference
         android:key="about"
