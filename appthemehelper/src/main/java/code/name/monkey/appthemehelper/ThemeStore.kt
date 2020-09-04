@@ -124,16 +124,6 @@ private constructor(private val mContext: Context) : ThemeStorePrefKeys, ThemeSt
         return textColorSecondaryInverse(ATHUtil.resolveColor(mContext, colorAttr))
     }
 
-    override fun coloredStatusBar(colored: Boolean): ThemeStore {
-        mEditor.putBoolean(ThemeStorePrefKeys.KEY_APPLY_PRIMARYDARK_STATUSBAR, colored)
-        return this
-    }
-
-    override fun coloredNavigationBar(applyToNavBar: Boolean): ThemeStore {
-        mEditor.putBoolean(ThemeStorePrefKeys.KEY_APPLY_PRIMARY_NAVBAR, applyToNavBar)
-        return this
-    }
-
     override fun commit() {
         mEditor.putLong(ThemeStorePrefKeys.VALUES_CHANGED, System.currentTimeMillis())
             .putBoolean(ThemeStorePrefKeys.IS_CONFIGURED_KEY, true)
@@ -180,25 +170,10 @@ private constructor(private val mContext: Context) : ThemeStorePrefKeys, ThemeSt
         @CheckResult
         @ColorInt
         fun navigationBarColor(context: Context): Int {
-            return if (!coloredNavigationBar(context)) {
-                Color.BLACK
-            } else prefs(context).getInt(
+            return prefs(context).getInt(
                 ThemeStorePrefKeys.KEY_NAVIGATION_BAR_COLOR,
                 themeColor(context)
             )
-        }
-
-        @CheckResult
-        fun coloredStatusBar(context: Context): Boolean {
-            return prefs(context).getBoolean(
-                ThemeStorePrefKeys.KEY_APPLY_PRIMARYDARK_STATUSBAR,
-                true
-            )
-        }
-
-        @CheckResult
-        fun coloredNavigationBar(context: Context): Boolean {
-            return prefs(context).getBoolean(ThemeStorePrefKeys.KEY_APPLY_PRIMARY_NAVBAR, false)
         }
 
         @CheckResult

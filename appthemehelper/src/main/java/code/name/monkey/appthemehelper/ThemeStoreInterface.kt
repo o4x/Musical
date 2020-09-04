@@ -66,12 +66,6 @@ internal interface ThemeStoreInterface {
 
     fun textColorSecondaryInverseAttr(@AttrRes colorAttr: Int): ThemeStore
 
-    // Toggle configurations
-
-    fun coloredStatusBar(colored: Boolean): ThemeStore
-
-    fun coloredNavigationBar(applyToNavBar: Boolean): ThemeStore
-
     // Commit/apply
 
     fun commit()

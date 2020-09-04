@@ -5,12 +5,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import butterknife.BindView
@@ -41,6 +43,10 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
     private val EUGENE_CHEUNG_WEBSITE = "https://echeung.me/"
     private val ADRIAN_TWITTER = "https://twitter.com/froschgames"
 
+
+    @JvmField
+    @BindView(R.id.nested_scroll_view)
+    var scrollView: NestedScrollView? = null
     @JvmField
     @BindView(R.id.app_version)
     var appVersion: TextView? = null
@@ -103,6 +109,7 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
     var adrianTwitter: AppCompatButton? = null
 
     private lateinit var unbinder: Unbinder
+    var position: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -121,8 +128,20 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
         unbinder.unbind()
     }
 
+    override fun onPause() {
+        // Save scroll view position
+        position = scrollView?.verticalScrollbarPosition
+        super.onPause()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Restore scroll view position
+        if (position != null) {
+            scrollView?.verticalScrollbarPosition = position!!
+        }
+
         setUpViews()
     }
 

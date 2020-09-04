@@ -116,11 +116,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
     }
 
     open fun setNavigationBarColor(color: Int) {
-        if (ThemeStore.coloredNavigationBar(this)) {
-            ATH.setNavigationbarColor(this, color)
-        } else {
-            ATH.setNavigationbarColor(this, Color.BLACK)
-        }
+        ATH.setNavigationbarColor(this, color)
     }
 
     fun setNavigationBarColorAuto() {
@@ -136,7 +132,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
     }
 
     open fun setLightNavigationBar(enabled: Boolean) {
-        if (!ATHUtil.isWindowBackgroundDark(this) and ThemeStore.coloredNavigationBar(this)) {
+        if (!ATHUtil.isWindowBackgroundDark(this)) {
             ATH.setLightNavigationbar(this, enabled)
         }
     }
@@ -146,14 +142,9 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
         decorView.setOnSystemUiVisibilityChangeListener(null)
     }
 
-    private fun exitFullscreen() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         unregisterSystemUiVisibility()
-        exitFullscreen()
     }
 
     override fun attachBaseContext(newBase: Context?) {
