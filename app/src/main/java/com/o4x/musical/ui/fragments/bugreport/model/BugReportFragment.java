@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.activities.bugreport;
+package com.o4x.musical.ui.fragments.bugreport.model;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,17 +9,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 import androidx.annotation.StringRes;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,12 +29,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.o4x.musical.R;
 import com.o4x.musical.misc.DialogAsyncTask;
-import com.o4x.musical.ui.activities.base.AbsThemeActivity;
-import com.o4x.musical.ui.activities.bugreport.model.DeviceInfo;
-import com.o4x.musical.ui.activities.bugreport.model.Report;
-import com.o4x.musical.ui.activities.bugreport.model.github.ExtraInfo;
-import com.o4x.musical.ui.activities.bugreport.model.github.GithubLogin;
-import com.o4x.musical.ui.activities.bugreport.model.github.GithubTarget;
+import com.o4x.musical.ui.fragments.bugreport.model.github.ExtraInfo;
+import com.o4x.musical.ui.fragments.bugreport.model.github.GithubLogin;
+import com.o4x.musical.ui.fragments.bugreport.model.github.GithubTarget;
 
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.client.GitHubClient;
@@ -45,10 +44,13 @@ import java.lang.annotation.RetentionPolicy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import code.name.monkey.appthemehelper.ThemeStore;
 import code.name.monkey.appthemehelper.util.TintHelper;
 
-public class BugReportActivity extends AbsThemeActivity {
+import static android.content.Context.CLIPBOARD_SERVICE;
+
+public class BugReportFragment extends Fragment {
 
     private static final int STATUS_BAD_CREDENTIALS = 401;
     private static final int STATUS_ISSUES_NOT_ENABLED = 410;
@@ -65,10 +67,10 @@ public class BugReportActivity extends AbsThemeActivity {
     private static final String RESULT_ISSUES_NOT_ENABLED = "RESULT_ISSUES_NOT_ENABLED";
     private static final String RESULT_UNKNOWN = "RESULT_UNKNOWN";
 
-    private DeviceInfo deviceInfo;
+    private static final String ISSUE_TRACKER_LINK = "https://github.com/kabouzeid/Musical";
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+
+    private DeviceInfo deviceInfo;
 
     @BindView(R.id.input_layout_title)
     TextInputLayout inputLayoutTitle;
@@ -97,35 +99,35 @@ public class BugReportActivity extends AbsThemeActivity {
     @BindView(R.id.button_send)
     FloatingActionButton sendFab;
 
-    private static final String ISSUE_TRACKER_LINK = "https://github.com/kabouzeid/Musical";
+    private Unbinder unbinder;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_bug_report, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bug_report);
-        ButterKnife.bind(this);
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
-        setStatusBarColorAuto();
-        setNavigationBarColorAuto();
-        setTaskDescriptionColorAuto();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         initViews();
 
-        if (TextUtils.isEmpty(getTitle()))
-            setTitle(R.string.report_an_issue);
-
-
-        deviceInfo = new DeviceInfo(this);
+        deviceInfo = new DeviceInfo(requireContext());
         textDeviceInfo.setText(deviceInfo.toString());
     }
 
     private void initViews() {
-        final int themeColor = ThemeStore.Companion.themeColor(this);
-        setSupportActionBar(toolbar);
-        //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final int themeColor = ThemeStore.Companion.themeColor(getContext());
 
-        TintHelper.setTintAuto(optionUseAccount, themeColor, false);
         optionUseAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,11 +204,11 @@ public class BugReportActivity extends AbsThemeActivity {
     }
 
     private void copyDeviceInfoToClipBoard() {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(getString(R.string.device_info), deviceInfo.toMarkdown());
         clipboard.setPrimaryClip(clip);
 
-        Toast.makeText(BugReportActivity.this, R.string.copied_device_info_to_clipboard, Toast.LENGTH_LONG).show();
+        Toast.makeText(requireContext(), R.string.copied_device_info_to_clipboard, Toast.LENGTH_LONG).show();
     }
 
     private boolean validateInput() {
@@ -259,26 +261,18 @@ public class BugReportActivity extends AbsThemeActivity {
         String bugTitle = inputTitle.getText().toString();
         String bugDescription = inputDescription.getText().toString();
 
-        Report report = new Report(bugTitle, bugDescription, deviceInfo, new ExtraInfo());
+        com.o4x.musical.ui.fragments.bugreport.model.Report report = new com.o4x.musical.ui.fragments.bugreport.model.Report(bugTitle, bugDescription, deviceInfo, new ExtraInfo());
         GithubTarget target = new GithubTarget("kabouzeid", "Musical");
 
-        ReportIssueAsyncTask.report(this, report, target, login);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
+        ReportIssueAsyncTask.report(requireActivity(), report, target, login);
     }
 
     private static class ReportIssueAsyncTask extends DialogAsyncTask<Void, Void, String> {
-        private final Report report;
+        private final com.o4x.musical.ui.fragments.bugreport.model.Report report;
         private final GithubTarget target;
         private final GithubLogin login;
 
-        public static void report(Activity activity, Report report, GithubTarget target,
+        public static void report(Activity activity, com.o4x.musical.ui.fragments.bugreport.model.Report report, GithubTarget target,
                                   GithubLogin login) {
             new ReportIssueAsyncTask(activity, report, target, login).execute();
         }

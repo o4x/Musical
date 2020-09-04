@@ -24,16 +24,11 @@ import com.o4x.musical.ui.activities.LicenseActivity;
 import com.o4x.musical.ui.activities.PlaylistDetailActivity;
 import com.o4x.musical.ui.activities.PurchaseActivity;
 import com.o4x.musical.ui.activities.SupportDevelopmentActivity;
-import com.o4x.musical.ui.activities.bugreport.BugReportActivity;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class NavigationUtil {
-
-    public static void bugReport(@NonNull Activity activity) {
-        ActivityCompat.startActivity(activity, new Intent(activity, BugReportActivity.class), null);
-    }
 
     public static void goToArtist(@NonNull final Activity activity, final int artistId, @Nullable Pair... sharedElements) {
         final Intent intent = new Intent(activity, ArtistDetailActivity.class);

@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
@@ -19,7 +20,6 @@ import com.afollestad.materialdialogs.internal.ThemeSingleton
 import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.ui.activities.PurchaseActivity
-import com.o4x.musical.ui.activities.bugreport.BugReportActivity
 import com.o4x.musical.ui.activities.intro.AppIntroActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
 import com.o4x.musical.ui.dialogs.DonationsDialog
@@ -27,8 +27,6 @@ import de.psdev.licensesdialog.LicensesDialog
 
 class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
 
-    private lateinit var unbinder: Unbinder
-    
     private val GITHUB = "https://github.com/kabouzeid/Musical"
     private val TWITTER = "https://twitter.com/swiftkarim"
     private val WEBSITE = "https://kabouzeid.com/"
@@ -103,6 +101,8 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
     @JvmField
     @BindView(R.id.adrian_twitter)
     var adrianTwitter: AppCompatButton? = null
+
+    private lateinit var unbinder: Unbinder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -183,7 +183,7 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
         } else if (v === visitWebsite) {
             openUrl(WEBSITE)
         } else if (v === reportBugs) {
-            startActivity(Intent(requireContext(), BugReportActivity::class.java))
+            findNavController().navigate(R.id.action_about_to_bug)
         } else if (v === writeAnEmail) {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:contact@kabouzeid.com")
