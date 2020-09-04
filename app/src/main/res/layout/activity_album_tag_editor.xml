@@ -11,7 +11,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/Toolbar"
-        app:navigationIcon="@drawable/ic_keyboard_backspace_black"
+        app:navigationIcon="@drawable/ic_keyboard_backspace"
         app:title="@string/action_tag_editor" />
 
     <androidx.core.widget.NestedScrollView

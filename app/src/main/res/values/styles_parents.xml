@@ -18,6 +18,19 @@
     </style>
 
     <style name="Theme.Musical.Base" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/blue_grey_200</item>
+        <item name="colorPrimaryVariant">@color/blue_grey_400</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/blue_grey_100</item>
+        <item name="colorSecondaryVariant">@color/blue_grey_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:colorBackground">@color/grey_900</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorSurface">@color/dark_grey</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorError">@color/red_A200</item>
+        <item name="colorOnError">@color/black</item>
+
         <item name="md_background_color">@color/darkColorSurface</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActivityTransitions">true</item>
@@ -31,18 +44,15 @@
         <item name="windowActionBar">false</item>
         <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
-        <item name="colorSurface">@color/darkColorSurface</item>
         <item name="android:windowBackground">@color/window_color_dark</item>
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
-
-
 
 
         <item name="md_dark_theme">true</item>
         <item name="rectSelectorStrong">@drawable/rect_selector_strong_dark</item>
         <item name="cardBackgroundColor">@color/grey_800</item>
         <item name="defaultFooterColor">@color/grey_900</item>
-        <item name="dividerColor">@color/md_divider_white</item>
+        <item name="dividerColor">@color/grey_800</item>
         <item name="iconColor">@color/ate_secondary_text_dark</item>
         <!-- just in case-->
         <item name="colorAccent">@android:color/white</item>
