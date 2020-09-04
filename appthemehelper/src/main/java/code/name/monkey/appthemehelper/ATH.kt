@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.Toolbar
+import code.name.monkey.appthemehelper.util.ATHUtil
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.TintHelper
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
@@ -62,6 +64,13 @@ object ATH {
     }
 
     fun setNavigationbarColor(activity: Activity, color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            activity.window.navigationBarDividerColor =
+                ColorUtil.withAlpha(
+                    ATHUtil.resolveColor(activity, R.attr.elevationOverlayColor),
+                    0.1f
+                )
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             activity.window.navigationBarColor = color
         } else {
