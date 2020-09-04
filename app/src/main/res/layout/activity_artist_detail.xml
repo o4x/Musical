@@ -87,7 +87,7 @@
                             app:srcCompat="@drawable/ic_album_white_24dp"
                             tools:ignore="ContentDescription,UnusedAttribute" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/album_count_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                             app:srcCompat="@drawable/ic_music_note_white_24dp"
                             tools:ignore="ContentDescription,UnusedAttribute" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/song_count_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
                             app:srcCompat="@drawable/ic_timer_white_24dp"
                             tools:ignore="ContentDescription,UnusedAttribute" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/duration_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

@@ -14,8 +14,8 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
-            android:id="@+id/observableScrollView"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -192,7 +192,7 @@
 
             </RelativeLayout>
 
-        </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
