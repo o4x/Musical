@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/mainSettings"
         android:name="com.o4x.musical.ui.fragments.settings.MainSettingsFragment"
-        android:label="@string/action_settings"
-        tools:layout="@layout/fragment_main_settings">
+        android:label="@string/action_settings">
 
 
         <action
