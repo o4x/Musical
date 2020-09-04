@@ -422,5 +422,6 @@
     <string name="donation_header">Buy me a:</string>
     <string name="restored_previous_purchases">Restored previous purchases.</string>
     <string name="pref_header_lists">Lists</string>
+    <string name="settings">Settings</string>
 
 </resources>

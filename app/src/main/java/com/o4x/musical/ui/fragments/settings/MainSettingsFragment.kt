@@ -228,7 +228,7 @@ class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, Shared
         }
         val aboutPreference: Preference? = findPreference("about")
         aboutPreference?.setOnPreferenceClickListener {
-            findNavController().navigate(R.id.action_mainSettingsFragment_to_aboutActivity)
+            findNavController().navigate(R.id.action_mainSettings_to_about)
             true
         }
     }

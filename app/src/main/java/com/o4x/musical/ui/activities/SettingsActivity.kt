@@ -1,6 +1,7 @@
 package com.o4x.musical.ui.activities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.navigation.NavController
 import code.name.monkey.appthemehelper.ThemeStore
@@ -53,7 +54,9 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            if (findNavController(R.id.contentFrame).currentDestination?.id == R.id.mainSettings) {
+                onBackPressed()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

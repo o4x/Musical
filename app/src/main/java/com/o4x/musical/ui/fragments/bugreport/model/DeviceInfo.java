@@ -1,10 +1,11 @@
-package com.o4x.musical.ui.activities.bugreport.model;
+package com.o4x.musical.ui.fragments.bugreport.model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+
 import androidx.annotation.IntRange;
 
 import java.util.Arrays;

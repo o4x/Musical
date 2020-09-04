@@ -1,6 +1,6 @@
-package com.o4x.musical.ui.activities.bugreport.model;
+package com.o4x.musical.ui.fragments.bugreport.model;
 
-import com.o4x.musical.ui.activities.bugreport.model.github.ExtraInfo;
+import com.o4x.musical.ui.fragments.bugreport.model.github.ExtraInfo;
 
 public class Report {
     private final String title;

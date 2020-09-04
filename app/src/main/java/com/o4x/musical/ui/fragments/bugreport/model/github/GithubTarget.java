@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.activities.bugreport.model.github;
+package com.o4x.musical.ui.fragments.bugreport.model.github;
 
 public class GithubTarget {
     private final String username;
