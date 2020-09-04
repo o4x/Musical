@@ -87,7 +87,7 @@
                             app:srcCompat="@drawable/ic_person_white_24dp"
                             tools:ignore="ContentDescription,UnusedAttribute" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:ellipsize="end"
                             android:maxLines="@integer/detail_header_tile_maxLines"
                             android:id="@+id/artist_text"
@@ -119,7 +119,7 @@
                             app:srcCompat="@drawable/ic_music_note_white_24dp"
                             tools:ignore="ContentDescription,UnusedAttribute" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/song_count_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
                             app:srcCompat="@drawable/ic_timer_white_24dp"
                             tools:ignore="ContentDescription,UnusedAttribute" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/duration_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -179,7 +179,7 @@
                             app:srcCompat="@drawable/ic_event_white_24dp"
                             tools:ignore="ContentDescription,UnusedAttribute" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/album_year_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

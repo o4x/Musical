@@ -194,8 +194,9 @@ public class MainActivity extends AbsMusicPanelActivity {
         GradientDrawable rectangle = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.rectangle);
         GradientDrawable rectangleRadius = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.rectangle_radius);
 
+
         rectangle.setColor(themeColor);
-        rectangleRadius.setColor(ColorUtil.INSTANCE.withAlpha(ThemeStore.Companion.textColorSecondary(this), 0.1f));
+        rectangleRadius.setColor(ColorUtil.INSTANCE.withAlpha(ThemeStore.Companion.textColorPrimary(this), 0.4f));
 
         checkSetUpPro();
         navigationView.setNavigationItemSelectedListener(menuItem -> {

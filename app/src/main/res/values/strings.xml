@@ -141,7 +141,7 @@
     <string name="create_action">Create</string>
     <string name="reset_action">Reset</string>
     <string name="x_selected">%1$d selected</string>
-    <string name="theme_color">Accent color</string>
+    <string name="theme_color">Theme color</string>
     <string name="theme_color_desc">The theme color.</string>
     <string name="update_image">Update image</string>
     <string name="playlist_empty_text">Empty playlist</string>
