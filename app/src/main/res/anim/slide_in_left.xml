@@ -18,6 +18,11 @@
 */
 -->
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-    <translate android:fromXDelta="-50%p" android:toXDelta="0"
-        android:duration="@android:integer/config_mediumAnimTime"/>
+    <alpha
+        android:duration="@android:integer/config_shortAnimTime"
+        android:fromAlpha="0"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:toAlpha="1.0" />
+    <translate android:fromXDelta="-10%p" android:toXDelta="0"
+        android:duration="@android:integer/config_shortAnimTime"/>
 </set>
