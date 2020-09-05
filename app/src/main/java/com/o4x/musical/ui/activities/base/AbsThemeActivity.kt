@@ -88,7 +88,8 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom,
                 color)
-            colorAnimation.duration = 400 // milliseconds
+            colorAnimation.duration =
+                resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
             colorAnimation.addUpdateListener { animator: ValueAnimator ->
                 window.statusBarColor = animator.animatedValue as Int
                 setLightStatusBarAuto(animator.animatedValue as Int)
