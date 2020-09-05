@@ -1,8 +1,13 @@
 package com.o4x.musical.ui.activities
 
+import android.R.attr.bitmap
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
 import android.view.MenuItem
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.navigation.NavController
 import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.util.VersionUtils
@@ -12,7 +17,10 @@ import com.o4x.musical.R
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
+import com.o4x.musical.util.ViewUtil
 import kotlinx.android.synthetic.main.activity_settings.*
+import java.io.ByteArrayOutputStream
+
 
 class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,11 +33,14 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
     }
 
     private fun setupToolbar() {
-        setTitle(R.string.action_settings)
         applyToolbar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         val navController: NavController = findNavController(R.id.contentFrame)
+        val animation: Animation = AnimationUtils.loadAnimation(applicationContext,
+            R.anim.slide_in_left)
         navController.addOnDestinationChangedListener { _, _, _ ->
-            toolbar.title = navController.currentDestination?.label
+            toolbar_title.startAnimation(animation)
+            toolbar_title.text = navController.currentDestination?.label
         }
     }
 
