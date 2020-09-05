@@ -68,7 +68,7 @@ object ATH {
             activity.window.navigationBarDividerColor =
                 ColorUtil.withAlpha(
                     ATHUtil.resolveColor(activity, R.attr.elevationOverlayColor),
-                    0.1f
+                    0.08f
                 )
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
