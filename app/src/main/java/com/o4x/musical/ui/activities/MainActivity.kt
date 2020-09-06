@@ -101,11 +101,6 @@ class MainActivity : AbsMusicPanelActivity() {
     }
 
     fun setMusicChooser(id: Int) {
-
-        if (id == navigation_view.checkedItem?.itemId ) {
-            return
-        }
-
         navigation_view.setCheckedItem(id)
         when (id) {
             R.id.nav_home -> navController.popBackStack()
@@ -189,7 +184,7 @@ class MainActivity : AbsMusicPanelActivity() {
                         SettingsActivity::class.java))
                 }, 200)
             }
-            false
+            true
         }
     }
 
@@ -220,7 +215,6 @@ class MainActivity : AbsMusicPanelActivity() {
             drawer_layout.closeDrawers()
             return true
         }
-        navigation_view.setCheckedItem(R.id.nav_home)
         return super.handleBackPress() || navController.popBackStack()
     }
 
