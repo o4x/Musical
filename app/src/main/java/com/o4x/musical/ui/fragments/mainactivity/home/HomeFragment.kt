@@ -58,7 +58,11 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        activity = mainActivity
+        activity = try {
+            mainActivity
+        } catch (e: ClassCastException) {
+            throw RuntimeException(context.javaClass.simpleName + " must be an instance of " + AbsMusicServiceActivity::class.java.simpleName)
+        }
     }
 
     override fun onCreateView(
