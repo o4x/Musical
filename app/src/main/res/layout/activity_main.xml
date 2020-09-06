@@ -11,7 +11,7 @@
         android:id="@+id/fragment_container"
         android:name="androidx.navigation.fragment.NavHostFragment"
         app:navGraph="@navigation/main_graph"
-        app:defaultNavHost="true" />
+        app:defaultNavHost="true"/>
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,8 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        app:elevation="0dp"
-        android:background="@color/transparent">
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/main_toolbar"

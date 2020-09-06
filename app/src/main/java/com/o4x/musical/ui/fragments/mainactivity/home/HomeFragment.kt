@@ -1,5 +1,7 @@
 package com.o4x.musical.ui.fragments.mainactivity.home
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -19,7 +21,7 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.o4x.musical.R
-import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.universalil.UniversalIL
 import com.o4x.musical.interfaces.MusicServiceEventListener
@@ -31,6 +33,7 @@ import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import com.o4x.musical.ui.activities.SearchActivity
+import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
@@ -42,8 +45,6 @@ import kotlin.math.max
 import kotlin.math.min
 
 class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
-
-    private val transparentColor = Color.TRANSPARENT
     
     private lateinit var activity: MainActivity
 
@@ -77,13 +78,24 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
         super.onViewCreated(view, savedInstanceState)
         queueListener = QueueListener()
         activity.addMusicServiceEventListener(queueListener)
-        activity.setStatusBarColor(transparentColor)
+        activity.setStatusBarColor(transparentColor())
+        activity.setNavigationBarColorAuto()
+        activity.setTaskDescriptionColorAuto()
         setUpToolbar()
         setUpViews()
     }
 
+    private fun transparentColor(): Int {
+        return Color.TRANSPARENT
+    }
+
     private fun setUpToolbar() {
+        val transparentColor = transparentColor()
+        activity.appbar.setBackgroundColor(transparentColor)
         activity.toolbar.setBackgroundColor(transparentColor)
+        activity.toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        activity.setTitle(R.string.app_name)
+        activity.setSupportActionBar(activity.toolbar)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -92,7 +104,7 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
         ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity,
             activity.toolbar,
             menu,
-            primaryColor())
+            ViewUtil.getViewBackgroundColor(activity.toolbar))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -120,6 +132,21 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
     override fun handleBackPress(): Boolean {
         return false
+    }
+
+    private fun setAppbarColor(color: Int) {
+        val colorFrom = ViewUtil.getViewBackgroundColor(activity.toolbar)
+        if (colorFrom == color) return
+        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom,
+            color)
+        colorAnimation.duration =
+            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
+        colorAnimation.addUpdateListener { animator: ValueAnimator ->
+            val background = animator.animatedValue as Int
+            activity.appbar.setBackgroundColor(background)
+            activity.toolbar.setBackgroundColor(background)
+        }
+        colorAnimation.start()
     }
 
     private fun setUpViews() {
@@ -184,6 +211,7 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
         // get real header height
         val headerHeight = header.layoutParams.height - appbarHeight - statusBarHeight.toFloat()
+        val transparentColor = transparentColor()
         val isStatusFlat = AtomicBoolean(false)
         val isAppbarFlat = AtomicBoolean(false)
         nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
@@ -195,8 +223,8 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
             // Scroll appbar
             if (scrollY > headerHeight + appbarHeight && !isAppbarFlat.get()) {
-                activity.setToolbarColor(primaryColor())
-                activity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+                setAppbarColor(surfaceColor())
+                activity.appbar.elevation = 8f
                 isAppbarFlat.set(true)
             }
             if (scrollY > headerHeight) {
@@ -216,7 +244,7 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
                 }
             } else {
                 if (isStatusFlat.get()) {
-                    activity.setToolbarColor(transparentColor)
+                    setAppbarColor(transparentColor)
                     activity.setStatusBarColorWithAnim(transparentColor)
                     activity.appbar.elevation = 0f
                     isStatusFlat.set(false)

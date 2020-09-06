@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.Unbinder
+import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
-import com.google.android.material.appbar.AppBarLayout
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
@@ -45,9 +48,10 @@ class QueueFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_queue, container, false)
+        val view = inflater.inflate(R.layout.fragment_queue, container, false)
+        return view
     }
 
     override fun onDestroyView() {
@@ -62,7 +66,20 @@ class QueueFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
         super.onViewCreated(view, savedInstanceState)
         queueListener = QueueListener()
         activity.addMusicServiceEventListener(queueListener)
+        mainActivity.setStatusBarColorAuto()
+        mainActivity.setNavigationBarColorAuto()
+        mainActivity.setTaskDescriptionColorAuto()
+        setUpToolbar()
         setUpViews()
+    }
+
+    private fun setUpToolbar() {
+        val primaryColor = themeColor(activity)
+        activity.appbar.setBackgroundColor(primaryColor)
+        activity.toolbar.setBackgroundColor(primaryColor)
+        activity.toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        activity.setTitle(R.string.app_name)
+        mainActivity.setSupportActionBar(activity.toolbar)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
