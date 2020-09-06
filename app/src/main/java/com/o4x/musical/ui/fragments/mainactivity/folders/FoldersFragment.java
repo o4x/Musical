@@ -93,6 +93,21 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
     private SongFileAdapter adapter;
     private MaterialCab cab;
 
+    public FoldersFragment() {
+    }
+
+    public static FoldersFragment newInstance(Context context) {
+        return newInstance(PreferenceUtil.getStartDirectory());
+    }
+
+    public static FoldersFragment newInstance(File directory) {
+        FoldersFragment frag = new FoldersFragment();
+        Bundle b = new Bundle();
+        b.putSerializable(PATH, directory);
+        frag.setArguments(b);
+        return frag;
+    }
+
     public void setCrumb(BreadCrumbLayout.Crumb crumb, boolean addToHistory) {
         if (crumb == null) return;
         saveScrollPosition();
@@ -125,7 +140,7 @@ public class FoldersFragment extends AbsMainActivityFragment implements MainActi
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
-            setCrumb(new BreadCrumbLayout.Crumb(FileUtil.safeGetCanonicalFile((File) PreferenceUtil.getStartDirectory())), true);
+            setCrumb(new BreadCrumbLayout.Crumb(FileUtil.safeGetCanonicalFile((File) getArguments().getSerializable(PATH))), true);
         } else {
             breadCrumbs.restoreFromStateWrapper(savedInstanceState.getParcelable(CRUMBS));
             getLoaderManager().initLoader(LOADER_ID, null, this);

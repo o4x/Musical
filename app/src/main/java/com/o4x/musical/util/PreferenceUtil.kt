@@ -511,12 +511,12 @@ object PreferenceUtil {
     }
 
     @JvmStatic
-    var startDirectory: File
+    var startDirectory: File?
         get() = File(
             sharedPreferences.getString(
                 START_DIRECTORY,
                 FoldersFragment.getDefaultStartDirectory().path
-            )!!
+            )
         )
         set(file) {
             val editor = sharedPreferences.edit()
