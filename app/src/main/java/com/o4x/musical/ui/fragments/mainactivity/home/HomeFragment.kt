@@ -95,25 +95,25 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
     private fun setUpToolbar() {
         val transparentColor = transparentColor()
-        activity.appbar.setBackgroundColor(transparentColor)
-        activity.toolbar.setBackgroundColor(transparentColor)
-        activity.toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        appbar.setBackgroundColor(transparentColor)
+        toolbar.setBackgroundColor(transparentColor)
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
         activity.setTitle(R.string.app_name)
-        activity.setSupportActionBar(activity.toolbar)
+        activity.setSupportActionBar(toolbar)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_main, menu)
         ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity,
-            activity.toolbar,
+            toolbar!!,
             menu,
-            ViewUtil.getViewBackgroundColor(activity.toolbar))
+            ViewUtil.getViewBackgroundColor(toolbar))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, activity.toolbar)
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, toolbar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -139,7 +139,7 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
     }
 
     private fun setAppbarColor(color: Int) {
-        val colorFrom = ViewUtil.getViewBackgroundColor(activity.toolbar)
+        val colorFrom = ViewUtil.getViewBackgroundColor(appbar)
         if (colorFrom == color) return
         val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom,
             color)
@@ -147,8 +147,8 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
             resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
         colorAnimation.addUpdateListener { animator: ValueAnimator ->
             val background = animator.animatedValue as Int
-            activity.appbar.setBackgroundColor(background)
-            activity.toolbar.setBackgroundColor(background)
+            appbar.setBackgroundColor(background)
+            toolbar.setBackgroundColor(background)
         }
         colorAnimation.start()
     }
@@ -210,7 +210,7 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
     private fun setUpBounceScrollView() {
         val displayHeight = Resources.getSystem().displayMetrics.heightPixels
         val statusBarHeight = Util.getStatusBarHeight(activity)
-        val appbarHeight = activity.toolbar.layoutParams.height
+        val appbarHeight = toolbar.layoutParams.height
 
 
         // get real header height
@@ -228,7 +228,7 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
             // Scroll appbar
             if (scrollY > headerHeight + appbarHeight && !isAppbarFlat.get()) {
                 setAppbarColor(surfaceColor())
-                activity.appbar.elevation = 8f
+                appbar.elevation = 8f
                 isAppbarFlat.set(true)
             }
             if (scrollY > headerHeight) {
@@ -237,12 +237,12 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
                     isStatusFlat.set(true)
                 }
                 if (scrollY > oldScrollY) {
-                    activity.appbar.y =
-                        max(-appbarHeight.toFloat(), activity.appbar.y + (oldScrollY - scrollY)
+                    appbar.y =
+                        max(-appbarHeight.toFloat(), appbar.y + (oldScrollY - scrollY)
                         )
                     shuffle_btn.hide()
                 } else {
-                    activity.appbar.y = min(0f, activity.appbar.y + (oldScrollY - scrollY)
+                    appbar.y = min(0f, appbar.y + (oldScrollY - scrollY)
                     )
                     shuffle_btn.show()
                 }
@@ -250,11 +250,11 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
                 if (isStatusFlat.get()) {
                     setAppbarColor(transparentColor)
                     activity.setStatusBarColorWithAnim(transparentColor)
-                    activity.appbar.elevation = 0f
+                    appbar.elevation = 0f
                     isStatusFlat.set(false)
                     isAppbarFlat.set(false)
                 }
-                activity.appbar.y = 0f
+                appbar.y = 0f
             }
         }
 
