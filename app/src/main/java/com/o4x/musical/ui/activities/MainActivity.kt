@@ -1,5 +1,7 @@
 package com.o4x.musical.ui.activities
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,6 +17,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.NavController
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
@@ -26,9 +29,12 @@ import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemIconColors
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
 import code.name.monkey.retromusic.extensions.findNavController
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.AppBarLayout.ScrollingViewBehavior
 import com.google.android.material.appbar.MaterialToolbar
 import com.o4x.musical.App
 import com.o4x.musical.R
+import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper
 import com.o4x.musical.imageloader.universalil.UniversalIL
@@ -44,6 +50,7 @@ import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog
 import com.o4x.musical.util.PreferenceUtil.introShown
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.util.PreferenceUtil.setIntroShown
+import com.o4x.musical.util.ViewUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
 import java.util.*
@@ -59,9 +66,10 @@ class MainActivity : AbsMusicPanelActivity() {
         super.onCreate(savedInstanceState)
 
         ButterKnife.bind(this)
-        navController = findNavController(R.id.fragment_container)
 
+        setupNavController()
         setDrawUnderBar()
+        setupToolbar()
         setUpNavigationView()
 
 
@@ -73,6 +81,7 @@ class MainActivity : AbsMusicPanelActivity() {
         App.setOnProVersionChangedListener { checkSetUpPro() }
         UniversalIL.initImageLoader(this)
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
@@ -100,6 +109,13 @@ class MainActivity : AbsMusicPanelActivity() {
         return contentView
     }
 
+    private fun setupToolbar() {
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        setTitle(R.string.app_name)
+        setSupportActionBar(toolbar)
+    }
+
+
     fun setMusicChooser(id: Int) {
 
         if (id == navigation_view.checkedItem?.itemId ) {
@@ -120,7 +136,6 @@ class MainActivity : AbsMusicPanelActivity() {
 //            )
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -274,7 +289,7 @@ class MainActivity : AbsMusicPanelActivity() {
 
     private fun parseIdFromIntent(
         intent: Intent, longKey: String,
-        stringKey: String
+        stringKey: String,
     ): Long {
         var id = intent.getLongExtra(longKey, -1)
         if (id < 0) {
@@ -320,6 +335,44 @@ class MainActivity : AbsMusicPanelActivity() {
         fun handleBackPress(): Boolean
     }
 
+    fun setToolbarColor(color: Int) {
+        val colorFrom = ViewUtil.getViewBackgroundColor(toolbar)
+        if (colorFrom == color) return
+        val colorAnimation = ValueAnimator.ofArgb(colorFrom, color)
+        colorAnimation.duration =
+            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
+        colorAnimation.addUpdateListener { animator: ValueAnimator ->
+            val background = animator.animatedValue as Int
+            toolbar.setBackgroundColor(background)
+        }
+        colorAnimation.start()
+    }
+
+    private fun setupNavController() {
+        navController = findNavController(R.id.fragment_container)
+
+        val toolbarParams: AppBarLayout.LayoutParams =
+            toolbar.layoutParams as AppBarLayout.LayoutParams
+
+        val coordinatorParams: CoordinatorLayout.LayoutParams =
+            fragment_container.layoutParams as CoordinatorLayout.LayoutParams
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.home) {
+                appbar.elevation = 0f
+                toolbarParams.scrollFlags = 0
+                coordinatorParams.behavior = null
+            } else {
+                setStatusBarColorAuto()
+                toolbar.setBackgroundColor(primaryColor())
+                appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+                toolbarParams.scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                        or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS)
+
+                coordinatorParams.behavior = ScrollingViewBehavior()
+            }
+        }
+    }
 
     val appbar: AppBarLayout
         get() = main_appbar

@@ -25,7 +25,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.o4x.musical.R
 
 fun AppCompatActivity.applyToolbar(toolbar: MaterialToolbar) {
-    toolbar.setBackgroundColor(surfaceColor())
+    toolbar.setBackgroundColor(primaryColor())
     ToolbarContentTintHelper.colorBackButton(toolbar)
     setSupportActionBar(toolbar)
 }
