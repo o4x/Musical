@@ -21,6 +21,7 @@ import code.name.monkey.appthemehelper.util.MaterialDialogsUtil
 import code.name.monkey.appthemehelper.util.VersionUtils
 import com.o4x.musical.LanguageContextWrapper
 import com.o4x.musical.R
+import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.RetroUtil
 import com.o4x.musical.util.Util
@@ -73,7 +74,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
             VersionUtils.hasMarshmallow() -> window.statusBarColor = color
             else -> window.statusBarColor = ColorUtil.darkenColor(color)
         }
-        setLightStatusBarAuto(ATHUtil.resolveColor(this, R.attr.colorSurface))
+        setLightStatusBarAuto(this.primaryColor())
     }
 
     /**
@@ -86,26 +87,25 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
         val colorFrom = window.statusBarColor
         if (colorFrom == color) return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom,
-                color)
+            val colorAnimation = ValueAnimator.ofArgb(colorFrom, color)
             colorAnimation.duration =
                 resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
             colorAnimation.addUpdateListener { animator: ValueAnimator ->
                 window.statusBarColor = animator.animatedValue as Int
-                setLightStatusBarAuto(animator.animatedValue as Int)
             }
+            setLightStatusBarAuto(primaryColor())
             colorAnimation.start()
         }
     }
 
     fun setStatusBarColorAuto() {
         // we don't want to use statusbar color because we are doing the color darkening on our own to support KitKat
-        setStatusBarColor(ATHUtil.resolveColor(this, R.attr.colorSurface))
-        setLightStatusBarAuto(ATHUtil.resolveColor(this, R.attr.colorSurface))
+        setStatusBarColor(primaryColor())
+        setLightStatusBarAuto(primaryColor())
     }
 
     fun setStatusBarColorAutoWithAnim() {
-        setStatusBarColorWithAnim(ATHUtil.resolveColor(this, R.attr.colorSurface))
+        setStatusBarColorWithAnim(primaryColor())
     }
 
     open fun setTaskDescriptionColor(@ColorInt color: Int) {

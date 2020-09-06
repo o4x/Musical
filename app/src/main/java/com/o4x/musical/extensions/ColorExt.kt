@@ -51,6 +51,10 @@ fun Context.themeColor() = ThemeStore.themeColor(this)
 
 fun Fragment.themeColor() = ThemeStore.themeColor(requireContext())
 
+fun Context.primaryColor() = resolveColor(R.attr.colorPrimary, Color.WHITE)
+
+fun Fragment.primaryColor() = resolveColor(R.attr.colorPrimary, Color.WHITE)
+
 fun Context.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
 
 fun Fragment.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
