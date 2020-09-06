@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import androidx.navigation.NavController
-import butterknife.BindView
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorSecondary
@@ -26,7 +25,6 @@ import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemIconColors
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
 import code.name.monkey.retromusic.extensions.findNavController
-import com.google.android.material.navigation.NavigationView
 import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
@@ -87,7 +85,7 @@ class MainActivity : AbsMusicPanelActivity() {
         @SuppressLint("InflateParams") val contentView =
             layoutInflater.inflate(R.layout.activity_main_drawer_layout, null)
         val drawerContent = contentView.findViewById<ViewGroup>(R.id.drawer_content_container)
-        drawerContent.addView(wrapSlidingMusicPanel(R.layout.activity_main_content))
+        drawerContent.addView(wrapSlidingMusicPanel(R.layout.activity_main))
 
         // To apply WindowInsets only for navigation view, not content and it's very important.
         contentView.setOnApplyWindowInsetsListener { view: View, windowInsets: WindowInsets ->
