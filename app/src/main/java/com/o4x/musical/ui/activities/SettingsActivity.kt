@@ -23,9 +23,15 @@ import java.io.ByteArrayOutputStream
 
 
 class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
+
+    lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_settings)
+        navController = findNavController(R.id.contentFrame)
+
         setStatusBarColorAuto()
         setNavigationBarColorAuto()
         setLightNavigationBar(true)
@@ -35,7 +41,6 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
     private fun setupToolbar() {
         applyToolbar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        val navController: NavController = findNavController(R.id.contentFrame)
         val animation: Animation = AnimationUtils.loadAnimation(applicationContext,
             R.anim.slide_in_left)
         navController.addOnDestinationChangedListener { _, _, _ ->
@@ -45,7 +50,7 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return findNavController(R.id.contentFrame).navigateUp() || super.onSupportNavigateUp()
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
     override fun onColorSelection(dialog: ColorChooserDialog, selectedColor: Int) {
@@ -65,7 +70,7 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            if (findNavController(R.id.contentFrame).currentDestination?.id == R.id.mainSettings) {
+            if (navController.currentDestination?.id == R.id.mainSettings) {
                 onBackPressed()
             }
         }
