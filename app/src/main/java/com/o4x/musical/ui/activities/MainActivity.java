@@ -72,6 +72,24 @@ public class MainActivity extends AbsMusicPanelActivity {
     private boolean blockRequestPermissions;
 
     @Override
+    protected View createContentView() {
+        @SuppressLint("InflateParams")
+        View contentView = getLayoutInflater().inflate(R.layout.activity_main_drawer_layout, null);
+        ViewGroup drawerContent = contentView.findViewById(R.id.drawer_content_container);
+        drawerContent.addView(wrapSlidingMusicPanel(R.layout.activity_main_content));
+
+        // To apply WindowInsets only for navigation view, not content and it's very important.
+        contentView.setOnApplyWindowInsetsListener((view, windowInsets) -> {
+            view.findViewById(R.id.navigation_view).onApplyWindowInsets(windowInsets);
+            view.findViewById(R.id.drawer_content_container).setPadding(
+                    0,0,0,windowInsets.getSystemWindowInsetBottom());
+            return windowInsets;
+        });
+
+        return contentView;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setDrawUnderBar();
@@ -80,7 +98,7 @@ public class MainActivity extends AbsMusicPanelActivity {
         setUpDrawerLayout();
 
         if (savedInstanceState == null) {
-            setMusicChooser(PreferenceUtil.getLastMusicChooser());
+            setMusicChooser(R.id.nav_home);
         } else {
             restoreCurrentFragment();
         }
@@ -89,13 +107,8 @@ public class MainActivity extends AbsMusicPanelActivity {
             showChangelog();
         }
 
-        App.setOnProVersionChangedListener(() -> {
-            // called if the cached value was outdated (should be a rare event)
-            checkSetUpPro();
-            if (!App.isProVersion() && PreferenceUtil.getLastMusicChooser() == R.id.nav_folders) {
-                setMusicChooser(R.id.nav_folders); // shows the purchase activity and switches to LIBRARY
-            }
-        });
+        // called if the cached value was outdated (should be a rare event)
+        App.setOnProVersionChangedListener(this::checkSetUpPro);
 
         UniversalIL.initImageLoader(this);
     }
@@ -113,7 +126,6 @@ public class MainActivity extends AbsMusicPanelActivity {
             id = R.id.nav_library;
         }
 
-        PreferenceUtil.setLastMusicChooser(id);
         navigationView.setCheckedItem(id);
         switch (id) {
             case R.id.nav_home:
@@ -163,25 +175,6 @@ public class MainActivity extends AbsMusicPanelActivity {
     protected void requestPermissions() {
         if (!blockRequestPermissions) super.requestPermissions();
     }
-
-    @Override
-    protected View createContentView() {
-        @SuppressLint("InflateParams")
-        View contentView = getLayoutInflater().inflate(R.layout.activity_main_drawer_layout, null);
-        ViewGroup drawerContent = contentView.findViewById(R.id.drawer_content_container);
-        drawerContent.addView(wrapSlidingMusicPanel(R.layout.activity_main_content));
-
-        // To apply WindowInsets only for navigation view, not content and it's very important.
-        contentView.setOnApplyWindowInsetsListener((view, windowInsets) -> {
-            view.findViewById(R.id.navigation_view).onApplyWindowInsets(windowInsets);
-            view.findViewById(R.id.drawer_content_container).setPadding(
-                    0,0,0,windowInsets.getSystemWindowInsetBottom());
-            return windowInsets;
-        });
-
-        return contentView;
-    }
-
 
 
     private void setUpNavigationView() {

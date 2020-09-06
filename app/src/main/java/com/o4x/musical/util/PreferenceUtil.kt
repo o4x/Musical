@@ -26,7 +26,6 @@ object PreferenceUtil {
     const val GENERAL_THEME = "general_theme"
     const val REMEMBER_LAST_TAB = "remember_last_tab"
     const val LAST_PAGE = "last_start_page"
-    const val LAST_MUSIC_CHOOSER = "last_music_chooser"
     const val NOW_PLAYING_SCREEN_ID = "now_playing_screen_id"
     const val ARTIST_SORT_ORDER = "artist_sort_order"
     const val ARTIST_SONG_SORT_ORDER = "artist_song_sort_order"
@@ -160,18 +159,6 @@ object PreferenceUtil {
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putInt(LAST_PAGE, value)
-            editor.apply()
-        }
-
-    @JvmStatic
-    var lastMusicChooser: Int
-        get() = sharedPreferences.getInt(
-            LAST_MUSIC_CHOOSER,
-            R.id.nav_home
-        )
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putInt(LAST_MUSIC_CHOOSER, value)
             editor.apply()
         }
 
