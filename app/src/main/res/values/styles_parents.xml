@@ -59,9 +59,9 @@
     </style>
 
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/grey_50</item>
-        <item name="colorPrimaryVariant">@color/grey_200</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/blue_grey_700</item>
+        <item name="colorPrimaryVariant">@color/blue_grey_800</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/blue_grey_600</item>
         <item name="colorSecondaryVariant">@color/blue_grey_800</item>
         <item name="colorOnSecondary">@color/white</item>
