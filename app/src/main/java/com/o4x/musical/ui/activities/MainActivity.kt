@@ -25,8 +25,6 @@ import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemIconColors
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
 import code.name.monkey.retromusic.extensions.findNavController
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.MaterialToolbar
 import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
@@ -44,7 +42,6 @@ import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog
 import com.o4x.musical.util.PreferenceUtil.introShown
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.util.PreferenceUtil.setIntroShown
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
 import java.util.*
 
@@ -313,13 +310,6 @@ class MainActivity : AbsMusicPanelActivity() {
     interface MainActivityFragmentCallbacks {
         fun handleBackPress(): Boolean
     }
-
-
-    val appbar: AppBarLayout
-        get() = main_appbar
-
-    val toolbar: MaterialToolbar
-        get() = main_toolbar
 
     companion object {
         val TAG = MainActivity::class.java.simpleName
