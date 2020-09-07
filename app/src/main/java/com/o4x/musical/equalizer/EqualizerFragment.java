@@ -2,7 +2,6 @@ package com.o4x.musical.equalizer;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -12,7 +11,6 @@ import android.media.audiofx.Equalizer;
 import android.media.audiofx.PresetReverb;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,7 +35,6 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EqualizerFragment extends AbsMainActivityFragment implements MainActivity.MainActivityFragmentCallbacks {
+public class EqualizerFragment extends AbsMainActivityFragment {
 
     public static final String ARG_AUDIO_SESSIOIN_ID = "audio_session_id";
 
@@ -138,9 +135,8 @@ public class EqualizerFragment extends AbsMainActivityFragment implements MainAc
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_equalizer, container, false);
+    public int getLayout() {
+        return R.layout.fragment_equalizer;
     }
 
     @SuppressLint("SetTextI18n")

@@ -67,13 +67,7 @@ class HomeFragment : AbsMainActivityFragment() {
         activity = mainActivity
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+    override fun getLayout(): Int = R.layout.fragment_home
 
     override fun onDestroyView() {
         activity.removeMusicServiceEventListener(queueListener)

@@ -515,7 +515,7 @@ object PreferenceUtil {
         get() = File(
             sharedPreferences.getString(
                 START_DIRECTORY,
-                FoldersFragment.getDefaultStartDirectory().path
+                FoldersFragment.defaultStartDirectory.path
             )!!
         )
         set(file) {
