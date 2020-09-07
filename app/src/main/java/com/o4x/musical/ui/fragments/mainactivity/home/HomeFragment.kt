@@ -60,6 +60,8 @@ class HomeFragment : AbsMainActivityFragment() {
     private lateinit var recentlyLayoutManager: GridLayoutManager
     private lateinit var newLayoutManager: GridLayoutManager
 
+    var position: Int? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity = mainActivity
@@ -78,8 +80,13 @@ class HomeFragment : AbsMainActivityFragment() {
         super.onDestroyView()
     }
 
+    override fun onPause() {
+        // Save scroll view position
+        position = nested_scroll_view.scrollY
+        super.onPause()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         queueListener = QueueListener()
         activity.addMusicServiceEventListener(queueListener)
         setUpViews()
@@ -180,6 +187,18 @@ class HomeFragment : AbsMainActivityFragment() {
         val headerHeight = header.layoutParams.height - appbarHeight
         val isStatusFlat = AtomicBoolean(false)
         val isAppbarFlat = AtomicBoolean(false)
+
+        if (position != null) { // on back to home page
+            showAppbar()
+            if (position!! < headerHeight) {
+                toolbarColorVisible(false)
+                statusBarColorVisible(false)
+                activity.appbar.elevation = 0f
+                isAppbarFlat.set(false)
+                isAppbarFlat.set(false)
+            }
+        }
+
         nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
             // Scroll poster
@@ -204,13 +223,11 @@ class HomeFragment : AbsMainActivityFragment() {
                             max(-toolbarHeight.toFloat(), activity.appbar.y + (oldScrollY - scrollY)
                             )
                         shuffle_btn.hide()
-                    } else if (scrollY < oldScrollY) { // Scrolling down
+                    } else { // Scrolling down
                         activity.appbar.y = min(0f, activity.appbar.y + (oldScrollY - scrollY)
                         )
                         shuffle_btn.show()
                     }
-                } else { // on back to home page
-                    showAppbar()
                 }
             } else { // inside header
                 if (isStatusFlat.get()) {
