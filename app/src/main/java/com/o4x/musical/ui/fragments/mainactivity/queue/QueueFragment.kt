@@ -1,17 +1,16 @@
 package com.o4x.musical.ui.fragments.mainactivity.queue
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.AbsListView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
-import com.google.android.material.appbar.AppBarLayout
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
@@ -19,28 +18,21 @@ import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.loader.SongLoader
-import com.o4x.musical.ui.activities.MainActivity
-import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import kotlinx.android.synthetic.main.fragment_queue.*
+import kotlin.math.max
+import kotlin.math.min
 
-class QueueFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
-    
-    private lateinit var activity: MainActivity
-    
+class QueueFragment : AbsMainActivityFragment() {
+
     private var queueAdapter: PlayingQueueAdapter? = null
     private var queueLayoutManager: LinearLayoutManager? = null
     private var queueListener: QueueListener? = null
     private var wrappedAdapter: RecyclerView.Adapter<*>? = null
     private var recyclerViewDragDropManager: RecyclerViewDragDropManager? = null
-    
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        activity = mainActivity
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +43,7 @@ class QueueFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
     }
 
     override fun onDestroyView() {
-        activity.removeMusicServiceEventListener(queueListener)
+        mainActivity.removeMusicServiceEventListener(queueListener)
         queueAdapter = null
         queueLayoutManager = null
         queueListener = null
@@ -61,28 +53,28 @@ class QueueFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         queueListener = QueueListener()
-        activity.addMusicServiceEventListener(queueListener)
+        mainActivity.addMusicServiceEventListener(queueListener)
         setUpViews()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_main, menu)
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity,
-            activity.toolbar,
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
+            mainActivity.toolbar,
             menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(activity.toolbar))
+            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, activity.toolbar)
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, mainActivity.toolbar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_shuffle_all -> {
-                MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(activity), true)
+                MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(mainActivity), true)
                 return true
             }
             R.id.action_new_playlist -> {
@@ -97,10 +89,6 @@ class QueueFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun handleBackPress(): Boolean {
-        return false
-    }
-
     private fun setUpViews() {
         setUpQueueView()
         checkIsEmpty()
@@ -110,7 +98,7 @@ class QueueFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
         recyclerViewDragDropManager = RecyclerViewDragDropManager()
         val animator: GeneralItemAnimator = RefactoredDefaultItemAnimator()
         queueAdapter = PlayingQueueAdapter(
-            getActivity() as AppCompatActivity?,
+            mainActivity,
             MusicPlayerRemote.getPlayingQueue(),
             MusicPlayerRemote.getPosition(),
             R.layout.item_list,
@@ -124,21 +112,40 @@ class QueueFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
         recyclerViewDragDropManager!!.attachRecyclerView(queue_recycler_view!!)
         queueLayoutManager!!.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0)
 
+        setupRecyclerWithAppbar()
+    }
 
-//        final GeneralItemAnimator animator = new RefactoredDefaultItemAnimator();
-//        queueLayoutManager = new LinearLayoutManager(activity, RecyclerView.VERTICAL, false);
-//        queueView.setLayoutManager(queueLayoutManager);
-//        queueAdapter = new PlayingQueueAdapter(
-//                ((AppCompatActivity) getActivity()),
-//                MusicPlayerRemote.getPlayingQueue(),
-//                MusicPlayerRemote.getPosition(),
-//                R.layout.item_list_no_image,
-//                false,
-//                null
-//        );
-//        queueView.setAdapter(queueAdapter);
-//        queueView.setItemAnimator(animator);
-//        queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition(), 0);
+    private fun setupRecyclerWithAppbar() {
+        val appbarHeight = appbarHeight()
+        val toolbarHeight = toolbarHeight()
+
+        queue_recycler_view.setPadding(0, appbarHeight, 0, 0);
+
+        queue_recycler_view.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                    when {
+                        dy > 0 -> { // Scrolling up
+                            val changes = max(-toolbarHeight.toFloat(), mainActivity.appbar.y - (dy))
+                            mainActivity.appbar.y = changes
+                            queue_recycler_view.setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
+                        }
+                        dy < 0 -> { // Scrolling down
+                            val changes = min(0f, mainActivity.appbar.y - (dy))
+                            mainActivity.appbar.y = changes
+                            queue_recycler_view.setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
+                        }
+                        else -> { // on start page
+                            showAppbar()
+                        }
+                    }
+
+                }
+
+            }
+        )
     }
 
     internal inner class QueueListener : MusicServiceEventListener {

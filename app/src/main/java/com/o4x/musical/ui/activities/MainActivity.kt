@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.StateListDrawable
@@ -71,6 +72,7 @@ class MainActivity : AbsMusicPanelActivity() {
         setDrawUnderBar()
         setupToolbar()
         setUpNavigationView()
+        setStatusBarColor(Color.TRANSPARENT)
 
 
         if (!checkShowIntro()) {
@@ -338,27 +340,27 @@ class MainActivity : AbsMusicPanelActivity() {
     private fun setupNavController() {
         navController = findNavController(R.id.fragment_container)
 
-        val toolbarParams: AppBarLayout.LayoutParams =
-            toolbar.layoutParams as AppBarLayout.LayoutParams
-
-        val coordinatorParams: CoordinatorLayout.LayoutParams =
-            fragment_container.layoutParams as CoordinatorLayout.LayoutParams
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.home) {
-                appbar.elevation = 0f
-                toolbarParams.scrollFlags = 0
-                coordinatorParams.behavior = null
-            } else {
-                setStatusBarColorAuto()
-                toolbar.setBackgroundColor(primaryColor())
-                appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
-                toolbarParams.scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                        or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS)
-
-                coordinatorParams.behavior = ScrollingViewBehavior()
-            }
-        }
+//        val toolbarParams: AppBarLayout.LayoutParams =
+//            toolbar.layoutParams as AppBarLayout.LayoutParams
+//
+//        val coordinatorParams: CoordinatorLayout.LayoutParams =
+//            fragment_container.layoutParams as CoordinatorLayout.LayoutParams
+//
+//        navController.addOnDestinationChangedListener { _, destination, _ ->
+//            if (destination.id == R.id.home) {
+//                appbar.elevation = 0f
+//                toolbarParams.scrollFlags = 0
+//                coordinatorParams.behavior = null
+//            } else {
+//                setStatusBarColorAuto()
+//                toolbar.setBackgroundColor(primaryColor())
+//                appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+//                toolbarParams.scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+//                        or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS)
+//
+//                coordinatorParams.behavior = ScrollingViewBehavior()
+//            }
+//        }
     }
 
     val appbar: AppBarLayout

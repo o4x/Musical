@@ -24,7 +24,8 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/main_toolbar"
-            style="@style/Toolbar" />
+            style="@style/Toolbar"
+            android:background="@color/transparent"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -9,6 +9,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import androidx.core.graphics.ColorUtils
@@ -45,7 +46,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
+class HomeFragment : AbsMainActivityFragment() {
 
     private val transparentColor = Color.TRANSPARENT
     
@@ -81,13 +82,7 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
         super.onViewCreated(view, savedInstanceState)
         queueListener = QueueListener()
         activity.addMusicServiceEventListener(queueListener)
-        activity.setStatusBarColor(transparentColor)
-        setUpToolbar()
         setUpViews()
-    }
-
-    private fun setUpToolbar() {
-        activity.toolbar.setBackgroundColor(transparentColor)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -120,10 +115,6 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun handleBackPress(): Boolean {
-        return false
     }
 
     private fun setUpViews() {
@@ -182,12 +173,11 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
     private fun setUpBounceScrollView() {
         val displayHeight = Resources.getSystem().displayMetrics.heightPixels
-        val statusBarHeight = Util.getStatusBarHeight(activity)
-        val appbarHeight = activity.toolbar.layoutParams.height
-
+        val appbarHeight = appbarHeight()
+        val toolbarHeight = toolbarHeight()
 
         // get real header height
-        val headerHeight = header.layoutParams.height - appbarHeight - statusBarHeight.toFloat()
+        val headerHeight = header.layoutParams.height - appbarHeight
         val isStatusFlat = AtomicBoolean(false)
         val isAppbarFlat = AtomicBoolean(false)
         nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
@@ -198,27 +188,31 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
                     .toFloat()
 
             // Scroll appbar
-            if (scrollY > headerHeight + appbarHeight && !isAppbarFlat.get()) {
+            if (scrollY > headerHeight + toolbarHeight && !isAppbarFlat.get()) {
                 toolbarColorVisible(true)
                 activity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
                 isAppbarFlat.set(true)
             }
-            if (scrollY > headerHeight) {
+            if (scrollY > headerHeight) { // outside header
                 if (!isStatusFlat.get()) {
                     statusBarColorVisible(true)
                     isStatusFlat.set(true)
                 }
-                if (scrollY > oldScrollY) {
-                    activity.appbar.y =
-                        max(-appbarHeight.toFloat(), activity.appbar.y + (oldScrollY - scrollY)
+                if (oldScrollY != 0) {
+                    if (scrollY > oldScrollY) { // Scrolling up
+                        activity.appbar.y =
+                            max(-toolbarHeight.toFloat(), activity.appbar.y + (oldScrollY - scrollY)
+                            )
+                        shuffle_btn.hide()
+                    } else if (scrollY < oldScrollY) { // Scrolling down
+                        activity.appbar.y = min(0f, activity.appbar.y + (oldScrollY - scrollY)
                         )
-                    shuffle_btn.hide()
-                } else {
-                    activity.appbar.y = min(0f, activity.appbar.y + (oldScrollY - scrollY)
-                    )
-                    shuffle_btn.show()
+                        shuffle_btn.show()
+                    }
+                } else { // on back to home page
+                    showAppbar()
                 }
-            } else {
+            } else { // inside header
                 if (isStatusFlat.get()) {
                     toolbarColorVisible(false)
                     statusBarColorVisible(false)
@@ -419,6 +413,15 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
     private fun toolbarColorVisible(show: Boolean) {
         val color = primaryColor()
+        val current = ViewUtil.getViewBackgroundColor(activity.toolbar)
+
+        // break if current color equal final color
+        if (
+            show && current == ColorUtil.withAlpha(current, 1f)
+            ||
+            !show && current == ColorUtil.withAlpha(current, 0f)
+        ) return
+
         val colorAnimation = ValueAnimator.ofFloat(0f, 1f)
         colorAnimation.duration =
             resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
@@ -431,6 +434,15 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
     private fun statusBarColorVisible(show: Boolean) {
         val color = primaryColor()
+        val current = activity.window.statusBarColor
+
+        // break if current color equal final color
+        if (
+            show && current == ColorUtil.withAlpha(current, 1f)
+            ||
+            !show && current == ColorUtil.withAlpha(current, 0f)
+        ) return
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val colorAnimation = ValueAnimator.ofFloat(0f, 1f)
             colorAnimation.duration =
