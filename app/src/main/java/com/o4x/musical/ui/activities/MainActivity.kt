@@ -335,19 +335,6 @@ class MainActivity : AbsMusicPanelActivity() {
         fun handleBackPress(): Boolean
     }
 
-    fun setToolbarColor(color: Int) {
-        val colorFrom = ViewUtil.getViewBackgroundColor(toolbar)
-        if (colorFrom == color) return
-        val colorAnimation = ValueAnimator.ofArgb(colorFrom, color)
-        colorAnimation.duration =
-            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
-        colorAnimation.addUpdateListener { animator: ValueAnimator ->
-            val background = animator.animatedValue as Int
-            toolbar.setBackgroundColor(background)
-        }
-        colorAnimation.start()
-    }
-
     private fun setupNavController() {
         navController = findNavController(R.id.fragment_container)
 
