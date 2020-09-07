@@ -3,8 +3,10 @@ package com.o4x.musical.ui.fragments.mainactivity
 import android.animation.ValueAnimator
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import code.name.monkey.appthemehelper.util.ColorUtil
+import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
@@ -17,6 +19,13 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
 
     val mainActivity: MainActivity
         get() = activity as MainActivity
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mainActivity.setStatusBarColorAuto()
+        mainActivity.toolbar.setBackgroundColor(primaryColor())
+        mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
