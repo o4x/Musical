@@ -40,7 +40,6 @@ import com.o4x.musical.misc.DialogAsyncTask;
 import com.o4x.musical.misc.UpdateToastMediaScannerCompletionListener;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.adapter.SongFileAdapter;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
 import com.o4x.musical.util.FileUtil;
@@ -66,7 +65,7 @@ import code.name.monkey.appthemehelper.ThemeStore;
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity;
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
-public class FoldersFragment extends AbsMainActivityFragment implements MainActivity.MainActivityFragmentCallbacks, CabHolder, BreadCrumbLayout.SelectionCallback, SongFileAdapter.Callbacks, AppBarLayout.OnOffsetChangedListener, LoaderManager.LoaderCallbacks<List<File>> {
+public class FoldersFragment extends AbsMainActivityFragment implements  CabHolder, BreadCrumbLayout.SelectionCallback, SongFileAdapter.Callbacks, AppBarLayout.OnOffsetChangedListener, LoaderManager.LoaderCallbacks<List<File>> {
 
     private static final int LOADER_ID = LoaderIds.FOLDERS_FRAGMENT;
 

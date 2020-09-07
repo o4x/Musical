@@ -27,7 +27,6 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.loader.SongLoader;
-import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.ui.activities.SearchActivity;
 import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter;
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
@@ -48,7 +47,7 @@ import code.name.monkey.appthemehelper.ThemeStore;
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity;
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
-public class LibraryFragment extends AbsMainActivityFragment implements CabHolder, MainActivity.MainActivityFragmentCallbacks, ViewPager.OnPageChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class LibraryFragment extends AbsMainActivityFragment implements CabHolder, ViewPager.OnPageChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Unbinder unbinder;
 
