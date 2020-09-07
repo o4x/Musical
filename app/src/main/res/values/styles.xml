@@ -51,10 +51,6 @@
     <style name="Toolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?android:attr/actionBarSize</item>
-        <item name="titleMarginStart">16dp</item>
-        <item name="popupTheme">?toolbarPopupTheme</item>
-        <item name="android:elevation" tools:ignore="NewApi">@dimen/toolbar_elevation</item>
-        <item name="android:transitionName" tools:ignore="NewApi">toolbar</item>
     </style>
 
 

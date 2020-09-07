@@ -1,20 +1,24 @@
 package com.o4x.musical.ui.fragments.mainactivity.home
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.FrameLayout
+import androidx.core.graphics.ColorUtils
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
+import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
@@ -195,13 +199,13 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
 
             // Scroll appbar
             if (scrollY > headerHeight + appbarHeight && !isAppbarFlat.get()) {
-                activity.setToolbarColor(primaryColor())
+                toolbarColorVisible(true)
                 activity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
                 isAppbarFlat.set(true)
             }
             if (scrollY > headerHeight) {
                 if (!isStatusFlat.get()) {
-                    activity.setStatusBarColorAutoWithAnim()
+                    statusBarColorVisible(true)
                     isStatusFlat.set(true)
                 }
                 if (scrollY > oldScrollY) {
@@ -216,8 +220,8 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
                 }
             } else {
                 if (isStatusFlat.get()) {
-                    activity.setToolbarColor(transparentColor)
-                    activity.setStatusBarColorWithAnim(transparentColor)
+                    toolbarColorVisible(false)
+                    statusBarColorVisible(false)
                     activity.appbar.elevation = 0f
                     isStatusFlat.set(false)
                     isAppbarFlat.set(false)
@@ -410,6 +414,33 @@ class HomeFragment : AbsMainActivityFragment(), MainActivityFragmentCallbacks {
                 (recentlyAdapter.itemCount == 0) and
                 (newAdapter.itemCount == 0)
             ) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun toolbarColorVisible(show: Boolean) {
+        val color = primaryColor()
+        val colorAnimation = ValueAnimator.ofFloat(0f, 1f)
+        colorAnimation.duration =
+            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
+        colorAnimation.addUpdateListener { animator: ValueAnimator ->
+            val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
+            activity.toolbar.setBackgroundColor(ColorUtil.withAlpha(color, f))
+        }
+        colorAnimation.start()
+    }
+
+    private fun statusBarColorVisible(show: Boolean) {
+        val color = primaryColor()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val colorAnimation = ValueAnimator.ofFloat(0f, 1f)
+            colorAnimation.duration =
+                resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
+            colorAnimation.addUpdateListener { animator: ValueAnimator ->
+                val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
+                activity.window.statusBarColor = ColorUtil.withAlpha(color, f)
+            }
+            activity.setLightStatusBarAuto(color)
+            colorAnimation.start()
         }
     }
 

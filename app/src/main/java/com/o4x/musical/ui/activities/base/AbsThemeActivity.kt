@@ -12,6 +12,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
+import androidx.core.graphics.ColorUtils
 import code.name.monkey.appthemehelper.ATH
 import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
@@ -77,35 +78,10 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
         setLightStatusBarAuto(this.primaryColor())
     }
 
-    /**
-     * This will set the color of the view with the id "status_bar" on KitKat and Lollipop.
-     * On Lollipop if no such view is found it will set the statusbar color using the native method.
-     *
-     * @param color the new statusbar color (will be shifted down on Lollipop and above)
-     */
-    open fun setStatusBarColorWithAnim(color: Int) {
-        val colorFrom = window.statusBarColor
-        if (colorFrom == color) return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val colorAnimation = ValueAnimator.ofArgb(colorFrom, color)
-            colorAnimation.duration =
-                resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
-            colorAnimation.addUpdateListener { animator: ValueAnimator ->
-                window.statusBarColor = animator.animatedValue as Int
-            }
-            setLightStatusBarAuto(primaryColor())
-            colorAnimation.start()
-        }
-    }
-
     fun setStatusBarColorAuto() {
         // we don't want to use statusbar color because we are doing the color darkening on our own to support KitKat
         setStatusBarColor(primaryColor())
         setLightStatusBarAuto(primaryColor())
-    }
-
-    fun setStatusBarColorAutoWithAnim() {
-        setStatusBarColorWithAnim(primaryColor())
     }
 
     open fun setTaskDescriptionColor(@ColorInt color: Int) {
