@@ -34,13 +34,7 @@ class QueueFragment : AbsMainActivityFragment() {
     private var wrappedAdapter: RecyclerView.Adapter<*>? = null
     private var recyclerViewDragDropManager: RecyclerViewDragDropManager? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_queue, container, false)
-    }
+    override fun getLayout(): Int = R.layout.fragment_queue
 
     override fun onDestroyView() {
         mainActivity.removeMusicServiceEventListener(queueListener)
@@ -112,40 +106,7 @@ class QueueFragment : AbsMainActivityFragment() {
         recyclerViewDragDropManager!!.attachRecyclerView(queue_recycler_view!!)
         queueLayoutManager!!.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0)
 
-        setupRecyclerWithAppbar()
-    }
-
-    private fun setupRecyclerWithAppbar() {
-        val appbarHeight = appbarHeight()
-        val toolbarHeight = toolbarHeight()
-
-        queue_recycler_view.setPadding(0, appbarHeight, 0, 0);
-
-        queue_recycler_view.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-
-                    when {
-                        dy > 0 -> { // Scrolling up
-                            val changes = max(-toolbarHeight.toFloat(), mainActivity.appbar.y - (dy))
-                            mainActivity.appbar.y = changes
-                            queue_recycler_view.setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
-                        }
-                        dy < 0 -> { // Scrolling down
-                            val changes = min(0f, mainActivity.appbar.y - (dy))
-                            mainActivity.appbar.y = changes
-                            queue_recycler_view.setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
-                        }
-                        else -> { // on start page
-                            showAppbar()
-                        }
-                    }
-
-                }
-
-            }
-        )
+        queue_recycler_view.addAppbarListener()
     }
 
     internal inner class QueueListener : MusicServiceEventListener {
