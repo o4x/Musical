@@ -12,7 +12,6 @@ import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
-import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
@@ -109,17 +108,6 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
             .start(callback)
         return cab!!
     }
-
-    fun addOnAppBarOffsetChangedListener(onOffsetChangedListener: OnOffsetChangedListener?) {
-        mainActivity.appbar.addOnOffsetChangedListener(onOffsetChangedListener)
-    }
-
-    fun removeOnAppBarOffsetChangedListener(onOffsetChangedListener: OnOffsetChangedListener?) {
-        mainActivity.appbar.removeOnOffsetChangedListener(onOffsetChangedListener)
-    }
-
-    val totalAppBarScrollingRange: Int
-        get() = mainActivity.appbar.totalScrollRange
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
