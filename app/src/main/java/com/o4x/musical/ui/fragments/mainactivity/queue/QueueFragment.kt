@@ -99,7 +99,7 @@ class QueueFragment : AbsMainActivityFragment() {
             false,
             null)
         wrappedAdapter = recyclerViewDragDropManager!!.createWrappedAdapter(queueAdapter!!)
-        queueLayoutManager = LinearLayoutManager(getActivity())
+        queueLayoutManager = LinearLayoutManager(activity)
         queue_recycler_view!!.layoutManager = queueLayoutManager
         queue_recycler_view!!.adapter = wrappedAdapter
         queue_recycler_view!!.itemAnimator = animator

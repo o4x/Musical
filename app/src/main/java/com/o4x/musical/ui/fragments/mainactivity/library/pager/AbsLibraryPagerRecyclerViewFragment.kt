@@ -9,10 +9,7 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.o4x.musical.R
-import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.util.ViewUtil
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import kotlinx.android.synthetic.main.fragment_main_activity_recycler_view.*
@@ -21,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_main_activity_recycler_view.*
  * @author Karim Abou Zeid (kabouzeid)
  */
 abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : RecyclerView.LayoutManager?> :
-    AbsLibraryPagerFragment(), OnOffsetChangedListener {
+    AbsLibraryPagerFragment() {
 
     protected var adapter: A? = null
         private set
@@ -38,14 +35,12 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        libraryFragment.addOnAppBarOffsetChangedListener(this)
         initLayoutManager()
         initAdapter()
         setUpRecyclerView()
     }
 
     private fun setUpRecyclerView() {
-        libraryFragment.setAppbarListener(recycler_view)
         if (recycler_view is FastScrollRecyclerView) {
             ViewUtil.setUpFastScrollRecyclerViewColor(activity,
                 recycler_view as FastScrollRecyclerView?,
@@ -54,6 +49,8 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
         }
         recycler_view!!.layoutManager = layoutManager
         recycler_view!!.adapter = adapter
+        libraryFragment.setAppbarListener(recycler_view)
+
     }
 
     protected fun invalidateLayoutManager() {
@@ -68,7 +65,6 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
     }
 
     private fun initAdapter() {
-        libraryFragment.showAppbar()
         adapter = createAdapter()
         adapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {
@@ -80,13 +76,6 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
 
     private fun initLayoutManager() {
         layoutManager = createLayoutManager()
-    }
-
-    override fun onOffsetChanged(appBarLayout: AppBarLayout, i: Int) {
-        container!!.setPadding(container!!.paddingLeft,
-            container!!.paddingTop,
-            container!!.paddingRight,
-            libraryFragment.totalAppBarScrollingRange + i)
     }
 
     private fun checkIsEmpty() {
@@ -110,8 +99,4 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
 
     protected abstract fun createLayoutManager(): LM
     protected abstract fun createAdapter(): A
-    override fun onDestroyView() {
-        super.onDestroyView()
-        libraryFragment.removeOnAppBarOffsetChangedListener(this)
-    }
 }

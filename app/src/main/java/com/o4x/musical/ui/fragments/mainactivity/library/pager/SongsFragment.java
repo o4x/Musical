@@ -63,7 +63,6 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
                     getLibraryFragment());
         }
 
-//        songAdapter.setPreloadProvider(getRecyclerView());
         return songAdapter;
     }
 

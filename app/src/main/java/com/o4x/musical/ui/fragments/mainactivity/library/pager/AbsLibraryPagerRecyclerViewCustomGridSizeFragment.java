@@ -128,7 +128,7 @@ public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extend
         } else {
             padding = 0;
         }
-        recyclerView.setPadding(padding, padding, padding, padding);
+        recyclerView.setPadding(padding, getLibraryFragment().appbarHeight(), padding, padding);
     }
 
     protected abstract int loadGridSize();
