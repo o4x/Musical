@@ -16,6 +16,8 @@ import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import com.o4x.musical.util.Util
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+import kotlinx.android.synthetic.main.fragment_library.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -40,6 +42,7 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
         mainActivity.setStatusBarColorAuto()
         mainActivity.toolbar.setBackgroundColor(primaryColor())
         mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+        mainActivity.tabs.visibility = View.GONE
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -59,7 +62,12 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
     }
 
     fun appbarHeight(): Int {
-        return Util.getStatusBarHeight(mainActivity) + toolbarHeight()
+        val h = Util.getStatusBarHeight(mainActivity) + toolbarHeight()
+        return if (mainActivity.tabs.visibility == View.VISIBLE) {
+            h + resources.getDimension(R.dimen.tab_height).toInt()
+        } else {
+            h
+        }
     }
 
     fun showAppbar() {
@@ -78,7 +86,7 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
         val appbarHeight = appbarHeight()
         val toolbarHeight = toolbarHeight()
 
-        setPadding(0, appbarHeight, 0, 0);
+        setPadding(0, appbarHeight, 0, 0)
 
         addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
@@ -95,6 +103,39 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
                             val changes = min(0f, mainActivity.appbar.y - (dy))
                             mainActivity.appbar.y = changes
                             setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
+                        }
+                        else -> { // on start page
+                            showAppbar()
+                        }
+                    }
+
+                }
+
+            }
+        )
+    }
+
+    fun setAppbarListener(recyclerView: FastScrollRecyclerView) {
+        val appbarHeight = appbarHeight()
+        val toolbarHeight = toolbarHeight()
+
+        recyclerView.setPadding(0, appbarHeight, 0, 0)
+
+        recyclerView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                    when {
+                        dy > 0 -> { // Scrolling up
+                            val changes = max(-toolbarHeight.toFloat(), mainActivity.appbar.y - (dy))
+                            mainActivity.appbar.y = changes
+                            recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
+                        }
+                        dy < 0 -> { // Scrolling down
+                            val changes = min(0f, mainActivity.appbar.y - (dy))
+                            mainActivity.appbar.y = changes
+                            recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
                         }
                         else -> { // on start page
                             showAppbar()
