@@ -1,10 +1,6 @@
 package com.o4x.musical.ui.fragments.mainactivity.library.pager;
 
-import android.os.Bundle;
-import android.view.View;
-
 import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.o4x.musical.R;
@@ -110,25 +106,6 @@ public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extend
     protected final void notifyLayoutResChanged(@LayoutRes int res) {
         this.currentLayoutRes = res;
         RecyclerView recyclerView = getRecyclerView();
-        if (recyclerView != null) {
-            applyRecyclerViewPaddingForLayoutRes(recyclerView, currentLayoutRes);
-        }
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        applyRecyclerViewPaddingForLayoutRes(getRecyclerView(), currentLayoutRes);
-    }
-
-    protected void applyRecyclerViewPaddingForLayoutRes(@NonNull RecyclerView recyclerView, @LayoutRes int res) {
-        int padding;
-        if (res == R.layout.item_grid) {
-            padding = (int) (getResources().getDisplayMetrics().density * 2);
-        } else {
-            padding = 0;
-        }
-        recyclerView.setPadding(padding, getLibraryFragment().appbarHeight(), padding, padding);
     }
 
     protected abstract int loadGridSize();
