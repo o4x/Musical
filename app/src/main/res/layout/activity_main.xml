@@ -27,6 +27,14 @@
             style="@style/Toolbar"
             android:background="@color/transparent"/>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/main_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_height"
+            android:visibility="gone"
+            app:tabContentStart="72dp"
+            app:tabMode="scrollable" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

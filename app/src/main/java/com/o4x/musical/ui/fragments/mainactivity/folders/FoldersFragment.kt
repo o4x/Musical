@@ -100,11 +100,7 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
     override fun getLayout(): Int = R.layout.fragment_folder
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mainActivity.setStatusBarColorAuto()
-        mainActivity.setNavigationBarColorAuto()
-        mainActivity.setTaskDescriptionColorAuto()
         setUpAppbarColor()
-        setUpToolbar()
         setUpBreadCrumbs()
         setUpRecyclerView()
         setUpAdapter()
@@ -119,12 +115,6 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
             primaryColor))
         bread_crumbs!!.setDeactivatedContentColor(ToolbarContentTintHelper.toolbarSubtitleColor(
             mainActivity, primaryColor))
-    }
-
-    private fun setUpToolbar() {
-        toolbar!!.setNavigationIcon(R.drawable.ic_menu_white_24dp)
-        mainActivity.setTitle(R.string.app_name)
-        mainActivity.setSupportActionBar(toolbar)
     }
 
     private fun setUpBreadCrumbs() {

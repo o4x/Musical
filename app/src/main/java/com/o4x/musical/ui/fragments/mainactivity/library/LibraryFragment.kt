@@ -3,21 +3,16 @@ package com.o4x.musical.ui.fragments.mainactivity.library
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
-import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
@@ -55,12 +50,10 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         registerOnSharedPreferenceChangedListener(this)
-        mainActivity.setStatusBarColorAuto()
-        mainActivity.setNavigationBarColorAuto()
-        mainActivity.setTaskDescriptionColorAuto()
-        setUpToolbar()
         setUpViewPager()
+        mainActivity.tabs.visibility = View.VISIBLE
     }
 
     override fun onSharedPreferenceChanged(preferences: SharedPreferences, key: String) {
@@ -76,26 +69,17 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         }
     }
 
-    private fun setUpToolbar() {
-        val primaryColor = themeColor(mainActivity)
-        appbar!!.setBackgroundColor(primaryColor)
-        toolbar!!.setBackgroundColor(primaryColor)
-        toolbar!!.setNavigationIcon(R.drawable.ic_menu_white_24dp)
-        mainActivity.setTitle(R.string.app_name)
-        mainActivity.setSupportActionBar(toolbar)
-    }
-
     private fun setUpViewPager() {
         pagerAdapter = MusicLibraryPagerAdapter(mainActivity, childFragmentManager)
         pager!!.adapter = pagerAdapter
         pager!!.offscreenPageLimit = pagerAdapter!!.count - 1
-        tabs!!.setupWithViewPager(pager)
+        mainActivity.tabs.setupWithViewPager(pager)
         val primaryColor = themeColor(mainActivity)
         val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
         val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
         //        TabLayoutUtil.setTabIconColors(tabs, normalColor, selectedColor);
-        tabs!!.setTabTextColors(normalColor, selectedColor)
-        tabs!!.setSelectedTabIndicatorColor(themeColor(mainActivity))
+        mainActivity.tabs.setTabTextColors(normalColor, selectedColor)
+        mainActivity.tabs.setSelectedTabIndicatorColor(themeColor(mainActivity))
         updateTabVisibility()
         if (rememberLastTab()) {
             pager!!.currentItem = lastPage
@@ -105,12 +89,13 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
 
     private fun updateTabVisibility() {
         // hide the tab bar when only a single tab is visible
-        tabs!!.visibility =
+        mainActivity.tabs.visibility =
             if (pagerAdapter!!.count == 1) View.GONE else View.VISIBLE
     }
 
     val currentFragment: Fragment
         get() = pagerAdapter!!.getFragment(pager!!.currentItem)
+
     private val isPlaylistPage: Boolean
         private get() = currentFragment is PlaylistsFragment
 
@@ -126,15 +111,15 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
     }
 
     fun addOnAppBarOffsetChangedListener(onOffsetChangedListener: OnOffsetChangedListener?) {
-        appbar!!.addOnOffsetChangedListener(onOffsetChangedListener)
+        mainActivity.appbar.addOnOffsetChangedListener(onOffsetChangedListener)
     }
 
     fun removeOnAppBarOffsetChangedListener(onOffsetChangedListener: OnOffsetChangedListener?) {
-        appbar!!.removeOnOffsetChangedListener(onOffsetChangedListener)
+        mainActivity.appbar.removeOnOffsetChangedListener(onOffsetChangedListener)
     }
 
     val totalAppBarScrollingRange: Int
-        get() = appbar!!.totalScrollRange
+        get() = mainActivity.appbar.totalScrollRange
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -162,17 +147,15 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
             menu.removeItem(R.id.action_colored_footers)
             menu.removeItem(R.id.action_sort_order)
         }
-        val activity = activity ?: return
         ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
-            toolbar!!,
+            mainActivity.toolbar,
             menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(toolbar))
+            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        val activity = activity ?: return
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, toolbar)
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, mainActivity.toolbar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -263,7 +246,7 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         if (gridSize > 0) {
             item.isChecked = true
             fragment.setAndSaveGridSize(gridSize)
-            toolbar!!.menu.findItem(R.id.action_colored_footers).isEnabled =
+            mainActivity.toolbar.menu.findItem(R.id.action_colored_footers).isEnabled =
                 fragment.canUsePalette()
             return true
         }
@@ -389,7 +372,9 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         lastPage = position
     }
 
-    override fun onPageScrollStateChanged(state: Int) {}
+    override fun onPageScrollStateChanged(state: Int) {
+        showAppbar()
+    }
 
     companion object {
         fun newInstance(): LibraryFragment {

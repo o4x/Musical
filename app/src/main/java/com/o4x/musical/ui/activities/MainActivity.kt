@@ -32,6 +32,7 @@ import code.name.monkey.retromusic.extensions.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.ScrollingViewBehavior
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
@@ -368,6 +369,9 @@ class MainActivity : AbsMusicPanelActivity() {
 
     val toolbar: MaterialToolbar
         get() = main_toolbar
+
+    val tabs: TabLayout
+        get() = main_tabs
 
     companion object {
         val TAG = MainActivity::class.java.simpleName

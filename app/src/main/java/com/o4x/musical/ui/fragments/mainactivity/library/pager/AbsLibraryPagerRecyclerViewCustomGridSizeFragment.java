@@ -1,10 +1,11 @@
 package com.o4x.musical.ui.fragments.mainactivity.library.pager;
 
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
 
 import com.o4x.musical.R;
 import com.o4x.musical.util.Util;
@@ -12,7 +13,7 @@ import com.o4x.musical.util.Util;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extends RecyclerView.Adapter, LM extends RecyclerView.LayoutManager> extends AbsLibraryPagerRecyclerViewFragment<A, LM> {
+public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extends RecyclerView.Adapter<?>, LM extends RecyclerView.LayoutManager> extends AbsLibraryPagerRecyclerViewFragment<A, LM> {
     private int gridSize;
     private String sortOrder;
 
