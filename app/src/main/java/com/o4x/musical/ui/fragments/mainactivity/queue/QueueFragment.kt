@@ -2,9 +2,7 @@ package com.o4x.musical.ui.fragments.mainactivity.queue
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.AbsListView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -18,13 +16,12 @@ import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.loader.SongLoader
+import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import kotlinx.android.synthetic.main.fragment_queue.*
-import kotlin.math.max
-import kotlin.math.min
 
 class QueueFragment : AbsMainActivityFragment() {
 
@@ -99,7 +96,7 @@ class QueueFragment : AbsMainActivityFragment() {
             false,
             null)
         wrappedAdapter = recyclerViewDragDropManager!!.createWrappedAdapter(queueAdapter!!)
-        queueLayoutManager = LinearLayoutManager(activity)
+        queueLayoutManager = OverScrollLinearLayoutManager(requireContext())
         queue_recycler_view!!.layoutManager = queueLayoutManager
         queue_recycler_view!!.adapter = wrappedAdapter
         queue_recycler_view!!.itemAnimator = animator
