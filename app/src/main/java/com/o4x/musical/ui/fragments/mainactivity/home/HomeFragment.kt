@@ -47,8 +47,6 @@ import kotlin.math.max
 import kotlin.math.min
 
 class HomeFragment : AbsMainActivityFragment() {
-    
-    private lateinit var activity: MainActivity
 
     private lateinit var queueAdapter: HomeAdapter
     private lateinit var queueLayoutManager: LinearLayoutManager
@@ -60,15 +58,10 @@ class HomeFragment : AbsMainActivityFragment() {
 
     var position: Int? = null
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        activity = mainActivity
-    }
-
     override fun getLayout(): Int = R.layout.fragment_home
 
     override fun onDestroyView() {
-        activity.removeMusicServiceEventListener(queueListener)
+        mainActivity.removeMusicServiceEventListener(queueListener)
         super.onDestroyView()
     }
 
@@ -79,30 +72,30 @@ class HomeFragment : AbsMainActivityFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        hideSubToolbar()
         queueListener = QueueListener()
-        activity.addMusicServiceEventListener(queueListener)
+        mainActivity.addMusicServiceEventListener(queueListener)
+        hideSubToolbar()
         setUpViews()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_main, menu)
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(activity,
-            activity.toolbar,
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
+            mainActivity.toolbar,
             menu,
             primaryColor())
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, activity.toolbar)
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, mainActivity.toolbar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_shuffle_all -> {
-                MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(activity), true)
+                MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(mainActivity), true)
                 return true
             }
             R.id.action_new_playlist -> {
@@ -148,26 +141,26 @@ class HomeFragment : AbsMainActivityFragment() {
         //create a new gradient color
         val colors = intArrayOf(
             Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT,
-            PhonographColorUtil.getWindowColor(activity))
+            PhonographColorUtil.getWindowColor(mainActivity))
         val gd = GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM, colors)
         poster_gradient.background = gd
     }
 
     private fun setUpOnClicks() {
-        queue_parent.setOnClickListener { activity.setMusicChooser(R.id.nav_queue) }
-        open_queue_button.setOnClickListener { activity.setMusicChooser(R.id.nav_queue) }
+        queue_parent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
+        open_queue_button.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         recently_parent.setOnClickListener {
             NavigationUtil.goToPlaylist(
-                activity, HistoryPlaylist(activity))
+                mainActivity, HistoryPlaylist(mainActivity))
         }
         newly_parent.setOnClickListener {
             NavigationUtil.goToPlaylist(
-                activity, LastAddedPlaylist(activity))
+                mainActivity, LastAddedPlaylist(mainActivity))
         }
         shuffle_btn.setOnClickListener {
             MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(
-                activity), true)
+                mainActivity), true)
         }
     }
 
@@ -186,7 +179,7 @@ class HomeFragment : AbsMainActivityFragment() {
             if (position!! < headerHeight) {
                 toolbarColorVisible(false)
                 statusBarColorVisible(false)
-                activity.appbar.elevation = 0f
+                mainActivity.appbar.elevation = 0f
                 isAppbarFlat.set(false)
                 isAppbarFlat.set(false)
             }
@@ -202,7 +195,7 @@ class HomeFragment : AbsMainActivityFragment() {
             // Scroll appbar
             if (scrollY > headerHeight + toolbarHeight && !isAppbarFlat.get()) {
                 toolbarColorVisible(true)
-                activity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+                mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
                 isAppbarFlat.set(true)
             }
             if (scrollY > headerHeight) { // outside header
@@ -212,12 +205,12 @@ class HomeFragment : AbsMainActivityFragment() {
                 }
                 if (oldScrollY != 0) {
                     if (scrollY > oldScrollY) { // Scrolling up
-                        activity.appbar.y =
-                            max(-toolbarHeight.toFloat(), activity.appbar.y + (oldScrollY - scrollY)
+                        mainActivity.appbar.y =
+                            max(-toolbarHeight.toFloat(), mainActivity.appbar.y + (oldScrollY - scrollY)
                             )
                         shuffle_btn.hide()
                     } else { // Scrolling down
-                        activity.appbar.y = min(0f, activity.appbar.y + (oldScrollY - scrollY)
+                        mainActivity.appbar.y = min(0f, mainActivity.appbar.y + (oldScrollY - scrollY)
                         )
                         shuffle_btn.show()
                     }
@@ -226,11 +219,11 @@ class HomeFragment : AbsMainActivityFragment() {
                 if (isStatusFlat.get()) {
                     toolbarColorVisible(false)
                     statusBarColorVisible(false)
-                    activity.appbar.elevation = 0f
+                    mainActivity.appbar.elevation = 0f
                     isStatusFlat.set(false)
                     isAppbarFlat.set(false)
                 }
-                activity.appbar.y = 0f
+                mainActivity.appbar.y = 0f
             }
         }
 
@@ -254,7 +247,7 @@ class HomeFragment : AbsMainActivityFragment() {
         queueLayoutManager = linearLayoutManager
         queue_recycler_view.layoutManager = queueLayoutManager
         queueAdapter = HomeAdapter(
-            activity,
+            mainActivity,
             MusicPlayerRemote.getPlayingQueue(),
             MusicPlayerRemote.getPosition(),
             R.layout.item_card_home,
@@ -270,8 +263,8 @@ class HomeFragment : AbsMainActivityFragment() {
         recentlyLayoutManager = gridLayoutManager
         recently_recycler_view.layoutManager = recentlyLayoutManager
         recentlyAdapter = HomeAdapter(
-            activity,
-            TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(activity),
+            mainActivity,
+            TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(mainActivity),
             0,
             R.layout.item_card_home,
             gridSize * 2,
@@ -284,8 +277,8 @@ class HomeFragment : AbsMainActivityFragment() {
         newLayoutManager = gridLayoutManager
         new_recycler_view.layoutManager = newLayoutManager
         newAdapter = HomeAdapter(
-            activity,
-            LastAddedLoader.getLastAddedSongs(activity),
+            mainActivity,
+            LastAddedLoader.getLastAddedSongs(mainActivity),
             0,
             R.layout.item_card_home,
             gridSize * 3,
@@ -423,7 +416,7 @@ class HomeFragment : AbsMainActivityFragment() {
 
     private fun toolbarColorVisible(show: Boolean) {
         val color = primaryColor()
-        val current = ViewUtil.getViewBackgroundColor(activity.toolbar)
+        val current = ViewUtil.getViewBackgroundColor(mainActivity.toolbar)
 
         // break if current color equal final color
         if (
@@ -437,14 +430,14 @@ class HomeFragment : AbsMainActivityFragment() {
             resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
         colorAnimation.addUpdateListener { animator: ValueAnimator ->
             val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
-            activity.toolbar.setBackgroundColor(ColorUtil.withAlpha(color, f))
+            mainActivity.toolbar.setBackgroundColor(ColorUtil.withAlpha(color, f))
         }
         colorAnimation.start()
     }
 
     private fun statusBarColorVisible(show: Boolean) {
         val color = primaryColor()
-        val current = activity.window.statusBarColor
+        val current = mainActivity.window.statusBarColor
 
         // break if current color equal final color
         if (
@@ -459,9 +452,9 @@ class HomeFragment : AbsMainActivityFragment() {
                 resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
             colorAnimation.addUpdateListener { animator: ValueAnimator ->
                 val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
-                activity.window.statusBarColor = ColorUtil.withAlpha(color, f)
+                mainActivity.window.statusBarColor = ColorUtil.withAlpha(color, f)
             }
-            activity.setLightStatusBarAuto(color)
+            mainActivity.setLightStatusBarAuto(color)
             colorAnimation.start()
         }
     }
