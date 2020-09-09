@@ -1,7 +1,6 @@
 package com.o4x.musical.ui.activities
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,13 +11,13 @@ import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.NavController
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
@@ -30,13 +29,10 @@ import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemIconColors
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
 import code.name.monkey.retromusic.extensions.findNavController
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.AppBarLayout.ScrollingViewBehavior
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.extensions.primaryColor
-import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper
 import com.o4x.musical.imageloader.universalil.UniversalIL
@@ -52,7 +48,6 @@ import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog
 import com.o4x.musical.util.PreferenceUtil.introShown
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.util.PreferenceUtil.setIntroShown
-import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
@@ -69,6 +64,8 @@ class MainActivity : AbsMusicPanelActivity() {
         super.onCreate(savedInstanceState)
 
         ButterKnife.bind(this)
+
+        setNavigationBarColorAuto()
 
         setupNavController()
         setDrawUnderBar()
@@ -180,34 +177,27 @@ class MainActivity : AbsMusicPanelActivity() {
         checkSetUpPro()
         navigation_view.setNavigationItemSelectedListener { menuItem: MenuItem ->
             drawer_layout.closeDrawers()
-            when (menuItem.itemId) {
-                R.id.nav_home -> Handler().postDelayed(
-                    { setMusicChooser(R.id.nav_home) }, 200)
-                R.id.nav_queue -> Handler().postDelayed({ setMusicChooser(R.id.nav_queue) }, 200)
-                R.id.nav_library -> Handler().postDelayed({ setMusicChooser(R.id.nav_library) },
-                    200)
-                R.id.nav_folders -> Handler().postDelayed({ setMusicChooser(R.id.nav_folders) },
-                    200)
-                R.id.nav_eq -> {
-                    Handler().postDelayed({ setMusicChooser(R.id.nav_eq) }, 200)
-                    Handler().postDelayed({
-                        startActivity(Intent(this@MainActivity,
-                            PurchaseActivity::class.java))
-                    }, 200)
-                }
-                R.id.buy_pro -> Handler().postDelayed({
-                    startActivity(Intent(this@MainActivity,
-                        PurchaseActivity::class.java))
-                }, 200)
-                R.id.action_scan -> Handler().postDelayed({
-                    val dialog = ScanMediaFolderChooserDialog.create()
-                    dialog.show(supportFragmentManager, "SCAN_MEDIA_FOLDER_CHOOSER")
-                }, 200)
-                R.id.nav_settings -> Handler().postDelayed({
-                    startActivity(Intent(this@MainActivity,
-                        SettingsActivity::class.java))
-                }, 200)
-            }
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    when (menuItem.itemId) {
+                        R.id.nav_home -> setMusicChooser(R.id.nav_home)
+                        R.id.nav_queue -> setMusicChooser(R.id.nav_queue)
+                        R.id.nav_library -> setMusicChooser(R.id.nav_library)
+                        R.id.nav_folders -> setMusicChooser(R.id.nav_folders)
+                        R.id.nav_eq -> setMusicChooser(R.id.nav_eq)
+                        R.id.buy_pro ->  startActivity(
+                            Intent(this@MainActivity, PurchaseActivity::class.java)
+                        )
+                        R.id.action_scan -> {
+                            val dialog = ScanMediaFolderChooserDialog.create()
+                            dialog.show(supportFragmentManager, "SCAN_MEDIA_FOLDER_CHOOSER")
+                        }
+                        R.id.nav_settings -> startActivity(
+                            Intent(this@MainActivity, SettingsActivity::class.java)
+                        )
+                    }
+                },
+                200)
             false
         }
     }

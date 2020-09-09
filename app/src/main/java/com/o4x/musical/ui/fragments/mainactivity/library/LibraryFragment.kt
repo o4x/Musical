@@ -14,6 +14,7 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
 import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.interfaces.CabHolder
@@ -86,6 +87,7 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
         val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
         //        TabLayoutUtil.setTabIconColors(tabs, normalColor, selectedColor);
+        mainActivity.tabs.setBackgroundColor(primaryColor)
         mainActivity.tabs.setTabTextColors(normalColor, selectedColor)
         mainActivity.tabs.setSelectedTabIndicatorColor(themeColor(mainActivity))
         updateTabVisibility()
