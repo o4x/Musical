@@ -13,6 +13,7 @@ import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
 import com.o4x.musical.R
+import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.interfaces.CabHolder
@@ -73,7 +74,7 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         pager!!.adapter = pagerAdapter
         pager!!.offscreenPageLimit = pagerAdapter!!.count - 1
         mainActivity.tabs.setupWithViewPager(pager)
-        val primaryColor = themeColor(mainActivity)
+        val primaryColor = primaryColor()
         val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
         val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
         //        TabLayoutUtil.setTabIconColors(tabs, normalColor, selectedColor);
@@ -96,15 +97,14 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         get() = pagerAdapter!!.getFragment(pager!!.currentItem)
 
     private val isPlaylistPage: Boolean
-        private get() = currentFragment is PlaylistsFragment
+        get() = currentFragment is PlaylistsFragment
 
     override fun openCab(menuRes: Int, callback: MaterialCab.Callback): MaterialCab {
-        if (cab != null && cab!!.isActive) cab!!.finish()
+        if (cab != null && cab!!.isActive) cab?.finish()
         cab = MaterialCab(mainActivity, R.id.cab_stub)
             .setMenu(menuRes)
             .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-            .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(themeColor(
-                mainActivity)))
+            .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(primaryColor()))
             .start(callback)
         return cab!!
     }

@@ -22,10 +22,21 @@
         app:elevation="0dp"
         android:background="@color/transparent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/main_toolbar"
-            style="@style/Toolbar"
-            android:background="@color/transparent"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/main_toolbar"
+                style="@style/Toolbar"
+                android:background="@color/transparent" />
+
+            <ViewStub
+                android:id="@+id/cab_stub"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize" />
+
+        </FrameLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/main_tabs"

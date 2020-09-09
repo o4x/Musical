@@ -47,8 +47,6 @@ import kotlin.math.max
 import kotlin.math.min
 
 class HomeFragment : AbsMainActivityFragment() {
-
-    private val transparentColor = Color.TRANSPARENT
     
     private lateinit var activity: MainActivity
 
