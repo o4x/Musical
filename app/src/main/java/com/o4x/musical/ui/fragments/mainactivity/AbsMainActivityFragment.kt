@@ -45,8 +45,13 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
         mainActivity.setStatusBarColorAuto()
         mainActivity.toolbar.setBackgroundColor(primaryColor())
         mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
-        mainActivity.tabs.visibility = View.GONE
+        hideSubToolbar();
         showAppbar()
+    }
+
+    fun hideSubToolbar() {
+        mainActivity.tabs.visibility = View.GONE
+        mainActivity.bread_crumbs.visibility = View.GONE
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -67,7 +72,7 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
 
     fun appbarHeight(): Int {
         val h = Util.getStatusBarHeight(mainActivity) + toolbarHeight()
-        return if (mainActivity.tabs.visibility == View.VISIBLE) {
+        return if (mainActivity.tabs.visibility == View.VISIBLE || mainActivity.bread_crumbs.visibility == View.VISIBLE) {
             h + resources.getDimension(R.dimen.tab_height).toInt()
         } else {
             h

@@ -53,6 +53,7 @@ import com.o4x.musical.util.PreferenceUtil.introShown
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.util.PreferenceUtil.setIntroShown
 import com.o4x.musical.util.ViewUtil
+import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
 import java.util.*
@@ -372,6 +373,9 @@ class MainActivity : AbsMusicPanelActivity() {
 
     val tabs: TabLayout
         get() = main_tabs
+
+    val bread_crumbs: BreadCrumbLayout
+        get() = main_bread_crumbs
 
     companion object {
         val TAG = MainActivity::class.java.simpleName

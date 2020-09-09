@@ -12,7 +12,7 @@ import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import com.o4x.musical.R
 import com.o4x.musical.util.ViewUtil
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-import kotlinx.android.synthetic.main.fragment_main_activity_recycler_view.*
+import kotlinx.android.synthetic.main.fragment_library_recycler_view.*
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -92,7 +92,7 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
 
     @get:LayoutRes
     protected val layoutRes: Int
-        protected get() = R.layout.fragment_main_activity_recycler_view
+        protected get() = R.layout.fragment_library_recycler_view
 
     val recyclerView: RecyclerView?
         get() = recycler_view

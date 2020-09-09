@@ -11,30 +11,26 @@ import android.view.*
 import android.webkit.MimeTypeMap
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
+import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.menu.SongMenuHelper
 import com.o4x.musical.helper.menu.SongsMenuHelper
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.interfaces.LoaderIds
 import com.o4x.musical.misc.DialogAsyncTask
+import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.misc.UpdateToastMediaScannerCompletionListener
 import com.o4x.musical.misc.WrappedAsyncTaskLoader
 import com.o4x.musical.model.Song
@@ -55,7 +51,7 @@ import java.lang.ref.WeakReference
 import java.util.*
 
 class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
-    SongFileAdapter.Callbacks, OnOffsetChangedListener, LoaderManager.LoaderCallbacks<List<File>> {
+    SongFileAdapter.Callbacks, LoaderManager.LoaderCallbacks<List<File>> {
 
     private var adapter: SongFileAdapter? = null
     private var cab: MaterialCab? = null
@@ -63,9 +59,9 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
     fun setCrumb(crumb: Crumb?, addToHistory: Boolean) {
         if (crumb == null) return
         saveScrollPosition()
-        bread_crumbs!!.setActiveOrAdd(crumb, false)
+        mainActivity.bread_crumbs.setActiveOrAdd(crumb, false)
         if (addToHistory) {
-            bread_crumbs!!.addHistory(crumb)
+            mainActivity.bread_crumbs.addHistory(crumb)
         }
         loaderManager.restartLoader(LOADER_ID, null, this)
     }
@@ -79,12 +75,12 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
     }
 
     private val activeCrumb: Crumb?
-        private get() = if (bread_crumbs != null && bread_crumbs!!.size() > 0) bread_crumbs!!.getCrumb(
-            bread_crumbs!!.activeIndex) else null
+        private get() = if (mainActivity.bread_crumbs.size() > 0) mainActivity.bread_crumbs.getCrumb(
+            mainActivity.bread_crumbs.activeIndex) else null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(CRUMBS, bread_crumbs!!.stateWrapper)
+        outState.putParcelable(CRUMBS, mainActivity.bread_crumbs.stateWrapper)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -92,7 +88,7 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
         if (savedInstanceState == null) {
             setCrumb(Crumb(FileUtil.safeGetCanonicalFile(startDirectory)), true)
         } else {
-            bread_crumbs!!.restoreFromStateWrapper(savedInstanceState.getParcelable(CRUMBS))
+            mainActivity.bread_crumbs.restoreFromStateWrapper(savedInstanceState.getParcelable(CRUMBS))
             loaderManager.initLoader(LOADER_ID, null, this)
         }
     }
@@ -100,6 +96,7 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
     override fun getLayout(): Int = R.layout.fragment_folder
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpAppbarColor()
         setUpBreadCrumbs()
         setUpRecyclerView()
@@ -107,25 +104,24 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
     }
 
     private fun setUpAppbarColor() {
-        val primaryColor = themeColor(mainActivity)
-        appbar!!.setBackgroundColor(primaryColor)
-        toolbar!!.setBackgroundColor(primaryColor)
-        bread_crumbs!!.setBackgroundColor(primaryColor)
-        bread_crumbs!!.setActivatedContentColor(ToolbarContentTintHelper.toolbarTitleColor(mainActivity,
+        val primaryColor = primaryColor()
+        mainActivity.bread_crumbs.setBackgroundColor(primaryColor)
+        mainActivity.bread_crumbs.setActivatedContentColor(ToolbarContentTintHelper.toolbarTitleColor(mainActivity,
             primaryColor))
-        bread_crumbs!!.setDeactivatedContentColor(ToolbarContentTintHelper.toolbarSubtitleColor(
+        mainActivity.bread_crumbs.setDeactivatedContentColor(ToolbarContentTintHelper.toolbarSubtitleColor(
             mainActivity, primaryColor))
     }
 
     private fun setUpBreadCrumbs() {
-        bread_crumbs!!.setCallback(this)
+        mainActivity.bread_crumbs.visibility = View.VISIBLE
+        mainActivity.bread_crumbs.setCallback(this)
     }
 
     private fun setUpRecyclerView() {
         ViewUtil.setUpFastScrollRecyclerViewColor(activity, recycler_view, themeColor(
             mainActivity))
-        recycler_view!!.layoutManager = LinearLayoutManager(activity)
-        appbar!!.addOnOffsetChangedListener(this)
+        recycler_view.layoutManager = OverScrollLinearLayoutManager(requireContext())
+        recycler_view.addAppbarListener()
     }
 
     private fun setUpAdapter() {
@@ -145,18 +141,13 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
         saveScrollPosition()
     }
 
-    override fun onDestroyView() {
-        appbar!!.removeOnOffsetChangedListener(this)
-        super.onDestroyView()
-    }
-
     override fun handleBackPress(): Boolean {
         if (cab != null && cab!!.isActive) {
             cab!!.finish()
             return true
         }
-        if (bread_crumbs!!.popHistory()) {
-            setCrumb(bread_crumbs!!.lastHistory(), false)
+        if (mainActivity.bread_crumbs.popHistory()) {
+            setCrumb(mainActivity.bread_crumbs.lastHistory(), false)
             return true
         }
         return false
@@ -177,14 +168,14 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_folders, menu)
         ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
-            toolbar!!,
+            mainActivity.toolbar,
             menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(toolbar))
+            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, toolbar)
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, mainActivity.toolbar)
     }
 
     override fun onCrumbSelection(crumb: Crumb, index: Int) {
@@ -378,13 +369,6 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
             }
         }
         popupMenu.show()
-    }
-
-    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-        container!!.setPadding(container!!.paddingLeft,
-            container!!.paddingTop,
-            container!!.paddingRight,
-            appbar!!.totalScrollRange + verticalOffset)
     }
 
     private fun checkIsEmpty() {
