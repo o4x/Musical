@@ -1,24 +1,25 @@
 package com.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
-import android.content.res.Resources
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.misc.OverScrollGridLayoutManager
+import com.o4x.musical.misc.OverScrollLinearLayoutManager
+import com.o4x.musical.misc.VerticalScrollListener
+import com.o4x.musical.misc.isRecyclerScrollable
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import com.o4x.musical.util.Util
-import me.everything.android.ui.overscroll.IOverScrollState.STATE_BOUNCE_BACK
-import me.everything.android.ui.overscroll.IOverScrollState.STATE_DRAG_END_SIDE
-import me.everything.android.ui.overscroll.IOverScrollState.STATE_DRAG_START_SIDE
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 import kotlin.math.max
 import kotlin.math.min
 
@@ -73,16 +74,18 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
         }
     }
 
+    private var animation: ValueAnimator? = null
     fun showAppbar() {
         val from = mainActivity.appbar.y.toInt()
         val to = 0
-        val animation = ValueAnimator.ofInt(from, to)
-        animation.duration =
+        animation?.cancel()
+        animation = ValueAnimator.ofInt(from, to)
+        animation?.duration =
             resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
-        animation.addUpdateListener { animator: ValueAnimator ->
+        animation?.addUpdateListener { animator: ValueAnimator ->
             mainActivity.appbar.y = (animator.animatedValue as Int).toFloat()
         }
-        animation.start()
+        animation?.start()
     }
 
     fun RecyclerView.addAppbarListener() {
@@ -95,42 +98,37 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
 
         recyclerView.setPadding(0, appbarHeight, 0, 0)
 
-        val handler = {
-                dy: Int ->
+        val handler = { dy: Int ->
             when {
                 dy > 0 -> { // Scrolling up
                     val changes = max(-toolbarHeight.toFloat(),
                         mainActivity.appbar.y - (dy))
                     mainActivity.appbar.y = changes
-                    recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
+                    recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0)
                 }
                 dy < 0 -> { // Scrolling down
                     val changes = min(0f, mainActivity.appbar.y - (dy))
                     mainActivity.appbar.y = changes
-                    recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0);
+                    recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0)
                 }
             }
         }
 
-        OverScrollDecoratorHelper.setUpOverScroll(recyclerView,
-            OverScrollDecoratorHelper.ORIENTATION_VERTICAL)
-            .setOverScrollUpdateListener { decor, state, offset ->
-                val dy = (-offset).toInt()
-
-                recyclerView.stopScroll()
-                recyclerView.scrollToPosition(0)
-
-                handler(dy)
-            }
-
-        recyclerView.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    handler(dy)
+        val verticalScrollListener =
+            object : VerticalScrollListener() {
+                override fun onScroll(dy: Int) {
+                    if (recyclerView.isRecyclerScrollable()) {
+                        animation?.cancel()
+                        handler(dy)
+                    }
                 }
-
             }
-        )
+
+        val lm = recyclerView.layoutManager
+        if (lm is OverScrollLinearLayoutManager) {
+            lm.setOnVerticalScrollListener(verticalScrollListener)
+        } else if (lm is OverScrollGridLayoutManager) {
+            lm.setOnVerticalScrollListener(verticalScrollListener)
+        }
     }
 }

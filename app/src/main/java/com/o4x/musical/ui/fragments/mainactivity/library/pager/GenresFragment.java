@@ -8,6 +8,7 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.o4x.musical.R;
+import com.o4x.musical.misc.OverScrollLinearLayoutManager;
 import com.o4x.musical.ui.adapter.GenreAdapter;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.loader.GenreLoader;
@@ -30,7 +31,7 @@ public class GenresFragment extends AbsLibraryPagerRecyclerViewFragment<GenreAda
     @NonNull
     @Override
     protected LinearLayoutManager createLayoutManager() {
-        return new LinearLayoutManager(getActivity());
+        return new OverScrollLinearLayoutManager(getActivity());
     }
 
     @NonNull
