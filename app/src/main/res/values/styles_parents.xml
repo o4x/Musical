@@ -17,47 +17,6 @@
         <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
     </style>
 
-    <style name="Theme.Musical.Base" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">@color/blue_grey_200</item>
-        <item name="colorPrimaryVariant">@color/blue_grey_400</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="colorSecondary">@color/blue_grey_100</item>
-        <item name="colorSecondaryVariant">@color/blue_grey_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <item name="android:colorBackground">@color/grey_900</item>
-        <item name="colorOnBackground">@color/white</item>
-        <item name="colorSurface">@color/dark_grey</item>
-        <item name="colorOnSurface">@color/white</item>
-        <item name="colorError">@color/red_A200</item>
-        <item name="colorOnError">@color/black</item>
-
-        <item name="md_background_color">@color/darkColorSurface</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="toolbarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
-        <item name="mcab_popup_theme">@style/ThemeOverlay.AppCompat.Dark</item>
-        <item name="roundSelector">@drawable/round_selector</item>
-        <item name="rectSelector">@drawable/rect_selector</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="windowActionBar">false</item>
-        <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
-        <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
-        <item name="android:windowBackground">@color/window_color_dark</item>
-        <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
-
-
-        <item name="md_dark_theme">true</item>
-        <item name="rectSelectorStrong">@drawable/rect_selector_strong_dark</item>
-        <item name="cardBackgroundColor">@color/grey_800</item>
-        <item name="defaultFooterColor">@color/grey_900</item>
-        <item name="dividerColor">@color/grey_800</item>
-        <item name="iconColor">@color/ate_secondary_text_dark</item>
-        <!-- just in case-->
-        <item name="colorAccent">@android:color/white</item>
-    </style>
-
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/grey_50</item>
         <item name="colorPrimaryVariant">@color/grey_200</item>
@@ -71,6 +30,11 @@
         <item name="colorOnSurface">@color/grey_900</item>
         <item name="colorError">@color/red_A700</item>
         <item name="colorOnError">@color/white</item>
+        <item name="android:windowBackground">@color/grey_50</item>
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="defaultFooterColor">@color/grey_300</item>
+        <item name="dividerColor">@color/md_divider_black</item>
+        <item name="iconColor">@color/ate_secondary_text_light</item>
 
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActivityTransitions">true</item>
@@ -87,34 +51,67 @@
         <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
 
 
-
-
         <item name="md_dark_theme">false</item>
         <item name="rectSelectorStrong">@drawable/rect_selector_strong</item>
-        <item name="cardBackgroundColor">@color/white</item>
-        <item name="defaultFooterColor">@color/grey_300</item>
-        <item name="dividerColor">@color/md_divider_black</item>
-        <item name="iconColor">@color/ate_secondary_text_light</item>
-        <!-- just in case-->
-        <item name="colorAccent">@android:color/black</item>
-
     </style>
 
-    <style name="Theme.Musical.Base.Black" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="md_background_color">@color/blackColorSurface</item>
-        <item name="roundSelector">@drawable/round_selector</item>
-        <item name="rectSelector">@drawable/rect_selector</item>
+    <style name="Theme.Musical.Base" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/dark_grey</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/blue_grey_800</item>
+        <item name="colorSecondaryVariant">@color/blue_grey_900</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/black_color</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorSurface">@color/black_color</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorError">@color/red_900</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="android:windowBackground">@color/black_color</item>
+        <item name="cardBackgroundColor">@color/dark_color</item>
+        <item name="defaultFooterColor">@color/dark_grey</item>
+        <item name="dividerColor">@color/grey_800</item>
+        <item name="iconColor">@color/grey_400</item>
+
+        <item name="md_background_color">@color/darkColorSurface</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="windowActionBarOverlay">true</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
-        <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
-        <item name="colorSurface">@color/blackColorSurface</item>
-        <item name="colorOnBackground">@color/blackColorSurface</item>
         <item name="toolbarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="mcab_popup_theme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="roundSelector">@drawable/round_selector</item>
+        <item name="rectSelector">@drawable/rect_selector</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="windowActionBar">false</item>
+        <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
+
+
+        <item name="md_dark_theme">true</item>
+        <item name="rectSelectorStrong">@drawable/rect_selector_strong_dark</item>
+    </style>
+
+    <style name="Theme.Musical.Base.Black" parent="Theme.Musical.Base">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/blue_grey_900</item>
+        <item name="colorSecondaryVariant">@color/blue_grey_900</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/black</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorSurface">@color/black</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorError">@color/red_900</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="cardBackgroundColor">@color/dark_grey</item>
+        <item name="defaultFooterColor">@color/black</item>
+        <item name="dividerColor">@color/grey_800</item>
+        <item name="iconColor">@color/grey_400</item>
     </style>
 
     <style name="FabParent">

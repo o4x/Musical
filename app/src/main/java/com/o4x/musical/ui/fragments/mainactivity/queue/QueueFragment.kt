@@ -109,7 +109,7 @@ class QueueFragment : AbsMainActivityFragment() {
         queue_recycler_view!!.adapter = wrappedAdapter
         queue_recycler_view!!.itemAnimator = animator
         recyclerViewDragDropManager!!.attachRecyclerView(queue_recycler_view!!)
-        queueLayoutManager!!.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0)
+        queueLayoutManager!!.scrollToPositionWithOffset(MusicPlayerRemote.getPosition(), 0)
 
         queue_recycler_view.addAppbarListener()
     }
