@@ -79,6 +79,7 @@ class HomeFragment : AbsMainActivityFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        hideSubToolbar()
         queueListener = QueueListener()
         activity.addMusicServiceEventListener(queueListener)
         setUpViews()
