@@ -32,17 +32,28 @@
     <action
         android:id="@+id/action_to_queue"
         app:destination="@id/queue"
-        app:popUpTo="@id/home"/>
-
+        app:popUpTo="@id/home"
+        app:enterAnim="@anim/retro_fragment_open_enter"
+        app:exitAnim="@anim/retro_fragment_open_exit"
+        app:popEnterAnim="@anim/retro_fragment_close_enter"
+        app:popExitAnim="@anim/retro_fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_library"
         app:destination="@id/library"
-        app:popUpTo="@id/home"/>
+        app:popUpTo="@id/home"
+        app:enterAnim="@anim/retro_fragment_open_enter"
+        app:exitAnim="@anim/retro_fragment_open_exit"
+        app:popEnterAnim="@anim/retro_fragment_close_enter"
+        app:popExitAnim="@anim/retro_fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_folders"
         app:destination="@id/folders"
-        app:popUpTo="@id/home"/>
+        app:popUpTo="@id/home"
+        app:enterAnim="@anim/retro_fragment_open_enter"
+        app:exitAnim="@anim/retro_fragment_open_exit"
+        app:popEnterAnim="@anim/retro_fragment_close_enter"
+        app:popExitAnim="@anim/retro_fragment_close_exit"/>
 
 </navigation>

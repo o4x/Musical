@@ -49,9 +49,17 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         pager!!.removeOnPageChangeListener(this)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
+        registerOnSharedPreferenceChangedListener(this)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        registerOnSharedPreferenceChangedListener(this)
         setUpViewPager()
         mainActivity.tabs.visibility = View.VISIBLE
     }
