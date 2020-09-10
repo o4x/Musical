@@ -33,6 +33,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.App
 import com.o4x.musical.R
+import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper
 import com.o4x.musical.imageloader.universalil.UniversalIL
@@ -153,26 +154,24 @@ class MainActivity : AbsMusicPanelActivity() {
     }
 
 
+    @SuppressLint("NewApi")
     private fun setUpNavigationView() {
         navigation_view.setCheckedItem(R.id.nav_home)
 
         val themeColor = themeColor(this)
 
-        setItemIconColors(navigation_view,
-            resolveColor(this, R.attr.iconColor, textColorSecondary(this)),
-            themeColor)
+        navigation_view.setBackgroundColor(primaryColor())
+
         setItemTextColors(navigation_view, textColorPrimary(this), themeColor)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val stateListDrawable = navigation_view.itemBackground as StateListDrawable
-            val layerDrawable = stateListDrawable.getStateDrawable(0) as LayerDrawable
-            val rectangle = layerDrawable.findDrawableByLayerId(R.id.rectangle) as GradientDrawable
-            val rectangleRadius =
-                layerDrawable.findDrawableByLayerId(R.id.rectangle_radius) as GradientDrawable
+        val stateListDrawable = navigation_view.itemBackground as StateListDrawable
+        val layerDrawable = stateListDrawable.getStateDrawable(0) as LayerDrawable
+        val rectangle = layerDrawable.findDrawableByLayerId(R.id.rectangle) as GradientDrawable
+        val rectangleRadius =
+            layerDrawable.findDrawableByLayerId(R.id.rectangle_radius) as GradientDrawable
 
-            rectangle.setColor(themeColor)
-            rectangleRadius.setColor(withAlpha(textColorPrimary(this), 0.4f))
-        }
+        rectangle.setColor(themeColor)
+        rectangleRadius.setColor(withAlpha(themeColor, 0.2f))
 
         checkSetUpPro()
         navigation_view.setNavigationItemSelectedListener { menuItem: MenuItem ->

@@ -3,11 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <item android:id="@+id/rectangle_radius" android:end="24dp"
+<!--    <item android:id="@+id/rectangle_radius" android:end="24dp"-->
+<!--        tools:ignore="UnusedAttribute">-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <corners android:topRightRadius="42dp"-->
+<!--                android:bottomRightRadius="42dp"/>-->
+<!--        </shape>-->
+<!--    </item>-->
+
+    <item android:id="@+id/rectangle_radius"
         tools:ignore="UnusedAttribute">
         <shape android:shape="rectangle">
-            <corners android:topRightRadius="42dp"
-                android:bottomRightRadius="42dp"/>
+            <corners android:topRightRadius="0dp"
+                android:bottomRightRadius="0dp"/>
         </shape>
     </item>
 
