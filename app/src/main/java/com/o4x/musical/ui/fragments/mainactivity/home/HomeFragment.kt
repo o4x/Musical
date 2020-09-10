@@ -1,7 +1,6 @@
 package com.o4x.musical.ui.fragments.mainactivity.home
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
@@ -9,10 +8,8 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
-import androidx.core.graphics.ColorUtils
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,13 +30,14 @@ import com.o4x.musical.loader.SongLoader
 import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
-import com.o4x.musical.ui.activities.MainActivity
-import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
-import com.o4x.musical.util.*
+import com.o4x.musical.util.MusicUtil
+import com.o4x.musical.util.NavigationUtil
+import com.o4x.musical.util.PhonographColorUtil
+import com.o4x.musical.util.ViewUtil
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
