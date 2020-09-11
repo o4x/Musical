@@ -10,13 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 /**
  * @author Aidan Follestad (afollestad), Karim Abou Zeid (kabouzeid)
  */
-open class ATHActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
-
-    private var updateTime: Long = -1
+abstract class ATHActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateTime = System.currentTimeMillis()
         // Set up a listener whenever themes changes
         ThemeStore.prefs(this).registerOnSharedPreferenceChangeListener(this)
     }
@@ -27,20 +24,11 @@ open class ATHActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         super.onDestroy()
     }
 
-    fun postRecreate() {
-        // hack to prevent java.lang.RuntimeException: Performing pause of activity that is not resumed
-        // makes sure recreate() is called right after and not in onResume()
-        Handler().post { recreate() }
-    }
-
-    private fun onThemeChanged() {
-        postRecreate()
-    }
-
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (ATH.didThemeValuesChange(this, updateTime)) {
-            updateTime = System.currentTimeMillis()
-            onThemeChanged()
+        if (key == ThemeStorePrefKeys.VALUES_CHANGED) {
+            updateTheme()
         }
     }
+
+    abstract fun updateTheme()
 }

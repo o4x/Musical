@@ -72,8 +72,13 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
          // THEME SETTINGS //
         ////////////////////
         val generalTheme: Preference? = findPreference("general_theme")
-        generalTheme?.setOnPreferenceChangeListener { _, _ ->
-            ThemeStore.markChanged(requireContext())
+        var lastTheme = generalTheme?.summary.toString()
+        generalTheme?.setOnPreferenceChangeListener { _, newValue ->
+            val newTheme = newValue.toString()
+            if (lastTheme != newTheme) {
+                lastTheme = newTheme
+                ThemeStore.markChanged(requireContext())
+            }
             true
         }
 
