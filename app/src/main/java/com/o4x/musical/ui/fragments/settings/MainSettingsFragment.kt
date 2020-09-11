@@ -38,7 +38,7 @@ import com.o4x.musical.ui.activities.SettingsActivity
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil
 
-class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,21 +72,11 @@ class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, Shared
          // THEME SETTINGS //
         ////////////////////
         val generalTheme: Preference? = findPreference("general_theme")
-        generalTheme?.let {
-            setSummary(it)
-            it.setOnPreferenceChangeListener { _, newValue ->
-                val theme = newValue as String
-                setSummary(it, newValue)
-                ThemeStore.markChanged(requireContext())
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                    requireActivity().setTheme(PreferenceUtil.themeResFromPrefValue(theme))
-                    DynamicShortcutManager(requireContext()).updateDynamicShortcuts()
-                }
-                requireActivity().recreate()
-                true
-            }
+        generalTheme?.setOnPreferenceChangeListener { _, _ ->
+            ThemeStore.markChanged(requireContext())
+            true
         }
+
 
         val blackTheme: ATESwitchPreference? = findPreference("black_theme")
         blackTheme?.setOnPreferenceChangeListener { _, _ ->
@@ -95,11 +85,6 @@ class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, Shared
                 return@setOnPreferenceChangeListener false
             }
             ThemeStore.markChanged(requireContext())
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                requireActivity().setTheme(PreferenceUtil.themeResFromPrefValue("black"))
-                DynamicShortcutManager(requireContext()).updateDynamicShortcuts()
-            }
-            requireActivity().recreate()
             true
         }
 
@@ -235,19 +220,6 @@ class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, Shared
         }
     }
 
-    override fun onClick(view: View) {
-//        when (view.id) {
-//            R.id.generalSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_themeSettingsFragment)
-//            R.id.audioSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_audioSettings)
-//            R.id.personalizeSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_personalizeSettingsFragment)
-//            R.id.imageSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_imageSettingFragment)
-//            R.id.notificationSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_notificationSettingsFragment)
-//            R.id.otherSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_otherSettingsFragment)
-//            R.id.aboutSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_aboutActivity)
-//            R.id.nowPlayingSettings -> findNavController().navigate(R.id.action_mainSettingsFragment_to_nowPlayingSettingsFragment)
-//        }
-    }
-
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
             PreferenceUtil.NOW_PLAYING_SCREEN_ID -> invalidateSettings()
@@ -256,7 +228,7 @@ class MainSettingsFragment : AbsSettingsFragment(), View.OnClickListener, Shared
             PreferenceUtil.CLASSIC_NOTIFICATION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     findPreference<Preference>("colored_notification")?.isEnabled =
-                        sharedPreferences?.getBoolean(key, false)!!
+                        sharedPreferences.getBoolean(key, false)
                 }
             }
         }
