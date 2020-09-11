@@ -10,7 +10,7 @@ import code.name.monkey.appthemehelper.util.ATHUtil;
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 
-public class ATHToolbarActivity extends ATHActivity {
+abstract public class ATHToolbarActivity extends ATHActivity {
 
     private Toolbar toolbar;
 

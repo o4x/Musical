@@ -27,16 +27,20 @@ import java.util.*
 abstract class AbsThemeActivity : ATHToolbarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        updateTheme()
+        setTheme()
         super.onCreate(savedInstanceState)
         toggleScreenOn()
         MaterialDialogsUtil.updateMaterialDialogsThemeSingleton(this)
     }
 
-    private fun updateTheme() {
+    private fun setTheme() {
         setTheme(ThemeManager.getThemeResValue(this))
         setDefaultNightMode(ThemeManager.getNightMode(this))
         DynamicShortcutManager(this).updateDynamicShortcuts()
+    }
+
+    override fun updateTheme() {
+        recreate()
     }
 
     private fun toggleScreenOn() {

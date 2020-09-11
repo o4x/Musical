@@ -54,7 +54,7 @@ public class PlayerActivity extends AbsMusicServiceActivity implements CardPlaye
     protected void onResume() {
         super.onResume();
         if (currentNowPlayingScreen != PreferenceUtil.getNowPlayingScreen()) {
-            postRecreate();
+            recreate();
         }
     }
 

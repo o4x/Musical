@@ -62,12 +62,18 @@ class HomeFragment : AbsMainActivityFragment() {
     private var toolbarHeight by Delegates.notNull<Int>()
     private var headerHeight by Delegates.notNull<Int>()
 
+    // animations //
+    private val toolbarAnimation = ValueAnimator.ofFloat(0f, 1f)
+    private val statusAnimation = ValueAnimator.ofFloat(0f, 1f)
+
     var position: Int = 0
 
     override fun getLayout(): Int = R.layout.fragment_home
 
     override fun onDestroyView() {
         mainActivity.removeMusicServiceEventListener(queueListener)
+        toolbarAnimation.cancel()
+        statusAnimation.cancel()
         super.onDestroyView()
     }
 
@@ -189,8 +195,8 @@ class HomeFragment : AbsMainActivityFragment() {
 
     private fun setUpBounceScrollView() {
 
-        val isStatusFlat = AtomicBoolean(false)
-        val isAppbarFlat = AtomicBoolean(false)
+        var isStatusFlat = false
+        var isAppbarFlat = false
 
         nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
@@ -200,15 +206,15 @@ class HomeFragment : AbsMainActivityFragment() {
                     .toFloat()
 
             // Scroll appbar
-            if (scrollY > headerHeight + toolbarHeight && !isAppbarFlat.get()) {
+            if (scrollY > headerHeight + toolbarHeight && !isAppbarFlat) {
                 toolbarColorVisible(true)
                 mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
-                isAppbarFlat.set(true)
+                isAppbarFlat = true
             }
             if (scrollY > headerHeight) { // outside header
-                if (!isStatusFlat.get()) {
+                if (!isStatusFlat) {
                     statusBarColorVisible(true)
-                    isStatusFlat.set(true)
+                    isStatusFlat = true
                 }
                 if (oldScrollY != 0) {
                     if (scrollY > oldScrollY) { // Scrolling up
@@ -223,12 +229,12 @@ class HomeFragment : AbsMainActivityFragment() {
                     }
                 }
             } else { // inside header
-                if (isStatusFlat.get()) {
+                if (isStatusFlat) {
                     toolbarColorVisible(false)
                     statusBarColorVisible(false)
                     mainActivity.appbar.elevation = 0f
-                    isStatusFlat.set(false)
-                    isAppbarFlat.set(false)
+                    isStatusFlat = false
+                    isAppbarFlat = false
                 }
                 mainActivity.appbar.y = 0f
             }
@@ -422,6 +428,8 @@ class HomeFragment : AbsMainActivityFragment() {
     }
 
     private fun toolbarColorVisible(show: Boolean) {
+        toolbarAnimation.cancel()
+
         val color = primaryColor()
         val current = ViewUtil.getViewBackgroundColor(mainActivity.toolbar)
 
@@ -430,19 +438,23 @@ class HomeFragment : AbsMainActivityFragment() {
             show && current == ColorUtil.withAlpha(current, 1f)
             ||
             !show && current == ColorUtil.withAlpha(current, 0f)
-        ) return
+        ) {
+            mainActivity.toolbar.setBackgroundColor(if (show) color else ColorUtil.withAlpha(color, 0f))
+            return
+        }
 
-        val colorAnimation = ValueAnimator.ofFloat(0f, 1f)
-        colorAnimation.duration =
+        toolbarAnimation.duration =
             resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
-        colorAnimation.addUpdateListener { animator: ValueAnimator ->
+        toolbarAnimation.addUpdateListener { animator: ValueAnimator ->
             val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
             mainActivity.toolbar.setBackgroundColor(ColorUtil.withAlpha(color, f))
         }
-        colorAnimation.start()
+        toolbarAnimation.start()
     }
 
     private fun statusBarColorVisible(show: Boolean) {
+        statusAnimation.cancel()
+
         val color = primaryColor()
         val current = mainActivity.window.statusBarColor
 
@@ -451,19 +463,19 @@ class HomeFragment : AbsMainActivityFragment() {
             show && current == ColorUtil.withAlpha(current, 1f)
             ||
             !show && current == ColorUtil.withAlpha(current, 0f)
-        ) return
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val colorAnimation = ValueAnimator.ofFloat(0f, 1f)
-            colorAnimation.duration =
-                resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
-            colorAnimation.addUpdateListener { animator: ValueAnimator ->
-                val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
-                mainActivity.window.statusBarColor = ColorUtil.withAlpha(color, f)
-            }
-            mainActivity.setLightStatusBarAuto(color)
-            colorAnimation.start()
+        ) {
+            mainActivity.window.statusBarColor = if (show) color else ColorUtil.withAlpha(color, 0f)
+            return
         }
+
+        statusAnimation.duration =
+            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
+        statusAnimation.addUpdateListener { animator: ValueAnimator ->
+            val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
+            mainActivity.window.statusBarColor = ColorUtil.withAlpha(color, f)
+        }
+        mainActivity.setLightStatusBarAuto(color)
+        statusAnimation.start()
     }
 
     companion object {

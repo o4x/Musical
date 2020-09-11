@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.MenuItem
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -40,12 +41,8 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
 
     private fun setupToolbar() {
         applyToolbar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        val animation: Animation = AnimationUtils.loadAnimation(applicationContext,
-            R.anim.slide_in_left)
         navController.addOnDestinationChangedListener { _, _, _ ->
-            toolbar_title.startAnimation(animation)
-            toolbar_title.text = navController.currentDestination?.label
+            toolbar.title = navController.currentDestination?.label
         }
     }
 
@@ -56,6 +53,7 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
     override fun onColorSelection(dialog: ColorChooserDialog, selectedColor: Int) {
         when (dialog.title) {
             R.string.theme_color -> {
+                if (ThemeStore.themeColor(this) != selectedColor)
                 ThemeStore.editTheme(this).themeColor(selectedColor).commit()
             }
         }
@@ -72,5 +70,11 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun updateTheme() {
+        startActivity(intent);
+        finish();
+        overridePendingTransition(0, 0);
     }
 }
