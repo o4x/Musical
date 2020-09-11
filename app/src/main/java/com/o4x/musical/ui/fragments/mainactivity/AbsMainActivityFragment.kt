@@ -1,15 +1,14 @@
 package com.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
@@ -30,7 +29,7 @@ import kotlin.math.min
 abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbacks {
 
     val mainActivity: MainActivity
-        get() = activity as MainActivity
+        get() = requireActivity() as MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +44,18 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
         mainActivity.setStatusBarColorAuto()
         mainActivity.toolbar.setBackgroundColor(primaryColor())
         mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
-        hideSubToolbar();
+        hideSubToolbar()
         showAppbar()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+    }
+
+    override fun onDestroy() {
+        animation?.cancel()
+        super.onDestroy()
     }
 
     fun hideSubToolbar() {
@@ -81,6 +90,7 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
 
     private var animation: ValueAnimator? = null
     fun showAppbar() {
+        mainActivity.appbar.setExpanded(true, true)
         val from = mainActivity.appbar.y.toInt()
         val to = 0
         animation?.cancel()

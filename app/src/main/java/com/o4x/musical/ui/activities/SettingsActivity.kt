@@ -57,11 +57,8 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
         when (dialog.title) {
             R.string.theme_color -> {
                 ThemeStore.editTheme(this).themeColor(selectedColor).commit()
-                if (VersionUtils.hasNougatMR())
-                    DynamicShortcutManager(this).updateDynamicShortcuts()
             }
         }
-        recreate()
     }
 
     override fun onColorChooserDismissed(dialog: ColorChooserDialog) {

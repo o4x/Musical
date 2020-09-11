@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import android.util.Log
 import androidx.annotation.StyleRes
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -18,6 +19,7 @@ import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment
 import com.o4x.musical.ui.fragments.player.AlbumCoverStyle
 import com.o4x.musical.ui.fragments.player.NowPlayingScreen
+import com.o4x.musical.util.theme.ThemeManager
 import com.o4x.musical.util.theme.ThemeMode
 import java.io.File
 import java.util.*

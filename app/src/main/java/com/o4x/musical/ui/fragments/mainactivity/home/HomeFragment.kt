@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import androidx.core.widget.NestedScrollView
@@ -43,6 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.properties.Delegates
 
 class HomeFragment : AbsMainActivityFragment() {
 
@@ -54,7 +56,13 @@ class HomeFragment : AbsMainActivityFragment() {
     private lateinit var recentlyLayoutManager: GridLayoutManager
     private lateinit var newLayoutManager: GridLayoutManager
 
-    var position: Int? = null
+    // Heights //
+    private var displayHeight by Delegates.notNull<Int>()
+    private var appbarHeight by Delegates.notNull<Int>()
+    private var toolbarHeight by Delegates.notNull<Int>()
+    private var headerHeight by Delegates.notNull<Int>()
+
+    var position: Int = 0
 
     override fun getLayout(): Int = R.layout.fragment_home
 
@@ -67,6 +75,16 @@ class HomeFragment : AbsMainActivityFragment() {
         // Save scroll view position
         position = nested_scroll_view.scrollY
         super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showAppbar()
+        if (position < headerHeight) {
+            toolbarColorVisible(false)
+            statusBarColorVisible(false)
+            mainActivity.appbar.elevation = 0f
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -119,7 +137,7 @@ class HomeFragment : AbsMainActivityFragment() {
     }
 
     private fun setUpHeights() {
-        val displayHeight = Resources.getSystem().displayMetrics.heightPixels
+        displayHeight = Resources.getSystem().displayMetrics.heightPixels
         var params: ViewGroup.LayoutParams
 
         // Set up header height
@@ -143,6 +161,13 @@ class HomeFragment : AbsMainActivityFragment() {
         val gd = GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM, colors)
         poster_gradient.background = gd
+
+
+
+        appbarHeight = appbarHeight()
+        toolbarHeight = toolbarHeight()
+        // get real header height
+        headerHeight = header.layoutParams.height - appbarHeight
     }
 
     private fun setUpOnClicks() {
@@ -163,25 +188,9 @@ class HomeFragment : AbsMainActivityFragment() {
     }
 
     private fun setUpBounceScrollView() {
-        val displayHeight = Resources.getSystem().displayMetrics.heightPixels
-        val appbarHeight = appbarHeight()
-        val toolbarHeight = toolbarHeight()
 
-        // get real header height
-        val headerHeight = header.layoutParams.height - appbarHeight
         val isStatusFlat = AtomicBoolean(false)
         val isAppbarFlat = AtomicBoolean(false)
-
-        if (position != null) { // on back to home page
-            showAppbar()
-            if (position!! < headerHeight) {
-                toolbarColorVisible(false)
-                statusBarColorVisible(false)
-                mainActivity.appbar.elevation = 0f
-                isAppbarFlat.set(false)
-                isAppbarFlat.set(false)
-            }
-        }
 
         nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 

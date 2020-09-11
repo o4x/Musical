@@ -22,7 +22,7 @@ object ATH {
 
     @SuppressLint("CommitPrefEdits")
     fun didThemeValuesChange(context: Context, since: Long): Boolean {
-        return ThemeStore.isConfigured(context) && ThemeStore.prefs(context).getLong(
+        return ThemeStore.prefs(context).getLong(
             ThemeStorePrefKeys.VALUES_CHANGED,
             -1
         ) > since

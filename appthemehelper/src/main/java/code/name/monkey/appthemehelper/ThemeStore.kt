@@ -126,7 +126,6 @@ private constructor(private val mContext: Context) : ThemeStorePrefKeys, ThemeSt
 
     override fun commit() {
         mEditor.putLong(ThemeStorePrefKeys.VALUES_CHANGED, System.currentTimeMillis())
-            .putBoolean(ThemeStorePrefKeys.IS_CONFIGURED_KEY, true)
             .commit()
     }
 
@@ -179,11 +178,6 @@ private constructor(private val mContext: Context) : ThemeStorePrefKeys, ThemeSt
         @CheckResult
         fun autoGeneratePrimaryDark(context: Context): Boolean {
             return prefs(context).getBoolean(ThemeStorePrefKeys.KEY_AUTO_GENERATE_PRIMARYDARK, true)
-        }
-
-        @CheckResult
-        fun isConfigured(context: Context): Boolean {
-            return prefs(context).getBoolean(ThemeStorePrefKeys.IS_CONFIGURED_KEY, false)
         }
 
         @CheckResult
