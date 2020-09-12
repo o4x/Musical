@@ -96,7 +96,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
     }
 
     fun setNavigationBarColorAuto() {
-        setNavigationBarColor(ATHUtil.resolveColor(this, R.attr.colorSurface))
+        setNavigationBarColor(primaryColor())
     }
 
     open fun setLightStatusBar(enabled: Boolean) {
