@@ -22,6 +22,7 @@ import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryDisabl
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryDisabledTextColor
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryTextColor
+import com.google.android.material.slider.Slider
 import com.o4x.musical.R
 import com.o4x.musical.extensions.applyColor
 import com.o4x.musical.extensions.textColorPrimary
@@ -61,7 +62,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     @JvmField
     @BindView(R.id.player_progress_slider)
-    var progressSlider: SeekBar? = null
+    var progressSlider: Slider? = null
 
     @JvmField
     @BindView(R.id.player_song_total_time)
@@ -269,24 +270,33 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
         updateProgressSliderColor()
 
-        progressSlider?.setOnSeekBarChangeListener(object : SimpleOnSeekbarChangeListener() {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    MusicPlayerRemote.seekTo(progress)
-                    onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
-                        MusicPlayerRemote.getSongDurationMillis())
-                }
+//        progressSlider?.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+//            override fun onStartTrackingTouch(slider: Slider) {
+//                TODO("Not yet implemented")
+//            }
+//
+//            override fun onStopTrackingTouch(slider: Slider) {
+//                TODO("Not yet implemented")
+//            }
+//
+//        })
+
+        progressSlider?.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                MusicPlayerRemote.seekTo(value.toInt())
+                onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
+                    MusicPlayerRemote.getSongDurationMillis())
             }
-        })
+        }
     }
 
     private fun updateProgressSliderColor() {
-        progressSlider?.applyColor(lastPlaybackControlsColor)
+//        progressSlider?.applyColor(lastPlaybackControlsColor)
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {
-        progressSlider?.max = total
-        progressSlider?.progress = progress
+        progressSlider?.valueTo = total.toFloat()
+        progressSlider?.value = progress.toFloat()
         songTotalTime?.text = MusicUtil.getReadableDurationString(total.toLong())
         songCurrentProgress!!.text = MusicUtil.getReadableDurationString(progress.toLong())
     }
