@@ -45,7 +45,7 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.fragment_flat_player;
+        return R.layout.fragment_player_flat;
     }
 
     @Override

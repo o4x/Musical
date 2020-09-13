@@ -5,12 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:background="@color/md_amber_500">
+    tools:background="@color/grey_400">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/progress_container_height"
-        android:background="@color/twenty_percent_black_overlay">
+        android:layout_height="@dimen/progress_container_height">
 
         <TextView
             android:id="@+id/player_song_current_progress"
@@ -42,12 +41,15 @@
             tools:ignore="RtlHardcoded,RtlSymmetry"
             tools:text="3:14" />
 
-        <SeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/player_progress_slider"
-            style="@style/MusicProgressSlider"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/player_song_total_time"
             android:layout_toRightOf="@id/player_song_current_progress"
+            android:progressDrawable="@drawable/color_progress_seek"
+            android:maxHeight="3dp"
+            tools:progress="20"
             tools:ignore="RtlHardcoded,UnusedAttribute" />
 
     </RelativeLayout>

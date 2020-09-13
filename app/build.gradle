@@ -185,4 +185,5 @@ dependencies {
     implementation 'com.bluelinelabs:conductor:3.0.0-rc5'
 
     implementation 'me.everything:overscroll-decor-android:1.1.0'
+
 }

@@ -10,6 +10,6 @@ public class FlatPlayerPlaybackControlsFragment extends AbsPlayerPlaybackControl
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.fragment_flat_player_playback_controls;
+        return R.layout.fragment_player_playback_controls_flat;
     }
 }
