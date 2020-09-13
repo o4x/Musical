@@ -10,20 +10,15 @@ import androidx.annotation.ColorInt;
 import com.o4x.musical.R;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
-import com.o4x.musical.ui.fragments.player.NowPlayingScreen;
-import com.o4x.musical.ui.fragments.player.card.CardPlayerFragment;
 import com.o4x.musical.ui.fragments.player.flat.FlatPlayerFragment;
-import com.o4x.musical.ui.fragments.player.full.FullPlayerFragment;
-import com.o4x.musical.util.PreferenceUtil;
 import com.o4x.musical.util.ViewUtil;
 
-public class PlayerActivity extends AbsMusicServiceActivity implements CardPlayerFragment.Callbacks {
+public class PlayerActivity extends AbsMusicServiceActivity implements FlatPlayerFragment.Callbacks {
 
     private int navigationBarColor;
     private int taskColor;
     private boolean lightStatusBar;
 
-    private NowPlayingScreen currentNowPlayingScreen;
     private AbsPlayerFragment playerFragment;
 
     private ValueAnimator navigationBarColorAnimator;
@@ -33,30 +28,12 @@ public class PlayerActivity extends AbsMusicServiceActivity implements CardPlaye
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-        currentNowPlayingScreen = PreferenceUtil.getNowPlayingScreen();
-        switch (currentNowPlayingScreen) {
-            case Full:
-                playerFragment = new FullPlayerFragment();
-                break;
-            case Flat:
-                playerFragment = new FlatPlayerFragment();
-                break;
-            case Card:
-            default:
-                playerFragment = new CardPlayerFragment();
-                break;
-        }
+        playerFragment = new FlatPlayerFragment();
+
         getSupportFragmentManager().beginTransaction().replace(R.id.player_fragment_container, playerFragment).commit();
         getSupportFragmentManager().executePendingTransactions();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (currentNowPlayingScreen != PreferenceUtil.getNowPlayingScreen()) {
-            recreate();
-        }
-    }
 
     @Override
     protected void onDestroy() {
