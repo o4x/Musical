@@ -96,9 +96,12 @@ fun Button.accentTextColor() {
 }
 
 fun SeekBar.applyColor(@ColorInt color: Int) {
-    thumbTintList = ColorStateList.valueOf(color)
-    progressTintList = ColorStateList.valueOf(color)
-    progressBackgroundTintList = ColorStateList.valueOf(color)
+
+    val colorNA = ColorUtil.withAlpha(color, 1f)
+
+    thumbTintList = ColorStateList.valueOf(colorNA)
+    progressTintList = ColorStateList.valueOf(ColorUtil.withAlpha(colorNA, 0.7f))
+    progressBackgroundTintList = ColorStateList.valueOf(colorNA)
 }
 
 fun ExtendedFloatingActionButton.themeColor() {

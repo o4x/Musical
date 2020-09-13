@@ -24,7 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -74,12 +73,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     protected SlidingUpPanelLayout slidingUpPanelLayout;
     @BindView(R.id.player_recycler_view)
     protected RecyclerView recyclerView;
-    @Nullable
-    @BindView(R.id.playing_queue_card)
-    protected CardView playingQueueCard;
-    @Nullable
-    @BindView(R.id.color_background)
-    protected View colorBackground;
     @BindView(R.id.player_queue_sub_header)
     protected TextView playerQueueSubHeader;
 
