@@ -4,25 +4,36 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryDisabledTextColor
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryDisabledTextColor
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryTextColor
+import code.name.monkey.appthemehelper.util.TintHelper
 import com.google.android.material.slider.Slider
+import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
 import com.o4x.musical.extensions.applyColor
 import com.o4x.musical.extensions.textColorPrimary
@@ -30,6 +41,7 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler
 import com.o4x.musical.misc.SimpleOnSeekbarChangeListener
+import com.o4x.musical.model.Song
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import com.o4x.musical.util.MusicUtil
@@ -37,8 +49,24 @@ import com.o4x.musical.views.PlayPauseDrawable
 import java.util.*
 
 abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
-    MusicProgressViewUpdateHelper.Callback {
+    MusicProgressViewUpdateHelper.Callback, PopupMenu.OnMenuItemClickListener {
     private var unbinder: Unbinder? = null
+
+    @JvmField
+    @BindView(R.id.title)
+    var title: MaterialTextView? = null
+
+    @JvmField
+    @BindView(R.id.text)
+    var text: MaterialTextView? = null
+
+    @JvmField
+    @BindView(R.id.playerMenu)
+    var playerMenu: AppCompatImageView? = null
+
+    @JvmField
+    @BindView(R.id.songFavourite)
+    var songFavourite: AppCompatImageView? = null
 
     @JvmField
     @BindView(R.id.player_play_pause__button)
@@ -77,6 +105,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     private var progressViewUpdateHelper: MusicProgressViewUpdateHelper? = null
     private var musicControllerAnimationSet: AnimatorSet? = null
     private var hidden = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         progressViewUpdateHelper = MusicProgressViewUpdateHelper(this)
@@ -93,6 +122,8 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         unbinder = ButterKnife.bind(this, view)
+
+        setupTitle()
         setUpMusicControllers()
         updateProgressTextColor()
     }
@@ -112,10 +143,20 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         progressViewUpdateHelper!!.stop()
     }
 
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        return (parentFragment as AbsPlayerFragment).onMenuItemClick(item!!)
+    }
+
     override fun onServiceConnected() {
-        updatePlayPauseDrawableState(false)
+        updatePlayPauseDrawableState(true)
         updateRepeatState()
         updateShuffleState()
+        updateSong()
+    }
+
+    override fun onPlayingMetaChanged() {
+        super.onPlayingMetaChanged()
+        updateSong()
     }
 
     override fun onPlayStateChanged() {
@@ -128,6 +169,13 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     override fun onShuffleModeChanged() {
         updateShuffleState()
+    }
+
+    private fun updateSong() {
+        val song = MusicPlayerRemote.getCurrentSong()
+        title?.text = song.title
+        text?.text = song.artistName
+        updateIsFavorite()
     }
 
     fun setDark(dark: Boolean) {
@@ -146,6 +194,19 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         updatePlayPauseColor()
         updateProgressTextColor()
         updateProgressSliderColor()
+    }
+
+    private fun setupTitle() {
+        title?.isSelected = true
+    }
+
+    private fun setupMenu() {
+        playerMenu?.setOnClickListener {
+            val popupMenu = PopupMenu(requireContext(), it)
+            popupMenu.setOnMenuItemClickListener(this)
+            popupMenu.inflate(R.menu.menu_player)
+            popupMenu.show()
+        }
     }
 
     private fun setUpPlayPauseButton() {
@@ -175,6 +236,8 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         setUpRepeatButton()
         setUpShuffleButton()
         setUpProgressSlider()
+        setupFavourite()
+        setupMenu()
     }
 
     private fun setUpPrevNext() {
@@ -201,18 +264,27 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         shuffleButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.toggleShuffleMode() }
     }
 
-    private fun updateShuffleState() {
+    fun updateShuffleState() {
         when (MusicPlayerRemote.getShuffleMode()) {
-            MusicService.SHUFFLE_MODE_SHUFFLE -> shuffleButton!!.setColorFilter(
+            MusicService.SHUFFLE_MODE_SHUFFLE -> shuffleButton?.setColorFilter(
                 lastPlaybackControlsColor,
-                PorterDuff.Mode.SRC_IN)
-            else -> shuffleButton!!.setColorFilter(lastDisabledPlaybackControlsColor,
-                PorterDuff.Mode.SRC_IN)
+                PorterDuff.Mode.SRC_IN
+            )
+            else -> shuffleButton?.setColorFilter(
+                lastDisabledPlaybackControlsColor,
+                PorterDuff.Mode.SRC_IN
+            )
         }
     }
 
     private fun setUpRepeatButton() {
         repeatButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.cycleRepeatMode() }
+    }
+
+    private fun setupFavourite() {
+        songFavourite?.setOnClickListener {
+            toggleFavorite(MusicPlayerRemote.getCurrentSong())
+        }
     }
 
     private fun updateRepeatState() {
@@ -330,5 +402,78 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
                 view.scaleY = 0f
             }
         }
+    }
+
+    private fun toggleFavorite(song: Song) {
+        MusicUtil.toggleFavorite(requireContext(), song)
+        if (song.id == MusicPlayerRemote.getCurrentSong().id) {
+            updateIsFavorite()
+        }
+    }
+
+
+
+
+
+
+
+// TODO
+//    fun setColor(color: MediaNotificationProcessor) {
+//        lastPlaybackControlsColor = color.primaryTextColor
+//        lastDisabledPlaybackControlsColor = ColorUtil.withAlpha(color.primaryTextColor, 0.3f)
+//
+//        val tintList = ColorStateList.valueOf(color.primaryTextColor)
+//        playerMenu?.imageTintList = tintList
+//        songFavourite?.imageTintList = tintList
+//        progressSlider?.applyColor(color.primaryTextColor)
+//        title?.setTextColor(color.primaryTextColor)
+//        text?.setTextColor(color.secondaryTextColor)
+//        songCurrentProgress?.setTextColor(color.secondaryTextColor)
+//        songTotalTime?.setTextColor(color.secondaryTextColor)
+//
+//        playPauseButton?.backgroundTintList = tintList
+//        playPauseButton?.imageTintList = ColorStateList.valueOf(color.backgroundColor)
+//
+//        updateRepeatState()
+//        updateShuffleState()
+//        updatePrevNextColor()
+//    }
+
+    private var updateIsFavoriteTask: AsyncTask<*, *, *>? = null
+
+    @SuppressLint("StaticFieldLeak")
+    fun updateIsFavorite() {
+        if (updateIsFavoriteTask != null) {
+            updateIsFavoriteTask?.cancel(false)
+        }
+        updateIsFavoriteTask = object : AsyncTask<Song, Void, Boolean>() {
+            override fun doInBackground(vararg params: Song): Boolean? {
+                val activity = activity
+                return if (activity != null) {
+                    MusicUtil.isFavorite(requireActivity(), params[0])
+                } else {
+                    cancel(false)
+                    null
+                }
+            }
+
+            override fun onPostExecute(isFavorite: Boolean?) {
+                val activity = activity
+                if (activity != null) {
+                    val res = if (isFavorite!!)
+                        R.drawable.ic_favorite_white_24dp
+                    else
+                        R.drawable.ic_favorite_border_white_24dp
+
+                    val drawable = TintHelper.createTintedDrawable(activity, res, Color.WHITE)
+                    songFavourite?.setImageDrawable(drawable)
+                }
+            }
+        }.execute(MusicPlayerRemote.getCurrentSong())
+    }
+
+    // TODO
+    fun onFavoriteToggled() {
+        toggleFavorite(MusicPlayerRemote.getCurrentSong())
     }
 }
