@@ -53,8 +53,6 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         // THEME PREFS //
         addPreferencesFromResource(R.xml.pref_theme)
-        // NOW PLAYING SCREEN PREFS //
-        addPreferencesFromResource(R.xml.pref_now_playing_screen)
         // AUDIO PREFS //
         addPreferencesFromResource(R.xml.pref_audio)
         // UI PREFS //
@@ -106,31 +104,6 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
                 .preselect(themeColor)
                 .show(requireActivity())
             return@setOnPreferenceClickListener true
-        }
-
-          /////////////////////////////////
-         // NOW PLAYING SCREEN SETTINGS //
-        /////////////////////////////////
-
-        val nowScreenPreference: Preference? = findPreference(PreferenceUtil.NOW_PLAYING_SCREEN_ID)
-        nowScreenPreference?.setSummary(PreferenceUtil.nowPlayingScreen.titleRes)
-
-        val albumCoverPreference: Preference? = findPreference(PreferenceUtil.ALBUM_COVER_STYLE)
-        albumCoverPreference?.setSummary(PreferenceUtil.albumCoverStyle.titleRes)
-
-        val carouselEffect: TwoStatePreference = findPreference("carousel_effect")!!
-        carouselEffect.setOnPreferenceChangeListener { _, newValue ->
-            if (newValue as Boolean && !App.isProVersion()) {
-                showProToastAndNavigate(getString(R.string.pref_title_toggle_carousel_effect))
-                return@setOnPreferenceChangeListener false
-            }
-            return@setOnPreferenceChangeListener true
-        }
-
-        val albumTransformPreference: Preference? = findPreference("album_cover_transform")
-        albumTransformPreference?.setOnPreferenceChangeListener { albumPrefs, newValue ->
-            setSummary(albumPrefs, newValue)
-            true
         }
 
           ////////////////////
@@ -227,9 +200,6 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            PreferenceUtil.NOW_PLAYING_SCREEN_ID -> invalidateSettings()
-            PreferenceUtil.ALBUM_COVER_STYLE -> invalidateSettings()
-            PreferenceUtil.CIRCULAR_ALBUM_ART, PreferenceUtil.CAROUSEL_EFFECT -> invalidateSettings()
             PreferenceUtil.CLASSIC_NOTIFICATION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     findPreference<Preference>("colored_notification")?.isEnabled =

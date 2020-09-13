@@ -17,18 +17,13 @@ import com.o4x.musical.R
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment
-import com.o4x.musical.ui.fragments.player.AlbumCoverStyle
-import com.o4x.musical.ui.fragments.player.NowPlayingScreen
-import com.o4x.musical.util.theme.ThemeManager
 import com.o4x.musical.util.theme.ThemeMode
 import java.io.File
-import java.util.*
 
 object PreferenceUtil {
     const val GENERAL_THEME = "general_theme"
     const val REMEMBER_LAST_TAB = "remember_last_tab"
     const val LAST_PAGE = "last_start_page"
-    const val NOW_PLAYING_SCREEN_ID = "now_playing_screen_id"
     const val ARTIST_SORT_ORDER = "artist_sort_order"
     const val ARTIST_SONG_SORT_ORDER = "artist_song_sort_order"
     const val ARTIST_ALBUM_SORT_ORDER = "artist_album_sort_order"
@@ -64,9 +59,6 @@ object PreferenceUtil {
     const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
     const val INITIALIZED_BLACKLIST = "initialized_blacklist"
     const val LIBRARY_CATEGORIES = "library_categories"
-    const val ALBUM_COVER_STYLE = "album_cover_style_id"
-    const val CIRCULAR_ALBUM_ART = "circular_album_art"
-    const val CAROUSEL_EFFECT = "carousel_effect"
     const val BLACK_THEME = "black_theme"
     const val KEEP_SCREEN_ON = "keep_screen_on"
     const val LANGUAGE_NAME = "language_name"
@@ -161,40 +153,6 @@ object PreferenceUtil {
         set(value) {
             val editor = sharedPreferences.edit()
             editor.putInt(LAST_PAGE, value)
-            editor.apply()
-        }
-
-    @JvmStatic
-    var albumCoverStyle: AlbumCoverStyle
-        get() {
-            val id: Int = sharedPreferences.getInt(ALBUM_COVER_STYLE, 0)
-            for (albumCoverStyle in AlbumCoverStyle.values()) {
-                if (albumCoverStyle.id == id) {
-                    return albumCoverStyle
-                }
-            }
-            return AlbumCoverStyle.Card
-        }
-        set(value) {
-            val editor = sharedPreferences.edit()
-            editor.putInt(ALBUM_COVER_STYLE, value.id)
-            editor.apply()
-        }
-
-
-    @JvmStatic
-    @set:SuppressLint("CommitPrefEdits")
-    var nowPlayingScreen: NowPlayingScreen
-        get() {
-            val id = sharedPreferences.getInt(NOW_PLAYING_SCREEN_ID, 0)
-            for (nowPlayingScreen in NowPlayingScreen.values()) {
-                if (nowPlayingScreen.id == id) return nowPlayingScreen
-            }
-            return NowPlayingScreen.Card
-        }
-        set(nowPlayingScreen) {
-            val editor = sharedPreferences.edit()
-            editor.putInt(NOW_PLAYING_SCREEN_ID, nowPlayingScreen.id)
             editor.apply()
         }
 
