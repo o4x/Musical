@@ -9,12 +9,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/progress_container_height">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
 
         <TextView
             android:id="@+id/player_song_current_progress"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical|left|end"
@@ -29,7 +30,7 @@
         <TextView
             android:id="@+id/player_song_total_time"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical|right|end"
@@ -41,15 +42,12 @@
             tools:ignore="RtlHardcoded,RtlSymmetry"
             tools:text="3:14" />
 
-        <androidx.appcompat.widget.AppCompatSeekBar
+        <com.google.android.material.slider.Slider
             android:id="@+id/player_progress_slider"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/player_song_total_time"
             android:layout_toRightOf="@id/player_song_current_progress"
-            android:progressDrawable="@drawable/color_progress_seek"
-            android:maxHeight="3dp"
-            tools:progress="20"
             tools:ignore="RtlHardcoded,UnusedAttribute" />
 
     </RelativeLayout>
