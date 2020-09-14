@@ -95,15 +95,6 @@ fun Button.accentTextColor() {
     setTextColor(ThemeStore.themeColor(App.getContext()))
 }
 
-fun SeekBar.applyColor(@ColorInt color: Int) {
-
-    val colorNA = ColorUtil.withAlpha(color, 1f)
-
-    thumbTintList = ColorStateList.valueOf(colorNA)
-    progressTintList = ColorStateList.valueOf(ColorUtil.withAlpha(colorNA, 0.7f))
-    progressBackgroundTintList = ColorStateList.valueOf(colorNA)
-}
-
 fun ExtendedFloatingActionButton.themeColor() {
     val color = ThemeStore.themeColor(context)
     val textColor = MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.isColorLight(color))

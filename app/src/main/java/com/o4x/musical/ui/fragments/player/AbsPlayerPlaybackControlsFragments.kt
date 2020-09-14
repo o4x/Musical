@@ -10,13 +10,16 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.SeekBar
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -29,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
+import com.o4x.musical.extensions.applyColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler
@@ -338,61 +342,28 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     }
 
     private fun updateProgressSliderColor() {
-//        progressSlider?.applyColor(lastPlaybackControlsColor)
+        progressSlider?.applyColor(lastPlaybackControlsColor)
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {
-//        progressSlider?.valueTo = total.toFloat()
-//        progressSlider?.value = progress.toFloat()
-//        songTotalTime?.text = MusicUtil.getReadableDurationString(total.toLong())
-//        songCurrentProgress!!.text = MusicUtil.getReadableDurationString(progress.toLong())
+
+        Log.e("ssssssssss", progress.toString())
+        Log.e("ssssssssss", total.toString())
+
+
+        if (total > progressSlider!!.valueTo.toInt()) {
+            progressSlider?.valueTo = total.toFloat()
+            progressSlider?.value = progress.toFloat()
+        }
+
+        songTotalTime?.text = MusicUtil.getReadableDurationString(total.toLong())
+        songCurrentProgress!!.text = MusicUtil.getReadableDurationString(progress.toLong())
     }
 
     @get:LayoutRes
     protected abstract val layoutRes: Int
 
-    companion object {
-        private fun addAnimation(
-            animators: MutableCollection<Animator>,
-            view: View?,
-            interpolator: TimeInterpolator,
-            duration: Int,
-            delay: Int
-        ) {
-            val scaleX: Animator = ObjectAnimator.ofFloat(view, View.SCALE_X, 0f, 1f)
-            scaleX.interpolator = interpolator
-            scaleX.duration = duration.toLong()
-            scaleX.startDelay = delay.toLong()
-            animators.add(scaleX)
-            val scaleY: Animator = ObjectAnimator.ofFloat(view, View.SCALE_Y, 0f, 1f)
-            scaleY.interpolator = interpolator
-            scaleY.duration = duration.toLong()
-            scaleY.startDelay = delay.toLong()
-            animators.add(scaleY)
-        }
 
-        private fun prepareForAnimation(view: View?) {
-            if (view != null) {
-                view.scaleX = 0f
-                view.scaleY = 0f
-            }
-        }
-    }
-
-    private fun toggleFavorite(song: Song) {
-        MusicUtil.toggleFavorite(requireContext(), song)
-        if (song.id == MusicPlayerRemote.getCurrentSong().id) {
-            updateIsFavorite()
-        }
-    }
-
-
-
-
-
-
-
-   // TODO
     fun setColor(colors: MediaNotificationProcessor) {
         lastPlaybackControlsColor = colors.primaryTextColor
         lastDisabledPlaybackControlsColor = ColorUtil.withAlpha(colors.primaryTextColor, 0.3f)
@@ -400,7 +371,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         val tintList = ColorStateList.valueOf(colors.primaryTextColor)
         playerMenu?.imageTintList = tintList
         songFavourite?.imageTintList = tintList
-    //        progressSlider?.applyColor(color.primaryTextColor)
+        progressSlider?.applyColor(colors.primaryTextColor)
         title?.setTextColor(colors.primaryTextColor)
         text?.setTextColor(colors.secondaryTextColor)
         songCurrentProgress?.setTextColor(colors.secondaryTextColor)
@@ -417,6 +388,14 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         updateProgressTextColor()
         updateProgressSliderColor()
     }
+
+    private fun toggleFavorite(song: Song) {
+        MusicUtil.toggleFavorite(requireContext(), song)
+        if (song.id == MusicPlayerRemote.getCurrentSong().id) {
+            updateIsFavorite()
+        }
+    }
+
 
     private var updateIsFavoriteTask: AsyncTask<*, *, *>? = null
 
@@ -451,8 +430,47 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         }.execute(MusicPlayerRemote.getCurrentSong())
     }
 
-
     fun onFavoriteToggled() {
         toggleFavorite(MusicPlayerRemote.getCurrentSong())
     }
+
+    companion object {
+        private fun addAnimation(
+            animators: MutableCollection<Animator>,
+            view: View?,
+            interpolator: TimeInterpolator,
+            duration: Int,
+            delay: Int
+        ) {
+            val scaleX: Animator = ObjectAnimator.ofFloat(view, View.SCALE_X, 0f, 1f)
+            scaleX.interpolator = interpolator
+            scaleX.duration = duration.toLong()
+            scaleX.startDelay = delay.toLong()
+            animators.add(scaleX)
+            val scaleY: Animator = ObjectAnimator.ofFloat(view, View.SCALE_Y, 0f, 1f)
+            scaleY.interpolator = interpolator
+            scaleY.duration = duration.toLong()
+            scaleY.startDelay = delay.toLong()
+            animators.add(scaleY)
+        }
+
+        private fun prepareForAnimation(view: View?) {
+            if (view != null) {
+                view.scaleX = 0f
+                view.scaleY = 0f
+            }
+        }
+    }
+}
+
+
+fun Slider.applyColor(@ColorInt color: Int) {
+
+    val tintList = ColorStateList.valueOf(color)
+
+    thumbTintList = tintList
+    haloTintList = ColorStateList.valueOf(color)
+    trackTintList = tintList
+    trackActiveTintList = ColorStateList.valueOf(ColorUtil.withAlpha(color, 0.8f))
+    trackInactiveTintList = ColorStateList.valueOf(ColorUtil.withAlpha(color, 0.3f))
 }
