@@ -417,6 +417,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     @Override
     public void onFavoriteToggled() {
         toggleFavorite(MusicPlayerRemote.getCurrentSong());
+        playbackControlsFragment.onFavoriteToggled();
     }
 
     @Override
