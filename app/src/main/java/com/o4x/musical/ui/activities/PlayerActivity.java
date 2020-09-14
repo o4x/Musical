@@ -28,6 +28,8 @@ public class PlayerActivity extends AbsMusicServiceActivity implements FlatPlaye
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+        setDrawUnderBar();
+
         playerFragment = new FlatPlayerFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.player_fragment_container, playerFragment).commit();

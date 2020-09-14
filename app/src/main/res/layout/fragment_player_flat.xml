@@ -30,7 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <fragment
+                    <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/player_album_cover_fragment"
                         class="com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment"
                         android:layout_width="match_parent"
@@ -56,69 +56,11 @@
 
         </FrameLayout>
 
-        <LinearLayout
-            android:id="@+id/player_panel"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/playback_controls_fragment"
+            class="com.o4x.musical.ui.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <fragment
-                android:id="@+id/playback_controls_fragment"
-                class="com.o4x.musical.ui.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!--This is necessary for the drag sorting to work at the top-->
-                <View
-                    android:id="@+id/draggable_area"
-                    android:layout_width="72dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/player_panel_content"
-                    android:layout_alignTop="@+id/player_panel_content"
-                    android:layout_marginTop="128dp" />
-
-                <LinearLayout
-                    android:id="@+id/player_panel_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="4dp"
-                        android:layout_marginBottom="4dp"
-                        android:background="@drawable/shadow_down" />
-
-                    <include
-                        android:id="@+id/current_song"
-                        layout="@layout/item_list" />
-
-                    <TextView
-                        android:id="@+id/player_queue_sub_header"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:text="@string/up_next"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textColor="?android:textColorSecondary" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/player_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:requiresFadingEdge="vertical" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-        </LinearLayout>
+            android:layout_height="wrap_content" />
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

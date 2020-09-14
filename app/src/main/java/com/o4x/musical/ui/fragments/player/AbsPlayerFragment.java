@@ -16,21 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
-import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
-import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
-import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.PaletteColorHolder;
@@ -38,7 +30,6 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.model.lyrics.Lyrics;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity;
-import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog;
 import com.o4x.musical.ui.dialogs.LyricsDialog;
@@ -57,7 +48,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
-public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implements Toolbar.OnMenuItemClickListener, PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks, SlidingUpPanelLayout.PanelSlideListener {
+public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
+        implements Toolbar.OnMenuItemClickListener,
+        PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks,
+        SlidingUpPanelLayout.PanelSlideListener {
 
     private Callbacks callbacks;
     private static boolean isToolbarShown = true;
@@ -71,22 +65,12 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     protected Toolbar toolbar;
     @BindView(R.id.player_sliding_layout)
     protected SlidingUpPanelLayout slidingUpPanelLayout;
-    @BindView(R.id.player_recycler_view)
-    protected RecyclerView recyclerView;
-    @BindView(R.id.player_queue_sub_header)
-    protected TextView playerQueueSubHeader;
 
     protected int lastColor;
 
     protected AbsPlayerPlaybackControlsFragments playbackControlsFragment;
     protected PlayerAlbumCoverFragment playerAlbumCoverFragment;
 
-    protected LinearLayoutManager layoutManager;
-
-    protected PlayingQueueAdapter playingQueueAdapter;
-
-    protected RecyclerView.Adapter wrappedAdapter;
-    protected RecyclerViewDragDropManager recyclerViewDragDropManager;
 
     protected AsyncTask updateIsFavoriteTask;
     protected AsyncTask updateLyricsAsyncTask;
@@ -111,10 +95,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
         setUpPlayerToolbar();
         setUpSubFragments();
 
-        setUpRecyclerView();
-
         slidingUpPanelLayout.addPanelSlideListener(this);
-        slidingUpPanelLayout.setAntiDragView(view.findViewById(R.id.draggable_area));
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -193,33 +174,9 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
         if (slidingUpPanelLayout != null) {
             slidingUpPanelLayout.removePanelSlideListener(this);
         }
-        if (recyclerViewDragDropManager != null) {
-            recyclerViewDragDropManager.release();
-            recyclerViewDragDropManager = null;
-        }
 
-        if (recyclerView != null) {
-            recyclerView.setItemAnimator(null);
-            recyclerView.setAdapter(null);
-            recyclerView = null;
-        }
-
-        if (wrappedAdapter != null) {
-            WrapperAdapterUtils.releaseAll(wrappedAdapter);
-            wrappedAdapter = null;
-        }
-        playingQueueAdapter = null;
-        layoutManager = null;
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @Override
-    public void onPause() {
-        if (recyclerViewDragDropManager != null) {
-            recyclerViewDragDropManager.cancelDrag();
-        }
-        super.onPause();
     }
 
     @Override
@@ -230,7 +187,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
 
     @Override
     public void onServiceConnected() {
-        updateQueue();
         updateCurrentSong();
         updateIsFavorite();
         updateLyrics();
@@ -240,35 +196,15 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     public void onPlayingMetaChanged() {
         updateCurrentSong();
         updateIsFavorite();
-        updateQueuePosition();
         updateLyrics();
     }
 
     @Override
-    public void onQueueChanged() {
-        updateQueue();
-    }
+    public void onQueueChanged() { }
 
     @Override
     public void onMediaStoreChanged() {
-        updateQueue();
         updateIsFavorite();
-    }
-
-    private void updateQueue() {
-        playingQueueAdapter.swapDataSet(MusicPlayerRemote.getPlayingQueue(), MusicPlayerRemote.getPosition());
-        playerQueueSubHeader.setText(getUpNextAndQueueTime());
-        if (slidingUpPanelLayout == null || slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-            resetToCurrentPosition();
-        }
-    }
-
-    private void updateQueuePosition() {
-        playingQueueAdapter.setCurrent(MusicPlayerRemote.getPosition());
-        playerQueueSubHeader.setText(getUpNextAndQueueTime());
-        if (slidingUpPanelLayout == null || slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-            resetToCurrentPosition();
-        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -288,30 +224,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         toolbar.setOnMenuItemClickListener(this);
-    }
-
-    private void setUpRecyclerView() {
-        recyclerViewDragDropManager = new RecyclerViewDragDropManager();
-        final GeneralItemAnimator animator = new RefactoredDefaultItemAnimator();
-
-        playingQueueAdapter = new PlayingQueueAdapter(
-                ((AppCompatActivity) getActivity()),
-                MusicPlayerRemote.getPlayingQueue(),
-                MusicPlayerRemote.getPosition(),
-                R.layout.item_list,
-                false,
-                null);
-        wrappedAdapter = recyclerViewDragDropManager.createWrappedAdapter(playingQueueAdapter);
-
-        layoutManager = new LinearLayoutManager(getActivity());
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(wrappedAdapter);
-        recyclerView.setItemAnimator(animator);
-
-        recyclerViewDragDropManager.attachRecyclerView(recyclerView);
-
-        layoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -476,20 +388,13 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
         }
     }
 
-    protected String getUpNextAndQueueTime() {
-        final long duration = MusicPlayerRemote.getQueueDurationMillis(MusicPlayerRemote.getPosition());
 
-        return MusicUtil.buildInfoString(
-            getResources().getString(R.string.up_next),
-            MusicUtil.getReadableDurationString(duration)
-        );
-    }
 
     @Override
     public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
         switch (newState) {
             case COLLAPSED:
-                onPanelCollapsed(panel);
+
                 break;
             case ANCHORED:
                 //noinspection ConstantConditions
@@ -498,14 +403,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
         }
     }
 
-    public void onPanelCollapsed(View panel) {
-        resetToCurrentPosition();
-    }
-
-    protected void resetToCurrentPosition() {
-        recyclerView.stopScroll();
-        layoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition() + 1, 0);
-    }
 
     public void onShow() {
         playbackControlsFragment.show();
