@@ -5,6 +5,7 @@
     android:id="@+id/player_footer_frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingVertical="16dp"
     android:orientation="vertical"
     tools:background="@color/grey_800">
 
@@ -29,7 +30,7 @@
         app:layout_constraintStart_toEndOf="@+id/songFavourite"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

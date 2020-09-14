@@ -99,6 +99,10 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
         setNavigationBarColor(primaryColor())
     }
 
+    fun setNavigationBarDividerColorAuto() {
+        ATH.setNavigationBarDividerColorAuto(this)
+    }
+
     open fun setLightStatusBar(enabled: Boolean) {
         ATH.setLightStatusbar(this, enabled)
     }
