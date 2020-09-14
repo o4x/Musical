@@ -30,7 +30,7 @@
         app:layout_constraintStart_toEndOf="@+id/songFavourite"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

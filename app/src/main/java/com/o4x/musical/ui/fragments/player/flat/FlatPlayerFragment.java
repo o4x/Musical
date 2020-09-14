@@ -2,33 +2,19 @@ package com.o4x.musical.ui.fragments.player.flat;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.o4x.musical.R;
-import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.ui.dialogs.SongShareDialog;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.ViewUtil;
-import com.o4x.musical.views.WidthFitSquareLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import code.name.monkey.appthemehelper.ThemeStore;
-import code.name.monkey.appthemehelper.util.ATHUtil;
-import code.name.monkey.appthemehelper.util.ColorUtil;
 
 public class FlatPlayerFragment extends AbsPlayerFragment {
 
@@ -65,28 +51,16 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(backgroundAnimator);
 
-            if (!ATHUtil.INSTANCE.isWindowBackgroundDark(fragment.getActivity())) {
-                int adjustedLastColor = ColorUtil.INSTANCE.isColorLight(fragment.lastColor) ? ColorUtil.INSTANCE.darkenColor(fragment.lastColor) : fragment.lastColor;
-                int adjustedNewColor = ColorUtil.INSTANCE.isColorLight(newColor) ? ColorUtil.INSTANCE.darkenColor(newColor) : newColor;
-                Animator subHeaderAnimator = ViewUtil.createTextColorTransition(fragment.playerQueueSubHeader, adjustedLastColor, adjustedNewColor);
-                animatorSet.play(subHeaderAnimator);
-            }
-
             animatorSet.setDuration(ViewUtil.PHONOGRAPH_ANIM_TIME);
             return animatorSet;
         }
 
         @Override
-        public void animateColorChange(int newColor) {
-            if (ATHUtil.INSTANCE.isWindowBackgroundDark(fragment.getActivity())) {
-                fragment.playerQueueSubHeader.setTextColor(ThemeStore.Companion.textColorSecondary(fragment.getActivity()));
-            }
-        }
+        public void animateColorChange(int newColor) {}
     }
 
     @SuppressWarnings("ConstantConditions")
     private static class PortraitImpl extends BaseImpl {
-        MediaEntryViewHolder currentSongViewHolder;
         Song currentSong = Song.EMPTY_SONG;
 
         public PortraitImpl(FlatPlayerFragment fragment) {
@@ -94,65 +68,17 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
         }
 
         @Override
-        public void init() {
-            currentSongViewHolder = new MediaEntryViewHolder(fragment.getView().findViewById(R.id.current_song));
-
-            currentSongViewHolder.separator.setVisibility(View.VISIBLE);
-            currentSongViewHolder.shortSeparator.setVisibility(View.GONE);
-            currentSongViewHolder.image.setScaleType(ImageView.ScaleType.CENTER);
-            currentSongViewHolder.image.setColorFilter(ATHUtil.INSTANCE.resolveColor(fragment.getActivity(), R.attr.iconColor, ThemeStore.Companion.textColorSecondary(fragment.getActivity())), PorterDuff.Mode.SRC_IN);
-            currentSongViewHolder.image.setImageResource(R.drawable.ic_volume_up_white_24dp);
-            currentSongViewHolder.itemView.setOnClickListener(v -> {
-                // toggle the panel
-                if (fragment.slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                    fragment.slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-                } else if (fragment.slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    fragment.slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                }
-            });
-            currentSongViewHolder.menu.setOnClickListener(new SongMenuHelper.OnClickSongMenu((AppCompatActivity) fragment.getActivity()) {
-                @Override
-                public Song getSong() {
-                    return currentSong;
-                }
-
-                public int getMenuRes() {
-                    return R.menu.menu_item_playing_queue_song;
-                }
-
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.action_remove_from_playing_queue:
-                            MusicPlayerRemote.removeFromQueue(MusicPlayerRemote.getPosition());
-                            return true;
-                        case R.id.action_share:
-                            SongShareDialog.create(getSong()).show(fragment.getFragmentManager(), "SONG_SHARE_DIALOG");
-                            return true;
-                    }
-                    return super.onMenuItemClick(item);
-                }
-            });
-        }
+        public void init() {}
 
         @Override
         public void setUpPanelAndAlbumCoverHeight() {
-            WidthFitSquareLayout albumCoverContainer = fragment.getView().findViewById(R.id.album_cover_container);
-
             final int availablePanelHeight = fragment.slidingUpPanelLayout.getHeight() - fragment.getView().findViewById(R.id.player_content).getHeight();
-            final int minPanelHeight = (int) ViewUtil.convertDpToPixel(8 + 72 + 24, fragment.getResources()) + fragment.getResources().getDimensionPixelSize(R.dimen.progress_container_height) + fragment.getResources().getDimensionPixelSize(R.dimen.media_controller_container_height);
-            if (availablePanelHeight < minPanelHeight) {
-                albumCoverContainer.getLayoutParams().height = albumCoverContainer.getHeight() - (minPanelHeight - availablePanelHeight);
-                albumCoverContainer.forceSquare(false);
-            }
-            fragment.slidingUpPanelLayout.setPanelHeight(Math.max(minPanelHeight, availablePanelHeight));
+            fragment.slidingUpPanelLayout.setPanelHeight(availablePanelHeight);
         }
 
         @Override
         public void updateCurrentSong(Song song) {
             currentSong = song;
-            currentSongViewHolder.title.setText(song.title);
-            currentSongViewHolder.text.setText(MusicUtil.getSongInfoString(song));
         }
 
         @Override
