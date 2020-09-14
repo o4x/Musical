@@ -64,19 +64,22 @@ object ATH {
     }
 
     fun setNavigationbarColor(activity: Activity, color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            activity.window.navigationBarDividerColor =
-                ColorUtil.withAlpha(
-                    ATHUtil.resolveColor(activity, R.attr.elevationOverlayColor),
-                    0.08f
-                )
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             activity.window.navigationBarColor = color
         } else {
             activity.window.navigationBarColor = ColorUtil.darkenColor(color)
         }
         setLightNavigationbarAuto(activity, color)
+    }
+
+    fun setNavigationBarDividerColorAuto(activity: Activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            activity.window.navigationBarDividerColor = ColorUtil.blendColors(
+                ATHUtil.resolveColor(activity, R.attr.elevationOverlayColor),
+                activity.window.navigationBarColor,
+                0.9f
+            )
+        }
     }
 
     fun setActivityToolbarColorAuto(activity: Activity, toolbar: Toolbar?) {

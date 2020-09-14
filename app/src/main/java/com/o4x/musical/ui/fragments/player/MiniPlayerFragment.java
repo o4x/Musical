@@ -94,6 +94,8 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
     public void onServiceConnected() {
         updateSongTitle();
         updatePlayPauseDrawableState(false);
+        onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
+                MusicPlayerRemote.getSongDurationMillis());
     }
 
     @Override

@@ -35,6 +35,7 @@ class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
 
         setStatusBarColorAuto()
         setNavigationBarColorAuto()
+        setNavigationBarDividerColorAuto()
         setLightNavigationBar(true)
         setupToolbar()
     }

@@ -29,6 +29,7 @@ import butterknife.Unbinder
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.TintHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
@@ -319,24 +320,27 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     private fun setUpProgressSlider() {
 
+        onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
+            MusicPlayerRemote.getSongDurationMillis())
+
         updateProgressSliderColor()
 
-//        progressSlider?.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-//            override fun onStartTrackingTouch(slider: Slider) {
-//                TODO("Not yet implemented")
-//            }
-//
-//            override fun onStopTrackingTouch(slider: Slider) {
-//                TODO("Not yet implemented")
-//            }
-//
-//        })
+        progressSlider?.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+
+            }
+
+            override fun onStopTrackingTouch(slider: Slider) {
+                MusicPlayerRemote.seekTo(slider.value.toInt())
+                onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
+                    MusicPlayerRemote.getSongDurationMillis())
+            }
+
+        })
 
         progressSlider?.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
-                MusicPlayerRemote.seekTo(value.toInt())
-                onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
-                    MusicPlayerRemote.getSongDurationMillis())
+
             }
         }
     }
@@ -346,16 +350,10 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {
-
-        Log.e("ssssssssss", progress.toString())
-        Log.e("ssssssssss", total.toString())
-
-
-        if (total > progressSlider!!.valueTo.toInt()) {
+        if (total > progress) {
             progressSlider?.valueTo = total.toFloat()
             progressSlider?.value = progress.toFloat()
         }
-
         songTotalTime?.text = MusicUtil.getReadableDurationString(total.toLong())
         songCurrentProgress!!.text = MusicUtil.getReadableDurationString(progress.toLong())
     }

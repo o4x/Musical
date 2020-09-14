@@ -47,14 +47,14 @@ public class MusicProgressViewUpdateHelper extends Handler {
     }
 
     private int refreshProgressViews() {
+        if (!MusicPlayerRemote.isPlaying()) {
+            return intervalPaused;
+        }
+
         final int progressMillis = MusicPlayerRemote.getSongProgressMillis();
         final int totalMillis = MusicPlayerRemote.getSongDurationMillis();
 
         callback.onUpdateProgressViews(progressMillis, totalMillis);
-
-        if (!MusicPlayerRemote.isPlaying()) {
-            return intervalPaused;
-        }
 
         final int remainingMillis = intervalPlaying - progressMillis % intervalPlaying;
 
