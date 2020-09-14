@@ -55,7 +55,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import code.name.monkey.appthemehelper.util.ColorUtil;
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implements Toolbar.OnMenuItemClickListener, PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks, SlidingUpPanelLayout.PanelSlideListener {
@@ -412,7 +411,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     public void onColorChanged(MediaNotificationProcessor colors) {
         animateColorChange(colors.getBackgroundColor());
         playbackControlsFragment.setColor(colors);
-        playbackControlsFragment.setDark(ColorUtil.INSTANCE.isColorLight(colors.getBackgroundColor()));
         getCallbacks().onPaletteColorChanged();
     }
 
