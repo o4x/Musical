@@ -49,6 +49,7 @@ import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
+import com.o4x.musical.util.color.MediaNotificationProcessor;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.BindView;
@@ -408,9 +409,10 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment implemen
     }
 
     @Override
-    public void onColorChanged(int color) {
-        animateColorChange(color);
-        playbackControlsFragment.setDark(ColorUtil.INSTANCE.isColorLight(color));
+    public void onColorChanged(MediaNotificationProcessor colors) {
+        animateColorChange(colors.getBackgroundColor());
+        playbackControlsFragment.setColor(colors);
+        playbackControlsFragment.setDark(ColorUtil.INSTANCE.isColorLight(colors.getBackgroundColor()));
         getCallbacks().onPaletteColorChanged();
     }
 

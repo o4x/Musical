@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.L;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.model.ArtistImage;
@@ -80,7 +81,7 @@ public class UniversalIL {
     public static void songImageLoader(
             @NonNull Song song,
             @NonNull ImageView image,
-            @Nullable PaletteImageLoadingListener listener) {
+            @Nullable SimpleImageLoadingListener listener) {
         imageLoader.displayImage(
                 MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
                 image,

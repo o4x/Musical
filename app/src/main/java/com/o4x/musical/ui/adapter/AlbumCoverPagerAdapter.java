@@ -2,21 +2,24 @@ package com.o4x.musical.ui.adapter;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.palette.PaletteMusicLoadingListener;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.PreferenceUtil;
+import com.o4x.musical.util.color.MediaNotificationProcessor;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -83,7 +86,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         ImageView albumCover;
 
         private boolean isColorReady;
-        private int color;
+        private MediaNotificationProcessor colors;
         private Song song;
         private ColorReceiver colorReceiver;
         private int request;
@@ -131,10 +134,10 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
             UniversalIL.songImageLoader(
                     song,
                     albumCover,
-                    new PaletteImageLoadingListener() {
+                    new PaletteMusicLoadingListener() {
                         @Override
-                        public void onColorReady(int color) {
-                            setColor(color);
+                        public void onColorReady(@NotNull MediaNotificationProcessor colors) {
+                            setColor(colors);
                         }
                     }
             );
@@ -154,18 +157,18 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
             albumCover.setScaleType(forceSquareAlbumCover ? ImageView.ScaleType.FIT_CENTER : ImageView.ScaleType.CENTER_CROP);
         }
 
-        private void setColor(int color) {
-            this.color = color;
+        private void setColor(MediaNotificationProcessor colors) {
+            this.colors = colors;
             isColorReady = true;
             if (colorReceiver != null) {
-                colorReceiver.onColorReady(color, request);
+                colorReceiver.onColorReady(colors, request);
                 colorReceiver = null;
             }
         }
 
         public void receiveColor(ColorReceiver colorReceiver, int request) {
             if (isColorReady) {
-                colorReceiver.onColorReady(color, request);
+                colorReceiver.onColorReady(colors, request);
             } else {
                 this.colorReceiver = colorReceiver;
                 this.request = request;
@@ -173,7 +176,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
 
         public interface ColorReceiver {
-            void onColorReady(int color, int request);
+            void onColorReady(MediaNotificationProcessor colors, int request);
         }
     }
 }
