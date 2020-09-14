@@ -451,7 +451,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         }.execute(MusicPlayerRemote.getCurrentSong())
     }
 
-    // TODO
+
     fun onFavoriteToggled() {
         toggleFavorite(MusicPlayerRemote.getCurrentSong())
     }
