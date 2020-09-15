@@ -1,67 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        xmlns:sothree="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/player_sliding_layout"
+    <FrameLayout
+        android:id="@+id/player_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.o4x.musical.views.WidthFitSquareLayout
+            android:id="@+id/album_cover_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/player_album_cover_fragment"
+                class="com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.o4x.musical.views.WidthFitSquareLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false"
-        android:focusable="true"
-        android:gravity="bottom"
-        sothree:umanoPanelHeight="0dp"
-        sothree:umanoScrollableView="@+id/player_recycler_view"
-        sothree:umanoShadowHeight="0dp">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <FrameLayout
-                android:id="@+id/player_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.o4x.musical.views.WidthFitSquareLayout
-                    android:id="@+id/album_cover_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/player_album_cover_fragment"
-                        class="com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </com.o4x.musical.views.WidthFitSquareLayout>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/toolbar_container"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_scrim_height"
-                android:background="@drawable/toolbar_gradient"
-                android:fitsSystemWindows="true">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/player_toolbar"
-                    style="@style/Toolbar"
-                    android:background="@android:color/transparent" />
-
-            </FrameLayout>
-
-        </FrameLayout>
+        android:fitsSystemWindows="true">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/playback_controls_fragment"
             class="com.o4x.musical.ui.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"/>
 
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/player_toolbar"
+            style="@style/Toolbar"
+            android:background="@android:color/transparent" />
 
-</LinearLayout>
+    </FrameLayout>
+
+    <View
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_scrim_height"
+        android:background="@drawable/toolbar_gradient" />
+
+</FrameLayout>

@@ -41,7 +41,6 @@ import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,21 +49,15 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         implements Toolbar.OnMenuItemClickListener,
-        PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks,
-        SlidingUpPanelLayout.PanelSlideListener {
+        PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks {
 
     private Callbacks callbacks;
     private static boolean isToolbarShown = true;
 
     protected Unbinder unbinder;
 
-    @Nullable
-    @BindView(R.id.toolbar_container)
-    protected FrameLayout toolbarContainer;
     @BindView(R.id.player_toolbar)
     protected Toolbar toolbar;
-    @BindView(R.id.player_sliding_layout)
-    protected SlidingUpPanelLayout slidingUpPanelLayout;
 
     protected int lastColor;
 
@@ -95,13 +88,10 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         setUpPlayerToolbar();
         setUpSubFragments();
 
-        slidingUpPanelLayout.addPanelSlideListener(this);
-
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                impl.setUpPanelAndAlbumCoverHeight();
             }
         });
     }
@@ -171,18 +161,13 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     }
 
     public void onDestroyView() {
-        if (slidingUpPanelLayout != null) {
-            slidingUpPanelLayout.removePanelSlideListener(this);
-        }
-
-        super.onDestroyView();
         unbinder.unbind();
+        super.onDestroyView();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        checkToggleToolbar(toolbarContainer);
     }
 
     @Override
@@ -332,11 +317,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         playbackControlsFragment.onFavoriteToggled();
     }
 
-    @Override
-    public void onToolbarToggled() {
-        toggleToolbar(toolbarContainer);
-    }
-
     protected void toggleFavorite(Song song) {
         MusicUtil.toggleFavorite(getActivity(), song);
         if (song.id == MusicPlayerRemote.getCurrentSong().id) {
@@ -372,34 +352,11 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         toolbar.animate().alpha(0f).setDuration(PlayerAlbumCoverFragment.VISIBILITY_ANIM_DURATION).withEndAction(() -> toolbar.setVisibility(View.GONE));
     }
 
-    protected void toggleToolbar(@Nullable final View toolbar) {
-        if (isToolbarShown()) {
-            hideToolbar(toolbar);
-        } else {
-            showToolbar(toolbar);
-        }
-    }
-
     protected void checkToggleToolbar(@Nullable final View toolbar) {
         if (toolbar != null && !isToolbarShown() && toolbar.getVisibility() != View.GONE) {
             hideToolbar(toolbar);
         } else if (toolbar != null && isToolbarShown() && toolbar.getVisibility() != View.VISIBLE) {
             showToolbar(toolbar);
-        }
-    }
-
-
-
-    @Override
-    public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-        switch (newState) {
-            case COLLAPSED:
-
-                break;
-            case ANCHORED:
-                //noinspection ConstantConditions
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED); // this fixes a bug where the panel would get stuck for some reason
-                break;
         }
     }
 
@@ -410,17 +367,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
 
     public void onHide() {
         playbackControlsFragment.hide();
-        onBackPressed();
-    }
-
-    public boolean onBackPressed() {
-        boolean wasExpanded = false;
-        if (slidingUpPanelLayout != null) {
-            wasExpanded = slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED;
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        }
-
-        return wasExpanded;
     }
 
     @LayoutRes
@@ -440,7 +386,5 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         void updateCurrentSong(Song song);
 
         void animateColorChange(final int newColor);
-
-        void setUpPanelAndAlbumCoverHeight();
     }
 }
