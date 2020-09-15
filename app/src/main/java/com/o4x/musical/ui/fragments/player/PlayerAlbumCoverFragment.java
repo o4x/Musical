@@ -68,6 +68,7 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewPager.addOnPageChangeListener(this);
+        viewPager.setPageTransformer(true, new ParallaxPageTransformer());
         progressViewUpdateHelper = new MusicProgressViewUpdateHelper(this, 500, 1000);
         progressViewUpdateHelper.start();
     }
@@ -243,5 +244,26 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
         void onColorChanged(MediaNotificationProcessor colors);
 
         void onFavoriteToggled();
+    }
+
+    public static class ParallaxPageTransformer implements ViewPager.PageTransformer {
+
+        public void transformPage(View view, float position) {
+            int pageWidth = view.getWidth();
+            int pageHeight = view.getHeight();
+
+            if (position < -1) { // [-Infinity,-1)
+                // This page is way off-screen to the left.
+                view.setAlpha(0f);
+
+            } else if (position <= 1) { // [-1,1]
+
+                view.findViewById(R.id.player_image).setTranslationX(-position * pageWidth / 2);
+
+            } else { // (1,+Infinity]
+                // This page is way off-screen to the right.
+                view.setAlpha(0f);
+            }
+        }
     }
 }
