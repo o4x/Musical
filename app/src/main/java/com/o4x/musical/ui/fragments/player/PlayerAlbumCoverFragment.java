@@ -2,9 +2,7 @@ package com.o4x.musical.ui.fragments.player;
 
 import android.animation.Animator;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -70,23 +68,6 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewPager.addOnPageChangeListener(this);
-        viewPager.setOnTouchListener(new View.OnTouchListener() {
-            GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapConfirmed(MotionEvent e) {
-                    if (callbacks != null) {
-                        callbacks.onToolbarToggled();
-                        return true;
-                    }
-                    return super.onSingleTapConfirmed(e);
-                }
-            });
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
         progressViewUpdateHelper = new MusicProgressViewUpdateHelper(this, 500, 1000);
         progressViewUpdateHelper.start();
     }
@@ -262,7 +243,5 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
         void onColorChanged(MediaNotificationProcessor colors);
 
         void onFavoriteToggled();
-
-        void onToolbarToggled();
     }
 }

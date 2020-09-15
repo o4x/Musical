@@ -34,10 +34,6 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
         return R.layout.fragment_player_flat;
     }
 
-    @Override
-    public void onPanelSlide(View panel, float slideOffset) {
-    }
-
     private static abstract class BaseImpl implements Impl {
         protected FlatPlayerFragment fragment;
 
@@ -71,12 +67,6 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
         public void init() {}
 
         @Override
-        public void setUpPanelAndAlbumCoverHeight() {
-            final int availablePanelHeight = fragment.slidingUpPanelLayout.getHeight() - fragment.getView().findViewById(R.id.player_content).getHeight();
-            fragment.slidingUpPanelLayout.setPanelHeight(availablePanelHeight);
-        }
-
-        @Override
         public void updateCurrentSong(Song song) {
             currentSong = song;
         }
@@ -96,11 +86,6 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
 
         @Override
         public void init() {
-        }
-
-        @Override
-        public void setUpPanelAndAlbumCoverHeight() {
-
         }
 
         @Override
