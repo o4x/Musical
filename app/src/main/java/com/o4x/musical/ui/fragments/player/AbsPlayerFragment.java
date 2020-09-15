@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.LayoutRes;
@@ -306,7 +305,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
 
     @Override
     public void onColorChanged(MediaNotificationProcessor colors) {
-        animateColorChange(colors.getBackgroundColor());
+//        animateColorChange(colors.getBackgroundColor());
         playbackControlsFragment.setColor(colors);
         getCallbacks().onPaletteColorChanged();
     }

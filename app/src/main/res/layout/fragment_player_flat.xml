@@ -3,25 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/player_content"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/player_album_cover_fragment"
+        class="com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.o4x.musical.views.WidthFitSquareLayout
-            android:id="@+id/album_cover_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/player_album_cover_fragment"
-                class="com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </com.o4x.musical.views.WidthFitSquareLayout>
-
-    </FrameLayout>
+        android:layout_height="match_parent" />
 
     <FrameLayout
         android:layout_width="match_parent"
