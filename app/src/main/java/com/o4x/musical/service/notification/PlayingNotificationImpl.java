@@ -85,7 +85,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
                 .build();
 
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
-        service.runOnUiThread(new Runnable() {
+        service.runOnNewThread(new Runnable() {
             @Override
             public void run() {
                 if (target != null) {

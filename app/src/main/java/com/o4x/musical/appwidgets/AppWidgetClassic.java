@@ -88,7 +88,7 @@ public class AppWidgetClassic extends BaseAppWidget {
 
         // Load the album cover async and push the update on completion
         final Context appContext = service.getApplicationContext();
-        service.runOnUiThread(new Runnable() {
+        service.runOnNewThread(new Runnable() {
             @Override
             public void run() {
                 if (target != null) {

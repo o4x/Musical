@@ -597,16 +597,18 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         }
 
         if (PreferenceUtil.albumArtOnLockscreen()) {
-            final Point screenSize = Util.getScreenSize(MusicService.this);
-            final RequestBuilder<Bitmap> request = SongGlideRequest.Builder.from(Glide.with(MusicService.this), song)
-                    .asBitmap()
-                    .build();
-            if (PreferenceUtil.blurredAlbumArt()) {
-                request.transform(new BlurTransformation.Builder(MusicService.this).build());
-            }
-            runOnUiThread(new Runnable() {
+            runOnNewThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    final Point screenSize = Util.getScreenSize(MusicService.this);
+                    final RequestBuilder<Bitmap> request = SongGlideRequest.Builder.from(Glide.with(MusicService.this), song)
+                            .asBitmap()
+                            .build();
+                    if (PreferenceUtil.blurredAlbumArt()) {
+                        request.transform(new BlurTransformation.Builder(MusicService.this).build());
+                    }
+
                     request.into(new CustomTarget<Bitmap>(screenSize.x, screenSize.y) {
 
                         @Override
@@ -649,6 +651,10 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
     public void runOnUiThread(Runnable runnable) {
         uiThreadHandler.post(runnable);
+    }
+
+    public void runOnNewThread(Runnable runnable) {
+        new Thread(runnable).start();
     }
 
     public Song getCurrentSong() {
