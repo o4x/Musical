@@ -80,22 +80,27 @@ class HomeFragment : AbsMainActivityFragment() {
     override fun onPause() {
         // Save scroll view position
         position = nested_scroll_view.scrollY
+
+        mainActivity.removeMusicServiceEventListener(queueListener)
+
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
+
         showAppbar()
         if (position < headerHeight) {
             toolbarColorVisible(false)
             statusBarColorVisible(false)
             mainActivity.appbar.elevation = 0f
         }
+
+        mainActivity.addMusicServiceEventListener(queueListener)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         queueListener = QueueListener()
-        mainActivity.addMusicServiceEventListener(queueListener)
         hideSubToolbar()
         setUpViews()
     }

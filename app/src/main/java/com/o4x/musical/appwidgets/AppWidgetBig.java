@@ -92,7 +92,7 @@ public class AppWidgetBig extends BaseAppWidget {
         Point p = Util.getScreenSize(service);
         final int widgetImageSize = Math.min(p.x, p.y);
         final Context appContext = service.getApplicationContext();
-        service.runOnUiThread(new Runnable() {
+        service.runOnNewThread(new Runnable() {
             @Override
             public void run() {
                 if (target != null) {

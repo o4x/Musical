@@ -95,7 +95,7 @@ public class AppWidgetCard extends BaseAppWidget {
             cardRadius = service.getResources().getDimension(R.dimen.app_widget_card_radius);
 
         // Load the album cover async and push the update on completion
-        service.runOnUiThread(new Runnable() {
+        service.runOnNewThread(new Runnable() {
             @Override
             public void run() {
                 if (target != null) {
