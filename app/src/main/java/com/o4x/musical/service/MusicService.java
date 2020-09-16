@@ -1367,7 +1367,6 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         }
 
         public void notifySeek() {
-            updateMediaSessionMetaData();
             updateMediaSessionPlaybackState();
             mHandler.removeCallbacks(this);
             mHandler.postDelayed(this, THROTTLE);
