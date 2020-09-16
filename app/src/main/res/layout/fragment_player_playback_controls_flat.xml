@@ -74,9 +74,10 @@
         app:srcCompat="@drawable/ic_favorite_border_white_24dp" />
 
 
+    <!--  If layout_width not equals with 0dp when update ui is lagging  -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/player_song_current_progress"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:gravity="center"
@@ -102,9 +103,10 @@
         app:layout_constraintStart_toEndOf="@id/player_song_current_progress"
         app:layout_constraintTop_toBottomOf="@id/titleContainer" />
 
+    <!--  If layout_width not equals with 0dp when update ui is lagging  -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/player_song_total_time"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:gravity="center"
