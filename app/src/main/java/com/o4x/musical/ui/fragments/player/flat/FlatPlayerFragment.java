@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import com.o4x.musical.R;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
-import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.ViewUtil;
 
@@ -90,17 +89,13 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
 
         @Override
         public void updateCurrentSong(Song song) {
-            fragment.toolbar.setTitle(song.title);
-            fragment.toolbar.setSubtitle(MusicUtil.getSongInfoString(song));
+
         }
 
         @Override
         public void animateColorChange(int newColor) {
             super.animateColorChange(newColor);
-
-            AnimatorSet animatorSet = createDefaultColorChangeAnimatorSet(newColor);
-            animatorSet.play(ViewUtil.createBackgroundColorTransition(fragment.toolbar, fragment.lastColor, newColor));
-            animatorSet.start();
+            createDefaultColorChangeAnimatorSet(newColor).start();
         }
     }
 }

@@ -13,6 +13,8 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="right"
         android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar
@@ -20,14 +22,15 @@
             style="@style/Toolbar"
             android:background="@android:color/transparent" />
 
-    </LinearLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/playback_controls_fragment"
+            class="com.o4x.musical.ui.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="16dp"/>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/playback_controls_fragment"
-        class="com.o4x.musical.ui.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
+    </LinearLayout>
 
     <View
         android:id="@+id/toolbar_container"

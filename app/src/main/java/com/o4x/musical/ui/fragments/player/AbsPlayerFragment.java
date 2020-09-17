@@ -15,8 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowInsets;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.LayoutRes;
@@ -40,6 +39,7 @@ import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
+import com.o4x.musical.util.Util;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
 
 import butterknife.BindView;
@@ -59,7 +59,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     @BindView(R.id.player_toolbar)
     protected Toolbar toolbar;
     @BindView(R.id.content)
-    protected FrameLayout content;
+    protected LinearLayout content;
 
     protected int lastColor;
 
@@ -88,18 +88,18 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         setUpPlayerToolbar();
         setUpSubFragments();
 
-        content.setOnApplyWindowInsetsListener(
-                new View.OnApplyWindowInsetsListener() {
-                    @Override
-                    public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+        if (!Util.isLandscape(getResources())) {
+            content.setOnApplyWindowInsetsListener(
+                    (view1, windowInsets) -> {
                         content.onApplyWindowInsets(windowInsets);
                         getChildFragmentManager().findFragmentById(R.id.playback_controls_fragment).getView().setPadding(
                                 windowInsets.getSystemWindowInsetLeft(), 0, windowInsets.getSystemWindowInsetRight(), windowInsets.getSystemWindowInsetBottom()
                         );
                         return windowInsets;
                     }
-                }
-        );
+            );
+        }
+
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
