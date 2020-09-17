@@ -48,7 +48,6 @@ object PreferenceUtil {
     const val GAPLESS_PLAYBACK = "gapless_playback"
     const val LAST_ADDED_CUTOFF = "last_added_interval"
     const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
-    const val BLURRED_ALBUM_ART = "blurred_album_art"
     const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
     const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
     const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
@@ -183,11 +182,6 @@ object PreferenceUtil {
     @JvmStatic
     fun albumArtOnLockscreen(): Boolean {
         return sharedPreferences.getBoolean(ALBUM_ART_ON_LOCKSCREEN, true)
-    }
-
-    @JvmStatic
-    fun blurredAlbumArt(): Boolean {
-        return sharedPreferences.getBoolean(BLURRED_ALBUM_ART, false)
     }
 
     @JvmStatic
