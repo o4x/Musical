@@ -607,35 +607,6 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                                     mediaSession.setMetadata(metaData.build());
                                 }
                     });
-
-//                    final Point screenSize = Util.getScreenSize(MusicService.this);
-//                    final RequestBuilder<Bitmap> request = SongGlideRequest.Builder.from(Glide.with(MusicService.this), song)
-//                            .asBitmap()
-//                            .build();
-//                    if (PreferenceUtil.blurredAlbumArt()) {
-//                        request.transform(new BlurTransformation.Builder(MusicService.this).build());
-//                    }
-//
-//                    request.into(new CustomTarget<Bitmap>(screenSize.x, screenSize.y) {
-//
-//                        @Override
-//                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
-//                            super.onLoadFailed(errorDrawable);
-//                            mediaSession.setMetadata(metaData.build());
-//                        }
-//
-//                        @Override
-//                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                            metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource);
-//                            mediaSession.setMetadata(metaData.build());
-//                        }
-//
-//                        @Override
-//                        public void onLoadCleared(@Nullable Drawable placeholder) {
-//
-//                        }
-//
-//                    });
                 }
             });
         } else {
@@ -1148,7 +1119,6 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                 }
                 break;
             case PreferenceUtil.ALBUM_ART_ON_LOCKSCREEN:
-            case PreferenceUtil.BLURRED_ALBUM_ART:
                 updateMediaSessionMetaData();
                 break;
             case PreferenceUtil.COLORED_NOTIFICATION:
