@@ -255,7 +255,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
             @Override
             public void onSkipToNext() {
-                playNextSong(true);
+                nextSong(true);
             }
 
             @Override
@@ -335,7 +335,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                         back(true);
                         break;
                     case ACTION_SKIP:
-                        playNextSong(true);
+                        nextSong(true);
                         break;
                     case ACTION_STOP:
                     case ACTION_QUIT:
@@ -487,8 +487,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         return position;
     }
 
-    public void playNextSong(boolean force) {
-        playSongAt(getNextPosition(force));
+    public void nextSong(boolean force) {
+        setPosition(getNextPosition(force));
     }
 
     private boolean openTrackAndPrepareNextAt(int position) {
@@ -888,15 +888,15 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         }
     }
 
-    public void playPreviousSong(boolean force) {
-        playSongAt(getPreviousPosition(force));
+    public void previousSong(boolean force) {
+        setPosition(getPreviousPosition(force));
     }
 
     public void back(boolean force) {
         if (getSongProgressMillis() > 5000) {
             seek(0);
         } else {
-            playPreviousSong(force);
+            previousSong(force);
         }
     }
 
@@ -1216,7 +1216,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                             break;
                         }
                     } else {
-                        service.playNextSong(false);
+                        service.nextSong(false);
                     }
                     sendEmptyMessage(RELEASE_WAKELOCK);
                     break;
@@ -1230,8 +1230,10 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                     break;
 
                 case SET_POSITION:
-                    service.openTrackAndPrepareNextAt(msg.arg1);
-                    service.notifyChange(PLAY_STATE_CHANGED);
+                    boolean playing = service.isPlaying();
+                    if(service.openTrackAndPrepareNextAt(msg.arg1) && playing) {
+                        service.play();
+                    }
                     break;
 
                 case PREPARE_NEXT:

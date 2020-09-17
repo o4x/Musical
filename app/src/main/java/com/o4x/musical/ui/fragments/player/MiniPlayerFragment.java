@@ -136,10 +136,10 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
                 public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                     if (Math.abs(velocityX) > Math.abs(velocityY)) {
                         if (velocityX < 0) {
-                            MusicPlayerRemote.playNextSong();
+                            MusicPlayerRemote.nextSong();
                             return true;
                         } else if (velocityX > 0) {
-                            MusicPlayerRemote.playPreviousSong();
+                            MusicPlayerRemote.previousSong();
                             return true;
                         }
                     }

@@ -10,14 +10,12 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
-import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
@@ -29,11 +27,9 @@ import butterknife.Unbinder
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.TintHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
-import com.o4x.musical.extensions.applyColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler
@@ -133,6 +129,8 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     override fun onResume() {
         super.onResume()
+        onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
+            MusicPlayerRemote.getSongDurationMillis())
         progressViewUpdateHelper!!.start()
     }
 
@@ -222,7 +220,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     private fun setUpPrevNext() {
         updatePrevNextColor()
-        nextButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.playNextSong() }
+        nextButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.nextSong() }
         prevButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.back() }
     }
 
@@ -319,10 +317,6 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     }
 
     private fun setUpProgressSlider() {
-
-        onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
-            MusicPlayerRemote.getSongDurationMillis())
-
         updateProgressSliderColor()
 
         progressSlider?.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
