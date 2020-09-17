@@ -15,11 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowInsets;
+import android.widget.FrameLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.o4x.musical.R;
@@ -52,20 +53,19 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks {
 
     private Callbacks callbacks;
-    private static boolean isToolbarShown = true;
 
     protected Unbinder unbinder;
 
     @BindView(R.id.player_toolbar)
     protected Toolbar toolbar;
+    @BindView(R.id.content)
+    protected FrameLayout content;
 
     protected int lastColor;
 
     protected AbsPlayerPlaybackControlsFragments playbackControlsFragment;
     protected PlayerAlbumCoverFragment playerAlbumCoverFragment;
 
-
-    protected AsyncTask updateIsFavoriteTask;
     protected AsyncTask updateLyricsAsyncTask;
 
     protected Lyrics lyrics;
@@ -88,6 +88,18 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         setUpPlayerToolbar();
         setUpSubFragments();
 
+        content.setOnApplyWindowInsetsListener(
+                new View.OnApplyWindowInsetsListener() {
+                    @Override
+                    public WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
+                        content.onApplyWindowInsets(windowInsets);
+                        getChildFragmentManager().findFragmentById(R.id.playback_controls_fragment).getView().setPadding(
+                                windowInsets.getSystemWindowInsetLeft(), 0, windowInsets.getSystemWindowInsetRight(), windowInsets.getSystemWindowInsetBottom()
+                        );
+                        return windowInsets;
+                    }
+                }
+        );
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -123,9 +135,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
                 return true;
             case R.id.action_sleep_timer:
                 new SleepTimerDialog().show(getFragmentManager(), "SET_SLEEP_TIMER");
-                return true;
-            case R.id.action_toggle_favorite:
-                toggleFavorite(song);
                 return true;
             case R.id.action_share:
                 SongShareDialog.create(song).show(getFragmentManager(), "SHARE_SONG");
@@ -173,14 +182,12 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     @Override
     public void onServiceConnected() {
         updateCurrentSong();
-        updateIsFavorite();
         updateLyrics();
     }
 
     @Override
     public void onPlayingMetaChanged() {
         updateCurrentSong();
-        updateIsFavorite();
         updateLyrics();
     }
 
@@ -188,9 +195,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     public void onQueueChanged() { }
 
     @Override
-    public void onMediaStoreChanged() {
-        updateIsFavorite();
-    }
+    public void onMediaStoreChanged() { }
 
     @SuppressWarnings("ConstantConditions")
     private void updateCurrentSong() {
@@ -206,39 +211,9 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
 
     private void setUpPlayerToolbar() {
         toolbar.inflateMenu(R.menu.menu_player);
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        toolbar.setNavigationIcon(R.drawable.mcab_nav_back);
         toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         toolbar.setOnMenuItemClickListener(this);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void updateIsFavorite() {
-        if (updateIsFavoriteTask != null) updateIsFavoriteTask.cancel(false);
-        updateIsFavoriteTask = new AsyncTask<Song, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(Song... params) {
-                Activity activity = getActivity();
-                if (activity != null) {
-                    return MusicUtil.isFavorite(getActivity(), params[0]);
-                } else {
-                    cancel(false);
-                    return null;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Boolean isFavorite) {
-                Activity activity = getActivity();
-                if (activity != null) {
-                    int res = isFavorite ? R.drawable.ic_favorite_white_24dp : R.drawable.ic_favorite_border_white_24dp;
-                    int color = ToolbarContentTintHelper.toolbarContentColor(activity, Color.TRANSPARENT);
-                    Drawable drawable = ImageUtil.getTintedVectorDrawable(activity, res, color);
-                    toolbar.getMenu().findItem(R.id.action_toggle_favorite)
-                            .setIcon(drawable)
-                            .setTitle(isFavorite ? getString(R.string.action_remove_from_favorites) : getString(R.string.action_add_to_favorites));
-                }
-            }
-        }.execute(MusicPlayerRemote.getCurrentSong());
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -313,51 +288,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
 
     @Override
     public void onFavoriteToggled() {
-        toggleFavorite(MusicPlayerRemote.getCurrentSong());
         playbackControlsFragment.onFavoriteToggled();
-    }
-
-    protected void toggleFavorite(Song song) {
-        MusicUtil.toggleFavorite(getActivity(), song);
-        if (song.id == MusicPlayerRemote.getCurrentSong().id) {
-            if (MusicUtil.isFavorite(getActivity(), song)) {
-                playerAlbumCoverFragment.showHeartAnimation();
-            }
-            updateIsFavorite();
-        }
-    }
-
-    protected boolean isToolbarShown() {
-        return isToolbarShown;
-    }
-
-    protected void setToolbarShown(boolean toolbarShown) {
-        isToolbarShown = toolbarShown;
-    }
-
-    protected void showToolbar(@Nullable final View toolbar) {
-        if (toolbar == null) return;
-
-        setToolbarShown(true);
-
-        toolbar.setVisibility(View.VISIBLE);
-        toolbar.animate().alpha(1f).setDuration(PlayerAlbumCoverFragment.VISIBILITY_ANIM_DURATION);
-    }
-
-    protected void hideToolbar(@Nullable final View toolbar) {
-        if (toolbar == null) return;
-
-        setToolbarShown(false);
-
-        toolbar.animate().alpha(0f).setDuration(PlayerAlbumCoverFragment.VISIBILITY_ANIM_DURATION).withEndAction(() -> toolbar.setVisibility(View.GONE));
-    }
-
-    protected void checkToggleToolbar(@Nullable final View toolbar) {
-        if (toolbar != null && !isToolbarShown() && toolbar.getVisibility() != View.GONE) {
-            hideToolbar(toolbar);
-        } else if (toolbar != null && isToolbarShown() && toolbar.getVisibility() != View.VISIBLE) {
-            showToolbar(toolbar);
-        }
     }
 
 

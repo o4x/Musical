@@ -112,9 +112,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
     }
 
     open fun setLightNavigationBar(enabled: Boolean) {
-        if (!ATHUtil.isWindowBackgroundDark(this)) {
-            ATH.setLightNavigationbar(this, enabled)
-        }
+        ATH.setLightNavigationbar(this, enabled)
     }
 
     private fun unregisterSystemUiVisibility() {

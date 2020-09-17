@@ -1,14 +1,10 @@
 package com.o4x.musical.ui.fragments.player;
 
-import android.animation.Animator;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,13 +13,11 @@ import androidx.viewpager.widget.ViewPager;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
-import com.o4x.musical.misc.SimpleAnimatorListener;
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics;
 import com.o4x.musical.model.lyrics.Lyrics;
 import com.o4x.musical.ui.adapter.AlbumCoverPagerAdapter;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.util.PreferenceUtil;
-import com.o4x.musical.util.ViewUtil;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
 
 import butterknife.BindView;
@@ -41,8 +35,6 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
 
     @BindView(R.id.player_album_cover_viewpager)
     ViewPager viewPager;
-    @BindView(R.id.player_favorite_icon)
-    ImageView favoriteIcon;
 
     @BindView(R.id.player_lyrics)
     FrameLayout lyricsLayout;
@@ -126,38 +118,6 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
 
     @Override
     public void onPageScrollStateChanged(int state) {
-    }
-
-    public void showHeartAnimation() {
-        favoriteIcon.clearAnimation();
-
-        favoriteIcon.setAlpha(0f);
-        favoriteIcon.setScaleX(0f);
-        favoriteIcon.setScaleY(0f);
-        favoriteIcon.setVisibility(View.VISIBLE);
-        favoriteIcon.setPivotX(favoriteIcon.getWidth() / 2);
-        favoriteIcon.setPivotY(favoriteIcon.getHeight() / 2);
-
-        favoriteIcon.animate()
-                .setDuration(ViewUtil.PHONOGRAPH_ANIM_TIME / 2)
-                .setInterpolator(new DecelerateInterpolator())
-                .scaleX(1f)
-                .scaleY(1f)
-                .alpha(1f)
-                .setListener(new SimpleAnimatorListener() {
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        favoriteIcon.setVisibility(View.INVISIBLE);
-                    }
-                })
-                .withEndAction(() -> favoriteIcon.animate()
-                        .setDuration(ViewUtil.PHONOGRAPH_ANIM_TIME / 2)
-                        .setInterpolator(new AccelerateInterpolator())
-                        .scaleX(0f)
-                        .scaleY(0f)
-                        .alpha(0f)
-                        .start())
-                .start();
     }
 
     private boolean isLyricsLayoutVisible() {

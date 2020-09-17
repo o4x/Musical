@@ -1,9 +1,8 @@
 package com.o4x.musical.ui.activities;
 
 import android.animation.ValueAnimator;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.animation.PathInterpolator;
 
 import androidx.annotation.ColorInt;
 
@@ -11,7 +10,8 @@ import com.o4x.musical.R;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
 import com.o4x.musical.ui.fragments.player.flat.FlatPlayerFragment;
-import com.o4x.musical.util.ViewUtil;
+
+import code.name.monkey.appthemehelper.util.ColorUtil;
 
 public class PlayerActivity extends AbsMusicServiceActivity implements FlatPlayerFragment.Callbacks {
 
@@ -50,7 +50,7 @@ public class PlayerActivity extends AbsMusicServiceActivity implements FlatPlaye
         int playerFragmentColor = playerFragment.getPaletteColor();
         this.setLightStatusBar(false);
         super.setTaskDescriptionColor(playerFragmentColor);
-        super.setNavigationBarColor(playerFragmentColor);
+        super.setNavigationBarColor(Color.TRANSPARENT);
 
         playerFragment.setMenuVisibility(true);
         playerFragment.setUserVisibleHint(true);
@@ -74,19 +74,7 @@ public class PlayerActivity extends AbsMusicServiceActivity implements FlatPlaye
     public void onPaletteColorChanged() {
         int playerFragmentColor = playerFragment.getPaletteColor();
         super.setTaskDescriptionColor(playerFragmentColor);
-        animateNavigationBarColor(playerFragmentColor);
-    }
-
-    private void animateNavigationBarColor(int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (navigationBarColorAnimator != null) navigationBarColorAnimator.cancel();
-            navigationBarColorAnimator = ValueAnimator
-                    .ofArgb(getWindow().getNavigationBarColor(), color)
-                    .setDuration(ViewUtil.PHONOGRAPH_ANIM_TIME);
-            navigationBarColorAnimator.setInterpolator(new PathInterpolator(0.4f, 0f, 1f, 1f));
-            navigationBarColorAnimator.addUpdateListener(animation -> PlayerActivity.super.setNavigationBarColor((Integer) animation.getAnimatedValue()));
-            navigationBarColorAnimator.start();
-        }
+        super.setLightNavigationBar(ColorUtil.INSTANCE.isColorLight(playerFragmentColor));
     }
 
     @Override
