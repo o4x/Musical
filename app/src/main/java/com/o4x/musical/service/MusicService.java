@@ -11,11 +11,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
-import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -30,22 +27,20 @@ import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.o4x.musical.R;
 import com.o4x.musical.appwidgets.AppWidgetBig;
 import com.o4x.musical.appwidgets.AppWidgetCard;
 import com.o4x.musical.appwidgets.AppWidgetClassic;
 import com.o4x.musical.appwidgets.AppWidgetSmall;
-import com.o4x.musical.imageloader.glide.BlurTransformation;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
 import com.o4x.musical.helper.ShuffleHelper;
 import com.o4x.musical.helper.StopWatch;
 import com.o4x.musical.loader.PlaylistSongLoader;
@@ -61,7 +56,6 @@ import com.o4x.musical.service.notification.PlayingNotificationImpl24;
 import com.o4x.musical.service.playback.Playback;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.PreferenceUtil;
-import com.o4x.musical.util.Util;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -284,9 +278,6 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                 return MediaButtonIntentReceiver.handleIntent(MusicService.this, mediaButtonEvent);
             }
         });
-
-        mediaSession.setFlags(MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
-                | MediaSession.FLAG_HANDLES_MEDIA_BUTTONS);
 
         mediaSession.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
     }
@@ -600,35 +591,51 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
             runOnNewThread(new Runnable() {
                 @Override
                 public void run() {
+                    ImageLoader.getInstance().loadImage(
+                            MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
+                            new SimpleImageLoadingListener() {
+                                @Override
+                                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                                    super.onLoadingFailed(imageUri, view, failReason);
+                                    mediaSession.setMetadata(metaData.build());
+                                }
 
-                    final Point screenSize = Util.getScreenSize(MusicService.this);
-                    final RequestBuilder<Bitmap> request = SongGlideRequest.Builder.from(Glide.with(MusicService.this), song)
-                            .asBitmap()
-                            .build();
-                    if (PreferenceUtil.blurredAlbumArt()) {
-                        request.transform(new BlurTransformation.Builder(MusicService.this).build());
-                    }
-
-                    request.into(new CustomTarget<Bitmap>(screenSize.x, screenSize.y) {
-
-                        @Override
-                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                            super.onLoadFailed(errorDrawable);
-                            mediaSession.setMetadata(metaData.build());
-                        }
-
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, copy(resource));
-                            mediaSession.setMetadata(metaData.build());
-                        }
-
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                        }
-
+                                @Override
+                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                    super.onLoadingComplete(imageUri, view, loadedImage);
+                                    metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, loadedImage);
+                                    mediaSession.setMetadata(metaData.build());
+                                }
                     });
+
+//                    final Point screenSize = Util.getScreenSize(MusicService.this);
+//                    final RequestBuilder<Bitmap> request = SongGlideRequest.Builder.from(Glide.with(MusicService.this), song)
+//                            .asBitmap()
+//                            .build();
+//                    if (PreferenceUtil.blurredAlbumArt()) {
+//                        request.transform(new BlurTransformation.Builder(MusicService.this).build());
+//                    }
+//
+//                    request.into(new CustomTarget<Bitmap>(screenSize.x, screenSize.y) {
+//
+//                        @Override
+//                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+//                            super.onLoadFailed(errorDrawable);
+//                            mediaSession.setMetadata(metaData.build());
+//                        }
+//
+//                        @Override
+//                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                            metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource);
+//                            mediaSession.setMetadata(metaData.build());
+//                        }
+//
+//                        @Override
+//                        public void onLoadCleared(@Nullable Drawable placeholder) {
+//
+//                        }
+//
+//                    });
                 }
             });
         } else {
