@@ -111,7 +111,7 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
         currentPosition = position;
         ((AlbumCoverPagerAdapter) viewPager.getAdapter()).receiveColor(colorReceiver, position);
         if (position != MusicPlayerRemote.getPosition()) {
-            MusicPlayerRemote.playSongAt(position);
+            MusicPlayerRemote.setPosition(position);
         }
     }
 

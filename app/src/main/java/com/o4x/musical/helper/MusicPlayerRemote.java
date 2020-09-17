@@ -139,18 +139,18 @@ public class MusicPlayerRemote {
     /**
      * Async
      */
-    public static void playNextSong() {
+    public static void nextSong() {
         if (musicService != null) {
-            musicService.playNextSong(true);
+            musicService.nextSong(true);
         }
     }
 
     /**
      * Async
      */
-    public static void playPreviousSong() {
+    public static void previousSong() {
         if (musicService != null) {
-            musicService.playPreviousSong(true);
+            musicService.previousSong(true);
         }
     }
 
