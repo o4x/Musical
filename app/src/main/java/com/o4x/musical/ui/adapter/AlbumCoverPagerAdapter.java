@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.adapter;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteMusicLoadingListener;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.util.PreferenceUtil;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
 
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +75,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
     }
 
-    public static class AlbumCoverFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    public static class AlbumCoverFragment extends Fragment {
         private static final String SONG_ARG = "song";
 
         private Unbinder unbinder;
@@ -115,17 +113,12 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         @Override
         public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            forceSquareAlbumCover(false);
-            // TODO
-//            forceSquareAlbumCover(PreferenceUtil.forceSquareAlbumCover());
-            PreferenceUtil.registerOnSharedPreferenceChangedListener(this);
             loadAlbumCover();
         }
 
         @Override
         public void onDestroyView() {
             super.onDestroyView();
-            PreferenceUtil.unregisterOnSharedPreferenceChangedListener(this);
             unbinder.unbind();
             colorReceiver = null;
         }
@@ -141,20 +134,6 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
                         }
                     }
             );
-        }
-
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            switch (key) {
-                case PreferenceUtil.FORCE_SQUARE_ALBUM_COVER:
-                    // TODO
-//                    forceSquareAlbumCover(PreferenceUtil.forceSquareAlbumCover());
-                    break;
-            }
-        }
-
-        public void forceSquareAlbumCover(boolean forceSquareAlbumCover) {
-            albumCover.setScaleType(forceSquareAlbumCover ? ImageView.ScaleType.FIT_CENTER : ImageView.ScaleType.CENTER_CROP);
         }
 
         private void setColor(MediaNotificationProcessor colors) {
