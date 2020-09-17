@@ -33,7 +33,7 @@ import code.name.monkey.appthemehelper.util.MaterialValueHelper;
  */
 public class ViewUtil {
 
-    public final static int PHONOGRAPH_ANIM_TIME = 1000;
+    public final static int PHONOGRAPH_ANIM_TIME = 400;
 
     public static Animator createBackgroundColorTransition(final View v, @ColorInt final int startColor, @ColorInt final int endColor) {
         return createColorAnimator(v, "backgroundColor", startColor, endColor);
