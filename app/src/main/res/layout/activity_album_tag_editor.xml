@@ -11,6 +11,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/Toolbar"
+        android:elevation="@dimen/appbar_elevation"
         app:navigationIcon="@drawable/mcab_nav_back"
         app:title="@string/action_tag_editor" />
 
@@ -156,19 +157,13 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/play_pause_fab"
-        style="@style/Fab"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin_top_left_right"
-        app:srcCompat="@drawable/ic_save_white_24dp" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/search_online_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/search_online"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+        style="?android:attr/borderlessButtonStyle"
+        android:elevation="@dimen/appbar_elevation"/>
 
 </LinearLayout>
 

@@ -40,8 +40,3 @@ fun View.hidden() {
 }
 
 fun View.showOrHide(show: Boolean) = if (show) show() else hide()
-
-fun EditText.appHandleColor(): EditText {
-    TintHelper.colorHandles(this, ThemeStore.themeColor(context))
-    return this
-}

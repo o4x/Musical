@@ -11,9 +11,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
@@ -22,21 +22,19 @@ import androidx.core.widget.NestedScrollView
 import androidx.palette.graphics.Palette
 import butterknife.BindView
 import butterknife.ButterKnife
-import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.util.ATHUtil
-import code.name.monkey.appthemehelper.util.TintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.o4x.musical.R
-import com.o4x.musical.extensions.appHandleColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
+import com.o4x.musical.ui.dialogs.DiscardTagsDialog
 import com.o4x.musical.util.ImageUtil
 import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.TagUtil
@@ -50,9 +48,6 @@ import java.util.*
  */
 abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
 
-    @JvmField
-    @BindView(R.id.play_pause_fab)
-    var fab: FloatingActionButton? = null
     @JvmField
     @BindView(R.id.search_online_btn)
     var searchBtn: AppCompatButton? = null
@@ -107,6 +102,8 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     @JvmField
     protected var tagUtil: TagUtil? = null
 
+    private var isChanged: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentViewLayout)
@@ -118,6 +115,26 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setTitle(R.string.action_tag_editor)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_tag_editor, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.save -> save()
+            android.R.id.home -> {
+                if (isChanged) {
+                    DiscardTagsDialog.create().show(fragmentManager, "TAGS")
+                    return true
+                }
+                super.onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private val intentExtras: Unit
@@ -139,7 +156,6 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
 
     private fun setupViews() {
         setupScrollView()
-        setupFab()
         setupSearchButton()
         setupImageView()
         setupTextInputEditTexts()
@@ -153,17 +169,9 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         )
     }
 
-    private fun setupFab() {
-        fab!!.scaleX = 0f
-        fab!!.scaleY = 0f
-        fab!!.isEnabled = false
-        fab!!.setOnClickListener { save() }
-        TintHelper.setTintAuto(fab!!, ThemeStore.themeColor(this), true)
-    }
-
     private fun setupSearchButton() {
-        searchBtn!!.setBackgroundColor(ThemeStore.themeColor(this))
-        searchBtn!!.setOnClickListener { searchOnline() }
+        searchBtn?.setBackgroundColor(surfaceColor())
+        searchBtn?.setOnClickListener { searchOnline() }
     }
 
     private fun setupImageView() {
@@ -189,16 +197,6 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                super.onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun setupTextInputEditTexts() {
         fillViewsWithFileTags()
         if (songName != null) songName!!.addTextChangedListener(textWatcher)
@@ -221,18 +219,9 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     }
 
     protected abstract fun fillViewsWithResult(result: RM)
-    protected fun dataChanged() {
-        showFab()
-    }
 
-    private fun showFab() {
-        fab!!.animate()
-            .setDuration(500)
-            .setInterpolator(OvershootInterpolator())
-            .scaleX(1f)
-            .scaleY(1f)
-            .start()
-        fab!!.isEnabled = true
+    protected fun dataChanged() {
+        isChanged = true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -278,18 +267,10 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
 
     private fun setColors(color: Int) {
         paletteColorPrimary = color
-        albumName?.appHandleColor()
-//        TintHelper.colorHandles(songName!!, color)
-//        TintHelper.colorHandles(albumName!!, color)
-//        TintHelper.colorHandles(artistName!!, color)
-//        TintHelper.colorHandles(genreName!!, color)
-//        TintHelper.colorHandles(year!!, color)
-//        TintHelper.colorHandles(trackNumber!!, color)
-//        TintHelper.colorHandles(lyrics!!, color)
 
         colorPrimary = ATHUtil.resolveColor(this, R.attr.colorSurface)
-        header!!.setBackgroundColor(colorPrimary)
-        toolbar!!.setBackgroundColor(colorPrimary)
+        header?.setBackgroundColor(colorPrimary)
+        toolbar?.setBackgroundColor(colorPrimary)
         setStatusBarColor(colorPrimary)
         setNavigationBarColor(colorPrimary)
         setTaskDescriptionColor(colorPrimary)

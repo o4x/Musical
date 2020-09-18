@@ -423,5 +423,8 @@
     <string name="restored_previous_purchases">Restored previous purchases.</string>
     <string name="pref_header_lists">Lists</string>
     <string name="settings">Settings</string>
+    <string name="save">Save</string>
+    <string name="ok">OK</string>
+    <string name="discard_changes">Discard your changes?</string>
 
 </resources>
