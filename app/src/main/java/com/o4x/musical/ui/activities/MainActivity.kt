@@ -105,7 +105,7 @@ class MainActivity : AbsMusicPanelActivity() {
         contentView.setOnApplyWindowInsetsListener { view: View, windowInsets: WindowInsets ->
             view.findViewById<View>(R.id.navigation_view).onApplyWindowInsets(windowInsets)
             view.findViewById<View>(R.id.drawer_content_container).setPadding(
-                0, 0, 0, windowInsets.systemWindowInsetBottom)
+                windowInsets.systemWindowInsetLeft, 0, windowInsets.systemWindowInsetRight, windowInsets.systemWindowInsetBottom)
             windowInsets
         }
         return contentView
