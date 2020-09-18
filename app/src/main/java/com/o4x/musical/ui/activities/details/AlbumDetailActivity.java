@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.activities;
+package com.o4x.musical.ui.activities.details;
 
 import android.content.Context;
 import android.content.Intent;

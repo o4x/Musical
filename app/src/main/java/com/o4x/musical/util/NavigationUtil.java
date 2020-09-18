@@ -17,11 +17,11 @@ import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Playlist;
-import com.o4x.musical.ui.activities.AlbumDetailActivity;
-import com.o4x.musical.ui.activities.ArtistDetailActivity;
-import com.o4x.musical.ui.activities.GenreDetailActivity;
+import com.o4x.musical.ui.activities.details.AlbumDetailActivity;
+import com.o4x.musical.ui.activities.details.ArtistDetailActivity;
+import com.o4x.musical.ui.activities.details.GenreDetailActivity;
 import com.o4x.musical.ui.activities.LicenseActivity;
-import com.o4x.musical.ui.activities.PlaylistDetailActivity;
+import com.o4x.musical.ui.activities.details.PlaylistDetailActivity;
 import com.o4x.musical.ui.activities.PurchaseActivity;
 import com.o4x.musical.ui.activities.SupportDevelopmentActivity;
 
