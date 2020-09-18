@@ -83,7 +83,7 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         pager!!.adapter = pagerAdapter
         pager!!.offscreenPageLimit = pagerAdapter!!.count - 1
         mainActivity.tabs.setupWithViewPager(pager)
-        val primaryColor = primaryColor()
+        val primaryColor = surfaceColor()
         val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
         val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
         //        TabLayoutUtil.setTabIconColors(tabs, normalColor, selectedColor);
@@ -114,7 +114,7 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         cab = MaterialCab(mainActivity, R.id.cab_stub)
             .setMenu(menuRes)
             .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-            .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(primaryColor()))
+            .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(surfaceColor()))
             .start(callback)
         return cab!!
     }

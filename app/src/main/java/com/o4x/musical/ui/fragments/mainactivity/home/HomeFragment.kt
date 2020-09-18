@@ -23,6 +23,7 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.universalil.UniversalIL
 import com.o4x.musical.interfaces.MusicServiceEventListener
@@ -111,7 +112,7 @@ class HomeFragment : AbsMainActivityFragment() {
         ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
             mainActivity.toolbar,
             menu,
-            primaryColor())
+            surfaceColor())
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -435,7 +436,7 @@ class HomeFragment : AbsMainActivityFragment() {
     private fun toolbarColorVisible(show: Boolean) {
         toolbarAnimation.cancel()
 
-        val color = primaryColor()
+        val color = surfaceColor()
         val current = ViewUtil.getViewBackgroundColor(mainActivity.toolbar)
 
         // break if current color equal final color
@@ -460,7 +461,7 @@ class HomeFragment : AbsMainActivityFragment() {
     private fun statusBarColorVisible(show: Boolean) {
         statusAnimation.cancel()
 
-        val color = primaryColor()
+        val color = surfaceColor()
         val current = mainActivity.window.statusBarColor
 
         // break if current color equal final color

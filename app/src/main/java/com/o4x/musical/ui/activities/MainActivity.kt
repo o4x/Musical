@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.StateListDrawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,11 +20,8 @@ import android.view.WindowInsets
 import androidx.navigation.NavController
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
-import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorSecondary
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
-import code.name.monkey.appthemehelper.util.ATHUtil.resolveColor
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
-import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemIconColors
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
 import code.name.monkey.retromusic.extensions.findNavController
 import com.google.android.material.appbar.AppBarLayout
@@ -33,7 +29,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper
 import com.o4x.musical.imageloader.universalil.UniversalIL
@@ -66,13 +62,14 @@ class MainActivity : AbsMusicPanelActivity() {
 
         ButterKnife.bind(this)
 
+        setDrawUnderBar()
         setNavigationBarColorAuto()
+        setLightNavigationBar(true)
+        setStatusBarColor(Color.TRANSPARENT)
 
         setupNavController()
-        setDrawUnderBar()
         setupToolbar()
         setUpNavigationView()
-        setStatusBarColor(Color.TRANSPARENT)
 
 
         if (!checkShowIntro()) {
@@ -160,7 +157,7 @@ class MainActivity : AbsMusicPanelActivity() {
 
         val themeColor = themeColor(this)
 
-        navigation_view.setBackgroundColor(primaryColor())
+        navigation_view.setBackgroundColor(surfaceColor())
 
         setItemTextColors(navigation_view, textColorPrimary(this), themeColor)
 

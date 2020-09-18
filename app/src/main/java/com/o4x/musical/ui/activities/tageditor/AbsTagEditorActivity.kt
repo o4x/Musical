@@ -49,30 +49,25 @@ import java.util.*
  * @author Karim Abou Zeid (kabouzeid)
  */
 abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
+
     @JvmField
     @BindView(R.id.play_pause_fab)
     var fab: FloatingActionButton? = null
-
     @JvmField
     @BindView(R.id.search_online_btn)
     var searchBtn: AppCompatButton? = null
-
     @JvmField
     @BindView(R.id.nested_scroll_view)
     var scrollView: NestedScrollView? = null
-
     @JvmField
     @BindView(R.id.toolbar)
     var toolbar: Toolbar? = null
-
     @JvmField
     @BindView(R.id.image)
     var image: ImageView? = null
-
     @JvmField
     @BindView(R.id.header)
     var header: LinearLayout? = null
-
     @JvmField
     @BindView(R.id.song_name)
     var songName: TextInputEditText? = null
@@ -111,6 +106,7 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     private var deleteAlbumArt = false
     @JvmField
     protected var tagUtil: TagUtil? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(contentViewLayout)

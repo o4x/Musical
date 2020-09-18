@@ -48,35 +48,30 @@ fun Toolbar.backgroundTintList() {
 }
 
 fun Context.themeColor() = ThemeStore.themeColor(this)
-
 fun Fragment.themeColor() = ThemeStore.themeColor(requireContext())
 
 fun Context.primaryColor() = resolveColor(R.attr.colorPrimary, Color.WHITE)
-
 fun Fragment.primaryColor() = resolveColor(R.attr.colorPrimary, Color.WHITE)
 
 fun Context.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
-
 fun Fragment.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
 
-fun Context.textColorSecondary() = resolveColor(android.R.attr.textColorSecondary)
+fun Context.backgroundColor() = resolveColor(R.attr.backgroundColor, Color.WHITE)
+fun Fragment.backgroundColor() = resolveColor(R.attr.backgroundColor, Color.WHITE)
 
+fun Context.textColorSecondary() = resolveColor(android.R.attr.textColorSecondary)
 fun Fragment.textColorSecondary() = resolveColor(android.R.attr.textColorSecondary)
 
 fun Context.colorControlNormal() = resolveColor(android.R.attr.colorControlNormal)
-
 fun Fragment.colorControlNormal() = resolveColor(android.R.attr.colorControlNormal)
 
 fun Context.textColorPrimary() = resolveColor(android.R.attr.textColorPrimary)
-
 fun Fragment.textColorPrimary() = resolveColor(android.R.attr.textColorPrimary)
 
 fun Context.resolveColor(@AttrRes attr: Int, fallBackColor: Int = 0) =
     ATHUtil.resolveColor(this, attr, fallBackColor)
-
 fun Fragment.resolveColor(@AttrRes attr: Int, fallBackColor: Int = 0) =
     ATHUtil.resolveColor(requireContext(), attr, fallBackColor)
-
 fun Dialog.resolveColor(@AttrRes attr: Int, fallBackColor: Int = 0) =
     ATHUtil.resolveColor(context, attr, fallBackColor)
 
@@ -84,7 +79,6 @@ fun Dialog.resolveColor(@AttrRes attr: Int, fallBackColor: Int = 0) =
 fun CheckBox.addthemeColor() {
     buttonTintList = ColorStateList.valueOf(ThemeStore.themeColor(context))
 }
-
 fun SeekBar.addthemeColor() {
     val colorState = ColorStateList.valueOf(ThemeStore.themeColor(context))
     progressTintList = colorState

@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.misc.OverScrollGridLayoutManager
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.misc.VerticalScrollListener
@@ -42,7 +43,7 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainActivity.setStatusBarColorAuto()
-        mainActivity.toolbar.setBackgroundColor(primaryColor())
+        mainActivity.toolbar.setBackgroundColor(surfaceColor())
         mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
         hideSubToolbar()
         showAppbar()
