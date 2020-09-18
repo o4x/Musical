@@ -84,7 +84,7 @@ public abstract class SearchOnlineAdapter<A extends AbsSearchOnlineActivity, RM 
                             activity.finish();
                         }
                     }
-            ).show(activity.getSupportFragmentManager(), "Online");
+            ).show(activity.getSupportFragmentManager(), "ONLINE");
         }
     }
 
