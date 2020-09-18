@@ -98,10 +98,10 @@
                 <data android:mimeType="vnd.android.cursor.dir/audio" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.AlbumDetailActivity" />
-        <activity android:name=".ui.activities.ArtistDetailActivity" />
-        <activity android:name=".ui.activities.GenreDetailActivity" />
-        <activity android:name=".ui.activities.PlaylistDetailActivity" />
+        <activity android:name=".ui.activities.details.AlbumDetailActivity" />
+        <activity android:name=".ui.activities.details.ArtistDetailActivity" />
+        <activity android:name=".ui.activities.details.GenreDetailActivity" />
+        <activity android:name=".ui.activities.details.PlaylistDetailActivity" />
         <activity
             android:name=".ui.activities.tageditor.SongTagEditorActivity"
             android:windowSoftInputMode="adjustResize" />
