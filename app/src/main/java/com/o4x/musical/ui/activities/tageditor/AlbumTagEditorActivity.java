@@ -35,6 +35,12 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Res
     }
 
     @Override
+    protected int getContentViewLayout() {
+        return R.layout.activity_album_tag_editor;
+    }
+
+
+    @Override
     protected void fillViewsWithResult(ITunesModel.Results result) {
         loadImageFromUrl(result.getBigArtworkUrl());
         if (songName != null)
@@ -49,11 +55,6 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Res
             year.setText(result.getYear());
         if (trackNumber != null)
             trackNumber.setText(String.valueOf(result.trackNumber));
-    }
-
-    @Override
-    protected int getContentViewLayout() {
-        return R.layout.activity_album_tag_editor;
     }
 
     @NonNull

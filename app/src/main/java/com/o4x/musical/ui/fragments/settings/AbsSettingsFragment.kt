@@ -23,6 +23,7 @@ import androidx.preference.PreferenceManager
 import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceFragmentCompat
 import code.name.monkey.appthemehelper.util.ATHUtil
 import com.o4x.musical.R
+import com.o4x.musical.extensions.backgroundColor
 import com.o4x.musical.preferences.*
 import com.o4x.musical.util.NavigationUtil
 
@@ -60,7 +61,7 @@ abstract class AbsSettingsFragment : ATEPreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listView.setBackgroundColor(ATHUtil.resolveColor(requireContext(), R.attr.colorSurface))
+        listView.setBackgroundColor(backgroundColor())
         invalidateSettings()
     }
 

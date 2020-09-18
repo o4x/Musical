@@ -18,15 +18,15 @@
     </style>
 
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/grey_50</item>
-        <item name="colorPrimaryVariant">@color/grey_200</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="colorSecondary">@color/blue_grey_600</item>
-        <item name="colorSecondaryVariant">@color/blue_grey_800</item>
+        <item name="colorPrimary">@color/deep_purple_A200</item>
+        <item name="colorPrimaryVariant">@color/deep_purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/deep_purple_400</item>
+        <item name="colorSecondaryVariant">@color/deep_purple_500</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="android:colorBackground">@color/grey_100</item>
+        <item name="backgroundColor">@color/grey_50</item>
         <item name="colorOnBackground">@color/grey_900</item>
-        <item name="colorSurface">@color/grey_50</item>
+        <item name="colorSurface">@color/grey_100</item>
         <item name="colorOnSurface">@color/grey_900</item>
         <item name="colorError">@color/red_A700</item>
         <item name="colorOnError">@color/white</item>
@@ -56,15 +56,15 @@
     </style>
 
     <style name="Theme.Musical.Base" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">@color/dark_grey</item>
-        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorPrimary">@color/deep_purple_A100</item>
+        <item name="colorPrimaryVariant">@color/deep_purple_A200</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/blue_grey_800</item>
-        <item name="colorSecondaryVariant">@color/blue_grey_900</item>
+        <item name="colorSecondary">@color/deep_purple_300</item>
+        <item name="colorSecondaryVariant">@color/deep_purple_400</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="android:colorBackground">@color/black_color</item>
+        <item name="backgroundColor">@color/black_color</item>
         <item name="colorOnBackground">@color/white</item>
-        <item name="colorSurface">@color/black_color</item>
+        <item name="colorSurface">@color/dark_grey</item>
         <item name="colorOnSurface">@color/white</item>
         <item name="colorError">@color/red_900</item>
         <item name="colorOnError">@color/white</item>
@@ -95,13 +95,13 @@
     </style>
 
     <style name="Theme.Musical.Base.Black" parent="Theme.Musical.Base">
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorPrimary">@color/deep_purple_A100</item>
+        <item name="colorPrimaryVariant">@color/deep_purple_A200</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/blue_grey_900</item>
-        <item name="colorSecondaryVariant">@color/blue_grey_900</item>
+        <item name="colorSecondary">@color/deep_purple_300</item>
+        <item name="colorSecondaryVariant">@color/deep_purple_400</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="android:colorBackground">@color/black</item>
+        <item name="backgroundColor">@color/black</item>
         <item name="colorOnBackground">@color/white</item>
         <item name="colorSurface">@color/black</item>
         <item name="colorOnSurface">@color/white</item>

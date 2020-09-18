@@ -24,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.menu.SongMenuHelper
 import com.o4x.musical.helper.menu.SongsMenuHelper
@@ -104,7 +105,7 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
     }
 
     private fun setUpAppbarColor() {
-        val primaryColor = primaryColor()
+        val primaryColor = surfaceColor()
         mainActivity.bread_crumbs.setBackgroundColor(primaryColor)
         mainActivity.bread_crumbs.setActivatedContentColor(ToolbarContentTintHelper.toolbarTitleColor(mainActivity,
             primaryColor))

@@ -18,6 +18,7 @@ import com.o4x.musical.LanguageContextWrapper
 import com.o4x.musical.R
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.extensions.primaryColor
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.RetroUtil
 import com.o4x.musical.util.Util
@@ -74,13 +75,13 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
             VersionUtils.hasMarshmallow() -> window.statusBarColor = color
             else -> window.statusBarColor = ColorUtil.darkenColor(color)
         }
-        setLightStatusBarAuto(this.primaryColor())
+        setLightStatusBarAuto(surfaceColor())
     }
 
     fun setStatusBarColorAuto() {
         // we don't want to use statusbar color because we are doing the color darkening on our own to support KitKat
-        setStatusBarColor(primaryColor())
-        setLightStatusBarAuto(primaryColor())
+        setStatusBarColor(surfaceColor())
+        setLightStatusBarAuto(surfaceColor())
     }
 
     open fun setTaskDescriptionColor(@ColorInt color: Int) {
@@ -96,7 +97,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
     }
 
     fun setNavigationBarColorAuto() {
-        setNavigationBarColor(primaryColor())
+        setNavigationBarColor(surfaceColor())
     }
 
     fun setNavigationBarDividerColorAuto() {
@@ -111,7 +112,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
         setLightStatusBar(ColorUtil.isColorLight(bgColor))
     }
 
-    open fun setLightNavigationBar(enabled: Boolean) {
+    fun setLightNavigationBar(enabled: Boolean) {
         ATH.setLightNavigationbar(this, enabled)
     }
 

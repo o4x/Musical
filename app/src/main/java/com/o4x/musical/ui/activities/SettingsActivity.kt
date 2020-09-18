@@ -1,26 +1,15 @@
 package com.o4x.musical.ui.activities
 
-import android.R.attr.bitmap
-import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.MenuItem
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.navigation.NavController
 import code.name.monkey.appthemehelper.ThemeStore
-import code.name.monkey.appthemehelper.util.VersionUtils
 import code.name.monkey.retromusic.extensions.findNavController
 import com.afollestad.materialdialogs.color.ColorChooserDialog
 import com.o4x.musical.R
-import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
-import com.o4x.musical.util.ViewUtil
 import kotlinx.android.synthetic.main.activity_settings.*
-import java.io.ByteArrayOutputStream
 
 
 class SettingsActivity : AbsBaseActivity(), ColorChooserDialog.ColorCallback {
