@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.App;
+import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.model.Artist;
 
 import java.io.BufferedOutputStream;
@@ -65,6 +66,9 @@ public class ArtistImageUtil {
                                 }
 
                                 if (succesful) {
+                                    // Remove cache from universal image loader for reload artist image
+                                    // For glide we don't need to remove cache, it's work with Signature
+                                    UniversalIL.removeFromCache(getPath(artist));
                                     App.getInstance().getContentResolver().notifyChange(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null); // trigger media store changed to force artist image reload
                                 }
                                 return null;
@@ -96,6 +100,8 @@ public class ArtistImageUtil {
                 if (!file.exists()) {
                     return null;
                 } else {
+                    // Remove caches from UIL just for optimize memory
+                    UniversalIL.removeFromCache(getPath(artist));
                     file.delete();
                 }
                 return null;

@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.L;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.model.ArtistImage;
 import com.o4x.musical.imageloader.model.AudioFileCover;
@@ -22,6 +23,8 @@ import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.ArtistImageUtil;
 import com.o4x.musical.util.MusicUtil;
+
+import java.io.File;
 
 public class UniversalIL {
 
@@ -157,5 +160,14 @@ public class UniversalIL {
                 onlineOptions,
                 listener
         );
+    }
+
+
+    public static void removeFromCache(String uri) {
+        MemoryCacheUtils.removeFromCache(uri, imageLoader.getMemoryCache());
+        File imageFile = imageLoader.getDiskCache().get(uri);
+        if (imageFile.exists()) {
+            imageFile.delete();
+        }
     }
 }
