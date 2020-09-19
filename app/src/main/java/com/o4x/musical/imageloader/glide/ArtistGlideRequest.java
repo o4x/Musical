@@ -15,16 +15,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.target.Target;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.model.AlbumCover;
 import com.o4x.musical.imageloader.model.ArtistImage;
-import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
-import com.o4x.musical.model.Song;
 import com.o4x.musical.util.ArtistSignatureUtil;
-import com.o4x.musical.util.CustomArtistImageUtil;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.o4x.musical.util.ArtistImageUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -90,7 +84,7 @@ public class ArtistGlideRequest {
     }
 
     public static RequestBuilder<Drawable> createBaseRequest(RequestManager requestManager, Artist artist, boolean noCustomImage) {
-        boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
+        boolean hasCustomImage = ArtistImageUtil.hasCustomArtistImage(artist);
         if (noCustomImage || !hasCustomImage) {
             return requestManager.load(getUri(artist, noCustomImage));
         } else {
@@ -99,7 +93,7 @@ public class ArtistGlideRequest {
     }
 
     public static RequestBuilder<Bitmap> createBaseRequestAsBitmap(RequestManager requestManager, Artist artist, boolean noCustomImage) {
-        boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
+        boolean hasCustomImage = ArtistImageUtil.hasCustomArtistImage(artist);
         if (noCustomImage || !hasCustomImage) {
             return requestManager.asBitmap().load(getUri(artist, noCustomImage));
         } else {
@@ -108,11 +102,11 @@ public class ArtistGlideRequest {
     }
 
     public static Object getUri(Artist artist, boolean noCustomImage) {
-        boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
+        boolean hasCustomImage = ArtistImageUtil.hasCustomArtistImage(artist);
         if (noCustomImage || !hasCustomImage) {
             return ArtistImage.fromArtist(artist);
         } else {
-            return CustomArtistImageUtil.getFile(artist);
+            return ArtistImageUtil.getFile(artist);
         }
     }
 

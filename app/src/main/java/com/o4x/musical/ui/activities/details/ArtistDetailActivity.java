@@ -48,7 +48,7 @@ import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
 import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.ui.dialogs.SleepTimerDialog;
-import com.o4x.musical.util.CustomArtistImageUtil;
+import com.o4x.musical.util.ArtistImageUtil;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PhonographColorUtil;
@@ -270,7 +270,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
         switch (requestCode) {
             case REQUEST_CODE_SELECT_IMAGE:
                 if (resultCode == RESULT_OK) {
-                    CustomArtistImageUtil.getInstance(this).setCustomArtistImage(artist, data.getData());
+                    ArtistImageUtil.setCustomArtistImage(artist, data.getData());
                 }
                 break;
             default:
@@ -372,7 +372,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
                 return true;
             case R.id.action_reset_artist_image:
                 Toast.makeText(ArtistDetailActivity.this, getResources().getString(R.string.updating), Toast.LENGTH_SHORT).show();
-                CustomArtistImageUtil.getInstance(ArtistDetailActivity.this).resetCustomArtistImage(artist);
+                ArtistImageUtil.resetCustomArtistImage(artist);
                 return true;
             case R.id.action_tag_editor:
                 Intent editor = new Intent(this, ArtistTagEditorActivity.class);
