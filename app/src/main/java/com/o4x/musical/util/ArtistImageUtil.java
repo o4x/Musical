@@ -65,7 +65,6 @@ public class ArtistImageUtil {
                                 }
 
                                 if (succesful) {
-                                    ArtistSignatureUtil.getInstance(App.getInstance()).updateArtistSignature(artist.getName());
                                     App.getInstance().getContentResolver().notifyChange(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null); // trigger media store changed to force artist image reload
                                 }
                                 return null;
@@ -91,7 +90,6 @@ public class ArtistImageUtil {
             @SuppressLint("ApplySharedPref")
             @Override
             protected Void doInBackground(Void... params) {
-                ArtistSignatureUtil.getInstance(App.getInstance()).updateArtistSignature(artist.getName());
                 App.getInstance().getContentResolver().notifyChange(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null); // trigger media store changed to force artist image reload
 
                 File file = getFile(artist);
