@@ -13,11 +13,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.target.Target;
-import com.o4x.musical.App;
+import com.bumptech.glide.signature.ObjectKey;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.model.ArtistImage;
 import com.o4x.musical.model.Artist;
-import com.o4x.musical.util.ArtistSignatureUtil;
 import com.o4x.musical.util.ArtistImageUtil;
 
 /**
@@ -111,6 +110,6 @@ public class ArtistGlideRequest {
     }
 
     private static Key createSignature(Artist artist) {
-        return ArtistSignatureUtil.getInstance(App.getInstance()).getArtistSignature(artist.getName());
+        return new ObjectKey(ArtistImageUtil.getFile(artist).lastModified());
     }
 }
