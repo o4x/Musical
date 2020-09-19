@@ -20,6 +20,7 @@ import com.o4x.musical.imageloader.universalil.othersource.CustomImageDownloader
 import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.util.ArtistImageUtil;
 import com.o4x.musical.util.MusicUtil;
 
 public class UniversalIL {
@@ -115,23 +116,35 @@ public class UniversalIL {
             @NonNull Artist artist,
             @NonNull ImageView image,
             @Nullable PaletteImageLoadingListener listener) {
+        boolean hasCustomImage =
+                ArtistImageUtil.hasCustomArtistImage(artist);
 
-
-        ArtistImage artistImage = ArtistImage.fromArtist(artist);
-
-        String imageId = CustomImageDownloader.SCHEME_ARTIST + artistImage.hashCode();
-
-        imageLoader.displayImage(
-                imageId,
-                image,
-                getOptions()
-                        .extraForDownloader(artistImage)
-                        .showImageOnLoading(DEFAULT_ARTIST_IMAGE)
-                        .showImageOnFail(DEFAULT_ARTIST_IMAGE)
-                        .showImageForEmptyUri(DEFAULT_ARTIST_IMAGE)
-                        .build(),
-                listener
-        );
+        if (hasCustomImage) {
+            imageLoader.displayImage(
+                    ArtistImageUtil.getPath(artist),
+                    image,
+                    getOptions()
+                            .showImageOnLoading(DEFAULT_ARTIST_IMAGE)
+                            .showImageOnFail(DEFAULT_ARTIST_IMAGE)
+                            .showImageForEmptyUri(DEFAULT_ARTIST_IMAGE)
+                            .build(),
+                    listener
+            );
+        } else {
+            ArtistImage artistImage = ArtistImage.fromArtist(artist);
+            String imageId = CustomImageDownloader.SCHEME_ARTIST + artistImage.hashCode();
+            imageLoader.displayImage(
+                    imageId,
+                    image,
+                    getOptions()
+                            .extraForDownloader(artistImage)
+                            .showImageOnLoading(DEFAULT_ARTIST_IMAGE)
+                            .showImageOnFail(DEFAULT_ARTIST_IMAGE)
+                            .showImageForEmptyUri(DEFAULT_ARTIST_IMAGE)
+                            .build(),
+                    listener
+            );
+        }
     }
 
     public static void onlineAlbumImageLoader(
