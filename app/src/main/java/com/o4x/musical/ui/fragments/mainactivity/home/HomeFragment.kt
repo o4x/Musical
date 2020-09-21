@@ -372,7 +372,7 @@ class HomeFragment : AbsMainActivityFragment() {
 //                }
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.title)).setText(song.title);
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.text)).setText(MusicUtil.getSongInfoString(song));
-                UniversalIL.getImageLoader().displayImage(
+                UniversalIL.imageLoader?.displayImage(
                     MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
                     poster
                 )

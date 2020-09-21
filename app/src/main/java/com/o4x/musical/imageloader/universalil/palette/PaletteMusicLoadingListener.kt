@@ -6,11 +6,11 @@ import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.util.color.MediaNotificationProcessor
 
-abstract class PaletteMusicLoadingListener : SimpleImageLoadingListener() {
+abstract class PaletteMusicLoadingListener : AbsImageLoadingListener() {
 
     override fun onLoadingFailed(imageUri: String, view: View, failReason: FailReason) {
         super.onLoadingFailed(imageUri, view, failReason)
-        onColorReady(MediaNotificationProcessor(view.context))
+        onColorReady(MediaNotificationProcessor(view.context, onFailedBitmap))
     }
 
     override fun onLoadingCancelled(imageUri: String, view: View) {

@@ -16,7 +16,7 @@ import kotlin.math.max
 object ColorCoverUtil {
 
     @JvmStatic
-    fun createSquareCoverWithText(context: Context, text: String, id: Int, size: Int = 1000): Bitmap {
+    fun createSquareCoverWithText(context: Context, text: String, id: Int, size: Int = 500): Bitmap {
         return create(
             context,
             size,
@@ -25,7 +25,8 @@ object ColorCoverUtil {
                 context,
                 id
             ),
-            text[0], text[1]
+            text.split(" ").elementAtOrNull(0)?.elementAtOrNull(0),
+            text.split(" ").elementAtOrNull(1)?.elementAtOrNull(0)
         )
     }
 
