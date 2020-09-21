@@ -1,22 +1,15 @@
 package com.o4x.musical.util
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import code.name.monkey.appthemehelper.util.ColorUtil
-import com.o4x.musical.R
+import com.o4x.musical.extensions.getBitmapDrawable
 import com.o4x.musical.extensions.isDarkMode
+import com.o4x.musical.extensions.textColorPrimary
+import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -40,64 +33,40 @@ object ColorCoverUtil {
         context: Context,
         width: Int,
         height: Int,
-        background: Drawable? = null,
+        background: Drawable,
         char0: Char? = null,
-        char1: Char? = null): Bitmap {
+        char1: Char? = null,
+    ): Bitmap {
 
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-        // Inflate the layout into a view and configure it the way you like
-        val view = RelativeLayout(context)
-        inflater.inflate(R.layout.color_cover, view, true)
-
-        // Get view's
-        val container = view.findViewById(R.id.container) as FrameLayout
-        val charOne = view.findViewById(R.id.char_one) as TextView
-        val charTwo = view.findViewById(R.id.char_two) as TextView
-        // Setup view's
-        container.background = background
-        val charSize =
-            ViewUtil.convertPixelsToDp(max(width, height).toFloat(), context.resources)
-        charOne.apply {
-            x = charSize / -2
-            y = charSize / -4
-            rotation = 30f
-
-            textSize = charSize
-            text = char0.toString()
-        }
-        charTwo.apply {
-            x = charSize
-            y = charSize / 2
-            rotation = 30f
-
-            textSize = charSize
-            text = char1.toString()
-        }
-
-
-        //Provide it with a layout params. It should necessarily be wrapping the
-        //content as we not really going to have a parent for it.
-        view.layoutParams =
-            ViewGroup.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT)
-
-        //Pre-measure the view so that height and width don't remain null.
-        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
-
-        //Assign a size and position to the view and all of its descendants
-        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+        val charSize = max(width, height) * 1.4f
 
         //Create the bitmap
-        val bitmap = Bitmap.createBitmap(view.measuredWidth,
-            view.measuredHeight,
-            Bitmap.Config.ARGB_8888)
-        //Create a canvas with the specified bitmap to draw into
+        val bitmap = background.toBitmap(width, height, Bitmap.Config.ARGB_8888)
+        // Create a canvas with the specified bitmap to draw into
         val c = Canvas(bitmap)
 
-        //Render this view (and all of its children) to the given Canvas
-        view.draw(c)
+
+        // Render char's
+        val paint = Paint()
+        paint.color = ColorUtil.withAlpha(context.textColorPrimary(), 0.5f)// Text Color
+        paint.textSize = charSize // Text Size
+        paint.isFakeBoldText = true
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.OVERLAY) // Text Overlapping Pattern
+
+        c.rotate(30f)
+
+        c.drawText(
+            char0.toString().toUpperCase(Locale.ROOT),
+            width / -12f,
+            height / 1.3f,
+            paint)
+
+        c.drawText(
+            char1.toString().toUpperCase(Locale.ROOT),
+            width / 2f,
+            height / 1.3f,
+            paint)
+
         return bitmap
     }
 
