@@ -1,7 +1,6 @@
 package com.o4x.musical.ui.adapter;
 
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.util.ImageUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
@@ -115,8 +113,7 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
             holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
             holder.image.setImageResource(R.drawable.ic_folder_white_24dp);
         } else {
-            Drawable error = ImageUtil.getTintedVectorDrawable(activity, R.drawable.ic_file_music_white_24dp, iconColor);
-            UniversalIL.audioFileImageLoader(new AudioFileCover(file.getPath()), error, holder.image, null);
+            UniversalIL.audioFileImageLoader(new AudioFileCover(file.getName(), file.getPath()), holder.image, null);
         }
     }
 

@@ -8,32 +8,35 @@ import androidx.annotation.NonNull;
 import androidx.palette.graphics.Palette;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.o4x.musical.R;
 import com.o4x.musical.util.PhonographColorUtil;
 
 import code.name.monkey.appthemehelper.util.ATHUtil;
 
-public abstract class PaletteImageLoadingListener extends SimpleImageLoadingListener {
+public abstract class PaletteImageLoadingListener extends AbsImageLoadingListener {
 
     @Override
     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
         super.onLoadingFailed(imageUri, view, failReason);
-        if (view == null) return;
-        onColorReady(getDefaultFooterColor(view.getContext()));
+        if (onFailedBitmap == null) {
+            onColorReady(getDefaultFooterColor(view.getContext()));
+        } else {
+            onColorReady(
+                    PhonographColorUtil.getColor(Palette.from(onFailedBitmap).generate(),
+                            getDefaultFooterColor(view.getContext()))
+            );
+        }
     }
 
     @Override
     public void onLoadingCancelled(String imageUri, View view) {
         super.onLoadingCancelled(imageUri, view);
-        if (view == null) return;
         onColorReady(getDefaultFooterColor(view.getContext()));
     }
 
     @Override
     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
         super.onLoadingComplete(imageUri, view, loadedImage);
-        if (view == null) return;
         onColorReady(
                 PhonographColorUtil.getColor(Palette.from(loadedImage).generate(),
                 getDefaultFooterColor(view.getContext()))
