@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container">
+
+    <TextView
+        android:id="@+id/char_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAllCaps="true"/>
+
+    <TextView
+        android:id="@+id/char_two"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAllCaps="true"/>
+
+</FrameLayout>

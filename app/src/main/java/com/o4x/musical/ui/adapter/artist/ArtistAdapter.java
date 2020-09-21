@@ -14,13 +14,12 @@ import androidx.core.util.Pair;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
+import com.o4x.musical.util.ColorCoverUtil;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
@@ -125,19 +124,20 @@ public class ArtistAdapter extends AbsMultiSelectAdapter<ArtistAdapter.ViewHolde
 
     protected void loadArtistImage(Artist artist, final ViewHolder holder) {
         if (holder.image == null) return;
-        UniversalIL.artistImageLoader(
-                artist,
-                holder.image,
-                new PaletteImageLoadingListener() {
-                    @Override
-                    public void onColorReady(int color) {
-                        if (usePalette)
-                            setColors(color, holder);
-                        else
-                            setColors(getDefaultFooterColor(activity), holder);
-                    }
-                }
-        );
+        holder.image.setImageBitmap(ColorCoverUtil.createSquareCoverWithText(activity, artist.getName(), artist.getId(), 300));
+//        UniversalIL.artistImageLoader(
+//                artist,
+//                holder.image,
+//                new PaletteImageLoadingListener() {
+//                    @Override
+//                    public void onColorReady(int color) {
+//                        if (usePalette)
+//                            setColors(color, holder);
+//                        else
+//                            setColors(getDefaultFooterColor(activity), holder);
+//                    }
+//                }
+//        );
     }
 
     @Override
