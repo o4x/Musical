@@ -112,7 +112,7 @@ object ColorCoverUtil {
         intArrayOf(0xFF_ff_60_62.toInt(), 0xFF_ff_96_66.toInt()),
         intArrayOf(0xFF_fc_4e_1b.toInt(), 0xFF_f8_b3_33.toInt()),
         intArrayOf(0xFF_f7_9f_32.toInt(), 0xFF_fc_ca_1c.toInt())
-    ).shuffled()
+    )
 
     private val DESATURATED_COLORS by lazy {
         COLORS.map { original ->
