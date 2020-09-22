@@ -15,6 +15,7 @@ import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.imageloader.universalil.palette.PaletteMusicLoadingListener;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.util.Util;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
 
 import org.jetbrains.annotations.NotNull;
@@ -132,7 +133,8 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
                         public void onColorReady(@NotNull MediaNotificationProcessor colors) {
                             setColor(colors);
                         }
-                    }
+                    },
+                    Math.max(Util.getScreenHeight(), Util.getScreenWidth())
             );
         }
 

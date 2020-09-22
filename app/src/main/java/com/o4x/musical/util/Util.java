@@ -8,9 +8,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.os.Build;
-import androidx.annotation.AttrRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -18,12 +15,24 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.o4x.musical.R;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class Util {
+
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
 
     public static int getStatusBarHeight(@NonNull Context context) {
         int result = 0;
