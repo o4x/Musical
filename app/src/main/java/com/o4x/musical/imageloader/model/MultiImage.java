@@ -1,6 +1,5 @@
 package com.o4x.musical.imageloader.model;
 
-import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Song;
@@ -24,10 +23,10 @@ public class MultiImage {
 
     static public MultiImage fromArtist(Artist artist) {
         final List<AlbumCover> covers = new ArrayList<>();
-        for (final Album album : artist.albums) {
-            final Song song = album.safeGetFirstSong();
-            covers.add(new AlbumCover(album.getYear(), song.data));
-        }
+//        for (final Album album : artist.albums) {
+//            final Song song = album.safeGetFirstSong();
+//            covers.add(new AlbumCover(album.getYear(), song.data));
+//        }
 
         return new MultiImage(artist.getName(), covers);
     }
