@@ -3,6 +3,7 @@ package com.o4x.musical.loader;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore.Audio.Genres;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -54,8 +55,8 @@ public class GenreLoader {
     private static Genre getGenreFromCursor(@NonNull final Context context, @NonNull final Cursor cursor) {
         final int id = cursor.getInt(0);
         final String name = cursor.getString(1);
-        final int songs = getSongs(context, id).size();
-        return new Genre(id, name, songs);
+        final List<Song> songs = getSongs(context, id);
+        return new Genre(id, name, songs.size(), songs);
     }
 
     @Nullable

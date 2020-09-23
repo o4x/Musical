@@ -37,9 +37,12 @@ object PreferenceUtil {
     const val SONG_GRID_SIZE_LAND = "song_grid_size_land"
     const val ARTIST_GRID_SIZE = "artist_grid_size"
     const val ARTIST_GRID_SIZE_LAND = "artist_grid_size_land"
+    const val GENRE_GRID_SIZE = "genre_grid_size"
+    const val GENRE_GRID_SIZE_LAND = "genre_grid_size_land"
     const val ALBUM_COLORED_FOOTERS = "album_colored_footers"
     const val SONG_COLORED_FOOTERS = "song_colored_footers"
     const val ARTIST_COLORED_FOOTERS = "artist_colored_footers"
+    const val GENRE_COLORED_FOOTERS = "genre_colored_footers"
     const val ALBUM_ARTIST_COLORED_FOOTERS = "album_artist_colored_footers"
     const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
     const val COLORED_NOTIFICATION = "colored_notification"
@@ -248,11 +251,16 @@ object PreferenceUtil {
         }
 
     @JvmStatic
-    val genreSortOrder: String?
+    var genreSortOrder: String?
         get() = sharedPreferences.getString(
             GENRE_SORT_ORDER,
             SortOrder.GenreSortOrder.GENRE_A_Z
         )
+        set(sortOrder) {
+            val editor = sharedPreferences.edit()
+            editor.putString(GENRE_SORT_ORDER, sortOrder)
+            editor.apply()
+        }
 
     @JvmStatic
     val lastAddedCutoff: Long
@@ -346,6 +354,21 @@ object PreferenceUtil {
     }
 
     @JvmStatic
+    fun setGenreGridSize(gridSize: Int) {
+        val editor = sharedPreferences.edit()
+        editor.putInt(GENRE_GRID_SIZE, gridSize)
+        editor.apply()
+    }
+
+    @JvmStatic
+    fun getGenreGridSize(context: Context): Int {
+        return sharedPreferences.getInt(
+            GENRE_GRID_SIZE,
+            context.resources.getInteger(R.integer.default_list_columns)
+        )
+    }
+
+    @JvmStatic
     fun setAlbumGridSizeLand(gridSize: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt(ALBUM_GRID_SIZE_LAND, gridSize)
@@ -386,6 +409,21 @@ object PreferenceUtil {
     fun getArtistGridSizeLand(context: Context): Int {
         return sharedPreferences.getInt(
             ARTIST_GRID_SIZE_LAND,
+            context.resources.getInteger(R.integer.default_list_columns_land)
+        )
+    }
+
+    @JvmStatic
+    fun setGenreGridSizeLand(gridSize: Int) {
+        val editor = sharedPreferences.edit()
+        editor.putInt(GENRE_GRID_SIZE_LAND, gridSize)
+        editor.apply()
+    }
+
+    @JvmStatic
+    fun getGenreGridSizeLand(context: Context): Int {
+        return sharedPreferences.getInt(
+            GENRE_GRID_SIZE_LAND,
             context.resources.getInteger(R.integer.default_list_columns_land)
         )
     }
@@ -437,6 +475,19 @@ object PreferenceUtil {
     fun artistColoredFooters(): Boolean {
         return sharedPreferences.getBoolean(ARTIST_COLORED_FOOTERS, true)
     }
+
+    @JvmStatic
+    fun setGenreColoredFooters(value: Boolean) {
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(GENRE_COLORED_FOOTERS, value)
+        editor.apply()
+    }
+
+    @JvmStatic
+    fun genreColoredFooters(): Boolean {
+        return sharedPreferences.getBoolean(GENRE_COLORED_FOOTERS, true)
+    }
+
 
     @JvmStatic
     fun setLastChangeLogVersion(version: Int) {

@@ -15,9 +15,9 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.signature.ObjectKey;
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.model.ArtistImage;
+import com.o4x.musical.imageloader.model.MultiImage;
 import com.o4x.musical.model.Artist;
-import com.o4x.musical.util.ArtistImageUtil;
+import com.o4x.musical.util.CustomImageUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -83,7 +83,7 @@ public class ArtistGlideRequest {
     }
 
     public static RequestBuilder<Drawable> createBaseRequest(RequestManager requestManager, Artist artist, boolean noCustomImage) {
-        boolean hasCustomImage = ArtistImageUtil.hasCustomArtistImage(artist);
+        boolean hasCustomImage = new CustomImageUtil(artist).hasCustomImage();
         if (noCustomImage || !hasCustomImage) {
             return requestManager.load(getUri(artist, noCustomImage));
         } else {
@@ -92,7 +92,7 @@ public class ArtistGlideRequest {
     }
 
     public static RequestBuilder<Bitmap> createBaseRequestAsBitmap(RequestManager requestManager, Artist artist, boolean noCustomImage) {
-        boolean hasCustomImage = ArtistImageUtil.hasCustomArtistImage(artist);
+        boolean hasCustomImage = new CustomImageUtil(artist).hasCustomImage();
         if (noCustomImage || !hasCustomImage) {
             return requestManager.asBitmap().load(getUri(artist, noCustomImage));
         } else {
@@ -101,15 +101,15 @@ public class ArtistGlideRequest {
     }
 
     public static Object getUri(Artist artist, boolean noCustomImage) {
-        boolean hasCustomImage = ArtistImageUtil.hasCustomArtistImage(artist);
+        boolean hasCustomImage = new CustomImageUtil(artist).hasCustomImage();
         if (noCustomImage || !hasCustomImage) {
-            return ArtistImage.fromArtist(artist);
+            return MultiImage.fromArtist(artist);
         } else {
-            return ArtistImageUtil.getFile(artist);
+            return new CustomImageUtil(artist).getFile();
         }
     }
 
     private static Key createSignature(Artist artist) {
-        return new ObjectKey(ArtistImageUtil.getFile(artist).lastModified());
+        return new ObjectKey(new CustomImageUtil(artist).getFile().lastModified());
     }
 }

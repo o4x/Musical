@@ -18,6 +18,8 @@ import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.App;
 import com.o4x.musical.imageloader.universalil.UniversalIL;
 import com.o4x.musical.model.Artist;
+import com.o4x.musical.model.Genre;
+import com.o4x.musical.model.Playlist;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,12 +32,40 @@ import java.util.Locale;
  * @author Karim Abou Zeid (kabouzeid)
  */
 
-public class ArtistImageUtil {
+public class CustomImageUtil {
 
-    private static final String FOLDER_NAME = "/artist_images/";
+    private static final String FOLDER_NAME = "/images/";
+
+    private final int id;
+    private final String name;
+    private final Type type;
+
+    public CustomImageUtil(int id, String name, Type type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
+    public CustomImageUtil(Artist artist) {
+        this.id = artist.getId();
+        this.name = artist.getName();
+        this.type = Type.ARTIST;
+    }
+
+    public CustomImageUtil(Genre genre) {
+        this.id = genre.id;
+        this.name = genre.name;
+        this.type = Type.GENRE;
+    }
+
+    public CustomImageUtil(Playlist playlist) {
+        this.id = playlist.id;
+        this.name = playlist.name;
+        this.type = Type.PLAYLIST;
+    }
 
     @SuppressLint("StaticFieldLeak")
-    public static void setCustomArtistImage(final Artist artist, Uri uri) {
+    public void setCustomImage(Uri uri) {
         Glide.with(App.getInstance())
                 .asBitmap()
                 .load(uri)
@@ -48,13 +78,7 @@ public class ArtistImageUtil {
                             @SuppressLint("ApplySharedPref")
                             @Override
                             protected Void doInBackground(Void... params) {
-                                File dir = new File(App.getInstance().getFilesDir(), FOLDER_NAME);
-                                if (!dir.exists()) {
-                                    if (!dir.mkdirs()) { // create the folder
-                                        return null;
-                                    }
-                                }
-                                File file = new File(dir, getFileName(artist));
+                                File file = getFile();
 
                                 boolean succesful = false;
                                 try {
@@ -66,10 +90,10 @@ public class ArtistImageUtil {
                                 }
 
                                 if (succesful) {
-                                    // Remove cache from universal image loader for reload artist image
+                                    // Remove cache from universal image loader for reload image
                                     // For glide we don't need to remove cache, it's work with Signature
-                                    UniversalIL.removeFromCache(getPath(artist));
-                                    App.getInstance().getContentResolver().notifyChange(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null); // trigger media store changed to force artist image reload
+                                    UniversalIL.removeFromCache(getPath());
+                                    notifyChange();
                                 }
                                 return null;
                             }
@@ -89,19 +113,18 @@ public class ArtistImageUtil {
     }
 
     @SuppressLint("StaticFieldLeak")
-    public static void resetCustomArtistImage(final Artist artist) {
+    public void resetCustomImage() {
         new AsyncTask<Void, Void, Void>() {
             @SuppressLint("ApplySharedPref")
             @Override
             protected Void doInBackground(Void... params) {
-                App.getInstance().getContentResolver().notifyChange(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null); // trigger media store changed to force artist image reload
-
-                File file = getFile(artist);
+                notifyChange();
+                File file = getFile();
                 if (!file.exists()) {
                     return null;
                 } else {
                     // Remove caches from UIL just for optimize memory
-                    UniversalIL.removeFromCache(getPath(artist));
+                    UniversalIL.removeFromCache(getPath());
                     file.delete();
                 }
                 return null;
@@ -109,26 +132,54 @@ public class ArtistImageUtil {
         }.execute();
     }
 
-
-    public static boolean hasCustomArtistImage(Artist artist) {
-        return getFile(artist).exists();
+    private void notifyChange() {
+        // trigger media store changed to force image reload
+        switch (type) {
+            case ARTIST:
+                App.getInstance().getContentResolver()
+                        .notifyChange(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null);
+                break;
+            case GENRE:
+                App.getInstance().getContentResolver()
+                        .notifyChange(MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI, null);
+                break;
+            case PLAYLIST:
+                App.getInstance().getContentResolver()
+                        .notifyChange(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, null);
+                break;
+        }
     }
 
-    private static String getFileName(Artist artist) {
-        String artistName = artist.getName();
-        if (artistName == null)
-            artistName = "";
+    public boolean hasCustomImage() {
+        return getFile().exists();
+    }
+
+    private String getFileName() {
+        String mName = name;
+        if (mName == null)
+            mName = "";
         // replace everything that is not a letter or a number with _
-        artistName = artistName.replaceAll("[^a-zA-Z0-9]", "_");
-        return String.format(Locale.US, "%s_%d.jpeg", artistName, artist.getId());
+        mName = mName.replaceAll("[^a-zA-Z0-9]", "_");
+        return String.format(Locale.US, "%s_%d.jpeg", mName, id);
     }
 
-    public static File getFile(Artist artist) {
-        File dir = new File(App.getInstance().getFilesDir(), FOLDER_NAME);
-        return new File(dir, getFileName(artist));
+    public File getFile() {
+        File dir = new File(App.getInstance().getFilesDir(), FOLDER_NAME + type.name());
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) { // create the folder
+                return null;
+            }
+        }
+        return new File(dir, getFileName());
     }
 
-    public static String getPath(Artist artist) {
-        return Uri.fromFile(ArtistImageUtil.getFile(artist)).toString();
+    public String getPath() {
+        return Uri.fromFile(getFile()).toString();
+    }
+
+    public enum Type {
+        ARTIST,
+        GENRE,
+        PLAYLIST
     }
 }
