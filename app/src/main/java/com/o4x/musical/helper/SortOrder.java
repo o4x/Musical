@@ -161,7 +161,7 @@ public final class SortOrder {
         String GENRE_A_Z = MediaStore.Audio.Genres.DEFAULT_SORT_ORDER;
 
         /* Genre sort order Z-A */
-        String ALBUM_Z_A = GENRE_A_Z + " DESC";
+        String GENRE_Z_A = GENRE_A_Z + " DESC";
     }
 
 }

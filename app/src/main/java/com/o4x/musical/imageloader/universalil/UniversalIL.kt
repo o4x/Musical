@@ -9,25 +9,22 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.nostra13.universalimageloader.utils.L
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils
 import com.o4x.musical.R
-import com.o4x.musical.imageloader.model.ArtistImage
+import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.universalil.othersource.CustomImageDownloader
 import com.o4x.musical.imageloader.universalil.palette.AbsImageLoadingListener
-import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener
 import com.o4x.musical.model.Artist
+import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.ArtistImageUtil
+import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.ColorCoverUtil.createSquareCoverWithText
 import com.o4x.musical.util.MusicUtil
 
 object UniversalIL {
 
-    private const val DEFAULT_ARTIST_IMAGE = R.drawable.default_artist_image
-    private const val DEFAULT_ALBUM_IMAGE = R.drawable.default_album_art
     private const val DEFAULT_SIZE = 500
 
     private val options: DisplayImageOptions.Builder
@@ -35,12 +32,6 @@ object UniversalIL {
             .imageScaleType(ImageScaleType.EXACTLY)
             .cacheOnDisk(true)
             .cacheInMemory(true)
-
-    private val songOptions = options
-        .showImageOnLoading(DEFAULT_ALBUM_IMAGE)
-        .showImageOnFail(DEFAULT_ALBUM_IMAGE)
-        .showImageForEmptyUri(DEFAULT_ALBUM_IMAGE)
-        .build()
 
     var imageLoader: ImageLoader? = null
         private set
@@ -109,6 +100,47 @@ object UniversalIL {
         )
     }
 
+
+    @JvmStatic
+    private fun multiImageLoader(
+        customImageUtil: CustomImageUtil,
+        multiImage: MultiImage,
+        image: ImageView,
+        listener: AbsImageLoadingListener?,
+        size: Int = DEFAULT_SIZE
+    ) {
+
+        val b: Bitmap = createSquareCoverWithText(
+            image.context, multiImage.name, multiImage.hashCode(), size)
+        val d: Drawable = b.toDrawable(image.resources)
+        listener?.setOnFailedBitmap(b)
+
+        val hasCustomImage = customImageUtil.hasCustomImage()
+        if (hasCustomImage) {
+            imageLoader?.displayImage(
+                customImageUtil.path,
+                image,
+                options
+                    .showImageOnFail(d)
+                    .showImageForEmptyUri(d)
+                    .build(),
+                listener
+            )
+        } else {
+            val imageId = CustomImageDownloader.SCHEME_MULTI + multiImage.hashCode()
+            imageLoader?.displayImage(
+                imageId,
+                image,
+                options
+                    .extraForDownloader(multiImage)
+                    .showImageOnFail(d)
+                    .showImageForEmptyUri(d)
+                    .build(),
+                listener
+            )
+        }
+    }
+
     @JvmStatic
     fun artistImageLoader(
         artist: Artist,
@@ -116,39 +148,27 @@ object UniversalIL {
         listener: AbsImageLoadingListener?,
         size: Int = DEFAULT_SIZE
     ) {
+        multiImageLoader(
+            CustomImageUtil(artist),
+            MultiImage.fromArtist(artist),
+            image,
+            listener,
+            size)
+    }
 
-        val b: Bitmap = createSquareCoverWithText(
-            image.context, artist.name, artist.hashCode(), size)
-        val d: Drawable = b.toDrawable(image.resources)
-        listener?.setOnFailedBitmap(b)
-
-        val hasCustomImage = ArtistImageUtil.hasCustomArtistImage(artist)
-        if (hasCustomImage) {
-            imageLoader?.displayImage(
-                ArtistImageUtil.getPath(artist),
-                image,
-                options
-                    .showImageOnLoading(d)
-                    .showImageOnFail(d)
-                    .showImageForEmptyUri(d)
-                    .build(),
-                listener
-            )
-        } else {
-            val artistImage = ArtistImage.fromArtist(artist)
-            val imageId = CustomImageDownloader.SCHEME_ARTIST + artistImage.hashCode()
-            imageLoader?.displayImage(
-                imageId,
-                image,
-                options
-                    .extraForDownloader(artistImage)
-                    .showImageOnLoading(DEFAULT_ARTIST_IMAGE)
-                    .showImageOnFail(DEFAULT_ARTIST_IMAGE)
-                    .showImageForEmptyUri(DEFAULT_ARTIST_IMAGE)
-                    .build(),
-                listener
-            )
-        }
+    @JvmStatic
+    fun genreImageLoader(
+        genre: Genre,
+        image: ImageView,
+        listener: AbsImageLoadingListener?,
+        size: Int = DEFAULT_SIZE
+    ) {
+        multiImageLoader(
+            CustomImageUtil(genre),
+            MultiImage.fromGenre(genre),
+            image,
+            listener,
+            size)
     }
 
     @JvmStatic
@@ -182,7 +202,7 @@ object UniversalIL {
     fun removeFromCache(uri: String?) {
         MemoryCacheUtils.removeFromCache(uri, imageLoader?.memoryCache)
         val imageFile = imageLoader!!.diskCache[uri]
-        if (imageFile.exists()) {
+        if (imageFile != null && imageFile.exists()) {
             imageFile.delete()
         }
     }
@@ -194,6 +214,10 @@ object UniversalIL {
     @JvmStatic
     fun artistImageLoader(artist: Artist, image: ImageView, listener: AbsImageLoadingListener?)
         = artistImageLoader(artist, image, listener, DEFAULT_SIZE)
+
+    @JvmStatic
+    fun genreImageLoader(genre: Genre, image: ImageView, listener: AbsImageLoadingListener?)
+            = genreImageLoader(genre, image, listener, DEFAULT_SIZE)
 
     @JvmStatic
     fun onlineAlbumImageLoader(url: String, image: ImageView, listener: AbsImageLoadingListener?)

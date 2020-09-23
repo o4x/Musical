@@ -2,6 +2,7 @@ package com.o4x.musical.imageloader.model;
 
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
+import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Song;
 
 import java.util.ArrayList;
@@ -10,30 +11,39 @@ import java.util.List;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class ArtistImage {
-    public final String artistName;
+public class MultiImage {
+    public final String name;
 
     // filePath to get the image of the artist
     public final List<AlbumCover> albumCovers;
 
-    public ArtistImage(String artistName, final List<AlbumCover> albumCovers) {
-        this.artistName = artistName;
+    public MultiImage(String name, final List<AlbumCover> albumCovers) {
+        this.name = name;
         this.albumCovers = albumCovers;
     }
 
-    static public ArtistImage fromArtist(Artist artist) {
+    static public MultiImage fromArtist(Artist artist) {
         final List<AlbumCover> covers = new ArrayList<>();
         for (final Album album : artist.albums) {
             final Song song = album.safeGetFirstSong();
             covers.add(new AlbumCover(album.getYear(), song.data));
         }
 
-        return new ArtistImage(artist.getName(), covers);
+        return new MultiImage(artist.getName(), covers);
+    }
+
+    static public MultiImage fromGenre(Genre genre) {
+        final List<AlbumCover> covers = new ArrayList<>();
+        for (final Song song : genre.songs) {
+            covers.add(new AlbumCover(song.albumId, song.data));
+        }
+
+        return new MultiImage(genre.name, covers);
     }
 
     public String toIdString() {
         StringBuilder id = new StringBuilder();
-        id.append(artistName);
+        id.append(name);
         for (AlbumCover albumCover: albumCovers) {
             id.append(albumCover.getYear()).append(albumCover.getFilePath());
         }
@@ -51,10 +61,10 @@ public class ArtistImage {
 
         if (obj == null || obj.getClass() != this.getClass()) return false;
 
-        ArtistImage compare = (ArtistImage) obj;
+        MultiImage compare = (MultiImage) obj;
 
         try {
-            return (compare.artistName.equals(this.artistName) && compare.hashCode() == this.hashCode());
+            return (compare.name.equals(this.name) && compare.hashCode() == this.hashCode());
         } catch (Exception e) {
             e.printStackTrace();
         }

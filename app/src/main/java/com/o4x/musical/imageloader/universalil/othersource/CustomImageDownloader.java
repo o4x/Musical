@@ -5,7 +5,7 @@ import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.o4x.musical.imageloader.model.ArtistImage;
+import com.o4x.musical.imageloader.model.MultiImage;
 import com.o4x.musical.imageloader.model.AudioFileCover;
 import com.o4x.musical.imageloader.util.AudioFileCoverUtils;
 
@@ -20,7 +20,7 @@ public class CustomImageDownloader extends BaseImageDownloader {
 
     private static final String PREFIX = "://";
     public static final String SCHEME_AUDIO = "audio" + PREFIX;
-    public static final String SCHEME_ARTIST = "artist" + PREFIX;
+    public static final String SCHEME_MULTI = "multi" + PREFIX;
 
     public CustomImageDownloader(Context context) {
         super(context);
@@ -33,8 +33,8 @@ public class CustomImageDownloader extends BaseImageDownloader {
         switch (imageUri.substring(0, imageUri.indexOf(PREFIX) + PREFIX.length())) {
             case SCHEME_AUDIO:
                 return getStreamFromAudio((AudioFileCover) extra);
-            case SCHEME_ARTIST:
-                return getStreamFromArtist((ArtistImage) extra);
+            case SCHEME_MULTI:
+                return getStreamFromMulti((MultiImage) extra);
             default:
                 return super.getStreamFromOtherSource(imageUri, extra);
         }
@@ -63,9 +63,9 @@ public class CustomImageDownloader extends BaseImageDownloader {
         return stream;
     }
 
-    private InputStream getStreamFromArtist(ArtistImage artistImage) {
-        Log.d("MOSAIC", "load data for" + artistImage.artistName);
-        InputStream stream = getMosaic(artistImage.albumCovers);
+    private InputStream getStreamFromMulti(MultiImage multiImage) {
+        Log.d("MOSAIC", "load data for" + multiImage.name);
+        InputStream stream = getMosaic(multiImage.albumCovers);
         return stream;
     }
 }

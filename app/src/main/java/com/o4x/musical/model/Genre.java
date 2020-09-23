@@ -3,15 +3,28 @@ package com.o4x.musical.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Genre implements Parcelable {
+
     public final int id;
     public final String name;
     public final int songCount;
+    public final List<Song> songs;
+
+    public Genre(final int id, final String name, final int songCount, final List<Song> songs) {
+        this.id = id;
+        this.name = name;
+        this.songCount = songCount;
+        this.songs = songs;
+    }
 
     public Genre(final int id, final String name, final int songCount) {
         this.id = id;
         this.name = name;
         this.songCount = songCount;
+        this.songs = new ArrayList<>();
     }
 
     @Override
@@ -23,6 +36,7 @@ public class Genre implements Parcelable {
 
         if (id != genre.id) return false;
         if (!name.equals(genre.name)) return false;
+        if (!songs.equals(genre.songs)) return false;
         return songCount == genre.songCount;
     }
 
@@ -31,6 +45,7 @@ public class Genre implements Parcelable {
         int result = id;
         result = 31 * result + name.hashCode();
         result = 31 * result + songCount;
+        result = 31 * result + (songs != null ? songs.hashCode() : 0);
         return result;
     }
 
@@ -40,6 +55,7 @@ public class Genre implements Parcelable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", songCount=" + songCount + '\'' +
+                ", songs=" + songs +
                 '}';
     }
 
@@ -53,17 +69,19 @@ public class Genre implements Parcelable {
         dest.writeInt(this.id);
         dest.writeString(this.name);
         dest.writeInt(this.songCount);
+        dest.writeTypedList(this.songs);
     }
 
     protected Genre(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
         this.songCount = in.readInt();
+        this.songs = in.createTypedArrayList(Song.CREATOR);
     }
 
     public static final Creator<Genre> CREATOR = new Creator<Genre>() {
         public Genre createFromParcel(Parcel source) {
-            return new Genre(source);
+            return new Genre( source);
         }
 
         public Genre[] newArray(int size) {

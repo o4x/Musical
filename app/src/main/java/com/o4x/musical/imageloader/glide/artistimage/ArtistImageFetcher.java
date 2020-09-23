@@ -1,8 +1,5 @@
 package com.o4x.musical.imageloader.glide.artistimage;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,21 +7,11 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.data.DataFetcher;
-import com.o4x.musical.imageloader.model.AlbumCover;
-import com.o4x.musical.imageloader.model.ArtistImage;
-import com.o4x.musical.util.ImageUtil;
+import com.o4x.musical.imageloader.model.MultiImage;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import static com.o4x.musical.imageloader.util.AudioFileCoverUtils.fallback;
 import static com.o4x.musical.imageloader.util.MosaicUtil.getMosaic;
 
 /**
@@ -32,17 +19,17 @@ import static com.o4x.musical.imageloader.util.MosaicUtil.getMosaic;
  */
 public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
-    private final ArtistImage model;
+    private final MultiImage model;
 
     private InputStream stream;
 
-    public ArtistImageFetcher(final ArtistImage model) {
+    public ArtistImageFetcher(final MultiImage model) {
         this.model = model;
     }
 
     @Override
     public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
-        Log.d("MOSAIC", "load data for" + model.artistName);
+        Log.d("MOSAIC", "load data for" + model.name);
         stream = getMosaic(model.albumCovers);
         callback.onDataReady(stream);
     }
@@ -79,7 +66,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
 
     public String getId() {
-        Log.d("MOSAIC", "get id for" + model.artistName);
+        Log.d("MOSAIC", "get id for" + model.name);
         // never return NULL here!
         // this id is used to determine whether the image is already cached
         // we use the artist name as well as the album years + file paths

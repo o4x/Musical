@@ -10,30 +10,30 @@ import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoaderFactory;
 import com.bumptech.glide.load.model.MultiModelLoaderFactory;
 import com.bumptech.glide.signature.ObjectKey;
-import com.o4x.musical.imageloader.model.ArtistImage;
+import com.o4x.musical.imageloader.model.MultiImage;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 
-public class ArtistImageLoader implements ModelLoader<ArtistImage, InputStream> {
+public class ArtistImageLoader implements ModelLoader<MultiImage, InputStream> {
 
     @Nullable
     @Override
-    public LoadData<InputStream> buildLoadData(@NonNull ArtistImage artistImage, int width, int height, @NonNull Options options) {
-        return  new LoadData<>(new ObjectKey(artistImage), new ArtistImageFetcher(artistImage));
+    public LoadData<InputStream> buildLoadData(@NonNull MultiImage multiImage, int width, int height, @NonNull Options options) {
+        return  new LoadData<>(new ObjectKey(multiImage), new ArtistImageFetcher(multiImage));
     }
 
     @Override
-    public boolean handles(@NonNull ArtistImage artistImage) {
+    public boolean handles(@NonNull MultiImage multiImage) {
         return true;
     }
 
-    public static class Factory implements ModelLoaderFactory<ArtistImage, InputStream> {
+    public static class Factory implements ModelLoaderFactory<MultiImage, InputStream> {
 
         @NonNull
         @Override
-        public ModelLoader<ArtistImage, InputStream> build(@NonNull MultiModelLoaderFactory multiFactory) {
+        public ModelLoader<MultiImage, InputStream> build(@NonNull MultiModelLoaderFactory multiFactory) {
             return new ArtistImageLoader();
         }
 
