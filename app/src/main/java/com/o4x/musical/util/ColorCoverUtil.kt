@@ -25,8 +25,8 @@ object ColorCoverUtil {
                 context,
                 id
             ),
-            text.split(" ").elementAtOrNull(0)?.elementAtOrNull(0),
-            text.split(" ").elementAtOrNull(1)?.elementAtOrNull(0)
+            text.split(" ").firstOrNull()?.firstOrNull(),
+            text.split(" ").lastOrNull()?.firstOrNull()
         )
     }
 

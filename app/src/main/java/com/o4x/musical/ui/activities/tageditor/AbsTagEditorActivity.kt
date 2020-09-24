@@ -18,30 +18,30 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.NestedScrollView
 import androidx.palette.graphics.Palette
 import butterknife.BindView
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.util.ATHUtil
 import com.afollestad.materialdialogs.MaterialDialog
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.textfield.TextInputEditText
+import com.nostra13.universalimageloader.core.DisplayImageOptions
+import com.nostra13.universalimageloader.core.assist.FailReason
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.R
-import com.o4x.musical.extensions.surfaceColor
+import com.o4x.musical.imageloader.universalil.UniversalIL
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
 import com.o4x.musical.ui.dialogs.DiscardTagsDialog
-import com.o4x.musical.util.ImageUtil
-import com.o4x.musical.util.PhonographColorUtil
-import com.o4x.musical.util.TagUtil
+import com.o4x.musical.util.*
 import com.o4x.musical.util.TagUtil.ArtworkInfo
 import org.jaudiotagger.tag.FieldKey
 import java.io.Serializable
 import java.util.*
+import com.o4x.musical.extensions.surfaceColor
+import kotlin.math.min
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -87,9 +87,9 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
 
     protected var id = 0
         private set
+
     private var headerVariableSpace = 0
-    private var paletteColorPrimary = 0
-    private var colorPrimary = 0
+
     private var textWatcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
         override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -97,8 +97,10 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
             dataChanged()
         }
     }
+
     private var albumArtBitmap: Bitmap? = null
     private var deleteAlbumArt = false
+
     @JvmField
     protected var tagUtil: TagUtil? = null
 
@@ -112,6 +114,10 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         createTagUtil()
         headerVariableSpace = resources.getDimensionPixelSize(R.dimen.tagEditorHeaderVariableSpace)
         setupViews()
+        setStatusBarColorAuto()
+        setNavigationBarColorAuto()
+        setNavigationBarDividerColorAuto()
+        toolbar?.setBackgroundColor(surfaceColor())
         setSupportActionBar(toolbar)
         supportActionBar!!.setTitle(R.string.action_tag_editor)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -229,7 +235,7 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         when (requestCode) {
             REQUEST_CODE_SELECT_IMAGE -> if (resultCode == RESULT_OK) {
                 val selectedImage = data!!.data
-                loadImageFromFile(selectedImage)
+                loadImageFromFile(selectedImage, null)
             }
             AbsSearchOnlineActivity.REQUEST_CODE -> try {
                 if (resultCode == RESULT_OK) {
@@ -241,7 +247,7 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
                             result?.let { fillViewsWithResult(it) }
                         } else if (extras.containsKey(AbsSearchOnlineActivity.EXTRA_RESULT_COVER)) {
                             loadImageFromUrl(
-                                extras.getString(AbsSearchOnlineActivity.EXTRA_RESULT_COVER)
+                                extras.getString(AbsSearchOnlineActivity.EXTRA_RESULT_COVER), null
                             )
                         }
                     }
@@ -256,24 +262,14 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         }
     }
 
-    protected fun setImageBitmap(bitmap: Bitmap?, bgColor: Int) {
+    protected fun setImageBitmap(bitmap: Bitmap?) {
         if (bitmap == null) {
-            image!!.setImageResource(R.drawable.default_album_art)
+            val b: Bitmap = ColorCoverUtil.createSquareCoverWithText(
+                this, tagUtil?.albumTitle ?: "", id, Util.getScreenWidth())
+            image?.setImageBitmap(b)
         } else {
-            image!!.setImageBitmap(bitmap)
+            image?.setImageBitmap(bitmap)
         }
-        setColors(bgColor)
-    }
-
-    private fun setColors(color: Int) {
-        paletteColorPrimary = color
-
-        colorPrimary = ATHUtil.resolveColor(this, R.attr.colorSurface)
-        header?.setBackgroundColor(colorPrimary)
-        toolbar?.setBackgroundColor(colorPrimary)
-        setStatusBarColor(colorPrimary)
-        setNavigationBarColor(colorPrimary)
-        setTaskDescriptionColor(colorPrimary)
     }
 
     protected fun searchWebFor(vararg keys: String?) {
@@ -297,15 +293,12 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
 
     private fun loadCurrentImage() {
         val bitmap = tagUtil!!.albumArt
-        setImageBitmap(bitmap,
-            PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(bitmap),
-                ATHUtil.resolveColor(this, R.attr.defaultFooterColor)))
+        setImageBitmap(bitmap)
         deleteAlbumArt = false
     }
 
     private fun deleteImage() {
-        setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.default_album_art),
-            ATHUtil.resolveColor(this, R.attr.defaultFooterColor))
+        setImageBitmap(null)
         deleteAlbumArt = true
         dataChanged()
     }
@@ -330,50 +323,38 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
             })
     }
 
-    private fun loadImageFromFile(selectedFile: Uri?) {
-        Glide.with(this@AbsTagEditorActivity)
-            .asBitmap()
-            .load(selectedFile)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .into(object : CustomTarget<Bitmap?>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
-                    val palette = Palette.from(resource).generate()
-                    PhonographColorUtil.getColor(palette, Color.TRANSPARENT)
-                    albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048)
-                    setImageBitmap(albumArtBitmap,
-                        PhonographColorUtil.getColor(palette,
-                            ATHUtil.resolveColor(this@AbsTagEditorActivity,
-                                R.attr.defaultFooterColor)))
-                    deleteAlbumArt = false
-                    dataChanged()
-                    setResult(RESULT_OK)
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {}
-            })
+    private fun loadImageFromFile(selectedFile: Uri?, name: String?) {
+        loadImageFromUrl(selectedFile?.toString(), name)
     }
 
-    protected fun loadImageFromUrl(url: String?) {
-        Glide.with(this@AbsTagEditorActivity)
-            .asBitmap()
-            .load(url)
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
-            .error(R.drawable.default_album_art)
-            .into(object : CustomTarget<Bitmap?>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
-                    albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048)
-                    setImageBitmap(albumArtBitmap,
-                        PhonographColorUtil.getColor(Palette.from(resource).generate(),
-                            ATHUtil.resolveColor(this@AbsTagEditorActivity,
-                                R.attr.defaultFooterColor)))
-                    deleteAlbumArt = false
-                    dataChanged()
-                    setResult(RESULT_OK)
-                }
+    protected fun loadImageFromUrl(url: String?, name: String?) {
+        url?.let {
 
-                override fun onLoadCleared(placeholder: Drawable?) {}
-            })
+            UniversalIL.imageLoader?.loadImage(
+                url,
+                DisplayImageOptions
+                    .Builder()
+                    .cacheOnDisk(true)
+                    .cacheInMemory(true)
+                    .build(),
+                object: SimpleImageLoadingListener() {
+                    override fun onLoadingComplete(
+                        imageUri: String?,
+                        view: View?,
+                        loadedImage: Bitmap?,
+                    ) {
+                        super.onLoadingComplete(imageUri, view, loadedImage)
+                        loadedImage?.let {
+                            albumArtBitmap = ImageUtil.resizeBitmap(loadedImage, 2048)
+                            setImageBitmap(albumArtBitmap)
+                            deleteAlbumArt = false
+                            dataChanged()
+                            setResult(RESULT_OK)
+                        }
+                    }
+                }
+            )
+        }
     }
 
     protected abstract val contentViewLayout: Int
