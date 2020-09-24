@@ -42,7 +42,7 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Res
 
     @Override
     protected void fillViewsWithResult(ITunesModel.Results result) {
-        loadImageFromUrl(result.getBigArtworkUrl());
+        loadImageFromUrl(result.getBigArtworkUrl(), result.collectionName);
         if (songName != null)
             songName.setText(result.trackName);
         if (albumName != null)
@@ -96,7 +96,7 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Res
                 if (lastFmAlbum.getAlbum() != null) {
                     String url = LastFMUtil.getLargestAlbumImageUrl(lastFmAlbum.getAlbum().getImage());
                     if (!TextUtils.isEmpty(url) && url.trim().length() > 0) {
-                        loadImageFromUrl(url);
+                        loadImageFromUrl(url, null);
                         return;
                     }
                 }

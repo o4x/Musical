@@ -30,7 +30,7 @@ public class SongTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Resu
 
     @Override
     protected void fillViewsWithResult(ITunesModel.Results result) {
-        loadImageFromUrl(result.getBigArtworkUrl());
+        loadImageFromUrl(result.getBigArtworkUrl(), result.collectionName);
         if (songName != null)
             songName.setText(result.trackName);
         if (albumName != null)

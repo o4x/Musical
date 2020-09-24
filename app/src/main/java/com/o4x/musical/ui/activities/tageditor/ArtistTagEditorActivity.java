@@ -33,7 +33,7 @@ public class ArtistTagEditorActivity extends AbsTagEditorActivity<DeezerArtistMo
 
     @Override
     protected void fillViewsWithResult(DeezerArtistModel.Data result) {
-        loadImageFromUrl(result.pictureXl);
+        loadImageFromUrl(result.pictureXl, result.name);
         if (artistName != null)
             artistName.setText(result.name);
     }

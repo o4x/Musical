@@ -28,7 +28,8 @@ public class SongOnlineAdapter
         try {
             String url = getArtUrl(position);
             if (holder.image != null)
-            UniversalIL.onlineAlbumImageLoader(url, holder.image, null);
+            UniversalIL.uriImageLoader(
+                    url, data.get(position).collectionName, holder.image, null);
             if (holder.title != null)
             holder.title.setText(data.get(position).trackName);
             if (holder.text != null)

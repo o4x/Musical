@@ -11,7 +11,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.utils.L
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils
-import com.o4x.musical.R
 import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.universalil.othersource.CustomImageDownloader
@@ -59,7 +58,7 @@ object UniversalIL {
     ) {
 
         val b: Bitmap = createSquareCoverWithText(
-            image.context, song.title, song.hashCode(), size)
+            image.context, song.albumName, song.albumId, size)
         val d: Drawable = b.toDrawable(image.resources)
         listener?.setOnFailedBitmap(b)
 
@@ -172,15 +171,16 @@ object UniversalIL {
     }
 
     @JvmStatic
-    fun onlineAlbumImageLoader(
+    fun uriImageLoader(
         url: String,
+        name: String,
         image: ImageView,
         listener: AbsImageLoadingListener?,
         size: Int = DEFAULT_SIZE
     ) {
 
         val b: Bitmap = createSquareCoverWithText(
-            image.context, "", url.hashCode(), size)
+            image.context, name, url.hashCode(), size)
         val d: Drawable = b.toDrawable(image.resources)
         listener?.setOnFailedBitmap(b)
 
@@ -190,7 +190,6 @@ object UniversalIL {
             DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
-                .showImageOnLoading(d)
                 .showImageOnFail(d)
                 .showImageForEmptyUri(d)
                 .build(),
@@ -220,8 +219,8 @@ object UniversalIL {
             = genreImageLoader(genre, image, listener, DEFAULT_SIZE)
 
     @JvmStatic
-    fun onlineAlbumImageLoader(url: String, image: ImageView, listener: AbsImageLoadingListener?)
-        = onlineAlbumImageLoader(url, image, listener, DEFAULT_SIZE)
+    fun uriImageLoader(url: String, name: String, image: ImageView, listener: AbsImageLoadingListener?)
+        = uriImageLoader(url, name, image, listener, DEFAULT_SIZE)
 
     @JvmStatic
     fun audioFileImageLoader(audioFileCover: AudioFileCover, image: ImageView, listener: AbsImageLoadingListener?)
