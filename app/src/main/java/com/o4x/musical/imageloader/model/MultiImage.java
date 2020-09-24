@@ -11,12 +11,13 @@ import java.util.List;
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class MultiImage {
+    public final int id;
     public final String name;
-
     // filePath to get the image of the artist
     public final List<AlbumCover> albumCovers;
 
-    public MultiImage(String name, final List<AlbumCover> albumCovers) {
+    public MultiImage(int id, String name, final List<AlbumCover> albumCovers) {
+        this.id = id;
         this.name = name;
         this.albumCovers = albumCovers;
     }
@@ -28,7 +29,7 @@ public class MultiImage {
 //            covers.add(new AlbumCover(album.getYear(), song.data));
 //        }
 
-        return new MultiImage(artist.getName(), covers);
+        return new MultiImage(artist.getId(), artist.getName(), covers);
     }
 
     static public MultiImage fromGenre(Genre genre) {
@@ -37,7 +38,7 @@ public class MultiImage {
             covers.add(new AlbumCover(song.albumId, song.data));
         }
 
-        return new MultiImage(genre.name, covers);
+        return new MultiImage(genre.id, genre.name, covers);
     }
 
     public String toIdString() {

@@ -2,28 +2,23 @@ package com.o4x.musical.ui.activities.tageditor;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.R;
 import com.o4x.musical.loader.AlbumLoader;
+import com.o4x.musical.loader.ArtistLoader;
+import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.network.ApiClient;
 import com.o4x.musical.network.Models.ITunesModel;
-import com.o4x.musical.network.Models.LastFmAlbum;
-import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
-import com.o4x.musical.util.LastFMUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Results> {
 
@@ -42,7 +37,7 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Res
 
     @Override
     protected void fillViewsWithResult(ITunesModel.Results result) {
-        loadImageFromUrl(result.getBigArtworkUrl(), result.collectionName);
+        loadImageFromUrl(result.getBigArtworkUrl(), null);
         if (songName != null)
             songName.setText(result.trackName);
         if (albumName != null)
@@ -55,6 +50,15 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Res
             year.setText(result.getYear());
         if (trackNumber != null)
             trackNumber.setText(String.valueOf(result.trackNumber));
+    }
+
+    @NotNull
+    @Override
+    protected Artist getArtist() {
+        return ArtistLoader.getArtist(
+                this,
+                AlbumLoader.getAlbum(this, getId()).getArtistId()
+        );
     }
 
     @NonNull
@@ -78,40 +82,5 @@ public class AlbumTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Res
         Intent intent = new Intent(this, AlbumSearchActivity.class);
         intent.putExtra(AlbumSearchActivity.EXTRA_SONG_NAME, tagUtil.getAlbumTitle());
         this.startActivityForResult(intent, AlbumSearchActivity.REQUEST_CODE);
-    }
-
-    @Override
-    protected void getImageFromLastFM() {
-        String albumTitleStr = albumName.getText().toString();
-        String albumArtistNameStr = artistName.getText().toString();
-        if (albumArtistNameStr.trim().equals("") || albumTitleStr.trim().equals("")) {
-            Toast.makeText(this, getResources().getString(R.string.album_or_artist_empty), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ApiClient.getClient(this).create(LastFMService.class)
-                .getAlbumInfo(albumTitleStr, albumArtistNameStr, null).enqueue(new Callback<LastFmAlbum>() {
-            @Override
-            public void onResponse(Call<LastFmAlbum> call, Response<LastFmAlbum> response) {
-                LastFmAlbum lastFmAlbum = response.body();
-                if (lastFmAlbum.getAlbum() != null) {
-                    String url = LastFMUtil.getLargestAlbumImageUrl(lastFmAlbum.getAlbum().getImage());
-                    if (!TextUtils.isEmpty(url) && url.trim().length() > 0) {
-                        loadImageFromUrl(url, null);
-                        return;
-                    }
-                }
-                toastLoadingFailed();
-            }
-
-            @Override
-            public void onFailure(Call<LastFmAlbum> call, Throwable t) {
-                toastLoadingFailed();
-            }
-
-            private void toastLoadingFailed() {
-                Toast.makeText(AlbumTagEditorActivity.this,
-                        R.string.could_not_download_album_cover, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

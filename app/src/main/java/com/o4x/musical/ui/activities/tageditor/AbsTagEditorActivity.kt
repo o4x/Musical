@@ -3,9 +3,6 @@ package com.o4x.musical.ui.activities.tageditor
 import android.app.SearchManager
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -18,18 +15,15 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
-import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.NestedScrollView
-import androidx.palette.graphics.Palette
 import butterknife.BindView
 import butterknife.ButterKnife
-import code.name.monkey.appthemehelper.util.ATHUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.nostra13.universalimageloader.core.DisplayImageOptions
-import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.R
+import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.imageloader.universalil.UniversalIL
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
@@ -41,7 +35,7 @@ import org.jaudiotagger.tag.FieldKey
 import java.io.Serializable
 import java.util.*
 import com.o4x.musical.extensions.surfaceColor
-import kotlin.math.min
+import com.o4x.musical.model.Artist
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -58,8 +52,11 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     @BindView(R.id.toolbar)
     var toolbar: Toolbar? = null
     @JvmField
-    @BindView(R.id.image)
-    var image: ImageView? = null
+    @BindView(R.id.album_image)
+    var albumImage: ImageView? = null
+    @JvmField
+    @BindView(R.id.artist_image)
+    var artistImage: ImageView? = null
     @JvmField
     @BindView(R.id.header)
     var header: LinearLayout? = null
@@ -100,6 +97,8 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
 
     private var albumArtBitmap: Bitmap? = null
     private var deleteAlbumArt = false
+    private var artistArtBitmap: Bitmap? = null
+    private var deleteArtistArt = false
 
     @JvmField
     protected var tagUtil: TagUtil? = null
@@ -163,14 +162,15 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     private fun setupViews() {
         setupScrollView()
         setupSearchButton()
-        setupImageView()
+        setupAlbumImageView()
+        setupArtistImageView()
         setupTextInputEditTexts()
     }
 
     private fun setupScrollView() {
-        scrollView!!.setOnScrollChangeListener(
+        scrollView?.setOnScrollChangeListener(
             NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
-                image!!.translationY = scrollY / 2f
+                albumImage?.translationY = scrollY / 2f
             }
         )
     }
@@ -180,26 +180,53 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         searchBtn?.setOnClickListener { searchOnline() }
     }
 
-    private fun setupImageView() {
-        loadCurrentImage()
+    private fun setupAlbumImageView() {
+
+        val bitmap = tagUtil!!.albumArt
+        setAlbumImageBitmap(bitmap)
+
         val items = arrayOf<CharSequence>(
-            getString(R.string.download_from_last_fm),
             getString(R.string.pick_from_local_storage),
             getString(R.string.web_search),
             getString(R.string.remove_cover)
         )
-        image!!.setOnClickListener {
+        albumImage?.setOnClickListener {
             MaterialDialog.Builder(this@AbsTagEditorActivity)
                 .title(R.string.update_image)
                 .items(*items)
                 .itemsCallback { _: MaterialDialog?, _: View?, which: Int, _: CharSequence? ->
                     when (which) {
-                        0 -> getImageFromLastFM()
-                        1 -> startImagePicker()
-                        2 -> searchImageOnWeb()
-                        3 -> deleteImage()
+                        0 -> startImagePicker(REQUEST_CODE_SELECT_ALBUM_IMAGE)
+                        1 -> searchImageOnWeb()
+                        2 -> deleteAlbumImage()
                     }
                 }.show()
+        }
+    }
+
+    private fun setupArtistImageView() {
+        artistImage?.let {
+
+            UniversalIL.artistImageLoader(
+                artist, it)
+
+            val items = arrayOf<CharSequence>(
+                getString(R.string.pick_from_local_storage),
+                getString(R.string.web_search),
+                getString(R.string.remove_cover)
+            )
+            it.setOnClickListener {
+                MaterialDialog.Builder(this@AbsTagEditorActivity)
+                    .title(R.string.update_image)
+                    .items(*items)
+                    .itemsCallback { _: MaterialDialog?, _: View?, which: Int, _: CharSequence? ->
+                        when (which) {
+                            0 -> startImagePicker(REQUEST_CODE_SELECT_ARTIST_IMAGE)
+                            1 -> searchImageOnWeb()
+                            2 -> deleteArtistImage()
+                        }
+                    }.show()
+            }
         }
     }
 
@@ -233,10 +260,19 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_CODE_SELECT_IMAGE -> if (resultCode == RESULT_OK) {
-                val selectedImage = data!!.data
-                loadImageFromFile(selectedImage, null)
-            }
+
+            REQUEST_CODE_SELECT_ALBUM_IMAGE ->
+                if (resultCode == RESULT_OK) {
+                    val selectedImage = data!!.data
+                    loadImageFromFile(selectedImage)
+                }
+
+            REQUEST_CODE_SELECT_ARTIST_IMAGE ->
+                if (resultCode == RESULT_OK) {
+                    val selectedImage = data!!.data
+                    loadImageFromFile(selectedImage, true)
+                }
+
             AbsSearchOnlineActivity.REQUEST_CODE -> try {
                 if (resultCode == RESULT_OK) {
                     val extras = data!!.extras
@@ -262,13 +298,28 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         }
     }
 
-    protected fun setImageBitmap(bitmap: Bitmap?) {
-        if (bitmap == null) {
-            val b: Bitmap = ColorCoverUtil.createSquareCoverWithText(
-                this, tagUtil?.albumTitle ?: "", id, Util.getScreenWidth())
-            image?.setImageBitmap(b)
-        } else {
-            image?.setImageBitmap(bitmap)
+    protected fun setAlbumImageBitmap(bitmap: Bitmap?) {
+        albumImage?.let {
+            if (bitmap == null) {
+                val b: Bitmap = ColorCoverUtil.createSquareCoverWithText(
+                    this, tagUtil?.albumTitle ?: "", id, Util.getScreenWidth())
+                it.setImageBitmap(b)
+            } else {
+                it.setImageBitmap(bitmap)
+            }
+        }
+    }
+
+    protected fun setArtistImageBitmap(bitmap: Bitmap?) {
+        artistImage?.let {
+            if (bitmap == null) {
+                val artist = artist
+                val b: Bitmap = ColorCoverUtil.createSquareCoverWithText(
+                    this, artist.name, artist.id, Util.getScreenWidth())
+                it.setImageBitmap(b)
+            } else {
+                it.setImageBitmap(bitmap)
+            }
         }
     }
 
@@ -284,22 +335,15 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         startActivity(intent)
     }
 
-    private fun startImagePicker() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        startActivityForResult(Intent.createChooser(intent,
-            getString(R.string.pick_from_local_storage)), REQUEST_CODE_SELECT_IMAGE)
-    }
-
-    private fun loadCurrentImage() {
-        val bitmap = tagUtil!!.albumArt
-        setImageBitmap(bitmap)
-        deleteAlbumArt = false
-    }
-
-    private fun deleteImage() {
-        setImageBitmap(null)
+    private fun deleteAlbumImage() {
+        setAlbumImageBitmap(null)
         deleteAlbumArt = true
+        dataChanged()
+    }
+
+    private fun deleteArtistImage() {
+        setArtistImageBitmap(null)
+        deleteArtistArt = true
         dataChanged()
     }
 
@@ -321,20 +365,32 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
                 else -> ArtworkInfo(
                     id, albumArtBitmap)
             })
+
+        when {
+            deleteArtistArt -> {
+                CustomImageUtil(artist).resetCustomImage()
+            }
+            artistArtBitmap == null -> null
+            else -> {
+                CustomImageUtil(artist).setCustomImage(artistArtBitmap)
+            }
+        }
+
+        finish()
     }
 
-    private fun loadImageFromFile(selectedFile: Uri?, name: String?) {
-        loadImageFromUrl(selectedFile?.toString(), name)
+    private fun loadImageFromFile(selectedFile: Uri?, forArtist: Boolean? = null) {
+        loadImageFromUrl(selectedFile?.toString(), forArtist)
     }
 
-    protected fun loadImageFromUrl(url: String?, name: String?) {
+    protected fun loadImageFromUrl(url: String?, forArtist: Boolean? = null) {
         url?.let {
 
             UniversalIL.imageLoader?.loadImage(
                 url,
                 DisplayImageOptions
                     .Builder()
-                    .cacheOnDisk(true)
+                    .cacheOnDisk(false)
                     .cacheInMemory(true)
                     .build(),
                 object: SimpleImageLoadingListener() {
@@ -345,9 +401,17 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
                     ) {
                         super.onLoadingComplete(imageUri, view, loadedImage)
                         loadedImage?.let {
-                            albumArtBitmap = ImageUtil.resizeBitmap(loadedImage, 2048)
-                            setImageBitmap(albumArtBitmap)
-                            deleteAlbumArt = false
+
+                            if (forArtist == true) {
+                                artistArtBitmap = ImageUtil.resizeBitmap(loadedImage, 2048)
+                                setArtistImageBitmap(artistArtBitmap)
+                                deleteArtistArt = false
+                            } else  {
+                                albumArtBitmap = ImageUtil.resizeBitmap(loadedImage, 2048)
+                                setAlbumImageBitmap(albumArtBitmap)
+                                deleteAlbumArt = false
+                            }
+
                             dataChanged()
                             setResult(RESULT_OK)
                         }
@@ -358,8 +422,8 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     }
 
     protected abstract val contentViewLayout: Int
+    protected abstract val artist: Artist
     protected abstract val songPaths: List<String>
-    protected abstract fun getImageFromLastFM()
     protected abstract fun searchImageOnWeb()
     protected abstract fun searchOnline()
 
@@ -367,6 +431,7 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         const val EXTRA_ID = "extra_id"
         const val EXTRA_PALETTE = "extra_palette"
         private val TAG = AbsTagEditorActivity::class.java.simpleName
-        private const val REQUEST_CODE_SELECT_IMAGE = 1000
+        private const val REQUEST_CODE_SELECT_ALBUM_IMAGE = 1000
+        private const val REQUEST_CODE_SELECT_ARTIST_IMAGE = 1001
     }
 }

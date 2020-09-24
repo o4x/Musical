@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 
 import com.o4x.musical.R;
 import com.o4x.musical.loader.ArtistLoader;
+import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.network.Models.DeezerArtistModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.ArtistSearchActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,15 @@ public class ArtistTagEditorActivity extends AbsTagEditorActivity<DeezerArtistMo
     @Override
     protected int getContentViewLayout() {
         return R.layout.activity_artist_tag_editor;
+    }
+
+    @NotNull
+    @Override
+    protected Artist getArtist() {
+        return ArtistLoader.getArtist(
+                this,
+                getId()
+        );
     }
 
     @NonNull
@@ -33,7 +45,7 @@ public class ArtistTagEditorActivity extends AbsTagEditorActivity<DeezerArtistMo
 
     @Override
     protected void fillViewsWithResult(DeezerArtistModel.Data result) {
-        loadImageFromUrl(result.pictureXl, result.name);
+        loadImageFromUrl(result.pictureXl, null);
         if (artistName != null)
             artistName.setText(result.name);
     }
@@ -49,10 +61,4 @@ public class ArtistTagEditorActivity extends AbsTagEditorActivity<DeezerArtistMo
         intent.putExtra(ArtistSearchActivity.EXTRA_SONG_NAME, tagUtil.getArtistName());
         this.startActivityForResult(intent, ArtistSearchActivity.REQUEST_CODE);
     }
-
-    @Override
-    protected void getImageFromLastFM() {
-        
-    }
-
 }

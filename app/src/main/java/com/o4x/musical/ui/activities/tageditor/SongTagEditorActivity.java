@@ -5,9 +5,13 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.R;
+import com.o4x.musical.loader.ArtistLoader;
 import com.o4x.musical.loader.SongLoader;
+import com.o4x.musical.model.Artist;
 import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.SongSearchActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +24,15 @@ public class SongTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Resu
         return R.layout.activity_song_tag_editor;
     }
 
+    @NotNull
+    @Override
+    protected Artist getArtist() {
+        return ArtistLoader.getArtist(
+                this,
+                SongLoader.getSong(this, getId()).artistId
+        );
+    }
+
     @NonNull
     @Override
     protected List<String> getSongPaths() {
@@ -30,7 +43,7 @@ public class SongTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Resu
 
     @Override
     protected void fillViewsWithResult(ITunesModel.Results result) {
-        loadImageFromUrl(result.getBigArtworkUrl(), result.collectionName);
+        loadImageFromUrl(result.getBigArtworkUrl(), null);
         if (songName != null)
             songName.setText(result.trackName);
         if (albumName != null)
@@ -60,10 +73,4 @@ public class SongTagEditorActivity extends AbsTagEditorActivity<ITunesModel.Resu
         intent.putExtra(SongSearchActivity.EXTRA_SONG_NAME, tagUtil.getSongTitle());
         this.startActivityForResult(intent, SongSearchActivity.REQUEST_CODE);
     }
-
-    @Override
-    protected void getImageFromLastFM() {
-
-    }
-
 }
