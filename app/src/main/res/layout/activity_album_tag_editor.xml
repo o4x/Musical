@@ -26,12 +26,12 @@
             android:layout_height="match_parent">
 
             <com.o4x.musical.views.WidthFitSquareLayout
-                android:id="@+id/image_container"
+                android:id="@+id/album_image_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/image"
+                    android:id="@+id/album_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -45,7 +45,7 @@
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image_container"
+                android:layout_below="@+id/album_image_container"
                 android:elevation="@dimen/toolbar_elevation"
                 android:minHeight="@dimen/title_view_height"
                 android:orientation="vertical"
@@ -54,6 +54,21 @@
                 android:paddingRight="16dp"
                 android:paddingBottom="8dp"
                 tools:ignore="UnusedAttribute">
+
+                <com.o4x.musical.views.WidthFitSquareLayout
+                    android:id="@+id/artist_image_container"
+                    android:layout_width="@dimen/detail_header_image_height"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/artist_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/default_artist_image"
+                        tools:ignore="ContentDescription" />
+
+                </com.o4x.musical.views.WidthFitSquareLayout>
 
             </LinearLayout>
 

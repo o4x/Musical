@@ -105,17 +105,16 @@ object UniversalIL {
         customImageUtil: CustomImageUtil,
         multiImage: MultiImage,
         image: ImageView,
-        listener: AbsImageLoadingListener?,
+        listener: AbsImageLoadingListener? = null,
         size: Int = DEFAULT_SIZE
     ) {
 
         val b: Bitmap = createSquareCoverWithText(
-            image.context, multiImage.name, multiImage.hashCode(), size)
+            image.context, multiImage.name, multiImage.id, size)
         val d: Drawable = b.toDrawable(image.resources)
         listener?.setOnFailedBitmap(b)
 
-        val hasCustomImage = customImageUtil.hasCustomImage()
-        if (hasCustomImage) {
+        if (customImageUtil.hasCustomImage()) {
             imageLoader?.displayImage(
                 customImageUtil.path,
                 image,
@@ -144,8 +143,8 @@ object UniversalIL {
     fun artistImageLoader(
         artist: Artist,
         image: ImageView,
-        listener: AbsImageLoadingListener?,
-        size: Int = DEFAULT_SIZE
+        listener: AbsImageLoadingListener? = null,
+        size: Int = DEFAULT_SIZE,
     ) {
         multiImageLoader(
             CustomImageUtil(artist),

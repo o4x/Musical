@@ -64,7 +64,6 @@ public class CustomImageUtil {
         this.type = Type.PLAYLIST;
     }
 
-    @SuppressLint("StaticFieldLeak")
     public void setCustomImage(Uri uri) {
         Glide.with(App.getInstance())
                 .asBitmap()
@@ -74,30 +73,7 @@ public class CustomImageUtil {
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        new AsyncTask<Void, Void, Void>() {
-                            @SuppressLint("ApplySharedPref")
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                File file = getFile();
-
-                                boolean succesful = false;
-                                try {
-                                    OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-                                    succesful = ImageUtil.resizeBitmap(resource, 2048).compress(Bitmap.CompressFormat.JPEG, 100, os);
-                                    os.close();
-                                } catch (IOException e) {
-                                    Toast.makeText(App.getInstance(), e.toString(), Toast.LENGTH_LONG).show();
-                                }
-
-                                if (succesful) {
-                                    // Remove cache from universal image loader for reload image
-                                    // For glide we don't need to remove cache, it's work with Signature
-                                    UniversalIL.removeFromCache(getPath());
-                                    notifyChange();
-                                }
-                                return null;
-                            }
-                        }.execute();
+                        setCustomImage(resource);
                     }
 
                     @Override
@@ -110,6 +86,34 @@ public class CustomImageUtil {
                         super.onLoadFailed(errorDrawable);
                     }
                 });
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void setCustomImage(Bitmap bitmap) {
+        if (bitmap == null) return;
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                File file = getFile();
+
+                boolean succesful = false;
+                try {
+                    OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+                    succesful = ImageUtil.resizeBitmap(bitmap, 2048).compress(Bitmap.CompressFormat.JPEG, 100, os);
+                    os.close();
+                } catch (IOException e) {
+                    Toast.makeText(App.getInstance(), e.toString(), Toast.LENGTH_LONG).show();
+                }
+
+                if (succesful) {
+                    // Remove cache from universal image loader for reload image
+                    // For glide we don't need to remove cache, it's work with Signature
+                    UniversalIL.removeFromCache(getPath());
+                    notifyChange();
+                }
+                return null;
+            }
+        }.execute();
     }
 
     @SuppressLint("StaticFieldLeak")
