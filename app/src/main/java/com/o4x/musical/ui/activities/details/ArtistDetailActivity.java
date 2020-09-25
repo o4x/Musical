@@ -459,7 +459,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
 
     @Override
     public Loader<Artist> onCreateLoader(int id, Bundle args) {
-        return new AsyncArtistDataLoader(this, args.getInt(EXTRA_ARTIST_ID));
+        return new AsyncArtistDataLoader(this, args.getLong(EXTRA_ARTIST_ID));
     }
 
     @Override
@@ -475,9 +475,9 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
     }
 
     private static class AsyncArtistDataLoader extends WrappedAsyncTaskLoader<Artist> {
-        private final int artistId;
+        private final long artistId;
 
-        public AsyncArtistDataLoader(Context context, int artistId) {
+        public AsyncArtistDataLoader(Context context, long artistId) {
             super(context);
             this.artistId = artistId;
         }

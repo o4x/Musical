@@ -11,12 +11,12 @@ import java.util.List;
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class MultiImage {
-    public final int id;
+    public final long id;
     public final String name;
     // filePath to get the image of the artist
     public final List<AlbumCover> albumCovers;
 
-    public MultiImage(int id, String name, final List<AlbumCover> albumCovers) {
+    public MultiImage(long id, String name, final List<AlbumCover> albumCovers) {
         this.id = id;
         this.name = name;
         this.albumCovers = albumCovers;
@@ -45,7 +45,7 @@ public class MultiImage {
         StringBuilder id = new StringBuilder();
         id.append(name);
         for (AlbumCover albumCover: albumCovers) {
-            id.append(albumCover.getYear()).append(albumCover.getFilePath());
+            id.append(albumCover.getId()).append(albumCover.getFilePath());
         }
         return id.toString();
     }

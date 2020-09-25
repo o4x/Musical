@@ -5,24 +5,23 @@ package com.o4x.musical.imageloader.model;
  */
 public class AlbumCover {
 
-    private int year;
-
+    private long id;
     private String filePath;
 
-    public AlbumCover(int year, String filePath) {
+    public AlbumCover(long id, String filePath) {
 
         this.filePath = filePath;
-        this.year = year;
+        this.id = id;
     }
 
-    public int getYear() {
+    public long getId() {
 
-        return year;
+        return id;
     }
 
-    public void setYear(int year) {
+    public void setId(int year) {
 
-        this.year = year;
+        this.id = year;
     }
 
     public String getFilePath() {

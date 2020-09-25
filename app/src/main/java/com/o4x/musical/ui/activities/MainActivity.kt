@@ -258,14 +258,14 @@ class MainActivity : AbsMusicPanelActivity() {
                 handled = true
             }
         } else if (MediaStore.Audio.Albums.CONTENT_TYPE == mimeType) {
-            val id = parseIdFromIntent(intent, "albumId", "album").toInt()
+            val id = parseIdFromIntent(intent, "albumId", "album")
             if (id >= 0) {
                 val position = intent.getIntExtra("position", 0)
                 MusicPlayerRemote.openQueue(AlbumLoader.getAlbum(this, id).songs, position, true)
                 handled = true
             }
         } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
-            val id = parseIdFromIntent(intent, "artistId", "artist").toInt()
+            val id = parseIdFromIntent(intent, "artistId", "artist")
             if (id >= 0) {
                 val position = intent.getIntExtra("position", 0)
                 MusicPlayerRemote.openQueue(ArtistLoader.getArtist(this, id).songs, position, true)
