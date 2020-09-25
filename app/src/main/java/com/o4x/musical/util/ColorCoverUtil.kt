@@ -15,8 +15,14 @@ import kotlin.math.max
 
 object ColorCoverUtil {
 
+    const val DEFAULT_SIZE = 500
+
     @JvmStatic
-    fun createSquareCoverWithText(context: Context, text: String, id: Int, size: Int = 500): Bitmap {
+    fun createSquareCoverWithText(context: Context, text: String, id: Long, size: Int = DEFAULT_SIZE)
+        = createSquareCoverWithText(context, text, id.toInt(), size)
+
+    @JvmStatic
+    fun createSquareCoverWithText(context: Context, text: String, id: Int, size: Int = DEFAULT_SIZE): Bitmap {
         return create(
             context,
             size,

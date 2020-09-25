@@ -8,9 +8,10 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.widget.Toast;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.M3UWriter;
@@ -184,7 +185,7 @@ public class PlaylistsUtil {
         }
     }
 
-    public static boolean doPlaylistContains(@NonNull final Context context, final long playlistId, final int songId) {
+    public static boolean doPlaylistContains(@NonNull final Context context, final long playlistId, final long songId) {
         if (playlistId != -1) {
             try {
                 Cursor c = context.getContentResolver().query(

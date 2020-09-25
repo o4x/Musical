@@ -36,11 +36,11 @@ public class CustomImageUtil {
 
     private static final String FOLDER_NAME = "/images/";
 
-    private final int id;
+    private final long id;
     private final String name;
     private final Type type;
 
-    public CustomImageUtil(int id, String name, Type type) {
+    public CustomImageUtil(long id, String name, Type type) {
         this.id = id;
         this.name = name;
         this.type = type;

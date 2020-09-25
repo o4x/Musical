@@ -26,7 +26,7 @@ public class MosaicUtil {
 
         int artistBitMapSize = 512;
 
-        final Map<InputStream, Integer> images = new HashMap<>();
+        final Map<InputStream, Long> images = new HashMap<>();
 
         InputStream result = null;
         List<InputStream> streams = new ArrayList<>();
@@ -44,7 +44,7 @@ public class MosaicUtil {
                 }
 
                 if (stream != null) {
-                    images.put(stream, cover.getYear());
+                    images.put(stream, cover.getId());
                 }
             }
 
@@ -89,9 +89,9 @@ public class MosaicUtil {
 
             } else if (nbImages > 0) {
                 // we return the last cover album of the artist
-                Map.Entry<InputStream, Integer> maxEntryYear = null;
+                Map.Entry<InputStream, Long> maxEntryYear = null;
 
-                for (final Map.Entry<InputStream, Integer> entry : images.entrySet()) {
+                for (final Map.Entry<InputStream, Long> entry : images.entrySet()) {
                     if (maxEntryYear == null || entry.getValue()
                             .compareTo(maxEntryYear.getValue()) > 0) {
                         maxEntryYear = entry;

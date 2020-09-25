@@ -22,13 +22,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.model.Song;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,7 +67,7 @@ public class MusicPlaybackQueueStore extends SQLiteOpenHelper {
         builder.append("(");
 
         builder.append(BaseColumns._ID);
-        builder.append(" INT NOT NULL,");
+        builder.append(" LONG NOT NULL,");
 
         builder.append(AudioColumns.TITLE);
         builder.append(" STRING NOT NULL,");
@@ -88,13 +88,13 @@ public class MusicPlaybackQueueStore extends SQLiteOpenHelper {
         builder.append(" LONG NOT NULL,");
 
         builder.append(AudioColumns.ALBUM_ID);
-        builder.append(" INT NOT NULL,");
+        builder.append(" LONG NOT NULL,");
 
         builder.append(AudioColumns.ALBUM);
         builder.append(" STRING NOT NULL,");
 
         builder.append(AudioColumns.ARTIST_ID);
-        builder.append(" INT NOT NULL,");
+        builder.append(" LONG NOT NULL,");
 
         builder.append(AudioColumns.ARTIST);
         builder.append(" STRING NOT NULL);");

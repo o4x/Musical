@@ -18,13 +18,14 @@ import com.o4x.musical.imageloader.universalil.palette.AbsImageLoadingListener
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
+import com.o4x.musical.util.ColorCoverUtil
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.ColorCoverUtil.createSquareCoverWithText
 import com.o4x.musical.util.MusicUtil
 
 object UniversalIL {
 
-    private const val DEFAULT_SIZE = 500
+    private const val DEFAULT_SIZE = ColorCoverUtil.DEFAULT_SIZE
 
     private val options: DisplayImageOptions.Builder
         get() = DisplayImageOptions.Builder()
