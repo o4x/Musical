@@ -249,7 +249,7 @@ class MainActivity : AbsMusicPanelActivity() {
             MusicPlayerRemote.playFromUri(uri)
             handled = true
         } else if (MediaStore.Audio.Playlists.CONTENT_TYPE == mimeType) {
-            val id = parseIdFromIntent(intent, "playlistId", "playlist").toInt()
+            val id = parseIdFromIntent(intent, "playlistId", "playlist")
             if (id >= 0) {
                 val position = intent.getIntExtra("position", 0)
                 val songs: List<Song> =
