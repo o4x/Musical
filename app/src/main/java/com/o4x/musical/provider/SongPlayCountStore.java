@@ -21,10 +21,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * This database tracks the number of play counts for an individual song.  This is used to drive
@@ -35,7 +36,7 @@ public class SongPlayCountStore extends SQLiteOpenHelper {
     private static SongPlayCountStore sInstance = null;
 
     public static final String DATABASE_NAME = "song_play_count.db";
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
 
     // interpolator curve applied for measuring the curve
     @NonNull
@@ -83,7 +84,7 @@ public class SongPlayCountStore extends SQLiteOpenHelper {
         builder.append(SongPlayCountColumns.NAME);
         builder.append("(");
         builder.append(SongPlayCountColumns.ID);
-        builder.append(" INT UNIQUE,");
+        builder.append(" LONG UNIQUE,");
 
         for (int i = 0; i < NUM_WEEKS; i++) {
             builder.append(getColumnNameForWeek(i));
