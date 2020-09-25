@@ -147,10 +147,10 @@ public class TagUtil {
     }
 
     public static class ArtworkInfo {
-        public final int albumId;
+        public final long albumId;
         public final Bitmap artwork;
 
-        public ArtworkInfo(int albumId, Bitmap artwork) {
+        public ArtworkInfo(long albumId, Bitmap artwork) {
             this.albumId = albumId;
             this.artwork = artwork;
         }

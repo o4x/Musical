@@ -82,8 +82,7 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     @BindView(R.id.lyrics)
     var lyrics: TextInputEditText? = null
 
-    protected var id = 0
-        private set
+    protected var id: Long = 0
 
     private var headerVariableSpace = 0
 
@@ -146,7 +145,7 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
         get() {
             val intentExtras = intent.extras
             if (intentExtras != null) {
-                id = intentExtras.getInt(EXTRA_ID)
+                id = intentExtras.getLong(EXTRA_ID)
             }
         }
 
