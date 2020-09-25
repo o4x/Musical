@@ -50,3 +50,12 @@
 #JAudioTagger
 -keep class org.jaudiotagger.** { *; }
 -dontwarn org.jaudiotagger.**
+
+#Navigation
+-keepnames class androidx.navigation.fragment.NavHostFragment
+-keep class * extends androidx.fragment.app.Fragment{}
+
+#Models
+-keepnames class * extends android.os.Parcelable
+-keepnames class * extends java.io.Serializable
+-keep class com.o4x.musical.model.** {*;}
