@@ -9,101 +9,77 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <FrameLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
+        android:elevation="@dimen/appbar_elevation"
+        app:navigationIcon="@drawable/mcab_nav_back"
+        app:title="@string/action_tag_editor" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:scrollbars="vertical">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested_scroll_view"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RelativeLayout
+            <com.o4x.musical.views.WidthFitSquareLayout
+                android:id="@+id/artist_image_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.o4x.musical.views.WidthFitSquareLayout
-                    android:id="@+id/image_container"
+                <ImageView
+                    android:id="@+id/artist_image"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_artist_image"
+                    tools:ignore="ContentDescription" />
 
-                    <ImageView
-                        android:id="@+id/image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/default_album_art"
-                        android:transitionName="@string/transition_album_art"
-                        tools:ignore="ContentDescription,UnusedAttribute" />
+            </com.o4x.musical.views.WidthFitSquareLayout>
 
-                </com.o4x.musical.views.WidthFitSquareLayout>
+            <LinearLayout
+                android:id="@+id/editables"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/artist_image_container"
+                android:layout_margin="16dp"
+                android:orientation="vertical"
+                tools:ignore="UnusedAttribute">
 
-                <LinearLayout
-                    android:id="@+id/header"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/image_container"
-                    android:elevation="@dimen/toolbar_elevation"
-                    android:minHeight="@dimen/title_view_height"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingRight="16dp"
-                    android:paddingBottom="8dp"
-                    tools:ignore="UnusedAttribute">
+                    app:hintEnabled="true">
 
-                    <com.google.android.material.textfield.TextInputLayout
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/artist_name"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="@string/album_artist"
+                        android:inputType="text|textCapWords"
+                        android:singleLine="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center_vertical"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                        <EditText
-                            android:id="@+id/artist_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-medium"
-                            android:gravity="center_vertical"
-                            android:hint="@string/artist"
-                            android:inputType="text|textCapWords"
-                            android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                            android:textColor="@color/ate_primary_text_dark" />
+            </LinearLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+        </RelativeLayout>
 
-                </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-            </RelativeLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="@drawable/shadow_down" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/Toolbar"
-            android:background="#00000000"
-            android:gravity="start|left"
-            tools:ignore="RtlHardcoded" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/play_pause_fab"
-            style="@style/Fab"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin_top_left_right"
-            app:srcCompat="@drawable/ic_save_white_24dp" />
-
-    </FrameLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/search_online_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/search_online"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+    <include
+        layout="@layout/tag_editor_search_online_btn"/>
 
 </LinearLayout>
 

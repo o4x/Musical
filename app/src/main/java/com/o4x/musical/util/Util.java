@@ -34,6 +34,10 @@ public class Util {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
+    public static int getMaxScreenSize() {
+        return Math.max(Util.getScreenHeight(), Util.getScreenWidth());
+    }
+
     public static int getStatusBarHeight(@NonNull Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
