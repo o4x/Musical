@@ -42,7 +42,7 @@ import java.util.*
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
+abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
     @JvmField
     @BindView(R.id.search_online_btn)
@@ -245,13 +245,13 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
 
     private fun setupTextInputEditTexts() {
         fillViewsWithFileTags()
-        if (songName != null) songName!!.addTextChangedListener(textWatcher)
-        if (albumName != null) albumName!!.addTextChangedListener(textWatcher)
-        if (artistName != null) artistName!!.addTextChangedListener(textWatcher)
-        if (genreName != null) genreName!!.addTextChangedListener(textWatcher)
-        if (year != null) year!!.addTextChangedListener(textWatcher)
-        if (trackNumber != null) trackNumber!!.addTextChangedListener(textWatcher)
-        if (lyrics != null) lyrics!!.addTextChangedListener(textWatcher)
+        songName?.addTextChangedListener(textWatcher)
+        albumName?.addTextChangedListener(textWatcher)
+        artistName?.addTextChangedListener(textWatcher)
+        genreName?.addTextChangedListener(textWatcher)
+        year?.addTextChangedListener(textWatcher)
+        trackNumber?.addTextChangedListener(textWatcher)
+        lyrics?.addTextChangedListener(textWatcher)
     }
 
     private fun fillViewsWithFileTags() {
