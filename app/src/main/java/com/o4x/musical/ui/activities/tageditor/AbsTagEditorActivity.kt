@@ -93,6 +93,9 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     @BindView(R.id.track_number)
     var trackNumber: TextInputEditText? = null
     @JvmField
+    @BindView(R.id.disc_number)
+    var discNumber: TextInputEditText? = null
+    @JvmField
     @BindView(R.id.lyrics)
     var lyrics: TextInputEditText? = null
 
@@ -266,6 +269,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
             genreName?.setText(it.genreName)
             year?.setText(it.songYear)
             trackNumber?.setText(it.trackNumber)
+            discNumber?.setText(it.discNumber)
             lyrics?.setText(it.lyrics)
         }
     }
@@ -298,8 +302,8 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
                     if (extras != null) {
                         if (extras.containsKey(AlbumSearchActivity.EXTRA_RESULT_ALL)) {
                             val result =
-                                extras.getSerializable(AbsSearchOnlineActivity.EXTRA_RESULT_ALL) as RM?
-                            result?.let { fillViewsWithResult(it) }
+                                extras.getSerializable(AbsSearchOnlineActivity.EXTRA_RESULT_ALL) as RM
+                            fillViewsWithResult(result)
                         } else if (extras.containsKey(AbsSearchOnlineActivity.EXTRA_RESULT_COVER)) {
                             loadImageFromUrl(
                                 extras.getString(AbsSearchOnlineActivity.EXTRA_RESULT_COVER), null
@@ -369,14 +373,15 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     private fun save() {
         val fieldKeyValueMap: MutableMap<FieldKey, String> = EnumMap(
             FieldKey::class.java)
-        if (songName != null) fieldKeyValueMap[FieldKey.TITLE] = songName!!.text.toString()
-        if (albumName != null) fieldKeyValueMap[FieldKey.ALBUM] = albumName!!.text.toString()
-        if (artistName != null) fieldKeyValueMap[FieldKey.ARTIST] = artistName!!.text.toString()
-        if (genreName != null) fieldKeyValueMap[FieldKey.GENRE] = genreName!!.text.toString()
-        if (year != null) fieldKeyValueMap[FieldKey.YEAR] = year!!.text.toString()
-        if (trackNumber != null) fieldKeyValueMap[FieldKey.TRACK] = trackNumber!!.text.toString()
-        if (lyrics != null) fieldKeyValueMap[FieldKey.LYRICS] = lyrics!!.text.toString()
-        tagUtil!!.writeValuesToFiles(fieldKeyValueMap,
+        fieldKeyValueMap[FieldKey.TITLE] = songName?.text.toString()
+        fieldKeyValueMap[FieldKey.ALBUM] = albumName?.text.toString()
+        fieldKeyValueMap[FieldKey.ARTIST] = artistName?.text.toString()
+        fieldKeyValueMap[FieldKey.GENRE] = genreName?.text.toString()
+        fieldKeyValueMap[FieldKey.YEAR] = year?.text.toString()
+        fieldKeyValueMap[FieldKey.TRACK] = trackNumber?.text.toString()
+        fieldKeyValueMap[FieldKey.DISC_NO] = discNumber?.text.toString()
+        fieldKeyValueMap[FieldKey.LYRICS] = lyrics?.text.toString()
+        tagUtil?.writeValuesToFiles(fieldKeyValueMap,
             when {
                 deleteAlbumArt -> ArtworkInfo(id,
                     null)
@@ -389,8 +394,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
             deleteArtistArt -> {
                 CustomImageUtil(artist).resetCustomImage()
             }
-            artistArtBitmap == null -> null
-            else -> {
+            artistArtBitmap != null -> {
                 CustomImageUtil(artist).setCustomImage(artistArtBitmap)
             }
         }
