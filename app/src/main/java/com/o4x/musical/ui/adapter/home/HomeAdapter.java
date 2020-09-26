@@ -16,9 +16,6 @@ import com.o4x.musical.ui.adapter.song.SongAdapter;
 
 import java.util.List;
 
-import code.name.monkey.appthemehelper.util.ColorUtil;
-import code.name.monkey.appthemehelper.util.MaterialValueHelper;
-
 public class HomeAdapter extends PlayingQueueAdapter {
 
     private final Integer limit;
@@ -88,18 +85,6 @@ public class HomeAdapter extends PlayingQueueAdapter {
         @Override
         public boolean onLongClick(View view) {
             return menu.callOnClick();
-        }
-    }
-
-    protected void setColors(int color, SongAdapter.ViewHolder holder) {
-        if (holder.paletteColorContainer != null) {
-            holder.paletteColorContainer.setBackgroundColor(color);
-            if (holder.title != null) {
-                holder.title.setTextColor(MaterialValueHelper.getPrimaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
-            }
-            if (holder.text != null) {
-                holder.text.setTextColor(MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
-            }
         }
     }
 

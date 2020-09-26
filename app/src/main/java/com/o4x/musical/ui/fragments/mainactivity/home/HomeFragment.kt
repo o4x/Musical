@@ -271,7 +271,7 @@ class HomeFragment : AbsMainActivityFragment() {
             MusicPlayerRemote.getPosition(),
             R.layout.item_card_home,
             null,
-            false,
+            true,
             true)
         queue_recycler_view.adapter = queueAdapter
         queue_recycler_view.itemAnimator = animator
@@ -287,7 +287,7 @@ class HomeFragment : AbsMainActivityFragment() {
             0,
             R.layout.item_card_home,
             gridSize * 2,
-            false,
+            true,
             false)
         recently_recycler_view.adapter = recentlyAdapter
     }
@@ -301,7 +301,7 @@ class HomeFragment : AbsMainActivityFragment() {
             0,
             R.layout.item_card_home,
             gridSize * 3,
-            false,
+            true,
             false)
         new_recycler_view.adapter = newAdapter
     }

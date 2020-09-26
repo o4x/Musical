@@ -140,7 +140,9 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
                     @Override
                     public void onColorReady(int color) {
                         if (usePalette)
-                            setColors(color, holder);
+                            setColors(
+                                    color,
+                                    holder);
                         else
                             setColors(getDefaultFooterColor(activity), holder);
                     }
