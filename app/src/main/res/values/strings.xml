@@ -426,5 +426,11 @@
     <string name="save">Save</string>
     <string name="ok">OK</string>
     <string name="discard_changes">Discard your changes?</string>
+    <string name="label_artist">Artist</string>
+    <string name="label_album">Album</string>
+    <string name="label_genre">Genre</string>
+    <string name="label_year">Year</string>
+    <string name="label_album_artist">Album artist</string>
+    <string name="label_album_artists">Album artists</string>
 
 </resources>
