@@ -124,6 +124,15 @@ public class TagUtil {
     }
 
     @Nullable
+    public String getDiscNumber() {
+        try {
+            return tags.getFirst(FieldKey.DISC_NO);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    @Nullable
     public String getLyrics() {
         try {
             return tags.getFirst(FieldKey.LYRICS);

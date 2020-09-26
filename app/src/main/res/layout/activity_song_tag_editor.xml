@@ -113,65 +113,110 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    app:boxBackgroundColor="@android:color/transparent"
-                    app:hintEnabled="true">
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/genre_name"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:background="@android:color/transparent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/genre"
-                        android:inputType="text|textCapWords"
-                        android:singleLine="true"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center_vertical"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_weight="1"
+                        android:layout_marginEnd="2dp"
+                        app:hintEnabled="true">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/year"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="@string/year"
+                            android:inputType="text|textCapWords"
+                            android:singleLine="true"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        android:background="@android:color/transparent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="2dp"
+                        app:hintEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/genre_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="@string/genre"
+                            android:inputType="text|textCapWords"
+                            android:singleLine="true"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    app:boxBackgroundColor="@android:color/transparent"
-                    app:hintEnabled="true">
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/year"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/year"
-                        android:inputType="text|textCapWords"
-                        android:singleLine="true"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center_vertical"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:layout_marginEnd="2dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:hintEnabled="true">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    app:boxBackgroundColor="@android:color/transparent"
-                    app:hintEnabled="true">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/track_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/track_hint"
+                            android:inputType="text|textCapWords"
+                            android:singleLine="true"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/track_number"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/track_hint"
-                        android:inputType="text|textCapWords"
-                        android:singleLine="true"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center_vertical"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:layout_marginStart="2dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:hintEnabled="true">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/disc_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/disc_hint"
+                            android:inputType="text|textCapWords"
+                            android:singleLine="true"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
