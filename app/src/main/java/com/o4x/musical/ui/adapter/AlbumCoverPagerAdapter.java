@@ -134,7 +134,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
                             setColor(colors);
                         }
                     },
-                    Math.max(Util.getScreenHeight(), Util.getScreenWidth())
+                    Util.getMaxScreenSize()
             );
         }
 

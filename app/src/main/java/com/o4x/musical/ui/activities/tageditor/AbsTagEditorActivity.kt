@@ -321,7 +321,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         albumImage?.let {
             if (bitmap == null) {
                 val b: Bitmap = ColorCoverUtil.createSquareCoverWithText(
-                    this, tagUtil?.albumTitle ?: "", id, Util.getScreenWidth())
+                    this, tagUtil?.albumTitle ?: "", id, Util.getMaxScreenSize())
                 it.setImageBitmap(b)
             } else {
                 it.setImageBitmap(bitmap)
@@ -334,7 +334,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
             if (bitmap == null) {
                 val artist = artist
                 val b: Bitmap = ColorCoverUtil.createSquareCoverWithText(
-                    this, artist.name, artist.id, Util.getScreenWidth())
+                    this, artist.name, artist.id, Util.getMaxScreenSize())
                 it.setImageBitmap(b)
             } else {
                 it.setImageBitmap(bitmap)
