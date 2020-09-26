@@ -2,15 +2,13 @@ package com.o4x.musical.ui.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.o4x.musical.R;
@@ -28,6 +26,8 @@ import org.jaudiotagger.tag.TagException;
 import java.io.File;
 import java.io.IOException;
 
+import static com.o4x.musical.util.TextUtil.makeTextWithTitle;
+
 /**
  * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
  */
@@ -42,10 +42,6 @@ public class SongDetailDialog extends DialogFragment {
         args.putParcelable("song", song);
         dialog.setArguments(args);
         return dialog;
-    }
-
-    private static Spanned makeTextWithTitle(@NonNull Context context, int titleResId, String text) {
-        return Html.fromHtml("<b>" + context.getResources().getString(titleResId) + ": " + "</b>" + text);
     }
 
     private static String getFileSizeString(long sizeInBytes) {

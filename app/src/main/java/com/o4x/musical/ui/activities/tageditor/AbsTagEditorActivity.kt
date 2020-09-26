@@ -12,30 +12,32 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textview.MaterialTextView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.R
 import com.o4x.musical.extensions.startImagePicker
+import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.imageloader.universalil.UniversalIL
+import com.o4x.musical.model.Artist
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
 import com.o4x.musical.ui.dialogs.DiscardTagsDialog
 import com.o4x.musical.util.*
 import com.o4x.musical.util.TagUtil.ArtworkInfo
+import com.o4x.musical.util.TextUtil.makeTextWithTitle
 import org.jaudiotagger.tag.FieldKey
 import java.io.Serializable
 import java.util.*
-import com.o4x.musical.extensions.surfaceColor
-import com.o4x.musical.model.Artist
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -59,7 +61,19 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     var artistImage: ImageView? = null
     @JvmField
     @BindView(R.id.header)
-    var header: LinearLayout? = null
+    var header: CardView? = null
+    @JvmField
+    @BindView(R.id.album_text)
+    var albumText: MaterialTextView? = null
+    @JvmField
+    @BindView(R.id.artist_text)
+    var artistText: MaterialTextView? = null
+    @JvmField
+    @BindView(R.id.genre_text)
+    var genreText: MaterialTextView? = null
+    @JvmField
+    @BindView(R.id.year_text)
+    var yearText: MaterialTextView? = null
     @JvmField
     @BindView(R.id.song_name)
     var songName: TextInputEditText? = null
@@ -241,13 +255,19 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
     }
 
     private fun fillViewsWithFileTags() {
-        if (songName != null) songName!!.setText(tagUtil!!.songTitle)
-        if (albumName != null) albumName!!.setText(tagUtil!!.albumTitle)
-        if (artistName != null) artistName!!.setText(tagUtil!!.artistName)
-        if (genreName != null) genreName!!.setText(tagUtil!!.genreName)
-        if (year != null) year!!.setText(tagUtil!!.songYear)
-        if (trackNumber != null) trackNumber!!.setText(tagUtil!!.trackNumber)
-        if (lyrics != null) lyrics!!.setText(tagUtil!!.lyrics)
+        tagUtil?.let {
+            albumText?.text = makeTextWithTitle(this, R.string.label_album, it.albumTitle)
+            artistText?.text = makeTextWithTitle(this, R.string.label_artist, it.artistName)
+            genreText?.text = makeTextWithTitle(this, R.string.label_genre, it.genreName)
+            yearText?.text = makeTextWithTitle(this, R.string.label_year, it.songYear)
+            songName?.setText(it.songTitle)
+            albumName?.setText(it.albumTitle)
+            artistName?.setText(it.artistName)
+            genreName?.setText(it.genreName)
+            year?.setText(it.songYear)
+            trackNumber?.setText(it.trackNumber)
+            lyrics?.setText(it.lyrics)
+        }
     }
 
     protected abstract fun fillViewsWithResult(result: RM)
@@ -392,7 +412,7 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
                     .cacheOnDisk(false)
                     .cacheInMemory(true)
                     .build(),
-                object: SimpleImageLoadingListener() {
+                object : SimpleImageLoadingListener() {
                     override fun onLoadingComplete(
                         imageUri: String?,
                         view: View?,
@@ -405,7 +425,7 @@ abstract class AbsTagEditorActivity<RM : Serializable?> : AbsBaseActivity() {
                                 artistArtBitmap = ImageUtil.resizeBitmap(loadedImage, 2048)
                                 setArtistImageBitmap(artistArtBitmap)
                                 deleteArtistArt = false
-                            } else  {
+                            } else {
                                 albumArtBitmap = ImageUtil.resizeBitmap(loadedImage, 2048)
                                 setAlbumImageBitmap(albumArtBitmap)
                                 deleteAlbumArt = false

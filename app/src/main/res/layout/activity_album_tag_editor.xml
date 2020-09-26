@@ -19,7 +19,8 @@
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:scrollbars="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -41,59 +42,30 @@
 
             </com.o4x.musical.views.WidthFitSquareLayout>
 
-            <LinearLayout
-                android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/album_image_container"
-                android:elevation="@dimen/toolbar_elevation"
-                android:minHeight="@dimen/title_view_height"
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="8dp"
-                tools:ignore="UnusedAttribute">
-
-                <com.o4x.musical.views.WidthFitSquareLayout
-                    android:id="@+id/artist_image_container"
-                    android:layout_width="@dimen/detail_header_image_height"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/artist_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/default_artist_image"
-                        tools:ignore="ContentDescription" />
-
-                </com.o4x.musical.views.WidthFitSquareLayout>
-
-            </LinearLayout>
+            <include
+                layout="@layout/tag_editor_header" />
 
             <LinearLayout
                 android:id="@+id/editables"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/header"
-                android:background="?android:attr/windowBackground"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    app:boxBackgroundColor="@android:color/transparent"
-                    android:background="@android:color/transparent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:boxBackgroundColor="@android:color/transparent"
                     app:hintEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/album_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@null"
                         android:hint="@string/album"
                         android:inputType="text|textCapWords"
                         android:singleLine="true"
