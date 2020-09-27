@@ -11,6 +11,9 @@ import android.media.audiofx.Equalizer;
 import android.media.audiofx.PresetReverb;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -42,15 +45,14 @@ import com.o4x.musical.views.AnalogController;
 
 import java.util.ArrayList;
 
+import code.name.monkey.appthemehelper.common.ATHToolbarActivity;
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class EqualizerFragment extends AbsMainActivityFragment {
-
-    ImageView backBtn;
-    TextView fragTitle;
-    SwitchCompat equalizerSwitch;
 
     LineSet dataset;
     LineChartView chart;
@@ -129,32 +131,7 @@ public class EqualizerFragment extends AbsMainActivityFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = view.findViewById(R.id.equalizer_back_btn);
-        backBtn.setVisibility(showBackButton ? View.VISIBLE : View.GONE);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null) {
-                    getActivity().onBackPressed();
-                }
-            }
-        });
-
-        fragTitle = view.findViewById(R.id.equalizer_fragment_title);
-
-
-        equalizerSwitch = view.findViewById(R.id.equalizer_switch);
-        equalizerSwitch.setChecked(Settings.isEqualizerEnabled);
-        equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mEqualizer.setEnabled(isChecked);
-                bassBoost.setEnabled(isChecked);
-                presetReverb.setEnabled(isChecked);
-                Settings.isEqualizerEnabled = isChecked;
-                Settings.equalizerModel.setEqualizerEnabled(isChecked);
-            }
-        });
+        setAppbarPadding(view);
 
         spinnerDropDownIcon = view.findViewById(R.id.spinner_dropdown_icon);
         spinnerDropDownIcon.setOnClickListener(new View.OnClickListener() {
@@ -457,6 +434,33 @@ public class EqualizerFragment extends AbsMainActivityFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_equalizer, menu);
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getMainActivity(),
+                getMainActivity().getToolbar(),
+                menu,
+                ATHToolbarActivity.getToolbarBackgroundColor(getMainActivity().getToolbar())
+        );
+
+        MenuItem item = menu.findItem(R.id.equalizer_switch);
+        item.setActionView(R.layout.switch_layout);
+
+        SwitchCompat equalizerSwitch = item.getActionView().findViewById(R.id.equalizer_enable_switch);
+        equalizerSwitch.setChecked(Settings.isEqualizerEnabled);
+        equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mEqualizer.setEnabled(isChecked);
+                bassBoost.setEnabled(isChecked);
+                presetReverb.setEnabled(isChecked);
+                Settings.isEqualizerEnabled = isChecked;
+                Settings.equalizerModel.setEqualizerEnabled(isChecked);
             }
         });
     }
