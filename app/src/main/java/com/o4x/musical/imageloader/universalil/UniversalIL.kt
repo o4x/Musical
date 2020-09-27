@@ -22,6 +22,7 @@ import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.CoverUtil.Companion.createSquareCoverWithText
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
+import com.o4x.musical.util.PreferenceUtil
 
 object UniversalIL {
 
@@ -58,20 +59,27 @@ object UniversalIL {
         size: Int = DEFAULT_SIZE
     ) {
 
-        val b: Bitmap = createSquareCoverWithText(
-            image.context, song.albumName, song.albumId, size)
-        val d: Drawable = b.toDrawable(image.resources)
-        listener?.setOnFailedBitmap(b)
+        if (PreferenceUtil.isIgnoreMediaStore()) {
+            audioFileImageLoader(
+                AudioFileCover(song.title, song.data),
+                image, listener, size
+            )
+        } else {
+            val b: Bitmap = createSquareCoverWithText(
+                image.context, song.albumName, song.albumId, size)
+            val d: Drawable = b.toDrawable(image.resources)
+            listener?.setOnFailedBitmap(b)
 
-        imageLoader?.displayImage(
-            MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
-            image,
-            options
-                .showImageOnFail(d)
-                .showImageForEmptyUri(d)
-                .build(),
-            listener
-        )
+            imageLoader?.displayImage(
+                MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
+                image,
+                options
+                    .showImageOnFail(d)
+                    .showImageForEmptyUri(d)
+                    .build(),
+                listener
+            )
+        }
     }
 
     @JvmStatic
