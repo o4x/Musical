@@ -12,26 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/poster_parent"
+        <ImageView
+            android:id="@+id/poster"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/poster"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop" >
-
-            </ImageView>
-
-            <View
-                android:id="@+id/poster_gradient"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"/>
-
-        </FrameLayout>
-
+            android:layout_height="0dp"
+            android:scaleType="centerCrop" />
 
         <com.xw.repo.widget.BounceScrollView
             android:id="@+id/nested_scroll_view"

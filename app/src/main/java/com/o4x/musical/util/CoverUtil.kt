@@ -1,17 +1,18 @@
 package com.o4x.musical.util
 
+import android.R.attr.src
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import androidx.core.graphics.drawable.toBitmap
 import code.name.monkey.appthemehelper.util.ColorUtil
-import com.o4x.musical.extensions.getBitmapDrawable
 import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.extensions.textColorPrimary
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
+
 
 class CoverUtil constructor(val context: Context) {
 
@@ -71,34 +72,26 @@ class CoverUtil constructor(val context: Context) {
         return gradient
     }
 
-
-    fun addGradientTo(bitmap: Bitmap): Bitmap {
-        val gradient = GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(0xff_ff_ff_ff.toInt(), 0x00_00_00_00.toInt())
-        )
-        gradient.cornerRadius = 0f
-
-        val c = Canvas(bitmap)
-        val paint = Paint()
-
-        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.OVERLAY)
-
-        c.drawBitmap(bitmap, 0f, 0f, paint)
-
-        return bitmap
-    }
-
     companion object {
         const val DEFAULT_SIZE = 500
 
         @JvmStatic
-        fun createSquareCoverWithText(context: Context, text: String, id: Long, size: Int = DEFAULT_SIZE)
+        fun createSquareCoverWithText(
+            context: Context,
+            text: String,
+            id: Long,
+            size: Int = DEFAULT_SIZE
+        )
                 = createSquareCoverWithText(context, text, id.toInt(), size)
 
 
         @JvmStatic
-        fun createSquareCoverWithText(context: Context, text: String, id: Int, size: Int = DEFAULT_SIZE): Bitmap {
+        fun createSquareCoverWithText(
+            context: Context,
+            text: String,
+            id: Int,
+            size: Int = DEFAULT_SIZE
+        ): Bitmap {
             val coverUtil = CoverUtil(context)
             return coverUtil.create(
                 size,
@@ -145,6 +138,25 @@ class CoverUtil constructor(val context: Context) {
                 ints[1] = ints[0]
                 ints
             }
+        }
+
+        @JvmStatic
+        fun addGradientTo(src: Bitmap): Bitmap {
+            val w: Int = src.width
+            val h: Int = src.height
+            val result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(result)
+
+            canvas.drawBitmap(src, 0f, 0f, null)
+
+            val paint = Paint()
+            val shader = LinearGradient(
+                0f, 0f, 0f, h.toFloat(), Color.WHITE, Color.TRANSPARENT, Shader.TileMode.MIRROR)
+            paint.shader = shader
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.MULTIPLY)
+            canvas.drawRect(0f, 0f, w.toFloat(), h.toFloat(), paint)
+
+            return result
         }
     }
 }
