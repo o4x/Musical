@@ -1,95 +1,84 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="2dp"
+    android:foreground="?attr/rectSelectorStrong"
+    app:cardBackgroundColor="?cardBackgroundColor"
+    tools:ignore="PrivateResource">
 
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="2dp"
-        android:foreground="?attr/rectSelectorStrong"
-        app:cardBackgroundColor="?cardBackgroundColor"
-        tools:ignore="PrivateResource">
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <FrameLayout
+            <ImageView
+                android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_group"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
 
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
+            <com.o4x.musical.views.IconImageView
+                android:id="@+id/icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="8dp"
+                android:background="@drawable/ic_play_arrow_white_24dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
 
-                <com.o4x.musical.views.IconImageView
-                    android:id="@+id/icon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_margin="8dp"
-                    android:layout_gravity="bottom|end"
-                    android:scaleType="centerCrop"
-                    android:background="@drawable/ic_play_arrow_white_24dp"
-                    android:visibility="gone"/>
+        </FrameLayout>
 
-            </FrameLayout>
+        <LinearLayout
+            android:id="@+id/palette_color_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="0dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/palette_color_container"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:paddingVertical="4dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="0dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/album_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/menu"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/album_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textSize="12sp" />
+            </LinearLayout>
 
-                </LinearLayout>
+            <com.o4x.musical.views.IconImageView
+                android:id="@+id/menu"
+                style="@style/OverFlowButtonMini"
+                tools:ignore="ContentDescription" />
 
-                <com.o4x.musical.views.IconImageView
-                    android:id="@+id/menu"
-                    style="@style/OverFlowButtonMini"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="ContentDescription" />
+        </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
 
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
