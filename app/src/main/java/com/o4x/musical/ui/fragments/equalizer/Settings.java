@@ -1,4 +1,6 @@
-package com.o4x.musical.equalizer;
+package com.o4x.musical.ui.fragments.equalizer;
+
+import com.o4x.musical.model.EqualizerModel;
 
 public class Settings {
     public static boolean isEqualizerEnabled = true;
