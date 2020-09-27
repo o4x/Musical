@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.fragments.equalizer;
+package com.o4x.musical.ui.fragments.mainactivity.equalizer;
 
 import com.o4x.musical.model.EqualizerModel;
 

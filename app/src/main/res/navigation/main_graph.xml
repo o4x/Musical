@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/equalizer"
-        android:name="com.o4x.musical.ui.fragments.equalizer.EqualizerFragment"
+        android:name="com.o4x.musical.ui.fragments.mainactivity.equalizer.EqualizerFragment"
         android:label="@string/equalizer"
         tools:layout="@layout/fragment_equalizer" />
 

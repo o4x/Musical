@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.o4x.musical.ui.fragments.equalizer.EqualizerFragment;
+import com.o4x.musical.ui.fragments.mainactivity.equalizer.EqualizerFragment;
 
 /**
  * Created by Harjot on 23-May-16.
