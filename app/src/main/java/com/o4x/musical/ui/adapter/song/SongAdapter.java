@@ -38,8 +38,6 @@ import code.name.monkey.appthemehelper.util.MaterialValueHelper;
  */
 public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, Song> implements MaterialCab.Callback, FastScrollRecyclerView.SectionedAdapter {
 
-    public static final int imageSize = 1024;
-
     protected final AppCompatActivity activity;
     protected List<Song> dataSet;
 
