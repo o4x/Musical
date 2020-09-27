@@ -52,11 +52,12 @@ public class HomeAdapter extends PlayingQueueAdapter {
         if (isQueue) {
             final int visibility = position == MusicPlayerRemote.getPosition() ?
                     View.VISIBLE : View.GONE;
-            holder.icon.setVisibility(visibility);
-
-            final int background = MusicPlayerRemote.isPlaying() ?
-                    R.drawable.ic_play_arrow_white_24dp : R.drawable.ic_pause_white_24dp;
-            holder.icon.setBackground(activity.getDrawable(background));
+            if(holder.icon != null) {
+                holder.icon.setVisibility(visibility);
+                final int background = MusicPlayerRemote.isPlaying() ?
+                        R.drawable.ic_play_arrow_white_24dp : R.drawable.ic_pause_white_24dp;
+                holder.icon.setBackground(activity.getDrawable(background));
+            }
         }
     }
 
