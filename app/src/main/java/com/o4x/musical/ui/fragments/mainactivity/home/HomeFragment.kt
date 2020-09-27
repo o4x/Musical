@@ -4,12 +4,8 @@ import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import androidx.core.widget.NestedScrollView
@@ -24,7 +20,6 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.R
-import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.universalil.UniversalIL
@@ -38,9 +33,11 @@ import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
-import com.o4x.musical.util.*
+import com.o4x.musical.util.CoverUtil
+import com.o4x.musical.util.MusicUtil
+import com.o4x.musical.util.NavigationUtil
+import com.o4x.musical.util.ViewUtil
 import kotlinx.android.synthetic.main.fragment_home.*
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
