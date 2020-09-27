@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/artist_card_gradient_effect"
-        tools:backgroundTint="@color/md_red_500">
+        tools:backgroundTint="@color/red_500">
 
         <com.o4x.musical.views.RetroShapeableImageView
             android:id="@+id/image"
