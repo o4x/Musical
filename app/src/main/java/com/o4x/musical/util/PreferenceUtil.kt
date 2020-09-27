@@ -64,7 +64,8 @@ object PreferenceUtil {
     const val BLACK_THEME = "black_theme"
     const val KEEP_SCREEN_ON = "keep_screen_on"
     const val LANGUAGE_NAME = "language_name"
-    private const val REMEMBER_SHUFFLE = "remember_shuffle"
+    const val IGNORE_MEDIA = "ignore_media_store_artwork"
+    const val REMEMBER_SHUFFLE = "remember_shuffle"
 
     @JvmStatic
     fun isAllowedToDownloadMetadata(context: Context): Boolean {
@@ -513,6 +514,14 @@ object PreferenceUtil {
     @JvmStatic
     fun rememberShuffle(): Boolean {
         return sharedPreferences.getBoolean(REMEMBER_SHUFFLE, true)
+    }
+
+    @JvmStatic
+    fun isIgnoreMediaStore(): Boolean {
+        return sharedPreferences.getBoolean(
+            IGNORE_MEDIA,
+            false
+        )
     }
 
     @JvmStatic
