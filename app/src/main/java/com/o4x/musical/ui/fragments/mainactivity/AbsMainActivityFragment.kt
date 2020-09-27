@@ -104,6 +104,10 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
         animation?.start()
     }
 
+    fun setAppbarPadding(view: View) {
+        view.setPadding(0, appbarHeight(), 0, 0)
+    }
+
     fun RecyclerView.addAppbarListener() {
         setAppbarListener(this)
     }
@@ -112,7 +116,7 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
         val appbarHeight = appbarHeight()
         val toolbarHeight = toolbarHeight()
 
-        recyclerView.setPadding(0, appbarHeight, 0, 0)
+        setAppbarPadding(recyclerView)
 
         val handler = { dy: Int ->
             when {
