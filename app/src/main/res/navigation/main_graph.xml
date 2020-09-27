@@ -29,6 +29,12 @@
         android:label="@string/folders"
         tools:layout="@layout/fragment_folder" />
 
+    <fragment
+        android:id="@+id/equalizer"
+        android:name="com.o4x.musical.ui.fragments.equalizer.EqualizerFragment"
+        android:label="@string/equalizer"
+        tools:layout="@layout/fragment_equalizer" />
+
     <action
         android:id="@+id/action_to_queue"
         app:destination="@id/queue"
@@ -50,6 +56,15 @@
     <action
         android:id="@+id/action_to_folders"
         app:destination="@id/folders"
+        app:popUpTo="@id/home"
+        app:enterAnim="@anim/retro_fragment_open_enter"
+        app:exitAnim="@anim/retro_fragment_open_exit"
+        app:popEnterAnim="@anim/retro_fragment_close_enter"
+        app:popExitAnim="@anim/retro_fragment_close_exit"/>
+
+    <action
+        android:id="@+id/action_to_equalizer"
+        app:destination="@id/equalizer"
         app:popUpTo="@id/home"
         app:enterAnim="@anim/retro_fragment_open_enter"
         app:exitAnim="@anim/retro_fragment_open_exit"

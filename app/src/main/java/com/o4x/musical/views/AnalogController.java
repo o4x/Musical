@@ -1,4 +1,4 @@
-package com.o4x.musical.equalizer;
+package com.o4x.musical.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,13 +8,15 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.o4x.musical.ui.fragments.equalizer.EqualizerFragment;
+
 /**
  * Created by Harjot on 23-May-16.
  */
 public class AnalogController extends View {
 
     float midx, midy;
-    Paint textPaint, circlePaint, circlePaint2, linePaint;
+    public Paint textPaint, circlePaint, circlePaint2, linePaint;
     String angle;
     float currdeg, deg = 3, downdeg;
 

@@ -127,12 +127,7 @@ class MainActivity : AbsMusicPanelActivity() {
             R.id.nav_queue -> navController.navigate(R.id.action_to_queue)
             R.id.nav_library -> navController.navigate(R.id.action_to_library)
             R.id.nav_folders -> navController.navigate(R.id.action_to_folders)
-//            R.id.nav_eq -> setCurrentFragment(
-//                EqualizerFragment.newBuilder()
-//                    .setthemeColor(Color.parseColor("#4caf50"))
-//                    .setAudioSessionId(MusicPlayerRemote.getAudioSessionId())
-//                    .build()
-//            )
+            R.id.nav_eq -> navController.navigate(R.id.action_to_equalizer)
         }
     }
 

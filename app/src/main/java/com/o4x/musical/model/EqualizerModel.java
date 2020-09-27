@@ -1,4 +1,4 @@
-package com.o4x.musical.equalizer;
+package com.o4x.musical.model;
 
 import java.io.Serializable;
 

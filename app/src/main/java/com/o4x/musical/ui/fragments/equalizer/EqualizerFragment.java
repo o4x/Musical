@@ -1,4 +1,4 @@
-package com.o4x.musical.equalizer;
+package com.o4x.musical.ui.fragments.equalizer;
 
 
 import android.annotation.SuppressLint;
@@ -35,7 +35,10 @@ import com.db.chart.view.AxisController;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.o4x.musical.R;
+import com.o4x.musical.helper.MusicPlayerRemote;
+import com.o4x.musical.model.EqualizerModel;
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment;
+import com.o4x.musical.views.AnalogController;
 
 import java.util.ArrayList;
 
@@ -44,8 +47,6 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class EqualizerFragment extends AbsMainActivityFragment {
-
-    public static final String ARG_AUDIO_SESSIOIN_ID = "audio_session_id";
 
     ImageView backBtn;
     TextView fragTitle;
@@ -71,27 +72,13 @@ public class EqualizerFragment extends AbsMainActivityFragment {
 
     FrameLayout equalizerBlocker;
 
-    public EqualizerFragment() {
-        // Required empty public constructor
-    }
-
     public Equalizer mEqualizer;
     public BassBoost bassBoost;
     public PresetReverb presetReverb;
     private int audioSesionId;
 
-    static int themeColor = Color.parseColor("#B24242");
+    public static int themeColor = Color.parseColor("#B24242");
     static boolean showBackButton = true;
-
-    public static EqualizerFragment newInstance(int audioSessionId) {
-
-        Bundle args = new Bundle();
-        args.putInt(ARG_AUDIO_SESSIOIN_ID, audioSessionId);
-
-        EqualizerFragment fragment = new EqualizerFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,9 +86,7 @@ public class EqualizerFragment extends AbsMainActivityFragment {
 
         Settings.isEditing = true;
 
-        if (getArguments() != null && getArguments().containsKey(ARG_AUDIO_SESSIOIN_ID)){
-            audioSesionId = getArguments().getInt(ARG_AUDIO_SESSIOIN_ID);
-        }
+        audioSesionId = MusicPlayerRemote.getAudioSessionId();
 
         if (Settings.equalizerModel == null){
             Settings.equalizerModel = new EqualizerModel();
@@ -504,33 +489,5 @@ public class EqualizerFragment extends AbsMainActivityFragment {
     public boolean handleBackPress() {
         return false;
     }
-
-    public static Builder newBuilder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private int id = -1;
-
-        public Builder setAudioSessionId(int id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder setthemeColor(int color) {
-            themeColor = color;
-            return this;
-        }
-
-        public Builder setShowBackButton(boolean show){
-            showBackButton = show;
-            return this;
-        }
-
-        public EqualizerFragment build() {
-            return EqualizerFragment.newInstance(id);
-        }
-    }
-
 
 }
