@@ -3,6 +3,7 @@ package com.o4x.musical.ui.fragments.mainactivity.home
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -21,6 +22,7 @@ import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.R
 import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.extensions.surfaceColor
@@ -36,10 +38,7 @@ import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
-import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.NavigationUtil
-import com.o4x.musical.util.PhonographColorUtil
-import com.o4x.musical.util.ViewUtil
+import com.o4x.musical.util.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
@@ -162,19 +161,6 @@ class HomeFragment : AbsMainActivityFragment() {
         params.height = (displayHeight / 1.5f).toInt()
         poster.layoutParams = params
 
-        // Set up posterGradient height
-        poster_gradient.layoutParams = params
-
-        // Set up posterGradient gradient
-        //create a new gradient color
-        val colors = intArrayOf(
-            Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT,
-            PhonographColorUtil.getWindowColor(mainActivity))
-        val gd = GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM, colors)
-        poster_gradient.background = gd
-
-
 
         appbarHeight = appbarHeight()
         toolbarHeight = toolbarHeight()
@@ -207,7 +193,7 @@ class HomeFragment : AbsMainActivityFragment() {
         nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
             // Scroll poster
-            poster_parent.y =
+            poster.y =
                 ((-scrollY / (displayHeight * 2 / poster.layoutParams.height.toFloat())).toInt())
                     .toFloat()
 
@@ -256,8 +242,6 @@ class HomeFragment : AbsMainActivityFragment() {
             val mParams: ViewGroup.LayoutParams =
                 FrameLayout.LayoutParams(width, (height * scale).toInt())
             poster.layoutParams = mParams
-            poster_parent.layoutParams = mParams
-            poster_gradient.layoutParams = mParams
         }
     }
 
@@ -372,9 +356,20 @@ class HomeFragment : AbsMainActivityFragment() {
 //                }
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.title)).setText(song.title);
 //                ((TextView) navigationDrawerHeader.findViewById(R.id.text)).setText(MusicUtil.getSongInfoString(song));
-                UniversalIL.imageLoader?.displayImage(
+                UniversalIL.imageLoader?.loadImage(
                     MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
-                    poster
+                    object: SimpleImageLoadingListener() {
+                        override fun onLoadingComplete(
+                            imageUri: String?,
+                            view: View?,
+                            loadedImage: Bitmap?,
+                        ) {
+                            super.onLoadingComplete(imageUri, view, loadedImage)
+                            loadedImage?.let {
+                                poster.setImageBitmap(CoverUtil.addGradientTo(it))
+                            }
+                        }
+                    }
                 )
             } else {
 //                if (navigationDrawerHeader != null) {
