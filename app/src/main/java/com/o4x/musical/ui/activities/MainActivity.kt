@@ -45,6 +45,7 @@ import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog
 import com.o4x.musical.util.PreferenceUtil.introShown
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.util.PreferenceUtil.setIntroShown
+import com.o4x.musical.util.RetroUtil
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
@@ -62,7 +63,7 @@ class MainActivity : AbsMusicPanelActivity() {
 
         ButterKnife.bind(this)
 
-        setDrawUnderBar()
+        setDrawUnderStatusBar()
         setNavigationBarColorAuto()
         setLightNavigationBar(true)
         setStatusBarColor(Color.TRANSPARENT)
@@ -98,13 +99,6 @@ class MainActivity : AbsMusicPanelActivity() {
         val drawerContent = contentView.findViewById<ViewGroup>(R.id.drawer_content_container)
         drawerContent.addView(wrapSlidingMusicPanel(R.layout.activity_main))
 
-        // To apply WindowInsets only for navigation view, not content and it's very important.
-        contentView.setOnApplyWindowInsetsListener { view: View, windowInsets: WindowInsets ->
-            view.findViewById<View>(R.id.navigation_view).onApplyWindowInsets(windowInsets)
-            view.findViewById<View>(R.id.drawer_content_container).setPadding(
-                windowInsets.systemWindowInsetLeft, 0, windowInsets.systemWindowInsetRight, windowInsets.systemWindowInsetBottom)
-            windowInsets
-        }
         return contentView
     }
 

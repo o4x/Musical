@@ -70,6 +70,11 @@ public class Util {
         );
     }
 
+    public static void setAllowDrawUnderStatusBar(@NonNull Window window) {
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
     public static void hideSoftKeyboard(@Nullable Activity activity) {
         if (activity != null) {
             View currentFocus = activity.getCurrentFocus();
