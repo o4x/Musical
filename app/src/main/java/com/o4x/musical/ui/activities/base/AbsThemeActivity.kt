@@ -52,16 +52,12 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
         }
     }
 
-    protected open fun setDrawUnderBar() {
+    fun setDrawUnderBar() {
         Util.setAllowDrawUnderBar(window)
     }
 
     fun setDrawUnderStatusBar() {
-        RetroUtil.setAllowDrawUnderStatusBar(window)
-    }
-
-    fun setDrawUnderNavigationBar() {
-        RetroUtil.setAllowDrawUnderNavigationBar(window)
+        Util.setAllowDrawUnderStatusBar(window)
     }
 
     /**
