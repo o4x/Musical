@@ -34,23 +34,21 @@
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp">
+            android:paddingVertical="8dp">
 
             <TextView
                 android:id="@+id/album_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:autoSizeTextType="uniform" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
             <TextView
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:autoSizeTextType="uniform" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
         </LinearLayout>
 
