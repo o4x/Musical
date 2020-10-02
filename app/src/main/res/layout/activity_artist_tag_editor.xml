@@ -64,7 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
-                        android:hint="@string/album_artist"
+                        android:hint="@string/artist_name"
                         android:inputType="text|textCapWords"
                         android:singleLine="true"
                         android:fontFamily="sans-serif-medium"

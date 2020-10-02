@@ -433,5 +433,6 @@
     <string name="label_album_artist">Album artist</string>
     <string name="label_album_artists">Album artists</string>
     <string name="disc_hint">Disc number</string>
+    <string name="artist_name">Artist name</string>
 
 </resources>
