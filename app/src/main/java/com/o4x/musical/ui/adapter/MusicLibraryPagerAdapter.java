@@ -2,12 +2,13 @@ package com.o4x.musical.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.SparseArray;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import android.util.SparseArray;
-import android.view.ViewGroup;
 
 import com.o4x.musical.model.CategoryInfo;
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.AlbumsFragment;
@@ -16,6 +17,8 @@ import com.o4x.musical.ui.fragments.mainactivity.library.pager.GenresFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.PlaylistsFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.SongsFragment;
 import com.o4x.musical.util.PreferenceUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -94,6 +97,7 @@ public class MusicLibraryPagerAdapter extends FragmentPagerAdapter {
         return mFragment;
     }
 
+    @NotNull
     @Override
     public Fragment getItem(final int position) {
         final Holder mCurrentHolder = mHolderList.get(position);
