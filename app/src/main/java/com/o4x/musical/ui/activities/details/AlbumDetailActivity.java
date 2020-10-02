@@ -27,8 +27,8 @@ import com.afollestad.materialdialogs.util.DialogUtils;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
+import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.interfaces.PaletteColorHolder;
@@ -163,8 +163,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     }
 
     private void loadAlbumCover() {
-        UniversalIL.songImageLoader(
-                getAlbum().safeGetFirstSong(),
+        new UniversalIL(
                 albumArtImageView,
                 new PaletteImageLoadingListener() {
                     @Override
@@ -172,7 +171,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
                         setColors(color);
                     }
                 }
-        );
+        ).loadImage(getAlbum().safeGetFirstSong());
     }
 
     private void setColors(int color) {

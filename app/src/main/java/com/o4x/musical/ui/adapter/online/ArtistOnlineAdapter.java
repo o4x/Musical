@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.network.Models.DeezerArtistModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.ArtistSearchActivity;
 
@@ -28,8 +28,8 @@ public class ArtistOnlineAdapter
         try {
             String url = getArtUrl(position);
             if (holder.image != null)
-                UniversalIL.uriImageLoader(
-                        url, data.get(position).name, holder.image, null);
+                new UniversalIL(holder.image).loadImage(
+                        url, data.get(position).name);
             if (holder.title != null)
                 holder.title.setText(data.get(position).name);
             if (holder.text != null)

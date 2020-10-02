@@ -16,7 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.App;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Playlist;
@@ -108,7 +108,7 @@ public class CustomImageUtil {
                 if (succesful) {
                     // Remove cache from universal image loader for reload image
                     // For glide we don't need to remove cache, it's work with Signature
-                    UniversalIL.removeFromCache(getPath());
+                    UniversalIL.Companion.removeFromCache(getPath());
                     notifyChange();
                 }
                 return null;
@@ -128,7 +128,7 @@ public class CustomImageUtil {
                     return null;
                 } else {
                     // Remove caches from UIL just for optimize memory
-                    UniversalIL.removeFromCache(getPath());
+                    UniversalIL.Companion.removeFromCache(getPath());
                     file.delete();
                 }
                 return null;

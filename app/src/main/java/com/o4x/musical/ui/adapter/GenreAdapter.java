@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
+import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Song;
@@ -116,9 +116,7 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
 
     protected void loadArtistImage(Genre genre, final ViewHolder holder) {
         if (holder.image == null) return;
-        UniversalIL.genreImageLoader(
-                genre,
-                holder.image,
+        new UniversalIL(holder.image,
                 new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {
@@ -127,8 +125,7 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
                         else
                             setColors(getDefaultFooterColor(activity), holder);
                     }
-                }
-        );
+                }).loadImage(genre);
     }
 
     @Override

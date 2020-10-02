@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 
@@ -28,8 +28,8 @@ public class AlbumOnlineAdapter
         try {
             String url = getArtUrl(position);
             if (holder.image != null)
-                UniversalIL.uriImageLoader(
-                        url, data.get(position).collectionName, holder.image, null);
+                new UniversalIL(holder.image).loadImage(
+                        url, data.get(position).collectionName);
             if (holder.title != null)
                 holder.title.setText(data.get(position).collectionName);
             if (holder.text != null)

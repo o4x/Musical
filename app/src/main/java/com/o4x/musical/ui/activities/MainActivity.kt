@@ -16,7 +16,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
 import androidx.navigation.NavController
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
@@ -32,7 +31,7 @@ import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper
-import com.o4x.musical.imageloader.universalil.UniversalIL
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.loader.AlbumLoader
 import com.o4x.musical.loader.ArtistLoader
 import com.o4x.musical.loader.PlaylistSongLoader
@@ -45,7 +44,6 @@ import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog
 import com.o4x.musical.util.PreferenceUtil.introShown
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.util.PreferenceUtil.setIntroShown
-import com.o4x.musical.util.RetroUtil
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*

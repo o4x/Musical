@@ -14,8 +14,8 @@ import androidx.core.util.Pair;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
+import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Song;
@@ -132,9 +132,7 @@ public class AlbumAdapter extends AbsMultiSelectAdapter<AlbumAdapter.ViewHolder,
     protected void loadAlbumCover(Album album, final ViewHolder holder) {
         if (holder.image == null) return;
 
-        UniversalIL.songImageLoader(
-                album.safeGetFirstSong(),
-                holder.image,
+        new UniversalIL(holder.image,
                 new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {
@@ -143,8 +141,7 @@ public class AlbumAdapter extends AbsMultiSelectAdapter<AlbumAdapter.ViewHolder,
                         else
                             setColors(getDefaultFooterColor(activity), holder);
                     }
-                }
-        );
+                }).loadImage(album.safeGetFirstSong());
     }
 
     @Override

@@ -17,8 +17,8 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
+import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
@@ -133,19 +133,19 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
     protected void loadAlbumCover(Song song, final ViewHolder holder) {
         if (holder.image == null) return;
 
-        UniversalIL.songImageLoader(song, holder.image,
-                new PaletteImageLoadingListener() {
-                    @Override
-                    public void onColorReady(int color) {
-                        if (usePalette)
-                            setColors(
-                                    color,
-                                    holder);
-                        else
-                            setColors(getDefaultFooterColor(activity), holder);
-                    }
+        new UniversalIL(
+            holder.image,
+            new PaletteImageLoadingListener() {
+                @Override
+                public void onColorReady(int color) {
+                    if (usePalette)
+                        setColors(
+                                color,
+                                holder);
+                    else
+                        setColors(getDefaultFooterColor(activity), holder);
                 }
-        );
+            }).loadImage(song);
     }
 
     protected String getSongTitle(Song song) {

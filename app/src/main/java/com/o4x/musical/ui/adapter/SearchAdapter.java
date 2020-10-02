@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
@@ -73,13 +73,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 final Album album = (Album) dataSet.get(position);
                 holder.title.setText(album.getTitle());
                 holder.text.setText(MusicUtil.getAlbumInfoString(activity, album));
-                UniversalIL.songImageLoader(album.safeGetFirstSong(), holder.image, null);
+                new UniversalIL(holder.image).loadImage(album.safeGetFirstSong());
                 break;
             case ARTIST:
                 final Artist artist = (Artist) dataSet.get(position);
                 holder.title.setText(artist.getName());
                 holder.text.setText(MusicUtil.getArtistInfoString(activity, artist));
-                UniversalIL.artistImageLoader(artist, holder.image, null);
+                new UniversalIL(holder.image).loadImage(artist);
                 break;
             case SONG:
                 final Song song = (Song) dataSet.get(position);

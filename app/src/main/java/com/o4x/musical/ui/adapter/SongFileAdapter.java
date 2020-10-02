@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.model.AudioFileCover;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
@@ -113,7 +113,8 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
             holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
             holder.image.setImageResource(R.drawable.ic_folder_white_24dp);
         } else {
-            UniversalIL.audioFileImageLoader(new AudioFileCover(file.getName(), file.getPath()), holder.image, null);
+            new UniversalIL(holder.image)
+                    .loadImage(new AudioFileCover(file.getName(), file.getPath()));
         }
     }
 
