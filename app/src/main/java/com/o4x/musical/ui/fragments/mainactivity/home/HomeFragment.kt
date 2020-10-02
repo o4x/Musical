@@ -298,6 +298,7 @@ class HomeFragment : AbsMainActivityFragment() {
                 }
             }
         }
+
     private val linearLayoutManager: LinearLayoutManager
         get() {
             val size = gridSize
@@ -309,6 +310,7 @@ class HomeFragment : AbsMainActivityFragment() {
                 }
             }
         }
+
     private val gridSize: Int
         get() = resources.getInteger(R.integer.home_grid_columns)
 
