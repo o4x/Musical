@@ -22,7 +22,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.imageloader.universalil.UniversalIL
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.loader.LastAddedLoader
 import com.o4x.musical.loader.SongLoader

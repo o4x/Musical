@@ -1,10 +1,6 @@
 package com.o4x.musical.ui.adapter.song;
 
 import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,12 +10,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
+
 import com.afollestad.materialcab.MaterialCab;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.NavigationUtil;
@@ -85,7 +86,7 @@ public class ArtistSongAdapter extends ArrayAdapter<Song> implements MaterialCab
         songTitle.setText(song.title);
         songInfo.setText(song.albumName);
 
-        UniversalIL.songImageLoader(song, albumArt, null);
+        new UniversalIL(albumArt).loadImage(song);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             albumArt.setTransitionName(activity.getString(R.string.transition_album_art));

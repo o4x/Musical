@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.imageloader.universalil.palette.PaletteMusicLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
+import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.Util;
@@ -125,17 +125,14 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
 
         private void loadAlbumCover() {
-            UniversalIL.songImageLoader(
-                    song,
-                    albumCover,
+            new UniversalIL(albumCover,
                     new PaletteMusicLoadingListener() {
                         @Override
                         public void onColorReady(@NotNull MediaNotificationProcessor colors) {
                             setColor(colors);
                         }
                     },
-                    Util.getMaxScreenSize()
-            );
+                    Util.getMaxScreenSize()).loadImage(song);
         }
 
         private void setColor(MediaNotificationProcessor colors) {

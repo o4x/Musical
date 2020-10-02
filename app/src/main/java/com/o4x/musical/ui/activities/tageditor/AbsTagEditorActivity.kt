@@ -26,7 +26,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.o4x.musical.R
 import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.extensions.surfaceColor
-import com.o4x.musical.imageloader.universalil.UniversalIL
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.model.Artist
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
@@ -223,8 +223,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     private fun setupArtistImageView() {
         artistImage?.let {
 
-            UniversalIL.artistImageLoader(
-                artist, it)
+            UniversalIL(it).loadImage(artist)
 
             val items = arrayOf<CharSequence>(
                 getString(R.string.pick_from_local_storage),

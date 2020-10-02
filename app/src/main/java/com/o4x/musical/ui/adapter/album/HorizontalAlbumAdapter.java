@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.o4x.musical.helper.HorizontalAdapterHelper;
-import com.o4x.musical.imageloader.universalil.UniversalIL;
-import com.o4x.musical.imageloader.universalil.palette.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
+import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.util.MusicUtil;
@@ -54,9 +54,7 @@ public class HorizontalAlbumAdapter extends AlbumAdapter {
     protected void loadAlbumCover(Album album, final ViewHolder holder) {
         if (holder.image == null) return;
 
-        UniversalIL.songImageLoader(
-                album.safeGetFirstSong(),
-                holder.image,
+        new UniversalIL(holder.image,
                 new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {
@@ -65,8 +63,7 @@ public class HorizontalAlbumAdapter extends AlbumAdapter {
                         else
                             setColors(getAlbumArtistFooterColor(activity), holder);
                     }
-                }
-        );
+                }).loadImage(album.safeGetFirstSong());
     }
 
     @Override
