@@ -24,7 +24,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import code.name.monkey.appthemehelper.ThemeStore;
 
 public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR extends List<? extends Serializable>>
         extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
@@ -117,7 +116,6 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     }
 
     private void setUpToolBar() {
-        toolbar.setBackgroundColor(ThemeStore.Companion.themeColor(this));
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
