@@ -37,8 +37,6 @@ import kotlinx.android.synthetic.main.fragment_library.*
 class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-
-
     private var pagerAdapter: MusicLibraryPagerAdapter? = null
     private var cab: MaterialCab? = null
 
@@ -70,10 +68,12 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
             val current = currentFragment
             pagerAdapter!!.setCategoryInfos(libraryCategory)
             pager!!.offscreenPageLimit = pagerAdapter!!.count - 1
-            var position = pagerAdapter!!.getItemPosition(current)
-            if (position < 0) position = 0
-            pager!!.currentItem = position
-            lastPage = position
+            var position = current?.let { pagerAdapter?.getItemPosition(it) }
+            position?.let {
+                if (it < 0) position = 0
+                pager!!.currentItem = it
+                lastPage = it
+            }
             updateTabVisibility()
         }
     }
@@ -86,7 +86,6 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
         val primaryColor = surfaceColor()
         val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
         val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
-        //        TabLayoutUtil.setTabIconColors(tabs, normalColor, selectedColor);
         mainActivity.tabs.setBackgroundColor(primaryColor)
         mainActivity.tabs.setTabTextColors(normalColor, selectedColor)
         mainActivity.tabs.setSelectedTabIndicatorColor(themeColor(mainActivity))
@@ -100,11 +99,11 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
     private fun updateTabVisibility() {
         // hide the tab bar when only a single tab is visible
         mainActivity.tabs.visibility =
-            if (pagerAdapter!!.count == 1) View.GONE else View.VISIBLE
+            if (pagerAdapter?.count == 1) View.GONE else View.VISIBLE
     }
 
-    val currentFragment: Fragment
-        get() = pagerAdapter!!.getFragment(pager!!.currentItem)
+    private val currentFragment: Fragment?
+        get() = pagerAdapter?.getFragment(pager!!.currentItem)
 
     private val isPlaylistPage: Boolean
         get() = currentFragment is PlaylistsFragment
@@ -173,8 +172,7 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
                 return true
             }
         }
-        val id = item.itemId
-        when (id) {
+        when (item.itemId) {
             R.id.action_shuffle_all -> {
                 MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(mainActivity), true)
                 return true
@@ -257,64 +255,68 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
     ) {
         val currentSortOrder = fragment.sortOrder
         sortOrderMenu.clear()
-        if (fragment is AlbumsFragment) {
-            sortOrderMenu.add(0,
-                R.id.action_album_sort_order_asc,
-                0,
-                R.string.sort_order_a_z).isChecked =
-                currentSortOrder == SortOrder.AlbumSortOrder.ALBUM_A_Z
-            sortOrderMenu.add(0,
-                R.id.action_album_sort_order_desc,
-                1,
-                R.string.sort_order_z_a).isChecked =
-                currentSortOrder == SortOrder.AlbumSortOrder.ALBUM_Z_A
-            sortOrderMenu.add(0,
-                R.id.action_album_sort_order_artist,
-                2,
-                R.string.sort_order_artist).isChecked =
-                currentSortOrder == SortOrder.AlbumSortOrder.ALBUM_ARTIST
-            sortOrderMenu.add(0,
-                R.id.action_album_sort_order_year,
-                3,
-                R.string.sort_order_year).isChecked =
-                currentSortOrder == SortOrder.AlbumSortOrder.ALBUM_YEAR
-        } else if (fragment is ArtistsFragment) {
-            sortOrderMenu.add(0,
-                R.id.action_artist_sort_order_asc,
-                0,
-                R.string.sort_order_a_z).isChecked =
-                currentSortOrder == SortOrder.ArtistSortOrder.ARTIST_A_Z
-            sortOrderMenu.add(0,
-                R.id.action_artist_sort_order_desc,
-                1,
-                R.string.sort_order_z_a).isChecked =
-                currentSortOrder == SortOrder.ArtistSortOrder.ARTIST_Z_A
-        } else if (fragment is SongsFragment) {
-            sortOrderMenu.add(0,
-                R.id.action_song_sort_order_asc,
-                0,
-                R.string.sort_order_a_z).isChecked =
-                currentSortOrder == SortOrder.SongSortOrder.SONG_A_Z
-            sortOrderMenu.add(0,
-                R.id.action_song_sort_order_desc,
-                1,
-                R.string.sort_order_z_a).isChecked =
-                currentSortOrder == SortOrder.SongSortOrder.SONG_Z_A
-            sortOrderMenu.add(0,
-                R.id.action_song_sort_order_artist,
-                2,
-                R.string.sort_order_artist).isChecked =
-                currentSortOrder == SortOrder.SongSortOrder.SONG_ARTIST
-            sortOrderMenu.add(0,
-                R.id.action_song_sort_order_album,
-                3,
-                R.string.sort_order_album).isChecked =
-                currentSortOrder == SortOrder.SongSortOrder.SONG_ALBUM
-            sortOrderMenu.add(0,
-                R.id.action_song_sort_order_year,
-                4,
-                R.string.sort_order_year).isChecked =
-                currentSortOrder == SortOrder.SongSortOrder.SONG_YEAR
+        when (fragment) {
+            is AlbumsFragment -> {
+                sortOrderMenu.add(0,
+                    R.id.action_album_sort_order_asc,
+                    0,
+                    R.string.sort_order_a_z).isChecked =
+                    currentSortOrder == SortOrder.AlbumSortOrder.ALBUM_A_Z
+                sortOrderMenu.add(0,
+                    R.id.action_album_sort_order_desc,
+                    1,
+                    R.string.sort_order_z_a).isChecked =
+                    currentSortOrder == SortOrder.AlbumSortOrder.ALBUM_Z_A
+                sortOrderMenu.add(0,
+                    R.id.action_album_sort_order_artist,
+                    2,
+                    R.string.sort_order_artist).isChecked =
+                    currentSortOrder == SortOrder.AlbumSortOrder.ALBUM_ARTIST
+                sortOrderMenu.add(0,
+                    R.id.action_album_sort_order_year,
+                    3,
+                    R.string.sort_order_year).isChecked =
+                    currentSortOrder == SortOrder.AlbumSortOrder.ALBUM_YEAR
+            }
+            is ArtistsFragment -> {
+                sortOrderMenu.add(0,
+                    R.id.action_artist_sort_order_asc,
+                    0,
+                    R.string.sort_order_a_z).isChecked =
+                    currentSortOrder == SortOrder.ArtistSortOrder.ARTIST_A_Z
+                sortOrderMenu.add(0,
+                    R.id.action_artist_sort_order_desc,
+                    1,
+                    R.string.sort_order_z_a).isChecked =
+                    currentSortOrder == SortOrder.ArtistSortOrder.ARTIST_Z_A
+            }
+            is SongsFragment -> {
+                sortOrderMenu.add(0,
+                    R.id.action_song_sort_order_asc,
+                    0,
+                    R.string.sort_order_a_z).isChecked =
+                    currentSortOrder == SortOrder.SongSortOrder.SONG_A_Z
+                sortOrderMenu.add(0,
+                    R.id.action_song_sort_order_desc,
+                    1,
+                    R.string.sort_order_z_a).isChecked =
+                    currentSortOrder == SortOrder.SongSortOrder.SONG_Z_A
+                sortOrderMenu.add(0,
+                    R.id.action_song_sort_order_artist,
+                    2,
+                    R.string.sort_order_artist).isChecked =
+                    currentSortOrder == SortOrder.SongSortOrder.SONG_ARTIST
+                sortOrderMenu.add(0,
+                    R.id.action_song_sort_order_album,
+                    3,
+                    R.string.sort_order_album).isChecked =
+                    currentSortOrder == SortOrder.SongSortOrder.SONG_ALBUM
+                sortOrderMenu.add(0,
+                    R.id.action_song_sort_order_year,
+                    4,
+                    R.string.sort_order_year).isChecked =
+                    currentSortOrder == SortOrder.SongSortOrder.SONG_YEAR
+            }
         }
         sortOrderMenu.setGroupCheckable(0, true, true)
     }
@@ -372,11 +374,5 @@ class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListen
 
     override fun onPageScrollStateChanged(state: Int) {
         showAppbar()
-    }
-
-    companion object {
-        fun newInstance(): LibraryFragment {
-            return LibraryFragment()
-        }
     }
 }
