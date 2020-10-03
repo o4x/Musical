@@ -27,18 +27,11 @@ import kotlin.math.min
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbacks {
+abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout), MainActivityFragmentCallbacks {
 
     val mainActivity: MainActivity
         get() = requireActivity() as MainActivity
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(getLayout(), container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,9 +65,6 @@ abstract class AbsMainActivityFragment : Fragment(), MainActivityFragmentCallbac
     override fun handleBackPress(): Boolean {
         return false
     }
-
-    @LayoutRes
-    abstract fun getLayout(): Int
 
     fun toolbarHeight(): Int {
         return mainActivity.toolbar.layoutParams.height

@@ -51,7 +51,7 @@ import java.io.FileFilter
 import java.lang.ref.WeakReference
 import java.util.*
 
-class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
+class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHolder, SelectionCallback,
     SongFileAdapter.Callbacks, LoaderManager.LoaderCallbacks<List<File>> {
 
     private var adapter: SongFileAdapter? = null
@@ -93,8 +93,6 @@ class FoldersFragment : AbsMainActivityFragment(), CabHolder, SelectionCallback,
             loaderManager.initLoader(LOADER_ID, null, this)
         }
     }
-
-    override fun getLayout(): Int = R.layout.fragment_folder
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

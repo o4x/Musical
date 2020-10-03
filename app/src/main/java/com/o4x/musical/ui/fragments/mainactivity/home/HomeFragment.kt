@@ -43,7 +43,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
 
-class HomeFragment : AbsMainActivityFragment() {
+class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
 
     private lateinit var queueAdapter: HomeAdapter
     private lateinit var queueLayoutManager: LinearLayoutManager
@@ -64,8 +64,6 @@ class HomeFragment : AbsMainActivityFragment() {
     private val statusAnimation = ValueAnimator.ofFloat(0f, 1f)
 
     var position: Int = 0
-
-    override fun getLayout(): Int = R.layout.fragment_home
 
     override fun onDestroyView() {
         mainActivity.removeMusicServiceEventListener(queueListener)
