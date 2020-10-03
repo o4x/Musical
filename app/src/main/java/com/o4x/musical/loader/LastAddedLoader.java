@@ -3,12 +3,12 @@ package com.o4x.musical.loader;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.PreferenceUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LastAddedLoader {

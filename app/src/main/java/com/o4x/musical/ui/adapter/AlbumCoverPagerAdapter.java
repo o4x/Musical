@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.Util;

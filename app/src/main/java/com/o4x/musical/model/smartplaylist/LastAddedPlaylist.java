@@ -2,14 +2,13 @@ package com.o4x.musical.model.smartplaylist;
 
 import android.content.Context;
 import android.os.Parcel;
+
 import androidx.annotation.NonNull;
 
+import com.o4x.musical.R;
 import com.o4x.musical.loader.LastAddedLoader;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.R;
-import com.o4x.musical.util.PreferenceUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

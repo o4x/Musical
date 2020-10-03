@@ -2,22 +2,23 @@ package com.o4x.musical.helper.menu;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.o4x.musical.App;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
-import com.o4x.musical.ui.dialogs.DeletePlaylistDialog;
-import com.o4x.musical.ui.dialogs.RenamePlaylistDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.loader.PlaylistSongLoader;
 import com.o4x.musical.misc.WeakContextAsyncTask;
 import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
+import com.o4x.musical.ui.dialogs.DeletePlaylistDialog;
+import com.o4x.musical.ui.dialogs.RenamePlaylistDialog;
 import com.o4x.musical.util.PlaylistsUtil;
 
 import java.io.IOException;

@@ -153,17 +153,17 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
                 return true;
             case R.id.action_tag_editor:
                 Intent intent = new Intent(getActivity(), SongTagEditorActivity.class);
-                intent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.id);
+                intent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.getId());
                 startActivity(intent);
                 return true;
             case R.id.action_details:
                 SongDetailDialog.create(song).show(getFragmentManager(), "SONG_DETAIL");
                 return true;
             case R.id.action_go_to_album:
-                NavigationUtil.goToAlbum(getActivity(), song.albumId);
+                NavigationUtil.goToAlbum(getActivity(), song.getAlbumId());
                 return true;
             case R.id.action_go_to_artist:
-                NavigationUtil.goToArtist(getActivity(), song.artistId);
+                NavigationUtil.goToArtist(getActivity(), song.getArtistId());
                 return true;
         }
         return false;

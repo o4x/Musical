@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2019 Hemanth Savarala.
+ *
+ * Licensed under the GNU General Public License v3
+ *
+ * This is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by
+ *  the Free Software Foundation either version 3 of the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ */
+
 package com.o4x.musical.provider;
 
 import android.content.ContentValues;
@@ -7,20 +21,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+
 import androidx.annotation.NonNull;
 
-import com.o4x.musical.service.MusicService;
 import com.o4x.musical.util.FileUtil;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+
+import static com.o4x.musical.service.MusicService.MEDIA_STORE_CHANGED;
 
 public class BlacklistStore extends SQLiteOpenHelper {
-    private static BlacklistStore sInstance = null;
     public static final String DATABASE_NAME = "blacklist.db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
+    private static BlacklistStore sInstance = null;
     private Context context;
 
     public BlacklistStore(final Context context) {
@@ -28,10 +43,25 @@ public class BlacklistStore extends SQLiteOpenHelper {
         this.context = context;
     }
 
+    @NonNull
+    public static synchronized BlacklistStore getInstance(@NonNull final Context context) {
+        if (sInstance == null) {
+            sInstance = new BlacklistStore(context.getApplicationContext());
+            if (!PreferenceUtil.INSTANCE.isInitializedBlacklist()) {
+                // blacklisted by default
+                sInstance.addPathImpl(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS));
+                sInstance.addPathImpl(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS));
+                sInstance.addPathImpl(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES));
+
+                PreferenceUtil.INSTANCE.setInitializedBlacklist(true);
+            }
+        }
+        return sInstance;
+    }
+
     @Override
     public void onCreate(@NonNull final SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + BlacklistStoreColumns.NAME + " ("
-                + BlacklistStoreColumns.PATH + " STRING NOT NULL);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + BlacklistStoreColumns.NAME + " (" + BlacklistStoreColumns.PATH + " STRING NOT NULL);");
     }
 
     @Override
@@ -44,22 +74,6 @@ public class BlacklistStore extends SQLiteOpenHelper {
     public void onDowngrade(@NonNull SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + BlacklistStoreColumns.NAME);
         onCreate(db);
-    }
-
-    @NonNull
-    public static synchronized BlacklistStore getInstance(@NonNull final Context context) {
-        if (sInstance == null) {
-            sInstance = new BlacklistStore(context.getApplicationContext());
-            if (!PreferenceUtil.initializedBlacklist()) {
-                // blacklisted by default
-                sInstance.addPathImpl(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS));
-                sInstance.addPathImpl(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS));
-                sInstance.addPathImpl(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES));
-
-                PreferenceUtil.setInitializedBlacklist();
-            }
-        }
-        return sInstance;
     }
 
     public void addPath(File file) {
@@ -127,16 +141,16 @@ public class BlacklistStore extends SQLiteOpenHelper {
     }
 
     private void notifyMediaStoreChanged() {
-        context.sendBroadcast(new Intent(MusicService.MEDIA_STORE_CHANGED));
+        context.sendBroadcast(new Intent(MEDIA_STORE_CHANGED));
     }
 
     @NonNull
-    public List<String> getPaths() {
+    public ArrayList<String> getPaths() {
         Cursor cursor = getReadableDatabase().query(BlacklistStoreColumns.NAME,
                 new String[]{BlacklistStoreColumns.PATH},
                 null, null, null, null, null);
 
-        List<String> paths = new ArrayList<>();
+        ArrayList<String> paths = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 paths.add(cursor.getString(0));
