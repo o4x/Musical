@@ -3,6 +3,7 @@ package com.o4x.musical.ui.dialogs;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
@@ -28,7 +29,7 @@ public class SongShareDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Song song = getArguments().getParcelable("song");
-        final String currentlyListening = getString(R.string.currently_listening_to_x_by_x, song.title, song.artistName);
+        final String currentlyListening = getString(R.string.currently_listening_to_x_by_x, song.getTitle(), song.getArtistName());
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.what_do_you_want_to_share)
                 .items(getString(R.string.the_audio_file), "\u201C" + currentlyListening + "\u201D")

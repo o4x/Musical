@@ -2,18 +2,19 @@ package com.o4x.musical.ui.fragments.mainactivity.library.pager;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.o4x.musical.R;
-import com.o4x.musical.misc.OverScrollGridLayoutManager;
-import com.o4x.musical.ui.adapter.artist.ArtistAdapter;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.loader.ArtistLoader;
+import com.o4x.musical.misc.OverScrollGridLayoutManager;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Artist;
+import com.o4x.musical.ui.adapter.artist.ArtistAdapter;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.ArrayList;

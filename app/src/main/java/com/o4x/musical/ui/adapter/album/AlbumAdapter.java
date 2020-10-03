@@ -14,8 +14,8 @@ import androidx.core.util.Pair;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Song;
@@ -86,7 +86,7 @@ public class AlbumAdapter extends AbsMultiSelectAdapter<AlbumAdapter.ViewHolder,
     protected String getAlbumText(Album album) {
         return MusicUtil.buildInfoString(
             album.getArtistName(),
-            MusicUtil.getSongCountString(activity, album.songs.size())
+            MusicUtil.getSongCountString(activity, album.getSongs().size())
         );
     }
 
@@ -173,7 +173,7 @@ public class AlbumAdapter extends AbsMultiSelectAdapter<AlbumAdapter.ViewHolder,
     private List<Song> getSongList(@NonNull List<Album> albums) {
         final List<Song> songs = new ArrayList<>();
         for (Album album : albums) {
-            songs.addAll(album.songs);
+            songs.addAll(album.getSongs());
         }
         return songs;
     }

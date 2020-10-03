@@ -28,8 +28,8 @@ import com.afollestad.materialdialogs.util.DialogUtils;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.interfaces.PaletteColorHolder;
@@ -186,7 +186,7 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
 
     private void setUpAlbumRecyclerView() {
         albumRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        albumAdapter = new HorizontalAlbumAdapter(this, getArtist().albums, usePalette, this);
+        albumAdapter = new HorizontalAlbumAdapter(this, getArtist().getAlbums(), usePalette, this);
         albumRecyclerView.setAdapter(albumAdapter);
         albumAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -448,11 +448,11 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
         durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
 
         songAdapter.swapDataSet(artist.getSongs());
-        albumAdapter.swapDataSet(artist.albums);
+        albumAdapter.swapDataSet(artist.getAlbums());
     }
 
     private Artist getArtist() {
-        if (artist == null) artist = new Artist();
+        if (artist == null) artist = Artist.Companion.getEmpty();
         return artist;
     }
 
@@ -468,9 +468,9 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
 
     @Override
     public void onLoaderReset(Loader<Artist> loader) {
-        this.artist = new Artist();
+        this.artist = Artist.Companion.getEmpty();
         songAdapter.swapDataSet(artist.getSongs());
-        albumAdapter.swapDataSet(artist.albums);
+        albumAdapter.swapDataSet(artist.getAlbums());
     }
 
     private static class AsyncArtistDataLoader extends WrappedAsyncTaskLoader<Artist> {

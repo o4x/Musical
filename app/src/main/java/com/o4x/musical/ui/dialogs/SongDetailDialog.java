@@ -80,7 +80,7 @@ public class SongDetailDialog extends DialogFragment {
         samplingRate.setText(makeTextWithTitle(context, R.string.label_sampling_rate, "-"));
 
         if (song != null) {
-            final File songFile = new File(song.data);
+            final File songFile = new File(song.getData());
             if (songFile.exists()) {
                 fileName.setText(makeTextWithTitle(context, R.string.label_file_name, songFile.getName()));
                 filePath.setText(makeTextWithTitle(context, R.string.label_file_path, songFile.getAbsolutePath()));
@@ -96,12 +96,12 @@ public class SongDetailDialog extends DialogFragment {
                 } catch (@NonNull CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
                     Log.e(TAG, "error while reading the song file", e);
                     // fallback
-                    trackLength.setText(makeTextWithTitle(context, R.string.label_track_length, MusicUtil.getReadableDurationString(song.duration)));
+                    trackLength.setText(makeTextWithTitle(context, R.string.label_track_length, MusicUtil.getReadableDurationString(song.getDuration())));
                 }
             } else {
                 // fallback
-                fileName.setText(makeTextWithTitle(context, R.string.label_file_name, song.title));
-                trackLength.setText(makeTextWithTitle(context, R.string.label_track_length, MusicUtil.getReadableDurationString(song.duration)));
+                fileName.setText(makeTextWithTitle(context, R.string.label_file_name, song.getTitle()));
+                trackLength.setText(makeTextWithTitle(context, R.string.label_track_length, MusicUtil.getReadableDurationString(song.getDuration())));
             }
         }
 

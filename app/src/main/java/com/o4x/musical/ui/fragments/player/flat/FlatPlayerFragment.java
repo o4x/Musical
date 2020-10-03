@@ -56,7 +56,7 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
 
     @SuppressWarnings("ConstantConditions")
     private static class PortraitImpl extends BaseImpl {
-        Song currentSong = Song.EMPTY_SONG;
+        Song currentSong = Song.getEmptySong();
 
         public PortraitImpl(FlatPlayerFragment fragment) {
             super(fragment);

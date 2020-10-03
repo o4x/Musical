@@ -17,8 +17,8 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
@@ -76,7 +76,7 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
 
     @Override
     public long getItemId(int position) {
-        return dataSet.get(position).id;
+        return dataSet.get(position).getId();
     }
 
     @Override
@@ -149,7 +149,7 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
     }
 
     protected String getSongTitle(Song song) {
-        return song.title;
+        return song.getTitle();
     }
 
     protected String getSongText(Song song) {
@@ -168,7 +168,7 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
 
     @Override
     protected String getName(Song song) {
-        return song.title;
+        return song.getTitle();
     }
 
     @Override
@@ -187,16 +187,16 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
         switch (PreferenceUtil.getSongSortOrder()) {
             case SortOrder.SongSortOrder.SONG_A_Z:
             case SortOrder.SongSortOrder.SONG_Z_A:
-                sectionName = dataSet.get(position).title;
+                sectionName = dataSet.get(position).getTitle();
                 break;
             case SortOrder.SongSortOrder.SONG_ALBUM:
-                sectionName = dataSet.get(position).albumName;
+                sectionName = dataSet.get(position).getAlbumName();
                 break;
             case SortOrder.SongSortOrder.SONG_ARTIST:
-                sectionName = dataSet.get(position).artistName;
+                sectionName = dataSet.get(position).getArtistName();
                 break;
             case SortOrder.SongSortOrder.SONG_YEAR:
-                return MusicUtil.getYearString(dataSet.get(position).year);
+                return MusicUtil.getYearString(dataSet.get(position).getYear());
         }
 
         return MusicUtil.getSectionName(sectionName);
@@ -245,7 +245,7 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
                         Pair[] albumPairs = new Pair[]{
                                 Pair.create(image, activity.getResources().getString(R.string.transition_album_art))
                         };
-                        NavigationUtil.goToAlbum(activity, getSong().albumId, albumPairs);
+                        NavigationUtil.goToAlbum(activity, getSong().getAlbumId(), albumPairs);
                         return true;
                 }
             }

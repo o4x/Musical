@@ -2,6 +2,7 @@ package com.o4x.musical.loader;
 
 import android.content.Context;
 import android.provider.MediaStore.Audio.AudioColumns;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -51,7 +52,7 @@ public class ArtistLoader {
                 new String[]{String.valueOf(artistId)},
                 getSongLoaderSortOrder(context))
         );
-        return new Artist(AlbumLoader.splitIntoAlbums(songs));
+        return new Artist(artistId, AlbumLoader.splitIntoAlbums(songs));
     }
 
     @NonNull
@@ -59,7 +60,7 @@ public class ArtistLoader {
         List<Artist> artists = new ArrayList<>();
         if (albums != null) {
             for (Album album : albums) {
-                getOrCreateArtist(artists, album.getArtistId()).albums.add(album);
+                getOrCreateArtist(artists, album.getArtistId()).getAlbums().add(album);
             }
         }
         return artists;
@@ -67,11 +68,11 @@ public class ArtistLoader {
 
     private static Artist getOrCreateArtist(List<Artist> artists, long artistId) {
         for (Artist artist : artists) {
-            if (!artist.albums.isEmpty() && !artist.albums.get(0).songs.isEmpty() && artist.albums.get(0).songs.get(0).artistId == artistId) {
+            if (!artist.getAlbums().isEmpty() && !artist.getAlbums().get(0).getSongs().isEmpty() && artist.getAlbums().get(0).getSongs().get(0).getArtistId() == artistId) {
                 return artist;
             }
         }
-        Artist artist = new Artist();
+        Artist artist = Artist.Companion.getEmpty();
         artists.add(artist);
         return artist;
     }

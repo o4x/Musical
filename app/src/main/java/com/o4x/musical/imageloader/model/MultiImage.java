@@ -35,7 +35,7 @@ public class MultiImage {
     static public MultiImage fromGenre(Genre genre) {
         final List<AlbumCover> covers = new ArrayList<>();
         for (final Song song : genre.songs) {
-            covers.add(new AlbumCover(song.albumId, song.data));
+            covers.add(new AlbumCover(song.getAlbumId(), song.getData()));
         }
 
         return new MultiImage(genre.id, genre.name, covers);

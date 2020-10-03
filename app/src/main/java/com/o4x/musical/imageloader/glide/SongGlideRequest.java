@@ -6,7 +6,6 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.Key;
@@ -74,10 +73,10 @@ public class SongGlideRequest {
     }
 
     public static Uri getUri(Song song) {
-        return MusicUtil.getMediaStoreAlbumCoverUri(song.albumId);
+        return MusicUtil.getMediaStoreAlbumCoverUri(song.getAlbumId());
     }
 
     public static Key createSignature(Song song) {
-        return new MediaStoreSignature("", song.dateModified, 0);
+        return new MediaStoreSignature("", song.getDateModified(), 0);
     }
 }

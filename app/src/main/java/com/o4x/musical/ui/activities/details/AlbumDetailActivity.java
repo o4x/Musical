@@ -27,8 +27,8 @@ import com.afollestad.materialdialogs.util.DialogUtils;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
+import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.interfaces.PaletteColorHolder;
@@ -220,7 +220,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     }
 
     private void setUpSongsAdapter() {
-        adapter = new AlbumSongAdapter(this, getAlbum().songs, R.layout.item_list, false, this);
+        adapter = new AlbumSongAdapter(this, getAlbum().getSongs(), R.layout.item_list, false, this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(adapter);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -413,14 +413,14 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
         getSupportActionBar().setTitle(album.getTitle());
         artistTextView.setText(album.getArtistName());
         songCountTextView.setText(MusicUtil.getSongCountString(this, album.getSongCount()));
-        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.songs)));
+        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
         albumYearTextView.setText(MusicUtil.getYearString(album.getYear()));
 
-        adapter.swapDataSet(album.songs);
+        adapter.swapDataSet(album.getSongs());
     }
 
     private Album getAlbum() {
-        if (album == null) album = new Album();
+        if (album == null) album = Album.Companion.getEmpty();
         return album;
     }
 
@@ -436,8 +436,8 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
 
     @Override
     public void onLoaderReset(Loader<Album> loader) {
-        this.album = new Album();
-        adapter.swapDataSet(album.songs);
+        this.album = Album.Companion.getEmpty();
+        adapter.swapDataSet(album.getSongs());
     }
 
     private static class AsyncAlbumLoader extends WrappedAsyncTaskLoader<Album> {

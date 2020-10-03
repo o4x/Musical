@@ -2,6 +2,7 @@ package com.o4x.musical.loader;
 
 import android.content.Context;
 import android.provider.MediaStore.Audio.AudioColumns;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -47,7 +48,7 @@ public class AlbumLoader {
     @NonNull
     public static Album getAlbum(@NonNull final Context context, long albumId) {
         List<Song> songs = SongLoader.getSongs(SongLoader.makeSongCursor(context, AudioColumns.ALBUM_ID + "=?", new String[]{String.valueOf(albumId)}, getSongLoaderSortOrder(context)));
-        Album album = new Album(songs);
+        Album album = new Album(albumId, songs);
         sortSongsByTrackNumber(album);
         return album;
     }
@@ -57,7 +58,7 @@ public class AlbumLoader {
         List<Album> albums = new ArrayList<>();
         if (songs != null) {
             for (Song song : songs) {
-                getOrCreateAlbum(albums, song.albumId).songs.add(song);
+                getOrCreateAlbum(albums, song.getAlbumId()).getSongs().add(song);
             }
         }
         for (Album album : albums) {
@@ -68,16 +69,16 @@ public class AlbumLoader {
 
     private static Album getOrCreateAlbum(List<Album> albums, long albumId) {
         for (Album album : albums) {
-            if (!album.songs.isEmpty() && album.songs.get(0).albumId == albumId) {
+            if (!album.getSongs().isEmpty() && album.getSongs().get(0).getAlbumId() == albumId) {
                 return album;
             }
         }
-        Album album = new Album();
+        Album album = Album.Companion.getEmpty();
         albums.add(album);
         return album;
     }
 
     private static void sortSongsByTrackNumber(Album album) {
-        Collections.sort(album.songs, (o1, o2) -> o1.trackNumber - o2.trackNumber);
+        Collections.sort(album.getSongs(), (o1, o2) -> o1.getTrackNumber() - o2.getTrackNumber());
     }
 }

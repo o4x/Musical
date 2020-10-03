@@ -1,12 +1,13 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
@@ -89,7 +90,7 @@ public abstract class AbsOffsetSongAdapter extends SongAdapter {
         @Override
         protected Song getSong() {
             if (getItemViewType() == OFFSET_ITEM)
-                return Song.EMPTY_SONG; // could also return null, just to be safe return empty song
+                return Song.getEmptySong(); // could also return null, just to be safe return empty song
             return dataSet.get(getAdapterPosition() - 1);
         }
 

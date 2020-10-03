@@ -1,22 +1,23 @@
 package com.o4x.musical.helper.menu;
 
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+
 import com.o4x.musical.R;
-import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
-import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
-import com.o4x.musical.ui.dialogs.SongDetailDialog;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.PaletteColorHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity;
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
+import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
+import com.o4x.musical.ui.dialogs.SongDetailDialog;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.RingtoneManager;
@@ -34,7 +35,7 @@ public class SongMenuHelper {
                     RingtoneManager.showDialog(activity);
                 } else {
                     RingtoneManager ringtoneManager = new RingtoneManager();
-                    ringtoneManager.setRingtone(activity, song.id);
+                    ringtoneManager.setRingtone(activity, song.getId());
                 }
                 return true;
             case R.id.action_share:
@@ -54,7 +55,7 @@ public class SongMenuHelper {
                 return true;
             case R.id.action_tag_editor:
                 Intent tagEditorIntent = new Intent(activity, SongTagEditorActivity.class);
-                tagEditorIntent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.id);
+                tagEditorIntent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.getId());
                 if (activity instanceof PaletteColorHolder)
                     tagEditorIntent.putExtra(AbsTagEditorActivity.EXTRA_PALETTE, ((PaletteColorHolder) activity).getPaletteColor());
                 activity.startActivity(tagEditorIntent);
@@ -63,10 +64,10 @@ public class SongMenuHelper {
                 SongDetailDialog.create(song).show(activity.getSupportFragmentManager(), "SONG_DETAILS");
                 return true;
             case R.id.action_go_to_album:
-                NavigationUtil.goToAlbum(activity, song.albumId);
+                NavigationUtil.goToAlbum(activity, song.getAlbumId());
                 return true;
             case R.id.action_go_to_artist:
-                NavigationUtil.goToArtist(activity, song.artistId);
+                NavigationUtil.goToArtist(activity, song.getArtistId());
                 return true;
         }
         return false;

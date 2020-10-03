@@ -83,8 +83,8 @@ public class ArtistSongAdapter extends ArrayAdapter<Song> implements MaterialCab
             }
         }
 
-        songTitle.setText(song.title);
-        songInfo.setText(song.albumName);
+        songTitle.setText(song.getTitle());
+        songInfo.setText(song.getAlbumName());
 
         new UniversalIL(albumArt).loadImage(song);
 
@@ -105,7 +105,7 @@ public class ArtistSongAdapter extends ArrayAdapter<Song> implements MaterialCab
                     Pair[] albumPairs = new Pair[]{
                             Pair.create(albumArt, activity.getResources().getString(R.string.transition_album_art))
                     };
-                    NavigationUtil.goToAlbum(activity, song.albumId, albumPairs);
+                    NavigationUtil.goToAlbum(activity, song.getAlbumId(), albumPairs);
                     return true;
                 }
                 return super.onMenuItemClick(item);
@@ -141,7 +141,7 @@ public class ArtistSongAdapter extends ArrayAdapter<Song> implements MaterialCab
 
             final int size = checked.size();
             if (size <= 0) cab.finish();
-            else if (size == 1) cab.setTitle(checked.get(0).title);
+            else if (size == 1) cab.setTitle(checked.get(0).getTitle());
             else if (size > 1) cab.setTitle(String.valueOf(size));
         }
     }

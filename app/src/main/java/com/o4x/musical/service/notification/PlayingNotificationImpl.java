@@ -48,21 +48,21 @@ public class PlayingNotificationImpl extends PlayingNotification {
         final RemoteViews notificationLayout = new RemoteViews(service.getPackageName(), R.layout.notification);
         final RemoteViews notificationLayoutBig = new RemoteViews(service.getPackageName(), R.layout.notification_big);
 
-        if (TextUtils.isEmpty(song.title) && TextUtils.isEmpty(song.artistName)) {
+        if (TextUtils.isEmpty(song.getTitle()) && TextUtils.isEmpty(song.getArtistName())) {
             notificationLayout.setViewVisibility(R.id.media_titles, View.INVISIBLE);
         } else {
             notificationLayout.setViewVisibility(R.id.media_titles, View.VISIBLE);
-            notificationLayout.setTextViewText(R.id.album_name, song.title);
-            notificationLayout.setTextViewText(R.id.text, song.artistName);
+            notificationLayout.setTextViewText(R.id.album_name, song.getTitle());
+            notificationLayout.setTextViewText(R.id.text, song.getArtistName());
         }
 
-        if (TextUtils.isEmpty(song.title) && TextUtils.isEmpty(song.artistName) && TextUtils.isEmpty(song.albumName)) {
+        if (TextUtils.isEmpty(song.getTitle()) && TextUtils.isEmpty(song.getArtistName()) && TextUtils.isEmpty(song.getAlbumName())) {
             notificationLayoutBig.setViewVisibility(R.id.media_titles, View.INVISIBLE);
         } else {
             notificationLayoutBig.setViewVisibility(R.id.media_titles, View.VISIBLE);
-            notificationLayoutBig.setTextViewText(R.id.album_name, song.title);
-            notificationLayoutBig.setTextViewText(R.id.text, song.artistName);
-            notificationLayoutBig.setTextViewText(R.id.text2, song.albumName);
+            notificationLayoutBig.setTextViewText(R.id.album_name, song.getTitle());
+            notificationLayoutBig.setTextViewText(R.id.text, song.getArtistName());
+            notificationLayoutBig.setTextViewText(R.id.text2, song.getAlbumName());
         }
 
         linkButtons(notificationLayout, notificationLayoutBig);

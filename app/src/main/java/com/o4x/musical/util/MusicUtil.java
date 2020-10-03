@@ -10,13 +10,13 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
@@ -60,7 +60,7 @@ public class MusicUtil {
         try {
             return new Intent()
                     .setAction(Intent.ACTION_SEND)
-                    .putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName(), new File(song.data)))
+                    .putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName(), new File(song.getData())))
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     .setType("audio/*");
         } catch (IllegalArgumentException e) {
@@ -97,8 +97,8 @@ public class MusicUtil {
     @NonNull
     public static String getSongInfoString(@NonNull final Song song) {
         return MusicUtil.buildInfoString(
-            song.artistName,
-            song.albumName
+            song.getArtistName(),
+            song.getAlbumName()
         );
     }
 
@@ -138,7 +138,7 @@ public class MusicUtil {
     public static long getTotalDuration(@NonNull final Context context, @NonNull List<Song> songs) {
         long duration = 0;
         for (int i = 0; i < songs.size(); i++) {
-            duration += songs.get(i).duration;
+            duration += songs.get(i).getDuration();
         }
         return duration;
     }
@@ -238,7 +238,7 @@ public class MusicUtil {
         final StringBuilder selection = new StringBuilder();
         selection.append(BaseColumns._ID + " IN (");
         for (int i = 0; i < songs.size(); i++) {
-            selection.append(songs.get(i).id);
+            selection.append(songs.get(i).getId());
             if (i < songs.size() - 1) {
                 selection.append(",");
             }
@@ -306,8 +306,18 @@ public class MusicUtil {
         return PlaylistLoader.getPlaylist(context, PlaylistsUtil.createPlaylist(context, context.getString(R.string.favorites)));
     }
 
+    public static boolean isVariousArtists(String artistName) {
+        if (TextUtils.isEmpty(artistName)) {
+            return false;
+        }
+        if (artistName.equals(Artist.VARIOUS_ARTISTS_DISPLAY_NAME)) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isFavorite(@NonNull final Context context, @NonNull final Song song) {
-        return PlaylistsUtil.doesPlaylistContain(context, getFavoritesPlaylist(context).id, song.id);
+        return PlaylistsUtil.doesPlaylistContain(context, getFavoritesPlaylist(context).id, song.getId());
     }
 
     public static void toggleFavorite(@NonNull final Context context, @NonNull final Song song) {
@@ -342,7 +352,7 @@ public class MusicUtil {
     public static String getLyrics(Song song) {
         String lyrics = null;
 
-        File file = new File(song.data);
+        File file = new File(song.getData());
 
         try {
             lyrics = AudioFileIO.read(file).getTagOrCreateDefault().getFirst(FieldKey.LYRICS);
@@ -356,7 +366,7 @@ public class MusicUtil {
             if (dir != null && dir.exists() && dir.isDirectory()) {
                 String format = ".*%s.*\\.(lrc|txt)";
                 String filename = Pattern.quote(FileUtil.stripExtension(file.getName()));
-                String songtitle = Pattern.quote(song.title);
+                String songtitle = Pattern.quote(song.getTitle());
 
                 final List<Pattern> patterns = new ArrayList<>();
                 patterns.add(Pattern.compile(String.format(format, filename), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE));

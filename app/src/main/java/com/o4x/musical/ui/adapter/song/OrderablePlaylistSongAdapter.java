@@ -1,21 +1,22 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 import com.o4x.musical.R;
-import com.o4x.musical.ui.dialogs.RemoveFromPlaylistDialog;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.PlaylistSong;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.ui.dialogs.RemoveFromPlaylistDialog;
 import com.o4x.musical.util.ViewUtil;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class OrderablePlaylistSongAdapter extends PlaylistSongAdapter implements
     public long getItemId(int position) {
         position--;
         if (position < 0) return -2;
-        return ((List<PlaylistSong>) (List) dataSet).get(position).idInPlayList; // important!
+        return ((List<PlaylistSong>) (List) dataSet).get(position).getIdInPlayList(); // important!
     }
 
     @Override

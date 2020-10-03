@@ -2,13 +2,13 @@ package com.o4x.musical.model.smartplaylist;
 
 import android.content.Context;
 import android.os.Parcel;
+
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.R;
 import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.model.Song;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShuffleAllPlaylist extends AbsSmartPlaylist {

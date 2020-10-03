@@ -216,7 +216,7 @@ public class MusicPlayerRemote {
         if (musicService != null) {
             return musicService.getCurrentSong();
         }
-        return Song.EMPTY_SONG;
+        return Song.getEmptySong();
     }
 
     public static int getPosition() {

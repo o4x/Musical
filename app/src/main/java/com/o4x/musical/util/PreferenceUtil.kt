@@ -12,7 +12,9 @@ import com.o4x.musical.extensions.getStringOrDefault
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import com.o4x.musical.ALBUM_ARTISTS_ONLY
 import com.o4x.musical.App
+import com.o4x.musical.FILTER_SONG
 import com.o4x.musical.R
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.CategoryInfo
@@ -240,15 +242,13 @@ object PreferenceUtil {
         )
 
     @JvmStatic
-    var songSortOrder: String?
-        get() = sharedPreferences.getString(
+    var songSortOrder
+        get() = sharedPreferences.getStringOrDefault(
             SONG_SORT_ORDER,
             SortOrder.SongSortOrder.SONG_A_Z
         )
-        set(sortOrder) {
-            val editor = sharedPreferences.edit()
-            editor.putString(SONG_SORT_ORDER, sortOrder)
-            editor.commit()
+        set(value) = sharedPreferences.edit {
+            putString(SONG_SORT_ORDER, value)
         }
 
     @JvmStatic
@@ -300,6 +300,8 @@ object PreferenceUtil {
         editor.apply()
     }
 
+    val filterLength get() = sharedPreferences.getInt(FILTER_SONG, 20)
+
     @JvmStatic
     var sleepTimerFinishMusic: Boolean
         get() = sharedPreferences.getBoolean(SLEEP_TIMER_FINISH_SONG, false)
@@ -308,6 +310,13 @@ object PreferenceUtil {
             editor.putBoolean(SLEEP_TIMER_FINISH_SONG, value)
             editor.apply()
         }
+
+    var albumArtistsOnly
+        get() = sharedPreferences.getBoolean(
+            ALBUM_ARTISTS_ONLY,
+            false
+        )
+        set(value) = sharedPreferences.edit { putBoolean(ALBUM_ARTISTS_ONLY, value) }
 
     @JvmStatic
     fun setAlbumGridSize(gridSize: Int) {
@@ -546,17 +555,13 @@ object PreferenceUtil {
         return sharedPreferences.getBoolean(SYNCHRONIZED_LYRICS_SHOW, true)
     }
 
-    @JvmStatic
-    fun setInitializedBlacklist() {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(INITIALIZED_BLACKLIST, true)
-        editor.apply()
-    }
-
-    @JvmStatic
-    fun initializedBlacklist(): Boolean {
-        return sharedPreferences.getBoolean(INITIALIZED_BLACKLIST, false)
-    }
+    var isInitializedBlacklist
+        get() = sharedPreferences.getBoolean(
+            INITIALIZED_BLACKLIST, false
+        )
+        set(value) = sharedPreferences.edit {
+            putBoolean(INITIALIZED_BLACKLIST, value)
+        }
 
     private val isBlackMode
         get() = sharedPreferences.getBoolean(
