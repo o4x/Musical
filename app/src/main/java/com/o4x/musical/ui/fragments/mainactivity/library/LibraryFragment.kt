@@ -34,13 +34,11 @@ import com.o4x.musical.util.PreferenceUtil.unregisterOnSharedPreferenceChangedLi
 import com.o4x.musical.util.Util
 import kotlinx.android.synthetic.main.fragment_library.*
 
-class LibraryFragment : AbsMainActivityFragment(), CabHolder, OnPageChangeListener,
+class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabHolder, OnPageChangeListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var pagerAdapter: MusicLibraryPagerAdapter? = null
     private var cab: MaterialCab? = null
-
-    override fun getLayout(): Int = R.layout.fragment_library
 
     override fun onDestroyView() {
         unregisterOnSharedPreferenceChangedListener(this)

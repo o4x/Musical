@@ -54,6 +54,10 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
  */
 public class EqualizerFragment extends AbsMainActivityFragment {
 
+    public EqualizerFragment() {
+        super(R.layout.fragment_equalizer);
+    }
+
     LineSet dataset;
     LineChartView chart;
     Paint paint;
@@ -119,11 +123,6 @@ public class EqualizerFragment extends AbsMainActivityFragment {
         else {
             mEqualizer.usePreset((short) Settings.presetPos);
         }
-    }
-
-    @Override
-    public int getLayout() {
-        return R.layout.fragment_equalizer;
     }
 
     @SuppressLint("SetTextI18n")

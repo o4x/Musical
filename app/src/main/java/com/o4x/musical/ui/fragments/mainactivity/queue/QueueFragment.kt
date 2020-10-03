@@ -23,15 +23,13 @@ import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import kotlinx.android.synthetic.main.fragment_queue.*
 
-class QueueFragment : AbsMainActivityFragment() {
+class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
 
     private var queueAdapter: PlayingQueueAdapter? = null
     private var queueLayoutManager: LinearLayoutManager? = null
     private var queueListener: QueueListener? = null
     private var wrappedAdapter: RecyclerView.Adapter<*>? = null
     private var recyclerViewDragDropManager: RecyclerViewDragDropManager? = null
-
-    override fun getLayout(): Int = R.layout.fragment_queue
 
     override fun onDestroyView() {
         mainActivity.removeMusicServiceEventListener(queueListener)
