@@ -26,7 +26,6 @@ import com.afollestad.materialdialogs.internal.ThemeSingleton;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.SkuDetails;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.o4x.musical.App;
 import com.o4x.musical.R;
 
 import java.lang.ref.WeakReference;
@@ -58,7 +57,7 @@ public class DonationsDialog extends DialogFragment implements BillingProcessor.
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        billingProcessor = new BillingProcessor(getContext(), App.GOOGLE_PLAY_LICENSE_KEY, this);
+//        billingProcessor = new BillingProcessor(getContext(), App.GOOGLE_PLAY_LICENSE_KEY, this);
 
         @SuppressLint("InflateParams")
         View customView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_donation, null);

@@ -435,5 +435,8 @@
     <string name="disc_hint">Disc number</string>
     <string name="artist_name">Artist name</string>
     <string name="not_recently_played">Not recently played</string>
+    <string name="speech_prompt">Search your library</string>
+    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
+    <string name="search">Search</string>
 
 </resources>

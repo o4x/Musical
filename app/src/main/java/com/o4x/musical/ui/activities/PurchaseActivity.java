@@ -3,13 +3,14 @@ package com.o4x.musical.ui.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
@@ -63,9 +64,9 @@ public class PurchaseActivity extends AbsBaseActivity implements BillingProcesso
             }
         });
 
-        purchaseButton.setOnClickListener(v -> billingProcessor.purchase(PurchaseActivity.this, App.PRO_VERSION_PRODUCT_ID));
-
-        billingProcessor = new BillingProcessor(this, App.GOOGLE_PLAY_LICENSE_KEY, this);
+//        purchaseButton.setOnClickListener(v -> billingProcessor.purchase(PurchaseActivity.this, App.PRO_VERSION_PRODUCT_ID));
+//
+//        billingProcessor = new BillingProcessor(this, App.GOOGLE_PLAY_LICENSE_KEY, this);
     }
 
     private void restorePurchase() {
@@ -78,14 +79,14 @@ public class PurchaseActivity extends AbsBaseActivity implements BillingProcesso
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
         Toast.makeText(this, R.string.thank_you, Toast.LENGTH_SHORT).show();
-        App.notifyProVersionChanged();
+//        App.notifyProVersionChanged();
     }
 
     @Override
     public void onPurchaseHistoryRestored() {
-        if (App.isProVersion()) {
+        if (App.Companion.isProVersion()) {
             Toast.makeText(this, R.string.restored_previous_purchase_please_restart, Toast.LENGTH_LONG).show();
-            App.notifyProVersionChanged();
+//            App.notifyProVersionChanged();
         } else {
             Toast.makeText(this, R.string.no_purchase_found, Toast.LENGTH_SHORT).show();
         }

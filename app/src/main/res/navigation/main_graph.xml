@@ -6,6 +6,12 @@
     app:startDestination="@id/home">
 
     <fragment
+        android:id="@+id/search"
+        android:name="com.o4x.musical.ui.fragments.mainactivity.search.SearchFragment"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
         android:id="@+id/home"
         android:name="com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment"
         android:label="@string/home"
@@ -34,6 +40,15 @@
         android:name="com.o4x.musical.ui.fragments.mainactivity.equalizer.EqualizerFragment"
         android:label="@string/equalizer"
         tools:layout="@layout/fragment_equalizer" />
+
+    <action
+        android:id="@+id/action_to_search"
+        app:destination="@id/search"
+        app:popUpTo="@id/home"
+        app:enterAnim="@anim/retro_fragment_open_enter"
+        app:exitAnim="@anim/retro_fragment_open_exit"
+        app:popEnterAnim="@anim/retro_fragment_close_enter"
+        app:popExitAnim="@anim/retro_fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_queue"

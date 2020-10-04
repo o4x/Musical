@@ -22,7 +22,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.SeekBar
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import code.name.monkey.appthemehelper.ThemeStore
@@ -33,7 +32,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.o4x.musical.App
 import com.o4x.musical.R
 
 fun Int.ripAlpha(): Int {
@@ -86,7 +84,7 @@ fun SeekBar.addthemeColor() {
 }
 
 fun Button.accentTextColor() {
-    setTextColor(ThemeStore.themeColor(App.getContext()))
+    setTextColor(ThemeStore.themeColor(context))
 }
 
 fun ExtendedFloatingActionButton.themeColor() {
