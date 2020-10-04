@@ -32,7 +32,6 @@ import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.interfaces.PaletteColorHolder;
-import com.o4x.musical.loader.AlbumLoader;
 import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Album;
@@ -40,6 +39,8 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.network.ApiClient;
 import com.o4x.musical.network.Models.LastFmAlbum;
 import com.o4x.musical.network.service.LastFMService;
+import com.o4x.musical.repository.RealAlbumRepository;
+import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity;
@@ -450,7 +451,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
 
         @Override
         public Album loadInBackground() {
-            return AlbumLoader.getAlbum(getContext(), albumId);
+            return new RealAlbumRepository(new RealSongRepository(getContext())).album(albumId);
         }
     }
 }
