@@ -37,12 +37,12 @@ public class GenreLoader {
             if (cursor.moveToFirst()) {
                 do {
                     Genre genre = getGenreFromCursor(context, cursor);
-                    if (genre.songCount > 0) {
+                    if (genre.getSongCount() > 0) {
                         genres.add(genre);
                     } else {
                         // try to remove the empty genre from the media store
                         try {
-                            context.getContentResolver().delete(Genres.EXTERNAL_CONTENT_URI, Genres._ID + " == " + genre.id, null);
+                            context.getContentResolver().delete(Genres.EXTERNAL_CONTENT_URI, Genres._ID + " == " + genre.getId(), null);
                         } catch (Exception e) {
                             e.printStackTrace();
                             // nothing we can do then

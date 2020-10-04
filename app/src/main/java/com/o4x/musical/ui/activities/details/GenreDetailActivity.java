@@ -101,7 +101,7 @@ public class GenreDetailActivity extends AbsMusicPanelActivity implements CabHol
         toolbar.setBackgroundColor(ThemeStore.Companion.themeColor(this));
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
-        getSupportActionBar().setTitle(genre.name);
+        getSupportActionBar().setTitle(genre.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -202,7 +202,7 @@ public class GenreDetailActivity extends AbsMusicPanelActivity implements CabHol
 
         @Override
         public List<Song> loadInBackground() {
-            return GenreLoader.getSongs(getContext(), genre.id);
+            return GenreLoader.getSongs(getContext(), genre.getId());
         }
     }
 }

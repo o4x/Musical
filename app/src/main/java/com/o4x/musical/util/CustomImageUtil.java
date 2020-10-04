@@ -53,8 +53,8 @@ public class CustomImageUtil {
     }
 
     public CustomImageUtil(Genre genre) {
-        this.id = genre.id;
-        this.name = genre.name;
+        this.id = genre.getId();
+        this.name = genre.getName();
         this.type = Type.GENRE;
     }
 

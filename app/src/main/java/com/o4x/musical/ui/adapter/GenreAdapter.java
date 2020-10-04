@@ -92,7 +92,7 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
         }
 
         if (holder.title != null) {
-            holder.title.setText(genre.name);
+            holder.title.setText(genre.getName());
         }
         if (holder.text != null) {
             holder.text.setText(MusicUtil.getGenreInfoString(activity, genre));
@@ -141,7 +141,7 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
 
     @Override
     protected String getName(Genre genre) {
-        return genre.name;
+        return genre.getName();
     }
 
     @Override
@@ -153,7 +153,7 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
     private List<Song> getSongList(@NonNull List<Genre> genres) {
         final List<Song> songs = new ArrayList<>();
         for (Genre genre : genres) {
-            songs.addAll(genre.songs); // maybe async in future?
+            songs.addAll(genre.getSongs()); // maybe async in future?
         }
         return songs;
     }
@@ -165,7 +165,7 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
         switch (PreferenceUtil.getGenreSortOrder()) {
             case SortOrder.GenreSortOrder.GENRE_A_Z:
             case SortOrder.GenreSortOrder.GENRE_Z_A:
-                sectionName = dataSet.get(position).name;
+                sectionName = dataSet.get(position).getName();
                 break;
         }
 
