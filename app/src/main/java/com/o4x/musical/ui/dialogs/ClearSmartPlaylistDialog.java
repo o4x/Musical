@@ -2,9 +2,10 @@ package com.o4x.musical.ui.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Html;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-import android.text.Html;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.o4x.musical.R;
@@ -31,7 +32,7 @@ public class ClearSmartPlaylistDialog extends DialogFragment {
         final AbsSmartPlaylist playlist = getArguments().getParcelable("playlist");
         int title = R.string.clear_playlist_title;
         //noinspection ConstantConditions
-        CharSequence content = Html.fromHtml(getString(R.string.clear_playlist_x, playlist.name));
+        CharSequence content = Html.fromHtml(getString(R.string.clear_playlist_x, playlist.getName()));
 
         return new MaterialDialog.Builder(getActivity())
                 .title(title)
@@ -42,7 +43,7 @@ public class ClearSmartPlaylistDialog extends DialogFragment {
                     if (getActivity() == null) {
                         return;
                     }
-                    playlist.clear(getActivity());
+//                    playlist.clear(getActivity());
                 })
                 .build();
     }

@@ -44,7 +44,7 @@ public class PlaylistLoader {
 
     @NonNull
     public static Playlist getPlaylist(@Nullable final Cursor cursor) {
-        Playlist playlist = new Playlist();
+        Playlist playlist = Playlist.Companion.getEmpty();
 
         if (cursor != null && cursor.moveToFirst()) {
             playlist = getPlaylistFromCursorImpl(cursor);

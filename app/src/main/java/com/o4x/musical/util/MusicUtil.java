@@ -295,7 +295,7 @@ public class MusicUtil {
     }
 
     public static boolean isFavoritePlaylist(@NonNull final Context context, @NonNull final Playlist playlist) {
-        return playlist.name != null && playlist.name.equals(context.getString(R.string.favorites));
+        return playlist.getName() != null && playlist.getName().equals(context.getString(R.string.favorites));
     }
 
     public static Playlist getFavoritesPlaylist(@NonNull final Context context) {
@@ -317,14 +317,14 @@ public class MusicUtil {
     }
 
     public static boolean isFavorite(@NonNull final Context context, @NonNull final Song song) {
-        return PlaylistsUtil.doesPlaylistContain(context, getFavoritesPlaylist(context).id, song.getId());
+        return PlaylistsUtil.doesPlaylistContain(context, getFavoritesPlaylist(context).getId(), song.getId());
     }
 
     public static void toggleFavorite(@NonNull final Context context, @NonNull final Song song) {
         if (isFavorite(context, song)) {
-            PlaylistsUtil.removeFromPlaylist(context, song, getFavoritesPlaylist(context).id);
+            PlaylistsUtil.removeFromPlaylist(context, song, getFavoritesPlaylist(context).getId());
         } else {
-            PlaylistsUtil.addToPlaylist(context, song, getOrCreateFavoritesPlaylist(context).id, false);
+            PlaylistsUtil.addToPlaylist(context, song, getOrCreateFavoritesPlaylist(context).getId(), false);
         }
     }
 

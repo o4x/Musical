@@ -18,13 +18,13 @@ public class M3UWriter implements M3UConstants {
     public static File write(Context context, File dir, Playlist playlist) throws IOException {
         if (!dir.exists()) //noinspection ResultOfMethodCallIgnored
             dir.mkdirs();
-        File file = new File(dir, playlist.name.concat("." + EXTENSION));
+        File file = new File(dir, playlist.getName().concat("." + EXTENSION));
 
         List<? extends Song> songs;
         if (playlist instanceof AbsCustomPlaylist) {
-            songs = ((AbsCustomPlaylist) playlist).getSongs(context);
+            songs = ((AbsCustomPlaylist) playlist).getSongs();
         } else {
-            songs = PlaylistSongLoader.getPlaylistSongList(context, playlist.id);
+            songs = PlaylistSongLoader.getPlaylistSongList(context, playlist.getId());
         }
 
         if (songs.size() > 0) {

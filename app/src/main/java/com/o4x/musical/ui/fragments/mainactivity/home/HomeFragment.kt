@@ -168,11 +168,11 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         open_queue_button.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         recently_parent.setOnClickListener {
             NavigationUtil.goToPlaylist(
-                mainActivity, HistoryPlaylist(mainActivity))
+                mainActivity, HistoryPlaylist())
         }
         newly_parent.setOnClickListener {
             NavigationUtil.goToPlaylist(
-                mainActivity, LastAddedPlaylist(mainActivity))
+                mainActivity, LastAddedPlaylist())
         }
         shuffle_btn.setOnClickListener {
             MusicPlayerRemote.openAndShuffleQueue(RealSongRepository(mainActivity).songs(), true)

@@ -11,10 +11,7 @@ import com.o4x.musical.extensions.getStringOrDefault
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
-import com.o4x.musical.ALBUM_ARTISTS_ONLY
-import com.o4x.musical.App
-import com.o4x.musical.FILTER_SONG
-import com.o4x.musical.R
+import com.o4x.musical.*
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment
@@ -375,6 +372,25 @@ object PreferenceUtil {
             GENRE_GRID_SIZE,
             context.resources.getInteger(R.integer.default_list_columns)
         )
+    }
+
+    private fun getCutoffTimeMillis(cutoff: String): Long {
+        val calendarUtil = CalendarUtil()
+        val interval: Long
+        interval = when (sharedPreferences.getString(cutoff, "")) {
+            "today" -> calendarUtil.elapsedToday
+            "this_week" -> calendarUtil.elapsedWeek
+            "past_seven_days" -> calendarUtil.getElapsedDays(7)
+            "past_three_months" -> calendarUtil.getElapsedMonths(3)
+            "this_year" -> calendarUtil.elapsedYear
+            "this_month" -> calendarUtil.elapsedMonth
+            else -> calendarUtil.elapsedMonth
+        }
+        return System.currentTimeMillis() - interval
+    }
+
+    fun getRecentlyPlayedCutoffTimeMillis(): Long {
+        return getCutoffTimeMillis(RECENTLY_PLAYED_CUTOFF)
     }
 
     @JvmStatic

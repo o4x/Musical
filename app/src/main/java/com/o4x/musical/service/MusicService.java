@@ -308,10 +308,10 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                         if (playlist != null) {
                             List<Song> playlistSongs;
                             if (playlist instanceof AbsCustomPlaylist) {
-                                playlistSongs = ((AbsCustomPlaylist) playlist).getSongs(getApplicationContext());
+                                playlistSongs = ((AbsCustomPlaylist) playlist).getSongs();
                             } else {
                                 //noinspection unchecked
-                                playlistSongs = (List) PlaylistSongLoader.getPlaylistSongList(getApplicationContext(), playlist.id);
+                                playlistSongs = (List) PlaylistSongLoader.getPlaylistSongList(getApplicationContext(), playlist.getId());
                             }
                             if (!playlistSongs.isEmpty()) {
                                 if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {

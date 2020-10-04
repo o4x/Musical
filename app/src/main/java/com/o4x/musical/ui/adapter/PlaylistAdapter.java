@@ -72,7 +72,7 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
 
     @Override
     public long getItemId(int position) {
-        return dataSet.get(position).id;
+        return dataSet.get(position).getId();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
         holder.itemView.setActivated(isChecked(playlist));
 
         if (holder.title != null) {
-            holder.title.setText(playlist.name);
+            holder.title.setText(playlist.getName());
         }
 
         if (holder.getAdapterPosition() == getItemCount() - 1) {
@@ -113,7 +113,7 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
 
     private int getIconRes(Playlist playlist) {
         if (playlist instanceof AbsSmartPlaylist) {
-            return ((AbsSmartPlaylist) playlist).iconRes;
+            return ((AbsSmartPlaylist) playlist).getIconRes();
         }
         return MusicUtil.isFavoritePlaylist(activity, playlist) ? R.drawable.ic_favorite_white_24dp : R.drawable.ic_queue_music_white_24dp;
     }
@@ -135,7 +135,7 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
 
     @Override
     protected String getName(Playlist playlist) {
-        return playlist.name;
+        return playlist.getName();
     }
 
     @Override
@@ -146,7 +146,7 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
                     Playlist playlist = selection.get(i);
                     if (playlist instanceof AbsSmartPlaylist) {
                         AbsSmartPlaylist absSmartPlaylist = (AbsSmartPlaylist) playlist;
-                        ClearSmartPlaylistDialog.create(absSmartPlaylist).show(activity.getSupportFragmentManager(), "CLEAR_PLAYLIST_" + absSmartPlaylist.name);
+                        ClearSmartPlaylistDialog.create(absSmartPlaylist).show(activity.getSupportFragmentManager(), "CLEAR_PLAYLIST_" + absSmartPlaylist.getName());
                         selection.remove(playlist);
                         i--;
                     }
@@ -210,9 +210,9 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
         final List<Song> songs = new ArrayList<>();
         for (Playlist playlist : playlists) {
             if (playlist instanceof AbsCustomPlaylist) {
-                songs.addAll(((AbsCustomPlaylist) playlist).getSongs(activity));
+                songs.addAll(((AbsCustomPlaylist) playlist).getSongs());
             } else {
-                songs.addAll(PlaylistSongLoader.getPlaylistSongList(activity, playlist.id));
+                songs.addAll(PlaylistSongLoader.getPlaylistSongList(activity, playlist.getId()));
             }
         }
         return songs;
@@ -250,7 +250,7 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
                     popupMenu.setOnMenuItemClickListener(item -> {
                         if (item.getItemId() == R.id.action_clear_playlist) {
                             if (playlist instanceof AbsSmartPlaylist) {
-                                ClearSmartPlaylistDialog.create((AbsSmartPlaylist) playlist).show(activity.getSupportFragmentManager(), "CLEAR_SMART_PLAYLIST_" + playlist.name);
+                                ClearSmartPlaylistDialog.create((AbsSmartPlaylist) playlist).show(activity.getSupportFragmentManager(), "CLEAR_SMART_PLAYLIST_" + playlist.getName());
                                 return true;
                             }
                         }

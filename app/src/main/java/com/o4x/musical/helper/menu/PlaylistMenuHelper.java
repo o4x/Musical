@@ -44,7 +44,7 @@ public class PlaylistMenuHelper {
                 AddToPlaylistDialog.create(new ArrayList<>(getPlaylistSongs(activity, playlist))).show(activity.getSupportFragmentManager(), "ADD_PLAYLIST");
                 return true;
             case R.id.action_rename_playlist:
-                RenamePlaylistDialog.create(playlist.id).show(activity.getSupportFragmentManager(), "RENAME_PLAYLIST");
+                RenamePlaylistDialog.create(playlist.getId()).show(activity.getSupportFragmentManager(), "RENAME_PLAYLIST");
                 return true;
             case R.id.action_delete_playlist:
                 DeletePlaylistDialog.create(playlist).show(activity.getSupportFragmentManager(), "DELETE_PLAYLIST");
@@ -59,8 +59,8 @@ public class PlaylistMenuHelper {
     @NonNull
     private static List<? extends Song> getPlaylistSongs(@NonNull Activity activity, Playlist playlist) {
         return playlist instanceof AbsCustomPlaylist ?
-                ((AbsCustomPlaylist) playlist).getSongs(activity) :
-                PlaylistSongLoader.getPlaylistSongList(activity, playlist.id);
+                ((AbsCustomPlaylist) playlist).getSongs() :
+                PlaylistSongLoader.getPlaylistSongList(activity, playlist.getId());
     }
 
 

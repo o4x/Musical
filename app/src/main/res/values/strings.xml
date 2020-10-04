@@ -434,5 +434,6 @@
     <string name="label_album_artists">Album artists</string>
     <string name="disc_hint">Disc number</string>
     <string name="artist_name">Artist name</string>
+    <string name="not_recently_played">Not recently played</string>
 
 </resources>
