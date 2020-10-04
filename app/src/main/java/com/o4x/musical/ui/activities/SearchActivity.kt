@@ -18,18 +18,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import butterknife.BindView
 import butterknife.ButterKnife
-import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import com.o4x.musical.R
-import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.interfaces.LoaderIds
 import com.o4x.musical.loader.AlbumLoader
 import com.o4x.musical.loader.ArtistLoader
-import com.o4x.musical.loader.SongLoader
 import com.o4x.musical.misc.WrappedAsyncTaskLoader
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
-import com.o4x.musical.ui.activities.SearchActivity
+import com.o4x.musical.repository.RealSongRepository
+import com.o4x.musical.repository.SongRepository
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
 import com.o4x.musical.ui.adapter.SearchAdapter
 import com.o4x.musical.util.Util
@@ -165,7 +163,7 @@ class SearchActivity : AbsMusicServiceActivity(), SearchView.OnQueryTextListener
         override fun loadInBackground(): List<Any>? {
             val results: MutableList<Any> = ArrayList()
             if (!TextUtils.isEmpty(query)) {
-                val songs: List<Song> = SongLoader.getSongs(context, query!!.trim { it <= ' ' })
+                val songs: List<Song> = RealSongRepository(context).songs(query!!.trim { it <= ' ' })
                 if (songs.isNotEmpty()) {
                     results.add(context.resources.getString(R.string.songs))
                     results.addAll(songs)

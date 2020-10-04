@@ -22,13 +22,13 @@ import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.loader.PlaylistLoader;
-import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics;
+import com.o4x.musical.repository.RealSongRepository;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
@@ -257,7 +257,7 @@ public class MusicUtil {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     final long id = cursor.getLong(0);
-                    final Song song = SongLoader.getSong(context, id);
+                    final Song song = new RealSongRepository(context).song(id);
                     MusicPlayerRemote.removeFromQueue(song);
                     cursor.moveToNext();
                 }

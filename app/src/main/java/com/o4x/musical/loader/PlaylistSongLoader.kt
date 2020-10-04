@@ -3,6 +3,7 @@ package com.o4x.musical.loader
 import android.content.Context
 import android.database.Cursor
 import android.provider.MediaStore
+import com.o4x.musical.Constants.IS_MUSIC
 import com.o4x.musical.extensions.getInt
 import com.o4x.musical.extensions.getLong
 import com.o4x.musical.extensions.getString
@@ -75,7 +76,7 @@ object PlaylistSongLoader {
                     MediaStore.Audio.AudioColumns.ARTIST_ID,  // 9
                     MediaStore.Audio.AudioColumns.ARTIST,  // 10
                     MediaStore.Audio.Playlists.Members._ID // 11
-                ), SongLoader.BASE_SELECTION, null,
+                ), IS_MUSIC, null,
                 MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER)
         } catch (e: SecurityException) {
             null

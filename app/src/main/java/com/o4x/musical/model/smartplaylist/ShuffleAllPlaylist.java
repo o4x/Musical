@@ -6,8 +6,8 @@ import android.os.Parcel;
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.R;
-import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.repository.RealSongRepository;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class ShuffleAllPlaylist extends AbsSmartPlaylist {
     @NonNull
     @Override
     public List<Song> getSongs(@NonNull Context context) {
-        return SongLoader.getAllSongs(context);
+        return new RealSongRepository(context).songs();
     }
 
     @Override

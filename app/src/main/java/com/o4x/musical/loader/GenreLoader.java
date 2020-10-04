@@ -7,12 +7,16 @@ import android.provider.MediaStore.Audio.Genres;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.o4x.musical.Constants;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.o4x.musical.Constants.IS_MUSIC;
 
 public class GenreLoader {
 
@@ -23,7 +27,7 @@ public class GenreLoader {
 
     @NonNull
     public static List<Song> getSongs(@NonNull final Context context, final long genreId) {
-        return SongLoader.getSongs(makeGenreSongCursor(context, genreId));
+        return new RealSongRepository(context).songs(makeGenreSongCursor(context, genreId));
     }
 
     @NonNull
@@ -64,7 +68,7 @@ public class GenreLoader {
         try {
             return context.getContentResolver().query(
                     Genres.Members.getContentUri("external", genreId),
-                    SongLoader.BASE_PROJECTION, SongLoader.BASE_SELECTION, null, PreferenceUtil.getSongSortOrder());
+                    Constants.getBaseProjection(), IS_MUSIC, null, PreferenceUtil.getSongSortOrder());
         } catch (SecurityException e) {
             return null;
         }

@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.provider.HistoryStore;
 import com.o4x.musical.provider.SongPlayCountStore;
+import com.o4x.musical.repository.RealSongRepository;
 
 import java.util.List;
 
@@ -34,12 +35,12 @@ public class TopAndRecentlyPlayedTracksLoader {
 
     @NonNull
     public static List<Song> getRecentlyPlayedTracks(@NonNull Context context) {
-        return SongLoader.getSongs(makeRecentTracksCursorAndClearUpDatabase(context));
+        return new RealSongRepository(context).songs(makeRecentTracksCursorAndClearUpDatabase(context));
     }
 
     @NonNull
     public static List<Song> getTopTracks(@NonNull Context context) {
-        return SongLoader.getSongs(makeTopTracksCursorAndClearUpDatabase(context));
+        return new RealSongRepository(context).songs(makeTopTracksCursorAndClearUpDatabase(context));
     }
 
     @Nullable
@@ -130,7 +131,7 @@ public class TopAndRecentlyPlayedTracksLoader {
             selection.append(")");
 
             // get a list of songs with the data given the selection statement
-            Cursor songCursor = SongLoader.makeSongCursor(context, selection.toString(), null);
+            Cursor songCursor = new RealSongRepository(context).makeSongCursor(selection.toString(), null);
             if (songCursor != null) {
                 // now return the wrapped TopTracksCursor to handle sorting given order
                 return new SortedLongCursor(songCursor, order, BaseColumns._ID);
