@@ -1,9 +1,6 @@
 package com.o4x.musical.ui.adapter;
 
 import android.annotation.SuppressLint;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.o4x.musical.R;
 import com.o4x.musical.model.CategoryInfo;
@@ -40,13 +41,13 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
     public void onBindViewHolder(@NonNull CategoryInfoAdapter.ViewHolder holder, int position) {
         CategoryInfo categoryInfo = categoryInfos.get(position);
 
-        holder.checkBox.setChecked(categoryInfo.visible);
-        holder.title.setText(holder.title.getResources().getString(categoryInfo.category.stringRes));
+        holder.checkBox.setChecked(categoryInfo.isVisible());
+        holder.title.setText(holder.title.getResources().getString(categoryInfo.getCategory().getStringRes()));
 
         holder.itemView.setOnClickListener(v -> {
-            if (!(categoryInfo.visible && isLastCheckedCategory(categoryInfo))) {
-                categoryInfo.visible = !categoryInfo.visible;
-                holder.checkBox.setChecked(categoryInfo.visible);
+            if (!(categoryInfo.isVisible() && isLastCheckedCategory(categoryInfo))) {
+                categoryInfo.setVisible(!categoryInfo.isVisible());
+                holder.checkBox.setChecked(categoryInfo.isVisible());
             } else {
                 Toast.makeText(holder.itemView.getContext(), R.string.you_have_to_select_at_least_one_category, Toast.LENGTH_SHORT).show();
             }
@@ -88,9 +89,9 @@ public class CategoryInfoAdapter extends RecyclerView.Adapter<CategoryInfoAdapte
     }
 
     private boolean isLastCheckedCategory(CategoryInfo categoryInfo) {
-        if (categoryInfo.visible) {
+        if (categoryInfo.isVisible()) {
             for (CategoryInfo c : categoryInfos) {
-                if (c != categoryInfo && c.visible) return false;
+                if (c != categoryInfo && c.isVisible()) return false;
             }
         }
         return true;
