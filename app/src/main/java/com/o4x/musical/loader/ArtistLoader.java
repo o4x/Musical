@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.repository.RealAlbumRepository;
 import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.util.PreferenceUtil;
 
@@ -31,7 +32,7 @@ public class ArtistLoader {
                 null,
                 getSongLoaderSortOrder(context))
         );
-        return splitIntoArtists(AlbumLoader.splitIntoAlbums(songs));
+        return splitIntoArtists(new RealAlbumRepository(songRepo).splitIntoAlbums(songs));
     }
 
     @NonNull
@@ -42,7 +43,7 @@ public class ArtistLoader {
                 new String[]{"%" + query + "%"},
                 getSongLoaderSortOrder(context))
         );
-        return splitIntoArtists(AlbumLoader.splitIntoAlbums(songs));
+        return splitIntoArtists(new RealAlbumRepository(songRepo).splitIntoAlbums(songs));
     }
 
     @NonNull
@@ -53,7 +54,7 @@ public class ArtistLoader {
                 new String[]{String.valueOf(artistId)},
                 getSongLoaderSortOrder(context))
         );
-        return new Artist(artistId, AlbumLoader.splitIntoAlbums(songs));
+        return new Artist(artistId, new RealAlbumRepository(songRepo).splitIntoAlbums(songs));
     }
 
     @NonNull

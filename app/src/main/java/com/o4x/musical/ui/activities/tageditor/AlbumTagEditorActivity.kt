@@ -4,10 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import butterknife.ButterKnife
 import com.o4x.musical.R
-import com.o4x.musical.loader.AlbumLoader
 import com.o4x.musical.loader.ArtistLoader
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.ITunesModel.Results
+import com.o4x.musical.repository.RealAlbumRepository
+import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
 import java.util.*
 
@@ -33,12 +34,12 @@ class AlbumTagEditorActivity : AbsTagEditorActivity<Results>() {
     override val artist: Artist
         get() = ArtistLoader.getArtist(
             this,
-            AlbumLoader.getAlbum(this, id).artistId
+            RealAlbumRepository(RealSongRepository(this)).album(id).artistId
         )
 
     override val songPaths: List<String>
         get() {
-            val songs = AlbumLoader.getAlbum(this, id).songs
+            val songs = RealAlbumRepository(RealSongRepository(this)).album(id).songs
             val paths: MutableList<String> = ArrayList(songs.size)
             for (song in songs) {
                 paths.add(song.data)

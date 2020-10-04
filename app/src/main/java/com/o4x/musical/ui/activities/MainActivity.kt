@@ -32,10 +32,11 @@ import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
-import com.o4x.musical.loader.AlbumLoader
 import com.o4x.musical.loader.ArtistLoader
 import com.o4x.musical.loader.PlaylistSongLoader
 import com.o4x.musical.model.Song
+import com.o4x.musical.repository.RealAlbumRepository
+import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.activities.intro.AppIntroActivity
@@ -248,7 +249,7 @@ class MainActivity : AbsMusicPanelActivity() {
             val id = parseIdFromIntent(intent, "albumId", "album")
             if (id >= 0) {
                 val position = intent.getIntExtra("position", 0)
-                MusicPlayerRemote.openQueue(AlbumLoader.getAlbum(this, id).songs, position, true)
+                MusicPlayerRemote.openQueue(RealAlbumRepository(RealSongRepository(this)).album(id).songs, position, true)
                 handled = true
             }
         } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
