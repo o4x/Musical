@@ -2,16 +2,11 @@ package com.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.o4x.musical.R
-import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.misc.OverScrollGridLayoutManager
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
@@ -19,7 +14,9 @@ import com.o4x.musical.misc.VerticalScrollListener
 import com.o4x.musical.misc.isRecyclerScrollable
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
+import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.util.Util
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.max
 import kotlin.math.min
 
@@ -28,6 +25,8 @@ import kotlin.math.min
  * @author Karim Abou Zeid (kabouzeid)
  */
 abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout), MainActivityFragmentCallbacks {
+
+    val libraryViewModel: LibraryViewModel by sharedViewModel()
 
     val mainActivity: MainActivity
         get() = requireActivity() as MainActivity

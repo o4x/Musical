@@ -19,7 +19,6 @@ import android.content.SharedPreferences
 import android.media.audiofx.AudioEffect
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
@@ -33,8 +32,6 @@ import code.name.monkey.appthemehelper.util.ColorUtil
 import com.afollestad.materialdialogs.color.ColorChooserDialog
 import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.appshortcuts.DynamicShortcutManager
-import com.o4x.musical.ui.activities.SettingsActivity
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil
 

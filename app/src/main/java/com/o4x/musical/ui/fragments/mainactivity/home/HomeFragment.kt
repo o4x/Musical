@@ -125,7 +125,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                 return true
             }
             R.id.action_search -> {
-                startActivity(Intent(activity, SearchActivity::class.java))
+                mainActivity.openSearch()
                 return true
             }
         }

@@ -65,7 +65,7 @@ public class CustomImageUtil {
     }
 
     public void setCustomImage(Uri uri) {
-        Glide.with(App.getInstance())
+        Glide.with(App.Companion.getContext())
                 .asBitmap()
                 .load(uri)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -102,7 +102,7 @@ public class CustomImageUtil {
                     succesful = ImageUtil.resizeBitmap(bitmap, 2048).compress(Bitmap.CompressFormat.JPEG, 100, os);
                     os.close();
                 } catch (IOException e) {
-                    Toast.makeText(App.getInstance(), e.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(App.Companion.getContext(), e.toString(), Toast.LENGTH_LONG).show();
                 }
 
                 if (succesful) {
@@ -140,15 +140,15 @@ public class CustomImageUtil {
         // trigger media store changed to force image reload
         switch (type) {
             case ARTIST:
-                App.getInstance().getContentResolver()
+                App.Companion.getContext().getContentResolver()
                         .notifyChange(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null);
                 break;
             case GENRE:
-                App.getInstance().getContentResolver()
+                App.Companion.getContext().getContentResolver()
                         .notifyChange(MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI, null);
                 break;
             case PLAYLIST:
-                App.getInstance().getContentResolver()
+                App.Companion.getContext().getContentResolver()
                         .notifyChange(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, null);
                 break;
         }
@@ -168,7 +168,7 @@ public class CustomImageUtil {
     }
 
     public File getFile() {
-        File dir = new File(App.getInstance().getFilesDir(), FOLDER_NAME + type.name());
+        File dir = new File(App.Companion.getContext().getFilesDir(), FOLDER_NAME + type.name());
         if (!dir.exists()) {
             if (!dir.mkdirs()) { // create the folder
                 return null;

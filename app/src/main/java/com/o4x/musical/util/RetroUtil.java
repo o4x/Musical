@@ -14,6 +14,7 @@
 
 package com.o4x.musical.util;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -99,10 +100,10 @@ public class RetroUtil {
 
     public static int getStatusBarHeight() {
         int result = 0;
-        int resourceId = App.getContext().getResources()
+        int resourceId = App.Companion.getContext().getResources()
                 .getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            result = App.getContext().getResources().getDimensionPixelSize(resourceId);
+            result = App.Companion.getContext().getResources().getDimensionPixelSize(resourceId);
         }
         return result;
     }
@@ -159,7 +160,7 @@ public class RetroUtil {
     }
 
     public static boolean isLandscape() {
-        return App.getContext().getResources().getConfiguration().orientation
+        return App.Companion.getContext().getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
     }
 
@@ -170,9 +171,10 @@ public class RetroUtil {
     }
 
     public static boolean isTablet() {
-        return App.getContext().getResources().getConfiguration().smallestScreenWidthDp >= 600;
+        return App.Companion.getContext().getResources().getConfiguration().smallestScreenWidthDp >= 600;
     }
 
+    @SuppressLint("WrongConstant")
     public static void openUrl(@NonNull Activity context, @NonNull String str) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.setData(Uri.parse(str));

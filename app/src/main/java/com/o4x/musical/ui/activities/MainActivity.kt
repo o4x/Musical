@@ -77,18 +77,12 @@ class MainActivity : AbsMusicPanelActivity() {
         }
 
         // called if the cached value was outdated (should be a rare event)
-        App.setOnProVersionChangedListener { checkSetUpPro() }
         UniversalIL.initImageLoader(this)
     }
 
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        App.setOnProVersionChangedListener(null)
     }
 
 
@@ -122,6 +116,10 @@ class MainActivity : AbsMusicPanelActivity() {
             R.id.nav_folders -> navController.navigate(R.id.action_to_folders)
             R.id.nav_eq -> navController.navigate(R.id.action_to_equalizer)
         }
+    }
+
+    fun openSearch() {
+        navController.navigate(R.id.action_to_search)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -158,7 +156,6 @@ class MainActivity : AbsMusicPanelActivity() {
         rectangle.setColor(themeColor)
         rectangleRadius.setColor(withAlpha(themeColor, 0.2f))
 
-        checkSetUpPro()
         navigation_view.setNavigationItemSelectedListener { menuItem: MenuItem ->
             drawer_layout.closeDrawers()
             Handler(Looper.getMainLooper()).postDelayed(
@@ -184,11 +181,6 @@ class MainActivity : AbsMusicPanelActivity() {
                 200)
             false
         }
-    }
-
-    private fun checkSetUpPro() {
-        navigation_view.menu.setGroupVisible(R.id.navigation_drawer_menu_category_buy_pro,
-            !App.isProVersion())
     }
 
     override fun onServiceConnected() {
