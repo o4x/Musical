@@ -2,9 +2,11 @@ package com.o4x.musical.ui.activities.tageditor
 
 import android.content.Intent
 import com.o4x.musical.R
-import com.o4x.musical.loader.ArtistLoader
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.DeezerArtistModel
+import com.o4x.musical.repository.RealAlbumRepository
+import com.o4x.musical.repository.RealArtistRepository
+import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.ArtistSearchActivity
 import java.util.*
 
@@ -13,14 +15,19 @@ class ArtistTagEditorActivity : AbsTagEditorActivity<DeezerArtistModel.Data>() {
         get() = R.layout.activity_artist_tag_editor
 
     override val artist: Artist
-        get() = ArtistLoader.getArtist(
-            this,
+        get() = RealArtistRepository(
+            RealSongRepository(this),
+            RealAlbumRepository(RealSongRepository(this))
+        ).artist(
             id
         )
 
     override val songPaths: List<String>
         get() {
-            val songs = ArtistLoader.getArtist(this, id).songs
+            val songs = RealArtistRepository(
+                RealSongRepository(this),
+                RealAlbumRepository(RealSongRepository(this))
+            ).artist(id).songs
             val paths: MutableList<String> = ArrayList(songs.size)
             for (song in songs) {
                 paths.add(song.data)

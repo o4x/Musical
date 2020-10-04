@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.o4x.musical.R;
 import com.o4x.musical.interfaces.LoaderIds;
-import com.o4x.musical.loader.ArtistLoader;
 import com.o4x.musical.misc.OverScrollGridLayoutManager;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Artist;
+import com.o4x.musical.repository.RealAlbumRepository;
+import com.o4x.musical.repository.RealArtistRepository;
+import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.ui.adapter.artist.ArtistAdapter;
 import com.o4x.musical.util.PreferenceUtil;
 
@@ -144,7 +146,10 @@ public class ArtistsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFr
 
         @Override
         public List<Artist> loadInBackground() {
-            return ArtistLoader.getAllArtists(getContext());
+            return new RealArtistRepository(
+                    new RealSongRepository(getContext()),
+                    new RealAlbumRepository(new RealSongRepository(getContext()))
+            ).artists();
         }
     }
 }
