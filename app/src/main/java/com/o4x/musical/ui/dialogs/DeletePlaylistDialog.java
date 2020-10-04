@@ -2,9 +2,10 @@ package com.o4x.musical.ui.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Html;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-import android.text.Html;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.o4x.musical.R;
@@ -48,7 +49,7 @@ public class DeletePlaylistDialog extends DialogFragment {
             content = Html.fromHtml(getString(R.string.delete_x_playlists, playlists.size()));
         } else {
             title = R.string.delete_playlist_title;
-            content = Html.fromHtml(getString(R.string.delete_playlist_x, playlists.get(0).name));
+            content = Html.fromHtml(getString(R.string.delete_playlist_x, playlists.get(0).getName()));
         }
         return new MaterialDialog.Builder(getActivity())
                 .title(title)

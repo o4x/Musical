@@ -102,7 +102,7 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
             recyclerViewDragDropManager = new RecyclerViewDragDropManager();
             final GeneralItemAnimator animator = new RefactoredDefaultItemAnimator();
             adapter = new OrderablePlaylistSongAdapter(this, new ArrayList<>(), R.layout.item_list, false, this, (fromPosition, toPosition) -> {
-                if (PlaylistsUtil.moveItem(PlaylistDetailActivity.this, playlist.id, fromPosition, toPosition)) {
+                if (PlaylistsUtil.moveItem(PlaylistDetailActivity.this, playlist.getId(), fromPosition, toPosition)) {
                     Song song = adapter.getDataSet().remove(fromPosition);
                     adapter.getDataSet().add(toPosition, song);
                     adapter.notifyItemMoved(fromPosition, toPosition);
@@ -130,7 +130,7 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setToolbarTitle(playlist.name);
+        setToolbarTitle(playlist.getName());
     }
 
     private void setToolbarTitle(String title) {
@@ -185,16 +185,16 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
 
         if (!(playlist instanceof AbsCustomPlaylist)) {
             // Playlist deleted
-            if (!PlaylistsUtil.doesPlaylistExist(this, playlist.id)) {
+            if (!PlaylistsUtil.doesPlaylistExist(this, playlist.getId())) {
                 finish();
                 return;
             }
 
             // Playlist renamed
-            final String playlistName = PlaylistsUtil.getNameForPlaylist(this, playlist.id);
-            if (!playlistName.equals(playlist.name)) {
-                playlist = PlaylistLoader.getPlaylist(this, playlist.id);
-                setToolbarTitle(playlist.name);
+            final String playlistName = PlaylistsUtil.getNameForPlaylist(this, playlist.getId());
+            if (!playlistName.equals(playlist.getName())) {
+                playlist = PlaylistLoader.getPlaylist(this, playlist.getId());
+                setToolbarTitle(playlist.getName());
             }
         }
 
@@ -265,10 +265,10 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
         @Override
         public List<Song> loadInBackground() {
             if (playlist instanceof AbsCustomPlaylist) {
-                return ((AbsCustomPlaylist) playlist).getSongs(getContext());
+                return ((AbsCustomPlaylist) playlist).getSongs();
             } else {
                 //noinspection unchecked
-                return (List) PlaylistSongLoader.getPlaylistSongList(getContext(), playlist.id);
+                return (List) PlaylistSongLoader.getPlaylistSongList(getContext(), playlist.getId());
             }
         }
     }

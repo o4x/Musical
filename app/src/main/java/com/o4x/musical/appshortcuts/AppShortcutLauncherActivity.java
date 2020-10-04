@@ -9,8 +9,8 @@ import com.o4x.musical.appshortcuts.shortcuttype.ShuffleAllShortcutType;
 import com.o4x.musical.appshortcuts.shortcuttype.TopTracksShortcutType;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist;
-import com.o4x.musical.model.smartplaylist.MyTopTracksPlaylist;
 import com.o4x.musical.model.smartplaylist.ShuffleAllPlaylist;
+import com.o4x.musical.model.smartplaylist.TopTracksPlaylist;
 import com.o4x.musical.service.MusicService;
 
 /**
@@ -41,17 +41,17 @@ public class AppShortcutLauncherActivity extends Activity {
         switch (shortcutType) {
             case SHORTCUT_TYPE_SHUFFLE_ALL:
                 startServiceWithPlaylist(MusicService.SHUFFLE_MODE_SHUFFLE,
-                        new ShuffleAllPlaylist(getApplicationContext()));
+                        new ShuffleAllPlaylist());
                 DynamicShortcutManager.reportShortcutUsed(this, ShuffleAllShortcutType.getId());
                 break;
             case SHORTCUT_TYPE_TOP_TRACKS:
                 startServiceWithPlaylist(MusicService.SHUFFLE_MODE_NONE,
-                        new MyTopTracksPlaylist(getApplicationContext()));
+                        new TopTracksPlaylist());
                 DynamicShortcutManager.reportShortcutUsed(this, TopTracksShortcutType.getId());
                 break;
             case SHORTCUT_TYPE_LAST_ADDED:
                 startServiceWithPlaylist(MusicService.SHUFFLE_MODE_NONE,
-                        new LastAddedPlaylist(getApplicationContext()));
+                        new LastAddedPlaylist());
                 DynamicShortcutManager.reportShortcutUsed(this, LastAddedShortcutType.getId());
                 break;
         }

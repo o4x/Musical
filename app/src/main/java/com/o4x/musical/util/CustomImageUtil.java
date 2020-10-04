@@ -59,8 +59,8 @@ public class CustomImageUtil {
     }
 
     public CustomImageUtil(Playlist playlist) {
-        this.id = playlist.id;
-        this.name = playlist.name;
+        this.id = playlist.getId();
+        this.name = playlist.getName();
         this.type = Type.PLAYLIST;
     }
 

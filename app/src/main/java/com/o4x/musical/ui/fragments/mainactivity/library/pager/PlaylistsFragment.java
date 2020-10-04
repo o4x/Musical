@@ -9,15 +9,15 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.o4x.musical.R;
-import com.o4x.musical.misc.OverScrollLinearLayoutManager;
-import com.o4x.musical.ui.adapter.PlaylistAdapter;
 import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.loader.PlaylistLoader;
+import com.o4x.musical.misc.OverScrollLinearLayoutManager;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist;
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist;
-import com.o4x.musical.model.smartplaylist.MyTopTracksPlaylist;
+import com.o4x.musical.model.smartplaylist.TopTracksPlaylist;
+import com.o4x.musical.ui.adapter.PlaylistAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,9 +81,9 @@ public class PlaylistsFragment extends AbsLibraryPagerRecyclerViewFragment<Playl
         private static List<Playlist> getAllPlaylists(Context context) {
             List<Playlist> playlists = new ArrayList<>();
 
-            playlists.add(new LastAddedPlaylist(context));
-            playlists.add(new HistoryPlaylist(context));
-            playlists.add(new MyTopTracksPlaylist(context));
+            playlists.add(new LastAddedPlaylist());
+            playlists.add(new HistoryPlaylist());
+            playlists.add(new TopTracksPlaylist());
 
             playlists.addAll(PlaylistLoader.getAllPlaylists(context));
 
