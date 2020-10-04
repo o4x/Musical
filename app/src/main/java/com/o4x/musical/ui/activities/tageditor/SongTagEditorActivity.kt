@@ -2,9 +2,10 @@ package com.o4x.musical.ui.activities.tageditor
 
 import android.content.Intent
 import com.o4x.musical.R
-import com.o4x.musical.loader.ArtistLoader
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.ITunesModel.Results
+import com.o4x.musical.repository.RealAlbumRepository
+import com.o4x.musical.repository.RealArtistRepository
 import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.SongSearchActivity
 import java.util.*
@@ -15,8 +16,10 @@ class SongTagEditorActivity : AbsTagEditorActivity<Results>() {
         get() = R.layout.activity_song_tag_editor
 
     override val artist: Artist
-        get() = ArtistLoader.getArtist(
-            this,
+        get() = RealArtistRepository(
+            RealSongRepository(this),
+            RealAlbumRepository(RealSongRepository(this))
+        ).artist(
             RealSongRepository(this).song(id).artistId
         )
 

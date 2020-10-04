@@ -32,10 +32,10 @@ import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
-import com.o4x.musical.loader.ArtistLoader
 import com.o4x.musical.loader.PlaylistSongLoader
 import com.o4x.musical.model.Song
 import com.o4x.musical.repository.RealAlbumRepository
+import com.o4x.musical.repository.RealArtistRepository
 import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
@@ -256,7 +256,10 @@ class MainActivity : AbsMusicPanelActivity() {
             val id = parseIdFromIntent(intent, "artistId", "artist")
             if (id >= 0) {
                 val position = intent.getIntExtra("position", 0)
-                MusicPlayerRemote.openQueue(ArtistLoader.getArtist(this, id).songs, position, true)
+                MusicPlayerRemote.openQueue(RealArtistRepository(
+                    RealSongRepository(this),
+                    RealAlbumRepository(RealSongRepository(this))
+                ).artist( id).songs, position, true)
                 handled = true
             }
         }

@@ -20,12 +20,12 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.o4x.musical.R
 import com.o4x.musical.interfaces.LoaderIds
-import com.o4x.musical.loader.ArtistLoader
 import com.o4x.musical.misc.WrappedAsyncTaskLoader
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
 import com.o4x.musical.repository.RealAlbumRepository
+import com.o4x.musical.repository.RealArtistRepository
 import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
 import com.o4x.musical.ui.adapter.SearchAdapter
@@ -167,7 +167,10 @@ class SearchActivity : AbsMusicServiceActivity(), SearchView.OnQueryTextListener
                     results.add(context.resources.getString(R.string.songs))
                     results.addAll(songs)
                 }
-                val artists: List<Artist> = ArtistLoader.getArtists(context, query.trim { it <= ' ' })
+                val artists: List<Artist> = RealArtistRepository(
+                    RealSongRepository(context),
+                    RealAlbumRepository(RealSongRepository(context))
+                ).artists(query.trim { it <= ' ' })
                 if (artists.isNotEmpty()) {
                     results.add(context.resources.getString(R.string.artists))
                     results.addAll(artists)
