@@ -60,7 +60,7 @@ public class GenreLoader {
         final long id = cursor.getLong(0);
         final String name = cursor.getString(1);
         final List<Song> songs = getSongs(context, id);
-        return new Genre(id, name, songs.size(), songs);
+        return new Genre(id, name, songs, songs.size());
     }
 
     @Nullable

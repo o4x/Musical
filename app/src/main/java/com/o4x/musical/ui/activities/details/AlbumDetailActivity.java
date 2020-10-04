@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,9 +35,6 @@ import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.network.ApiClient;
-import com.o4x.musical.network.Models.LastFmAlbum;
-import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.repository.RealAlbumRepository;
 import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
@@ -60,9 +56,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import code.name.monkey.appthemehelper.util.ColorUtil;
 import code.name.monkey.appthemehelper.util.MaterialValueHelper;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Be careful when changing things in this Activity!
@@ -250,40 +243,40 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     private void loadWiki(@Nullable final String lang) {
         wiki = null;
 
-        ApiClient.getClient(this).create(LastFMService.class)
-                .getAlbumInfo(getAlbum().getTitle(), getAlbum().getArtistName(), lang)
-                .enqueue(new Callback<LastFmAlbum>() {
-                    @Override
-                    public void onResponse(@NonNull Call<LastFmAlbum> call, @NonNull Response<LastFmAlbum> response) {
-                        final LastFmAlbum lastFmAlbum = response.body();
-                        if (lastFmAlbum != null && lastFmAlbum.getAlbum() != null && lastFmAlbum.getAlbum().getWiki() != null) {
-                            final String wikiContent = lastFmAlbum.getAlbum().getWiki().getContent();
-                            if (wikiContent != null && !wikiContent.trim().isEmpty()) {
-                                wiki = Html.fromHtml(wikiContent);
-                            }
-                        }
-
-                        // If the "lang" parameter is set and no wiki is given, retry with default language
-                        if (wiki == null && lang != null) {
-                            loadWiki(null);
-                            return;
-                        }
-
-                        if (!PreferenceUtil.isAllowedToDownloadMetadata(AlbumDetailActivity.this)) {
-                            if (wiki != null) {
-                                wikiDialog.setContent(wiki);
-                            } else {
-                                wikiDialog.dismiss();
-                                Toast.makeText(AlbumDetailActivity.this, getResources().getString(R.string.wiki_unavailable), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<LastFmAlbum> call, @NonNull Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+//        ApiClient.getClient(this).create(LastFMService.class)
+//                .getAlbumInfo(getAlbum().getTitle(), getAlbum().getArtistName(), lang)
+//                .enqueue(new Callback<LastFmAlbum>() {
+//                    @Override
+//                    public void onResponse(@NonNull Call<LastFmAlbum> call, @NonNull Response<LastFmAlbum> response) {
+//                        final LastFmAlbum lastFmAlbum = response.body();
+//                        if (lastFmAlbum != null && lastFmAlbum.getAlbum() != null && lastFmAlbum.getAlbum().getWiki() != null) {
+//                            final String wikiContent = lastFmAlbum.getAlbum().getWiki().getContent();
+//                            if (wikiContent != null && !wikiContent.trim().isEmpty()) {
+//                                wiki = Html.fromHtml(wikiContent);
+//                            }
+//                        }
+//
+//                        // If the "lang" parameter is set and no wiki is given, retry with default language
+//                        if (wiki == null && lang != null) {
+//                            loadWiki(null);
+//                            return;
+//                        }
+//
+//                        if (!PreferenceUtil.isAllowedToDownloadMetadata(AlbumDetailActivity.this)) {
+//                            if (wiki != null) {
+//                                wikiDialog.setContent(wiki);
+//                            } else {
+//                                wikiDialog.dismiss();
+//                                Toast.makeText(AlbumDetailActivity.this, getResources().getString(R.string.wiki_unavailable), Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(@NonNull Call<LastFmAlbum> call, @NonNull Throwable t) {
+//                        t.printStackTrace();
+//                    }
+//                });
     }
 
     @Override

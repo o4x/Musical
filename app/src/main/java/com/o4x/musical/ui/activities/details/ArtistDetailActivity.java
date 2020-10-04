@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,9 +36,6 @@ import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.network.ApiClient;
-import com.o4x.musical.network.Models.LastFmArtist;
-import com.o4x.musical.network.service.LastFMService;
 import com.o4x.musical.repository.RealAlbumRepository;
 import com.o4x.musical.repository.RealArtistRepository;
 import com.o4x.musical.repository.RealSongRepository;
@@ -63,9 +59,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import code.name.monkey.appthemehelper.util.ColorUtil;
 import code.name.monkey.appthemehelper.util.MaterialValueHelper;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Be careful when changing things in this Activity!
@@ -216,41 +209,41 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
     private void loadBiography(@Nullable final String lang) {
         biography = null;
 
-        ApiClient.getClient(this).create(LastFMService.class)
-                .getArtistInfo(getArtist().getName(), lang, null)
-                .enqueue(new Callback<LastFmArtist>() {
-                    @Override
-                    public void onResponse(@NonNull Call<LastFmArtist> call, @NonNull Response<LastFmArtist> response) {
-                        final LastFmArtist lastFmArtist = response.body();
-                        if (lastFmArtist != null && lastFmArtist.getArtist() != null) {
-                            final String bioContent = lastFmArtist.getArtist().getBio().getContent();
-                            if (bioContent != null && !bioContent.trim().isEmpty()) {
-                                biography = Html.fromHtml(bioContent);
-                            }
-                        }
-
-                        // If the "lang" parameter is set and no biography is given, retry with default language
-                        if (biography == null && lang != null) {
-                            loadBiography(null);
-                            return;
-                        }
-
-                        if (!PreferenceUtil.isAllowedToDownloadMetadata(ArtistDetailActivity.this)) {
-                            if (biography != null) {
-                                biographyDialog.setContent(biography);
-                            } else {
-                                biographyDialog.dismiss();
-                                Toast.makeText(ArtistDetailActivity.this, getResources().getString(R.string.biography_unavailable), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<LastFmArtist> call, @NonNull Throwable t) {
-                        t.printStackTrace();
-                        biography = null;
-                    }
-                });
+//        ApiClient.getClient(this).create(LastFMService.class)
+//                .getArtistInfo(getArtist().getName(), lang, null)
+//                .enqueue(new Callback<LastFmArtist>() {
+//                    @Override
+//                    public void onResponse(@NonNull Call<LastFmArtist> call, @NonNull Response<LastFmArtist> response) {
+//                        final LastFmArtist lastFmArtist = response.body();
+//                        if (lastFmArtist != null && lastFmArtist.getArtist() != null) {
+//                            final String bioContent = lastFmArtist.getArtist().getBio().getContent();
+//                            if (bioContent != null && !bioContent.trim().isEmpty()) {
+//                                biography = Html.fromHtml(bioContent);
+//                            }
+//                        }
+//
+//                        // If the "lang" parameter is set and no biography is given, retry with default language
+//                        if (biography == null && lang != null) {
+//                            loadBiography(null);
+//                            return;
+//                        }
+//
+//                        if (!PreferenceUtil.isAllowedToDownloadMetadata(ArtistDetailActivity.this)) {
+//                            if (biography != null) {
+//                                biographyDialog.setContent(biography);
+//                            } else {
+//                                biographyDialog.dismiss();
+//                                Toast.makeText(ArtistDetailActivity.this, getResources().getString(R.string.biography_unavailable), Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(@NonNull Call<LastFmArtist> call, @NonNull Throwable t) {
+//                        t.printStackTrace();
+//                        biography = null;
+//                    }
+//                });
     }
 
     private void loadArtistImage() {
