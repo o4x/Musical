@@ -104,7 +104,7 @@ public class MusicUtil {
 
     @NonNull
     public static String getGenreInfoString(@NonNull final Context context, @NonNull final Genre genre) {
-        int songCount = genre.songCount;
+        int songCount = genre.getSongCount();
         return MusicUtil.getSongCountString(context, songCount);
     }
 
