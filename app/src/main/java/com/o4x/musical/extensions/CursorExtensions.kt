@@ -1,6 +1,7 @@
 package com.o4x.musical.extensions
 
 import android.database.Cursor
+import android.util.Log
 
 // exception is rethrown manually in order to have a readable stacktrace
 
@@ -29,9 +30,11 @@ internal fun Cursor.getString(columnName: String): String {
 }
 
 internal fun Cursor.getStringOrNull(columnName: String): String? {
-    return try {
-        this.getString(this.getColumnIndex(columnName))
+    val column: Int = this.getColumnIndex(columnName)
+    if (column == -1) return null
+    try {
+        return this.getString(column)
     } catch (ex: Throwable) {
-        null
+        throw IllegalStateException("invalid column $columnName", ex)
     }
 }
