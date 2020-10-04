@@ -22,8 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.o4x.musical.R;
-import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.util.PreferenceUtil;
 
@@ -408,8 +408,8 @@ public class MusicPlayerRemote {
                         songId = uri.getLastPathSegment();
                     }
                     if (songId != null) {
-                        songs = SongLoader.getSongs(SongLoader.makeSongCursor(
-                                musicService,
+                        RealSongRepository songRepo = new RealSongRepository(musicService);
+                        songs = songRepo.songs(songRepo.makeSongCursor(
                                 MediaStore.Audio.AudioColumns._ID + "=?",
                                 new String[]{songId}
                         ));
@@ -430,8 +430,8 @@ public class MusicPlayerRemote {
                     songFile = new File(uri.getPath());
                 }
                 if (songFile != null) {
-                    songs = SongLoader.getSongs(SongLoader.makeSongCursor(
-                            musicService,
+                    RealSongRepository songRepo = new RealSongRepository(musicService);
+                    songs = songRepo.songs(songRepo.makeSongCursor(
                             MediaStore.Audio.AudioColumns.DATA + "=?",
                             new String[]{songFile.getAbsolutePath()}
                     ));

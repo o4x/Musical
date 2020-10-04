@@ -8,9 +8,9 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.loader.SortedCursor;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.repository.RealSongRepository;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,7 +33,7 @@ public final class FileUtil {
 
     @NonNull
     public static List<Song> matchFilesWithMediaStore(@NonNull Context context, @Nullable List<File> files) {
-        return SongLoader.getSongs(makeSongCursor(context, files));
+        return new RealSongRepository(context).songs(makeSongCursor(context, files));
     }
 
     @Nullable
@@ -49,7 +49,7 @@ public final class FileUtil {
             }
         }
 
-        Cursor songCursor = SongLoader.makeSongCursor(context, selection, selection == null ? null : paths);
+        Cursor songCursor = new RealSongRepository(context).makeSongCursor(selection, selection == null ? null : paths);
 
         return songCursor == null ? null : new SortedCursor(songCursor, paths, MediaStore.Audio.AudioColumns.DATA);
     }

@@ -127,7 +127,6 @@ class RealSongRepository(private val context: Context) : SongRepository {
 
     @JvmOverloads
     fun makeSongCursor(
-
         selection: String?,
         selectionValues: Array<String>?,
         sortOrder: String = PreferenceUtil.songSortOrder

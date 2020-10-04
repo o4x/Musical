@@ -3,9 +3,9 @@ package com.o4x.musical.ui.activities.tageditor
 import android.content.Intent
 import com.o4x.musical.R
 import com.o4x.musical.loader.ArtistLoader
-import com.o4x.musical.loader.SongLoader
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.ITunesModel.Results
+import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.SongSearchActivity
 import java.util.*
 
@@ -17,13 +17,13 @@ class SongTagEditorActivity : AbsTagEditorActivity<Results>() {
     override val artist: Artist
         get() = ArtistLoader.getArtist(
             this,
-            SongLoader.getSong(this, id).artistId
+            RealSongRepository(this).song(id).artistId
         )
 
     override val songPaths: List<String>
         get() {
             val paths: MutableList<String> = ArrayList(1)
-            paths.add(SongLoader.getSong(this, id).data)
+            paths.add(RealSongRepository(this).song(id).data)
             return paths
         }
 

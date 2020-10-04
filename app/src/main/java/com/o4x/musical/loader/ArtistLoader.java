@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class ArtistLoader {
 
     @NonNull
     public static List<Artist> getAllArtists(@NonNull final Context context) {
-        List<Song> songs = SongLoader.getSongs(SongLoader.makeSongCursor(
-                context,
+        RealSongRepository songRepo = new RealSongRepository(context);
+        List<Song> songs = songRepo.songs(songRepo.makeSongCursor(
                 null,
                 null,
                 getSongLoaderSortOrder(context))
@@ -35,8 +36,8 @@ public class ArtistLoader {
 
     @NonNull
     public static List<Artist> getArtists(@NonNull final Context context, String query) {
-        List<Song> songs = SongLoader.getSongs(SongLoader.makeSongCursor(
-                context,
+        RealSongRepository songRepo = new RealSongRepository(context);
+        List<Song> songs = songRepo.songs(songRepo.makeSongCursor(
                 AudioColumns.ARTIST + " LIKE ?",
                 new String[]{"%" + query + "%"},
                 getSongLoaderSortOrder(context))
@@ -46,8 +47,8 @@ public class ArtistLoader {
 
     @NonNull
     public static Artist getArtist(@NonNull final Context context, long artistId) {
-        List<Song> songs = SongLoader.getSongs(SongLoader.makeSongCursor(
-                context,
+        RealSongRepository songRepo = new RealSongRepository(context);
+        List<Song> songs = songRepo.songs(songRepo.makeSongCursor(
                 AudioColumns.ARTIST_ID + "=?",
                 new String[]{String.valueOf(artistId)},
                 getSongLoaderSortOrder(context))

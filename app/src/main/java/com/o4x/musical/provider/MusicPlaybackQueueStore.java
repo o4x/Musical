@@ -26,8 +26,8 @@ import android.provider.MediaStore.Audio.AudioColumns;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.o4x.musical.loader.SongLoader;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.repository.RealSongRepository;
 
 import java.util.List;
 
@@ -44,6 +44,8 @@ public class MusicPlaybackQueueStore extends SQLiteOpenHelper {
     public static final String ORIGINAL_PLAYING_QUEUE_TABLE_NAME = "original_playing_queue";
     private static final int VERSION = 4;
 
+    private final Context context;
+
     /**
      * Constructor of <code>MusicPlaybackState</code>
      *
@@ -51,6 +53,7 @@ public class MusicPlaybackQueueStore extends SQLiteOpenHelper {
      */
     public MusicPlaybackQueueStore(final Context context) {
         super(context, DATABASE_NAME, null, VERSION);
+        this.context = context;
     }
 
     @Override
@@ -197,6 +200,6 @@ public class MusicPlaybackQueueStore extends SQLiteOpenHelper {
     private List<Song> getQueue(@NonNull final String tableName) {
         Cursor cursor = getReadableDatabase().query(tableName, null,
                 null, null, null, null, null);
-        return SongLoader.getSongs(cursor);
+        return new RealSongRepository(context).songs(cursor);
     }
 }

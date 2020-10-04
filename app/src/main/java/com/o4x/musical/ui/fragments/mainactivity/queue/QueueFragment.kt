@@ -15,8 +15,8 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropM
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.interfaces.MusicServiceEventListener
-import com.o4x.musical.loader.SongLoader
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
+import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
@@ -71,7 +71,7 @@ class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_shuffle_all -> {
-                MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(mainActivity), true)
+                MusicPlayerRemote.openAndShuffleQueue(RealSongRepository(mainActivity).songs(), true)
                 return true
             }
             R.id.action_new_playlist -> {

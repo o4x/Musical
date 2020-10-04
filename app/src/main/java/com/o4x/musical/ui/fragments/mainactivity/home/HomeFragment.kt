@@ -25,10 +25,10 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.loader.LastAddedLoader
-import com.o4x.musical.loader.SongLoader
 import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
+import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
@@ -117,7 +117,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_shuffle_all -> {
-                MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(mainActivity), true)
+                MusicPlayerRemote.openAndShuffleQueue(RealSongRepository(mainActivity).songs(), true)
                 return true
             }
             R.id.action_new_playlist -> {
@@ -175,8 +175,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                 mainActivity, LastAddedPlaylist(mainActivity))
         }
         shuffle_btn.setOnClickListener {
-            MusicPlayerRemote.openAndShuffleQueue(SongLoader.getAllSongs(
-                mainActivity), true)
+            MusicPlayerRemote.openAndShuffleQueue(RealSongRepository(mainActivity).songs(), true)
         }
     }
 

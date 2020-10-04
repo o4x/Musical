@@ -36,6 +36,7 @@ object Constants {
     const val IS_MUSIC =
         MediaStore.Audio.AudioColumns.IS_MUSIC + "=1" + " AND " + MediaStore.Audio.AudioColumns.TITLE + " != ''"
 
+    @JvmStatic
     val baseProjection = arrayOf(
         BaseColumns._ID, // 0
         MediaStore.Audio.AudioColumns.TITLE, // 1
@@ -51,6 +52,7 @@ object Constants {
         MediaStore.Audio.AudioColumns.COMPOSER,// 11
         "album_artist"//12
     )
+
     const val NUMBER_OF_TOP_TRACKS = 99
 }
 const val EXTRA_GENRE = "extra_genre"
