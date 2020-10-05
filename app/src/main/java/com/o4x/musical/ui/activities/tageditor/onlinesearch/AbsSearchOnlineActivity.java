@@ -1,19 +1,28 @@
 package com.o4x.musical.ui.activities.tageditor.onlinesearch;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
+import android.speech.RecognizerIntent;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.o4x.musical.R;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.adapter.online.SearchOnlineAdapter;
@@ -21,12 +30,17 @@ import com.o4x.musical.util.Util;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.o4x.musical.extensions.FragmentExtKt.showToast;
+
 public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR extends List<? extends Serializable>>
-        extends AbsMusicServiceActivity implements SearchView.OnQueryTextListener {
+        extends AbsMusicServiceActivity {
+
+    public static final int REQ_CODE_SPEECH_INPUT = 9003;
 
     public static final String QUERY = "query";
     public static final int REQUEST_CODE = 2000;
@@ -36,14 +50,20 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    SearchView searchView;
     @BindView(R.id.empty)
     TextView empty;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
-
     @BindView(R.id.results_recycler_view)
     RecyclerView resultsRecyclerView;
+    @BindView(R.id.search_view)
+    TextInputEditText searchView;
+    @BindView(R.id.voice_search)
+    AppCompatImageView voiceSearch;
+    @BindView(R.id.clear_text)
+    AppCompatImageView clearText;
+
+
     protected A onlineSearchAdapter;
 
     protected LR results;
@@ -51,6 +71,7 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
 
     private Handler handler;
     private Runnable runnable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +83,45 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
         setStatusBarColorAuto();
         setNavigationBarColorAuto();
         setTaskDescriptionColorAuto();
+        setNavigationBarDividerColorAuto();
 
         setup();
         getExtra();
         if (savedInstanceState != null) {
             search(savedInstanceState.getString(QUERY));
         }
+
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                search(editable.toString());
+            }
+        });
+        searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String mQuery = v.getText().toString();
+                    if (!query.equals(mQuery)) {
+                        search(mQuery);
+                    }
+                    hideSoftKeyboard();
+                    return true;
+                }
+                return false;
+            }
+        });
+        searchView.setText(query);
+        voiceSearch.setOnClickListener(v -> startMicSearch());
+        clearText.setVisibility(View.GONE);
     }
 
     @Override
@@ -76,37 +130,35 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
         outState.putString(QUERY, query);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void getExtra() {
         search(getIntent().getStringExtra(EXTRA_SONG_NAME));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-
-        final MenuItem searchItem = menu.findItem(R.id.search);
-        searchView = (SearchView) searchItem.getActionView();
-        searchView.setQueryHint(getString(R.string.search_hint));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        searchItem.expandActionView();
-        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                onBackPressed();
-                return false;
-            }
-        });
-
-        searchView.setQuery(query, false);
-        searchView.post(() -> searchView.setOnQueryTextListener(this));
-
-        return super.onCreateOptionsMenu(menu);
+    private void startMicSearch() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+        );
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt));
+        try {
+            startActivityForResult(
+                    intent,
+                    REQ_CODE_SPEECH_INPUT
+            );
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(this, getString(R.string.speech_not_supported), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setup() {
@@ -133,21 +185,6 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
             hideSoftKeyboard();
             return false;
         });
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        if (this.query != query) {
-            search(query);
-        }
-        hideSoftKeyboard();
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        search(newText);
-        return false;
     }
 
     private void setupHandler() {

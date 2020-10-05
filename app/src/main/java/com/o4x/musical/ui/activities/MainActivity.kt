@@ -49,6 +49,7 @@ import com.o4x.musical.util.PreferenceUtil.setIntroShown
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
+import kotlinx.android.synthetic.main.search_bar.*
 import java.util.*
 
 class MainActivity : AbsMusicPanelActivity() {
