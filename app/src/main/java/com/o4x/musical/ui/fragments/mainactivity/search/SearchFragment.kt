@@ -56,6 +56,13 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
         voiceSearch.setOnClickListener { startMicSearch() }
         clearText.setOnClickListener { searchView.clearText() }
 
+        searchView.requestFocus()
+        val inputManager = getSystemService(
+            requireContext(),
+            InputMethodManager::class.java
+        )
+        inputManager?.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT)
+
         if (savedInstanceState != null) {
             query = savedInstanceState.getString(QUERY)
         }
