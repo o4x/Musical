@@ -114,7 +114,6 @@
         <activity android:name=".ui.activities.tageditor.onlinesearch.SongSearchActivity" />
         <activity android:name=".ui.activities.tageditor.onlinesearch.AlbumSearchActivity" />
         <activity android:name=".ui.activities.tageditor.onlinesearch.ArtistSearchActivity" />
-        <activity android:name=".ui.activities.SearchActivity" />
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:label="@string/action_settings" />

@@ -1,7 +1,6 @@
 package com.o4x.musical.ui.fragments.mainactivity.home
 
 import android.animation.ValueAnimator
-import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -28,8 +27,6 @@ import com.o4x.musical.loader.LastAddedLoader
 import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
-import com.o4x.musical.repository.RealSongRepository
-import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment

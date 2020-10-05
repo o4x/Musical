@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.fragments.mainactivity.queue
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +16,6 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.repository.RealSongRepository
-import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
@@ -79,7 +77,7 @@ class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
                 return true
             }
             R.id.action_search -> {
-                startActivity(Intent(getActivity(), SearchActivity::class.java))
+                mainActivity.openSearch()
                 return true
             }
         }
