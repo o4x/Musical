@@ -225,7 +225,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
                             }
                         }
                         if (startIndex > -1) {
-                            MusicPlayerRemote.openQueue(songs, startIndex, true)
+                            MusicPlayerRemote.openQueue(songs as List<Song>, startIndex, true)
                         } else {
                             Snackbar.make(coordinator_layout!!,
                                 Html.fromHtml(String.format(getString(R.string.not_listed_in_media_store),

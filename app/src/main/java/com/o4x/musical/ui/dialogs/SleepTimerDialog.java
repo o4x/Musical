@@ -95,7 +95,7 @@ public class SleepTimerDialog extends DialogFragment {
                         Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.sleep_timer_canceled), Toast.LENGTH_SHORT).show();
                     }
 
-                    MusicService musicService = MusicPlayerRemote.musicService;
+                    MusicService musicService = MusicPlayerRemote.getMusicService();
                     if (musicService != null && musicService.pendingQuit) {
                         musicService.pendingQuit = false;
                         Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.sleep_timer_canceled), Toast.LENGTH_SHORT).show();
@@ -177,7 +177,7 @@ public class SleepTimerDialog extends DialogFragment {
     }
 
     private void updateCancelButton() {
-        MusicService musicService = MusicPlayerRemote.musicService;
+        MusicService musicService = MusicPlayerRemote.getMusicService();
         if (musicService != null && musicService.pendingQuit) {
             materialDialog.setActionButton(DialogAction.NEUTRAL, materialDialog.getContext().getString(R.string.cancel_current_timer));
         } else {

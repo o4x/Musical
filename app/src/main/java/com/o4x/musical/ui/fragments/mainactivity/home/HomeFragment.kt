@@ -117,7 +117,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_shuffle_all -> {
-                MusicPlayerRemote.openAndShuffleQueue(RealSongRepository(mainActivity).songs(), true)
+                libraryViewModel.shuffleSongs()
                 return true
             }
             R.id.action_new_playlist -> {
@@ -175,7 +175,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                 mainActivity, LastAddedPlaylist())
         }
         shuffle_btn.setOnClickListener {
-            MusicPlayerRemote.openAndShuffleQueue(RealSongRepository(mainActivity).songs(), true)
+            libraryViewModel.shuffleSongs()
         }
     }
 
@@ -245,15 +245,15 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         queue_recycler_view.layoutManager = queueLayoutManager
         queueAdapter = HomeAdapter(
             mainActivity,
-            MusicPlayerRemote.getPlayingQueue(),
-            MusicPlayerRemote.getPosition(),
+            MusicPlayerRemote.playingQueue,
+            MusicPlayerRemote.position,
             R.layout.item_card_home,
             null,
             true,
             true)
         queue_recycler_view.adapter = queueAdapter
         queue_recycler_view.itemAnimator = animator
-        queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.getPosition(), 0)
+        queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.position, 0)
     }
 
     private fun setUpRecentlyView() {
@@ -338,8 +338,8 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         }
 
         private fun updatePoster() {
-            if (MusicPlayerRemote.getPlayingQueue().isNotEmpty()) {
-                val song = MusicPlayerRemote.getCurrentSong()
+            if (MusicPlayerRemote.playingQueue.isNotEmpty()) {
+                val song = MusicPlayerRemote.currentSong
                 //                if (navigationDrawerHeader == null) {
 //                    navigationDrawerHeader = navigationView.inflateHeaderView(R.layout.navigation_drawer_header);
 //                    //noinspection ConstantConditions
@@ -376,8 +376,8 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         }
 
         private fun updateQueue() {
-            queueAdapter.swapDataSet(MusicPlayerRemote.getPlayingQueue(),
-                MusicPlayerRemote.getPosition())
+            queueAdapter.swapDataSet(MusicPlayerRemote.playingQueue,
+                MusicPlayerRemote.position)
             resetToCurrentPosition()
         }
 
@@ -385,7 +385,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             if (queueAdapter.itemCount == 0) return
             queue_recycler_view.stopScroll()
             val from = queueLayoutManager.findFirstVisibleItemPosition()
-            val to = MusicPlayerRemote.getPosition()
+            val to = MusicPlayerRemote.position
             val delta = abs(to - from)
             val limit = 150
             if (delta > limit) {

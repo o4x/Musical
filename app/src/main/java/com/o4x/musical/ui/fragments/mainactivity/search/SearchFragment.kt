@@ -22,6 +22,7 @@ import com.o4x.musical.extensions.showToast
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.ui.adapter.SearchAdapter
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
+import com.o4x.musical.util.Util
 import kotlinx.android.synthetic.main.fragment_search.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -63,6 +64,7 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
         clearText.setOnClickListener { searchView.clearText() }
 
         searchView.requestFocus()
+        // show keyboard
         val inputManager = getSystemService(
             requireContext(),
             InputMethodManager::class.java
@@ -84,6 +86,7 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
+            Util.hideSoftKeyboard(mainActivity)
             mainActivity.onBackPressed()
             return true
         }
