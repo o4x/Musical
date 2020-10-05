@@ -438,5 +438,6 @@
     <string name="speech_prompt">Search your library</string>
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
     <string name="search">Search</string>
+    <string name="close">CLOSE</string>
 
 </resources>

@@ -6,20 +6,18 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
 import com.google.android.material.textfield.TextInputEditText
 import com.o4x.musical.R
-import com.o4x.musical.extensions.dipToPix
 import com.o4x.musical.extensions.showToast
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.ui.adapter.SearchAdapter
@@ -42,8 +40,16 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
     private lateinit var searchAdapter: SearchAdapter
     private var query: String? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainActivity.setDrawerEnabled(false)
+
         val search = mainActivity.search
         search.visibility = View.VISIBLE
         searchView = search.findViewById(R.id.search_view)
@@ -69,6 +75,19 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
         libraryViewModel.getSearchResult().observe(viewLifecycleOwner, {
             showData(it)
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mainActivity.setDrawerEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            mainActivity.onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showData(data: List<Any>) {

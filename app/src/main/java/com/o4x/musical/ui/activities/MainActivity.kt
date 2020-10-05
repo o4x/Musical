@@ -17,6 +17,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
@@ -27,7 +29,6 @@ import code.name.monkey.retromusic.extensions.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
-import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
@@ -57,6 +58,8 @@ class MainActivity : AbsMusicPanelActivity() {
     private var blockRequestPermissions = false
 
     lateinit var navController: NavController
+
+    lateinit var toggle: ActionBarDrawerToggle
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,6 +144,15 @@ class MainActivity : AbsMusicPanelActivity() {
 
     @SuppressLint("NewApi")
     private fun setUpNavigationView() {
+        toggle = object : ActionBarDrawerToggle(
+            this,
+            drawer_layout,
+            R.string.open,
+            R.string.close
+        ) {}
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+
         navigation_view.setCheckedItem(R.id.nav_home)
 
         val themeColor = themeColor(this)
@@ -168,7 +180,7 @@ class MainActivity : AbsMusicPanelActivity() {
                         R.id.nav_library -> setMusicChooser(R.id.nav_library)
                         R.id.nav_folders -> setMusicChooser(R.id.nav_folders)
                         R.id.nav_eq -> setMusicChooser(R.id.nav_eq)
-                        R.id.buy_pro ->  startActivity(
+                        R.id.buy_pro -> startActivity(
                             Intent(this@MainActivity, PurchaseActivity::class.java)
                         )
                         R.id.action_scan -> {
@@ -180,9 +192,18 @@ class MainActivity : AbsMusicPanelActivity() {
                         )
                     }
                 },
-                200)
+                200
+            )
             false
         }
+    }
+
+    fun setDrawerEnabled(enabled: Boolean) {
+        val lockMode: Int =
+            if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+        drawer_layout.setDrawerLockMode(lockMode)
+        toggle.isDrawerIndicatorEnabled = enabled
+        toggle.syncState()
     }
 
     override fun onServiceConnected() {
@@ -192,6 +213,8 @@ class MainActivity : AbsMusicPanelActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
+            if (navController.currentDestination?.id == R.id.search)
+                return false
             if (drawer_layout.isDrawerOpen(navigation_view)) {
                 drawer_layout.closeDrawer(navigation_view)
             } else {
@@ -243,17 +266,23 @@ class MainActivity : AbsMusicPanelActivity() {
             val id = parseIdFromIntent(intent, "albumId", "album")
             if (id >= 0) {
                 val position = intent.getIntExtra("position", 0)
-                MusicPlayerRemote.openQueue(RealAlbumRepository(RealSongRepository(this)).album(id).songs, position, true)
+                MusicPlayerRemote.openQueue(
+                    RealAlbumRepository(RealSongRepository(this)).album(id).songs,
+                    position,
+                    true
+                )
                 handled = true
             }
         } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
             val id = parseIdFromIntent(intent, "artistId", "artist")
             if (id >= 0) {
                 val position = intent.getIntExtra("position", 0)
-                MusicPlayerRemote.openQueue(RealArtistRepository(
-                    RealSongRepository(this),
-                    RealAlbumRepository(RealSongRepository(this))
-                ).artist( id).songs, position, true)
+                MusicPlayerRemote.openQueue(
+                    RealArtistRepository(
+                        RealSongRepository(this),
+                        RealAlbumRepository(RealSongRepository(this))
+                    ).artist(id).songs, position, true
+                )
                 handled = true
             }
         }
@@ -286,8 +315,12 @@ class MainActivity : AbsMusicPanelActivity() {
             ChangelogDialog.setChangelogRead(this)
             blockRequestPermissions = true
             Handler().postDelayed({
-                startActivityForResult(Intent(this@MainActivity,
-                    AppIntroActivity::class.java), APP_INTRO_REQUEST)
+                startActivityForResult(
+                    Intent(
+                        this@MainActivity,
+                        AppIntroActivity::class.java
+                    ), APP_INTRO_REQUEST
+                )
             }, 50)
             return true
         }
