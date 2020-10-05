@@ -265,7 +265,7 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
         @Override
         public List<Song> loadInBackground() {
             if (playlist instanceof AbsCustomPlaylist) {
-                return ((AbsCustomPlaylist) playlist).getSongs();
+                return ((AbsCustomPlaylist) playlist).songs();
             } else {
                 //noinspection unchecked
                 return (List) PlaylistSongLoader.getPlaylistSongList(getContext(), playlist.getId());
