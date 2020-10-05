@@ -307,6 +307,8 @@ object PreferenceUtil {
             editor.apply()
         }
 
+    val isShuffleModeOn get() = sharedPreferences.getBoolean(TOGGLE_SHUFFLE, false)
+
     var albumArtistsOnly
         get() = sharedPreferences.getBoolean(
             ALBUM_ARTISTS_ONLY,

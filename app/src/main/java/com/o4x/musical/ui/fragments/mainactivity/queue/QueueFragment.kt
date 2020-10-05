@@ -96,8 +96,8 @@ class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
         val animator: GeneralItemAnimator = RefactoredDefaultItemAnimator()
         queueAdapter = PlayingQueueAdapter(
             mainActivity,
-            MusicPlayerRemote.getPlayingQueue(),
-            MusicPlayerRemote.getPosition(),
+            MusicPlayerRemote.playingQueue,
+            MusicPlayerRemote.position,
             R.layout.item_list,
             false,
             null)
@@ -107,7 +107,7 @@ class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
         queue_recycler_view!!.adapter = wrappedAdapter
         queue_recycler_view!!.itemAnimator = animator
         recyclerViewDragDropManager!!.attachRecyclerView(queue_recycler_view!!)
-        queueLayoutManager!!.scrollToPositionWithOffset(MusicPlayerRemote.getPosition(), 0)
+        queueLayoutManager!!.scrollToPositionWithOffset(MusicPlayerRemote.position, 0)
 
         queue_recycler_view.addAppbarListener()
     }
@@ -134,8 +134,8 @@ class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
         }
 
         private fun updateQueue() {
-            queueAdapter!!.swapDataSet(MusicPlayerRemote.getPlayingQueue(),
-                MusicPlayerRemote.getPosition())
+            queueAdapter!!.swapDataSet(MusicPlayerRemote.playingQueue,
+                MusicPlayerRemote.position)
             resetToCurrentPosition()
             checkIsEmpty()
         }
@@ -149,7 +149,7 @@ class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
                 }
             }
             try {
-                smoothScroller.targetPosition = MusicPlayerRemote.getPosition() + 2
+                smoothScroller.targetPosition = MusicPlayerRemote.position + 2
                 queueLayoutManager!!.startSmoothScroll(smoothScroller)
             } catch (e: Exception) {
             }

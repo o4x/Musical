@@ -8,17 +8,18 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.StateListDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
@@ -32,13 +33,10 @@ import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.helper.SearchQueryHelper
+import com.o4x.musical.helper.SearchQueryHelper.getSongs
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
-import com.o4x.musical.loader.PlaylistSongLoader
 import com.o4x.musical.model.Song
-import com.o4x.musical.repository.RealAlbumRepository
-import com.o4x.musical.repository.RealArtistRepository
-import com.o4x.musical.repository.RealSongRepository
+import com.o4x.musical.repository.PlaylistSongsLoader
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.activities.intro.AppIntroActivity
@@ -51,7 +49,9 @@ import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
 import kotlinx.android.synthetic.main.search_bar.*
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 
 class MainActivity : AbsMusicPanelActivity() {
 
@@ -234,66 +234,68 @@ class MainActivity : AbsMusicPanelActivity() {
         return super.handleBackPress() || navController.popBackStack()
     }
 
-    private fun handlePlaybackIntent(intent: Intent?) {
-        if (intent == null) {
-            return
-        }
-        val uri = intent.data
-        val mimeType = intent.type
-        var handled = false
-        if (intent.action != null && intent.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
-            val songs = intent.extras?.let { SearchQueryHelper.getSongs(this, it) }
-            if (MusicPlayerRemote.getShuffleMode() == MusicService.SHUFFLE_MODE_SHUFFLE) {
-                MusicPlayerRemote.openAndShuffleQueue(songs, true)
-            } else {
-                MusicPlayerRemote.openQueue(songs, 0, true)
-            }
-            handled = true
-        }
-        if (uri != null && uri.toString().length > 0) {
-            MusicPlayerRemote.playFromUri(uri)
-            handled = true
-        } else if (MediaStore.Audio.Playlists.CONTENT_TYPE == mimeType) {
-            val id = parseIdFromIntent(intent, "playlistId", "playlist")
-            if (id >= 0) {
-                val position = intent.getIntExtra("position", 0)
-                val songs: List<Song> =
-                    ArrayList<Song>(PlaylistSongLoader.getPlaylistSongList(this, id))
-                MusicPlayerRemote.openQueue(songs, position, true)
+    private fun handlePlaybackIntent(intent: Intent) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val uri: Uri? = intent.data
+            val mimeType: String? = intent.type
+            var handled = false
+            if (intent.action != null &&
+                intent.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH
+            ) {
+                val songs: List<Song> = getSongs(intent.extras!!)
+                if (MusicPlayerRemote.shuffleMode == MusicService.SHUFFLE_MODE_SHUFFLE) {
+                    MusicPlayerRemote.openAndShuffleQueue(songs, true)
+                } else {
+                    MusicPlayerRemote.openQueue(songs, 0, true)
+                }
                 handled = true
             }
-        } else if (MediaStore.Audio.Albums.CONTENT_TYPE == mimeType) {
-            val id = parseIdFromIntent(intent, "albumId", "album")
-            if (id >= 0) {
-                val position = intent.getIntExtra("position", 0)
-                MusicPlayerRemote.openQueue(
-                    RealAlbumRepository(RealSongRepository(this)).album(id).songs,
-                    position,
-                    true
-                )
+            if (uri != null && uri.toString().isNotEmpty()) {
+                MusicPlayerRemote.playFromUri(uri)
                 handled = true
+            } else if (MediaStore.Audio.Playlists.CONTENT_TYPE == mimeType) {
+                val id = parseLongFromIntent(intent, "playlistId", "playlist")
+                if (id >= 0L) {
+                    val position: Int = intent.getIntExtra("position", 0)
+                    val songs: List<Song> = PlaylistSongsLoader.getPlaylistSongList(get(), id)
+                    MusicPlayerRemote.openQueue(songs, position, true)
+                    handled = true
+                }
+            } else if (MediaStore.Audio.Albums.CONTENT_TYPE == mimeType) {
+                val id = parseLongFromIntent(intent, "albumId", "album")
+                if (id >= 0L) {
+                    val position: Int = intent.getIntExtra("position", 0)
+                    val songs = libraryViewModel.albumById(id).songs
+                    MusicPlayerRemote.openQueue(
+                        songs,
+                        position,
+                        true
+                    )
+                    handled = true
+                }
+            } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
+                val id = parseLongFromIntent(intent, "artistId", "artist")
+                if (id >= 0L) {
+                    val position: Int = intent.getIntExtra("position", 0)
+                    val songs: List<Song> = libraryViewModel.artistById(id).songs
+                    MusicPlayerRemote.openQueue(
+                        songs,
+                        position,
+                        true
+                    )
+                    handled = true
+                }
             }
-        } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
-            val id = parseIdFromIntent(intent, "artistId", "artist")
-            if (id >= 0) {
-                val position = intent.getIntExtra("position", 0)
-                MusicPlayerRemote.openQueue(
-                    RealArtistRepository(
-                        RealSongRepository(this),
-                        RealAlbumRepository(RealSongRepository(this))
-                    ).artist(id).songs, position, true
-                )
-                handled = true
+            if (handled) {
+                setIntent(Intent())
             }
         }
-        if (handled) {
-            setIntent(Intent())
-        }
+
     }
 
-    private fun parseIdFromIntent(
+    private fun parseLongFromIntent(
         intent: Intent, longKey: String,
-        stringKey: String,
+        stringKey: String
     ): Long {
         var id = intent.getLongExtra(longKey, -1)
         if (id < 0) {
@@ -302,7 +304,7 @@ class MainActivity : AbsMusicPanelActivity() {
                 try {
                     id = idString.toLong()
                 } catch (e: NumberFormatException) {
-                    Log.e(TAG, e.message!!)
+                    println(e.message)
                 }
             }
         }

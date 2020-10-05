@@ -129,8 +129,8 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     override fun onResume() {
         super.onResume()
-        onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
-            MusicPlayerRemote.getSongDurationMillis())
+        onUpdateProgressViews(MusicPlayerRemote.songProgressMillis,
+            MusicPlayerRemote.songDurationMillis)
         progressViewUpdateHelper!!.start()
     }
 
@@ -168,7 +168,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     }
 
     private fun updateSong() {
-        val song = MusicPlayerRemote.getCurrentSong()
+        val song = MusicPlayerRemote.currentSong
         title?.text = song.title
         text?.text = song.artistName
         updateIsFavorite()
@@ -201,7 +201,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     }
 
     protected fun updatePlayPauseDrawableState(animate: Boolean) {
-        if (MusicPlayerRemote.isPlaying()) {
+        if (MusicPlayerRemote.isPlaying) {
             playPauseDrawable!!.setPause(animate)
         } else {
             playPauseDrawable!!.setPlay(animate)
@@ -220,7 +220,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     private fun setUpPrevNext() {
         updatePrevNextColor()
-        nextButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.nextSong() }
+        nextButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.playNextSong() }
         prevButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.back() }
     }
 
@@ -243,7 +243,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     }
 
     fun updateShuffleState() {
-        when (MusicPlayerRemote.getShuffleMode()) {
+        when (MusicPlayerRemote.shuffleMode) {
             MusicService.SHUFFLE_MODE_SHUFFLE -> shuffleButton?.setColorFilter(
                 lastPlaybackControlsColor,
                 PorterDuff.Mode.SRC_IN
@@ -261,12 +261,12 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     private fun setupFavourite() {
         songFavourite?.setOnClickListener {
-            toggleFavorite(MusicPlayerRemote.getCurrentSong())
+            toggleFavorite(MusicPlayerRemote.currentSong)
         }
     }
 
     private fun updateRepeatState() {
-        when (MusicPlayerRemote.getRepeatMode()) {
+        when (MusicPlayerRemote.repeatMode) {
             MusicService.REPEAT_MODE_NONE -> {
                 repeatButton!!.setImageResource(R.drawable.ic_repeat_white_24dp)
                 repeatButton!!.setColorFilter(lastDisabledPlaybackControlsColor,
@@ -326,8 +326,8 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
             override fun onStopTrackingTouch(slider: Slider) {
                 MusicPlayerRemote.seekTo(slider.value.toInt())
-                onUpdateProgressViews(MusicPlayerRemote.getSongProgressMillis(),
-                    MusicPlayerRemote.getSongDurationMillis())
+                onUpdateProgressViews(MusicPlayerRemote.songProgressMillis,
+                    MusicPlayerRemote.songDurationMillis)
             }
 
         })
@@ -383,7 +383,7 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
 
     private fun toggleFavorite(song: Song) {
         MusicUtil.toggleFavorite(requireContext(), song)
-        if (song.id == MusicPlayerRemote.getCurrentSong().id) {
+        if (song.id == MusicPlayerRemote.currentSong.id) {
             updateIsFavorite()
         }
     }
@@ -419,11 +419,11 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
                     songFavourite?.setImageDrawable(drawable)
                 }
             }
-        }.execute(MusicPlayerRemote.getCurrentSong())
+        }.execute(MusicPlayerRemote.currentSong)
     }
 
     fun onFavoriteToggled() {
-        toggleFavorite(MusicPlayerRemote.getCurrentSong())
+        toggleFavorite(MusicPlayerRemote.currentSong)
     }
 
     companion object {
