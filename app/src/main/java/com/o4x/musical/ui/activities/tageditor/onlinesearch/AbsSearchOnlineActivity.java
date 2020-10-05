@@ -105,19 +105,16 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
                 search(editable.toString());
             }
         });
-        searchView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String mQuery = v.getText().toString();
-                    if (!query.equals(mQuery)) {
-                        search(mQuery);
-                    }
-                    hideSoftKeyboard();
-                    return true;
+        searchView.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String mQuery = v.getText().toString();
+                if (!query.equals(mQuery)) {
+                    search(mQuery);
                 }
-                return false;
+                hideSoftKeyboard();
+                return true;
             }
+            return false;
         });
         searchView.setText(query);
         voiceSearch.setOnClickListener(v -> startMicSearch());
@@ -140,25 +137,6 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
 
     private void getExtra() {
         search(getIntent().getStringExtra(EXTRA_SONG_NAME));
-    }
-
-    private void startMicSearch() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-        );
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt));
-        try {
-            startActivityForResult(
-                    intent,
-                    REQ_CODE_SPEECH_INPUT
-            );
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(this, getString(R.string.speech_not_supported), Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void setup() {
@@ -202,6 +180,25 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
         Util.hideSoftKeyboard(this);
         if (searchView != null) {
             searchView.clearFocus();
+        }
+    }
+
+    private void startMicSearch() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+        );
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt));
+        try {
+            startActivityForResult(
+                    intent,
+                    REQ_CODE_SPEECH_INPUT
+            );
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(this, getString(R.string.speech_not_supported), Toast.LENGTH_SHORT).show();
         }
     }
 
