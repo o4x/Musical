@@ -8,7 +8,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -19,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.o4x.musical.R
 import com.o4x.musical.extensions.dipToPix
 import com.o4x.musical.extensions.showToast
+import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.ui.adapter.SearchAdapter
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -26,17 +29,27 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWatcher {
+
     companion object {
         const val QUERY = "query"
         const val REQ_CODE_SPEECH_INPUT = 9001
     }
+
+    private lateinit var searchView: TextInputEditText
+    private lateinit var voiceSearch: AppCompatImageView
+    private lateinit var clearText: AppCompatImageView
 
     private lateinit var searchAdapter: SearchAdapter
     private var query: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainActivity.setSupportActionBar(toolbar)
+        val search = mainActivity.search
+        search.visibility = View.VISIBLE
+        searchView = search.findViewById(R.id.search_view)
+        voiceSearch = search.findViewById(R.id.voice_search)
+        clearText = search.findViewById(R.id.clear_text)
+
         libraryViewModel.clearSearchResult()
         setupRecyclerView()
         searchView.addTextChangedListener(this)
@@ -66,13 +79,12 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
             override fun onChanged() {
                 super.onChanged()
                 empty.isVisible = searchAdapter.itemCount < 1
-                val height = dipToPix(52f)
-                recyclerView.setPadding(0, 0, 0, height.toInt())
             }
         })
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = OverScrollLinearLayoutManager(requireContext())
             adapter = searchAdapter
+            addAppbarListener()
         }
     }
 
@@ -90,7 +102,7 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
 
     private fun search(query: String) {
         this.query = query
-        TransitionManager.beginDelayedTransition(appBarLayout)
+//        TransitionManager.beginDelayedTransition(mainActivity.appbar)
         voiceSearch.isGone = query.isNotEmpty()
         clearText.isVisible = query.isNotEmpty()
         libraryViewModel.search(query)

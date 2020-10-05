@@ -52,6 +52,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
     }
 
     fun hideSubToolbar() {
+        mainActivity.search.visibility = View.GONE
         mainActivity.tabs.visibility = View.GONE
         mainActivity.bread_crumbs.visibility = View.GONE
     }

@@ -45,22 +45,22 @@ class RealSearchRepository(
                 results.add(context.resources.getString(R.string.albums))
                 results.addAll(albums)
             }
-            val genres: List<Genre> = genreRepository.genres().filter { genre ->
-                genre.name.toLowerCase(Locale.getDefault())
-                    .contains(searchString.toLowerCase(Locale.getDefault()))
-            }
-            if (genres.isNotEmpty()) {
-                results.add(context.resources.getString(R.string.genres))
-                results.addAll(genres)
-            }
-            val playlist = roomRepository.playlistWithSongs().filter { playlist ->
-                playlist.playlistEntity.playlistName.toLowerCase(Locale.getDefault())
-                    .contains(searchString.toLowerCase(Locale.getDefault()))
-            }
-            if (playlist.isNotEmpty()) {
-                results.add(context.getString(R.string.playlists))
-                results.addAll(playlist)
-            }
+//            val genres: List<Genre> = genreRepository.genres().filter { genre ->
+//                genre.name.toLowerCase(Locale.getDefault())
+//                    .contains(searchString.toLowerCase(Locale.getDefault()))
+//            }
+//            if (genres.isNotEmpty()) {
+//                results.add(context.resources.getString(R.string.genres))
+//                results.addAll(genres)
+//            }
+//            val playlist = roomRepository.playlistWithSongs().filter { playlist ->
+//                playlist.playlistEntity.playlistName.toLowerCase(Locale.getDefault())
+//                    .contains(searchString.toLowerCase(Locale.getDefault()))
+//            }
+//            if (playlist.isNotEmpty()) {
+//                results.add(context.getString(R.string.playlists))
+//                results.addAll(playlist)
+//            }
         }
         return results
     }

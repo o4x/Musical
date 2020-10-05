@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.navigation.NavController
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
@@ -339,6 +340,9 @@ class MainActivity : AbsMusicPanelActivity() {
 
     val toolbar: MaterialToolbar
         get() = main_toolbar
+
+    val search: LinearLayout
+        get() = main_search
 
     val tabs: TabLayout
         get() = main_tabs
