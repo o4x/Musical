@@ -44,7 +44,6 @@
     <action
         android:id="@+id/action_to_search"
         app:destination="@id/search"
-        app:popUpTo="@id/home"
         app:enterAnim="@anim/retro_fragment_open_enter"
         app:exitAnim="@anim/retro_fragment_open_exit"
         app:popEnterAnim="@anim/retro_fragment_close_enter"

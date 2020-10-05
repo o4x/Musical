@@ -113,7 +113,6 @@ class MainActivity : AbsMusicPanelActivity() {
             return
         }
 
-        navigation_view.setCheckedItem(id)
         when (id) {
             R.id.nav_home -> navController.popBackStack()
             R.id.nav_queue -> navController.navigate(R.id.action_to_queue)
@@ -152,8 +151,6 @@ class MainActivity : AbsMusicPanelActivity() {
         ) {}
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
-
-        navigation_view.setCheckedItem(R.id.nav_home)
 
         val themeColor = themeColor(this)
 
@@ -230,7 +227,6 @@ class MainActivity : AbsMusicPanelActivity() {
             drawer_layout.closeDrawers()
             return true
         }
-        navigation_view.setCheckedItem(R.id.nav_home)
         return super.handleBackPress() || navController.popBackStack()
     }
 
@@ -347,28 +343,16 @@ class MainActivity : AbsMusicPanelActivity() {
 
     private fun setupNavController() {
         navController = findNavController(R.id.fragment_container)
-
-//        val toolbarParams: AppBarLayout.LayoutParams =
-//            toolbar.layoutParams as AppBarLayout.LayoutParams
-//
-//        val coordinatorParams: CoordinatorLayout.LayoutParams =
-//            fragment_container.layoutParams as CoordinatorLayout.LayoutParams
-//
-//        navController.addOnDestinationChangedListener { _, destination, _ ->
-//            if (destination.id == R.id.home) {
-//                appbar.elevation = 0f
-//                toolbarParams.scrollFlags = 0
-//                coordinatorParams.behavior = null
-//            } else {
-//                setStatusBarColorAuto()
-//                toolbar.setBackgroundColor(primaryColor())
-//                appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
-//                toolbarParams.scrollFlags = (AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-//                        or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS)
-//
-//                coordinatorParams.behavior = ScrollingViewBehavior()
-//            }
-//        }
+        
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.home -> navigation_view.setCheckedItem(R.id.nav_home)
+                R.id.queue -> navigation_view.setCheckedItem(R.id.nav_queue)
+                R.id.library -> navigation_view.setCheckedItem(R.id.nav_library)
+                R.id.folders -> navigation_view.setCheckedItem(R.id.nav_folders)
+                R.id.equalizer -> navigation_view.setCheckedItem(R.id.nav_eq)
+            }
+        }
     }
 
     val appbar: AppBarLayout

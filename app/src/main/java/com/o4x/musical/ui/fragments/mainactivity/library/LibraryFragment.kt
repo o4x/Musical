@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.fragments.mainactivity.library
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
@@ -16,7 +15,6 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.repository.RealSongRepository
-import com.o4x.musical.ui.activities.SearchActivity
 import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
@@ -177,7 +175,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
                 return true
             }
             R.id.action_search -> {
-                startActivity(Intent(activity, SearchActivity::class.java))
+                mainActivity.openSearch()
                 return true
             }
         }
