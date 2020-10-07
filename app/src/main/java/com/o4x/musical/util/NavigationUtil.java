@@ -47,11 +47,11 @@ public class NavigationUtil {
         intent.putExtra(AlbumDetailActivity.EXTRA_ALBUM_ID, albumId);
 
         //noinspection unchecked
-        if (sharedElements != null && sharedElements.length > 0) {
-            activity.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedElements).toBundle());
-        } else {
+//        if (sharedElements != null && sharedElements.length > 0) {
+//            activity.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedElements).toBundle());
+//        } else {
             activity.startActivity(intent);
-        }
+//        }
     }
 
     public static void goToGenre(@NonNull final Activity activity, final Genre genre, @Nullable Pair... sharedElements) {

@@ -40,7 +40,7 @@ public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Nullable
     @BindView(R.id.menu)
-    public View menu;
+    public IconImageView menu;
 
     @Nullable
     @BindView(R.id.separator)

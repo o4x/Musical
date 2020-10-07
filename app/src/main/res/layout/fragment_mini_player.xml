@@ -8,6 +8,7 @@
     android:clickable="true"
     android:focusable="false"
     android:transitionName="@string/transition_mini_player"
+    android:id="@+id/container"
     tools:ignore="UnusedAttribute">
 
     <LinearLayout
@@ -56,6 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_gravity="top"
+        app:mpb_showProgressBackground="false"
         app:mpb_progressStyle="horizontal"
         app:mpb_useIntrinsicPadding="false" />
 
