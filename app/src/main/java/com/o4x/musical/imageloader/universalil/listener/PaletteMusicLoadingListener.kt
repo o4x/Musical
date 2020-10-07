@@ -9,17 +9,28 @@ abstract class PaletteMusicLoadingListener : AbsImageLoadingListener() {
 
     override fun onFailedBitmapReady(failedBitmap: Bitmap?) {
         super.onFailedBitmapReady(failedBitmap)
-        onColorReady(MediaNotificationProcessor(context, failedBitmap))
+        colorReady(failedBitmap)
     }
 
     override fun onLoadingCancelled(imageUri: String, view: View) {
         super.onLoadingCancelled(imageUri, view)
-        onColorReady(MediaNotificationProcessor(context))
+        colorReady(null)
     }
 
     override fun onLoadingComplete(imageUri: String, view: View, loadedImage: Bitmap) {
         super.onLoadingComplete(imageUri, view, loadedImage)
-        onColorReady(MediaNotificationProcessor(context, loadedImage))
+        colorReady(loadedImage)
+    }
+
+    private fun colorReady(bitmap: Bitmap?) {
+        MediaNotificationProcessor(context).getPaletteAsync(
+            { mediaNotificationProcessor ->
+                if (mediaNotificationProcessor != null) {
+                    onColorReady(mediaNotificationProcessor)
+                }
+            },
+            bitmap
+        )
     }
 
     abstract fun onColorReady(colors: MediaNotificationProcessor)
