@@ -45,6 +45,7 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
     }
 
     protected abstract fun createContentView(): View?
+
     override fun onServiceConnected() {
         super.onServiceConnected()
     }
@@ -56,9 +57,9 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
     fun hideBottomBar(hide: Boolean) {
         if (hide) {
-            panelContainer!!.visibility = View.GONE
+            panelContainer?.visibility = View.GONE
         } else {
-            panelContainer!!.visibility = View.VISIBLE
+            panelContainer?.visibility = View.VISIBLE
         }
     }
 
