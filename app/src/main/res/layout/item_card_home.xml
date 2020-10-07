@@ -45,7 +45,7 @@
                 android:id="@+id/palette_color_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="4dp"
+                android:paddingVertical="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="0dp"
                 android:orientation="horizontal"
