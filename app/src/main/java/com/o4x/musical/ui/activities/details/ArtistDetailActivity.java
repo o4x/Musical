@@ -128,7 +128,6 @@ public class ArtistDetailActivity extends AbsMusicPanelActivity implements Palet
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setDrawUnderBar();
         ButterKnife.bind(this);
 
         usePalette = PreferenceUtil.albumArtistColoredFooters();

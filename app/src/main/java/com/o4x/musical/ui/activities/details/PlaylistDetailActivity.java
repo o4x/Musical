@@ -71,7 +71,6 @@ public class PlaylistDetailActivity extends AbsMusicPanelActivity implements Cab
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setDrawUnderBar();
         ButterKnife.bind(this);
 
         setStatusBarColorAuto();

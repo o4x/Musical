@@ -110,7 +110,6 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setDrawUnderBar();
         ButterKnife.bind(this);
 
         setUpObservableListViewParams();

@@ -60,7 +60,6 @@ public class GenreDetailActivity extends AbsMusicPanelActivity implements CabHol
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setDrawUnderBar();
         ButterKnife.bind(this);
 
         setStatusBarColorAuto();
