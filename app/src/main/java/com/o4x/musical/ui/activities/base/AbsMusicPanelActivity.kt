@@ -14,6 +14,8 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.fragments.player.MiniPlayerFragment
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
+import com.o4x.musical.util.color.MediaNotificationProcessor
+import org.jetbrains.annotations.NotNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -27,7 +29,7 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
     protected val libraryViewModel by viewModel<LibraryViewModel>()
 
-    private var miniPlayerFragment: MiniPlayerFragment? = null
+    private lateinit var miniPlayerFragment: MiniPlayerFragment
 
     @JvmField
     @BindView(R.id.panel_container)
@@ -36,9 +38,11 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
         super.onCreate(savedInstanceState)
         setContentView(createContentView())
         ButterKnife.bind(this)
+
         miniPlayerFragment =
-            supportFragmentManager.findFragmentById(R.id.mini_player_fragment) as MiniPlayerFragment?
-        miniPlayerFragment?.requireView()?.setOnClickListener { v: View? ->
+            supportFragmentManager.findFragmentById(R.id.mini_player_fragment) as MiniPlayerFragment
+
+        miniPlayerFragment.requireView().setOnClickListener { _: View? ->
             val myIntent = Intent(this@AbsMusicPanelActivity, PlayerActivity::class.java)
             this@AbsMusicPanelActivity.startActivity(myIntent)
         }
@@ -81,5 +85,9 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
     open fun handleBackPress(): Boolean {
         return false
+    }
+
+    fun setMiniPlayerColor(colors: MediaNotificationProcessor) {
+        miniPlayerFragment.setColor(colors)
     }
 }

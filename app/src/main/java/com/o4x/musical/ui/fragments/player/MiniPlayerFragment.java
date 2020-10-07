@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,13 +21,18 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
+import com.o4x.musical.util.color.MediaNotificationProcessor;
+import com.o4x.musical.views.IconImageView;
 import com.o4x.musical.views.PlayPauseDrawable;
+
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import code.name.monkey.appthemehelper.ThemeStore;
 import code.name.monkey.appthemehelper.util.ATHUtil;
+import code.name.monkey.appthemehelper.util.ColorUtil;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 /**
@@ -36,6 +42,10 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
 
     private Unbinder unbinder;
 
+    @BindView(R.id.container)
+    FrameLayout container;
+    @BindView(R.id.mini_player_image)
+    IconImageView miniPlayerImage;
     @BindView(R.id.mini_player_title)
     TextView miniPlayerTitle;
     @BindView(R.id.mini_player_play_pause_button)
@@ -160,5 +170,15 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
         } else {
             miniPlayerPlayPauseDrawable.setPlay(animate);
         }
+    }
+
+    public void setColor(@NotNull MediaNotificationProcessor colors) {
+        final int fg = colors.getPrimaryTextColor();
+
+        container.setBackgroundColor(colors.getActionBarColor());
+        progressBar.setSupportProgressTintList(ColorStateList.valueOf(fg));
+        miniPlayerImage.setColorFilter(fg);
+        miniPlayerPlayPauseButton.setColorFilter(fg, PorterDuff.Mode.SRC_IN);
+        miniPlayerTitle.setTextColor(fg);
     }
 }
