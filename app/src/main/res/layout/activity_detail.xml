@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:transitionName="@string/transition_album_art"
             tools:ignore="ContentDescription,UnusedAttribute" />
 
     </com.o4x.musical.views.WidthFitSquareLayout>
@@ -73,8 +72,8 @@
 
             </LinearLayout>
 
-            <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
-                android:id="@+id/list"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/song_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"

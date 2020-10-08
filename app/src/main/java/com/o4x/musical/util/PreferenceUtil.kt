@@ -41,7 +41,6 @@ object PreferenceUtil {
     const val SONG_COLORED_FOOTERS = "song_colored_footers"
     const val ARTIST_COLORED_FOOTERS = "artist_colored_footers"
     const val GENRE_COLORED_FOOTERS = "genre_colored_footers"
-    const val ALBUM_ARTIST_COLORED_FOOTERS = "album_artist_colored_footers"
     const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
     const val COLORED_NOTIFICATION = "colored_notification"
     const val CLASSIC_NOTIFICATION = "classic_notification"
@@ -465,18 +464,6 @@ object PreferenceUtil {
     @JvmStatic
     fun albumColoredFooters(): Boolean {
         return sharedPreferences.getBoolean(ALBUM_COLORED_FOOTERS, true)
-    }
-
-    @JvmStatic
-    fun setAlbumArtistColoredFooters(value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(ALBUM_ARTIST_COLORED_FOOTERS, value)
-        editor.apply()
-    }
-
-    @JvmStatic
-    fun albumArtistColoredFooters(): Boolean {
-        return sharedPreferences.getBoolean(ALBUM_ARTIST_COLORED_FOOTERS, true)
     }
 
     @JvmStatic

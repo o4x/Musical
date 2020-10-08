@@ -2,227 +2,58 @@ package com.o4x.musical.ui.activities.details;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.widget.NestedScrollView;
-import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialcab.MaterialCab;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.util.DialogUtils;
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.google.android.material.textview.MaterialTextView;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
-import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
-import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.LoaderIds;
-import com.o4x.musical.interfaces.PaletteColorHolder;
-import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.repository.RealAlbumRepository;
 import com.o4x.musical.repository.RealSongRepository;
-import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity;
-import com.o4x.musical.ui.adapter.song.AlbumSongAdapter;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
 import com.o4x.musical.ui.dialogs.SleepTimerDialog;
-import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.PreferenceUtil;
-import com.o4x.musical.util.Util;
-import com.o4x.musical.util.ViewUtil;
-import com.o4x.musical.util.color.MediaNotificationProcessor;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import code.name.monkey.appthemehelper.util.ColorUtil;
-import code.name.monkey.appthemehelper.util.MaterialValueHelper;
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
-
 /**
  * Be careful when changing things in this Activity!
  */
-public class AlbumDetailActivity extends AbsMusicPanelActivity implements PaletteColorHolder, CabHolder, LoaderManager.LoaderCallbacks<Album> {
+public class AlbumDetailActivity extends AbsDetailActivity<Album> {
 
-    private static final int TAG_EDITOR_REQUEST = 2001;
     private static final int LOADER_ID = LoaderIds.ALBUM_DETAIL_ACTIVITY;
-
     public static final String EXTRA_ALBUM_ID = "extra_album_id";
 
     private Album album;
 
-    @BindView(R.id.nested_scroll_view)
-    NestedScrollView scrollView;
-    @BindView(R.id.list)
-    ObservableRecyclerView recyclerView;
-    @BindView(R.id.image)
-    ImageView albumArtImageView;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.header)
-    View headerView;
-    @BindView(R.id.gradient)
-    View gradient;
-    @BindView(R.id.title)
-    MaterialTextView title;
-    @BindView(R.id.subtitle)
-    MaterialTextView subtitle;
-
-    private AlbumSongAdapter adapter;
-
-    private MaterialCab cab;
-    private int toolbarColor = 0;
-
-    @Nullable
-    private Spanned wiki;
-    private MaterialDialog wikiDialog;
-
-    private int imageHeight;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-
-        setDrawUnderStatusBar();
-        setStatusBarColor(Color.TRANSPARENT);
-        setUpToolBar();
-        setUpViews();
-
-        getSupportLoaderManager().initLoader(LOADER_ID, getIntent().getExtras(), this);
-    }
-
-    @Override
-    protected View createContentView() {
-        return wrapSlidingMusicPanel(R.layout.activity_album_detail);
-    }
-
-    private void setUpViews() {
-        setUpRecyclerView();
-        setUpSongsAdapter();
+    void setupViews() {
+        super.setupViews();
         headerView.setOnClickListener(v -> {
             if (album != null) {
                 NavigationUtil.goToArtist(AlbumDetailActivity.this, album.getArtistId());
             }
         });
-        setColors(DialogUtils.resolveColor(this, R.attr.defaultFooterColor), null);
     }
 
-    private void loadAlbumCover() {
-        new UniversalIL(
-                albumArtImageView,
-                new PaletteMusicLoadingListener() {
-                    @Override
-                    public void onColorReady(@NotNull MediaNotificationProcessor colors) {
-                        setColors(colors.getBackgroundColor(), colors);
-                        setMiniPlayerColor(colors);
-                        adapter.setColors(colors);
-                    }
-                }, imageHeight
-        ).loadImage(getAlbum().safeGetFirstSong());
-    }
-
-    private void setColors(int color, @Nullable MediaNotificationProcessor colors) {
-
-        headerView.setBackgroundColor(color);
-
-        if (colors != null) {
-            toolbarColor = colors.getActionBarColor();
-            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.getPrimaryTextColor(), this);
-            setNavigationBarColor(colors.getActionBarColor());
-            setTaskDescriptionColor(colors.getActionBarColor());
-
-            title.setTextColor(colors.getPrimaryTextColor());
-            subtitle.setTextColor(colors.getSecondaryTextColor());
-        }
-
-        gradient.setBackgroundTintList(ColorStateList.valueOf(color));
-        recyclerView.setBackgroundColor(color);
-        findViewById(android.R.id.content).getRootView().setBackgroundColor(color);
-    }
-
-    @Override
-    public int getPaletteColor() {
-        return toolbarColor;
-    }
-
-
-    private void setUpRecyclerView() {
-        final int displayHeight = Util.getScreenHeight();
-        final int displayWidth = Util.getScreenWidth();
-        imageHeight = displayWidth;
-
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                // Change alpha of overlay
-                float headerAlpha = Math.max(0, Math.min(1, (float) 2 * scrollY / imageHeight));
-                setAppbarColor(ColorUtil.INSTANCE.withAlpha(toolbarColor, headerAlpha));
-
-                // Scroll poster
-                albumArtImageView.setTranslationY(
-                        Math.max(-scrollY / (displayHeight * 2 / imageHeight), -imageHeight)
-                );
-            }
-        });
-
-    }
-
-    private void setUpToolBar() {
-        setSupportActionBar(toolbar);
-        //noinspection ConstantConditions
-        getSupportActionBar().setTitle(null);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void setUpSongsAdapter() {
-        adapter = new AlbumSongAdapter(this, getAlbum().getSongs(), R.layout.item_list, false, this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (adapter.getItemCount() == 0) finish();
-            }
-        });
-    }
-
-    private void reload() {
+    void reload() {
         getSupportLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
     }
 
@@ -278,7 +109,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        final List<Song> songs = adapter.getDataSet();
+        final List<Song> songs = songAdapter.getDataSet();
         switch (id) {
             case R.id.action_sleep_timer:
                 new SleepTimerDialog().show(getSupportFragmentManager(), "SET_SLEEP_TIMER");
@@ -335,66 +166,9 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TAG_EDITOR_REQUEST) {
-            reload();
-            setResult(RESULT_OK);
-        }
-    }
-
-    @NonNull
-    @Override
-    public MaterialCab openCab(int menuRes, @NonNull final MaterialCab.Callback callback) {
-        if (cab != null && cab.isActive()) cab.finish();
-        cab = new MaterialCab(this, R.id.cab_stub)
-                .setMenu(menuRes)
-                .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-                .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(getPaletteColor()))
-                .start(new MaterialCab.Callback() {
-                    @Override
-                    public boolean onCabCreated(MaterialCab materialCab, Menu menu) {
-                        return callback.onCabCreated(materialCab, menu);
-                    }
-
-                    @Override
-                    public boolean onCabItemClicked(MenuItem menuItem) {
-                        return callback.onCabItemClicked(menuItem);
-                    }
-
-                    @Override
-                    public boolean onCabFinished(MaterialCab materialCab) {
-                        return callback.onCabFinished(materialCab);
-                    }
-                });
-        return cab;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (cab != null && cab.isActive()) cab.finish();
-        else {
-            recyclerView.stopScroll();
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public void onMediaStoreChanged() {
-        super.onMediaStoreChanged();
-        reload();
-    }
-
-    @Override
-    public void setStatusBarColor(int color) {
-        super.setStatusBarColor(color);
-        setLightStatusBar(false);
-    }
-
     private void setAlbum(Album album) {
         this.album = album;
-        loadAlbumCover();
+        loadImage();
 
         if (PreferenceUtil.isAllowedToDownloadMetadata(this)) {
             loadWiki();
@@ -407,12 +181,17 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
         title.setText(album.getTitle());
         subtitle.setText(album.getArtistName());
 
-        adapter.swapDataSet(album.getSongs());
+        songAdapter.swapDataSet(album.getSongs());
     }
 
     private Album getAlbum() {
         if (album == null) album = Album.Companion.getEmpty();
         return album;
+    }
+
+    @Override
+    protected List<Song> getSongs() {
+        return getAlbum().getSongs();
     }
 
     @Override
@@ -428,7 +207,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     @Override
     public void onLoaderReset(Loader<Album> loader) {
         this.album = Album.Companion.getEmpty();
-        adapter.swapDataSet(album.getSongs());
+        songAdapter.swapDataSet(album.getSongs());
     }
 
     private static class AsyncAlbumLoader extends WrappedAsyncTaskLoader<Album> {
@@ -443,10 +222,5 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
         public Album loadInBackground() {
             return new RealAlbumRepository(new RealSongRepository(getContext())).album(albumId);
         }
-    }
-
-    private void setAppbarColor(int color) {
-        toolbar.setBackgroundColor(color);
-        setStatusBarColor(color);
     }
 }
