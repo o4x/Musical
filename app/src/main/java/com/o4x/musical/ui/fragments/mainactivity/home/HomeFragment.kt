@@ -471,11 +471,4 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         mainActivity.setLightStatusBarAuto(color)
         statusAnimation.start()
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(): HomeFragment {
-            return HomeFragment()
-        }
-    }
 }
