@@ -70,6 +70,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import code.name.monkey.appthemehelper.util.ColorUtil;
 import code.name.monkey.appthemehelper.util.MaterialValueHelper;
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 /**
  * Be careful when changing things in this Activity!
@@ -103,11 +104,13 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
     private AlbumSongAdapter adapter;
 
     private MaterialCab cab;
-    private int toolbarColor;
+    private int toolbarColor = 0;
 
     @Nullable
     private Spanned wiki;
     private MaterialDialog wikiDialog;
+
+    private int imageHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +118,7 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
         ButterKnife.bind(this);
 
         setDrawUnderStatusBar();
+        setStatusBarColor(Color.TRANSPARENT);
         setUpToolBar();
         setUpViews();
 
@@ -147,25 +151,23 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
                         setMiniPlayerColor(colors);
                         adapter.setColors(colors);
                     }
-                }
+                }, imageHeight
         ).loadImage(getAlbum().safeGetFirstSong());
     }
 
     private void setColors(int color, @Nullable MediaNotificationProcessor colors) {
-        toolbarColor = color;
+
         headerView.setBackgroundColor(color);
 
         if (colors != null) {
+            toolbarColor = colors.getActionBarColor();
+            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.getPrimaryTextColor(), this);
             setNavigationBarColor(colors.getActionBarColor());
             setTaskDescriptionColor(colors.getActionBarColor());
 
             title.setTextColor(colors.getPrimaryTextColor());
             subtitle.setTextColor(colors.getSecondaryTextColor());
         }
-
-//        toolbar.setBackgroundColor(color);
-        setSupportActionBar(toolbar); // needed to auto readjust the toolbar content color
-        setStatusBarColor(Color.TRANSPARENT);
 
         gradient.setBackgroundTintList(ColorStateList.valueOf(color));
         recyclerView.setBackgroundColor(color);
@@ -177,41 +179,27 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
         return toolbarColor;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     private void setUpRecyclerView() {
         final int displayHeight = Util.getScreenHeight();
         final int displayWidth = Util.getScreenWidth();
-        final int headerViewHeight = displayWidth;
+        imageHeight = displayWidth;
 
-//        final SimpleObservableScrollViewCallbacks observableScrollViewCallbacks =
-//                new SimpleObservableScrollViewCallbacks() {
-//                    @Override
-//                    public void onScrollChanged(int scrollY, boolean b, boolean b2) {
-//                        scrollY += headerViewHeight;
-//
-//                        // Change alpha of overlay
-//                        float headerAlpha = Math.max(0, Math.min(1, (float) 2 * scrollY / headerViewHeight));
-//
-//                        // Translate name text
-//                        final int transation = Math.max(-scrollY, -headerViewHeight);
-//                        headerView.setTranslationY(transation);
-//                        albumArtImageView.setTranslationY(transation);
-//                    }
-//                };
-
-        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                // Change alpha of overlay
+                float headerAlpha = Math.max(0, Math.min(1, (float) 2 * scrollY / imageHeight));
+                setAppbarColor(ColorUtil.INSTANCE.withAlpha(toolbarColor, headerAlpha));
+
                 // Scroll poster
                 albumArtImageView.setTranslationY(
-                        Math.max(((int)(-scrollY / (displayHeight * 2 / headerViewHeight))), -headerViewHeight)
+                        Math.max(-scrollY / (displayHeight * 2 / imageHeight), -imageHeight)
                 );
             }
         });
 
-//        recyclerView.setScrollViewCallbacks(observableScrollViewCallbacks);
-//        final View contentView = getWindow().getDecorView().findViewById(android.R.id.content);
-//        contentView.post(() -> observableScrollViewCallbacks.onScrollChanged(-headerViewHeight, false, false));
     }
 
     private void setUpToolBar() {
@@ -412,7 +400,6 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
             loadWiki();
         }
 
-        getSupportActionBar().setTitle(album.getTitle());
 //        artistTextView.setText(album.getArtistName());
 //        songCountTextView.setText(MusicUtil.getSongCountString(this, album.getSongCount()));
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
@@ -456,5 +443,10 @@ public class AlbumDetailActivity extends AbsMusicPanelActivity implements Palett
         public Album loadInBackground() {
             return new RealAlbumRepository(new RealSongRepository(getContext())).album(albumId);
         }
+    }
+
+    private void setAppbarColor(int color) {
+        toolbar.setBackgroundColor(color);
+        setStatusBarColor(color);
     }
 }
