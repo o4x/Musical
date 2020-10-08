@@ -29,7 +29,7 @@ import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.PaletteColorHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
-import com.o4x.musical.ui.adapter.song.AlbumSongAdapter;
+import com.o4x.musical.ui.adapter.song.DetailsSongAdapter;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
@@ -72,7 +72,7 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
     Spanned wiki;
     MaterialDialog wikiDialog;
 
-    AlbumSongAdapter songAdapter;
+    DetailsSongAdapter songAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +177,7 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
     }
 
     void setupSongsRecycler() {
-        songAdapter = new AlbumSongAdapter(this, getSongs(), R.layout.item_list, false, this);
+        songAdapter = new DetailsSongAdapter(this, getSongs(), R.layout.item_list, false, this);
         SongRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         SongRecyclerView.setAdapter(songAdapter);
         songAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {

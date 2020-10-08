@@ -15,7 +15,7 @@ import com.o4x.musical.util.color.MediaNotificationProcessor
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-class AlbumSongAdapter(
+class DetailsSongAdapter(
     activity: AppCompatActivity?,
     dataSet: List<Song?>?,
     @LayoutRes itemLayoutRes: Int,

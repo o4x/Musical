@@ -2,10 +2,7 @@ package com.o4x.musical.ui.activities.details;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.text.Spanned;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,15 +14,10 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialcab.MaterialCab;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.util.DialogUtils;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.LoaderIds;
-import com.o4x.musical.misc.SimpleObservableScrollViewCallbacks;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;
@@ -35,21 +27,14 @@ import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.ArtistTagEditorActivity;
 import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
-import com.o4x.musical.ui.adapter.song.ArtistSongAdapter;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.ui.dialogs.SleepTimerDialog;
 import com.o4x.musical.util.CustomImageUtil;
-import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
-import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.List;
 import java.util.Locale;
-
-import butterknife.ButterKnife;
-import code.name.monkey.appthemehelper.util.ColorUtil;
-import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
 /**
  * Be careful when changing things in this Activity!
