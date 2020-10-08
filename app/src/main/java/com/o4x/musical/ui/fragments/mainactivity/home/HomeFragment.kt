@@ -1,6 +1,7 @@
 package com.o4x.musical.ui.fragments.mainactivity.home
 
 import android.animation.ValueAnimator
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -131,7 +132,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
 
     private fun setUpViews() {
         setUpHeights()
-        setUpOnClicks()
+        setupButtons()
         setUpBounceScrollView()
         setUpQueueView()
         setUpRecentlyView()
@@ -160,7 +161,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         headerHeight = header.layoutParams.height - appbarHeight
     }
 
-    private fun setUpOnClicks() {
+    private fun setupButtons() {
         queue_parent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         open_queue_button.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         recently_parent.setOnClickListener {
