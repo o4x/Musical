@@ -42,16 +42,10 @@ public class NavigationUtil {
         }
     }
 
-    public static void goToAlbum(@NonNull final Activity activity, final long albumId, @Nullable Pair... sharedElements) {
+    public static void goToAlbum(@NonNull final Activity activity, final long albumId) {
         final Intent intent = new Intent(activity, AlbumDetailActivity.class);
         intent.putExtra(AlbumDetailActivity.EXTRA_ALBUM_ID, albumId);
-
-        //noinspection unchecked
-//        if (sharedElements != null && sharedElements.length > 0) {
-//            activity.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedElements).toBundle());
-//        } else {
-            activity.startActivity(intent);
-//        }
+        activity.startActivity(intent);
     }
 
     public static void goToGenre(@NonNull final Activity activity, final Genre genre, @Nullable Pair... sharedElements) {
