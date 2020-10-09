@@ -184,6 +184,7 @@ public class AlbumDetailActivity extends AbsDetailActivity<Album> {
 //        songCountTextView.setText(MusicUtil.getSongCountString(this, album.getSongCount()));
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
 //        albumYearTextView.setText(MusicUtil.getYearString(album.getYear()));
+        getSupportActionBar().setTitle(album.getTitle());
         title.setText(album.getTitle());
         subtitle.setText(album.getArtistName());
 

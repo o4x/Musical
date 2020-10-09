@@ -206,6 +206,7 @@ public class ArtistDetailActivity extends AbsDetailActivity<Artist> {
         }
 
 
+        getSupportActionBar().setTitle(artist.getName());
         title.setText(artist.getName());
         subtitle.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
 //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
