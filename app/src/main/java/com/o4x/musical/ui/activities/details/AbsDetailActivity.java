@@ -2,7 +2,6 @@ package com.o4x.musical.ui.activities.details;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.Menu;
@@ -66,7 +65,7 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
 
     MaterialCab cab;
     int imageHeight;
-    int toolbarColor = 0;
+    MediaNotificationProcessor colors;
 
     @Nullable
     Spanned wiki;
@@ -80,7 +79,6 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
         ButterKnife.bind(this);
 
         setDrawUnderStatusBar();
-        setStatusBarColor(Color.TRANSPARENT);
         setUpToolBar();
         setupViews();
 
@@ -94,7 +92,7 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
 
     @Override
     public int getPaletteColor() {
-        return toolbarColor;
+        return colors.getActionBarColor();
     }
 
     @NonNull
@@ -157,16 +155,17 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
 
     void setupScrollView() {
         final int displayHeight = Util.getScreenHeight();
-        final int displayWidth = Util.getScreenWidth();
-        imageHeight = displayWidth;
+        imageHeight = Util.getScreenWidth();
+        final int gradientHeight =
+                (int) (imageHeight + getResources().getDimension(R.dimen.detail_header_height));
 
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
                 // Change alpha of overlay
-                float headerAlpha = Math.max(0, Math.min(1, (float) 2 * scrollY / imageHeight));
-                setAppbarColor(ColorUtil.INSTANCE.withAlpha(toolbarColor, headerAlpha));
+                final float alpha = Math.max(0, Math.min(1, (float) 2 * scrollY / gradientHeight));
+                setAppbarAlpha(alpha);
 
                 // Scroll poster
                 image.setTranslationY(
@@ -190,11 +189,8 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
     }
 
     private void setColors(int color, @Nullable MediaNotificationProcessor colors) {
-
-        headerView.setBackgroundColor(color);
-
         if (colors != null) {
-            toolbarColor = colors.getActionBarColor();
+            this.colors = colors;
             ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.getPrimaryTextColor(), this);
             setNavigationBarColor(colors.getActionBarColor());
             setTaskDescriptionColor(colors.getActionBarColor());
@@ -204,13 +200,23 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
         }
 
         gradient.setBackgroundTintList(ColorStateList.valueOf(color));
-        songRecyclerView.setBackgroundColor(color);
+        headerView.setBackgroundColor(color);
         findViewById(android.R.id.content).getRootView().setBackgroundColor(color);
+
+        setAppbarAlpha(0);
     }
 
-    private void setAppbarColor(int color) {
-        toolbar.setBackgroundColor(color);
-        setStatusBarColor(color);
+    private void setAppbarAlpha(float alpha) {
+        if (colors == null) return;
+        toolbar.setBackgroundColor(
+                ColorUtil.INSTANCE.withAlpha(colors.getActionBarColor(), alpha)
+        );
+        setStatusBarColor(
+                ColorUtil.INSTANCE.withAlpha(colors.getActionBarColor(), alpha)
+        );
+        toolbar.setTitleTextColor(
+                ColorUtil.INSTANCE.withAlpha(colors.getPrimaryTextColor(), alpha)
+        );
     }
 
     @Override
