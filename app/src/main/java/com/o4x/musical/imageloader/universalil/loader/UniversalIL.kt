@@ -13,6 +13,7 @@ import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.imageloader.universalil.listener.AbsImageLoadingListener
 import com.o4x.musical.imageloader.universalil.listener.AbsImageLoadingListener.CoverData
 import com.o4x.musical.imageloader.universalil.othersource.CustomImageDownloader
+import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
@@ -44,13 +45,12 @@ class UniversalIL(
         )
     }
 
-
     fun loadImage(
         song: Song,
     ) {
 
         if (PreferenceUtil.isIgnoreMediaStore()) {
-            loadImage(AudioFileCover(song.title, song.data), )
+            loadImage(AudioFileCover(song.title, song.data))
         } else {
             listener.setCoverData(
                 CoverData(song.albumId, image, song.albumName, size)
@@ -58,6 +58,12 @@ class UniversalIL(
 
             displayImage(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(), options)
         }
+    }
+
+    fun loadImage(
+        album: Album
+    ) {
+        loadImage(album.safeGetFirstSong())
     }
 
     fun loadImage(

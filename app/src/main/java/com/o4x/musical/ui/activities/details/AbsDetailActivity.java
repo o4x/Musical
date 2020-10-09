@@ -189,20 +189,6 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
         });
     }
 
-    void loadImage() {
-        new UniversalIL(
-                image,
-                new PaletteMusicLoadingListener() {
-                    @Override
-                    public void onColorReady(@NotNull MediaNotificationProcessor colors) {
-                        setColors(colors.getBackgroundColor(), colors);
-                        setMiniPlayerColor(colors);
-                        songAdapter.setColors(colors);
-                    }
-                }, imageHeight
-        ).loadImage(getSongs().get(0));
-    }
-
     private void setColors(int color, @Nullable MediaNotificationProcessor colors) {
 
         headerView.setBackgroundColor(color);
@@ -233,6 +219,21 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
         reload();
     }
 
+    UniversalIL getImageLoader() {
+        return new UniversalIL(
+                image,
+                new PaletteMusicLoadingListener() {
+                    @Override
+                    public void onColorReady(@NotNull MediaNotificationProcessor colors) {
+                        setColors(colors.getBackgroundColor(), colors);
+                        setMiniPlayerColor(colors);
+                        songAdapter.setColors(colors);
+                    }
+                }, imageHeight
+        );
+    }
+
+    abstract void loadImage();
     abstract void reload();
     protected abstract List<Song> getSongs();
 }

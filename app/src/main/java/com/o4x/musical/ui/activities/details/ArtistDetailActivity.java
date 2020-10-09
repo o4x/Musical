@@ -76,6 +76,12 @@ public class ArtistDetailActivity extends AbsDetailActivity<Artist> {
         });
     }
 
+    @Override
+    void loadImage() {
+        getImageLoader().loadImage(artist);
+    }
+
+    @Override
     void reload() {
         getSupportLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
     }
