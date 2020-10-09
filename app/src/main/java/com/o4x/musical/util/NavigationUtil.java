@@ -30,16 +30,10 @@ import com.o4x.musical.ui.activities.details.PlaylistDetailActivity;
  */
 public class NavigationUtil {
 
-    public static void goToArtist(@NonNull final Activity activity, final long artistId, @Nullable Pair... sharedElements) {
+    public static void goToArtist(@NonNull final Activity activity, final long artistId) {
         final Intent intent = new Intent(activity, ArtistDetailActivity.class);
         intent.putExtra(ArtistDetailActivity.EXTRA_ARTIST_ID, artistId);
-
-        //noinspection unchecked
-        if (sharedElements != null && sharedElements.length > 0) {
-            activity.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(activity, sharedElements).toBundle());
-        } else {
-            activity.startActivity(intent);
-        }
+        activity.startActivity(intent);
     }
 
     public static void goToAlbum(@NonNull final Activity activity, final long albumId) {
