@@ -3,6 +3,7 @@ package com.o4x.musical.ui.activities.details;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,11 +31,14 @@ import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.ui.dialogs.SleepTimerDialog;
 import com.o4x.musical.util.CustomImageUtil;
+import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
 
 import java.util.List;
 import java.util.Locale;
+
+import butterknife.BindView;
 
 /**
  * Be careful when changing things in this Activity!
@@ -44,9 +48,10 @@ public class ArtistDetailActivity extends AbsDetailActivity<Artist> {
     private static final int LOADER_ID = LoaderIds.ARTIST_DETAIL_ACTIVITY;
     public static final String EXTRA_ARTIST_ID = "extra_artist_id";
 
-
-    View songListHeader;
+    @BindView(R.id.album_recycler)
     RecyclerView albumRecyclerView;
+
+
     private Artist artist;
     private HorizontalAlbumAdapter albumAdapter;
 
@@ -57,10 +62,8 @@ public class ArtistDetailActivity extends AbsDetailActivity<Artist> {
     }
 
     private void initViews() {
-//        songListHeader = LayoutInflater.from(this).inflate(R.layout.artist_detail_header, recyclerView, false);
-//        albumRecyclerView = songListHeader.findViewById(R.id.recycler_view);
-//        setupAlbumRecyclerView();
-//        recyclerView.addHeaderView(songListHeader);
+        albumRecyclerView.setVisibility(View.VISIBLE);
+        setupAlbumRecyclerView();
     }
 
     private void setupAlbumRecyclerView() {
@@ -203,12 +206,14 @@ public class ArtistDetailActivity extends AbsDetailActivity<Artist> {
         }
 
 
+        title.setText(artist.getName());
+        subtitle.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
 //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
 //        albumCountTextView.setText(MusicUtil.getAlbumCountString(this, artist.getAlbumCount()));
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
 
         songAdapter.swapDataSet(artist.getSongs());
-//        albumAdapter.swapDataSet(artist.getAlbums());
+        albumAdapter.swapDataSet(artist.getAlbums());
     }
 
     @Override
