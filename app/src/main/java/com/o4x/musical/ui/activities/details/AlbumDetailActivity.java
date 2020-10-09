@@ -53,6 +53,12 @@ public class AlbumDetailActivity extends AbsDetailActivity<Album> {
         });
     }
 
+    @Override
+    void loadImage() {
+        getImageLoader().loadImage(album);
+    }
+
+    @Override
     void reload() {
         getSupportLoaderManager().restartLoader(LOADER_ID, getIntent().getExtras(), this);
     }
