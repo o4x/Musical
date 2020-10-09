@@ -370,16 +370,34 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 
     private fun save() {
-        val fieldKeyValueMap: MutableMap<FieldKey, String> = EnumMap(
+        val fieldKeyValueMap: MutableMap<FieldKey, String?> = EnumMap(
             FieldKey::class.java)
-        fieldKeyValueMap[FieldKey.TITLE] = songName?.text.toString()
-        fieldKeyValueMap[FieldKey.ALBUM] = albumName?.text.toString()
-        fieldKeyValueMap[FieldKey.ARTIST] = artistName?.text.toString()
-        fieldKeyValueMap[FieldKey.GENRE] = genreName?.text.toString()
-        fieldKeyValueMap[FieldKey.YEAR] = year?.text.toString()
-        fieldKeyValueMap[FieldKey.TRACK] = trackNumber?.text.toString()
-        fieldKeyValueMap[FieldKey.DISC_NO] = discNumber?.text.toString()
-        fieldKeyValueMap[FieldKey.LYRICS] = lyrics?.text.toString()
+
+        songName?.let {
+            fieldKeyValueMap[FieldKey.TITLE] = it.getSafeString()
+        }
+        albumName?.let {
+            fieldKeyValueMap[FieldKey.ALBUM] = it.getSafeString()
+        }
+        artistName?.let {
+            fieldKeyValueMap[FieldKey.ARTIST] = it.getSafeString()
+        }
+        genreName?.let {
+            fieldKeyValueMap[FieldKey.GENRE] = it.getSafeString()
+        }
+        year?.let {
+            fieldKeyValueMap[FieldKey.YEAR] = it.getSafeString()
+        }
+        trackNumber?.let {
+            fieldKeyValueMap[FieldKey.TRACK] = it.getSafeString()
+        }
+        discNumber?.let {
+            fieldKeyValueMap[FieldKey.DISC_NO] = it.getSafeString()
+        }
+        lyrics?.let {
+            fieldKeyValueMap[FieldKey.LYRICS] = it.getSafeString()
+        }
+
         tagUtil?.writeValuesToFiles(fieldKeyValueMap,
             when {
                 deleteAlbumArt -> ArtworkInfo(id,
@@ -456,4 +474,10 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         private const val REQUEST_CODE_SELECT_ALBUM_IMAGE = 1000
         private const val REQUEST_CODE_SELECT_ARTIST_IMAGE = 1001
     }
+}
+
+private fun TextInputEditText.getSafeString(): String {
+    return if (text?.length ?: -1 > 0) {
+        text.toString()
+    } else ""
 }
