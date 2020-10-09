@@ -50,7 +50,7 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
     @BindView(R.id.nested_scroll_view)
     NestedScrollView scrollView;
     @BindView(R.id.song_recycler)
-    RecyclerView SongRecyclerView;
+    RecyclerView songRecyclerView;
     @BindView(R.id.image)
     ImageView image;
     @BindView(R.id.toolbar)
@@ -178,8 +178,8 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
 
     void setupSongsRecycler() {
         songAdapter = new DetailsSongAdapter(this, getSongs(), R.layout.item_list, false, this);
-        SongRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SongRecyclerView.setAdapter(songAdapter);
+        songRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        songRecyclerView.setAdapter(songAdapter);
         songAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -204,7 +204,7 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
         }
 
         gradient.setBackgroundTintList(ColorStateList.valueOf(color));
-        SongRecyclerView.setBackgroundColor(color);
+        songRecyclerView.setBackgroundColor(color);
         findViewById(android.R.id.content).getRootView().setBackgroundColor(color);
     }
 

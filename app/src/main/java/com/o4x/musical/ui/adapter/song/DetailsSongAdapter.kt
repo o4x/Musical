@@ -2,6 +2,7 @@ package com.o4x.musical.ui.adapter.song
 
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
+import android.util.Log
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
