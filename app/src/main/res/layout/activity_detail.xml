@@ -18,11 +18,23 @@
 
     </com.o4x.musical.views.WidthFitSquareLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/song_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:scrollbars="none"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never"/>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:id="@+id/nested_scroll_view">
+        android:id="@+id/nested_scroll_view"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,17 +97,6 @@
                     android:nestedScrollingEnabled="false"
                     android:scrollbars="none"
                     android:visibility="gone"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/song_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"
-                    android:scrollbars="none"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"/>
 
             </LinearLayout>
 
