@@ -34,15 +34,12 @@ import java.util.*
 class AlbumDetailActivity : AbsDetailActivity<Album?>() {
 
     private var album: Album? = null
-    public override fun setupViews() {
-        super.setupViews()
-    }
 
-    public override fun loadImage() {
+    override fun loadImage() {
         imageLoader.loadImage(album!!)
     }
 
-    public override fun reload() {
+    override fun reload() {
         supportLoaderManager.restartLoader(LOADER_ID, intent.extras, this)
     }
 
