@@ -28,6 +28,7 @@ import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.interfaces.PaletteColorHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity;
+import com.o4x.musical.ui.adapter.SpacesItemDecoration;
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.Util;
@@ -159,6 +160,7 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
         final int gradientHeight =
                 (int) (imageHeight + getResources().getDimension(R.dimen.detail_header_height));
 
+        songRecyclerView.addItemDecoration(new SpacesItemDecoration(imageHeight));
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
