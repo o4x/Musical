@@ -46,22 +46,13 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
 
     static final int TAG_EDITOR_REQUEST = 2001;
 
-    @BindView(R.id.nested_scroll_view)
-    NestedScrollView scrollView;
+
     @BindView(R.id.song_recycler)
     RecyclerView songRecyclerView;
     @BindView(R.id.image)
     ImageView image;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.header)
-    View headerView;
-    @BindView(R.id.gradient)
-    View gradient;
-    @BindView(R.id.title)
-    MaterialTextView title;
-    @BindView(R.id.subtitle)
-    MaterialTextView subtitle;
 
     MaterialCab cab;
     int imageHeight;
@@ -126,7 +117,7 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
     public void onBackPressed() {
         if (cab != null && cab.isActive()) cab.finish();
         else {
-            scrollView.stopNestedScroll();
+            songRecyclerView.stopScroll();
             super.onBackPressed();
         }
     }
@@ -159,9 +150,12 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
         final int gradientHeight =
                 (int) (imageHeight + getResources().getDimension(R.dimen.detail_header_height));
 
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        songRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private int scrollY = 0;
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                scrollY += dy;
 
                 // Change alpha of overlay
                 final float alpha = Math.max(0, Math.min(1, (float) 2 * scrollY / gradientHeight));
@@ -194,13 +188,9 @@ public abstract class AbsDetailActivity<T> extends AbsMusicPanelActivity impleme
             ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.getPrimaryTextColor(), this);
             setNavigationBarColor(colors.getActionBarColor());
             setTaskDescriptionColor(colors.getActionBarColor());
-
-            title.setTextColor(colors.getPrimaryTextColor());
-            subtitle.setTextColor(colors.getSecondaryTextColor());
         }
 
-        gradient.setBackgroundTintList(ColorStateList.valueOf(color));
-        headerView.setBackgroundColor(color);
+
         findViewById(android.R.id.content).getRootView().setBackgroundColor(color);
 
         setAppbarAlpha(0);

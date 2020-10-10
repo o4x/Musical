@@ -48,36 +48,7 @@ public class ArtistDetailActivity extends AbsDetailActivity<Artist> {
     private static final int LOADER_ID = LoaderIds.ARTIST_DETAIL_ACTIVITY;
     public static final String EXTRA_ARTIST_ID = "extra_artist_id";
 
-    @BindView(R.id.album_recycler)
-    RecyclerView albumRecyclerView;
-
-
     private Artist artist;
-    private HorizontalAlbumAdapter albumAdapter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initViews();
-    }
-
-    private void initViews() {
-        albumRecyclerView.setVisibility(View.VISIBLE);
-        setupAlbumRecyclerView();
-    }
-
-    private void setupAlbumRecyclerView() {
-        albumRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        albumAdapter = new HorizontalAlbumAdapter(this, getArtist().getAlbums(), true, this);
-        albumRecyclerView.setAdapter(albumAdapter);
-        albumAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (albumAdapter.getItemCount() == 0) finish();
-            }
-        });
-    }
 
     @Override
     void loadImage() {
@@ -207,14 +178,12 @@ public class ArtistDetailActivity extends AbsDetailActivity<Artist> {
 
 
         getSupportActionBar().setTitle(artist.getName());
-        title.setText(artist.getName());
-        subtitle.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
 //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
 //        albumCountTextView.setText(MusicUtil.getAlbumCountString(this, artist.getAlbumCount()));
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
 
         songAdapter.swapDataSet(artist.getSongs());
-        albumAdapter.swapDataSet(artist.getAlbums());
+        songAdapter.setData(artist);
     }
 
     @Override
@@ -241,7 +210,7 @@ public class ArtistDetailActivity extends AbsDetailActivity<Artist> {
     public void onLoaderReset(Loader<Artist> loader) {
         this.artist = Artist.Companion.getEmpty();
         songAdapter.swapDataSet(artist.getSongs());
-        albumAdapter.swapDataSet(artist.getAlbums());
+//        albumAdapter.swapDataSet(artist.getAlbums());
     }
 
     private static class AsyncArtistDataLoader extends WrappedAsyncTaskLoader<Artist> {

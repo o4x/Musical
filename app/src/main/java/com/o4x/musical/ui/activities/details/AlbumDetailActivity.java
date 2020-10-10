@@ -46,11 +46,6 @@ public class AlbumDetailActivity extends AbsDetailActivity<Album> {
     @Override
     void setupViews() {
         super.setupViews();
-        headerView.setOnClickListener(v -> {
-            if (album != null) {
-                NavigationUtil.goToArtist(AlbumDetailActivity.this, album.getArtistId());
-            }
-        });
     }
 
     @Override
@@ -185,10 +180,9 @@ public class AlbumDetailActivity extends AbsDetailActivity<Album> {
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
 //        albumYearTextView.setText(MusicUtil.getYearString(album.getYear()));
         getSupportActionBar().setTitle(album.getTitle());
-        title.setText(album.getTitle());
-        subtitle.setText(album.getArtistName());
 
         songAdapter.swapDataSet(album.getSongs());
+        songAdapter.setData(album);
     }
 
     private Album getAlbum() {
