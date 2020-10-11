@@ -178,11 +178,6 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
         )
     }
 
-    override fun onMediaStoreChanged() {
-        super.onMediaStoreChanged()
-        initObserver()
-    }
-
     val imageLoader: UniversalIL
         get() = UniversalIL(
             image,
