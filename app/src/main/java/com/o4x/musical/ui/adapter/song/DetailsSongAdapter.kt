@@ -133,10 +133,17 @@ class DetailsSongAdapter(
                 super.onBindViewHolder(holder, getDataSetPos(position))
                 val song = dataSet[getDataSetPos(position)]
 
-                holder.imageText?.let {
-                    val trackNumber = MusicUtil.getFixedTrackNumber(song.trackNumber)
-                    val trackNumberString = if (trackNumber > 0) trackNumber.toString() else "-"
-                    it.text = trackNumberString
+                when (data) {
+                    is Album -> {
+                        holder.imageText?.visibility = View.VISIBLE
+                        holder.image?.visibility = View.GONE
+                        holder.imageText?.let {
+                            val trackNumber = MusicUtil.getFixedTrackNumber(song.trackNumber)
+                            val trackNumberString = if (trackNumber > 0) trackNumber.toString() else "-"
+                            it.text = trackNumberString
+                        }
+                    }
+                    is Artist -> {}
                 }
 
                 colors?.let {
@@ -201,17 +208,14 @@ class DetailsSongAdapter(
     }
 
     inner class SongViewHolder(itemView: View) : SongAdapter.ViewHolder(itemView) {
-        init {
-            imageText?.visibility = View.VISIBLE
-            image?.visibility = View.GONE
-        }
-
         override fun getRealPosition(): Int {
             return getDataSetPos(super.getRealPosition())
         }
     }
 
     override fun loadAlbumCover(song: Song, holder: SongAdapter.ViewHolder) {
-        // We don't want to load it in this adapter
+        if (data is Artist) {
+            super.loadAlbumCover(song, holder)
+        }
     }
 }

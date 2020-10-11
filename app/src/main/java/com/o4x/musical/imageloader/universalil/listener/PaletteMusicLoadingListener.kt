@@ -7,6 +7,13 @@ import com.o4x.musical.util.color.MediaNotificationProcessor
 
 abstract class PaletteMusicLoadingListener : AbsImageLoadingListener() {
 
+    var mediaNotificationProcessor: MediaNotificationProcessor? = null
+
+    override fun onLoadingStarted(imageUri: String?, view: View?) {
+        super.onLoadingStarted(imageUri, view)
+        mediaNotificationProcessor = MediaNotificationProcessor(context)
+    }
+
     override fun onFailedBitmapReady(failedBitmap: Bitmap?) {
         super.onFailedBitmapReady(failedBitmap)
         colorReady(failedBitmap)
@@ -23,7 +30,7 @@ abstract class PaletteMusicLoadingListener : AbsImageLoadingListener() {
     }
 
     private fun colorReady(bitmap: Bitmap?) {
-        MediaNotificationProcessor(context).getPaletteAsync(
+        mediaNotificationProcessor?.getPaletteAsync(
             { mediaNotificationProcessor ->
                 if (mediaNotificationProcessor != null) {
                     onColorReady(mediaNotificationProcessor)
