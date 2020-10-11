@@ -24,15 +24,12 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
 
     protected Context context;
 
+    private boolean isComplete = false;
+
     @Override
     public void onLoadingStarted(String imageUri, View view) {
         super.onLoadingStarted(imageUri, view);
         context = view.getContext();
-    }
-
-    @Override
-    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-        super.onLoadingFailed(imageUri, view, failReason);
         if (coverData != null) {
 
             task = new AsyncTaskLoader<Bitmap>(context) {
@@ -54,6 +51,11 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     }
 
     @Override
+    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+        super.onLoadingFailed(imageUri, view, failReason);
+    }
+
+    @Override
     public void onLoadingCancelled(String imageUri, View view) {
         super.onLoadingCancelled(imageUri, view);
         if (task != null) task.cancelLoad();
@@ -62,9 +64,12 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     @Override
     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
         super.onLoadingComplete(imageUri, view, loadedImage);
+        if (task != null) task.cancelLoad();
+        isComplete = true;
     }
 
     public void onFailedBitmapReady(Bitmap failedBitmap){
+        if (isComplete) return;
         coverData.image.setImageBitmap(failedBitmap);
     }
 
