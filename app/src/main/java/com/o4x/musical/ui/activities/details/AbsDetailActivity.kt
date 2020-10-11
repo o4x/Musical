@@ -1,6 +1,7 @@
 package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Spanned
 import android.view.Menu
@@ -8,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
-import androidx.loader.app.LoaderManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -33,8 +33,7 @@ import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlin.math.max
 import kotlin.math.min
 
-abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolder, CabHolder,
-    LoaderManager.LoaderCallbacks<T> {
+abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, CabHolder {
 
     @BindView(R.id.song_recycler)
     lateinit var songRecyclerView: RecyclerView
@@ -58,7 +57,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         setDrawUnderStatusBar()
         setUpToolBar()
         setupViews()
-        reload()
+        initObserver()
     }
 
     override fun createContentView(): View? {
@@ -101,7 +100,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == TAG_EDITOR_REQUEST) {
-            reload()
+            initObserver()
             setResult(RESULT_OK)
         }
     }
@@ -161,7 +160,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
             setTaskDescriptionColor(colors.actionBarColor)
         }
         findViewById<View>(android.R.id.content).rootView.setBackgroundColor(color)
-        setAppbarAlpha(0f)
     }
 
     private fun setAppbarAlpha(alpha: Float) {
@@ -179,7 +177,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
 
     override fun onMediaStoreChanged() {
         super.onMediaStoreChanged()
-        reload()
+        initObserver()
     }
 
     val imageLoader: UniversalIL
@@ -194,8 +192,8 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
             }, imageHeight
         )
 
+    abstract fun initObserver()
     abstract fun loadImage()
-    abstract fun reload()
     protected abstract fun getSongs(): List<Song>
 
     companion object {

@@ -230,8 +230,12 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
             });
         }
 
+        protected int getRealPosition() {
+            return getAdapterPosition();
+        }
+
         protected Song getSong() {
-            return dataSet.get(getAdapterPosition());
+            return dataSet.get(getRealPosition());
         }
 
         protected int getSongMenuRes() {
@@ -254,7 +258,7 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
             if (isInQuickSelectMode()) {
                 toggleChecked(getAdapterPosition());
             } else {
-                MusicPlayerRemote.openQueue(dataSet, getAdapterPosition(), true);
+                MusicPlayerRemote.openQueue(dataSet, getRealPosition(), true);
             }
         }
 

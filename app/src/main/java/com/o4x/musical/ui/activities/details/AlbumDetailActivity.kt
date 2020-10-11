@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.loader.content.Loader
 import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.R
@@ -24,23 +25,36 @@ import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
 import com.o4x.musical.ui.dialogs.DeleteSongsDialog
 import com.o4x.musical.ui.dialogs.SleepTimerDialog
+import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil.isAllowedToDownloadMetadata
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.*
 
 /**
  * Be careful when changing things in this Activity!
  */
-class AlbumDetailActivity : AbsDetailActivity<Album?>() {
+class AlbumDetailActivity : AbsDetailActivity() {
+
+    companion object {
+        const val EXTRA_ALBUM_ID = "extra_album_id"
+    }
+
+    private val detailsViewModel by viewModel<AlbumDetailsViewModel> {
+        parametersOf(intent.extras!!.getLong(EXTRA_ALBUM_ID))
+    }
 
     private var album: Album? = null
 
-    override fun loadImage() {
-        imageLoader.loadImage(album!!)
+    override fun initObserver() {
+        detailsViewModel.getAlbum().observe(this, {
+            setAlbum(it)
+        })
     }
 
-    override fun reload() {
-        supportLoaderManager.restartLoader(LOADER_ID, intent.extras, this)
+    override fun loadImage() {
+        imageLoader.loadImage(album!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -184,32 +198,5 @@ class AlbumDetailActivity : AbsDetailActivity<Album?>() {
 
     override fun getSongs(): List<Song> {
         return getAlbum().songs
-    }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Album?> {
-        return AsyncAlbumLoader(this, args!!.getLong(EXTRA_ALBUM_ID))
-    }
-
-    override fun onLoadFinished(loader: Loader<Album?>, data: Album?) {
-        if (data != null) {
-            setAlbum(data)
-        }
-    }
-
-    override fun onLoaderReset(loader: Loader<Album?>) {
-        album = empty
-        songAdapter.swapDataSet(album!!.songs)
-    }
-
-    private class AsyncAlbumLoader(context: Context?, private val albumId: Long) :
-        WrappedAsyncTaskLoader<Album?>(context) {
-        override fun loadInBackground(): Album? {
-            return RealAlbumRepository(RealSongRepository(context)).album(albumId)
-        }
-    }
-
-    companion object {
-        private const val LOADER_ID = LoaderIds.ALBUM_DETAIL_ACTIVITY
-        const val EXTRA_ALBUM_ID = "extra_album_id"
     }
 }

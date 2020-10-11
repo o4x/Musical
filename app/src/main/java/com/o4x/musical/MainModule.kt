@@ -11,6 +11,8 @@ import com.o4x.musical.network.provideLastFmRest
 import com.o4x.musical.network.provideLastFmRetrofit
 import com.o4x.musical.network.provideOkHttp
 import com.o4x.musical.repository.*
+import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
+import com.o4x.musical.ui.viewmodel.ArtistDetailsViewModel
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.util.FilePathUtil
 import kotlinx.coroutines.Dispatchers.IO
@@ -150,20 +152,20 @@ private val viewModules = module {
         LibraryViewModel(get())
     }
 
-//    viewModel { (albumId: Long) ->
-//        AlbumDetailsViewModel(
-//            get(),
-//            albumId
-//        )
-//    }
-//
-//    viewModel { (artistId: Long) ->
-//        ArtistDetailsViewModel(
-//            get(),
-//            artistId
-//        )
-//    }
-//
+    viewModel { (albumId: Long) ->
+        AlbumDetailsViewModel(
+            get(),
+            albumId
+        )
+    }
+
+    viewModel { (artistId: Long) ->
+        ArtistDetailsViewModel(
+            get(),
+            artistId
+        )
+    }
+
 //    viewModel { (playlist: PlaylistWithSongs) ->
 //        PlaylistDetailsViewModel(
 //            get(),
