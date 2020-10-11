@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -19,6 +20,7 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.util.DialogUtils
+import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
 import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
@@ -30,6 +32,7 @@ import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
 import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.color.MediaNotificationProcessor
+import kotlinx.android.synthetic.main.fragment_search.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -107,14 +110,12 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
 
     private fun setUpToolBar() {
         setSupportActionBar(toolbar)
-        supportActionBar?.title = null
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     open fun setupViews() {
         setupScrollView()
         setupSongsRecycler()
-        setColors(DialogUtils.resolveColor(this, R.attr.defaultFooterColor), null)
     }
 
     private fun setupScrollView() {
@@ -159,7 +160,9 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
             setNavigationBarColor(colors.actionBarColor)
             setTaskDescriptionColor(colors.actionBarColor)
         }
+
         findViewById<View>(android.R.id.content).rootView.setBackgroundColor(color)
+        setAppbarAlpha(0f)
     }
 
     private fun setAppbarAlpha(alpha: Float) {
