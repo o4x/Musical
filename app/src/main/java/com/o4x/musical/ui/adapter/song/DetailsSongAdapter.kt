@@ -205,6 +205,10 @@ class DetailsSongAdapter(
             imageText?.visibility = View.VISIBLE
             image?.visibility = View.GONE
         }
+
+        override fun getRealPosition(): Int {
+            return getDataSetPos(super.getRealPosition())
+        }
     }
 
     override fun loadAlbumCover(song: Song, holder: SongAdapter.ViewHolder) {

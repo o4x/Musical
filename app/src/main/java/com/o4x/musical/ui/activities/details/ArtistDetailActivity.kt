@@ -25,23 +25,37 @@ import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import com.o4x.musical.ui.activities.tageditor.ArtistTagEditorActivity
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
 import com.o4x.musical.ui.dialogs.SleepTimerDialog
+import com.o4x.musical.ui.viewmodel.ArtistDetailsViewModel
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil.isAllowedToDownloadMetadata
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.*
 
 /**
  * Be careful when changing things in this Activity!
  */
-class ArtistDetailActivity : AbsDetailActivity<Artist?>() {
+class ArtistDetailActivity : AbsDetailActivity() {
+
+    companion object {
+        const val EXTRA_ARTIST_ID = "extra_artist_id"
+    }
+
+    private val detailsViewModel: ArtistDetailsViewModel by viewModel {
+        parametersOf(intent.extras!!.getLong(EXTRA_ARTIST_ID))
+    }
 
     private var artist: Artist? = null
+
     public override fun loadImage() {
         imageLoader.loadImage(artist!!)
     }
 
-    public override fun reload() {
-        supportLoaderManager.restartLoader(LOADER_ID, intent.extras, this)
+    public override fun initObserver() {
+        detailsViewModel.getArtist().observe(this, {
+            setArtist(it)
+        })
     }
 
     private fun loadBiography(lang: String? = Locale.getDefault().language) {
@@ -185,36 +199,5 @@ class ArtistDetailActivity : AbsDetailActivity<Artist?>() {
     private fun getArtist(): Artist {
         if (artist == null) artist = empty
         return artist!!
-    }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Artist?> {
-        return AsyncArtistDataLoader(this, args!!.getLong(EXTRA_ARTIST_ID))
-    }
-
-    override fun onLoadFinished(loader: Loader<Artist?>, data: Artist?) {
-        if (data != null) {
-            setArtist(data)
-        }
-    }
-
-    override fun onLoaderReset(loader: Loader<Artist?>) {
-        artist = empty
-        songAdapter.swapDataSet(artist!!.songs)
-        //        albumAdapter.swapDataSet(artist.getAlbums());
-    }
-
-    private class AsyncArtistDataLoader(context: Context?, private val artistId: Long) :
-        WrappedAsyncTaskLoader<Artist?>(context) {
-        override fun loadInBackground(): Artist? {
-            return RealArtistRepository(
-                RealSongRepository(context),
-                RealAlbumRepository(RealSongRepository(context))
-            ).artist(artistId)
-        }
-    }
-
-    companion object {
-        private const val LOADER_ID = LoaderIds.ARTIST_DETAIL_ACTIVITY
-        const val EXTRA_ARTIST_ID = "extra_artist_id"
     }
 }
