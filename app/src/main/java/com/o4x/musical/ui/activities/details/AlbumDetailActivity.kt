@@ -186,7 +186,7 @@ class AlbumDetailActivity : AbsDetailActivity() {
 //        songCountTextView.setText(MusicUtil.getSongCountString(this, album.getSongCount()));
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
 //        albumYearTextView.setText(MusicUtil.getYearString(album.getYear()));
-        supportActionBar!!.title = album.title
+        toolbar.title = album.title
         songAdapter.swapDataSet(album.songs)
         songAdapter.data = album
     }

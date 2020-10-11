@@ -184,7 +184,7 @@ class ArtistDetailActivity : AbsDetailActivity() {
         if (isAllowedToDownloadMetadata(this)) {
             loadBiography()
         }
-        supportActionBar!!.title = artist.name
+        toolbar.title = artist.name
         //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
 //        albumCountTextView.setText(MusicUtil.getAlbumCountString(this, artist.getAlbumCount()));
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
