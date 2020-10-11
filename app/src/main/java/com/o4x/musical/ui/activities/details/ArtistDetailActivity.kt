@@ -1,26 +1,20 @@
 package com.o4x.musical.ui.activities.details
 
-import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
-import androidx.loader.content.Loader
+import androidx.core.text.HtmlCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote.enqueue
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.MusicPlayerRemote.playNext
-import com.o4x.musical.interfaces.LoaderIds
-import com.o4x.musical.misc.WrappedAsyncTaskLoader
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Artist.Companion.empty
 import com.o4x.musical.model.Song
-import com.o4x.musical.repository.RealAlbumRepository
-import com.o4x.musical.repository.RealArtistRepository
-import com.o4x.musical.repository.RealSongRepository
-import com.o4x.musical.ui.activities.details.ArtistDetailActivity
+import com.o4x.musical.network.Models.LastFmArtist
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import com.o4x.musical.ui.activities.tageditor.ArtistTagEditorActivity
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
@@ -32,6 +26,8 @@ import com.o4x.musical.util.PreferenceUtil.isAllowedToDownloadMetadata
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
+import com.o4x.musical.network.Result
+import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
 
 /**
  * Be careful when changing things in this Activity!
@@ -59,7 +55,18 @@ class ArtistDetailActivity : AbsDetailActivity() {
     }
 
     private fun loadBiography(lang: String? = Locale.getDefault().language) {
+        (songRecyclerView.findViewHolderForAdapterPosition(0) as DetailsSongAdapter.HeaderViewHolder?)
+            ?.hTitle?.text = "sssssssss"
+
         wiki = null
+        detailsViewModel.getArtistInfo(getArtist().name, lang, null)
+            .observe(this, { result ->
+                when (result) {
+                    is Result.Loading -> println("Loading")
+                    is Result.Error -> println("Error")
+                    is Result.Success -> artistInfo(result.data)
+                }
+            })
 
 //        ApiClient.getClient(this).create(LastFMService.class)
 //                .getArtistInfo(getArtist().getName(), lang, null)
@@ -96,6 +103,33 @@ class ArtistDetailActivity : AbsDetailActivity() {
 //                        biography = null;
 //                    }
 //                });
+    }
+
+    private fun artistInfo(lastFmArtist: LastFmArtist?) {
+//        if (lastFmArtist != null && lastFmArtist.artist != null) {
+//            val bioContent = lastFmArtist.artist.bio.content
+//            if (bioContent != null && bioContent.trim { it <= ' ' }.isNotEmpty()) {
+//                biographyText.visibility = View.VISIBLE
+//                biographyTitle.visibility = View.VISIBLE
+//                biography = HtmlCompat.fromHtml(bioContent, HtmlCompat.FROM_HTML_MODE_LEGACY)
+//                biographyText.text = biography
+//                if (lastFmArtist.artist.stats.listeners.isNotEmpty()) {
+//                    listeners.show()
+//                    listenersLabel.show()
+//                    scrobbles.show()
+//                    scrobblesLabel.show()
+//                    listeners.text =
+//                        RetroUtil.formatValue(lastFmArtist.artist.stats.listeners.toFloat())
+//                    scrobbles.text =
+//                        RetroUtil.formatValue(lastFmArtist.artist.stats.playcount.toFloat())
+//                }
+//            }
+//        }
+//
+//        // If the "lang" parameter is set and no biography is given, retry with default language
+//        if (biography == null && lang != null) {
+//            loadBiography(artist.name, null)
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

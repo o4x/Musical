@@ -146,10 +146,18 @@ public class MediaNotificationProcessor {
         RGBToXYZ(Color.red(color), Color.green(color), Color.blue(color), outXyz);
     }
 
+    private Thread thread;
+
     public void getPaletteAsync(final OnPaletteLoadedListener onPaletteLoadedListener, Drawable drawable) {
         this.drawable = drawable;
+
+        if (thread != null) {
+            thread.interrupt();
+            thread = null;
+        }
+
         final Handler handler = new Handler();
-        new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 getMediaPalette();
@@ -160,8 +168,9 @@ public class MediaNotificationProcessor {
                     }
                 });
             }
-        }).start();
+        });
 
+        thread.start();
     }
 
     public void getPaletteAsync(OnPaletteLoadedListener onPaletteLoadedListener, Bitmap bitmap) {

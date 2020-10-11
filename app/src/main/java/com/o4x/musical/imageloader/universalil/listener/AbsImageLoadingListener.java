@@ -41,6 +41,8 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
 
                 @Override
                 public void deliverResult(@Nullable Bitmap data) {
+                    if (isComplete) return;
+
                     super.deliverResult(data);
                     onFailedBitmapReady(data);
                 }
@@ -69,7 +71,6 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     }
 
     public void onFailedBitmapReady(Bitmap failedBitmap){
-        if (isComplete) return;
         coverData.image.setImageBitmap(failedBitmap);
     }
 
