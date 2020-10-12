@@ -19,6 +19,7 @@ import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
 import com.o4x.musical.util.CoverUtil
+import com.o4x.musical.util.CoverUtil.Companion.createSquareCoverWithText
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.PreferenceUtil
@@ -67,12 +68,21 @@ class UniversalIL {
             )
         }
 
-        fun loadImageSync(): Bitmap? {
-            return imageLoader?.loadImageSync(
+        fun loadImageSync(context: Context): Bitmap? {
+            var bitmap: Bitmap? = imageLoader?.loadImageSync(
                 url,
                 options
                     .build()
             )
+
+            if (bitmap == null) {
+                val coverData: CoverData = listener.coverData
+                bitmap = createSquareCoverWithText(
+                    context, coverData.text, coverData.id, coverData.size
+                )
+            }
+
+            return bitmap
         }
     }
 
@@ -100,13 +110,16 @@ class UniversalIL {
 
         listener.setCoverData(
             CoverData(
-                audioFileCover.hashCode().toLong(), audioFileCover.title, size)
+                audioFileCover.hashCode().toLong(), audioFileCover.title, size
+            )
         )
 
         val uri = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.filePath
-        return Builder(uri,
+        return Builder(
+            uri,
             options
-                .extraForDownloader(audioFileCover))
+                .extraForDownloader(audioFileCover)
+        )
     }
 
 
@@ -141,7 +154,8 @@ class UniversalIL {
     ): Builder {
         return byThis(
             CustomImageUtil(artist),
-            MultiImage.fromArtist(artist))
+            MultiImage.fromArtist(artist)
+        )
     }
 
     fun byThis(
@@ -149,7 +163,8 @@ class UniversalIL {
     ): Builder {
         return byThis(
             CustomImageUtil(genre),
-            MultiImage.fromGenre(genre))
+            MultiImage.fromGenre(genre)
+        )
     }
 
 
