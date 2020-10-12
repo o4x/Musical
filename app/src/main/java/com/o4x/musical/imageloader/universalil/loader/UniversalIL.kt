@@ -1,6 +1,7 @@
 package com.o4x.musical.imageloader.universalil.loader
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.widget.ImageView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
@@ -23,83 +24,110 @@ import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.PreferenceUtil
 
 
-class UniversalIL(
-    val image: ImageView,
-    val listener: AbsImageLoadingListener = AbsImageLoadingListener(),
-    val size: Int = DEFAULT_SIZE
-) {
+class UniversalIL {
 
-    constructor(image: ImageView, listener: AbsImageLoadingListener = AbsImageLoadingListener()) :
-            this(image, listener, DEFAULT_SIZE)
 
-    constructor(image: ImageView) :
-            this(image, size= DEFAULT_SIZE)
+    private var listener: AbsImageLoadingListener = AbsImageLoadingListener()
+    private var size: Int = DEFAULT_SIZE
 
-    private fun displayImage(uri: String, options: DisplayImageOptions.Builder) {
-        imageLoader?.displayImage(
-            uri,
-            image,
-            options
-                .build(),
-            listener
-        )
+    fun withListener(listener: AbsImageLoadingListener): UniversalIL {
+        this.listener = listener
+        return this
     }
 
-    fun loadImage(
-        song: Song,
+    fun withSize(size: Int): UniversalIL {
+        this.size = size
+        return this
+    }
+
+
+    inner class Builder(
+        private val url: String,
+        private val options: DisplayImageOptions.Builder
     ) {
+        fun displayInTo(image: ImageView) {
 
-        if (PreferenceUtil.isIgnoreMediaStore()) {
-            loadImage(AudioFileCover(song.title, song.data))
-        } else {
-            listener.setCoverData(
-                CoverData(song.albumId, image, song.albumName, size)
+            listener.coverData.setImage(image)
+
+            imageLoader?.displayImage(
+                url,
+                image,
+                options
+                    .build(),
+                listener
             )
+        }
 
-            displayImage(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(), options)
+        fun loadImage() {
+            imageLoader?.loadImage(
+                url,
+                options
+                    .build(),
+                listener
+            )
+        }
+
+        fun loadImageSync(): Bitmap? {
+            return imageLoader?.loadImageSync(
+                url,
+                options
+                    .build()
+            )
         }
     }
 
-    fun loadImage(
-        album: Album
-    ) {
-        loadImage(album.safeGetFirstSong())
+    fun byThis(song: Song): Builder {
+        if (PreferenceUtil.isIgnoreMediaStore()) {
+            return byThis(AudioFileCover(song.title, song.data))
+        } else {
+            listener.setCoverData(
+                CoverData(song.albumId, song.albumName, size)
+            )
+
+            return Builder(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(), options)
+        }
     }
 
-    fun loadImage(
+    fun byThis(
+        album: Album
+    ): Builder {
+        return byThis(album.safeGetFirstSong())
+    }
+
+    fun byThis(
         audioFileCover: AudioFileCover
-    ) {
+    ): Builder {
 
         listener.setCoverData(
             CoverData(
-                audioFileCover.hashCode().toLong(), image, audioFileCover.title, size)
+                audioFileCover.hashCode().toLong(), audioFileCover.title, size)
         )
 
         val uri = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.filePath
-        displayImage(uri,
+        return Builder(uri,
             options
                 .extraForDownloader(audioFileCover))
     }
 
 
-    private fun loadImage(
+    private fun byThis(
         customImageUtil: CustomImageUtil,
         multiImage: MultiImage,
-    ) {
+    ): Builder {
 
         listener.setCoverData(
-            CoverData(multiImage.id, image, multiImage.name, size)
+            CoverData(multiImage.id, multiImage.name, size)
         )
 
         if (customImageUtil.hasCustomImage()) {
-            displayImage(
+            return Builder(
                 customImageUtil.path,
                 options
             )
 
         } else {
             val uri = CustomImageDownloader.SCHEME_MULTI + multiImage.hashCode()
-            displayImage(
+            return Builder(
                 uri,
                 options
                     .extraForDownloader(multiImage),
@@ -108,33 +136,31 @@ class UniversalIL(
     }
 
 
-    fun loadImage(
+    fun byThis(
         artist: Artist,
-    ) {
-        loadImage(
+    ): Builder {
+        return byThis(
             CustomImageUtil(artist),
             MultiImage.fromArtist(artist))
     }
 
-    fun loadImage(
+    fun byThis(
         genre: Genre
-    ) {
-        loadImage(
+    ): Builder {
+        return byThis(
             CustomImageUtil(genre),
             MultiImage.fromGenre(genre))
     }
 
 
-    fun loadImage(
+    fun byThis(
         url: String,
         name: String,
-    ) {
+    ): Builder {
 
-        listener.setCoverData(
-            CoverData(url.hashCode().toLong(), image, name, size)
-        )
+        listener.coverData = CoverData(url.hashCode().toLong(), name, size)
 
-        displayImage(
+        return Builder(
             url,
             DisplayImageOptions.Builder()
                 .cacheInMemory(true)

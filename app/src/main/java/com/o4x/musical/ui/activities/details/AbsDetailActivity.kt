@@ -192,16 +192,16 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
     }
 
     val imageLoader: UniversalIL
-        get() = UniversalIL(
-            image,
-            object : PaletteMusicLoadingListener() {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
-                    setColors(colors.backgroundColor, colors)
-                    setMiniPlayerColor(colors)
-                    songAdapter.colors = colors
-                }
-            }, imageHeight
-        )
+        get() = UniversalIL()
+            .withListener(
+                object : PaletteMusicLoadingListener() {
+                    override fun onColorReady(colors: MediaNotificationProcessor) {
+                        setColors(colors.backgroundColor, colors)
+                        setMiniPlayerColor(colors)
+                        songAdapter.colors = colors
+                    }
+                })
+            .withSize(imageHeight)
 
     abstract fun initObserver()
     abstract fun loadImage()

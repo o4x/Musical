@@ -125,14 +125,15 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
 
         private void loadAlbumCover() {
-            new UniversalIL(albumCover,
-                    new PaletteMusicLoadingListener() {
+            new UniversalIL()
+                    .withListener(new PaletteMusicLoadingListener() {
                         @Override
                         public void onColorReady(@NotNull MediaNotificationProcessor colors) {
                             setColor(colors);
                         }
-                    },
-                    Util.getMaxScreenSize()).loadImage(song);
+                    })
+                    .byThis(song)
+                    .displayInTo(albumCover);
         }
 
         private void setColor(MediaNotificationProcessor colors) {

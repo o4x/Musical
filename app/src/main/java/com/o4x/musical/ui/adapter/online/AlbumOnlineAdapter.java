@@ -28,8 +28,9 @@ public class AlbumOnlineAdapter
         try {
             String url = getArtUrl(position);
             if (holder.image != null)
-                new UniversalIL(holder.image).loadImage(
-                        url, data.get(position).collectionName);
+                new UniversalIL()
+                    .byThis(url, data.get(position).collectionName)
+                    .displayInTo(holder.image);
             if (holder.title != null)
                 holder.title.setText(data.get(position).collectionName);
             if (holder.text != null)

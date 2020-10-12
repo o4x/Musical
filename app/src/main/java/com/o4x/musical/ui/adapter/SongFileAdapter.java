@@ -113,8 +113,9 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
             holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
             holder.image.setImageResource(R.drawable.ic_folder_white_24dp);
         } else {
-            new UniversalIL(holder.image)
-                    .loadImage(new AudioFileCover(file.getName(), file.getPath()));
+            new UniversalIL()
+                    .byThis(new AudioFileCover(file.getName(), file.getPath()))
+                    .displayInTo(holder.image);
         }
     }
 

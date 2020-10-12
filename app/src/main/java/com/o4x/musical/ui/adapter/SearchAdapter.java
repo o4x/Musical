@@ -73,13 +73,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 final Album album = (Album) dataSet.get(position);
                 holder.title.setText(album.getTitle());
                 holder.text.setText(MusicUtil.getAlbumInfoString(activity, album));
-                new UniversalIL(holder.image).loadImage(album.safeGetFirstSong());
+                new UniversalIL().byThis(album).displayInTo(holder.image);
                 break;
             case ARTIST:
                 final Artist artist = (Artist) dataSet.get(position);
                 holder.title.setText(artist.getName());
                 holder.text.setText(MusicUtil.getArtistInfoString(activity, artist));
-                new UniversalIL(holder.image).loadImage(artist);
+                new UniversalIL().byThis(artist).displayInTo(holder.image);
                 break;
             case SONG:
                 final Song song = (Song) dataSet.get(position);

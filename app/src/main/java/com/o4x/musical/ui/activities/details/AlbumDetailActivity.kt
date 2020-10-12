@@ -81,7 +81,7 @@ class AlbumDetailActivity : AbsDetailActivity() {
     }
 
     override fun loadImage() {
-        imageLoader.loadImage(album!!)
+        imageLoader.byThis(album!!).displayInTo(image)
     }
 
     private fun loadWiki(lang: String? = Locale.getDefault().language) {

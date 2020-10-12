@@ -132,20 +132,20 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
 
     protected void loadAlbumCover(Song song, final ViewHolder holder) {
         if (holder.image == null) return;
-
-        new UniversalIL(
-            holder.image,
-            new PaletteImageLoadingListener() {
-                @Override
-                public void onColorReady(int color) {
-                    if (usePalette)
-                        setColors(
-                                color,
-                                holder);
-                    else
-                        setColors(getDefaultFooterColor(activity), holder);
-                }
-            }).loadImage(song);
+        new UniversalIL()
+                .withListener(new PaletteImageLoadingListener() {
+                    @Override
+                    public void onColorReady(int color) {
+                        if (usePalette)
+                            setColors(
+                                    color,
+                                    holder);
+                        else
+                            setColors(getDefaultFooterColor(activity), holder);
+                    }
+                })
+                .byThis(song)
+                .displayInTo(holder.image);
     }
 
     protected String getSongTitle(Song song) {

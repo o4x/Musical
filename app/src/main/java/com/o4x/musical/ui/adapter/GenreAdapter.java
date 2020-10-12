@@ -116,8 +116,8 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
 
     protected void loadArtistImage(Genre genre, final ViewHolder holder) {
         if (holder.image == null) return;
-        new UniversalIL(holder.image,
-                new PaletteImageLoadingListener() {
+        new UniversalIL()
+                .withListener(new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {
                         if (usePalette)
@@ -125,7 +125,9 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
                         else
                             setColors(getDefaultFooterColor(activity), holder);
                     }
-                }).loadImage(genre);
+                })
+                .byThis(genre)
+                .displayInTo(holder.image);
     }
 
     @Override

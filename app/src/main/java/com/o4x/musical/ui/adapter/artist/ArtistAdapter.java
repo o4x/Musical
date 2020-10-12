@@ -125,8 +125,8 @@ public class ArtistAdapter extends AbsMultiSelectAdapter<ArtistAdapter.ViewHolde
 
     protected void loadArtistImage(Artist artist, final ViewHolder holder) {
         if (holder.image == null) return;
-        new UniversalIL(holder.image,
-                new PaletteImageLoadingListener() {
+        new UniversalIL()
+                .withListener(new PaletteImageLoadingListener() {
                     @Override
                     public void onColorReady(int color) {
                         if (usePalette)
@@ -134,7 +134,9 @@ public class ArtistAdapter extends AbsMultiSelectAdapter<ArtistAdapter.ViewHolde
                         else
                             setColors(getDefaultFooterColor(activity), holder);
                     }
-                }).loadImage(artist);
+                })
+                .byThis(artist)
+                .displayInTo(holder.image);
     }
 
     @Override
