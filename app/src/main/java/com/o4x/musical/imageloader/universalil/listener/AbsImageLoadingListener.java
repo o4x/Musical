@@ -81,11 +81,11 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     public static class CoverData {
 
         @Nullable
-        ImageView image;
+        public ImageView image;
 
-        final long id;
-        final String text;
-        final int size;
+        public final long id;
+        public final String text;
+        public final int size;
 
         public CoverData(long id, String text, int size) {
             this.id = id;
