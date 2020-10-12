@@ -92,17 +92,17 @@ interface Repository {
 }
 
 class RealRepository(
-    private val context: Context,
-    private val lastFMService: LastFMService,
-    private val songRepository: SongRepository,
-    private val albumRepository: AlbumRepository,
-    private val artistRepository: ArtistRepository,
-    private val genreRepository: GenreRepository,
-    private val lastAddedRepository: LastAddedRepository,
-    private val playlistRepository: PlaylistRepository,
-    private val searchRepository: RealSearchRepository,
-    private val topPlayedRepository: TopPlayedRepository,
-    private val roomRepository: RoomRepository,
+    val context: Context,
+    val lastFMService: LastFMService,
+    val songRepository: SongRepository,
+    val albumRepository: AlbumRepository,
+    val artistRepository: ArtistRepository,
+    val genreRepository: GenreRepository,
+    val lastAddedRepository: LastAddedRepository,
+    val playlistRepository: PlaylistRepository,
+    val searchRepository: RealSearchRepository,
+    val topPlayedRepository: TopPlayedRepository,
+    val roomRepository: RoomRepository,
 ) : Repository {
 
 

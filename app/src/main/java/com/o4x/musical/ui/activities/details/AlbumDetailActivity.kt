@@ -1,26 +1,18 @@
 package com.o4x.musical.ui.activities.details
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.loader.content.Loader
 import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote.enqueue
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.MusicPlayerRemote.playNext
-import com.o4x.musical.interfaces.LoaderIds
-import com.o4x.musical.misc.WrappedAsyncTaskLoader
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Album.Companion.empty
 import com.o4x.musical.model.Song
-import com.o4x.musical.repository.RealAlbumRepository
-import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
@@ -38,29 +30,58 @@ import java.util.*
  */
 class AlbumDetailActivity : AbsDetailActivity() {
 
-    companion object {
-        const val EXTRA_ALBUM_ID = "extra_album_id"
-    }
-
-    private val detailsViewModel by viewModel<AlbumDetailsViewModel> {
-        parametersOf(intent.extras!!.getLong(EXTRA_ALBUM_ID))
-    }
-
     private var album: Album? = null
 
+    private val detailsViewModel by viewModel<AlbumDetailsViewModel> {
+        parametersOf(intent.extras!!.getLong(EXTRA_ID))
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        addMusicServiceEventListener(detailsViewModel)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        removeMusicServiceEventListener(detailsViewModel)
+    }
+
     override fun initObserver() {
+        setAlbum(
+            detailsViewModel.loadAlbumSync()
+        )
         detailsViewModel.getAlbum().observe(this, {
             setAlbum(it)
         })
     }
 
-    override fun loadImage() {
-        imageLoader.loadImage(album!!)
+    private fun setAlbum(album: Album) {
+        this.album = album
+        loadImage()
+        if (isAllowedToDownloadMetadata(this)) {
+            loadWiki()
+        }
+
+//        artistTextView.setText(album.getArtistName());
+//        songCountTextView.setText(MusicUtil.getSongCountString(this, album.getSongCount()));
+//        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
+//        albumYearTextView.setText(MusicUtil.getYearString(album.getYear()));
+        toolbar.title = album.title
+        songAdapter.swapDataSet(album.songs)
+        songAdapter.data = album
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_album_detail, menu)
-        return super.onCreateOptionsMenu(menu)
+    private fun getAlbum(): Album {
+        if (album == null) album = empty
+        return album!!
+    }
+
+    override fun getSongs(): List<Song> {
+        return getAlbum().songs
+    }
+
+    override fun loadImage() {
+        imageLoader.loadImage(album!!)
     }
 
     private fun loadWiki(lang: String? = Locale.getDefault().language) {
@@ -100,6 +121,11 @@ class AlbumDetailActivity : AbsDetailActivity() {
 //                        t.printStackTrace();
 //                    }
 //                });
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_album_detail, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -174,30 +200,5 @@ class AlbumDetailActivity : AbsDetailActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun setAlbum(album: Album) {
-        this.album = album
-        loadImage()
-        if (isAllowedToDownloadMetadata(this)) {
-            loadWiki()
-        }
-
-//        artistTextView.setText(album.getArtistName());
-//        songCountTextView.setText(MusicUtil.getSongCountString(this, album.getSongCount()));
-//        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
-//        albumYearTextView.setText(MusicUtil.getYearString(album.getYear()));
-        toolbar.title = album.title
-        songAdapter.swapDataSet(album.songs)
-        songAdapter.data = album
-    }
-
-    private fun getAlbum(): Album {
-        if (album == null) album = empty
-        return album!!
-    }
-
-    override fun getSongs(): List<Song> {
-        return getAlbum().songs
     }
 }
