@@ -1,23 +1,25 @@
 package com.o4x.musical.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import com.o4x.musical.network.Result
+import androidx.lifecycle.*
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.LastFmArtist
+import com.o4x.musical.network.Result
 import com.o4x.musical.repository.RealRepository
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class ArtistDetailsViewModel(
     private val realRepository: RealRepository,
     private val artistId: Long
 ) : ViewModel(), MusicServiceEventListener {
 
-    fun getArtist(): LiveData<Artist> = liveData(IO) {
-        val artist = realRepository.artistById(artistId)
-        emit(artist)
+    private val artist: MutableLiveData<Artist> by lazy {
+        MutableLiveData<Artist>()
+    }
+
+    fun getArtist(): LiveData<Artist> {
+        return artist
     }
 
     fun getArtistInfo(
@@ -30,8 +32,20 @@ class ArtistDetailsViewModel(
         emit(info)
     }
 
+    fun loadArtistSync(): Artist {
+        return realRepository.artistRepository.artist(artistId)
+    }
+
+    private fun fetchArtist() {
+        viewModelScope.launch(IO) {
+            artist.postValue(
+                realRepository.artistById(artistId)
+            )
+        }
+    }
+
     override fun onMediaStoreChanged() {
-        getArtist()
+        fetchArtist()
     }
 
     override fun onServiceConnected() {}

@@ -1,11 +1,10 @@
 package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import androidx.core.text.HtmlCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote.enqueue
@@ -34,24 +33,55 @@ import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
  */
 class ArtistDetailActivity : AbsDetailActivity() {
 
-    companion object {
-        const val EXTRA_ARTIST_ID = "extra_artist_id"
-    }
-
-    private val detailsViewModel: ArtistDetailsViewModel by viewModel {
-        parametersOf(intent.extras!!.getLong(EXTRA_ARTIST_ID))
-    }
-
     private var artist: Artist? = null
 
-    public override fun loadImage() {
-        imageLoader.loadImage(artist!!)
+    private val detailsViewModel: ArtistDetailsViewModel by viewModel {
+        parametersOf(intent.extras!!.getLong(EXTRA_ID))
     }
 
-    public override fun initObserver() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        addMusicServiceEventListener(detailsViewModel)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        removeMusicServiceEventListener(detailsViewModel)
+    }
+
+    override fun initObserver() {
+        setArtist(
+            detailsViewModel.loadArtistSync()
+        )
         detailsViewModel.getArtist().observe(this, {
             setArtist(it)
         })
+    }
+
+    private fun setArtist(artist: Artist) {
+        loadImage()
+        if (isAllowedToDownloadMetadata(this)) {
+            loadBiography()
+        }
+        toolbar.title = artist.name
+        //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
+//        albumCountTextView.setText(MusicUtil.getAlbumCountString(this, artist.getAlbumCount()));
+//        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
+        songAdapter.swapDataSet(artist.songs)
+        songAdapter.data = artist
+    }
+
+    override fun getSongs(): List<Song> {
+        return getArtist().songs
+    }
+
+    private fun getArtist(): Artist {
+        if (artist == null) artist = empty
+        return artist!!
+    }
+
+    override fun loadImage() {
+        imageLoader.loadImage(artist!!)
     }
 
     private fun loadBiography(lang: String? = Locale.getDefault().language) {
@@ -210,28 +240,5 @@ class ArtistDetailActivity : AbsDetailActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun setArtist(artist: Artist) {
-        this.artist = artist
-        loadImage()
-        if (isAllowedToDownloadMetadata(this)) {
-            loadBiography()
-        }
-        toolbar.title = artist.name
-        //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
-//        albumCountTextView.setText(MusicUtil.getAlbumCountString(this, artist.getAlbumCount()));
-//        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
-        songAdapter.swapDataSet(artist.songs)
-        songAdapter.data = artist
-    }
-
-    override fun getSongs(): List<Song> {
-        return getArtist().songs
-    }
-
-    private fun getArtist(): Artist {
-        if (artist == null) artist = empty
-        return artist!!
     }
 }

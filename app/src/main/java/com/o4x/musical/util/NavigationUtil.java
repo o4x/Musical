@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 
 import com.o4x.musical.R;
@@ -32,13 +31,13 @@ public class NavigationUtil {
 
     public static void goToArtist(@NonNull final Activity activity, final long artistId) {
         final Intent intent = new Intent(activity, ArtistDetailActivity.class);
-        intent.putExtra(ArtistDetailActivity.EXTRA_ARTIST_ID, artistId);
+        intent.putExtra(ArtistDetailActivity.EXTRA_ID, artistId);
         activity.startActivity(intent);
     }
 
     public static void goToAlbum(@NonNull final Activity activity, final long albumId) {
         final Intent intent = new Intent(activity, AlbumDetailActivity.class);
-        intent.putExtra(AlbumDetailActivity.EXTRA_ALBUM_ID, albumId);
+        intent.putExtra(AlbumDetailActivity.EXTRA_ID, albumId);
         activity.startActivity(intent);
     }
 

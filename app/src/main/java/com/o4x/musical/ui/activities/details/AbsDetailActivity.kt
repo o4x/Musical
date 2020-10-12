@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -25,18 +27,29 @@ import com.o4x.musical.R
 import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.CabHolder
+import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.interfaces.PaletteColorHolder
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
+import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
 import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.math.max
 import kotlin.math.min
 
 abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, CabHolder {
+
+    companion object {
+        const val EXTRA_ID = "extra_id"
+        const val TAG_EDITOR_REQUEST = 2001
+    }
 
     @BindView(R.id.song_recycler)
     lateinit var songRecyclerView: RecyclerView
@@ -193,8 +206,4 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
     abstract fun initObserver()
     abstract fun loadImage()
     protected abstract fun getSongs(): List<Song>
-
-    companion object {
-        const val TAG_EDITOR_REQUEST = 2001
-    }
 }
