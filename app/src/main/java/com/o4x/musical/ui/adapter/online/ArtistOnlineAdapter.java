@@ -28,8 +28,9 @@ public class ArtistOnlineAdapter
         try {
             String url = getArtUrl(position);
             if (holder.image != null)
-                new UniversalIL(holder.image).loadImage(
-                        url, data.get(position).name);
+                new UniversalIL()
+                    .byThis(url, data.get(position).name)
+                    .displayInTo(holder.image);
             if (holder.title != null)
                 holder.title.setText(data.get(position).name);
             if (holder.text != null)

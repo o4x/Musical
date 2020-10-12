@@ -81,7 +81,7 @@ class ArtistDetailActivity : AbsDetailActivity() {
     }
 
     override fun loadImage() {
-        imageLoader.loadImage(artist!!)
+        imageLoader.byThis(artist!!).displayInTo(image)
     }
 
     private fun loadBiography(lang: String? = Locale.getDefault().language) {

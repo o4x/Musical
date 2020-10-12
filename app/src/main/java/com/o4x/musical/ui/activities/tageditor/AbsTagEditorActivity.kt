@@ -223,7 +223,9 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     private fun setupArtistImageView() {
         artistImage?.let {
 
-            UniversalIL(it).loadImage(artist)
+            UniversalIL()
+                .byThis(artist)
+                .displayInTo(it)
 
             val items = arrayOf<CharSequence>(
                 getString(R.string.pick_from_local_storage),

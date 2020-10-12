@@ -108,9 +108,8 @@ open class AlbumAdapter(
 
     protected open fun loadAlbumCover(album: Album, holder: ViewHolder) {
         if (holder.image == null) return
-        UniversalIL(
-            holder.image!!,
-            object : PaletteImageLoadingListener() {
+        UniversalIL()
+            .withListener(object : PaletteImageLoadingListener() {
                 override fun onColorReady(color: Int) {
                     if (usePalette) setColors(color, holder) else setColors(
                         getDefaultFooterColor(
@@ -118,7 +117,9 @@ open class AlbumAdapter(
                         ), holder
                     )
                 }
-            }).loadImage(album.safeGetFirstSong())
+            })
+            .byThis(album)
+            .displayInTo(holder.image!!)
     }
 
     override fun getItemCount(): Int {

@@ -28,12 +28,13 @@ public class SongOnlineAdapter
         try {
             String url = getArtUrl(position);
             if (holder.image != null)
-            new UniversalIL(holder.image).loadImage(
-                    url, data.get(position).collectionName);
+                new UniversalIL()
+                        .byThis(url, data.get(position).collectionName)
+                        .displayInTo(holder.image);
             if (holder.title != null)
-            holder.title.setText(data.get(position).trackName);
+                holder.title.setText(data.get(position).trackName);
             if (holder.text != null)
-            holder.text.setText(data.get(position).artistName);
+                holder.text.setText(data.get(position).artistName);
         } catch (Exception e) {
             Log.e(TAG, Objects.requireNonNull(e.getMessage()));
         }

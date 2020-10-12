@@ -21,6 +21,9 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     public void setCoverData(CoverData coverData) {
         this.coverData = coverData;
     }
+    public CoverData getCoverData() {
+        return coverData;
+    }
 
     protected Context context;
 
@@ -71,20 +74,27 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     }
 
     public void onFailedBitmapReady(Bitmap failedBitmap){
-        coverData.image.setImageBitmap(failedBitmap);
+        if (coverData.image != null)
+            coverData.image.setImageBitmap(failedBitmap);
     }
 
     public static class CoverData {
+
+        @Nullable
+        ImageView image;
+
         final long id;
-        final ImageView image;
         final String text;
         final int size;
 
-        public CoverData(long id, ImageView image, String text, int size) {
+        public CoverData(long id, String text, int size) {
             this.id = id;
-            this.image = image;
             this.text = text;
             this.size = size;
+        }
+
+        public void setImage(@Nullable ImageView image) {
+            this.image = image;
         }
     }
 }
