@@ -68,7 +68,7 @@ class UniversalIL {
             )
         }
 
-        fun loadImageSync(context: Context): Bitmap? {
+        fun loadImageSync(image: ImageView): Bitmap? {
             var bitmap: Bitmap? = imageLoader?.loadImageSync(
                 url,
                 options
@@ -78,23 +78,26 @@ class UniversalIL {
             if (bitmap == null) {
                 val coverData: CoverData = listener.coverData
                 bitmap = createSquareCoverWithText(
-                    context, coverData.text, coverData.id, coverData.size
+                    image.context, coverData.text, coverData.id, coverData.size
                 )
             }
 
+            listener.isLoadColorSync = true
+            listener.onLoadingStarted(url, image)
+            listener.onLoadingComplete(url, image, bitmap)
+
+            image.setImageBitmap(bitmap)
             return bitmap
         }
     }
 
     fun byThis(song: Song): Builder {
-        if (PreferenceUtil.isIgnoreMediaStore()) {
-            return byThis(AudioFileCover(song.title, song.data))
+        return if (PreferenceUtil.isIgnoreMediaStore()) {
+            byThis(AudioFileCover(song.title, song.data))
         } else {
-            listener.setCoverData(
-                CoverData(song.albumId, song.albumName, size)
-            )
+            listener.coverData = CoverData(song.albumId, song.albumName, size)
 
-            return Builder(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(), options)
+            Builder(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(), options)
         }
     }
 
@@ -108,11 +111,10 @@ class UniversalIL {
         audioFileCover: AudioFileCover
     ): Builder {
 
-        listener.setCoverData(
+        listener.coverData =
             CoverData(
                 audioFileCover.hashCode().toLong(), audioFileCover.title, size
             )
-        )
 
         val uri = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.filePath
         return Builder(
@@ -128,19 +130,18 @@ class UniversalIL {
         multiImage: MultiImage,
     ): Builder {
 
-        listener.setCoverData(
+        listener.coverData =
             CoverData(multiImage.id, multiImage.name, size)
-        )
 
-        if (customImageUtil.hasCustomImage()) {
-            return Builder(
+        return if (customImageUtil.hasCustomImage()) {
+            Builder(
                 customImageUtil.path,
                 options
             )
 
         } else {
             val uri = CustomImageDownloader.SCHEME_MULTI + multiImage.hashCode()
-            return Builder(
+            Builder(
                 uri,
                 options
                     .extraForDownloader(multiImage),

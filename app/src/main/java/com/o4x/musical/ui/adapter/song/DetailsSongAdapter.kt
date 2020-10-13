@@ -32,7 +32,9 @@ class DetailsSongAdapter(
     dataSet: List<Song?>?,
     @LayoutRes itemLayoutRes: Int,
     usePalette: Boolean,
-    val cabHolder: CabHolder?
+    val cabHolder: CabHolder?,
+    data: Any,
+    colors: MediaNotificationProcessor
 ) : SongAdapter(activity, dataSet, itemLayoutRes, usePalette, cabHolder) {
 
     companion object {
@@ -52,8 +54,13 @@ class DetailsSongAdapter(
             notifyItemChanged(0)
         }
 
+    init {
+        this.colors = colors
+        this.data = data
+    }
+
     private fun getDataSetPos(position: Int): Int {
-        return position - 1;
+        return position - 1
     }
 
     override fun getItemViewType(position: Int): Int {

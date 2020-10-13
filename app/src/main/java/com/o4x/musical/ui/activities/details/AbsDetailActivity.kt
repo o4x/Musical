@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spanned
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -29,6 +30,7 @@ import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.interfaces.PaletteColorHolder
+import com.o4x.musical.model.Album
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
@@ -44,12 +46,14 @@ import org.koin.core.parameter.parametersOf
 import kotlin.math.max
 import kotlin.math.min
 
-abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, CabHolder {
+abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolder, CabHolder {
 
     companion object {
         const val EXTRA_ID = "extra_id"
         const val TAG_EDITOR_REQUEST = 2001
     }
+
+    var data: T? = null
 
     @BindView(R.id.song_recycler)
     lateinit var songRecyclerView: RecyclerView
@@ -59,21 +63,21 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
     lateinit var toolbar: Toolbar
 
     var cab: MaterialCab? = null
-    var imageHeight = 0
+    var imageHeight = Util.getScreenWidth()
     var colors: MediaNotificationProcessor? = null
 
     var wiki: Spanned? = null
     var wikiDialog: MaterialDialog? = null
 
-    lateinit var songAdapter: DetailsSongAdapter
+    var songAdapter: DetailsSongAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ButterKnife.bind(this)
         setDrawUnderStatusBar()
         setUpToolBar()
-        setupViews()
         initObserver()
+        setupViews()
     }
 
     override fun createContentView(): View? {
@@ -133,9 +137,9 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
 
     private fun setupScrollView() {
         val displayHeight = Util.getScreenHeight()
-        imageHeight = Util.getScreenWidth()
         val gradientHeight =
             (imageHeight + resources.getDimension(R.dimen.detail_header_height)).toInt()
+
         songRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private var scrollY = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -155,13 +159,14 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
     }
 
     private fun setupSongsRecycler() {
-        songAdapter = DetailsSongAdapter(this, getSongs(), R.layout.item_list, false, this)
+        songAdapter = DetailsSongAdapter(
+            this, getSongs(), R.layout.item_list, false, this, data!!, colors!!)
         songRecyclerView.layoutManager = LinearLayoutManager(this)
         songRecyclerView.adapter = songAdapter
-        songAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+        songAdapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
-                if (songAdapter.itemCount == 0) finish()
+                if (songAdapter!!.itemCount == 0) finish()
             }
         })
     }
@@ -169,6 +174,7 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
     private fun setColors(color: Int, colors: MediaNotificationProcessor?) {
         if (colors != null) {
             this.colors = colors
+            songAdapter?.colors = colors
             ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.primaryTextColor, this)
             setNavigationBarColor(colors.actionBarColor)
             setTaskDescriptionColor(colors.actionBarColor)
@@ -198,12 +204,12 @@ abstract class AbsDetailActivity : AbsMusicPanelActivity(), PaletteColorHolder, 
                     override fun onColorReady(colors: MediaNotificationProcessor) {
                         setColors(colors.backgroundColor, colors)
                         setMiniPlayerColor(colors)
-                        songAdapter.colors = colors
                     }
                 })
             .withSize(imageHeight)
 
     abstract fun initObserver()
     abstract fun loadImage()
+    abstract fun loadImageSync()
     protected abstract fun getSongs(): List<Song>
 }

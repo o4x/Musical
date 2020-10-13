@@ -11,7 +11,6 @@ import com.o4x.musical.helper.MusicPlayerRemote.enqueue
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.MusicPlayerRemote.playNext
 import com.o4x.musical.model.Artist
-import com.o4x.musical.model.Artist.Companion.empty
 import com.o4x.musical.model.Song
 import com.o4x.musical.network.Models.LastFmArtist
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
@@ -31,9 +30,7 @@ import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
 /**
  * Be careful when changing things in this Activity!
  */
-class ArtistDetailActivity : AbsDetailActivity() {
-
-    private var artist: Artist? = null
+class ArtistDetailActivity : AbsDetailActivity<Artist>() {
 
     private val detailsViewModel: ArtistDetailsViewModel by viewModel {
         parametersOf(intent.extras!!.getLong(EXTRA_ID))
@@ -59,7 +56,15 @@ class ArtistDetailActivity : AbsDetailActivity() {
     }
 
     private fun setArtist(artist: Artist) {
-        loadImage()
+        val isFirst = this.data == null
+        this.data = artist
+
+        if (isFirst) {
+            loadImageSync()
+        } else {
+            loadImage()
+        }
+
         if (isAllowedToDownloadMetadata(this)) {
             loadBiography()
         }
@@ -67,21 +72,20 @@ class ArtistDetailActivity : AbsDetailActivity() {
         //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
 //        albumCountTextView.setText(MusicUtil.getAlbumCountString(this, artist.getAlbumCount()));
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
-        songAdapter.swapDataSet(artist.songs)
-        songAdapter.data = artist
+        songAdapter?.swapDataSet(artist.songs)
+        songAdapter?.data = artist
     }
 
     override fun getSongs(): List<Song> {
-        return getArtist().songs
-    }
-
-    private fun getArtist(): Artist {
-        if (artist == null) artist = empty
-        return artist!!
+        return data!!.songs
     }
 
     override fun loadImage() {
-        imageLoader.byThis(artist!!).displayInTo(image)
+        imageLoader.byThis(data!!).displayInTo(image)
+    }
+
+    override fun loadImageSync() {
+        imageLoader.byThis(data!!).loadImageSync(image)
     }
 
     private fun loadBiography(lang: String? = Locale.getDefault().language) {
@@ -89,7 +93,7 @@ class ArtistDetailActivity : AbsDetailActivity() {
             ?.hTitle?.text = "sssssssss"
 
         wiki = null
-        detailsViewModel.getArtistInfo(getArtist().name, lang, null)
+        detailsViewModel.getArtistInfo(data!!.name, lang, null)
             .observe(this, { result ->
                 when (result) {
                     is Result.Loading -> println("Loading")
@@ -169,7 +173,7 @@ class ArtistDetailActivity : AbsDetailActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        val songs = songAdapter.dataSet
+        val songs = getSongs()
         when (id) {
             R.id.action_sleep_timer -> {
                 SleepTimerDialog().show(supportFragmentManager, "SET_SLEEP_TIMER")
@@ -202,7 +206,7 @@ class ArtistDetailActivity : AbsDetailActivity() {
             R.id.action_biography -> {
                 if (wikiDialog == null) {
                     wikiDialog = MaterialDialog.Builder(this)
-                        .title(artist!!.name)
+                        .title(data!!.name)
                         .positiveText(android.R.string.ok)
                         .build()
                 }
@@ -229,12 +233,12 @@ class ArtistDetailActivity : AbsDetailActivity() {
                     resources.getString(R.string.updating),
                     Toast.LENGTH_SHORT
                 ).show()
-                CustomImageUtil(artist).resetCustomImage()
+                CustomImageUtil(data).resetCustomImage()
                 return true
             }
             R.id.action_tag_editor -> {
                 val editor = Intent(this, ArtistTagEditorActivity::class.java)
-                editor.putExtra(AbsTagEditorActivity.EXTRA_ID, getArtist().id)
+                editor.putExtra(AbsTagEditorActivity.EXTRA_ID, data!!.id)
                 startActivityForResult(editor, TAG_EDITOR_REQUEST)
                 return true
             }
