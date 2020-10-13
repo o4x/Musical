@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
@@ -15,25 +16,19 @@ import static com.o4x.musical.util.CoverUtil.createSquareCoverWithText;
 
 public class AbsImageLoadingListener extends SimpleImageLoadingListener {
 
-    private CoverData coverData;
+    public CoverData coverData;
+    public boolean isLoadColorSync = false;
+
+
     private AsyncTaskLoader<Bitmap> task;
-
-    public void setCoverData(CoverData coverData) {
-        this.coverData = coverData;
-    }
-    public CoverData getCoverData() {
-        return coverData;
-    }
-
     protected Context context;
-
     private boolean isComplete = false;
 
     @Override
     public void onLoadingStarted(String imageUri, View view) {
         super.onLoadingStarted(imageUri, view);
         context = view.getContext();
-        if (coverData != null) {
+        if (coverData != null && !isLoadColorSync) {
 
             task = new AsyncTaskLoader<Bitmap>(context) {
                 @Override
@@ -81,7 +76,7 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     public static class CoverData {
 
         @Nullable
-        public ImageView image;
+        ImageView image;
 
         public final long id;
         public final String text;

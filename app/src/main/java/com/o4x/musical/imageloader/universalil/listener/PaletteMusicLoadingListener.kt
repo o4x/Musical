@@ -30,14 +30,20 @@ abstract class PaletteMusicLoadingListener : AbsImageLoadingListener() {
     }
 
     private fun colorReady(bitmap: Bitmap?) {
-        mediaNotificationProcessor?.getPaletteAsync(
-            { mediaNotificationProcessor ->
-                if (mediaNotificationProcessor != null) {
-                    onColorReady(mediaNotificationProcessor)
-                }
-            },
-            bitmap
-        )
+        if (isLoadColorSync) {
+            onColorReady(
+                MediaNotificationProcessor(context, bitmap)
+            )
+        } else {
+            mediaNotificationProcessor?.getPaletteAsync(
+                { mediaNotificationProcessor ->
+                    if (mediaNotificationProcessor != null) {
+                        onColorReady(mediaNotificationProcessor)
+                    }
+                },
+                bitmap
+            )
+        }
     }
 
     abstract fun onColorReady(colors: MediaNotificationProcessor)

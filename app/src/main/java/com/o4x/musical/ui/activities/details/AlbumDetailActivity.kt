@@ -2,6 +2,7 @@ package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -11,7 +12,6 @@ import com.o4x.musical.helper.MusicPlayerRemote.enqueue
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.MusicPlayerRemote.playNext
 import com.o4x.musical.model.Album
-import com.o4x.musical.model.Album.Companion.empty
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity
@@ -28,9 +28,7 @@ import java.util.*
 /**
  * Be careful when changing things in this Activity!
  */
-class AlbumDetailActivity : AbsDetailActivity() {
-
-    private var album: Album? = null
+class AlbumDetailActivity : AbsDetailActivity<Album>() {
 
     private val detailsViewModel by viewModel<AlbumDetailsViewModel> {
         parametersOf(intent.extras!!.getLong(EXTRA_ID))
@@ -56,8 +54,15 @@ class AlbumDetailActivity : AbsDetailActivity() {
     }
 
     private fun setAlbum(album: Album) {
-        this.album = album
-        loadImage()
+        val isFirst = this.data == null
+        this.data = album
+
+        if (isFirst) {
+            loadImageSync()
+        } else {
+            loadImage()
+        }
+
         if (isAllowedToDownloadMetadata(this)) {
             loadWiki()
         }
@@ -67,21 +72,20 @@ class AlbumDetailActivity : AbsDetailActivity() {
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
 //        albumYearTextView.setText(MusicUtil.getYearString(album.getYear()));
         toolbar.title = album.title
-        songAdapter.swapDataSet(album.songs)
-        songAdapter.data = album
-    }
-
-    private fun getAlbum(): Album {
-        if (album == null) album = empty
-        return album!!
+        songAdapter?.swapDataSet(album.songs)
+        songAdapter?.data = album
     }
 
     override fun getSongs(): List<Song> {
-        return getAlbum().songs
+        return data!!.songs
     }
 
     override fun loadImage() {
-        imageLoader.byThis(album!!).displayInTo(image)
+        imageLoader.byThis(data!!).displayInTo(image)
+    }
+
+    override fun loadImageSync() {
+        imageLoader.byThis(data!!).loadImageSync(image)
     }
 
     private fun loadWiki(lang: String? = Locale.getDefault().language) {
@@ -130,7 +134,7 @@ class AlbumDetailActivity : AbsDetailActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        val songs = songAdapter.dataSet
+        val songs = getSongs()
         when (id) {
             R.id.action_sleep_timer -> {
                 SleepTimerDialog().show(supportFragmentManager, "SET_SLEEP_TIMER")
@@ -166,18 +170,18 @@ class AlbumDetailActivity : AbsDetailActivity() {
             }
             R.id.action_tag_editor -> {
                 val intent = Intent(this, AlbumTagEditorActivity::class.java)
-                intent.putExtra(AbsTagEditorActivity.EXTRA_ID, getAlbum().id)
+                intent.putExtra(AbsTagEditorActivity.EXTRA_ID, data!!.id)
                 startActivityForResult(intent, TAG_EDITOR_REQUEST)
                 return true
             }
             R.id.action_go_to_artist -> {
-                NavigationUtil.goToArtist(this, getAlbum().artistId)
+                NavigationUtil.goToArtist(this, data!!.artistId)
                 return true
             }
             R.id.action_wiki -> {
                 if (wikiDialog == null) {
                     wikiDialog = MaterialDialog.Builder(this)
-                        .title(album!!.title!!)
+                        .title(data!!.title!!)
                         .positiveText(android.R.string.ok)
                         .build()
                 }
