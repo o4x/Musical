@@ -72,8 +72,8 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         super.onCreate(savedInstanceState)
         ButterKnife.bind(this)
         setDrawUnderStatusBar()
-        setUpToolBar()
         initObserver()
+        setUpToolBar()
         setupViews()
     }
 
