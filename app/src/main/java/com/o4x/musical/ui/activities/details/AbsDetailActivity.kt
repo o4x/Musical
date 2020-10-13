@@ -1,18 +1,12 @@
 package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.text.Spanned
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -21,28 +15,17 @@ import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.util.DialogUtils
-import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
 import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.CabHolder
-import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.interfaces.PaletteColorHolder
-import com.o4x.musical.model.Album
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
-import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
 import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.color.MediaNotificationProcessor
-import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import kotlin.math.max
 import kotlin.math.min
 
@@ -125,17 +108,36 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     private fun setUpToolBar() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.post {
+            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors!!.primaryTextColor, this)
+            setAppbarAlpha(0f)
+        }
     }
 
     open fun setupViews() {
-        setupScrollView()
         setupSongsRecycler()
+        setupScrollView()
+    }
+
+    private fun setupSongsRecycler() {
+        songAdapter = DetailsSongAdapter(
+            this, getSongs(), R.layout.item_list, false, this, data!!, colors!!
+        )
+        songRecyclerView.layoutManager = LinearLayoutManager(this)
+        songRecyclerView.adapter = songAdapter
+        songAdapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
+            override fun onChanged() {
+                super.onChanged()
+                if (songAdapter!!.itemCount == 0) finish()
+            }
+        })
     }
 
     private fun setupScrollView() {
         val displayHeight = Util.getScreenHeight()
         val gradientHeight =
             (imageHeight + resources.getDimension(R.dimen.detail_header_height)).toInt()
+
 
         songRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private var scrollY = 0
@@ -155,19 +157,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         })
     }
 
-    private fun setupSongsRecycler() {
-        songAdapter = DetailsSongAdapter(
-            this, getSongs(), R.layout.item_list, false, this, data!!, colors!!)
-        songRecyclerView.layoutManager = LinearLayoutManager(this)
-        songRecyclerView.adapter = songAdapter
-        songAdapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
-            override fun onChanged() {
-                super.onChanged()
-                if (songAdapter!!.itemCount == 0) finish()
-            }
-        })
-    }
-
     private fun setColors(color: Int, colors: MediaNotificationProcessor?) {
         if (colors != null) {
             this.colors = colors
@@ -178,7 +167,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         }
 
         findViewById<View>(android.R.id.content).rootView.setBackgroundColor(color)
-        setAppbarAlpha(0f)
     }
 
     private fun setAppbarAlpha(alpha: Float) {
