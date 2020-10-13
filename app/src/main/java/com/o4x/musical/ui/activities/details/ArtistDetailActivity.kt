@@ -65,9 +65,6 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
             loadImage()
         }
 
-        if (isAllowedToDownloadMetadata(this)) {
-            loadBiography()
-        }
         toolbar.title = artist.name
         //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
 //        albumCountTextView.setText(MusicUtil.getAlbumCountString(this, artist.getAlbumCount()));
@@ -86,84 +83,6 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
 
     override fun loadImageSync() {
         imageLoader.byThis(data!!).loadImageSync(image)
-    }
-
-    private fun loadBiography(lang: String? = Locale.getDefault().language) {
-        (songRecyclerView.findViewHolderForAdapterPosition(0) as DetailsSongAdapter.HeaderViewHolder?)
-            ?.hTitle?.text = "sssssssss"
-
-        wiki = null
-        detailsViewModel.getArtistInfo(data!!.name, lang, null)
-            .observe(this, { result ->
-                when (result) {
-                    is Result.Loading -> println("Loading")
-                    is Result.Error -> println("Error")
-                    is Result.Success -> artistInfo(result.data)
-                }
-            })
-
-//        ApiClient.getClient(this).create(LastFMService.class)
-//                .getArtistInfo(getArtist().getName(), lang, null)
-//                .enqueue(new Callback<LastFmArtist>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<LastFmArtist> call, @NonNull Response<LastFmArtist> response) {
-//                        final LastFmArtist lastFmArtist = response.body();
-//                        if (lastFmArtist != null && lastFmArtist.getArtist() != null) {
-//                            final String bioContent = lastFmArtist.getArtist().getBio().getContent();
-//                            if (bioContent != null && !bioContent.trim().isEmpty()) {
-//                                biography = Html.fromHtml(bioContent);
-//                            }
-//                        }
-//
-//                        // If the "lang" parameter is set and no biography is given, retry with default language
-//                        if (biography == null && lang != null) {
-//                            loadBiography(null);
-//                            return;
-//                        }
-//
-//                        if (!PreferenceUtil.isAllowedToDownloadMetadata(ArtistDetailActivity.this)) {
-//                            if (biography != null) {
-//                                biographyDialog.setContent(biography);
-//                            } else {
-//                                biographyDialog.dismiss();
-//                                Toast.makeText(ArtistDetailActivity.this, getResources().getString(R.string.biography_unavailable), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<LastFmArtist> call, @NonNull Throwable t) {
-//                        t.printStackTrace();
-//                        biography = null;
-//                    }
-//                });
-    }
-
-    private fun artistInfo(lastFmArtist: LastFmArtist?) {
-//        if (lastFmArtist != null && lastFmArtist.artist != null) {
-//            val bioContent = lastFmArtist.artist.bio.content
-//            if (bioContent != null && bioContent.trim { it <= ' ' }.isNotEmpty()) {
-//                biographyText.visibility = View.VISIBLE
-//                biographyTitle.visibility = View.VISIBLE
-//                biography = HtmlCompat.fromHtml(bioContent, HtmlCompat.FROM_HTML_MODE_LEGACY)
-//                biographyText.text = biography
-//                if (lastFmArtist.artist.stats.listeners.isNotEmpty()) {
-//                    listeners.show()
-//                    listenersLabel.show()
-//                    scrobbles.show()
-//                    scrobblesLabel.show()
-//                    listeners.text =
-//                        RetroUtil.formatValue(lastFmArtist.artist.stats.listeners.toFloat())
-//                    scrobbles.text =
-//                        RetroUtil.formatValue(lastFmArtist.artist.stats.playcount.toFloat())
-//                }
-//            }
-//        }
-//
-//        // If the "lang" parameter is set and no biography is given, retry with default language
-//        if (biography == null && lang != null) {
-//            loadBiography(artist.name, null)
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -201,39 +120,6 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
             }
             android.R.id.home -> {
                 super.onBackPressed()
-                return true
-            }
-            R.id.action_biography -> {
-                if (wikiDialog == null) {
-                    wikiDialog = MaterialDialog.Builder(this)
-                        .title(data!!.name)
-                        .positiveText(android.R.string.ok)
-                        .build()
-                }
-                if (isAllowedToDownloadMetadata(this@ArtistDetailActivity)) { // wiki should've been already downloaded
-                    if (wiki != null) {
-                        wikiDialog?.setContent(wiki)
-                        wikiDialog?.show()
-                    } else {
-                        Toast.makeText(
-                            this@ArtistDetailActivity,
-                            resources.getString(R.string.biography_unavailable),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } else { // force download
-                    wikiDialog?.show()
-                    loadBiography()
-                }
-                return true
-            }
-            R.id.action_reset_artist_image -> {
-                Toast.makeText(
-                    this@ArtistDetailActivity,
-                    resources.getString(R.string.updating),
-                    Toast.LENGTH_SHORT
-                ).show()
-                CustomImageUtil(data).resetCustomImage()
                 return true
             }
             R.id.action_tag_editor -> {
