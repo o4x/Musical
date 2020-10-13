@@ -63,10 +63,6 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
             loadImage()
         }
 
-        if (isAllowedToDownloadMetadata(this)) {
-            loadWiki()
-        }
-
 //        artistTextView.setText(album.getArtistName());
 //        songCountTextView.setText(MusicUtil.getSongCountString(this, album.getSongCount()));
 //        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
@@ -86,45 +82,6 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
 
     override fun loadImageSync() {
         imageLoader.byThis(data!!).loadImageSync(image)
-    }
-
-    private fun loadWiki(lang: String? = Locale.getDefault().language) {
-        wiki = null
-
-//        ApiClient.getClient(this).create(LastFMService.class)
-//                .getAlbumInfo(getAlbum().getTitle(), getAlbum().getArtistName(), lang)
-//                .enqueue(new Callback<LastFmAlbum>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<LastFmAlbum> call, @NonNull Response<LastFmAlbum> response) {
-//                        final LastFmAlbum lastFmAlbum = response.body();
-//                        if (lastFmAlbum != null && lastFmAlbum.getAlbum() != null && lastFmAlbum.getAlbum().getWiki() != null) {
-//                            final String wikiContent = lastFmAlbum.getAlbum().getWiki().getContent();
-//                            if (wikiContent != null && !wikiContent.trim().isEmpty()) {
-//                                wiki = Html.fromHtml(wikiContent);
-//                            }
-//                        }
-//
-//                        // If the "lang" parameter is set and no wiki is given, retry with default language
-//                        if (wiki == null && lang != null) {
-//                            loadWiki(null);
-//                            return;
-//                        }
-//
-//                        if (!PreferenceUtil.isAllowedToDownloadMetadata(AlbumDetailActivity.this)) {
-//                            if (wiki != null) {
-//                                wikiDialog.setContent(wiki);
-//                            } else {
-//                                wikiDialog.dismiss();
-//                                Toast.makeText(AlbumDetailActivity.this, getResources().getString(R.string.wiki_unavailable), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<LastFmAlbum> call, @NonNull Throwable t) {
-//                        t.printStackTrace();
-//                    }
-//                });
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -176,30 +133,6 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
             }
             R.id.action_go_to_artist -> {
                 NavigationUtil.goToArtist(this, data!!.artistId)
-                return true
-            }
-            R.id.action_wiki -> {
-                if (wikiDialog == null) {
-                    wikiDialog = MaterialDialog.Builder(this)
-                        .title(data!!.title!!)
-                        .positiveText(android.R.string.ok)
-                        .build()
-                }
-                if (isAllowedToDownloadMetadata(this)) {
-                    if (wiki != null) {
-                        wikiDialog?.setContent(wiki)
-                        wikiDialog?.show()
-                    } else {
-                        Toast.makeText(
-                            this,
-                            resources.getString(R.string.wiki_unavailable),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } else {
-                    wikiDialog?.show()
-                    loadWiki()
-                }
                 return true
             }
         }

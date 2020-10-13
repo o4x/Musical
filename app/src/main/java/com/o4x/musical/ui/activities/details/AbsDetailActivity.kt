@@ -66,9 +66,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     var imageHeight = Util.getScreenWidth()
     var colors: MediaNotificationProcessor? = null
 
-    var wiki: Spanned? = null
-    var wikiDialog: MaterialDialog? = null
-
     var songAdapter: DetailsSongAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
