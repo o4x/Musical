@@ -34,7 +34,7 @@ class CoverUtil constructor(val context: Context) {
 
         // Render char's
         val paint = Paint()
-        paint.color = ColorUtil.withAlpha(Color.BLACK, 0.5f)// Text Color
+        paint.color = ColorUtil.withAlpha(context.textColorPrimary(), 0.5f)// Text Color
         paint.textSize = charSize // Text Size
         paint.isFakeBoldText = true
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.OVERLAY) // Text Overlapping Pattern
@@ -122,13 +122,7 @@ class CoverUtil constructor(val context: Context) {
         }
 
         private val COLORS_DARK = listOf(
-            arrayOf("#093028", "#237A57"),
-            arrayOf("#000428", "#004e92"),
-            arrayOf("#41295a", "#2F0743"),
-            arrayOf("#c31432", "#240b36"),
-            arrayOf("#232526", "#414345"),
-            arrayOf("#BA8B02", "#181818"),
-            arrayOf("#0F2027", "#2C5364"),
+            arrayOf("#2E2E2E", "#373737"),
         ).map {
             it.map {
                     it -> Color.parseColor(it)

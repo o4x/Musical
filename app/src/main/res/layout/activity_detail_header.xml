@@ -20,6 +20,8 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -27,8 +29,6 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground">
 
             <com.google.android.material.textview.MaterialTextView
