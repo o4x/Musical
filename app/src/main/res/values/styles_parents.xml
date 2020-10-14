@@ -15,6 +15,7 @@
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
         <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
+        <item name="materialCardViewStyle">@style/CardWithoutCorner</item>
     </style>
 
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -49,7 +50,7 @@
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
         <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
-
+        <item name="materialCardViewStyle">@style/CardWithoutCorner</item>
 
         <item name="md_dark_theme">false</item>
         <item name="rectSelectorStrong">@drawable/rect_selector_strong</item>
@@ -88,7 +89,7 @@
         <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
-
+        <item name="materialCardViewStyle">@style/CardWithoutCorner</item>
 
         <item name="md_dark_theme">true</item>
         <item name="rectSelectorStrong">@drawable/rect_selector_strong_dark</item>
@@ -130,5 +131,9 @@
     <!-- content description is necessary to find the overflow button later in the layout-->
     <style name="Widget.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:contentDescription">@string/abc_action_menu_overflow_description</item>
+    </style>
+
+    <style name="CardWithoutCorner" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">@dimen/cornerRadius</item>
     </style>
 </resources>

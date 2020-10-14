@@ -3,21 +3,12 @@
     <style name="Theme.Musical" parent="Theme.Musical.Base" />
 
     <style name="Theme.Musical.Light" parent="Theme.Musical.Base.Light">
-        <item name="android:windowBackground">@color/window_color_light</item>
-        <item name="android:scrollbars">none</item>
-        <item name="dialogCornerRadius">16dp</item>
     </style>
 
     <style name="Theme.Musical.Black" parent="Theme.Musical.Base.Black">
-        <item name="android:windowBackground">@color/window_color_dark</item>
-        <item name="android:scrollbars">none</item>
-        <item name="dialogCornerRadius">16dp</item>
     </style>
 
     <style name="Theme.Musical.FollowSystem" parent="Theme.Musical.Base.Adaptive">
-        <item name="android:windowBackground">@color/window_color</item>
-        <item name="android:scrollbars">none</item>
-        <item name="dialogCornerRadius">16dp</item>
     </style>
 
     <style name="Theme.Musical.Notification" parent="@android:style/TextAppearance.StatusBar.EventContent" />
