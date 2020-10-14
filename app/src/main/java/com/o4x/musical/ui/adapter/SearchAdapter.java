@@ -107,9 +107,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     itemView.setElevation(activity.getResources().getDimensionPixelSize(R.dimen.card_elevation));
                 }
-                if (shortSeparator != null) {
-                    shortSeparator.setVisibility(View.GONE);
-                }
             }
 
             if (menu != null) {

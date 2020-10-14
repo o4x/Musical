@@ -81,16 +81,6 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
         boolean isChecked = isChecked(genre);
         holder.itemView.setActivated(isChecked);
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
-            if (holder.shortSeparator != null) {
-                holder.shortSeparator.setVisibility(View.GONE);
-            }
-        } else {
-            if (holder.shortSeparator != null) {
-                holder.shortSeparator.setVisibility(View.VISIBLE);
-            }
-        }
-
         if (holder.title != null) {
             holder.title.setText(genre.getName());
         }

@@ -55,10 +55,38 @@
             android:id="@+id/album_recycler"
             android:layout_width="match_parent"
             android:layout_height="164dp"
-            android:layout_marginTop="8dp"
-            android:nestedScrollingEnabled="false"
-            android:scrollbars="none"
+            android:layout_marginVertical="8dp"
+            android:scrollbars="horizontal"
             android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/track_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginHorizontal="10dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/track_count"
+                android:id="@+id/left_line"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/track_count"
+                android:id="@+id/right_line"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

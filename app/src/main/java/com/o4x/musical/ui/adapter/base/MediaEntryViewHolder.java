@@ -43,14 +43,6 @@ public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements Vie
     public IconImageView menu;
 
     @Nullable
-    @BindView(R.id.separator)
-    public View separator;
-
-    @Nullable
-    @BindView(R.id.short_separator)
-    public View shortSeparator;
-
-    @Nullable
     @BindView(R.id.drag_view)
     public View dragView;
 

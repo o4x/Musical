@@ -76,21 +76,4 @@
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/separator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="?attr/dividerColor"
-        android:visibility="gone" />
-
-    <View
-        android:id="@+id/short_separator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="72dp"
-        android:layout_marginStart="72dp"
-        android:background="?attr/dividerColor" />
-
 </FrameLayout>

@@ -76,15 +76,7 @@ open class AlbumAdapter(
         val album = dataSet[position]
         val isChecked = isChecked(album)
         holder.itemView.isActivated = isChecked
-        if (holder.adapterPosition == itemCount - 1) {
-            if (holder.shortSeparator != null) {
-                holder.shortSeparator!!.visibility = View.GONE
-            }
-        } else {
-            if (holder.shortSeparator != null) {
-                holder.shortSeparator!!.visibility = View.VISIBLE
-            }
-        }
+
         if (holder.title != null) {
             holder.title!!.text = getAlbumTitle(album)
         }

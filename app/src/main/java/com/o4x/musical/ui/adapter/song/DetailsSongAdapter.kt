@@ -2,12 +2,13 @@ package com.o4x.musical.ui.adapter.song
 
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -15,6 +16,7 @@ import butterknife.BindView
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
+import com.o4x.musical.extensions.withAlpha
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
@@ -105,23 +107,26 @@ class DetailsSongAdapter(
                             is Album -> {
                                 hTitle.text = it.title
                                 hSubtitle.text = it.artistName
-                                headerView.setOnClickListener { v ->
-
+                                headerView.setOnClickListener { _ ->
                                     NavigationUtil.goToArtist(
                                         activity,
                                         it.artistId
                                     )
                                 }
+                                hTrackCount.setText(
+                                    MusicUtil.getSongCountString(
+                                        activity,
+                                        it.songCount
+                                    )
+                                )
                             }
                             is Artist -> {
                                 hTitle.text = it.name
-                                hSubtitle.text = MusicUtil.getReadableDurationString(
-                                    MusicUtil.getTotalDuration(
-                                        activity,
-                                        it.songs
-                                    )
-                                )
-                                hAlbumRecyclerView.setVisibility(View.VISIBLE)
+                                hSubtitle.text =
+                                    MusicUtil.getAlbumCountString(activity, it.albumCount)
+                                hTrackCount.text =
+                                    MusicUtil.getSongCountString(activity, it.songCount)
+                                hAlbumRecyclerView.visibility = View.VISIBLE
                                 hAlbumAdapter?.swapDataSet(it.albums)
                             }
                             else -> {
@@ -132,8 +137,9 @@ class DetailsSongAdapter(
                     colors?.let {
                         hTitle.setTextColor(it.primaryTextColor)
                         hSubtitle.setTextColor(it.secondaryTextColor)
-                        hGradient.setBackgroundTintList(ColorStateList.valueOf(it.backgroundColor))
+                        hGradient.backgroundTintList = ColorStateList.valueOf(it.backgroundColor)
                         headerView.setBackgroundColor(it.backgroundColor)
+                        setLineColor(it.secondaryTextColor)
                     }
                 }
             }
@@ -147,11 +153,13 @@ class DetailsSongAdapter(
                         holder.image?.visibility = View.GONE
                         holder.imageText?.let {
                             val trackNumber = MusicUtil.getFixedTrackNumber(song.trackNumber)
-                            val trackNumberString = if (trackNumber > 0) trackNumber.toString() else "-"
+                            val trackNumberString =
+                                if (trackNumber > 0) trackNumber.toString() else "-"
                             it.text = trackNumberString
                         }
                     }
-                    is Artist -> {}
+                    is Artist -> {
+                    }
                 }
 
                 colors?.let {
@@ -159,9 +167,6 @@ class DetailsSongAdapter(
                         title?.setTextColor(it.primaryTextColor)
                         text?.setTextColor(it.secondaryTextColor)
                         imageText?.setTextColor(it.secondaryTextColor)
-                        shortSeparator?.setBackgroundColor(
-                            ColorUtil.withAlpha(it.secondaryTextColor, 0.3f)
-                        )
                         menu?.setColorFilter(it.secondaryTextColor, PorterDuff.Mode.SRC_IN)
 
                         itemView.setBackgroundColor(it.backgroundColor)
@@ -186,25 +191,35 @@ class DetailsSongAdapter(
         lateinit var hSubtitle: MaterialTextView
         @BindView(R.id.album_recycler)
         lateinit var hAlbumRecyclerView: RecyclerView
+        @BindView(R.id.track_count)
+        lateinit var hTrackCount: MaterialTextView
+        @BindView(R.id.left_line)
+        lateinit var hLeftLine: View
+        @BindView(R.id.right_line)
+        lateinit var hRightLine: View
 
         var hAlbumAdapter: HorizontalAlbumAdapter? = null
 
         init {
-            hAlbumRecyclerView.setLayoutManager(
-                LinearLayoutManager(
-                    activity,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
-                )
+            hAlbumRecyclerView.layoutManager = LinearLayoutManager(
+                activity,
+                LinearLayoutManager.HORIZONTAL,
+                false
             )
             hAlbumAdapter = HorizontalAlbumAdapter(activity, ArrayList(), true, cabHolder)
-            hAlbumRecyclerView.setAdapter(hAlbumAdapter)
+            hAlbumRecyclerView.adapter = hAlbumAdapter
             hAlbumAdapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
                 override fun onChanged() {
                     super.onChanged()
-                    if (hAlbumAdapter!!.getItemCount() == 0) activity.finish()
+                    if (hAlbumAdapter!!.itemCount == 0) activity.finish()
                 }
             })
+        }
+
+        fun setLineColor(color: Int) {
+            hTrackCount.setTextColor(color.withAlpha(.9f))
+            hLeftLine.setBackgroundColor(color.withAlpha(.5f))
+            hRightLine.setBackgroundColor(color.withAlpha(.5f))
         }
 
         // We don't want to click in this holder
