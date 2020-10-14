@@ -107,7 +107,7 @@ class DetailsSongAdapter(
                             is Album -> {
                                 hTitle.text = it.title
                                 hSubtitle.text = it.artistName
-                                headerView.setOnClickListener { _ ->
+                                subHeaderView.setOnClickListener { _ ->
                                     NavigationUtil.goToArtist(
                                         activity,
                                         it.artistId
@@ -183,6 +183,8 @@ class DetailsSongAdapter(
     inner class HeaderViewHolder(itemView: View) : SongAdapter.ViewHolder(itemView) {
         @BindView(R.id.header)
         lateinit var headerView: View
+        @BindView(R.id.sub_header)
+        lateinit var subHeaderView: View
         @BindView(R.id.gradient)
         lateinit var hGradient: View
         @BindView(R.id.title)
