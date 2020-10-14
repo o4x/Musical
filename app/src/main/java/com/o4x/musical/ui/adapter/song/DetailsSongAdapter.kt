@@ -106,6 +106,7 @@ class DetailsSongAdapter(
                                 hTitle.text = it.title
                                 hSubtitle.text = it.artistName
                                 headerView.setOnClickListener { v ->
+
                                     NavigationUtil.goToArtist(
                                         activity,
                                         it.artistId
