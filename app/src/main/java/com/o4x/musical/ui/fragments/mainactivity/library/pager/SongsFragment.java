@@ -14,7 +14,6 @@ import com.o4x.musical.misc.OverScrollGridLayoutManager;
 import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.repository.RealSongRepository;
-import com.o4x.musical.ui.adapter.song.ShuffleButtonSongAdapter;
 import com.o4x.musical.ui.adapter.song.SongAdapter;
 import com.o4x.musical.util.PreferenceUtil;
 
@@ -49,21 +48,12 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
         List<Song> dataSet = getAdapter() == null ? new ArrayList<>() : getAdapter().getDataSet();
 
         SongAdapter songAdapter;
-        if (getGridSize() <= getMaxGridSizeForList()) {
-            songAdapter = new ShuffleButtonSongAdapter(
-                    getLibraryFragment().getMainActivity(),
-                    dataSet,
-                    itemLayoutRes,
-                    usePalette,
-                    getLibraryFragment());
-        } else {
-            songAdapter = new SongAdapter(
-                    getLibraryFragment().getMainActivity(),
-                    dataSet,
-                    itemLayoutRes,
-                    usePalette,
-                    getLibraryFragment());
-        }
+        songAdapter = new SongAdapter(
+                getLibraryFragment().getMainActivity(),
+                dataSet,
+                itemLayoutRes,
+                usePalette,
+                getLibraryFragment());
 
         return songAdapter;
     }

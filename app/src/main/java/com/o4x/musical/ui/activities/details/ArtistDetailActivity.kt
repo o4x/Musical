@@ -66,9 +66,7 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
         }
 
         toolbar.title = artist.name
-        //        songCountTextView.setText(MusicUtil.getSongCountString(this, artist.getSongCount()));
-//        albumCountTextView.setText(MusicUtil.getAlbumCountString(this, artist.getAlbumCount()));
-//        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, artist.getSongs())));
+
         songAdapter?.swapDataSet(artist.songs)
         songAdapter?.data = artist
     }

@@ -57,12 +57,6 @@ public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
             if (holder.dragView != null) {
                 holder.dragView.setVisibility(View.GONE);
             }
-            if (holder.separator != null) {
-                holder.separator.setVisibility(View.VISIBLE);
-            }
-            if (holder.shortSeparator != null) {
-                holder.shortSeparator.setVisibility(View.GONE);
-            }
         } else {
             super.onBindViewHolder(holder, position - 1);
         }

@@ -63,10 +63,7 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
             loadImage()
         }
 
-//        artistTextView.setText(album.getArtistName());
-//        songCountTextView.setText(MusicUtil.getSongCountString(this, album.getSongCount()));
-//        durationTextView.setText(MusicUtil.getReadableDurationString(MusicUtil.getTotalDuration(this, album.getSongs())));
-//        albumYearTextView.setText(MusicUtil.getYearString(album.getYear()));
+
         toolbar.title = album.title
         songAdapter?.swapDataSet(album.songs)
         songAdapter?.data = album

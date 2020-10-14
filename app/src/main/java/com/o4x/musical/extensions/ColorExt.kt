@@ -38,6 +38,10 @@ fun Int.ripAlpha(): Int {
     return ColorUtil.stripAlpha(this)
 }
 
+fun Int.withAlpha(alpha: Float): Int {
+    return ColorUtil.withAlpha(this, alpha)
+}
+
 fun Dialog.colorControlNormal() = resolveColor(android.R.attr.colorControlNormal)
 fun Toolbar.backgroundTintList() {
     val surfaceColor = ATHUtil.resolveColor(context, R.attr.colorSurface, Color.BLACK)

@@ -90,16 +90,6 @@ public class ArtistAdapter extends AbsMultiSelectAdapter<ArtistAdapter.ViewHolde
         boolean isChecked = isChecked(artist);
         holder.itemView.setActivated(isChecked);
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
-            if (holder.shortSeparator != null) {
-                holder.shortSeparator.setVisibility(View.GONE);
-            }
-        } else {
-            if (holder.shortSeparator != null) {
-                holder.shortSeparator.setVisibility(View.VISIBLE);
-            }
-        }
-
         if (holder.title != null) {
             holder.title.setText(artist.getName());
         }

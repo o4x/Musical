@@ -96,16 +96,6 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
             holder.title.setText(playlist.getName());
         }
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
-            if (holder.shortSeparator != null) {
-                holder.shortSeparator.setVisibility(View.GONE);
-            }
-        } else {
-            if (holder.shortSeparator != null && !(dataSet.get(position) instanceof AbsSmartPlaylist)) {
-                holder.shortSeparator.setVisibility(View.VISIBLE);
-            }
-        }
-
         if (holder.image != null) {
             holder.image.setImageResource(getIconRes(playlist));
         }
@@ -224,9 +214,6 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
             super(itemView);
 
             if (itemViewType == SMART_PLAYLIST) {
-                if (shortSeparator != null) {
-                    shortSeparator.setVisibility(View.GONE);
-                }
                 itemView.setBackgroundColor(ATHUtil.INSTANCE.resolveColor(activity, R.attr.cardBackgroundColor));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     itemView.setElevation(activity.getResources().getDimensionPixelSize(R.dimen.card_elevation));
