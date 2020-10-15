@@ -38,7 +38,9 @@ public class PhonographColorUtil {
     @ColorInt
     public static int getColor(@Nullable Palette palette, int fallback) {
         if (palette != null) {
-            if (palette.getVibrantSwatch() != null) {
+            if (palette.getDominantSwatch()!= null) {
+                return palette.getDominantSwatch().getRgb();
+            } else if (palette.getVibrantSwatch() != null) {
                 return palette.getVibrantSwatch().getRgb();
             } else if (palette.getMutedSwatch() != null) {
                 return palette.getMutedSwatch().getRgb();
