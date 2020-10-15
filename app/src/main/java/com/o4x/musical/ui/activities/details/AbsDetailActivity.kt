@@ -2,6 +2,7 @@ package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,9 +24,12 @@ import com.o4x.musical.interfaces.PaletteColorHolder
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
+import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.color.MediaNotificationProcessor
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.math.max
 import kotlin.math.min
 
@@ -34,6 +38,10 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     companion object {
         const val EXTRA_ID = "extra_id"
         const val TAG_EDITOR_REQUEST = 2001
+    }
+
+    val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
+        parametersOf(null)
     }
 
     var data: T? = null
@@ -46,15 +54,19 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     lateinit var toolbar: Toolbar
 
     var cab: MaterialCab? = null
-    var imageHeight = Util.getScreenWidth()
+    var imageHeight: Int? = null
     var colors: MediaNotificationProcessor? = null
 
     var songAdapter: DetailsSongAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         ButterKnife.bind(this)
         setDrawUnderStatusBar()
+
+        Log.e("sssssssssss", "wssssssssss")
+        imageHeight = Util.getScreenWidth()
         initObserver()
         setUpToolBar()
         setupViews()
@@ -133,17 +145,21 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         })
     }
 
+
     private fun setupScrollView() {
         val displayHeight = Util.getScreenHeight()
         val gradientHeight =
-            (imageHeight + resources.getDimension(R.dimen.detail_header_height)).toInt()
+            (imageHeight!! + resources.getDimension(R.dimen.detail_header_height)).toInt()
+
+//        Log.e("sssssssssss", scrollY.toString())
 
 
         songRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            private var scrollY = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                scrollY += dy
+
+                scrollPositionViewModel.addPosition(dy)
+                val scrollY = scrollPositionViewModel.getPositionValue()
 
                 // Change alpha of overlay
                 val alpha = max(0f, min(1f, 2.toFloat() * scrollY / gradientHeight))
@@ -151,7 +167,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
 
                 // Scroll poster
                 image.translationY =
-                    max(-scrollY / (displayHeight * 2 / imageHeight), -imageHeight)
+                    max(-scrollY / (displayHeight * 2 / imageHeight!!), -imageHeight!!)
                         .toFloat()
             }
         })
@@ -191,7 +207,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
                         setMiniPlayerColor(colors)
                     }
                 })
-            .withSize(imageHeight)
+            .withSize(imageHeight!!)
 
     abstract fun initObserver()
     abstract fun loadImage()
