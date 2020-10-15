@@ -14,6 +14,7 @@ import com.o4x.musical.repository.*
 import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
 import com.o4x.musical.ui.viewmodel.ArtistDetailsViewModel
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
+import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.FilePathUtil
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
@@ -147,6 +148,10 @@ private val dataModule = module {
 }
 
 private val viewModules = module {
+
+    viewModel {
+        ScrollPositionViewModel()
+    }
 
     viewModel {
         LibraryViewModel(get())
