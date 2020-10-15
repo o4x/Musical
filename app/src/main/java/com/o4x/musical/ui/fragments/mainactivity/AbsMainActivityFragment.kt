@@ -130,6 +130,8 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
                     if (recyclerView.isRecyclerScrollable()) {
                         animation?.cancel()
                         handler(dy)
+                    } else {
+                        setAppbarPadding(recyclerView)
                     }
                 }
             }
