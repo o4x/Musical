@@ -27,6 +27,7 @@ import android.os.Handler;
 import androidx.annotation.ColorInt;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 
 import com.o4x.musical.R;
@@ -474,20 +475,22 @@ public class MediaNotificationProcessor {
                 backgroundColor);
     }
 
+    // composite for remove alpha
+
     public int getPrimaryTextColor() {
-        return primaryTextColor;
+        return ColorUtils.compositeColors(primaryTextColor, Color.BLACK);
     }
 
     public int getSecondaryTextColor() {
-        return secondaryTextColor;
+        return ColorUtils.compositeColors(secondaryTextColor, Color.BLACK);
     }
 
     public int getActionBarColor() {
-        return actionBarColor;
+        return ColorUtils.compositeColors(actionBarColor, Color.WHITE);
     }
 
     public int getBackgroundColor() {
-        return backgroundColor;
+        return ColorUtils.compositeColors(backgroundColor, Color.WHITE);
     }
 
     boolean isWhiteColor(int color) {

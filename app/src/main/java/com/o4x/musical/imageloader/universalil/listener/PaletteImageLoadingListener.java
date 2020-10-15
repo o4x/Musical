@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.loader.content.AsyncTaskLoader;
 import androidx.palette.graphics.Palette;
+import androidx.palette.graphics.Target;
 
 import com.o4x.musical.R;
 import com.o4x.musical.extensions.ColorExtKt;
@@ -40,13 +41,12 @@ public abstract class PaletteImageLoadingListener extends AbsImageLoadingListene
             @Override
             public Integer loadInBackground() {
                 if (image == null) {
-                    return blend(getDefaultFooterColor(context));
+                    return getDefaultFooterColor(context);
                 } else {
-                    return blend(
-                            PhonographColorUtil.getColor(
-                                    Palette.from(image).generate(),
-                                    getDefaultFooterColor(context)
-                            ));
+                    return PhonographColorUtil.getColor(
+                            Palette.from(image).generate(),
+                            getDefaultFooterColor(context)
+                    );
                 }
             }
 
@@ -64,14 +64,6 @@ public abstract class PaletteImageLoadingListener extends AbsImageLoadingListene
     public void onFailedBitmapReady(Bitmap failedBitmap) {
         super.onFailedBitmapReady(failedBitmap);
         colorReady(failedBitmap);
-    }
-
-    private int blend(int color) {
-        return ColorUtils.blendARGB(
-                color,
-                ColorExtKt.surfaceColor(context),
-                .5f
-        );
     }
 
     public abstract void onColorReady(int color);
