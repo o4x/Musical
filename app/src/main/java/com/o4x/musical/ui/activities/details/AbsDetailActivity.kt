@@ -65,7 +65,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         ButterKnife.bind(this)
         setDrawUnderStatusBar()
 
-        Log.e("sssssssssss", "wssssssssss")
         imageHeight = Util.getScreenWidth()
         initObserver()
         setUpToolBar()
@@ -150,9 +149,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         val displayHeight = Util.getScreenHeight()
         val gradientHeight =
             (imageHeight!! + resources.getDimension(R.dimen.detail_header_height)).toInt()
-
-//        Log.e("sssssssssss", scrollY.toString())
-
 
         songRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
