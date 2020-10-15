@@ -2,6 +2,7 @@ package com.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
@@ -108,16 +109,18 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
 
         setAppbarPadding(recyclerView)
 
-        val handler = { dy: Int ->
+        val handler = { dy: Int, withAppBar: Boolean ->
             when {
                 dy > 0 -> { // Scrolling up
                     val changes = max(-toolbarHeight.toFloat(),
                         mainActivity.appbar.y - (dy))
+                    if (withAppBar)
                     mainActivity.appbar.y = changes
                     recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0)
                 }
                 dy < 0 -> { // Scrolling down
                     val changes = min(0f, mainActivity.appbar.y - (dy))
+                    if (withAppBar)
                     mainActivity.appbar.y = changes
                     recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0)
                 }
@@ -129,9 +132,15 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
                 override fun onScroll(dy: Int) {
                     if (recyclerView.isRecyclerScrollable()) {
                         animation?.cancel()
-                        handler(dy)
+                        handler(dy, true)
                     } else {
-                        setAppbarPadding(recyclerView)
+                        if (mainActivity.appbar.y != 0f) {
+                            if (animation?.isRunning != true)
+                                showAppbar()
+                        }
+                        if (recyclerView.paddingTop != appbarHeight) {
+                            handler(dy, false)
+                        }
                     }
                 }
             }
