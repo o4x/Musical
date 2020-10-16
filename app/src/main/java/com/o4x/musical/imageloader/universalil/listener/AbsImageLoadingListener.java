@@ -24,10 +24,15 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     protected Context context;
     private boolean isComplete = false;
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     @Override
     public void onLoadingStarted(String imageUri, View view) {
         super.onLoadingStarted(imageUri, view);
-        context = view.getContext();
+        if (view != null)
+            context = view.getContext();
         if (coverData != null && !isLoadColorSync) {
 
             task = new AsyncTaskLoader<Bitmap>(context) {

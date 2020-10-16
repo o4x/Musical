@@ -59,7 +59,8 @@ class UniversalIL {
             )
         }
 
-        fun loadImage() {
+        fun loadImage(context: Context) {
+            listener.setContext(context)
             imageLoader?.loadImage(
                 url,
                 options

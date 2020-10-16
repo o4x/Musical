@@ -1,14 +1,15 @@
 package com.o4x.musical.util
 
-import android.R.attr.src
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import androidx.core.graphics.drawable.toBitmap
 import code.name.monkey.appthemehelper.util.ColorUtil
+import com.o4x.musical.extensions.getBitmapDrawable
 import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.extensions.textColorPrimary
+import com.o4x.musical.extensions.withAlpha
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -45,13 +46,15 @@ class CoverUtil constructor(val context: Context) {
             char0.toString().toUpperCase(Locale.ROOT),
             width / -12f,
             height / 1.3f,
-            paint)
+            paint
+        )
 
         c.drawText(
             char1.toString().toUpperCase(Locale.ROOT),
             width / 2f,
             height / 1.3f,
-            paint)
+            paint
+        )
 
         return bitmap
     }
@@ -60,8 +63,8 @@ class CoverUtil constructor(val context: Context) {
         val gradient = GradientDrawable(
             GradientDrawable.Orientation.values()[
                     abs((id) % GradientDrawable.Orientation.values().size)
-            ]
-            , intArrayOf(-0x9e9d9f, -0xececed))
+            ], intArrayOf(-0x9e9d9f, -0xececed)
+        )
         gradient.cornerRadius = 0f
 
         if (context.isDarkMode) {
@@ -115,17 +118,15 @@ class CoverUtil constructor(val context: Context) {
             arrayOf("#FFB4A2", "#FFCDB2"),
             arrayOf("#EDF1F4", "#C3CBDC"),
             arrayOf("#F7D4D4", "#F6ECC4"),
-            ).map {
-            it.map {
-                it -> Color.parseColor(it)
+        ).map {
+            it.map { it -> Color.parseColor(it)
             }.toIntArray()
         }
 
         private val COLORS_DARK = listOf(
             arrayOf("#2E2E2E", "#373737"),
         ).map {
-            it.map {
-                    it -> Color.parseColor(it)
+            it.map { it -> Color.parseColor(it)
             }.toIntArray()
         }
 
@@ -140,12 +141,24 @@ class CoverUtil constructor(val context: Context) {
 
             val paint = Paint()
             val shader = LinearGradient(
-                0f, 0f, 0f, h.toFloat(), Color.WHITE, Color.TRANSPARENT, Shader.TileMode.MIRROR)
+                0f, 0f, 0f, h.toFloat(), Color.WHITE, Color.TRANSPARENT, Shader.TileMode.MIRROR
+            )
             paint.shader = shader
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.MULTIPLY)
             canvas.drawRect(0f, 0f, w.toFloat(), h.toFloat(), paint)
 
             return result
+        }
+
+        @JvmStatic
+        fun doubleGradient(color1: Int, color2: Int): Bitmap {
+            val gd = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(color1.withAlpha(.8f), color2.withAlpha(.8f))
+            )
+            gd.cornerRadius = 0f
+
+            return addGradientTo(gd.toBitmap(500, 500))
         }
     }
 }
