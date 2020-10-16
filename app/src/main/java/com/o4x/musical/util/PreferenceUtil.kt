@@ -58,7 +58,6 @@ object PreferenceUtil {
     const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
     const val INITIALIZED_BLACKLIST = "initialized_blacklist"
     const val LIBRARY_CATEGORIES = "library_categories"
-    const val BLACK_THEME = "black_theme"
     const val KEEP_SCREEN_ON = "keep_screen_on"
     const val LANGUAGE_NAME = "language_name"
     const val IGNORE_MEDIA = "ignore_media_store_artwork"
@@ -567,29 +566,17 @@ object PreferenceUtil {
             putBoolean(INITIALIZED_BLACKLIST, value)
         }
 
-    private val isBlackMode
-        get() = sharedPreferences.getBoolean(
-            BLACK_THEME, true
-        )
-
 
     @JvmStatic
     fun getGeneralThemeValue(isSystemDark: Boolean): ThemeMode {
         val themeMode: String =
             sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
-        return if (isBlackMode && isSystemDark) {
-            ThemeMode.BLACK
-        } else {
-            if (isBlackMode && themeMode == "dark") {
-                ThemeMode.BLACK
-            } else {
-                when (themeMode) {
-                    "light" -> ThemeMode.LIGHT
-                    "dark" -> ThemeMode.DARK
-                    "auto" -> ThemeMode.AUTO
-                    else -> ThemeMode.AUTO
-                }
-            }
+        return when (themeMode) {
+            "light" -> ThemeMode.LIGHT
+            "dark" -> ThemeMode.DARK
+            "black" -> ThemeMode.BLACK
+            "auto" -> ThemeMode.AUTO
+            else -> ThemeMode.AUTO
         }
     }
 

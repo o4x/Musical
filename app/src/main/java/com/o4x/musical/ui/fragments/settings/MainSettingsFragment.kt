@@ -77,17 +77,6 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
             true
         }
 
-
-        val blackTheme: ATESwitchPreference? = findPreference("black_theme")
-        blackTheme?.setOnPreferenceChangeListener { _, _ ->
-            if (!App.isProVersion()) {
-                showProToastAndNavigate("Just Black theme")
-                return@setOnPreferenceChangeListener false
-            }
-            ThemeStore.markChanged(requireContext())
-            true
-        }
-
         val themeColorPref: ATEColorPreference = findPreference("theme_color")!!
         val themeColor = ThemeStore.themeColor(requireContext())
         themeColorPref.setColor(themeColor, ColorUtil.darkenColor(themeColor))
