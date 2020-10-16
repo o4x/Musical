@@ -4,11 +4,11 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
-import android.widget.FrameLayout
 import androidx.core.view.setPadding
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,13 +17,16 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import code.name.monkey.appthemehelper.util.ColorUtil
+import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
+import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
+import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryTextColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.R
 import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.extensions.surfaceColor
+import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
@@ -36,7 +39,6 @@ import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.util.CoverUtil
-import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
@@ -106,10 +108,12 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_main, menu)
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(
+            mainActivity,
             mainActivity.toolbar,
             menu,
-            surfaceColor())
+            surfaceColor()
+        )
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -171,15 +175,26 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         open_queue_button.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         recently_parent.setOnClickListener {
             NavigationUtil.goToPlaylist(
-                mainActivity, HistoryPlaylist())
+                mainActivity, HistoryPlaylist()
+            )
         }
         newly_parent.setOnClickListener {
             NavigationUtil.goToPlaylist(
-                mainActivity, LastAddedPlaylist())
+                mainActivity, LastAddedPlaylist()
+            )
         }
         shuffle_btn.setOnClickListener {
             libraryViewModel.shuffleSongs()
         }
+        shuffle_btn.backgroundTintList = ColorStateList.valueOf(themeColor())
+        shuffle_btn.setColorFilter(
+            getSecondaryTextColor(activity, isColorLight(themeColor())),
+            PorterDuff.Mode.SRC_IN
+        )
+        open_queue_button.setBackgroundColor(themeColor())
+        open_queue_button.setTextColor(
+            getPrimaryTextColor(activity, isColorLight(themeColor()))
+        )
     }
 
     private fun setUpBounceScrollView() {
@@ -208,11 +223,14 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                 if (oldScrollY != 0) {
                     if (scrollY > oldScrollY) { // Scrolling up
                         mainActivity.appbar.y =
-                            max(-toolbarHeight.toFloat(), mainActivity.appbar.y + (oldScrollY - scrollY)
+                            max(
+                                -toolbarHeight.toFloat(),
+                                mainActivity.appbar.y + (oldScrollY - scrollY)
                             )
                         shuffle_btn.hide()
                     } else { // Scrolling down
-                        mainActivity.appbar.y = min(0f, mainActivity.appbar.y + (oldScrollY - scrollY)
+                        mainActivity.appbar.y = min(
+                            0f, mainActivity.appbar.y + (oldScrollY - scrollY)
                         )
                         shuffle_btn.show()
                     }
@@ -249,7 +267,8 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             R.layout.item_card_home,
             null,
             true,
-            true)
+            true
+        )
         queue_recycler_view.adapter = queueAdapter
         queue_recycler_view.itemAnimator = animator
         queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.position, 0)
@@ -265,7 +284,8 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             R.layout.item_card_home,
             gridSize * 2,
             true,
-            false)
+            false
+        )
         recently_recycler_view.adapter = recentlyAdapter
     }
 
@@ -279,7 +299,8 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             R.layout.item_card_home,
             gridSize * 3,
             true,
-            false)
+            false
+        )
         new_recycler_view.adapter = newAdapter
     }
 
@@ -358,12 +379,16 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                             poster.background =
                                 BitmapDrawable(
                                     resources,
-                                    CoverUtil.doubleGradient(colors.backgroundColor, colors.mightyColor)
+                                    CoverUtil.doubleGradient(
+                                        colors.backgroundColor,
+                                        colors.mightyColor
+                                    )
                                 )
 
                             bitmap?.let {
                                 if (requireContext().isDarkMode ==
-                                    !ColorUtil.isColorLight(colors.backgroundColor)) {
+                                    !ColorUtil.isColorLight(colors.backgroundColor)
+                                ) {
                                     poster.setPadding(0)
                                     poster.setImageBitmap(CoverUtil.addGradientTo(it))
                                 } else {
@@ -380,8 +405,10 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         }
 
         private fun updateQueue() {
-            queueAdapter.swapDataSet(MusicPlayerRemote.playingQueue,
-                MusicPlayerRemote.position)
+            queueAdapter.swapDataSet(
+                MusicPlayerRemote.playingQueue,
+                MusicPlayerRemote.position
+            )
             resetToCurrentPosition()
         }
 
@@ -440,7 +467,12 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             ||
             !show && current == ColorUtil.withAlpha(current, 0f)
         ) {
-            mainActivity.toolbar.setBackgroundColor(if (show) color else ColorUtil.withAlpha(color, 0f))
+            mainActivity.toolbar.setBackgroundColor(
+                if (show) color else ColorUtil.withAlpha(
+                    color,
+                    0f
+                )
+            )
             return
         }
 
