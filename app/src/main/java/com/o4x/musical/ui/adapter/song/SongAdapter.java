@@ -1,5 +1,7 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,6 +118,12 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
             }
             if (holder.text != null) {
                 holder.text.setTextColor(MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
+            }
+            if (holder.menu != null) {
+                holder.menu.setColorFilter(
+                        MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)),
+                        PorterDuff.Mode.SRC_IN
+                );
             }
         }
     }
