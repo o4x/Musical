@@ -131,7 +131,7 @@ class CoverUtil constructor(val context: Context) {
         }
 
         @JvmStatic
-        fun addGradientTo(src: Bitmap): Bitmap {
+        fun addGradientTo(src: Bitmap, fromMiddle: Boolean = true): Bitmap {
             val w: Int = src.width
             val h: Int = src.height
             val result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
@@ -141,7 +141,10 @@ class CoverUtil constructor(val context: Context) {
 
             val paint = Paint()
             val shader = LinearGradient(
-                0f, 0f, 0f, h.toFloat(), Color.WHITE, Color.TRANSPARENT, Shader.TileMode.MIRROR
+                0f,
+                if (fromMiddle) h / 2f else 0f,
+                0f,
+                h.toFloat(), Color.WHITE, Color.TRANSPARENT, Shader.TileMode.CLAMP
             )
             paint.shader = shader
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.MULTIPLY)
@@ -158,7 +161,7 @@ class CoverUtil constructor(val context: Context) {
             )
             gd.cornerRadius = 0f
 
-            return addGradientTo(gd.toBitmap(500, 500))
+            return addGradientTo(gd.toBitmap(500, 500), fromMiddle = false)
         }
     }
 }
