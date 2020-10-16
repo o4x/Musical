@@ -22,6 +22,7 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.R
+import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
@@ -230,14 +231,10 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
 
 
         // zooming poster in over scroll
-        val params = poster.layoutParams
-        val width = params.width
-        val height = params.height
         nested_scroll_view.setOnOverScrollListener { _: Boolean, overScrolledDistance: Int ->
             val scale = 1 + overScrolledDistance / displayHeight.toFloat()
-            val mParams: ViewGroup.LayoutParams =
-                FrameLayout.LayoutParams(width, (height * scale).toInt())
-            poster.layoutParams = mParams
+            poster.scaleX = scale
+            poster.scaleY = scale
         }
     }
 
@@ -345,16 +342,16 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
 
                 UniversalIL().withListener(
                     object : PaletteMusicLoadingListener() {
+
+                        var bitmap: Bitmap? = null
+
                         override fun onLoadingComplete(
                             imageUri: String,
                             view: View?,
                             loadedImage: Bitmap
                         ) {
                             super.onLoadingComplete(imageUri, view, loadedImage)
-                            loadedImage.let {
-                                poster.setImageBitmap(it)
-                            }
-                            poster.setPadding(300)
+                            bitmap = loadedImage
                         }
 
                         override fun onColorReady(colors: MediaNotificationProcessor) {
@@ -363,16 +360,22 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                                     resources,
                                     CoverUtil.doubleGradient(colors.backgroundColor, colors.mightyColor)
                                 )
+
+                            bitmap?.let {
+                                if (requireContext().isDarkMode ==
+                                    !ColorUtil.isColorLight(colors.backgroundColor)) {
+                                    poster.setPadding(0)
+                                    poster.setImageBitmap(CoverUtil.addGradientTo(it))
+                                } else {
+                                    poster.setPadding(appbarHeight)
+                                    poster.setImageBitmap(it)
+                                }
+                            }
                         }
 
                     }
                 ).byThis(song).loadImage(requireContext())
 
-            } else {
-//                if (navigationDrawerHeader != null) {
-//                    navigationView.removeHeaderView(navigationDrawerHeader);
-//                    navigationDrawerHeader = null;
-//                }
             }
         }
 
