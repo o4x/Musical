@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import code.name.monkey.appthemehelper.util.ColorUtil
+import code.name.monkey.appthemehelper.util.ColorUtil.isColorDark
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryTextColor
@@ -38,17 +39,24 @@ import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
+import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
 
 class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
+
+    val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
+        parametersOf(null)
+    }
 
     private lateinit var queueAdapter: HomeAdapter
     private lateinit var queueLayoutManager: LinearLayoutManager
@@ -68,8 +76,6 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     private val toolbarAnimation = ValueAnimator.ofFloat(0f, 1f)
     private val statusAnimation = ValueAnimator.ofFloat(0f, 1f)
 
-    var position: Int = 0
-
     override fun onDestroyView() {
         mainActivity.removeMusicServiceEventListener(queueListener)
         toolbarAnimation.cancel()
@@ -78,11 +84,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     }
 
     override fun onPause() {
-        // Save scroll view position
-        position = nested_scroll_view.scrollY
-
         mainActivity.removeMusicServiceEventListener(queueListener)
-
         super.onPause()
     }
 
@@ -90,7 +92,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         super.onResume()
 
         showAppbar()
-        if (position < headerHeight) {
+        if (scrollPositionViewModel.getPositionValue() < headerHeight) {
             toolbarColorVisible(false)
             statusBarColorVisible(false)
             mainActivity.appbar.elevation = 0f
@@ -387,8 +389,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
 
                             bitmap?.let {
                                 if (requireContext().isDarkMode ==
-                                    !ColorUtil.isColorLight(colors.backgroundColor)
-                                ) {
+                                    isColorDark(colors.backgroundColor)) {
                                     poster.setPadding(0)
                                     poster.setImageBitmap(CoverUtil.addGradientTo(it))
                                 } else {

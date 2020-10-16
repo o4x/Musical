@@ -49,6 +49,10 @@ object ColorUtil {
         return darkness < 0.4
     }
 
+    fun isColorDark(@ColorInt color: Int): Boolean {
+        return !isColorLight(color)
+    }
+
     @ColorInt
     fun invertColor(@ColorInt color: Int): Int {
         val r = 255 - Color.red(color)
