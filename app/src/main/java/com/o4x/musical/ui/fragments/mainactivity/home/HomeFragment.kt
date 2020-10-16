@@ -4,10 +4,12 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.FrameLayout
+import androidx.core.view.setPadding
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
+import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.loader.LastAddedLoader
@@ -35,6 +38,7 @@ import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.ViewUtil
+import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlin.math.abs
 import kotlin.math.max
@@ -338,33 +342,32 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         private fun updatePoster() {
             if (MusicPlayerRemote.playingQueue.isNotEmpty()) {
                 val song = MusicPlayerRemote.currentSong
-                //                if (navigationDrawerHeader == null) {
-//                    navigationDrawerHeader = navigationView.inflateHeaderView(R.layout.navigation_drawer_header);
-//                    //noinspection ConstantConditions
-//                    navigationDrawerHeader.setOnClickListener(v -> {
-//                        drawerLayout.closeDrawers();
-//                        if (getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-//                            expandPanel();
-//                        }
-//                    });
-//                }
-//                ((TextView) navigationDrawerHeader.findViewById(R.id.title)).setText(song.title);
-//                ((TextView) navigationDrawerHeader.findViewById(R.id.text)).setText(MusicUtil.getSongInfoString(song));
-                UniversalIL.imageLoader?.loadImage(
-                    MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(),
-                    object: SimpleImageLoadingListener() {
+
+                UniversalIL().withListener(
+                    object : PaletteMusicLoadingListener() {
                         override fun onLoadingComplete(
-                            imageUri: String?,
+                            imageUri: String,
                             view: View?,
-                            loadedImage: Bitmap?,
+                            loadedImage: Bitmap
                         ) {
                             super.onLoadingComplete(imageUri, view, loadedImage)
-                            loadedImage?.let {
-                                poster.setImageBitmap(CoverUtil.addGradientTo(it))
+                            loadedImage.let {
+                                poster.setImageBitmap(it)
                             }
+                            poster.setPadding(300)
                         }
+
+                        override fun onColorReady(colors: MediaNotificationProcessor) {
+                            poster.background =
+                                BitmapDrawable(
+                                    resources,
+                                    CoverUtil.doubleGradient(colors.backgroundColor, colors.mightyColor)
+                                )
+                        }
+
                     }
-                )
+                ).byThis(song).loadImage(requireContext())
+
             } else {
 //                if (navigationDrawerHeader != null) {
 //                    navigationView.removeHeaderView(navigationDrawerHeader);

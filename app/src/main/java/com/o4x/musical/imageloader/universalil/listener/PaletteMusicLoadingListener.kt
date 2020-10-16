@@ -19,12 +19,12 @@ abstract class PaletteMusicLoadingListener : AbsImageLoadingListener() {
         colorReady(failedBitmap)
     }
 
-    override fun onLoadingCancelled(imageUri: String, view: View) {
+    override fun onLoadingCancelled(imageUri: String, view: View?) {
         super.onLoadingCancelled(imageUri, view)
         colorReady(null)
     }
 
-    override fun onLoadingComplete(imageUri: String, view: View, loadedImage: Bitmap) {
+    override fun onLoadingComplete(imageUri: String, view: View?, loadedImage: Bitmap) {
         super.onLoadingComplete(imageUri, view, loadedImage)
         colorReady(loadedImage)
     }
