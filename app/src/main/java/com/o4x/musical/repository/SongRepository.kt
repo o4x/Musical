@@ -26,9 +26,7 @@ import com.o4x.musical.extensions.getLong
 import com.o4x.musical.extensions.getString
 import com.o4x.musical.extensions.getStringOrNull
 import com.o4x.musical.model.Song
-import com.o4x.musical.provider.BlacklistStore
 import com.o4x.musical.util.PreferenceUtil
-import java.util.*
 
 /**
  * Created by hemanths on 10/08/17.
@@ -133,18 +131,14 @@ class RealSongRepository(private val context: Context) : SongRepository {
     ): Cursor? {
         var selectionFinal = selection
         var selectionValuesFinal = selectionValues
+
         selectionFinal = if (selection != null && selection.trim { it <= ' ' } != "") {
             "$IS_MUSIC AND $selectionFinal"
         } else {
             IS_MUSIC
         }
 
-        // Blacklist
-        val paths = BlacklistStore.getInstance(context).paths
-        if (paths.isNotEmpty()) {
-            selectionFinal = generateBlacklistSelection(selectionFinal, paths.size)
-            selectionValuesFinal = addBlacklistSelectionValues(selectionValuesFinal, paths)
-        }
+
         selectionFinal =
             selectionFinal + " AND " + Media.DURATION + ">= " + (PreferenceUtil.filterLength * 1000)
 
@@ -164,36 +158,5 @@ class RealSongRepository(private val context: Context) : SongRepository {
         } catch (ex: SecurityException) {
             return null
         }
-    }
-
-    private fun generateBlacklistSelection(
-        selection: String?,
-        pathCount: Int
-    ): String {
-        val newSelection = StringBuilder(
-            if (selection != null && selection.trim { it <= ' ' } != "") "$selection AND " else "")
-        newSelection.append(AudioColumns.DATA + " NOT LIKE ?")
-        for (i in 0 until pathCount - 1) {
-            newSelection.append(" AND " + AudioColumns.DATA + " NOT LIKE ?")
-        }
-        return newSelection.toString()
-    }
-
-    private fun addBlacklistSelectionValues(
-        selectionValues: Array<String>?,
-        paths: ArrayList<String>
-    ): Array<String>? {
-        var selectionValuesFinal = selectionValues
-        if (selectionValuesFinal == null) {
-            selectionValuesFinal = emptyArray()
-        }
-        val newSelectionValues = Array(selectionValuesFinal.size + paths.size) {
-            "n = $it"
-        }
-        System.arraycopy(selectionValuesFinal, 0, newSelectionValues, 0, selectionValuesFinal.size)
-        for (i in selectionValuesFinal.size until newSelectionValues.size) {
-            newSelectionValues[i] = paths[i - selectionValuesFinal.size] + "%"
-        }
-        return newSelectionValues
     }
 }

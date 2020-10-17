@@ -6,14 +6,6 @@
         android:title="@string/pref_header_lists"
         app:allowDividerBelow="false">
 
-        <com.o4x.musical.preferences.BlacklistPreference
-            android:key="blacklist"
-            android:layout="@layout/list_item_view"
-            android:summary="@string/pref_summary_blacklist"
-            android:title="@string/pref_title_blacklist"
-            app:icon="@drawable/ic_music_note_off"
-            app:allowDividerBelow="false"/>
-
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
             android:defaultValue="this_month"
             android:entries="@array/pref_playlists_last_added_interval_titles"

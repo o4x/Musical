@@ -3,8 +3,6 @@ package com.o4x.musical
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.o4x.musical.db.BlackListStoreDao
-import com.o4x.musical.db.BlackListStoreEntity
 import com.o4x.musical.db.RetroDatabase
 import com.o4x.musical.network.provideDefaultCache
 import com.o4x.musical.network.provideLastFmRest
