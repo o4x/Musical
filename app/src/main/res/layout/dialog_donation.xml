@@ -11,10 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="end|center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/md_content_padding_top"
-        android:paddingLeft="@dimen/md_dialog_frame_margin"
-        android:paddingRight="@dimen/md_dialog_frame_margin"
-        android:paddingTop="@dimen/md_content_padding_top">
+        android:padding="16dp">
 
         <ProgressBar
             android:id="@+id/progress"
@@ -41,8 +38,7 @@
         android:clipToPadding="false"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:paddingBottom="@dimen/md_content_padding_bottom"
-        android:paddingTop="@dimen/md_content_padding_top"
+        android:paddingVertical="16dp"
         android:scrollbarStyle="outsideOverlay"
         android:visibility="gone" />
 

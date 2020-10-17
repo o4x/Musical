@@ -27,6 +27,7 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.Artwork;
 import org.jaudiotagger.tag.images.ArtworkFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -249,7 +250,7 @@ public class TagUtil {
         }
 
         @Override
-        protected void onPostExecute(String[] toBeScanned) {
+        protected void onPostExecute(@NotNull String[] toBeScanned) {
             super.onPostExecute(toBeScanned);
             scan(toBeScanned);
         }
@@ -267,18 +268,14 @@ public class TagUtil {
 
         @Override
         protected Dialog createDialog(@NonNull Context context) {
-            return new MaterialDialog.Builder(context)
-                    .title(R.string.saving_changes)
-                    .cancelable(false)
-                    .progress(false, 0)
-                    .build();
+            return null;
         }
 
         @Override
         protected void onProgressUpdate(@NonNull Dialog dialog, Integer... values) {
             super.onProgressUpdate(dialog, values);
-            ((MaterialDialog) dialog).setMaxProgress(values[1]);
-            ((MaterialDialog) dialog).setProgress(values[0]);
+//            ((MaterialDialog) dialog).setMaxProgress(values[1]);
+//            ((MaterialDialog) dialog).setProgress(values[0]);
         }
 
         public static class LoadingInfo {

@@ -17,9 +17,9 @@ import androidx.navigation.fragment.findNavController
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import com.afollestad.materialdialogs.internal.ThemeSingleton
 import com.o4x.musical.App
 import com.o4x.musical.R
+import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.ui.activities.PurchaseActivity
 import com.o4x.musical.ui.activities.intro.AppIntroActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
@@ -250,10 +250,10 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
             .setNotices(R.raw.notices)
             .setTitle(R.string.licenses)
             .setNoticesCssStyle(getString(R.string.license_dialog_style)
-                .replace("{bg-color}", if (ThemeSingleton.get().darkTheme) "424242" else "ffffff")
-                .replace("{text-color}", if (ThemeSingleton.get().darkTheme) "ffffff" else "000000")
+                .replace("{bg-color}", if (requireContext().isDarkMode) "424242" else "ffffff")
+                .replace("{text-color}", if (requireContext().isDarkMode) "ffffff" else "000000")
                 .replace("{license-bg-color}",
-                    if (ThemeSingleton.get().darkTheme) "535353" else "eeeeee")
+                    if (requireContext().isDarkMode) "535353" else "eeeeee")
             )
             .setIncludeOwnLicense(true)
             .build()

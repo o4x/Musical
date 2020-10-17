@@ -19,7 +19,6 @@ import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
-import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
@@ -192,8 +191,8 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
                 if (crumb != null) {
                     ArrayListPathsAsyncTask(activity,
                         object : OnPathsListedCallback {
-                            override fun onPathsListed(toBeScanned: Array<String?>) {
-                                scanPaths(toBeScanned)
+                            override fun onPathsListed(paths: Array<String>) {
+                                scanPaths(paths)
                             }
                         }).execute(
                         ArrayListPathsAsyncTask.LoadingInfo(crumb.file, AUDIO_FILE_FILTER))
@@ -258,7 +257,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
                             R.string.some_files_are_not_listed_in_the_media_store,
                             Snackbar.LENGTH_LONG)
                             .setAction(R.string.action_scan) { v: View? ->
-                                val paths = arrayOfNulls<String>(files.size)
+                                val paths = arrayOf<String>()
                                 for (i in files.indices) {
                                     paths[i] = FileUtil.safeGetCanonicalPath(files[i])
                                 }
@@ -318,8 +317,8 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
                     R.id.action_scan -> {
                         ArrayListPathsAsyncTask(activity,
                             object : OnPathsListedCallback {
-                                override fun onPathsListed(toBeScanned: Array<String?>) {
-                                    scanPaths(toBeScanned)
+                                override fun onPathsListed(paths: Array<String>) {
+                                    scanPaths(paths)
                                 }
                             }).execute(
                             ArrayListPathsAsyncTask.LoadingInfo(file, AUDIO_FILE_FILTER))
@@ -377,7 +376,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
         }
     }
 
-    private fun scanPaths(toBeScanned: Array<String?>?) {
+    private fun scanPaths(toBeScanned: Array<String>?) {
         if (activity == null) return
         if (toBeScanned == null || toBeScanned.size < 1) {
             Toast.makeText(activity, R.string.nothing_to_scan, Toast.LENGTH_SHORT).show()
@@ -508,7 +507,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
     }
 
     class ArrayListPathsAsyncTask(context: Context?, callback: OnPathsListedCallback) :
-        ListingFilesDialogAsyncTask<ArrayListPathsAsyncTask.LoadingInfo?, String?, Array<String?>?>(
+        ListingFilesDialogAsyncTask<ArrayListPathsAsyncTask.LoadingInfo?, String?, Array<String>?>(
             context,
             500) {
         private val onPathsListedCallbackWeakReference: WeakReference<OnPathsListedCallback>
@@ -517,22 +516,22 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
             checkCallbackReference()
         }
 
-        protected override fun doInBackground(vararg params: LoadingInfo?): Array<String?>? {
+        protected override fun doInBackground(vararg params: LoadingInfo?): Array<String>? {
             return try {
                 if (isCancelled || checkCallbackReference() == null) return null
                 val info = params[0]
-                val paths: Array<String?>
+                val paths: Array<String>
                 if (info!!.file.isDirectory) {
                     val files = FileUtil.listFilesDeep(info.file, info.fileFilter)
                     if (isCancelled || checkCallbackReference() == null) return null
-                    paths = arrayOfNulls(files.size)
+                    paths = arrayOf()
                     for (i in files.indices) {
                         val f = files[i]
                         paths[i] = FileUtil.safeGetCanonicalPath(f)
                         if (isCancelled || checkCallbackReference() == null) return null
                     }
                 } else {
-                    paths = arrayOfNulls(1)
+                    paths = arrayOf()
                     paths[0] = FileUtil.safeGetCanonicalPath(info.file)
                 }
                 paths
@@ -543,7 +542,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
             }
         }
 
-        protected override fun onPostExecute(paths: Array<String?>?) {
+        override fun onPostExecute(paths: Array<String>?) {
             super.onPostExecute(paths)
             val callback = checkCallbackReference()
             if (callback != null && paths != null) {
@@ -561,7 +560,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
 
         class LoadingInfo(val file: File, val fileFilter: FileFilter)
         interface OnPathsListedCallback {
-            fun onPathsListed(paths: Array<String?>)
+            fun onPathsListed(paths: Array<String>)
         }
 
         init {
@@ -575,15 +574,11 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
         constructor(context: Context?, showDelay: Int) : super(context, showDelay) {}
 
         override fun createDialog(context: Context): Dialog {
-            return MaterialDialog.Builder(context)
+            return MaterialDialog(context)
                 .title(R.string.listing_files)
-                .progress(true, 0)
-                .progressIndeterminateStyle(true)
-                .cancelListener { dialog: DialogInterface? -> cancel(false) }
-                .dismissListener { dialog: DialogInterface? -> cancel(false) }
-                .negativeText(android.R.string.cancel)
-                .onNegative { dialog: MaterialDialog?, which: DialogAction? -> cancel(false) }
-                .show()
+                .negativeButton(android.R.string.cancel) {
+                    cancel(false)
+                }
         }
     }
 

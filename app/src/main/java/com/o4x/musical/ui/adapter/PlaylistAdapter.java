@@ -26,10 +26,8 @@ import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.model.smartplaylist.AbsSmartPlaylist;
-import com.o4x.musical.model.smartplaylist.LastAddedPlaylist;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.ui.dialogs.ClearSmartPlaylistDialog;
 import com.o4x.musical.ui.dialogs.DeletePlaylistDialog;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
@@ -135,8 +133,6 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
                 for (int i = 0; i < selection.size(); i++) {
                     Playlist playlist = selection.get(i);
                     if (playlist instanceof AbsSmartPlaylist) {
-                        AbsSmartPlaylist absSmartPlaylist = (AbsSmartPlaylist) playlist;
-                        ClearSmartPlaylistDialog.create(absSmartPlaylist).show(activity.getSupportFragmentManager(), "CLEAR_PLAYLIST_" + absSmartPlaylist.getName());
                         selection.remove(playlist);
                         i--;
                     }
@@ -231,19 +227,9 @@ public class PlaylistAdapter extends AbsMultiSelectAdapter<PlaylistAdapter.ViewH
                     final Playlist playlist = dataSet.get(getAdapterPosition());
                     final PopupMenu popupMenu = new PopupMenu(activity, view);
                     popupMenu.inflate(getItemViewType() == SMART_PLAYLIST ? R.menu.menu_item_smart_playlist : R.menu.menu_item_playlist);
-                    if (playlist instanceof LastAddedPlaylist) {
-                        popupMenu.getMenu().findItem(R.id.action_clear_playlist).setVisible(false);
-                    }
-                    popupMenu.setOnMenuItemClickListener(item -> {
-                        if (item.getItemId() == R.id.action_clear_playlist) {
-                            if (playlist instanceof AbsSmartPlaylist) {
-                                ClearSmartPlaylistDialog.create((AbsSmartPlaylist) playlist).show(activity.getSupportFragmentManager(), "CLEAR_SMART_PLAYLIST_" + playlist.getName());
-                                return true;
-                            }
-                        }
-                        return PlaylistMenuHelper.handleMenuClick(
-                                activity, dataSet.get(getAdapterPosition()), item);
-                    });
+                    popupMenu.setOnMenuItemClickListener(item ->
+                            PlaylistMenuHelper.handleMenuClick(
+                            activity, playlist, item));
                     popupMenu.show();
                 });
             }

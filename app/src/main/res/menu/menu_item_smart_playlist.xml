@@ -18,10 +18,6 @@
         android:title="@string/action_add_to_playlist" />
 
     <item
-        android:id="@+id/action_clear_playlist"
-        android:title="@string/action_clear_playlist" />
-
-    <item
         android:id="@+id/action_save_playlist"
         android:title="@string/save_playlist_title" />
 </menu>

@@ -439,5 +439,7 @@
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
     <string name="search">Search</string>
     <string name="close">CLOSE</string>
+    <string name="error">Error</string>
+    <string name="storage_perm_error">Permission error</string>
 
 </resources>

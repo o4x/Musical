@@ -27,10 +27,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEDialogPreference
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.o4x.musical.R
-import com.o4x.musical.extensions.colorButtons
 import com.o4x.musical.extensions.colorControlNormal
-import com.o4x.musical.extensions.materialDialog
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.adapter.CategoryInfoAdapter
 import com.o4x.musical.util.PreferenceUtil
@@ -63,20 +63,16 @@ class LibraryPreferenceDialog : DialogFragment() {
         recyclerView.adapter = categoryAdapter
         categoryAdapter.attachToRecyclerView(recyclerView)
 
-
-        return materialDialog(R.string.library_categories)
-            .setNeutralButton(
-                R.string.reset_action
-            ) { _, _ ->
+        return MaterialDialog(requireContext())
+            .title(R.string.library_categories)
+            .neutralButton(R.string.reset_action) {
                 categoryAdapter.categoryInfos = PreferenceUtil.defaultCategories
             }
-            .setNegativeButton(android.R.string.cancel, null)
-            .setPositiveButton(
-                android.R.string.ok
-            ) { _, _ -> updateCategories(categoryAdapter.categoryInfos) }
-            .setView(view)
-            .create()
-            .colorButtons()
+            .negativeButton(android.R.string.cancel)
+            .positiveButton(android.R.string.ok) {
+                updateCategories(categoryAdapter.categoryInfos)
+            }
+            .customView(view = view)
     }
 
     private fun updateCategories(categories: List<CategoryInfo>) {

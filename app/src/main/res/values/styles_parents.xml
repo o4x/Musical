@@ -34,7 +34,7 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="cardBackgroundColor">@color/white</item>
         <item name="defaultFooterColor">@color/grey_300</item>
-        <item name="dividerColor">@color/md_divider_black</item>
+        <item name="dividerColor">@color/grey_200</item>
         <item name="iconColor">@color/ate_secondary_text_light</item>
 
         <item name="android:windowActionBarOverlay">true</item>
@@ -52,7 +52,6 @@
         <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
         <item name="materialCardViewStyle">@style/CardWithoutCorner</item>
 
-        <item name="md_dark_theme">false</item>
         <item name="rectSelectorStrong">@drawable/rect_selector_strong</item>
     </style>
 
@@ -91,7 +90,6 @@
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
         <item name="materialCardViewStyle">@style/CardWithoutCorner</item>
 
-        <item name="md_dark_theme">true</item>
         <item name="rectSelectorStrong">@drawable/rect_selector_strong_dark</item>
     </style>
 
@@ -111,7 +109,7 @@
         <item name="android:windowBackground">@color/black</item>
         <item name="cardBackgroundColor">@color/dark_grey</item>
         <item name="defaultFooterColor">@color/black</item>
-        <item name="dividerColor">@color/grey_800</item>
+        <item name="dividerColor">@color/grey_900</item>
         <item name="iconColor">@color/grey_400</item>
     </style>
 
