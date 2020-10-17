@@ -26,6 +26,7 @@ import com.o4x.musical.loader.PlaylistSongLoader.getPlaylistSongList
 import com.o4x.musical.model.AbsCustomPlaylist
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.Song
+import com.o4x.musical.model.smartplaylist.AbsSmartPlaylist
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
 import com.o4x.musical.ui.dialogs.DeletePlaylistDialog
 import com.o4x.musical.ui.dialogs.RenamePlaylistDialog
@@ -36,8 +37,86 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
 import java.io.IOException
+import java.util.*
 
 object PlaylistMenuHelper : KoinComponent {
+
+    private fun getPlaylistSongs(activity: Activity, playlist: Playlist): List<Song> {
+        return if (playlist is AbsCustomPlaylist) playlist.getSongs()
+        else getPlaylistSongList(
+            activity,
+            playlist.id
+        )
+    }
+
+    private fun getPlaylistsSongs(activity: Activity, playlists: List<Playlist>): List<Song> {
+        val songs: MutableList<Song> = ArrayList()
+        for (playlist in playlists) {
+            if (playlist is AbsCustomPlaylist) {
+                songs.addAll(playlist.getSongs())
+            } else {
+                songs.addAll(getPlaylistSongList(activity, playlist.id))
+            }
+        }
+        return songs
+    }
+
+    private fun savePlaylist(activity: FragmentActivity, playlist: Playlist) {
+        activity.lifecycleScope.launch(IO) {
+            val msg = try {
+                String.format(
+                    activity.getString(R.string.saved_playlist_to),
+                    PlaylistsUtil.savePlaylist(
+                        getContext().applicationContext, playlist
+                    )
+                )
+            } catch (e: IOException) {
+                e.printStackTrace()
+                String.format(
+                    activity.getString(R.string.failed_to_save_playlist),
+                    e
+                )
+            }
+            withContext(Main) {
+                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun savePlaylists(activity: FragmentActivity, playlists: MutableList<Playlist>) {
+        activity.lifecycleScope.launch(IO) {
+            var successes = 0
+            var failures = 0
+
+            var dir: String? = ""
+
+            for (playlist in playlists) {
+                try {
+                    dir =
+                        PlaylistsUtil.savePlaylist(getContext().applicationContext, playlist).parent
+                    successes++
+                } catch (e: IOException) {
+                    failures++
+                    e.printStackTrace()
+                }
+            }
+
+            val msg = if (failures == 0) String.format(
+                getContext().applicationContext.getString(R.string.saved_x_playlists_to_x),
+                successes,
+                dir
+            ) else String.format(
+                getContext().applicationContext.getString(R.string.saved_x_playlists_to_x_failed_to_save_x),
+                successes,
+                dir,
+                failures
+            )
+
+            withContext(Main) {
+                Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     @JvmStatic
     fun handleMenuClick(
@@ -76,36 +155,47 @@ object PlaylistMenuHelper : KoinComponent {
                 return true
             }
             R.id.action_save_playlist -> {
-                activity.lifecycleScope.launch(IO) {
-                    val msg = try {
-                        String.format(
-                            activity.getString(R.string.saved_playlist_to),
-                            PlaylistsUtil.savePlaylist(
-                                getContext().applicationContext, playlist
-                            )
-                        )
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        String.format(
-                            activity.getString(R.string.failed_to_save_playlist),
-                            e
-                        )
-                    }
-                    withContext(Main) {
-                        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show()
-                    }
-                }
+                savePlaylist(activity, playlist)
                 return true
             }
         }
         return false
     }
 
-    private fun getPlaylistSongs(activity: Activity, playlist: Playlist): List<Song> {
-        return if (playlist is AbsCustomPlaylist) playlist.getSongs()
-        else getPlaylistSongList(
-            activity,
-            playlist.id
-        )
+    @JvmStatic
+    fun handleMultipleItemAction(
+        activity: FragmentActivity,
+        playlists: MutableList<Playlist>,
+        item: MenuItem
+    ) {
+        when (item.itemId) {
+            R.id.action_delete_playlist -> {
+                var i = 0
+                while (i < playlists.size) {
+                    val playlist: Playlist = playlists[i]
+                    if (playlist is AbsSmartPlaylist) {
+                        playlists.remove(playlist)
+                        i--
+                    }
+                    i++
+                }
+                if (playlists.size > 0) {
+                    DeletePlaylistDialog
+                        .create(playlists).show(activity.supportFragmentManager, "DELETE_PLAYLIST")
+                }
+            }
+            R.id.action_save_playlist -> {
+                if (playlists.size == 1) {
+                    handleMenuClick(activity, playlists[0], item)
+                } else {
+                    savePlaylists(activity, playlists)
+                }
+            }
+            else -> SongsMenuHelper.handleMenuClick(
+                activity,
+                getPlaylistsSongs(activity, playlists),
+                item.itemId
+            )
+        }
     }
 }

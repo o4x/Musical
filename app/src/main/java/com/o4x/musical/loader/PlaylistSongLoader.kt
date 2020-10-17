@@ -12,6 +12,7 @@ import com.o4x.musical.model.PlaylistSong
 import java.util.*
 
 object PlaylistSongLoader {
+
     @JvmStatic
     fun getPlaylistSongList(context: Context, playlistId: Long): List<PlaylistSong> {
         val songs: MutableList<PlaylistSong> = ArrayList()
