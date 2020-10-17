@@ -66,13 +66,13 @@ class LibraryPreferenceDialog : DialogFragment() {
         return MaterialDialog(requireContext())
             .title(R.string.library_categories)
             .neutralButton(R.string.reset_action) {
-                categoryAdapter.categoryInfos = PreferenceUtil.defaultCategories
+                updateCategories(PreferenceUtil.defaultCategories)
             }
             .negativeButton(android.R.string.cancel)
             .positiveButton(android.R.string.ok) {
                 updateCategories(categoryAdapter.categoryInfos)
             }
-            .customView(view = view)
+            .customView(view = view, horizontalPadding = true)
     }
 
     private fun updateCategories(categories: List<CategoryInfo>) {
