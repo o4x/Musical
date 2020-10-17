@@ -14,6 +14,7 @@ import java.util.*
  * @author Karim Abou Zeid (kabouzeid)
  */
 class DeletePlaylistDialog : DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val playlists: ArrayList<Playlist>? = requireArguments().getParcelableArrayList("playlists")
         val title: Int

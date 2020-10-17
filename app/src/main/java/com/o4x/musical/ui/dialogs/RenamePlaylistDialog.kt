@@ -14,7 +14,9 @@ import com.o4x.musical.util.PlaylistsUtil
  */
 class RenamePlaylistDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
         val playlistId = requireArguments().getLong(PLAYLIST_ID)
+
         return MaterialDialog(requireContext())
             .title(R.string.rename_playlist_title)
             .positiveButton(R.string.rename_action)
@@ -30,8 +32,7 @@ class RenamePlaylistDialog : DialogFragment() {
             ) { _, charSequence ->
                 val name: String = charSequence.toString().trim()
                 if (name.isNotEmpty()) {
-                    val playlistId1 = requireArguments().getLong(PLAYLIST_ID)
-                    PlaylistsUtil.renamePlaylist(requireActivity(), playlistId1, name)
+                    PlaylistsUtil.renamePlaylist(requireActivity(), playlistId, name)
                 }
             }
     }
