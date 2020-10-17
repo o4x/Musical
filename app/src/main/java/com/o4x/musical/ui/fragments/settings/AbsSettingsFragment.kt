@@ -71,10 +71,6 @@ abstract class AbsSettingsFragment : ATEPreferenceFragmentCompat() {
                 val fragment = LibraryPreferenceDialog.newInstance()
                 fragment.show(childFragmentManager, preference.key)
             }
-            is BlacklistPreference -> {
-                val fragment = BlacklistPreferenceDialog.newInstance()
-                fragment.show(childFragmentManager, preference.key)
-            }
             else -> super.onDisplayPreferenceDialog(preference)
         }
     }

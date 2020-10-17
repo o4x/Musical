@@ -84,7 +84,6 @@ interface Repository {
     suspend fun deleteSongInPlayCount(playCountEntity: PlayCountEntity)
     suspend fun checkSongExistInPlayCount(songId: Long): List<PlayCountEntity>
     suspend fun playCountSongs(): List<PlayCountEntity>
-    suspend fun blackListPaths(): List<BlackListStoreEntity>
     suspend fun deleteSongs(songs: List<Song>)
     suspend fun searchArtists(query: String): List<Artist>
     suspend fun searchSongs(query: String): List<Song>
@@ -256,9 +255,6 @@ class RealRepository(
 
     override suspend fun playCountSongs(): List<PlayCountEntity> =
         roomRepository.playCountSongs()
-
-    override suspend fun blackListPaths(): List<BlackListStoreEntity> =
-        roomRepository.blackListPaths()
 
     override fun observableHistorySongs(): LiveData<List<Song>> =
         Transformations.map(roomRepository.observableHistorySongs()) {

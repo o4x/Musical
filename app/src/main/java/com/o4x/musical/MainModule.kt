@@ -13,7 +13,6 @@ import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
 import com.o4x.musical.ui.viewmodel.ArtistDetailsViewModel
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
-import com.o4x.musical.util.FilePathUtil
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,16 +42,6 @@ private val roomModule = module {
     single {
         Room.databaseBuilder(androidContext(), RetroDatabase::class.java, "playlist.db")
             .allowMainThreadQueries()
-            .addCallback(object : RoomDatabase.Callback() {
-                override fun onOpen(db: SupportSQLiteDatabase) {
-                    super.onOpen(db)
-                    GlobalScope.launch(IO) {
-                        FilePathUtil.blacklistFilePaths().map {
-                            get<BlackListStoreDao>().insertBlacklistPath(BlackListStoreEntity(it))
-                        }
-                    }
-                }
-            })
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -65,10 +54,6 @@ private val roomModule = module {
     }
 
     factory {
-        get<RetroDatabase>().blackListStore()
-    }
-
-    factory {
         get<RetroDatabase>().playCountDao()
     }
 
@@ -77,7 +62,7 @@ private val roomModule = module {
     }
 
     single {
-        RealRoomRepository(get(), get(), get(), get(), get())
+        RealRoomRepository(get(), get(), get(), get())
     } bind RoomRepository::class
 }
 private val mainModule = module {
