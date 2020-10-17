@@ -230,7 +230,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
                                 Html.fromHtml(String.format(getString(R.string.not_listed_in_media_store),
                                     canonicalFile.name)),
                                 Snackbar.LENGTH_LONG)
-                                .setAction(R.string.action_scan) { v: View? ->
+                                .setAction(R.string.action_scan) {
                                     scanPaths(arrayOf(canonicalFile.path))
                                 }
                                 .setActionTextColor(themeColor(mainActivity))
