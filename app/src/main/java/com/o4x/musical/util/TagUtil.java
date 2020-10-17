@@ -5,16 +5,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.o4x.musical.R;
 import com.o4x.musical.misc.DialogAsyncTask;
-import com.o4x.musical.misc.UpdateToastMediaScannerCompletionListener;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -252,18 +248,13 @@ public class TagUtil {
         @Override
         protected void onPostExecute(@NotNull String[] toBeScanned) {
             super.onPostExecute(toBeScanned);
-            scan(toBeScanned);
+            ScannerUtilKt.scanPaths(toBeScanned);
         }
 
         @Override
         protected void onCancelled(String[] toBeScanned) {
             super.onCancelled(toBeScanned);
-            scan(toBeScanned);
-        }
-
-        private void scan(String[] toBeScanned) {
-            Context context = getContext();
-            MediaScannerConnection.scanFile(applicationContext, toBeScanned, null, context instanceof Activity ? new UpdateToastMediaScannerCompletionListener((Activity) context, toBeScanned) : null);
+            ScannerUtilKt.scanPaths(toBeScanned);
         }
 
         @Override
