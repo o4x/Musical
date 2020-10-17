@@ -3,22 +3,19 @@ package com.o4x.musical.ui.dialogs
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.pm.PackageManager
-import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.files.folderChooser
 import com.o4x.musical.R
-import com.o4x.musical.misc.UpdateToastMediaScannerCompletionListener
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ArrayListPathsAsyncTask
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ArrayListPathsAsyncTask.OnPathsListedCallback
 import com.o4x.musical.util.PreferenceUtil.startDirectory
+import com.o4x.musical.util.scanPaths
 import java.lang.ref.WeakReference
 
 /**
@@ -55,11 +52,7 @@ class ScanMediaFolderChooserDialog : DialogFragment() {
                         activity,
                         object : OnPathsListedCallback {
                             override fun onPathsListed(paths: Array<String>) {
-                                scanPaths(
-                                    activityWeakReference,
-                                    applicationContext,
-                                    paths
-                                )
+                                scanPaths(paths)
                             }
                         }).execute(
                         ArrayListPathsAsyncTask.LoadingInfo(
@@ -77,27 +70,6 @@ class ScanMediaFolderChooserDialog : DialogFragment() {
     companion object {
         fun create(): ScanMediaFolderChooserDialog {
             return ScanMediaFolderChooserDialog()
-        }
-
-        private fun scanPaths(
-            activityWeakReference: WeakReference<Activity?>,
-            applicationContext: Context,
-            toBeScanned: Array<String>?
-        ) {
-            val activity = activityWeakReference.get()
-            if (toBeScanned == null || toBeScanned.isEmpty()) {
-                Toast.makeText(
-                    applicationContext,
-                    R.string.nothing_to_scan,
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                MediaScannerConnection.scanFile(
-                    applicationContext,
-                    toBeScanned,
-                    null,
-                    activity?.let { UpdateToastMediaScannerCompletionListener(it, toBeScanned) })
-            }
         }
     }
 }

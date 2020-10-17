@@ -2,12 +2,13 @@ package com.o4x.musical.ui.fragments.mainactivity.folders
 
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
-import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.os.Environment
 import android.text.Html
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -22,7 +23,6 @@ import com.afollestad.materialcab.MaterialCab
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
-import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.menu.SongMenuHelper
@@ -31,7 +31,6 @@ import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.interfaces.LoaderIds
 import com.o4x.musical.misc.DialogAsyncTask
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
-import com.o4x.musical.misc.UpdateToastMediaScannerCompletionListener
 import com.o4x.musical.misc.WrappedAsyncTaskLoader
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.adapter.SongFileAdapter
@@ -42,6 +41,7 @@ import com.o4x.musical.util.FileUtil
 import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.PreferenceUtil.startDirectory
 import com.o4x.musical.util.ViewUtil
+import com.o4x.musical.util.scanPaths
 import com.o4x.musical.views.BreadCrumbLayout.Crumb
 import com.o4x.musical.views.BreadCrumbLayout.SelectionCallback
 import kotlinx.android.synthetic.main.fragment_folder.*
@@ -330,8 +330,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
         } else {
             popupMenu.inflate(R.menu.menu_item_file)
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
-                val itemId = item.itemId
-                when (itemId) {
+                when (val itemId = item.itemId) {
                     R.id.action_play_next, R.id.action_add_to_current_playing, R.id.action_add_to_playlist, R.id.action_go_to_album, R.id.action_go_to_artist, R.id.action_share, R.id.action_tag_editor, R.id.action_details, R.id.action_set_as_ringtone, R.id.action_delete_from_device -> {
                         ListSongsAsyncTask(activity,
                             null,
@@ -373,19 +372,6 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
         if (empty != null) {
             empty!!.visibility =
                 if (adapter == null || adapter!!.itemCount == 0) View.VISIBLE else View.GONE
-        }
-    }
-
-    private fun scanPaths(toBeScanned: Array<String>?) {
-        if (activity == null) return
-        if (toBeScanned == null || toBeScanned.size < 1) {
-            Toast.makeText(activity, R.string.nothing_to_scan, Toast.LENGTH_SHORT).show()
-        } else {
-            MediaScannerConnection.scanFile(mainActivity.applicationContext,
-                toBeScanned,
-                null,
-                UpdateToastMediaScannerCompletionListener(
-                    activity, toBeScanned))
         }
     }
 
