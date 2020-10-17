@@ -61,7 +61,7 @@ public abstract class SearchOnlineAdapter<A extends AbsSearchOnlineActivity, RM 
             SetTagsDialog.create(
                     new SetTagsDialog.On() {
                         @Override
-                        protected void allTags() {
+                        public void allTags() {
                             super.allTags();
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra(
@@ -73,7 +73,7 @@ public abstract class SearchOnlineAdapter<A extends AbsSearchOnlineActivity, RM 
                         }
 
                         @Override
-                        protected void justImage() {
+                        public void justImage() {
                             super.justImage();
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra(

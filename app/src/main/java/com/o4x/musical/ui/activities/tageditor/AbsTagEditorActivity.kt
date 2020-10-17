@@ -19,6 +19,7 @@ import androidx.core.widget.NestedScrollView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItems
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.nostra13.universalimageloader.core.DisplayImageOptions
@@ -148,7 +149,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
             R.id.save -> save()
             android.R.id.home -> {
                 if (isChanged) {
-                    DiscardTagsDialog.create().show(fragmentManager, "TAGS")
+                    DiscardTagsDialog.create().show(supportFragmentManager, "TAGS")
                     return true
                 }
                 super.onBackPressed()
@@ -205,18 +206,18 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
             getString(R.string.pick_from_local_storage),
             getString(R.string.web_search),
             getString(R.string.remove_cover)
-        )
+        ).asList()
         albumImage?.setOnClickListener {
-            MaterialDialog.Builder(this@AbsTagEditorActivity)
+            MaterialDialog(this@AbsTagEditorActivity)
                 .title(R.string.update_image)
-                .items(*items)
-                .itemsCallback { _: MaterialDialog?, _: View?, which: Int, _: CharSequence? ->
-                    when (which) {
+                .listItems(items = items) { dialog, index, text ->
+                    when (index) {
                         0 -> startImagePicker(REQUEST_CODE_SELECT_ALBUM_IMAGE)
                         1 -> searchImageOnWeb()
                         2 -> deleteAlbumImage()
                     }
-                }.show()
+                }
+                .show()
         }
     }
 
@@ -231,13 +232,12 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
                 getString(R.string.pick_from_local_storage),
                 getString(R.string.web_search),
                 getString(R.string.remove_cover)
-            )
+            ).asList()
             it.setOnClickListener {
-                MaterialDialog.Builder(this@AbsTagEditorActivity)
+                MaterialDialog(this@AbsTagEditorActivity)
                     .title(R.string.update_image)
-                    .items(*items)
-                    .itemsCallback { _: MaterialDialog?, _: View?, which: Int, _: CharSequence? ->
-                        when (which) {
+                    .listItems(items = items) { dialog, index, text ->
+                        when (index) {
                             0 -> startImagePicker(REQUEST_CODE_SELECT_ARTIST_IMAGE)
                             1 -> searchImageOnWeb()
                             2 -> deleteArtistImage()

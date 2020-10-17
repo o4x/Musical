@@ -29,7 +29,8 @@ import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEColorPreference
 import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
 import code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
 import code.name.monkey.appthemehelper.util.ColorUtil
-import com.afollestad.materialdialogs.color.ColorChooserDialog
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.color.colorChooser
 import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.util.NavigationUtil
@@ -82,13 +83,20 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
         themeColorPref.setColor(themeColor, ColorUtil.darkenColor(themeColor))
 
         themeColorPref.setOnPreferenceClickListener {
-            ColorChooserDialog.Builder(requireContext(), R.string.theme_color)
-                .customColors(ColorPalette(requireActivity()).materialColorsPrimary, ColorPalette(requireActivity()).materialColors)
-                .accentMode(true)
-                .allowUserColorInput(true)
-                .allowUserColorInputAlpha(false)
-                .preselect(themeColor)
-                .show(requireActivity())
+            MaterialDialog(requireContext())
+                .title(R.string.theme_color)
+                .colorChooser(
+                    ColorPalette(requireActivity()).materialColorsPrimary,
+                    ColorPalette(requireActivity()).materialColors,
+                    allowCustomArgb = true,
+                    changeActionButtonsColor = true,
+                    showAlphaSelector = false,
+                    initialSelection = themeColor
+                ) { _, color ->
+                    if (ThemeStore.themeColor(requireContext()) != color)
+                        ThemeStore.editTheme(requireContext()).themeColor(color).commit()
+                }
+                .show()
             return@setOnPreferenceClickListener true
         }
 

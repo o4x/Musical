@@ -1,10 +1,7 @@
 package com.o4x.musical.ui.activities.base
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
@@ -12,15 +9,12 @@ import code.name.monkey.appthemehelper.ATH
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ATHUtil
 import code.name.monkey.appthemehelper.util.ColorUtil
-import code.name.monkey.appthemehelper.util.MaterialDialogsUtil
 import code.name.monkey.appthemehelper.util.VersionUtils
 import com.o4x.musical.LanguageContextWrapper
 import com.o4x.musical.R
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
-import com.o4x.musical.extensions.primaryColor
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.util.RetroUtil
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.theme.ThemeManager
 import java.util.*
@@ -31,7 +25,6 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
         setTheme()
         super.onCreate(savedInstanceState)
         toggleScreenOn()
-        MaterialDialogsUtil.updateMaterialDialogsThemeSingleton(this)
     }
 
     private fun setTheme() {

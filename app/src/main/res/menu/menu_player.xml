@@ -2,6 +2,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_go_to_album"
+        android:orderInCategory="1"
+        android:title="@string/action_go_to_album" />
+
+    <item
+        android:id="@+id/action_go_to_artist"
+        android:orderInCategory="1"
+        android:title="@string/action_go_to_artist" />
+
+    <item
+        android:id="@+id/action_add_to_playlist"
+        android:orderInCategory="1"
+        android:title="@string/action_add_to_playlist" />
+
+    <item
+        android:id="@+id/action_share"
+        android:orderInCategory="1"
+        android:title="@string/action_share" />
+
+    <item
+        android:id="@+id/action_details"
+        android:orderInCategory="1"
+        android:title="@string/action_details" />
+
+    <item
         android:id="@+id/action_clear_playing_queue"
         android:orderInCategory="1"
         android:title="@string/action_clear_playing_queue"
@@ -21,7 +46,7 @@
 
     <item
         android:id="@+id/action_equalizer"
-        android:orderInCategory="99"
+        android:orderInCategory="1"
         android:title="@string/equalizer"
         app:showAsAction="never" />
 </menu>
