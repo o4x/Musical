@@ -41,7 +41,6 @@ import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.activities.intro.AppIntroActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
-import com.o4x.musical.ui.dialogs.ScanMediaFolderChooserDialog
 import com.o4x.musical.util.PreferenceUtil.introShown
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.util.PreferenceUtil.setIntroShown
@@ -181,8 +180,8 @@ class MainActivity : AbsMusicPanelActivity() {
                             Intent(this@MainActivity, PurchaseActivity::class.java)
                         )
                         R.id.action_scan -> {
-                            val dialog = ScanMediaFolderChooserDialog.create()
-                            dialog.show(supportFragmentManager, "SCAN_MEDIA_FOLDER_CHOOSER")
+//                            val dialog = ScanMediaFolderChooserDialog.create()
+//                            dialog.show(supportFragmentManager, "SCAN_MEDIA_FOLDER_CHOOSER")
                         }
                         R.id.nav_settings -> startActivity(
                             Intent(this@MainActivity, SettingsActivity::class.java)
