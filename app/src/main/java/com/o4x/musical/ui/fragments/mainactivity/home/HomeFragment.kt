@@ -206,6 +206,8 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
 
         nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
+            scrollPositionViewModel.setPosition(scrollY)
+
             // Scroll poster
             poster.y =
                 ((-scrollY / (displayHeight * 2 / poster.layoutParams.height.toFloat())).toInt())
