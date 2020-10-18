@@ -1,4 +1,4 @@
-package com.o4x.musical.imageloader.glide.audiocover;
+package com.o4x.musical.imageloader.glide.module.audiocover;
 
 import android.media.MediaMetadataRetriever;
 
@@ -62,7 +62,13 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
 
     @Override
     public void cancel() {
-        // cannot cancel
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException ignore) {
+                // can't do much about it
+            }
+        }
     }
 
     @NonNull

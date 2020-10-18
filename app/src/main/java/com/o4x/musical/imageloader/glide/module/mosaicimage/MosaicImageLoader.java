@@ -1,4 +1,4 @@
-package com.o4x.musical.imageloader.glide.artistimage;
+package com.o4x.musical.imageloader.glide.module.mosaicimage;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,12 +16,12 @@ import com.o4x.musical.imageloader.model.MultiImage;
  * @author Karim Abou Zeid (kabouzeid)
  */
 
-public class ArtistImageLoader implements ModelLoader<MultiImage, InputStream> {
+public class MosaicImageLoader implements ModelLoader<MultiImage, InputStream> {
 
     @Nullable
     @Override
     public LoadData<InputStream> buildLoadData(@NonNull MultiImage multiImage, int width, int height, @NonNull Options options) {
-        return  new LoadData<>(new ObjectKey(multiImage), new ArtistImageFetcher(multiImage));
+        return  new LoadData<>(new ObjectKey(multiImage), new MosaicImageFetcher(multiImage));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ArtistImageLoader implements ModelLoader<MultiImage, InputStream> {
         @NonNull
         @Override
         public ModelLoader<MultiImage, InputStream> build(@NonNull MultiModelLoaderFactory multiFactory) {
-            return new ArtistImageLoader();
+            return new MosaicImageLoader();
         }
 
         @Override

@@ -1,4 +1,4 @@
-package com.o4x.musical.imageloader.glide.artistimage;
+package com.o4x.musical.imageloader.glide.module.mosaicimage;
 
 import android.util.Log;
 
@@ -17,13 +17,13 @@ import static com.o4x.musical.imageloader.util.MosaicUtil.getMosaic;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class ArtistImageFetcher implements DataFetcher<InputStream> {
+public class MosaicImageFetcher implements DataFetcher<InputStream> {
 
     private final MultiImage model;
 
     private InputStream stream;
 
-    public ArtistImageFetcher(final MultiImage model) {
+    public MosaicImageFetcher(final MultiImage model) {
         this.model = model;
     }
 
@@ -48,7 +48,13 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
     @Override
     public void cancel() {
-
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException ignore) {
+                // can't do much about it
+            }
+        }
     }
 
     @NonNull
@@ -84,7 +90,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
         if (obj == null || obj.getClass() != this.getClass()) return false;
 
-        ArtistImageFetcher compare = (ArtistImageFetcher) obj;
+        MosaicImageFetcher compare = (MosaicImageFetcher) obj;
 
         try {
             return (compare.getId().equals(this.getId()));

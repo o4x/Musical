@@ -1,4 +1,4 @@
-package com.o4x.musical.imageloader.glide.audiocover;
+package com.o4x.musical.imageloader.glide.module.audiocover;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -10,15 +10,14 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.utils.L
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils
 import com.o4x.musical.imageloader.model.AudioFileCover
+import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.imageloader.universalil.listener.AbsImageLoadingListener
-import com.o4x.musical.imageloader.universalil.listener.AbsImageLoadingListener.CoverData
 import com.o4x.musical.imageloader.universalil.othersource.CustomImageDownloader
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.CoverUtil.Companion.createSquareCoverWithText
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
@@ -29,7 +28,7 @@ class UniversalIL {
 
 
     private var listener: AbsImageLoadingListener = AbsImageLoadingListener()
-    private var size: Int = DEFAULT_SIZE
+    private var size: Int? = null
 
     fun withListener(listener: AbsImageLoadingListener): UniversalIL {
         this.listener = listener
@@ -46,6 +45,12 @@ class UniversalIL {
         private val url: String,
         private val options: DisplayImageOptions.Builder
     ) {
+        init {
+            size?.let {
+                listener.coverData.size = it
+            }
+        }
+
         fun displayInTo(image: ImageView) {
 
             listener.coverData.setImage(image)
@@ -96,7 +101,7 @@ class UniversalIL {
         return if (PreferenceUtil.isIgnoreMediaStore()) {
             byThis(AudioFileCover(song.title, song.data))
         } else {
-            listener.coverData = CoverData(song.albumId, song.albumName, size)
+            listener.coverData = CoverData(song.albumId, song.albumName)
 
             Builder(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(), options)
         }
@@ -113,9 +118,7 @@ class UniversalIL {
     ): Builder {
 
         listener.coverData =
-            CoverData(
-                audioFileCover.hashCode().toLong(), audioFileCover.title, size
-            )
+            CoverData(audioFileCover.hashCode().toLong(), audioFileCover.title)
 
         val uri = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.filePath
         return Builder(
@@ -132,7 +135,7 @@ class UniversalIL {
     ): Builder {
 
         listener.coverData =
-            CoverData(multiImage.id, multiImage.name, size)
+            CoverData(multiImage.id, multiImage.name)
 
         return if (customImageUtil.hasCustomImage()) {
             Builder(
@@ -175,7 +178,7 @@ class UniversalIL {
         name: String,
     ): Builder {
 
-        listener.coverData = CoverData(url.hashCode().toLong(), name, size)
+        listener.coverData = CoverData(url.hashCode().toLong(), name)
 
         return Builder(
             url,
@@ -187,8 +190,6 @@ class UniversalIL {
 
 
     companion object {
-
-        private const val DEFAULT_SIZE = CoverUtil.DEFAULT_SIZE
 
         private val options: DisplayImageOptions.Builder
             get() = DisplayImageOptions.Builder()
