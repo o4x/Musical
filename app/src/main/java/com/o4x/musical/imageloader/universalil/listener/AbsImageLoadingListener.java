@@ -11,6 +11,7 @@ import androidx.loader.content.AsyncTaskLoader;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.o4x.musical.imageloader.model.CoverData;
 
 import static com.o4x.musical.util.CoverUtil.createSquareCoverWithText;
 
@@ -76,25 +77,5 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     public void onFailedBitmapReady(Bitmap failedBitmap){
         if (coverData.image != null)
             coverData.image.setImageBitmap(failedBitmap);
-    }
-
-    public static class CoverData {
-
-        @Nullable
-        ImageView image;
-
-        public final long id;
-        public final String text;
-        public final int size;
-
-        public CoverData(long id, String text, int size) {
-            this.id = id;
-            this.text = text;
-            this.size = size;
-        }
-
-        public void setImage(@Nullable ImageView image) {
-            this.image = image;
-        }
     }
 }
