@@ -2,6 +2,7 @@ package com.o4x.musical.imageloader.glide.loader
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
@@ -11,6 +12,7 @@ import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.imageloader.model.MultiImage
+import com.o4x.musical.imageloader.util.CustomCoverUtil
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Genre
@@ -69,12 +71,16 @@ class GlideLoader {
             coverData.context = context
             size?.let { coverData.size = it }
 
+
             return this
+//                .placeholder(
+//                    BitmapDrawable(context.resources, CustomCoverUtil.createCustomCover(coverData))
+//                )
                 .error(
                 requestBuilder.clone()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .load(coverData)
-            )
+                )
 
         }
 
