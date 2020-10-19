@@ -31,15 +31,12 @@ class HorizontalAlbumAdapter(
     }
 
     override fun setColors(color: Int, holder: ViewHolder) {
-        if (holder.itemView != null) {
-            val card = holder.itemView as CardView
-            card.setCardBackgroundColor(color)
-            if (holder.title != null) {
-                holder.title!!.setTextColor(getPrimaryTextColor(activity, isColorLight(color)))
-            }
-            if (holder.text != null) {
-                holder.text!!.setTextColor(getSecondaryTextColor(activity, isColorLight(color)))
-            }
+        holder.itemView.setBackgroundColor(color)
+        if (holder.title != null) {
+            holder.title!!.setTextColor(getPrimaryTextColor(activity, isColorLight(color)))
+        }
+        if (holder.text != null) {
+            holder.text!!.setTextColor(getSecondaryTextColor(activity, isColorLight(color)))
         }
     }
 
