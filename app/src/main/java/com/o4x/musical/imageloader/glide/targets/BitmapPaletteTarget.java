@@ -1,4 +1,4 @@
-package com.o4x.musical.imageloader.glide.palette;
+package com.o4x.musical.imageloader.glide.targets;
 
 import android.graphics.Bitmap;
 import android.widget.ImageView;

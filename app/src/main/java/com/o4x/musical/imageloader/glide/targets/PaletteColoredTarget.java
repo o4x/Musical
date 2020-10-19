@@ -1,9 +1,8 @@
-package com.o4x.musical.imageloader.glide.palette;
+package com.o4x.musical.imageloader.glide.targets;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,8 +14,8 @@ import com.o4x.musical.util.PhonographColorUtil;
 
 import code.name.monkey.appthemehelper.util.ATHUtil;
 
-public abstract class PhonographColoredTarget extends BitmapPaletteTarget {
-    public PhonographColoredTarget(ImageView view) {
+public abstract class PaletteColoredTarget extends BitmapPaletteTarget {
+    public PaletteColoredTarget(ImageView view) {
         super(view);
     }
 
@@ -29,7 +28,12 @@ public abstract class PhonographColoredTarget extends BitmapPaletteTarget {
     @Override
     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
         super.onResourceReady(resource, transition);
-        onColorReady(PhonographColorUtil.getColor(Palette.from(resource).generate(), getDefaultFooterColor()));
+        Palette.from(resource).generate(
+                palette -> onColorReady(
+                        PhonographColorUtil.getColor(palette, getDefaultFooterColor())
+                )
+        );
+
     }
 
     protected int getDefaultFooterColor() {
