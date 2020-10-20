@@ -27,7 +27,7 @@ import com.o4x.musical.util.PreferenceUtil
 class UniversalIL {
 
 
-    private var listener: AbsImageLoadingListener = AbsImageLoadingListener()
+    private var listener: AbsImageLoadingListener? = AbsImageLoadingListener()
     private var size: Int? = null
 
     fun withListener(listener: AbsImageLoadingListener): UniversalIL {
@@ -47,13 +47,13 @@ class UniversalIL {
     ) {
         init {
             size?.let {
-                listener.coverData.size = it
+                listener?.coverData?.size = it
             }
         }
 
         fun displayInTo(image: ImageView) {
 
-            listener.coverData.setImage(image)
+            listener?.coverData?.setImage(image)
 
             imageLoader?.displayImage(
                 url,
@@ -65,7 +65,9 @@ class UniversalIL {
         }
 
         fun loadImage(context: Context) {
-            listener.setContext(context)
+
+            listener?.setContext(context)
+
             imageLoader?.loadImage(
                 url,
                 options
@@ -82,15 +84,17 @@ class UniversalIL {
             )
 
             if (bitmap == null) {
-                val coverData: CoverData = listener.coverData
+
+                val coverData: CoverData = listener!!.coverData
+
                 bitmap = createSquareCoverWithText(
                     image.context, coverData.text, coverData.id, coverData.size
                 )
             }
 
-            listener.isLoadColorSync = true
-            listener.onLoadingStarted(url, image)
-            listener.onLoadingComplete(url, image, bitmap)
+            listener?.isLoadColorSync = true
+            listener?.onLoadingStarted(url, image)
+            listener?.onLoadingComplete(url, image, bitmap)
 
             image.setImageBitmap(bitmap)
             return bitmap
@@ -101,7 +105,7 @@ class UniversalIL {
         return if (PreferenceUtil.isIgnoreMediaStore()) {
             byThis(AudioFileCover(song.title, song.data))
         } else {
-            listener.coverData = CoverData(song.albumId, song.albumName)
+            listener?.coverData = CoverData(song.albumId, song.albumName)
 
             Builder(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(), options)
         }
@@ -117,7 +121,7 @@ class UniversalIL {
         audioFileCover: AudioFileCover
     ): Builder {
 
-        listener.coverData =
+        listener?.coverData =
             CoverData(audioFileCover.hashCode().toLong(), audioFileCover.title)
 
         val uri = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.filePath
@@ -134,7 +138,7 @@ class UniversalIL {
         multiImage: MultiImage,
     ): Builder {
 
-        listener.coverData =
+        listener?.coverData =
             CoverData(multiImage.id, multiImage.name)
 
         return if (customImageUtil.hasCustomImage()) {
@@ -178,7 +182,7 @@ class UniversalIL {
         name: String,
     ): Builder {
 
-        listener.coverData = CoverData(url.hashCode().toLong(), name)
+        listener?.coverData = CoverData(url.hashCode().toLong(), name)
 
         return Builder(
             url,
@@ -196,6 +200,7 @@ class UniversalIL {
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .cacheOnDisk(true)
                 .cacheInMemory(true)
+                .resetViewBeforeLoading(true)
 
 
         var imageLoader: ImageLoader? = null
