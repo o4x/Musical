@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    sothree:umanoOverlay="false"
-    sothree:umanoPanelHeight="0dp"
-    sothree:umanoShadowHeight="@dimen/card_elevation">
+    app:umanoOverlay="false"
+    app:umanoPanelHeight="0dp"
+    app:umanoShadowHeight="@dimen/card_elevation">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,14 +17,23 @@
             android:id="@+id/content_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/shadow_up" />
+
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/panel_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            sothree:layout_anchor="@+id/content_container"
-            sothree:layout_anchorGravity="bottom|center" >
+            app:layout_anchor="@+id/content_container"
+            app:layout_anchorGravity="bottom|center">
+
             <fragment
                 class="com.o4x.musical.ui.fragments.player.MiniPlayerFragment"
                 android:id="@+id/mini_player_fragment"

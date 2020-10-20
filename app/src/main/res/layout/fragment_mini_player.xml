@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/mini_player_height"
-    android:background="?cardBackgroundColor"
+    android:background="?attr/colorSurface"
     android:clickable="true"
-    android:focusable="false"
+    android:focusable="true"
     android:transitionName="@string/transition_mini_player"
     android:id="@+id/container"
     tools:ignore="UnusedAttribute">
@@ -51,14 +51,21 @@
 
     </LinearLayout>
 
-    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-        android:id="@+id/progress_bar"
-        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+    <FrameLayout
+        android:id="@+id/progress_bar_container"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_gravity="top"
-        app:mpb_showProgressBackground="false"
-        app:mpb_progressStyle="horizontal"
-        app:mpb_useIntrinsicPadding="false" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="top">
+
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            app:mpb_showProgressBackground="false"
+            app:mpb_progressStyle="horizontal"
+            app:mpb_useIntrinsicPadding="false" />
+
+    </FrameLayout>
 
 </FrameLayout>

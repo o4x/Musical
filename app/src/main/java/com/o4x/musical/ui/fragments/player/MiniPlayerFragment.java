@@ -13,10 +13,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.o4x.musical.R;
+import com.o4x.musical.extensions.ColorExtKt;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler;
@@ -50,6 +52,8 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
     TextView miniPlayerTitle;
     @BindView(R.id.mini_player_play_pause_button)
     ImageView miniPlayerPlayPauseButton;
+    @BindView(R.id.progress_bar_container)
+    FrameLayout progressBarContainer;
     @BindView(R.id.progress_bar)
     MaterialProgressBar progressBar;
 
@@ -86,7 +90,12 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
 
     private void setUpMiniPlayer() {
         setUpPlayPauseButton();
-        progressBar.setSupportProgressTintList(ColorStateList.valueOf(ThemeStore.Companion.themeColor(getActivity())));
+        setProgressColor(ColorExtKt.themeColor(this));
+    }
+
+    private void setProgressColor(@ColorInt int color) {
+        progressBarContainer.setBackgroundColor(ColorUtil.INSTANCE.withAlpha(color, .3f));
+        progressBar.setSupportProgressTintList(ColorStateList.valueOf(color));
     }
 
     private void setUpPlayPauseButton() {
@@ -176,7 +185,7 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
         final int fg = colors.getPrimaryTextColor();
 
         container.setBackgroundColor(colors.getActionBarColor());
-        progressBar.setSupportProgressTintList(ColorStateList.valueOf(fg));
+        setProgressColor(fg);
         miniPlayerImage.setColorFilter(fg);
         miniPlayerPlayPauseButton.setColorFilter(fg, PorterDuff.Mode.SRC_IN);
         miniPlayerTitle.setTextColor(fg);
