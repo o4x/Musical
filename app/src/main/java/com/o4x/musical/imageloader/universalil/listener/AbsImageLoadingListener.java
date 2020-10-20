@@ -2,10 +2,9 @@ package com.o4x.musical.imageloader.universalil.listener;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
-import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
@@ -23,7 +22,6 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
 
     private AsyncTaskLoader<Bitmap> task;
     protected Context context;
-    private boolean isComplete = false;
 
     public void setContext(Context context) {
         this.context = context;
@@ -45,7 +43,8 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
 
                 @Override
                 public void deliverResult(@Nullable Bitmap data) {
-                    if (isComplete) return;
+                    if (coverData.image != null)
+                    if (coverData.image.getDrawable() != null) return;
 
                     super.deliverResult(data);
                     onFailedBitmapReady(data);
@@ -71,11 +70,15 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
         super.onLoadingComplete(imageUri, view, loadedImage);
         if (task != null) task.cancelLoad();
-        isComplete = true;
+        if (coverData.image != null) {
+            coverData.image.setBackground(null);
+        }
     }
 
     public void onFailedBitmapReady(Bitmap failedBitmap){
-        if (coverData.image != null)
-            coverData.image.setImageBitmap(failedBitmap);
+        if (coverData.image != null) {
+            coverData.image.setBackground(new BitmapDrawable(context.getResources(), failedBitmap));
+//            coverData.image.setImageBitmap(failedBitmap);
+        }
     }
 }
