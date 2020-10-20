@@ -313,7 +313,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             val size = gridSize
             return object : GridLayoutManager(activity, size) {
                 override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
-                    lp.width = width / size
+                    lp.width = (width / size) - (lp.marginStart * 2 /* for left and right */)
                     lp.height = (lp.width * 1.5).toInt()
                     return super.checkLayoutParams(lp)
                 }
@@ -325,7 +325,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             val size = gridSize
             return object : LinearLayoutManager(activity, HORIZONTAL, false) {
                 override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
-                    lp.width = width / size
+                    lp.width = (width / size) - (lp.marginStart * 2 /* for left and right */)
                     lp.height = (lp.width * 1.5).toInt()
                     return super.checkLayoutParams(lp)
                 }
