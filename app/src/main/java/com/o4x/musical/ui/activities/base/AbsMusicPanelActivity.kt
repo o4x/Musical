@@ -34,6 +34,8 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
     @JvmField
     @BindView(R.id.panel_container)
     var panelContainer: FrameLayout? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(createContentView())
