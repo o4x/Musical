@@ -188,6 +188,7 @@ class UniversalIL {
             url,
             DisplayImageOptions.Builder()
                 .cacheInMemory(true)
+                .cacheOnDisk(false)
                 .imageScaleType(ImageScaleType.EXACTLY)
         )
     }
