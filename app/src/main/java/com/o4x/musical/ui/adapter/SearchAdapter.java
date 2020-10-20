@@ -85,6 +85,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 final Song song = (Song) dataSet.get(position);
                 holder.title.setText(song.getTitle());
                 holder.text.setText(MusicUtil.getSongInfoString(song));
+                new UniversalIL().byThis(song).displayInTo(holder.image);
                 break;
             default:
                 holder.title.setText(dataSet.get(position).toString());
@@ -124,6 +125,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
 
             switch (itemViewType) {
+                case SONG:
+                    break;
                 case ALBUM:
                     setImageTransitionName(activity.getString(R.string.transition_album_art));
                     break;

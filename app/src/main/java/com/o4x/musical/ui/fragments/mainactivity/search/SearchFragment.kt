@@ -57,7 +57,7 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
         voiceSearch = search.findViewById(R.id.voice_search)
         clearText = search.findViewById(R.id.clear_text)
 
-        libraryViewModel.clearSearchResult()
+
         setupRecyclerView()
         searchView.addTextChangedListener(this)
         voiceSearch.setOnClickListener { startMicSearch() }
