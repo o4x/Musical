@@ -15,7 +15,8 @@
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
         <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
-        <item name="materialCardViewStyle">@style/CardWithoutCorner</item>
+        <item name="materialCardViewStyle">@style/MaterialCardWithoutCorner</item>
+        <item name="cardViewStyle">@style/CardWithoutCorner</item>
     </style>
 
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -48,7 +49,8 @@
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
         <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
-        <item name="materialCardViewStyle">@style/CardWithoutCorner</item>
+        <item name="materialCardViewStyle">@style/MaterialCardWithoutCorner</item>
+        <item name="cardViewStyle">@style/CardWithoutCorner</item>
 
         <item name="roundSelector">@drawable/round_selector</item>
         <item name="rectSelector">@drawable/rect_selector</item>
@@ -86,7 +88,8 @@
         <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
-        <item name="materialCardViewStyle">@style/CardWithoutCorner</item>
+        <item name="materialCardViewStyle">@style/MaterialCardWithoutCorner</item>
+        <item name="cardViewStyle">@style/CardWithoutCorner</item>
 
         <item name="roundSelector">@drawable/round_selector_dark</item>
         <item name="rectSelector">@drawable/rect_selector_dark</item>
@@ -131,7 +134,11 @@
         <item name="android:contentDescription">@string/abc_action_menu_overflow_description</item>
     </style>
 
-    <style name="CardWithoutCorner" parent="Widget.MaterialComponents.CardView">
+    <style name="MaterialCardWithoutCorner" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">@dimen/cornerRadius</item>
+    </style>
+
+    <style name="CardWithoutCorner" parent="CardView">
         <item name="cardCornerRadius">@dimen/cornerRadius</item>
     </style>
 </resources>

@@ -86,8 +86,10 @@
                     android:id="@+id/queue_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingVertical="4dp"
+                    android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
-                    android:overScrollMode="always"/>
+                    android:overScrollMode="always" />
                 
                 <Space
                     android:layout_width="match_parent"
@@ -118,6 +120,8 @@
                     android:id="@+id/recently_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingVertical="4dp"
+                    android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
                     android:overScrollMode="never"/>
 
@@ -150,6 +154,8 @@
                     android:id="@+id/new_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingVertical="4dp"
+                    android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
                     android:overScrollMode="never" />
 

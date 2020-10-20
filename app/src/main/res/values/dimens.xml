@@ -8,7 +8,7 @@
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
 
-    <dimen name="cornerRadius">1dp</dimen>
+    <dimen name="cornerRadius">0dp</dimen>
 
     <!-- 4x standard action bar height (56dp) -->
     <dimen name="toolbar_scrim_height">224dp</dimen>
