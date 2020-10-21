@@ -27,11 +27,9 @@ import code.name.monkey.appthemehelper.ColorPalette
 import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEColorPreference
 import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
-import code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.color.colorChooser
-import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil
