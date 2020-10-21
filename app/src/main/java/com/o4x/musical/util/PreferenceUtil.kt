@@ -54,7 +54,6 @@ object PreferenceUtil {
     const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
     const val INITIALIZED_BLACKLIST = "initialized_blacklist"
     const val LIBRARY_CATEGORIES = "library_categories"
-    const val KEEP_SCREEN_ON = "keep_screen_on"
     const val LANGUAGE_NAME = "language_name"
     const val IGNORE_MEDIA = "ignore_media_store_artwork"
     const val REMEMBER_SHUFFLE = "remember_shuffle"
