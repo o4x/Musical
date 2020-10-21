@@ -121,11 +121,6 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
             setSummary(preference, newValue)
             true
         }
-        val tabTextMode: ATEListPreference? = findPreference("tab_text_mode")
-        tabTextMode?.setOnPreferenceChangeListener { prefs, newValue ->
-            setSummary(prefs, newValue)
-            true
-        }
 
           ////////////////////
          // IMAGE SETTINGS //
