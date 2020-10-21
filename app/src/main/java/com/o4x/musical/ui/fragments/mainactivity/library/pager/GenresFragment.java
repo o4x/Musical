@@ -45,7 +45,6 @@ public class GenresFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
                 getLibraryFragment().getMainActivity(),
                 dataSet,
                 itemLayoutRes,
-                loadUsePalette(),
                 getLibraryFragment());
     }
 
@@ -93,21 +92,6 @@ public class GenresFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
     @Override
     protected void saveGridSizeLand(int gridSize) {
         PreferenceUtil.setGenreGridSizeLand(gridSize);
-    }
-
-    @Override
-    protected void saveUsePalette(boolean usePalette) {
-        PreferenceUtil.setGenreColoredFooters(usePalette);
-    }
-
-    @Override
-    protected boolean loadUsePalette() {
-        return PreferenceUtil.genreColoredFooters();
-    }
-
-    @Override
-    protected void setUsePalette(boolean usePalette) {
-        getAdapter().usePalette(usePalette);
     }
 
     @Override

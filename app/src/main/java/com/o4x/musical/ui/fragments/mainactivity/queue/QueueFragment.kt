@@ -97,7 +97,6 @@ class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
             MusicPlayerRemote.playingQueue,
             MusicPlayerRemote.position,
             R.layout.item_list,
-            false,
             null)
         wrappedAdapter = recyclerViewDragDropManager!!.createWrappedAdapter(queueAdapter!!)
         queueLayoutManager = OverScrollLinearLayoutManager(requireContext())

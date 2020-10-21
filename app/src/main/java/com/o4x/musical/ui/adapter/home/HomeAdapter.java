@@ -14,6 +14,8 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter;
 import com.o4x.musical.ui.adapter.song.SongAdapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class HomeAdapter extends PlayingQueueAdapter {
@@ -21,14 +23,14 @@ public class HomeAdapter extends PlayingQueueAdapter {
     private final Integer limit;
     private final boolean isQueue;
 
-    public HomeAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable Integer limit, boolean usePalette, boolean isQueue) {
-        super(activity, dataSet, current, itemLayoutRes, usePalette, null);
+    public HomeAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable Integer limit, boolean isQueue) {
+        super(activity, dataSet, current, itemLayoutRes, null);
         this.limit = limit;
         this.isQueue = isQueue;
     }
 
     @Override
-    protected SongAdapter.ViewHolder createViewHolder(View view) {
+    protected SongAdapter.ViewHolder createViewHolder(@NotNull View view, int viewType) {
         return new HomeAdapter.ViewHolder(view);
     }
 
@@ -88,20 +90,4 @@ public class HomeAdapter extends PlayingQueueAdapter {
             return menu.callOnClick();
         }
     }
-
-    public void usePalette(boolean usePalette) {
-        this.usePalette = usePalette;
-        notifyDataSetChanged();
-    }
-
-    public void swapDataSet(List<Song> dataSet) {
-        this.dataSet = dataSet;
-        notifyDataSetChanged();
-    }
-
-    public List<Song> getDataSet() {
-        return dataSet;
-    }
-
-
 }

@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.ui.adapter.artist.ArtistAdapter;
+import com.o4x.musical.ui.adapter.base.AbsAdapter;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.util.MusicUtil;
@@ -25,61 +28,36 @@ import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import code.name.monkey.appthemehelper.util.ColorUtil;
 import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
-public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder, Genre> implements FastScrollRecyclerView.SectionedAdapter {
+public class GenreAdapter extends AbsAdapter<GenreAdapter.ViewHolder, Genre> {
 
-    @NonNull
-    private final AppCompatActivity activity;
-    private List<Genre> dataSet;
-    private int itemLayoutRes;
-
-    protected boolean usePalette = false;
-
-    public GenreAdapter(@NonNull AppCompatActivity activity, List<Genre> dataSet, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder) {
-        super(activity, cabHolder, R.menu.menu_media_selection);
-        this.activity = activity;
-        this.dataSet = dataSet;
-        this.itemLayoutRes = itemLayoutRes;
-        this.usePalette = usePalette;
+    public GenreAdapter(@NonNull AppCompatActivity activity, List<Genre> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
+        super(activity, dataSet, itemLayoutRes, cabHolder);
     }
 
-    public List<Genre> getDataSet() {
-        return dataSet;
-    }
-
-    public void usePalette(boolean usePalette) {
-        this.usePalette = usePalette;
-        notifyDataSetChanged();
-    }
-
-    public void swapDataSet(List<Genre> dataSet) {
-        this.dataSet = dataSet;
-        notifyDataSetChanged();
-    }
 
     @Override
     public long getItemId(int position) {
         return dataSet.get(position).hashCode();
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(itemLayoutRes, parent, false);
+    protected ViewHolder createViewHolder(@NotNull View view, int viewType) {
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Genre genre = dataSet.get(position);
+        super.onBindViewHolder(holder, position);
 
-        boolean isChecked = isChecked(genre);
-        holder.itemView.setActivated(isChecked);
+        final Genre genre = dataSet.get(position);
 
         if (holder.title != null) {
             holder.title.setText(genre.getName());
@@ -87,48 +65,14 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
         if (holder.text != null) {
             holder.text.setText(MusicUtil.getGenreInfoString(activity, genre));
         }
-        holder.itemView.setActivated(isChecked(genre));
-
-        loadArtistImage(genre, holder);
     }
 
-    private void setColors(int color, ViewHolder holder) {
-        if (holder.paletteColorContainer != null) {
-            holder.paletteColorContainer.setBackgroundColor(color);
-            if (holder.title != null) {
-                holder.title.setTextColor(MaterialValueHelper.getPrimaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
-            }
-            if (holder.text != null) {
-                holder.text.setTextColor(MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
-            }
-        }
-    }
-
-    protected void loadArtistImage(Genre genre, final ViewHolder holder) {
+    @Override
+    protected void loadImage(Genre genre, final ViewHolder holder) {
         if (holder.image == null) return;
-        new UniversalIL()
-                .withListener(new PaletteImageLoadingListener() {
-                    @Override
-                    public void onColorReady(int color) {
-                        if (usePalette)
-                            setColors(color, holder);
-                        else
-                            setColors(getDefaultFooterColor(activity), holder);
-                    }
-                })
+        getImageLoader(holder)
                 .byThis(genre)
                 .displayInTo(holder.image);
-    }
-
-    @Override
-    public int getItemCount() {
-        return dataSet.size();
-    }
-
-    @Nullable
-    @Override
-    protected Genre getIdentifier(int position) {
-        return dataSet.get(position);
     }
 
     @Override
@@ -137,12 +81,8 @@ public class GenreAdapter extends AbsMultiSelectAdapter<GenreAdapter.ViewHolder,
     }
 
     @Override
-    protected void onMultipleItemAction(MenuItem menuItem, List<Genre> selection) {
-        SongsMenuHelper.handleMenuClick(activity, getSongList(selection), menuItem.getItemId());
-    }
-
     @NonNull
-    private List<Song> getSongList(@NonNull List<Genre> genres) {
+    protected List<Song> getSongList(@NonNull List<Genre> genres) {
         final List<Song> songs = new ArrayList<>();
         for (Genre genre : genres) {
             songs.addAll(genre.getSongs()); // maybe async in future?

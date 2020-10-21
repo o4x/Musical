@@ -84,7 +84,7 @@ public class GenreDetailActivity extends AbsMusicPanelActivity implements CabHol
         ViewUtil.setUpFastScrollRecyclerViewColor(this, ((FastScrollRecyclerView) recyclerView), ThemeStore.Companion.themeColor(this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new SongAdapter(this, new ArrayList<>(), R.layout.item_list, false, this);
+        adapter = new SongAdapter(this, new ArrayList<>(), R.layout.item_list, this);
         recyclerView.setAdapter(adapter);
 
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {

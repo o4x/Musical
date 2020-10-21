@@ -15,6 +15,8 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import code.name.monkey.appthemehelper.ThemeStore;
@@ -24,13 +26,13 @@ import code.name.monkey.appthemehelper.ThemeStore;
  */
 public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
 
-    public PlaylistSongAdapter(AppCompatActivity activity, @NonNull List<Song> dataSet, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder) {
-        super(activity, dataSet, itemLayoutRes, usePalette, cabHolder, false);
+    public PlaylistSongAdapter(AppCompatActivity activity, @NonNull List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
+        super(activity, dataSet, itemLayoutRes, cabHolder, false);
         setMultiSelectMenuRes(R.menu.menu_cannot_delete_single_songs_playlist_songs_selection);
     }
 
     @Override
-    protected SongAdapter.ViewHolder createViewHolder(View view) {
+    protected SongAdapter.ViewHolder createViewHolder(@NotNull View view, int viewType) {
         return new PlaylistSongAdapter.ViewHolder(view);
     }
 

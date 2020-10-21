@@ -33,11 +33,10 @@ class DetailsSongAdapter(
     activity: AppCompatActivity?,
     dataSet: List<Song?>?,
     @LayoutRes itemLayoutRes: Int,
-    usePalette: Boolean,
     val cabHolder: CabHolder?,
     data: Any,
     colors: MediaNotificationProcessor
-) : SongAdapter(activity, dataSet, itemLayoutRes, usePalette, cabHolder) {
+) : SongAdapter(activity, dataSet, itemLayoutRes, cabHolder) {
 
     companion object {
         private const val HEADER = 0
@@ -208,7 +207,7 @@ class DetailsSongAdapter(
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-            hAlbumAdapter = HorizontalAlbumAdapter(activity, ArrayList(), true, cabHolder)
+            hAlbumAdapter = HorizontalAlbumAdapter(activity, ArrayList(), cabHolder)
             hAlbumRecyclerView.adapter = hAlbumAdapter
             hAlbumAdapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
                 override fun onChanged() {
@@ -238,9 +237,9 @@ class DetailsSongAdapter(
         }
     }
 
-    override fun loadAlbumCover(song: Song, holder: SongAdapter.ViewHolder) {
+    override fun loadImage(song: Song, holder: SongAdapter.ViewHolder) {
         if (data is Artist) {
-            super.loadAlbumCover(song, holder)
+            super.loadImage(song, holder)
         }
     }
 }
