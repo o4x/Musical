@@ -1,14 +1,8 @@
 package com.o4x.musical.ui.adapter.album
 
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
-import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
-import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryTextColor
 import com.o4x.musical.R
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.helper.menu.SongsMenuHelper
@@ -17,7 +11,7 @@ import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Song
-import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter
+import com.o4x.musical.ui.adapter.base.AbsAdapter
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.NavigationUtil
@@ -29,35 +23,19 @@ import java.util.*
  * @author Karim Abou Zeid (kabouzeid)
  */
 open class AlbumAdapter(
-    protected val activity: AppCompatActivity,
-    var dataSet: List<Album>,
-    @param:LayoutRes protected var itemLayoutRes: Int,
-    usePalette: Boolean,
+    activity: AppCompatActivity,
+    dataSet: List<Album>,
+    itemLayoutRes: Int,
     cabHolder: CabHolder?
-) : AbsMultiSelectAdapter<AlbumAdapter.ViewHolder?, Album?>(
-    activity, cabHolder, R.menu.menu_media_selection
+) : AbsAdapter<AlbumAdapter.ViewHolder, Album>(
+    activity, dataSet, itemLayoutRes, cabHolder
 ), SectionedAdapter {
 
-    protected var usePalette = false
-
-    fun usePalette(usePalette: Boolean) {
-        this.usePalette = usePalette
-        notifyDataSetChanged()
+    init {
+        setHasStableIds(true)
     }
 
-    fun swapDataSet(dataSet: List<Album>) {
-        this.dataSet = dataSet
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(activity).inflate(
-            itemLayoutRes, parent, false
-        )
-        return createViewHolder(view, viewType)
-    }
-
-    protected open fun createViewHolder(view: View, viewType: Int): ViewHolder {
+    override fun createViewHolder(view: View, viewType: Int): ViewHolder {
         return ViewHolder(view)
     }
 
@@ -73,9 +51,9 @@ open class AlbumAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+
         val album = dataSet[position]
-        val isChecked = isChecked(album)
-        holder.itemView.isActivated = isChecked
 
         if (holder.title != null) {
             holder.title!!.text = getAlbumTitle(album)
@@ -83,58 +61,24 @@ open class AlbumAdapter(
         if (holder.text != null) {
             holder.text!!.text = getAlbumText(album)
         }
-        loadAlbumCover(album, holder)
     }
 
-    protected open fun setColors(color: Int, holder: ViewHolder) {
-        if (holder.paletteColorContainer != null) {
-            holder.paletteColorContainer!!.setBackgroundColor(color)
-            if (holder.title != null) {
-                holder.title!!.setTextColor(getPrimaryTextColor(activity, isColorLight(color)))
-            }
-            if (holder.text != null) {
-                holder.text!!.setTextColor(getSecondaryTextColor(activity, isColorLight(color)))
-            }
-        }
-    }
-
-    protected open fun loadAlbumCover(album: Album, holder: ViewHolder) {
+    override fun loadImage(album: Album, holder: ViewHolder) {
         if (holder.image == null) return
-        UniversalIL()
-            .withListener(object : PaletteImageLoadingListener() {
-                override fun onColorReady(color: Int) {
-                    if (usePalette) setColors(color, holder) else setColors(
-                        getDefaultFooterColor(
-                            activity
-                        ), holder
-                    )
-                }
-            })
+        getImageLoader(holder)
             .byThis(album)
             .displayInTo(holder.image!!)
-    }
-
-    override fun getItemCount(): Int {
-        return dataSet.size
     }
 
     override fun getItemId(position: Int): Long {
         return dataSet[position].id
     }
 
-    override fun getIdentifier(position: Int): Album? {
-        return dataSet[position]
-    }
-
     override fun getName(album: Album?): String {
         return album?.title!!
     }
 
-    override fun onMultipleItemAction(menuItem: MenuItem, selection: List<Album?>) {
-        SongsMenuHelper.handleMenuClick(activity, getSongList(selection), menuItem.itemId)
-    }
-
-    private fun getSongList(albums: List<Album?>): List<Song> {
+    override fun getSongList(albums: List<Album?>): List<Song> {
         val songs: MutableList<Song> = ArrayList()
         for (album in albums) {
             album?.songs?.let { songs.addAll(it) }
@@ -175,10 +119,5 @@ open class AlbumAdapter(
                 menu!!.visibility = View.GONE
             }
         }
-    }
-
-    init {
-        this.usePalette = usePalette
-        setHasStableIds(true)
     }
 }

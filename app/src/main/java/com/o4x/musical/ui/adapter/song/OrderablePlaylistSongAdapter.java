@@ -19,6 +19,8 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.dialogs.RemoveFromPlaylistDialog;
 import com.o4x.musical.util.ViewUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -29,14 +31,14 @@ public class OrderablePlaylistSongAdapter extends PlaylistSongAdapter implements
 
     private OnMoveItemListener onMoveItemListener;
 
-    public OrderablePlaylistSongAdapter(@NonNull AppCompatActivity activity, @NonNull List<PlaylistSong> dataSet, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder, @Nullable OnMoveItemListener onMoveItemListener) {
-        super(activity, (List<Song>) (List) dataSet, itemLayoutRes, usePalette, cabHolder);
+    public OrderablePlaylistSongAdapter(@NonNull AppCompatActivity activity, @NonNull List<PlaylistSong> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder, @Nullable OnMoveItemListener onMoveItemListener) {
+        super(activity, (List<Song>) (List) dataSet, itemLayoutRes, cabHolder);
         setMultiSelectMenuRes(R.menu.menu_playlists_songs_selection);
         this.onMoveItemListener = onMoveItemListener;
     }
 
     @Override
-    protected SongAdapter.ViewHolder createViewHolder(View view) {
+    protected SongAdapter.ViewHolder createViewHolder(@NotNull View view, int viewType) {
         return new OrderablePlaylistSongAdapter.ViewHolder(view);
     }
 

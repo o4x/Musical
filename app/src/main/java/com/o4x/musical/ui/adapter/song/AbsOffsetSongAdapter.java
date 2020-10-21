@@ -14,6 +14,8 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -24,26 +26,26 @@ public abstract class AbsOffsetSongAdapter extends SongAdapter {
     protected static final int OFFSET_ITEM = 0;
     protected static final int SONG = 1;
 
-    public AbsOffsetSongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder) {
-        super(activity, dataSet, itemLayoutRes, usePalette, cabHolder);
+    public AbsOffsetSongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
+        super(activity, dataSet, itemLayoutRes, cabHolder);
     }
 
-    public AbsOffsetSongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder, boolean showSectionName) {
-        super(activity, dataSet, itemLayoutRes, usePalette, cabHolder, showSectionName);
+    public AbsOffsetSongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder, boolean showSectionName) {
+        super(activity, dataSet, itemLayoutRes, cabHolder, showSectionName);
     }
 
     @NonNull
     @Override
-    public SongAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SongAdapter.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         if (viewType == OFFSET_ITEM) {
             View view = LayoutInflater.from(activity).inflate(R.layout.item_list_single_row, parent, false);
-            return createViewHolder(view);
+            return createViewHolder(view, viewType);
         }
         return super.onCreateViewHolder(parent, viewType);
     }
 
     @Override
-    protected SongAdapter.ViewHolder createViewHolder(View view) {
+    protected SongAdapter.ViewHolder createViewHolder(@NotNull View view, int viewType) {
         return new AbsOffsetSongAdapter.ViewHolder(view);
     }
 

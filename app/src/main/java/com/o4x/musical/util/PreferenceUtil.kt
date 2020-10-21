@@ -37,10 +37,6 @@ object PreferenceUtil {
     const val ARTIST_GRID_SIZE_LAND = "artist_grid_size_land"
     const val GENRE_GRID_SIZE = "genre_grid_size"
     const val GENRE_GRID_SIZE_LAND = "genre_grid_size_land"
-    const val ALBUM_COLORED_FOOTERS = "album_colored_footers"
-    const val SONG_COLORED_FOOTERS = "song_colored_footers"
-    const val ARTIST_COLORED_FOOTERS = "artist_colored_footers"
-    const val GENRE_COLORED_FOOTERS = "genre_colored_footers"
     const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
     const val COLORED_NOTIFICATION = "colored_notification"
     const val CLASSIC_NOTIFICATION = "classic_notification"
@@ -451,54 +447,6 @@ object PreferenceUtil {
             GENRE_GRID_SIZE_LAND,
             context.resources.getInteger(R.integer.default_list_columns_land)
         )
-    }
-
-    @JvmStatic
-    fun setAlbumColoredFooters(value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(ALBUM_COLORED_FOOTERS, value)
-        editor.apply()
-    }
-
-    @JvmStatic
-    fun albumColoredFooters(): Boolean {
-        return sharedPreferences.getBoolean(ALBUM_COLORED_FOOTERS, true)
-    }
-
-    @JvmStatic
-    fun setSongColoredFooters(value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(SONG_COLORED_FOOTERS, value)
-        editor.apply()
-    }
-
-    @JvmStatic
-    fun songColoredFooters(): Boolean {
-        return sharedPreferences.getBoolean(SONG_COLORED_FOOTERS, true)
-    }
-
-    @JvmStatic
-    fun setArtistColoredFooters(value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(ARTIST_COLORED_FOOTERS, value)
-        editor.apply()
-    }
-
-    @JvmStatic
-    fun artistColoredFooters(): Boolean {
-        return sharedPreferences.getBoolean(ARTIST_COLORED_FOOTERS, true)
-    }
-
-    @JvmStatic
-    fun setGenreColoredFooters(value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(GENRE_COLORED_FOOTERS, value)
-        editor.apply()
-    }
-
-    @JvmStatic
-    fun genreColoredFooters(): Boolean {
-        return sharedPreferences.getBoolean(GENRE_COLORED_FOOTERS, true)
     }
 
 

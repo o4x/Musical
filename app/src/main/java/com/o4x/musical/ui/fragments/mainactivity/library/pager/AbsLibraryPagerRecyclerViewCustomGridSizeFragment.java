@@ -4,6 +4,7 @@ import androidx.annotation.LayoutRes;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.o4x.musical.R;
+import com.o4x.musical.util.PreferenceUtil;
 import com.o4x.musical.util.Util;
 
 /**
@@ -13,8 +14,6 @@ public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extend
     private int gridSize;
     private String sortOrder;
 
-    private boolean usePaletteInitialized;
-    private boolean usePalette;
     private int currentLayoutRes;
 
     public final int getGridSize() {
@@ -34,17 +33,6 @@ public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extend
         } else {
             return getResources().getInteger(R.integer.max_columns);
         }
-    }
-
-    /**
-     * @return whether the palette should be used at all or not
-     */
-    public final boolean usePalette() {
-        if (!usePaletteInitialized) {
-            usePalette = loadUsePalette();
-            usePaletteInitialized = true;
-        }
-        return usePalette;
     }
 
     public final String getSortOrder() {
@@ -71,12 +59,6 @@ public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extend
         }
     }
 
-    public void setAndSaveUsePalette(final boolean usePalette) {
-        this.usePalette = usePalette;
-        saveUsePalette(usePalette);
-        setUsePalette(usePalette);
-    }
-
     public void setAndSaveSortOrder(final String sortOrder) {
         this.sortOrder = sortOrder;
         saveSortOrder(sortOrder);
@@ -84,14 +66,7 @@ public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extend
     }
 
     /**
-     * @return whether the palette option should be available for the current item layout or not
-     */
-    public boolean canUsePalette() {
-        return getItemLayoutRes() == R.layout.item_grid;
-    }
-
-    /**
-     * Override to customize which item layout currentLayoutRes should be used. You might also want to override {@link #canUsePalette()} then.
+     *
      *
      * @see #getGridSize()
      */
@@ -115,12 +90,6 @@ public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extend
     protected abstract int loadGridSizeLand();
 
     protected abstract void saveGridSizeLand(int gridColumns);
-
-    protected abstract void saveUsePalette(boolean usePalette);
-
-    protected abstract boolean loadUsePalette();
-
-    protected abstract void setUsePalette(boolean usePalette);
 
     protected abstract void setGridSize(int gridSize);
 

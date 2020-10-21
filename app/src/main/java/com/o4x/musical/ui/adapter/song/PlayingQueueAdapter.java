@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -21,6 +22,8 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.ViewUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import code.name.monkey.appthemehelper.util.ColorUtil;
@@ -36,13 +39,13 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
 
     protected int current;
 
-    public PlayingQueueAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder) {
-        super(activity, dataSet, itemLayoutRes, usePalette, cabHolder);
+    public PlayingQueueAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
+        super(activity, dataSet, itemLayoutRes, cabHolder);
         this.current = current;
     }
 
     @Override
-    protected SongAdapter.ViewHolder createViewHolder(View view) {
+    protected SongAdapter.ViewHolder createViewHolder(@NotNull View view, int viewType) {
         return new ViewHolder(view);
     }
 

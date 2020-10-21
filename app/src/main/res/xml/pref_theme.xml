@@ -24,7 +24,8 @@
             android:persistent="false"
             android:summary="@string/theme_color_desc"
             android:title="@string/theme_color"
-            app:icon="@drawable/ic_colorize" />
+            app:icon="@drawable/ic_colorize"
+            app:allowDividerBelow="false"/>
 
     </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>
 

@@ -138,7 +138,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
 
     private fun setupSongsRecycler() {
         songAdapter = DetailsSongAdapter(
-            this, getSongs(), R.layout.item_list, false, this, data!!, colors!!
+            this, getSongs(), R.layout.item_list,  this, data!!, colors!!
         )
         songRecyclerView.layoutManager = LinearLayoutManager(this)
         songRecyclerView.adapter = songAdapter

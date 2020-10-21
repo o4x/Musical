@@ -20,9 +20,8 @@ import com.o4x.musical.util.MusicUtil
 class HorizontalAlbumAdapter(
     activity: AppCompatActivity,
     dataSet: List<Album>,
-    usePalette: Boolean,
     cabHolder: CabHolder?
-) : AlbumAdapter(activity, dataSet, HorizontalAdapterHelper.LAYOUT_RES, usePalette, cabHolder) {
+) : AlbumAdapter(activity, dataSet, HorizontalAdapterHelper.LAYOUT_RES, cabHolder) {
 
     override fun createViewHolder(view: View, viewType: Int): ViewHolder {
         val params = view.layoutParams as ViewGroup.MarginLayoutParams
@@ -38,21 +37,6 @@ class HorizontalAlbumAdapter(
         if (holder.text != null) {
             holder.text!!.setTextColor(getSecondaryTextColor(activity, isColorLight(color)))
         }
-    }
-
-    override fun loadAlbumCover(album: Album, holder: ViewHolder) {
-        if (holder.image == null) return
-        UniversalIL()
-            .withListener(object : PaletteImageLoadingListener() {
-                override fun onColorReady(color: Int) {
-                    if (usePalette) setColors(color, holder) else setColors(
-                        getAlbumArtistFooterColor(activity),
-                        holder
-                    )
-                }
-            })
-            .byThis(album)
-            .displayInTo(holder.image!!)
     }
 
     override fun getAlbumText(album: Album): String? {

@@ -44,7 +44,6 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
     protected SongAdapter createAdapter() {
         int itemLayoutRes = getItemLayoutRes();
         notifyLayoutResChanged(itemLayoutRes);
-        boolean usePalette = loadUsePalette();
         List<Song> dataSet = getAdapter() == null ? new ArrayList<>() : getAdapter().getDataSet();
 
         SongAdapter songAdapter;
@@ -52,7 +51,6 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
                 getLibraryFragment().getMainActivity(),
                 dataSet,
                 itemLayoutRes,
-                usePalette,
                 getLibraryFragment());
 
         return songAdapter;
@@ -101,21 +99,6 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
     @Override
     protected void saveGridSizeLand(int gridSize) {
         PreferenceUtil.setSongGridSizeLand(gridSize);
-    }
-
-    @Override
-    public void saveUsePalette(boolean usePalette) {
-        PreferenceUtil.setSongColoredFooters(usePalette);
-    }
-
-    @Override
-    public boolean loadUsePalette() {
-        return PreferenceUtil.songColoredFooters();
-    }
-
-    @Override
-    public void setUsePalette(boolean usePalette) {
-        getAdapter().usePalette(usePalette);
     }
 
     @Override

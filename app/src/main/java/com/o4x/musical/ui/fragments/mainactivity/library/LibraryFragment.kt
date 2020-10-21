@@ -126,15 +126,10 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
                 gridSizeItem.setTitle(R.string.action_grid_size_land)
             }
             setUpGridSizeMenu(absLibraryRecyclerViewCustomGridSizeFragment, gridSizeItem.subMenu)
-            menu.findItem(R.id.action_colored_footers).isChecked =
-                absLibraryRecyclerViewCustomGridSizeFragment.usePalette()
-            menu.findItem(R.id.action_colored_footers).isEnabled =
-                absLibraryRecyclerViewCustomGridSizeFragment.canUsePalette()
             setUpSortOrderMenu(absLibraryRecyclerViewCustomGridSizeFragment,
                 menu.findItem(R.id.action_sort_order).subMenu)
         } else {
             menu.removeItem(R.id.action_grid_size)
-            menu.removeItem(R.id.action_colored_footers)
             menu.removeItem(R.id.action_sort_order)
         }
         ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
@@ -153,11 +148,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
         val currentFragment = currentFragment
         if (currentFragment is AbsLibraryPagerRecyclerViewCustomGridSizeFragment<*, *>) {
             val absLibraryRecyclerViewCustomGridSizeFragment = currentFragment
-            if (item.itemId == R.id.action_colored_footers) {
-                item.isChecked = !item.isChecked
-                absLibraryRecyclerViewCustomGridSizeFragment.setAndSaveUsePalette(item.isChecked)
-                return true
-            }
             if (handleGridSizeMenuItem(absLibraryRecyclerViewCustomGridSizeFragment, item)) {
                 return true
             }
@@ -235,8 +225,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
         if (gridSize > 0) {
             item.isChecked = true
             fragment.setAndSaveGridSize(gridSize)
-            mainActivity.toolbar.menu.findItem(R.id.action_colored_footers).isEnabled =
-                fragment.canUsePalette()
             return true
         }
         return false

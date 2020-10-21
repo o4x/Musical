@@ -30,12 +30,16 @@ import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListe
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.ui.adapter.artist.ArtistAdapter;
+import com.o4x.musical.ui.adapter.base.AbsAdapter;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -46,42 +50,15 @@ import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, Song> implements MaterialCab.Callback, FastScrollRecyclerView.SectionedAdapter {
+public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> implements MaterialCab.Callback {
 
-    protected final AppCompatActivity activity;
-    protected List<Song> dataSet;
-
-    protected int itemLayoutRes;
-
-    protected boolean usePalette = false;
-    protected boolean showSectionName = true;
-
-    public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder) {
-        this(activity, dataSet, itemLayoutRes, usePalette, cabHolder, true);
+    public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
+        this(activity, dataSet, itemLayoutRes, cabHolder, true);
     }
 
-    public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, boolean usePalette, @Nullable CabHolder cabHolder, boolean showSectionName) {
-        super(activity, cabHolder, R.menu.menu_media_selection);
-        this.activity = activity;
-        this.dataSet = dataSet;
-        this.itemLayoutRes = itemLayoutRes;
-        this.usePalette = usePalette;
-        this.showSectionName = showSectionName;
+    public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder, boolean showSectionName) {
+        super(activity, dataSet, itemLayoutRes, cabHolder);
         setHasStableIds(true);
-    }
-
-    public void swapDataSet(List<Song> dataSet) {
-        this.dataSet = dataSet;
-        notifyDataSetChanged();
-    }
-
-    public void usePalette(boolean usePalette) {
-        this.usePalette = usePalette;
-        notifyDataSetChanged();
-    }
-
-    public List<Song> getDataSet() {
-        return dataSet;
     }
 
     @Override
@@ -89,23 +66,17 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
         return dataSet.get(position).getId();
     }
 
-    @Override
-    @NonNull
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(itemLayoutRes, parent, false);
-        return createViewHolder(view);
-    }
 
-    protected ViewHolder createViewHolder(View view) {
+    @Override
+    protected ViewHolder createViewHolder(@NotNull View view, int viewType) {
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final Song song = dataSet.get(position);
+        super.onBindViewHolder(holder, position);
 
-        boolean isChecked = isChecked(song);
-        holder.itemView.setActivated(isChecked);
+        final Song song = dataSet.get(position);
 
         if (holder.title != null) {
             holder.title.setText(getSongTitle(song));
@@ -113,46 +84,13 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
         if (holder.text != null) {
             holder.text.setText(getSongText(song));
         }
-
-        loadAlbumCover(song, holder);
-
     }
 
-    private void setColors(int color, ViewHolder holder) {
-        if (holder.paletteColorContainer != null) {
-            holder.paletteColorContainer.setBackgroundColor(color);
-            if (holder.title != null) {
-                holder.title.setTextColor(MaterialValueHelper.getPrimaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
-            }
-            if (holder.text != null) {
-                holder.text.setTextColor(MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
-            }
-            if (holder.menu != null) {
-                holder.menu.setColorFilter(
-                        MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)),
-                        PorterDuff.Mode.SRC_IN
-                );
-            }
-        }
-    }
-
-    protected void loadAlbumCover(Song song, final ViewHolder holder) {
+    @Override
+    protected void loadImage(Song song, final ViewHolder holder) {
 
         if (holder.image == null) return;
-        new UniversalIL()
-                .withListener(
-                        new PaletteImageLoadingListener() {
-                            @Override
-                            public void onColorReady(int color) {
-                                if (usePalette)
-                                    setColors(
-                                            color,
-                                            holder);
-                                else
-                                    setColors(getDefaultFooterColor(activity), holder);
-                            }
-                        }
-                )
+        getImageLoader(holder)
                 .byThis(song).displayInTo(holder.image);
 
     }
@@ -166,32 +104,19 @@ public class SongAdapter extends AbsMultiSelectAdapter<SongAdapter.ViewHolder, S
     }
 
     @Override
-    public int getItemCount() {
-        return dataSet.size();
-    }
-
-    @Override
-    protected Song getIdentifier(int position) {
-        return dataSet.get(position);
-    }
-
-    @Override
     protected String getName(Song song) {
         return song.getTitle();
     }
 
+    @NonNull
     @Override
-    protected void onMultipleItemAction(@NonNull MenuItem menuItem, @NonNull List<Song> selection) {
-        SongsMenuHelper.handleMenuClick(activity, selection, menuItem.getItemId());
+    protected List<Song> getSongList(@NonNull List<Song> data) {
+        return data;
     }
 
     @NonNull
     @Override
     public String getSectionName(int position) {
-        if (!showSectionName) {
-            return "";
-        }
-
         @Nullable String sectionName = null;
         switch (PreferenceUtil.getSongSortOrder()) {
             case SortOrder.SongSortOrder.SONG_A_Z:

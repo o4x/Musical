@@ -49,7 +49,6 @@ public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
                 getLibraryFragment().getMainActivity(),
                 dataSet,
                 itemLayoutRes,
-                loadUsePalette(),
                 getLibraryFragment());
     }
 
@@ -71,16 +70,6 @@ public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
     @Override
     protected void setSortOrder(String sortOrder) {
         getLoaderManager().restartLoader(LOADER_ID, null, this);
-    }
-
-    @Override
-    public boolean loadUsePalette() {
-        return PreferenceUtil.albumColoredFooters();
-    }
-
-    @Override
-    protected void setUsePalette(boolean usePalette) {
-        getAdapter().usePalette(usePalette);
     }
 
     @Override
@@ -107,11 +96,6 @@ public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
     @Override
     protected void saveGridSizeLand(int gridSize) {
         PreferenceUtil.setAlbumGridSizeLand(gridSize);
-    }
-
-    @Override
-    protected void saveUsePalette(boolean usePalette) {
-        PreferenceUtil.setAlbumColoredFooters(usePalette);
     }
 
     @Override
