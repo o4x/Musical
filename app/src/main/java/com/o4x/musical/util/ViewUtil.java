@@ -12,7 +12,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -24,6 +26,9 @@ import androidx.annotation.ColorInt;
 
 import com.o4x.musical.R;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import code.name.monkey.appthemehelper.util.ATHUtil;
 import code.name.monkey.appthemehelper.util.ColorUtil;
@@ -127,6 +132,29 @@ public class ViewUtil {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
             p.setMargins(l, t, r, b);
             v.requestLayout();
+        }
+    }
+
+    public static void setScrollBarColor(View scr, @ColorInt int color) {
+        try
+        {
+            Field mScrollCacheField = View.class.getDeclaredField("mScrollCache");
+            mScrollCacheField.setAccessible(true);
+            Object mScrollCache = mScrollCacheField.get(scr); // scr is your Scroll View
+
+            Field scrollBarField = mScrollCache.getClass().getDeclaredField("scrollBar");
+            scrollBarField.setAccessible(true);
+            Object scrollBar = scrollBarField.get(mScrollCache);
+
+            Method method = scrollBar.getClass().getDeclaredMethod("setVerticalThumbDrawable", Drawable.class);
+            method.setAccessible(true);
+
+            // Set your drawable here.
+            method.invoke(scrollBar, new ColorDrawable(color));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }
