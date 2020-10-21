@@ -415,14 +415,24 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         private fun resetToCurrentPosition() {
             if (queueAdapter.itemCount == 0) return
             queue_recycler_view.stopScroll()
-            
+            val from = queueLayoutManager.findFirstVisibleItemPosition()
             val to = MusicPlayerRemote.position
+            val delta = abs(to - from)
 
             val smoothScroller: SmoothScroller = object : LinearSmoothScroller(activity) {
                 override fun getHorizontalSnapPreference(): Int {
                     return SNAP_TO_ANY
                 }
+
+                override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                    return if (delta < 20) {
+                        super.calculateSpeedPerPixel(displayMetrics) * 5
+                    } else {
+                        super.calculateSpeedPerPixel(displayMetrics)
+                    }
+                }
             }
+            
             smoothScroller.targetPosition = to
             queueLayoutManager.startSmoothScroll(smoothScroller)
         }
