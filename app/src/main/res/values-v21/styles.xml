@@ -19,13 +19,6 @@
         <item name="android:windowBackground">@color/window_color_dark</item>
     </style>
 
-    <style name="Theme.Musical.FollowSystem" parent="Theme.Musical.Base.Adaptive">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowSharedElementsUseOverlay">false</item>
-        <item name="android:textViewStyle">@style/TextViewStyleIm</item>
-        <item name="android:windowBackground">@color/window_color</item>
-    </style>
-
     <style name="Theme.Musical.Notification" parent="@android:style/TextAppearance.Material.Notification" />
 
     <style name="Theme.Musical.Notification.Title" parent="@android:style/TextAppearance.Material.Notification.Title" />

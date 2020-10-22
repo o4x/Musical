@@ -7,7 +7,7 @@
         app:allowDividerBelow="false">
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
-            android:defaultValue="auto"
+            android:defaultValue="black"
             android:entries="@array/pref_general_theme_list_titles"
             android:entryValues="@array/pref_general_theme_list_values"
             android:key="general_theme"

@@ -22,15 +22,13 @@ fun Context.getIntRes(@IntegerRes int: Int): Int {
     return resources.getInteger(int)
 }
 
-val Context.generalThemeValue
-    get() = PreferenceUtil.getGeneralThemeValue(isSystemDarkModeEnabled())
+val generalThemeValue
+    get() = PreferenceUtil.getGeneralThemeValue()
 
 val Context.isDarkMode: Boolean
     get() {
-        if (PreferenceUtil.getGeneralThemeValue(isSystemDarkModeEnabled()) == ThemeMode.LIGHT) {
+        if (PreferenceUtil.getGeneralThemeValue() == ThemeMode.LIGHT) {
             return false
-        } else if (PreferenceUtil.getGeneralThemeValue(isSystemDarkModeEnabled()) == ThemeMode.AUTO) {
-            return isSystemDarkModeEnabled()
         }
         return true;
     }
