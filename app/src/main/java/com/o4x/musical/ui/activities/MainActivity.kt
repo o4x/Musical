@@ -39,11 +39,9 @@ import com.o4x.musical.model.Song
 import com.o4x.musical.repository.PlaylistSongsLoader
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
-import com.o4x.musical.ui.activities.intro.AppIntroActivity
+import com.o4x.musical.ui.activities.intro.PermissionActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
-import com.o4x.musical.util.PreferenceUtil.introShown
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
-import com.o4x.musical.util.PreferenceUtil.setIntroShown
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
@@ -75,9 +73,13 @@ class MainActivity : AbsMusicPanelActivity() {
         setupToolbar()
         setUpNavigationView()
 
+        if (!hasPermissions()) {
+            val myIntent = Intent(
+                this,
+                PermissionActivity::class.java
+            )
 
-        if (!checkShowIntro()) {
-            showChangelog()
+            this.startActivity(myIntent)
         }
 
         // called if the cached value was outdated (should be a rare event)
@@ -304,24 +306,6 @@ class MainActivity : AbsMusicPanelActivity() {
             }
         }
         return id
-    }
-
-    private fun checkShowIntro(): Boolean {
-        if (!introShown()) {
-            setIntroShown()
-            ChangelogDialog.setChangelogRead(this)
-            blockRequestPermissions = true
-            Handler().postDelayed({
-                startActivityForResult(
-                    Intent(
-                        this@MainActivity,
-                        AppIntroActivity::class.java
-                    ), APP_INTRO_REQUEST
-                )
-            }, 50)
-            return true
-        }
-        return false
     }
 
     private fun showChangelog() {

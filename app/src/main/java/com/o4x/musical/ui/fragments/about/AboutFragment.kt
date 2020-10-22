@@ -21,7 +21,6 @@ import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.ui.activities.PurchaseActivity
-import com.o4x.musical.ui.activities.intro.AppIntroActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
 import com.o4x.musical.ui.dialogs.DonationsDialog
 import de.psdev.licensesdialog.LicensesDialog
@@ -52,9 +51,6 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
     @JvmField
     @BindView(R.id.changelog)
     var changelog: LinearLayout? = null
-    @JvmField
-    @BindView(R.id.intro)
-    var intro: LinearLayout? = null
     @JvmField
     @BindView(R.id.licenses)
     var licenses: LinearLayout? = null
@@ -156,7 +152,6 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
 
     private fun setUpOnClickListeners() {
         changelog!!.setOnClickListener(this)
-        intro!!.setOnClickListener(this)
         licenses!!.setOnClickListener(this)
         followOnTwitter!!.setOnClickListener(this)
         forkOnGitHub!!.setOnClickListener(this)
@@ -192,8 +187,6 @@ class AboutFragment : Fragment(R.layout.fragment_about), View.OnClickListener {
                 "CHANGELOG_DIALOG")
         } else if (v === licenses) {
             showLicenseDialog()
-        } else if (v === intro) {
-            startActivity(Intent(requireContext(), AppIntroActivity::class.java))
         } else if (v === followOnTwitter) {
             openUrl(TWITTER)
         } else if (v === forkOnGitHub) {

@@ -441,5 +441,7 @@
     <string name="close">CLOSE</string>
     <string name="error">Error</string>
     <string name="storage_perm_error">Permission error</string>
+    <string name="permission_title">Storage Access</string>
+    <string name="permission_summary">The app needs permission to access your device storage for playing music</string>
 
 </resources>
