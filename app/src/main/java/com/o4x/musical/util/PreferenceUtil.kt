@@ -502,15 +502,14 @@ object PreferenceUtil {
 
 
     @JvmStatic
-    fun getGeneralThemeValue(isSystemDark: Boolean): ThemeMode {
+    fun getGeneralThemeValue(): ThemeMode {
         val themeMode: String =
             sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
         return when (themeMode) {
             "light" -> ThemeMode.LIGHT
             "dark" -> ThemeMode.DARK
             "black" -> ThemeMode.BLACK
-            "auto" -> ThemeMode.AUTO
-            else -> ThemeMode.AUTO
+            else -> ThemeMode.BLACK
         }
     }
 

@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Musical.Base.Adaptive" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="toolbarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="mcab_popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="roundSelector">@drawable/round_selector</item>
-        <item name="rectSelector">@drawable/rect_selector</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
-        <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
-        <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
-        <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
-        <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
-        <item name="materialCardViewStyle">@style/MaterialCardWithoutCorner</item>
-        <item name="cardViewStyle">@style/CardWithoutCorner</item>
-    </style>
-
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/deep_purple_A200</item>
         <item name="colorPrimaryVariant">@color/deep_purple_500</item>

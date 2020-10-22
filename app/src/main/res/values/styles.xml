@@ -1,18 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <style name="Theme.Musical" parent="Theme.Musical.Base" />
-
-    <style name="Theme.Musical.Light" parent="Theme.Musical.Base.Light">
-    </style>
-
-    <style name="Theme.Musical.Black" parent="Theme.Musical.Base.Black">
-    </style>
-
-    <style name="Theme.Musical.FollowSystem" parent="Theme.Musical.Base.Adaptive">
-    </style>
+    <style name="Theme.Musical.Light" parent="Theme.Musical.Base.Light" />
+    <style name="Theme.Musical.Black" parent="Theme.Musical.Base.Black" />
 
     <style name="Theme.Musical.Notification" parent="@android:style/TextAppearance.StatusBar.EventContent" />
-
     <style name="Theme.Musical.Notification.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title" />
 
     <style name="OverFlowButton">

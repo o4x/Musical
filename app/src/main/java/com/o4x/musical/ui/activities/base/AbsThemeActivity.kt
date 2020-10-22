@@ -28,8 +28,8 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
     }
 
     private fun setTheme() {
-        setTheme(ThemeManager.getThemeResValue(this))
-        setDefaultNightMode(ThemeManager.getNightMode(this))
+        setTheme(ThemeManager.getThemeResValue())
+        setDefaultNightMode(ThemeManager.getNightMode())
         DynamicShortcutManager(this).updateDynamicShortcuts()
     }
 

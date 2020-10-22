@@ -22,7 +22,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Musical.Light"
+        android:theme="@style/Theme.Musical.Black"
         tools:ignore="UnusedAttribute">
         <activity android:name=".ui.activities.PlayerActivity" />
         <activity android:name=".ui.activities.MainActivity">
