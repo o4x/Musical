@@ -30,14 +30,14 @@ public class SongMenuHelper {
 
     public static boolean handleMenuClick(@NonNull FragmentActivity activity, @NonNull Song song, int menuItemId) {
         switch (menuItemId) {
-            case R.id.action_set_as_ringtone:
-                if (RingtoneManager.requiresDialog(activity)) {
-                    RingtoneManager.showDialog(activity);
-                } else {
-                    RingtoneManager ringtoneManager = new RingtoneManager();
-                    ringtoneManager.setRingtone(activity, song.getId());
-                }
-                return true;
+//            case R.id.action_set_as_ringtone:
+//                if (RingtoneManager.requiresDialog(activity)) {
+//                    RingtoneManager.showDialog(activity);
+//                } else {
+//                    RingtoneManager ringtoneManager = new RingtoneManager();
+//                    ringtoneManager.setRingtone(activity, song.getId());
+//                }
+//                return true;
             case R.id.action_share:
                 activity.startActivity(Intent.createChooser(MusicUtil.createShareSongFileIntent(song, activity), null));
                 return true;
