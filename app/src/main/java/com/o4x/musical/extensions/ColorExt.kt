@@ -87,6 +87,20 @@ fun SeekBar.addthemeColor() {
     thumbTintList = colorState
 }
 
+fun MaterialButton.themeBackgroundColor() {
+    backgroundTintList = ColorStateList.valueOf(ThemeStore.themeColor(context))
+}
+
+
+fun MaterialButton.themeOutlineColor() {
+    val color = ThemeStore.themeColor(context)
+    val colorStateList = ColorStateList.valueOf(color)
+    iconTint = colorStateList
+    strokeColor = colorStateList
+    setTextColor(colorStateList)
+    rippleColor = colorStateList
+}
+
 fun Button.accentTextColor() {
     setTextColor(ThemeStore.themeColor(context))
 }

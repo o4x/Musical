@@ -48,7 +48,6 @@ object PreferenceUtil {
     const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
     const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
     const val LAST_CHANGELOG_VERSION = "last_changelog_version"
-    const val INTRO_SHOWN = "intro_shown"
     const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"
     const val START_DIRECTORY = "start_directory"
     const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
@@ -457,18 +456,6 @@ object PreferenceUtil {
     @JvmStatic
     val lastChangelogVersion: Int
         get() = sharedPreferences.getInt(LAST_CHANGELOG_VERSION, -1)
-
-    @JvmStatic
-    @SuppressLint("CommitPrefEdits")
-    fun setIntroShown() {
-        // don't use apply here
-        sharedPreferences.edit().putBoolean(INTRO_SHOWN, true).apply()
-    }
-
-    @JvmStatic
-    fun introShown(): Boolean {
-        return sharedPreferences.getBoolean(INTRO_SHOWN, false)
-    }
 
     @JvmStatic
     fun rememberShuffle(): Boolean {
