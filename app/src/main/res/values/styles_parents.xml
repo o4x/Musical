@@ -19,6 +19,7 @@
         <item name="defaultFooterColor">@color/grey_300</item>
         <item name="dividerColor">@color/grey_200</item>
         <item name="iconColor">@color/ate_secondary_text_light</item>
+        <item name="colorBackgroundFloating">@color/white</item>
 
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActivityTransitions">true</item>
@@ -33,6 +34,8 @@
         <item name="popupWindowStyle">@style/MaterialPopupMenuStyle</item>
         <item name="materialCardViewStyle">@style/MaterialCardWithoutCorner</item>
         <item name="cardViewStyle">@style/CardWithoutCorner</item>
+
+        <item name="md_corner_radius">@dimen/cornerRadius</item>
 
         <item name="roundSelector">@drawable/round_selector</item>
         <item name="rectSelector">@drawable/rect_selector</item>
@@ -57,8 +60,8 @@
         <item name="defaultFooterColor">@color/dark_grey</item>
         <item name="dividerColor">@color/grey_800</item>
         <item name="iconColor">@color/grey_400</item>
+        <item name="colorBackgroundFloating">@color/black_color</item>
 
-        <item name="md_background_color">@color/darkColorSurface</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="windowActionBarOverlay">true</item>
@@ -72,6 +75,8 @@
         <item name="popupMenuStyle">@style/MaterialPopupMenuStyle</item>
         <item name="materialCardViewStyle">@style/MaterialCardWithoutCorner</item>
         <item name="cardViewStyle">@style/CardWithoutCorner</item>
+
+        <item name="md_corner_radius">@dimen/cornerRadius</item>
 
         <item name="roundSelector">@drawable/round_selector_dark</item>
         <item name="rectSelector">@drawable/rect_selector_dark</item>
@@ -96,6 +101,7 @@
         <item name="defaultFooterColor">@color/black</item>
         <item name="dividerColor">@color/grey_900</item>
         <item name="iconColor">@color/grey_400</item>
+        <item name="colorBackgroundFloating">@color/black</item>
     </style>
 
     <style name="FabParent">
