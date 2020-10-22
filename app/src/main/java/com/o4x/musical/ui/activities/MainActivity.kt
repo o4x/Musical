@@ -52,8 +52,6 @@ import org.koin.android.ext.android.get
 
 class MainActivity : AbsMusicPanelActivity() {
 
-    private var blockRequestPermissions = false
-
     lateinit var navController: NavController
 
     lateinit var toggle: ActionBarDrawerToggle
@@ -61,6 +59,15 @@ class MainActivity : AbsMusicPanelActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!hasPermissions()) {
+            val myIntent = Intent(
+                this,
+                PermissionActivity::class.java
+            )
+
+            this.startActivity(myIntent)
+        }
 
         ButterKnife.bind(this)
 
@@ -72,15 +79,6 @@ class MainActivity : AbsMusicPanelActivity() {
         setupNavController()
         setupToolbar()
         setUpNavigationView()
-
-        if (!hasPermissions()) {
-            val myIntent = Intent(
-                this,
-                PermissionActivity::class.java
-            )
-
-            this.startActivity(myIntent)
-        }
 
         // called if the cached value was outdated (should be a rare event)
         UniversalIL.initImageLoader(this)
@@ -125,20 +123,6 @@ class MainActivity : AbsMusicPanelActivity() {
 
     fun openSearch() {
         navController.navigate(R.id.action_to_search)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == APP_INTRO_REQUEST) {
-            blockRequestPermissions = false
-            if (!hasPermissions()) {
-                requestPermissions()
-            }
-        }
-    }
-
-    override fun requestPermissions() {
-        if (!blockRequestPermissions) super.requestPermissions()
     }
 
 
@@ -355,6 +339,5 @@ class MainActivity : AbsMusicPanelActivity() {
 
     companion object {
         val TAG = MainActivity::class.java.simpleName
-        const val APP_INTRO_REQUEST = 100
     }
 }

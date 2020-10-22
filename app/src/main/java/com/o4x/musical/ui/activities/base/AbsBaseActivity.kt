@@ -43,13 +43,6 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
         permissionDeniedMessage = null
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        if (!hasPermissions()) {
-            requestPermissions()
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         val hasPermissions = hasPermissions()
