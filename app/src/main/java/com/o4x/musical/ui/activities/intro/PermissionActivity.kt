@@ -15,16 +15,26 @@
 package com.o4x.musical.ui.activities.intro
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.core.text.HtmlCompat
 import code.name.monkey.appthemehelper.ThemeStore
 import com.o4x.musical.R
+import com.o4x.musical.extensions.backgroundColor
 import com.o4x.musical.extensions.themeBackgroundColor
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
+import com.o4x.musical.util.CoverUtil
 import kotlinx.android.synthetic.main.activity_permission.*
+import kotlin.properties.Delegates
 
 class PermissionActivity : AbsMusicServiceActivity() {
+
+    private var baseColor by Delegates.notNull<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView((R.layout.activity_permission))
@@ -33,13 +43,16 @@ class PermissionActivity : AbsMusicServiceActivity() {
         setNavigationBarDividerColorAuto()
         setLightNavigationBar(true)
         setTaskDescriptionColorAuto()
+
+        baseColor = resources.getColor(R.color.deep_purple_A200)
+
         setupTitle()
 
         storagePermission.setButtonClick {
             requestPermissions()
         }
 
-        finish.themeBackgroundColor()
+        finish.themeBackgroundColor(baseColor)
         finish.setOnClickListener {
             if (hasPermissions()) {
                 startActivity(
@@ -54,10 +67,13 @@ class PermissionActivity : AbsMusicServiceActivity() {
     }
 
     private fun setupTitle() {
-        val color = ThemeStore.themeColor(this)
-        val hexColor = String.format("#%06X", 0xFFFFFF and color)
+        val hexColor = String.format("#%06X", 0xFFFFFF and baseColor)
         val appName = HtmlCompat.fromHtml(
-            "Hello there! <br>Welcome to <b><span  style='color:$hexColor';>Musical</span></b>",
+            "Welcome to <b><span  style='color:$hexColor';>Musical</span></b>" +
+                    " <br/> " +
+                    "We love to see you <span  style='color:$hexColor';>SMILE</span> :)" +
+                    " <br/> " +
+                    "I have not found another sentence yet.",
             HtmlCompat.FROM_HTML_MODE_COMPACT
         )
         appNameText.text = appName

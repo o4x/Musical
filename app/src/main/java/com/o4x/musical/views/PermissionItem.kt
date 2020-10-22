@@ -2,8 +2,10 @@ package com.o4x.musical.views
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import androidx.annotation.ColorInt
 import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.R
@@ -16,6 +18,9 @@ class PermissionItem @JvmOverloads constructor(
     defStyleAttr: Int = -1,
     defStyleRes: Int = -1
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
+
+
+
     init {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.PermissionItem, 0, 0)
         inflate(context, R.layout.item_permission, this)
@@ -30,10 +35,13 @@ class PermissionItem @JvmOverloads constructor(
                 R.drawable.ic_album_white_24dp
             )
         )
-        val color = ThemeStore.themeColor(context)
+
+        val color =
+            attributes.getColor(R.styleable.PermissionItem_permissionColor, ThemeStore.themeColor(context))
+
         number.backgroundTintList = ColorStateList.valueOf(ColorUtil.withAlpha(color, 0.22f))
 
-        button.themeOutlineColor()
+        button.themeOutlineColor(color)
         attributes.recycle()
     }
 

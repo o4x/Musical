@@ -91,6 +91,17 @@ fun MaterialButton.themeBackgroundColor() {
     backgroundTintList = ColorStateList.valueOf(ThemeStore.themeColor(context))
 }
 
+fun MaterialButton.themeBackgroundColor(color: Int) {
+    backgroundTintList = ColorStateList.valueOf(color)
+}
+
+fun MaterialButton.themeOutlineColor(color: Int) {
+    val colorStateList = ColorStateList.valueOf(color)
+    iconTint = colorStateList
+    strokeColor = colorStateList
+    setTextColor(colorStateList)
+    rippleColor = colorStateList
+}
 
 fun MaterialButton.themeOutlineColor() {
     val color = ThemeStore.themeColor(context)

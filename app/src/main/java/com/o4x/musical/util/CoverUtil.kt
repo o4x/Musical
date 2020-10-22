@@ -2,11 +2,12 @@ package com.o4x.musical.util
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import androidx.annotation.ColorInt
 import androidx.core.graphics.drawable.toBitmap
 import code.name.monkey.appthemehelper.util.ColorUtil
-import com.o4x.musical.extensions.getBitmapDrawable
 import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.extensions.textColorPrimary
 import com.o4x.musical.extensions.withAlpha

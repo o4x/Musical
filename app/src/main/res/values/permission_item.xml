@@ -6,5 +6,6 @@
         <attr name="permissionTitleNumber" format="string" />
         <attr name="permissionIcon" format="integer" />
         <attr name="permissionButtonTitle" format="string" />
+        <attr name="permissionColor" format="color" />
     </declare-styleable>
 </resources>
