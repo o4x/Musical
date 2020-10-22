@@ -432,7 +432,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                     }
                 }
             }
-            
+
             smoothScroller.targetPosition = to
             queueLayoutManager.startSmoothScroll(smoothScroller)
         }
