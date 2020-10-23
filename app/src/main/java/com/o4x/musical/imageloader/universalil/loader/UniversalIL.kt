@@ -18,7 +18,6 @@ import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.CoverUtil.Companion.createSquareCoverWithText
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.PreferenceUtil
@@ -53,7 +52,7 @@ class UniversalIL {
 
         fun displayInTo(image: ImageView) {
 
-            listener?.coverData?.setImage(image)
+            listener?.coverData?.image = image
 
             imageLoader?.displayImage(
                 url,
@@ -87,9 +86,7 @@ class UniversalIL {
 
                 val coverData: CoverData = listener!!.coverData
 
-                bitmap = createSquareCoverWithText(
-                    image.context, coverData.text, coverData.id, coverData.size
-                )
+                bitmap = coverData.create(image.context);
             }
 
             listener?.isLoadColorSync = true
@@ -103,9 +100,9 @@ class UniversalIL {
 
     fun byThis(song: Song): Builder {
         return if (PreferenceUtil.isIgnoreMediaStore()) {
-            byThis(AudioFileCover(song.title, song.data))
+            byThis(AudioFileCover(song.albumName, song.data))
         } else {
-            listener?.coverData = CoverData(song.albumId, song.albumName)
+            listener?.coverData = CoverData.from(song)
 
             Builder(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId).toString(), options)
         }
@@ -121,8 +118,7 @@ class UniversalIL {
         audioFileCover: AudioFileCover
     ): Builder {
 
-        listener?.coverData =
-            CoverData(audioFileCover.hashCode().toLong(), audioFileCover.title)
+        listener?.coverData = CoverData.from(audioFileCover)
 
         val uri = CustomImageDownloader.SCHEME_AUDIO + audioFileCover.filePath
         return Builder(
@@ -138,8 +134,7 @@ class UniversalIL {
         multiImage: MultiImage,
     ): Builder {
 
-        listener?.coverData =
-            CoverData(multiImage.id, multiImage.name)
+        listener?.coverData = CoverData.from(multiImage)
 
         return if (customImageUtil.hasCustomImage()) {
             Builder(
@@ -182,7 +177,7 @@ class UniversalIL {
         name: String,
     ): Builder {
 
-        listener?.coverData = CoverData(url.hashCode().toLong(), name)
+        listener?.coverData = CoverData.from(url, name)
 
         return Builder(
             url,

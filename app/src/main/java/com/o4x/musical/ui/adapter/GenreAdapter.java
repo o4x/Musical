@@ -71,8 +71,8 @@ public class GenreAdapter extends AbsAdapter<GenreAdapter.ViewHolder, Genre> {
     protected void loadImage(Genre genre, final ViewHolder holder) {
         if (holder.image == null) return;
         getImageLoader(holder)
-                .byThis(genre)
-                .displayInTo(holder.image);
+                .load(genre)
+                .into(holder.image);
     }
 
     @Override

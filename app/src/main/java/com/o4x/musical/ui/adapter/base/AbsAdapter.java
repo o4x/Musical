@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
+import com.o4x.musical.imageloader.glide.loader.GlideLoader;
+import com.o4x.musical.imageloader.glide.targets.PaletteColoredTargetListener;
 import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
@@ -69,9 +71,9 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
 
     protected abstract void loadImage(I data, final VH holder);
 
-    protected UniversalIL getImageLoader(final VH holder) {
-        return new UniversalIL()
-                .withListener(new PaletteImageLoadingListener() {
+    protected GlideLoader.GlideBuilder getImageLoader(final VH holder) {
+        return GlideLoader.with(activity)
+                .withListener(new PaletteColoredTargetListener() {
                     @Override
                     public void onColorReady(int color) {
                         setColors(color, holder);

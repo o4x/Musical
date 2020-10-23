@@ -1,11 +1,16 @@
 package com.o4x.musical.imageloader.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.o4x.musical.model.Song;
 import com.o4x.musical.util.CoverUtil;
+
+import static com.o4x.musical.util.CoverUtil.createSquareCoverWithText;
 
 public class CoverData {
 
@@ -23,11 +28,24 @@ public class CoverData {
         this.text = text;
     }
 
-    public void setImage(@Nullable ImageView image) {
-        this.image = image;
+    public Bitmap create(@NonNull Context context) {
+        return createSquareCoverWithText(
+                context, text, id, size);
     }
 
-    public void setContext(@Nullable Context context) {
-        this.context = context;
+    public static CoverData from(Song song) {
+        return new CoverData(song.getAlbumId(), song.getAlbumName());
+    }
+
+    public static CoverData from(AudioFileCover audioFileCover) {
+        return new CoverData(audioFileCover.hashCode(), audioFileCover.title);
+    }
+
+    public static CoverData from(MultiImage multiImage) {
+        return new CoverData(multiImage.id, multiImage.name);
+    }
+
+    public static CoverData from(String url, String name) {
+        return new CoverData(url.hashCode(), name);
     }
 }

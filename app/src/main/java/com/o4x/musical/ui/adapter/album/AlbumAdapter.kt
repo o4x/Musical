@@ -66,8 +66,8 @@ open class AlbumAdapter(
     override fun loadImage(album: Album, holder: ViewHolder) {
         if (holder.image == null) return
         getImageLoader(holder)
-            .byThis(album)
-            .displayInTo(holder.image!!)
+            .load(album)
+            .into(holder.image!!)
     }
 
     override fun getItemId(position: Int): Long {
