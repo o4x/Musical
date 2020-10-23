@@ -1,51 +1,31 @@
 package com.o4x.musical.ui.adapter.song;
 
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
-import androidx.loader.content.AsyncTaskLoader;
 
 import com.afollestad.materialcab.MaterialCab;
-import com.bumptech.glide.request.FutureTarget;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongMenuHelper;
-import com.o4x.musical.helper.menu.SongsMenuHelper;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.glide.targets.PaletteColoredTarget;
-import com.o4x.musical.imageloader.universalil.listener.AbsImageLoadingListener;
-import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
+import com.o4x.musical.imageloader.glide.targets.PaletteColoredTargetListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.adapter.artist.ArtistAdapter;
 import com.o4x.musical.ui.adapter.base.AbsAdapter;
-import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import code.name.monkey.appthemehelper.util.ColorUtil;
-import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -88,11 +68,9 @@ public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> implem
 
     @Override
     protected void loadImage(Song song, final ViewHolder holder) {
-
         if (holder.image == null) return;
         getImageLoader(holder)
-                .byThis(song).displayInTo(holder.image);
-
+                .load(song).into(holder.image);
     }
 
     protected String getSongTitle(Song song) {

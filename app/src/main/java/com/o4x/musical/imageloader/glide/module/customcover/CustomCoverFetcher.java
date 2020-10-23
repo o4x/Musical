@@ -10,7 +10,6 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.data.DataFetcher;
 import com.o4x.musical.imageloader.model.CoverData;
-import com.o4x.musical.imageloader.util.CustomCoverUtil;
 
 public class CustomCoverFetcher implements DataFetcher<Bitmap> {
 
@@ -31,7 +30,7 @@ public class CustomCoverFetcher implements DataFetcher<Bitmap> {
             @Nullable
             @Override
             public Bitmap loadInBackground() {
-                return CustomCoverUtil.createCustomCover(coverData);
+                return coverData.create(coverData.context);
             }
 
             @Override

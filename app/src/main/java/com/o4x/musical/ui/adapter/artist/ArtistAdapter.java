@@ -74,8 +74,8 @@ public class ArtistAdapter extends AbsAdapter<ArtistAdapter.ViewHolder, Artist> 
     protected void loadImage(Artist artist, final ViewHolder holder) {
         if (holder.image == null) return;
         getImageLoader(holder)
-                .byThis(artist)
-                .displayInTo(holder.image);
+                .load(artist)
+                .into(holder.image);
     }
 
     @Override

@@ -32,13 +32,13 @@ public class AbsImageLoadingListener extends SimpleImageLoadingListener {
         super.onLoadingStarted(imageUri, view);
         if (view != null)
             context = view.getContext();
+
         if (coverData != null && !isLoadColorSync) {
 
             task = new AsyncTaskLoader<Bitmap>(context) {
                 @Override
                 public Bitmap loadInBackground() {
-                    return createSquareCoverWithText(
-                            context, coverData.text, coverData.id, coverData.size);
+                    return coverData.create(context);
                 }
 
                 @Override
