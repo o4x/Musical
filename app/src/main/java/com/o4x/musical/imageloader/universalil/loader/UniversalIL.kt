@@ -194,7 +194,7 @@ class UniversalIL {
         private val options: DisplayImageOptions.Builder
             get() = DisplayImageOptions.Builder()
                 .imageScaleType(ImageScaleType.EXACTLY)
-                .cacheOnDisk(true)
+                .cacheOnDisk(false)
                 .cacheInMemory(true)
                 .resetViewBeforeLoading(true)
 
