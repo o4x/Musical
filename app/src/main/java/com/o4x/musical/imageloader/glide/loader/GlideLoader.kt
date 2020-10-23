@@ -26,7 +26,7 @@ class GlideLoader {
 
     companion object {
 
-        val DEFAULT_DISK_CACHE_STRATEGY: DiskCacheStrategy = DiskCacheStrategy.NONE
+        val DEFAULT_DISK_CACHE_STRATEGY: DiskCacheStrategy = DiskCacheStrategy.AUTOMATIC
         const val DEFAULT_PLACEHOLDER_IMAGE: Int = R.drawable.default_album_art
 
 
