@@ -16,7 +16,6 @@ import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.imageloader.model.MultiImage
-import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Genre
@@ -164,6 +163,11 @@ class GlideLoader {
                 .into(
                     BitmapPaletteTarget(image, listener)
                 )
+        }
+
+        fun into(target: Target<Bitmap>) {
+            requestBuilder
+                .into(target)
         }
 
         fun intoSync(image: ImageView) {

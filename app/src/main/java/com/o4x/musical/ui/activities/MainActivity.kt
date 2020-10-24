@@ -34,7 +34,6 @@ import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper.getSongs
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.model.Song
 import com.o4x.musical.repository.PlaylistSongsLoader
 import com.o4x.musical.service.MusicService
@@ -79,9 +78,6 @@ class MainActivity : AbsMusicPanelActivity() {
         setupNavController()
         setupToolbar()
         setUpNavigationView()
-
-        // called if the cached value was outdated (should be a rare event)
-        UniversalIL.initImageLoader(this)
     }
 
 

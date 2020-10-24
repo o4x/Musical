@@ -13,11 +13,8 @@ import androidx.fragment.app.FragmentManager;
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
 import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener;
-import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.util.Util;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
 
 import org.jetbrains.annotations.NotNull;

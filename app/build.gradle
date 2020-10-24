@@ -193,9 +193,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
-
-    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-
     implementation 'com.diogobernardino:williamchart:2.2'
     implementation 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
 

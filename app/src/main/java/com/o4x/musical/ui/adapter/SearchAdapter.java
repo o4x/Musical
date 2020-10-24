@@ -7,14 +7,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.menu.SongMenuHelper;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Song;

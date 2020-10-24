@@ -8,9 +8,6 @@ import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote.enqueue
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.MusicPlayerRemote.playNext
-import com.o4x.musical.imageloader.glide.loader.GlideLoader
-import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
-import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
@@ -20,7 +17,6 @@ import com.o4x.musical.ui.dialogs.DeleteSongsDialog
 import com.o4x.musical.ui.dialogs.SleepTimerDialog
 import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
 import com.o4x.musical.util.NavigationUtil
-import com.o4x.musical.util.color.MediaNotificationProcessor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.network.Models.ITunesModel;
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity;
 

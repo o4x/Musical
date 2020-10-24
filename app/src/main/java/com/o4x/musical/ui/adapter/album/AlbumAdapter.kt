@@ -1,13 +1,9 @@
 package com.o4x.musical.ui.adapter.album
 
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.o4x.musical.R
 import com.o4x.musical.helper.SortOrder
-import com.o4x.musical.helper.menu.SongsMenuHelper
-import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Song

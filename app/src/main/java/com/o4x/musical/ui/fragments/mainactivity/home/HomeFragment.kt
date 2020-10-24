@@ -31,8 +31,6 @@ import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
-import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.loader.LastAddedLoader
 import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader

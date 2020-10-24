@@ -3,13 +3,10 @@ package com.o4x.musical.ui.adapter.album
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryTextColor
 import com.o4x.musical.helper.HorizontalAdapterHelper
-import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Album
 import com.o4x.musical.util.MusicUtil
