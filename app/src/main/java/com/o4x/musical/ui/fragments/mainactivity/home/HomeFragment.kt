@@ -29,6 +29,8 @@ import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.helper.MusicPlayerRemote
+import com.o4x.musical.imageloader.glide.loader.GlideLoader
+import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
 import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.imageloader.universalil.loader.UniversalIL
 import com.o4x.musical.interfaces.MusicServiceEventListener
@@ -42,6 +44,7 @@ import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.NavigationUtil
+import com.o4x.musical.util.Util
 import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -359,24 +362,24 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         }
 
         private fun updatePoster() {
+
             if (MusicPlayerRemote.playingQueue.isNotEmpty()) {
                 val song = MusicPlayerRemote.currentSong
 
-                UniversalIL().withListener(
-                    object : PaletteMusicLoadingListener() {
+                GlideLoader.with(requireContext())
+                    .withListener(
+                    object : MusicColoredTargetListener() {
 
                         var bitmap: Bitmap? = null
 
-                        override fun onLoadingComplete(
-                            imageUri: String,
-                            view: View?,
-                            loadedImage: Bitmap
-                        ) {
-                            super.onLoadingComplete(imageUri, view, loadedImage)
-                            bitmap = loadedImage
+                        override fun onResourceReady(resource: Bitmap?) {
+                            super.onResourceReady(resource)
+                            bitmap = resource
                         }
 
                         override fun onColorReady(colors: MediaNotificationProcessor) {
+                            if (poster == null) return
+
                             poster.background =
                                 BitmapDrawable(
                                     resources,
@@ -399,7 +402,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                         }
 
                     }
-                ).byThis(song).loadImage(requireContext())
+                ).load(song).withSize(Util.getMaxScreenSize()).into(poster)
 
             }
         }

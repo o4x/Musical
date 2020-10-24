@@ -1,9 +1,6 @@
 package com.o4x.musical.ui.activities.details
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -20,8 +17,8 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
 import com.o4x.musical.R
 import com.o4x.musical.extensions.withAlpha
-import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL
+import com.o4x.musical.imageloader.glide.loader.GlideLoader
+import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.interfaces.PaletteColorHolder
 import com.o4x.musical.model.Song
@@ -34,8 +31,6 @@ import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.lang.reflect.Field
-import java.lang.reflect.Method
 import kotlin.math.max
 import kotlin.math.min
 
@@ -175,8 +170,8 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         })
     }
 
-    @SuppressLint("NewApi")
-    private fun setColors(color: Int, colors: MediaNotificationProcessor?) {
+
+    public fun setColors(color: Int, colors: MediaNotificationProcessor?) {
         if (colors != null) {
             this.colors = colors
             songAdapter?.colors = colors
@@ -203,16 +198,14 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         )
     }
 
-    val imageLoader: UniversalIL
-        get() = UniversalIL()
-            .withListener(
-                object : PaletteMusicLoadingListener() {
-                    override fun onColorReady(colors: MediaNotificationProcessor) {
-                        setColors(colors.backgroundColor, colors)
-                        setMiniPlayerColor(colors)
-                    }
-                })
-            .withSize(imageHeight!!)
+    val imageLoader: GlideLoader.GlideBuilder
+        get() = GlideLoader.with(this)
+            .withListener(object : MusicColoredTargetListener() {
+                override fun onColorReady(colors: MediaNotificationProcessor) {
+                    setColors(colors.backgroundColor, colors)
+                    setMiniPlayerColor(colors)
+                }
+            })
 
     abstract fun initObserver()
     abstract fun loadImage()

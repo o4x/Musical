@@ -6,12 +6,15 @@ import java.util.Objects;
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class AudioFileCover {
+
     public final String title;
     public final String filePath;
+    public final Long dateModified;
 
-    public AudioFileCover(String title, String filePath) {
+    public AudioFileCover(String title, String filePath, Long dateModified) {
         this.title = title;
         this.filePath = filePath;
+        this.dateModified = dateModified;
     }
 
     @Override
@@ -24,6 +27,6 @@ public class AudioFileCover {
 
     @Override
     public int hashCode() {
-        return Objects.hash(filePath);
+        return Objects.hash(filePath) + dateModified.hashCode();
     }
 }

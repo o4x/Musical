@@ -2,10 +2,13 @@ package com.o4x.musical.imageloader.glide.loader
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.widget.ImageView
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.MediaStoreSignature
+import com.bumptech.glide.signature.ObjectKey
 import com.o4x.musical.R
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.targets.BitmapPaletteTarget
@@ -13,6 +16,7 @@ import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.imageloader.model.MultiImage
+import com.o4x.musical.imageloader.universalil.listener.PaletteMusicLoadingListener
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Genre
@@ -20,6 +24,7 @@ import com.o4x.musical.model.Song
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.PreferenceUtil
+import java.lang.Exception
 
 
 class GlideLoader {
@@ -32,19 +37,21 @@ class GlideLoader {
 
         @JvmStatic
         fun with(context: Context): GlideBuilder {
-            return GlideBuilder(context, GlideApp.with(context).asBitmap())
+            return GlideBuilder(GlideApp.with(context).asBitmap())
         }
     }
 
-    class GlideBuilder(private val context: Context) {
+    class GlideBuilder() {
 
         private lateinit var requestBuilder: RequestBuilder<Bitmap>
         private var listener = PaletteTargetListener()
 
-        constructor(context: Context, requestBuilder: RequestBuilder<Bitmap>) : this(context) {
+        constructor(requestBuilder: RequestBuilder<Bitmap>) : this() {
             this@GlideBuilder.requestBuilder =
                 requestBuilder
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
+                    .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+//                    .priority(Priority.LOW)
 //                    .placeholder(DEFAULT_PLACEHOLDER_IMAGE)
         }
 
@@ -55,13 +62,14 @@ class GlideLoader {
 
         fun load(song: Song): GlideFinisher {
             return if (PreferenceUtil.isIgnoreMediaStore()) {
-                load(AudioFileCover(song.albumName, song.data))
+                load(AudioFileCover(song.albumName, song.data, song.dateModified))
             } else {
 
                 listener.coverData = CoverData.from(song)
 
                 GlideFinisher(
                     requestBuilder
+                        .signature(createSignature(song))
                         .load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId)),
                     listener
                 )
@@ -90,6 +98,7 @@ class GlideLoader {
             return if (customImageUtil.hasCustomImage()) {
                 GlideFinisher(
                     requestBuilder
+                        .signature(createSignature(customImageUtil))
                         .load(customImageUtil.file),
                     listener
                 )
@@ -125,9 +134,18 @@ class GlideLoader {
 
             return GlideFinisher(
                 requestBuilder
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .load(url),
                 listener
             )
+        }
+
+        private fun createSignature(song: Song): Key {
+            return MediaStoreSignature("", song.dateModified, 0)
+        }
+
+        private fun createSignature(customImageUtil: CustomImageUtil): Key {
+            return ObjectKey(customImageUtil.file.lastModified())
         }
     }
 
@@ -152,19 +170,20 @@ class GlideLoader {
             var bitmap: Bitmap? = null
 
             val thread = Thread {
-                 bitmap = requestBuilder
-                    .error(
-                        requestBuilder.clone()
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .load(listener.coverData)
-                    )
-                    .submit()
-                    .get()
+                bitmap = try {
+                    requestBuilder
+                        .submit()
+                        .get()
+                } catch(e: Exception) {
+                    listener.coverData.create(image.context)
+                }
             }
 
             thread.start()
             thread.join()
 
+            listener.isSync = true
+            listener.onResourceReady(bitmap)
             image.setImageBitmap(bitmap)
         }
     }

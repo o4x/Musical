@@ -9,6 +9,7 @@ import com.o4x.musical.imageloader.model.CoverData;
 public class PaletteTargetListener {
 
     public CoverData coverData;
+    public boolean isSync = false;
 
-    void onResourceReady(@Nullable Bitmap resource) {}
+    public void onResourceReady(@Nullable Bitmap resource) {}
 }

@@ -42,7 +42,8 @@ public abstract class DialogAsyncTask<Params, Progress, Result> extends WeakCont
         if (!supposedToBeDismissed && context != null) {
             Dialog dialog = createDialog(context);
             dialogWeakReference = new WeakReference<>(dialog);
-            dialog.show();
+            if (dialog != null)
+                dialog.show();
         }
     }
 

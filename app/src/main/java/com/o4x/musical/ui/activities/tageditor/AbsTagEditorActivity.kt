@@ -3,6 +3,7 @@ package com.o4x.musical.ui.activities.tageditor
 import android.app.SearchManager
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -10,7 +11,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
@@ -20,14 +20,16 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
-import com.nostra13.universalimageloader.core.DisplayImageOptions
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.o4x.musical.R
 import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.extensions.surfaceColor
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL
+import com.o4x.musical.imageloader.glide.loader.GlideLoader
+import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.model.Artist
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
@@ -224,9 +226,9 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     private fun setupArtistImageView() {
         artistImage?.let {
 
-            UniversalIL()
-                .byThis(artist)
-                .displayInTo(it)
+            GlideLoader.with(this)
+                .load(artist)
+                .into(it)
 
             val items = arrayOf<CharSequence>(
                 getString(R.string.pick_from_local_storage),
@@ -421,45 +423,47 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         finish()
     }
 
+    private fun getImageTarget(forArtist: Boolean? = null): CustomTarget<Bitmap> {
+        return object : CustomTarget<Bitmap>() {
+            override fun onResourceReady(
+                resource: Bitmap,
+                transition: Transition<in Bitmap>?
+            ) {
+                if (forArtist == true) {
+                    artistArtBitmap = ImageUtil.resizeBitmap(resource, 2048)
+                    setArtistImageBitmap(artistArtBitmap)
+                    deleteArtistArt = false
+                } else {
+                    albumArtBitmap = ImageUtil.resizeBitmap(resource, 2048)
+                    setAlbumImageBitmap(albumArtBitmap)
+                    deleteAlbumArt = false
+                }
+
+                dataChanged()
+                setResult(RESULT_OK)
+            }
+
+            override fun onLoadCleared(placeholder: Drawable?) {}
+        }
+    }
+
     private fun loadImageFromFile(selectedFile: Uri?, forArtist: Boolean? = null) {
-        loadImageFromUrl(selectedFile?.toString(), forArtist)
+        selectedFile?.let {
+            GlideApp.with(this)
+                .asBitmap()
+                .load(selectedFile)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(getImageTarget(forArtist))
+        }
     }
 
     protected fun loadImageFromUrl(url: String?, forArtist: Boolean? = null) {
         url?.let {
-
-            UniversalIL.imageLoader?.loadImage(
-                url,
-                DisplayImageOptions
-                    .Builder()
-                    .cacheOnDisk(false)
-                    .cacheInMemory(true)
-                    .build(),
-                object : SimpleImageLoadingListener() {
-                    override fun onLoadingComplete(
-                        imageUri: String?,
-                        view: View?,
-                        loadedImage: Bitmap?,
-                    ) {
-                        super.onLoadingComplete(imageUri, view, loadedImage)
-                        loadedImage?.let {
-
-                            if (forArtist == true) {
-                                artistArtBitmap = ImageUtil.resizeBitmap(loadedImage, 2048)
-                                setArtistImageBitmap(artistArtBitmap)
-                                deleteArtistArt = false
-                            } else {
-                                albumArtBitmap = ImageUtil.resizeBitmap(loadedImage, 2048)
-                                setAlbumImageBitmap(albumArtBitmap)
-                                deleteAlbumArt = false
-                            }
-
-                            dataChanged()
-                            setResult(RESULT_OK)
-                        }
-                    }
-                }
-            )
+            GlideApp.with(this)
+                .asBitmap()
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(getImageTarget(forArtist))
         }
     }
 

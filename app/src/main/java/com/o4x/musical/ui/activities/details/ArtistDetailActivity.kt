@@ -76,11 +76,17 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
     }
 
     override fun loadImage() {
-        imageLoader.byThis(data!!).displayInTo(image)
+        imageLoader
+            .load(data!!)
+            .withSize(imageHeight!!)
+            .into(image)
     }
 
     override fun loadImageSync() {
-        imageLoader.byThis(data!!).loadImageSync(image)
+        imageLoader
+            .load(data!!)
+            .withSize(imageHeight!!)
+            .intoSync(image)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
