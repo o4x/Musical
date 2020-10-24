@@ -86,7 +86,7 @@ class UniversalIL {
 
                 val coverData: CoverData = listener!!.coverData
 
-                bitmap = coverData.create(image.context);
+                bitmap = coverData.create(image.context)
             }
 
             listener?.isLoadColorSync = true
@@ -100,7 +100,7 @@ class UniversalIL {
 
     fun byThis(song: Song): Builder {
         return if (PreferenceUtil.isIgnoreMediaStore()) {
-            byThis(AudioFileCover(song.albumName, song.data))
+            byThis(AudioFileCover(song.albumName, song.data, song.dateModified))
         } else {
             listener?.coverData = CoverData.from(song)
 

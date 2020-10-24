@@ -80,7 +80,9 @@ class CoverUtil constructor(val context: Context) {
     }
 
     companion object {
-        const val DEFAULT_SIZE = 500
+
+        @JvmField
+        val DEFAULT_SIZE = Util.getScreenWidth() / 2
 
         @JvmStatic
         fun createSquareCoverWithText(

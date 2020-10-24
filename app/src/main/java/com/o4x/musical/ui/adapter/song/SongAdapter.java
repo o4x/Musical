@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -22,6 +23,8 @@ import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
+import com.o4x.musical.util.Util;
+import com.o4x.musical.util.ViewUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -70,7 +73,8 @@ public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> implem
     protected void loadImage(Song song, final ViewHolder holder) {
         if (holder.image == null) return;
         getImageLoader(holder)
-                .load(song).into(holder.image);
+                .load(song)
+                .into(holder.image);
     }
 
     protected String getSongTitle(Song song) {

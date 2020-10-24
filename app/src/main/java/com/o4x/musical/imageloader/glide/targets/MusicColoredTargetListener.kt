@@ -15,11 +15,10 @@
 package com.o4x.musical.imageloader.glide.targets
 
 import android.graphics.Bitmap
-import android.widget.ImageView
 import com.o4x.musical.App
 import com.o4x.musical.util.color.MediaNotificationProcessor
 
-abstract class MusicColoredTargetListener(view: ImageView) :
+abstract class MusicColoredTargetListener :
     PaletteTargetListener() {
 
     override fun onResourceReady(resource: Bitmap?) {
@@ -27,11 +26,17 @@ abstract class MusicColoredTargetListener(view: ImageView) :
             val colors = MediaNotificationProcessor(App.getContext())
             onColorReady(colors)
         } else {
-            MediaNotificationProcessor(
-                App.getContext()).getPaletteAsync(
-                { onColorReady(it) }
-                , resource
-            )
+            if (isSync) {
+                onColorReady(
+                    MediaNotificationProcessor(App.getContext(), resource)
+                )
+            } else {
+                MediaNotificationProcessor(
+                    App.getContext()).getPaletteAsync(
+                    { onColorReady(it) }
+                    , resource
+                )
+            }
         }
     }
 

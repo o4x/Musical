@@ -18,11 +18,18 @@ public abstract class PaletteColoredTargetListener extends PaletteTargetListener
         if (resource == null) {
             onColorReady(getDefaultFooterColor());
         } else {
-            Palette.from(resource).generate(
-                    palette -> onColorReady(
-                            PhonographColorUtil.getColor(palette, getDefaultFooterColor())
-                    )
-            );
+            if (isSync) {
+                onColorReady(
+                        PhonographColorUtil.getColor(
+                                Palette.from(resource).generate(), getDefaultFooterColor())
+                );
+            } else {
+                Palette.from(resource).generate(
+                        palette -> onColorReady(
+                                PhonographColorUtil.getColor(palette, getDefaultFooterColor())
+                        )
+                );
+            }
         }
     }
 
