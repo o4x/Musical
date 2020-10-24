@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
 import android.os.Binder;
@@ -27,15 +28,14 @@ import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.o4x.musical.App;
 import com.o4x.musical.R;
 import com.o4x.musical.appwidgets.AppWidgetBig;
 import com.o4x.musical.appwidgets.AppWidgetCard;
@@ -43,6 +43,7 @@ import com.o4x.musical.appwidgets.AppWidgetClassic;
 import com.o4x.musical.appwidgets.AppWidgetSmall;
 import com.o4x.musical.helper.ShuffleHelper;
 import com.o4x.musical.helper.StopWatch;
+import com.o4x.musical.imageloader.glide.loader.GlideLoader;
 import com.o4x.musical.loader.PlaylistSongLoader;
 import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
@@ -591,21 +592,24 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
             runOnNewThread(new Runnable() {
                 @Override
                 public void run() {
-                    ImageLoader.getInstance().loadImage(
-                            MusicUtil.getMediaStoreAlbumCoverUri(song.getAlbumId()).toString(),
-                            new SimpleImageLoadingListener() {
-                                @Override
-                                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                                    super.onLoadingFailed(imageUri, view, failReason);
-                                    mediaSession.setMetadata(metaData.build());
-                                }
+                    GlideLoader.with(App.Companion.getContext())
+                            .load(song).into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource);
+                            mediaSession.setMetadata(metaData.build());
+                        }
 
-                                @Override
-                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                    super.onLoadingComplete(imageUri, view, loadedImage);
-                                    metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, loadedImage);
-                                    mediaSession.setMetadata(metaData.build());
-                                }
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                        }
+
+                        @Override
+                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                            super.onLoadFailed(errorDrawable);
+                            mediaSession.setMetadata(metaData.build());
+                        }
                     });
                 }
             });

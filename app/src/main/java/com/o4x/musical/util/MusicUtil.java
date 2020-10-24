@@ -20,7 +20,6 @@ import androidx.core.content.FileProvider;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.loader.PlaylistLoader;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
@@ -195,10 +194,6 @@ public class MusicUtil {
 
         contentResolver.insert(artworkUri, values);
         contentResolver.notifyChange(artworkUri, null);
-
-
-        // Glide is auto
-        UniversalIL.Companion.removeFromCache(getMediaStoreAlbumCoverUri(albumId).toString());
     }
 
     public static void deleteAlbumArt(@NonNull Context context, long albumId) {
@@ -206,9 +201,6 @@ public class MusicUtil {
         Uri localUri = Uri.parse("content://media/external/audio/albumart");
         contentResolver.delete(ContentUris.withAppendedId(localUri, albumId), null, null);
         contentResolver.notifyChange(localUri, null);
-
-        // Glide is auto
-        UniversalIL.Companion.removeFromCache(getMediaStoreAlbumCoverUri(albumId).toString());
     }
 
     @NonNull

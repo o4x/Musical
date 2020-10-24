@@ -15,8 +15,6 @@ import com.o4x.musical.R;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
 import com.o4x.musical.imageloader.glide.targets.PaletteColoredTargetListener;
-import com.o4x.musical.imageloader.universalil.listener.PaletteImageLoadingListener;
-import com.o4x.musical.imageloader.universalil.loader.UniversalIL;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
