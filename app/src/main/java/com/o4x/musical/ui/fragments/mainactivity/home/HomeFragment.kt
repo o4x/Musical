@@ -11,6 +11,7 @@ import android.util.DisplayMetrics
 import android.view.*
 import androidx.core.view.setPadding
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -55,17 +56,18 @@ import kotlin.properties.Delegates
 
 class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
 
-    val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
+    private val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
         parametersOf(null)
     }
 
     private lateinit var queueAdapter: HomeAdapter
-    private lateinit var queueLayoutManager: LinearLayoutManager
-    private lateinit var queueListener: QueueListener
     private lateinit var recentlyAdapter: HomeAdapter
     private lateinit var newAdapter: HomeAdapter
+    private lateinit var queueLayoutManager: LinearLayoutManager
     private lateinit var recentlyLayoutManager: GridLayoutManager
     private lateinit var newLayoutManager: GridLayoutManager
+    private lateinit var listener: Listener
+
 
     // Heights //
     private var displayHeight by Delegates.notNull<Int>()
@@ -78,14 +80,14 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     private val statusAnimation = ValueAnimator.ofFloat(0f, 1f)
 
     override fun onDestroyView() {
-        mainActivity.removeMusicServiceEventListener(queueListener)
+        mainActivity.removeMusicServiceEventListener(listener)
         toolbarAnimation.cancel()
         statusAnimation.cancel()
         super.onDestroyView()
     }
 
     override fun onPause() {
-        mainActivity.removeMusicServiceEventListener(queueListener)
+        mainActivity.removeMusicServiceEventListener(listener)
         super.onPause()
     }
 
@@ -99,11 +101,11 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             mainActivity.appbar.elevation = 0f
         }
 
-        mainActivity.addMusicServiceEventListener(queueListener)
+        mainActivity.addMusicServiceEventListener(listener)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        queueListener = QueueListener()
+        listener = Listener()
         hideSubToolbar()
         setUpViews()
     }
@@ -287,9 +289,12 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             0,
             R.layout.item_card_home,
             gridSize * 2,
-            true,
+            false,
         )
         recently_recycler_view.adapter = recentlyAdapter
+        libraryViewModel.observableHistorySongs().observe(viewLifecycleOwner, {
+            recentlyAdapter.swapDataSet(it)
+        })
     }
 
     private fun setUpNewView() {
@@ -301,9 +306,12 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             0,
             R.layout.item_card_home,
             gridSize * 3,
-            true,
+            false,
         )
         new_recycler_view.adapter = newAdapter
+        libraryViewModel.recentSongs().observe(viewLifecycleOwner, {
+            newAdapter.swapDataSet(it)
+        })
     }
 
     private val gridLayoutManager: GridLayoutManager
@@ -333,7 +341,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     private val gridSize: Int
         get() = resources.getInteger(R.integer.home_grid_columns)
 
-    internal inner class QueueListener : MusicServiceEventListener {
+    internal inner class Listener : MusicServiceEventListener {
         override fun onServiceConnected() {
             updatePoster()
             updateQueue()
@@ -343,10 +351,12 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         override fun onServiceDisconnected() {}
         override fun onQueueChanged() {
             updateQueue()
+            resetToCurrentPosition()
         }
 
         override fun onPlayingMetaChanged() {
             updateQueue()
+            resetToCurrentPosition()
         }
 
         override fun onPlayStateChanged() {
@@ -357,6 +367,13 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         override fun onShuffleModeChanged() {}
         override fun onMediaStoreChanged() {
             updateQueue()
+        }
+
+        private fun updateQueue() {
+            queueAdapter.swapDataSet(
+                MusicPlayerRemote.playingQueue,
+                MusicPlayerRemote.position
+            )
         }
 
         private fun updatePoster() {
@@ -403,14 +420,6 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                 ).load(song).withSize(Util.getMaxScreenSize()).into(poster)
 
             }
-        }
-
-        private fun updateQueue() {
-            queueAdapter.swapDataSet(
-                MusicPlayerRemote.playingQueue,
-                MusicPlayerRemote.position
-            )
-            resetToCurrentPosition()
         }
 
         private fun resetToCurrentPosition() {
