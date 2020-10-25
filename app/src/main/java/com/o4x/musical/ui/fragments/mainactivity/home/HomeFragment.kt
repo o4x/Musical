@@ -11,7 +11,6 @@ import android.util.DisplayMetrics
 import android.view.*
 import androidx.core.view.setPadding
 import androidx.core.widget.NestedScrollView
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -33,7 +32,6 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
 import com.o4x.musical.interfaces.MusicServiceEventListener
-import com.o4x.musical.loader.LastAddedLoader
 import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
@@ -302,7 +300,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         new_recycler_view.layoutManager = newLayoutManager
         newAdapter = HomeAdapter(
             mainActivity,
-            LastAddedLoader.getLastAddedSongs(mainActivity),
+            ArrayList(),
             0,
             R.layout.item_card_home,
             gridSize * 3,
