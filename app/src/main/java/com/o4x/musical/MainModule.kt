@@ -3,16 +3,16 @@ package com.o4x.musical
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.o4x.musical.db.PlaylistWithSongs
 import com.o4x.musical.db.RetroDatabase
+import com.o4x.musical.model.Genre
+import com.o4x.musical.model.Playlist
 import com.o4x.musical.network.provideDefaultCache
 import com.o4x.musical.network.provideLastFmRest
 import com.o4x.musical.network.provideLastFmRetrofit
 import com.o4x.musical.network.provideOkHttp
 import com.o4x.musical.repository.*
-import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
-import com.o4x.musical.ui.viewmodel.ArtistDetailsViewModel
-import com.o4x.musical.ui.viewmodel.LibraryViewModel
-import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
+import com.o4x.musical.ui.viewmodel.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -154,19 +154,19 @@ private val viewModules = module {
         )
     }
 
-//    viewModel { (playlist: PlaylistWithSongs) ->
-//        PlaylistDetailsViewModel(
-//            get(),
-//            playlist
-//        )
-//    }
-//
-//    viewModel { (genre: Genre) ->
-//        GenreDetailsViewModel(
-//            get(),
-//            genre
-//        )
-//    }
+    viewModel { (playlist: Playlist) ->
+        PlaylistDetailsViewModel(
+            get(),
+            playlist
+        )
+    }
+
+    viewModel { (genre: Genre) ->
+        GenreDetailsViewModel(
+            get(),
+            genre
+        )
+    }
 }
 
 val appModules = listOf(mainModule, dataModule, viewModules, networkModule, roomModule)
