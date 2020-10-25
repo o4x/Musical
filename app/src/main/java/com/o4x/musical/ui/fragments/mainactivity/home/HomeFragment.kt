@@ -32,7 +32,6 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
 import com.o4x.musical.interfaces.MusicServiceEventListener
-import com.o4x.musical.loader.TopAndRecentlyPlayedTracksLoader
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.ui.adapter.home.HomeAdapter
@@ -283,7 +282,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         recently_recycler_view.layoutManager = recentlyLayoutManager
         recentlyAdapter = HomeAdapter(
             mainActivity,
-            TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(mainActivity),
+            ArrayList(),
             0,
             R.layout.item_card_home,
             gridSize * 2,
