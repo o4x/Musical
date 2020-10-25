@@ -22,12 +22,10 @@ import com.o4x.musical.db.*
 import com.o4x.musical.model.*
 import com.o4x.musical.network.Models.LastFmAlbum
 import com.o4x.musical.network.Models.LastFmArtist
-import com.o4x.musical.network.service.LastFMService
 import com.o4x.musical.network.Result
 import com.o4x.musical.network.Result.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.o4x.musical.network.service.LastFMService
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 
 interface Repository {

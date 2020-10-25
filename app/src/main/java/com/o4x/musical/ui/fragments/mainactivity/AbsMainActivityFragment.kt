@@ -3,7 +3,9 @@ package com.o4x.musical.ui.fragments.mainactivity
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +34,14 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
     val mainActivity: MainActivity
         get() = requireActivity() as MainActivity
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        mainActivity.addMusicServiceEventListener(libraryViewModel)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +58,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
     }
 
     override fun onDestroy() {
+        mainActivity.removeMusicServiceEventListener(libraryViewModel)
         animation?.cancel()
         super.onDestroy()
     }
