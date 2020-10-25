@@ -19,7 +19,6 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import android.provider.MediaStore
 import com.o4x.musical.Constants.NUMBER_OF_TOP_TRACKS
-import com.o4x.musical.loader.SortedLongCursor
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song

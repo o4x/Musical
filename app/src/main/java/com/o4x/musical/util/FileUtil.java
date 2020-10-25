@@ -8,9 +8,9 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.o4x.musical.loader.SortedCursor;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.repository.RealSongRepository;
+import com.o4x.musical.repository.SortedCursor;
 
 import java.io.BufferedReader;
 import java.io.File;
