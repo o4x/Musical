@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.adapter;
 
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -8,33 +7,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.o4x.musical.App;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.menu.PlaylistMenuHelper;
-import com.o4x.musical.helper.menu.SongsMenuHelper;
 import com.o4x.musical.interfaces.CabHolder;
-import com.o4x.musical.loader.PlaylistSongLoader;
-import com.o4x.musical.misc.WeakContextAsyncTask;
-import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
-import com.o4x.musical.model.Song;
 import com.o4x.musical.model.smartplaylist.AbsSmartPlaylist;
 import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
-import com.o4x.musical.ui.dialogs.DeletePlaylistDialog;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
-import com.o4x.musical.util.PlaylistsUtil;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import code.name.monkey.appthemehelper.util.ATHUtil;
