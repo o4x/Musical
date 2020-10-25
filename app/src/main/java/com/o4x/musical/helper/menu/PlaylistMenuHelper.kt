@@ -22,7 +22,6 @@ import androidx.lifecycle.lifecycleScope
 import com.o4x.musical.App.Companion.getContext
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.loader.PlaylistSongLoader.getPlaylistSongList
 import com.o4x.musical.model.AbsCustomPlaylist
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.Song
@@ -43,10 +42,7 @@ object PlaylistMenuHelper : KoinComponent {
 
     private fun getPlaylistSongs(activity: Activity, playlist: Playlist): List<Song> {
         return if (playlist is AbsCustomPlaylist) playlist.songs()
-        else getPlaylistSongList(
-            activity,
-            playlist.id
-        )
+        else playlist.getSongs()
     }
 
     private fun getPlaylistsSongs(activity: Activity, playlists: List<Playlist>): List<Song> {
@@ -55,7 +51,7 @@ object PlaylistMenuHelper : KoinComponent {
             if (playlist is AbsCustomPlaylist) {
                 songs.addAll(playlist.getSongs())
             } else {
-                songs.addAll(getPlaylistSongList(activity, playlist.id))
+                songs.addAll(playlist.getSongs())
             }
         }
         return songs

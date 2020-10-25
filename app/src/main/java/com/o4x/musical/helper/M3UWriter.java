@@ -2,7 +2,6 @@ package com.o4x.musical.helper;
 
 import android.content.Context;
 
-import com.o4x.musical.loader.PlaylistSongLoader;
 import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
@@ -22,9 +21,9 @@ public class M3UWriter implements M3UConstants {
 
         List<? extends Song> songs;
         if (playlist instanceof AbsCustomPlaylist) {
-            songs = ((AbsCustomPlaylist) playlist).getSongs();
+            songs = ((AbsCustomPlaylist) playlist).songs();
         } else {
-            songs = PlaylistSongLoader.getPlaylistSongList(context, playlist.getId());
+            songs = playlist.getSongs();
         }
 
         if (songs.size() > 0) {

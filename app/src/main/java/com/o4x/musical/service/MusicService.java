@@ -44,7 +44,6 @@ import com.o4x.musical.appwidgets.AppWidgetSmall;
 import com.o4x.musical.helper.ShuffleHelper;
 import com.o4x.musical.helper.StopWatch;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.loader.PlaylistSongLoader;
 import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
@@ -309,10 +308,10 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                         if (playlist != null) {
                             List<Song> playlistSongs;
                             if (playlist instanceof AbsCustomPlaylist) {
-                                playlistSongs = ((AbsCustomPlaylist) playlist).getSongs();
+                                playlistSongs = ((AbsCustomPlaylist) playlist).songs();
                             } else {
                                 //noinspection unchecked
-                                playlistSongs = (List) PlaylistSongLoader.getPlaylistSongList(getApplicationContext(), playlist.getId());
+                                playlistSongs = playlist.getSongs();
                             }
                             if (!playlistSongs.isEmpty()) {
                                 if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
