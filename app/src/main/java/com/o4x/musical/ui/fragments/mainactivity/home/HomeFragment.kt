@@ -289,7 +289,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             false,
         )
         recently_recycler_view.adapter = recentlyAdapter
-        libraryViewModel.observableHistorySongs().observe(viewLifecycleOwner, {
+        libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner, {
             recentlyAdapter.swapDataSet(it)
         })
     }
@@ -306,7 +306,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
             false,
         )
         new_recycler_view.adapter = newAdapter
-        libraryViewModel.recentSongs().observe(viewLifecycleOwner, {
+        libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner, {
             newAdapter.swapDataSet(it)
         })
     }

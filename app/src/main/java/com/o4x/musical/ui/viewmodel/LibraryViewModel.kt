@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.o4x.musical.db.*
 import com.o4x.musical.helper.MusicPlayerRemote
@@ -22,6 +23,8 @@ class LibraryViewModel(
     private val legacyPlaylists = MutableLiveData<List<Playlist>>()
     private val genres = MutableLiveData<List<Genre>>()
     private val searchResults = MutableLiveData<List<Any>>()
+    private val recentlyAdded = MutableLiveData<List<Song>>()
+    private val recentlyPlayed = MutableLiveData<List<Song>>()
     val paletteColor: LiveData<Int> = _paletteColor
 
     init {
@@ -35,6 +38,9 @@ class LibraryViewModel(
         fetchGenres()
         fetchPlaylists()
         fetchLegacyPlaylist()
+
+        fetchRecentlyPlayed()
+        fetchRecentlyAdded()
     }
 
     fun getSearchResult(): LiveData<List<Any>> = searchResults
@@ -61,6 +67,14 @@ class LibraryViewModel(
 
     fun getGenre(): LiveData<List<Genre>> {
         return genres
+    }
+
+    fun getRecentlyPlayed(): LiveData<List<Song>> {
+        return recentlyPlayed
+    }
+
+    fun getRecentlyAdded(): LiveData<List<Song>> {
+        return recentlyAdded
     }
 
     private fun fetchSongs() {
@@ -105,6 +119,18 @@ class LibraryViewModel(
         }
     }
 
+    private fun fetchRecentlyPlayed() {
+        viewModelScope.launch(IO) {
+            recentlyPlayed.postValue(repository.topPlayedRepository.recentlyPlayedTracks())
+        }
+    }
+
+    private fun fetchRecentlyAdded() {
+        viewModelScope.launch(IO) {
+            recentlyAdded.postValue(repository.recentSongs())
+        }
+    }
+
     fun search(query: String?) = viewModelScope.launch(IO) {
         val result = repository.search(query)
         searchResults.postValue(result)
@@ -146,7 +172,7 @@ class LibraryViewModel(
 
     override fun onPlayingMetaChanged() {
         println("onPlayingMetaChanged")
-
+        fetchRecentlyPlayed()
     }
 
     override fun onPlayStateChanged() {
