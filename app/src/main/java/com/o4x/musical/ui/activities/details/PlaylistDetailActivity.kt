@@ -18,11 +18,9 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemA
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.o4x.musical.R
-import com.o4x.musical.db.toSongs
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.menu.PlaylistMenuHelper.handleMenuClick
 import com.o4x.musical.interfaces.CabHolder
-import com.o4x.musical.loader.PlaylistLoader
 import com.o4x.musical.model.AbsCustomPlaylist
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
@@ -188,7 +186,7 @@ class PlaylistDetailActivity : AbsMusicPanelActivity(), CabHolder {
             // Playlist renamed
             val playlistName = PlaylistsUtil.getNameForPlaylist(this, playlist!!.id)
             if (playlistName != playlist!!.name) {
-                playlist = PlaylistLoader.getPlaylist(this, playlist!!.id)
+//                playlist = PlaylistLoader.getPlaylist(this, playlist!!.id)
                 setToolbarTitle(playlist!!.name)
             }
         }

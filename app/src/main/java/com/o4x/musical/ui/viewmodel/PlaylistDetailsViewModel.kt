@@ -14,14 +14,10 @@
  */
 package com.o4x.musical.ui.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.o4x.musical.db.PlaylistWithSongs
-import com.o4x.musical.db.SongEntity
 import com.o4x.musical.interfaces.MusicServiceEventListener
-import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.Song
 import com.o4x.musical.repository.RealRepository

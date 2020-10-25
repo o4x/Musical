@@ -6,23 +6,29 @@ import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.o4x.musical.R
-import com.o4x.musical.loader.PlaylistLoader
 import com.o4x.musical.model.Song
+import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.util.PlaylistsUtil
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
 /**
  * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
  */
 class AddToPlaylistDialog : DialogFragment() {
+
+    private val libraryViewModel by sharedViewModel<LibraryViewModel>()
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val playlists = PlaylistLoader.getAllPlaylists(requireActivity())
+        val playlists = libraryViewModel.getLegacyPlaylist().value
         val playlistNames = mutableListOf<CharSequence>()
 
         playlistNames.add(requireActivity().resources.getString(R.string.action_new_playlist))
-        for (playlist in playlists) {
-            playlistNames.add(playlist.name)
+        if (playlists != null) {
+            for (playlist in playlists) {
+                playlistNames.add(playlist.name)
+            }
         }
 
         return MaterialDialog(requireContext())
@@ -36,7 +42,7 @@ class AddToPlaylistDialog : DialogFragment() {
                         .show(requireActivity().supportFragmentManager, "ADD_TO_PLAYLIST")
                 } else {
                     materialDialog.dismiss()
-                    PlaylistsUtil.addToPlaylist(requireActivity(), songs, playlists[i - 1].id, true)
+                    PlaylistsUtil.addToPlaylist(requireActivity(), songs, playlists!![i - 1].id, true)
                 }
             }
 
