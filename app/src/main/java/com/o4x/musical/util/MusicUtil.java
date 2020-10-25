@@ -20,13 +20,13 @@ import androidx.core.content.FileProvider;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.loader.PlaylistLoader;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics;
+import com.o4x.musical.repository.RealPlaylistRepository;
 import com.o4x.musical.repository.RealSongRepository;
 
 import org.jaudiotagger.audio.AudioFileIO;
@@ -291,11 +291,17 @@ public class MusicUtil {
     }
 
     public static Playlist getFavoritesPlaylist(@NonNull final Context context) {
-        return PlaylistLoader.getPlaylist(context, context.getString(R.string.favorites));
+        return new RealPlaylistRepository(context.getContentResolver())
+                .playlist(context.getString(R.string.favorites));
     }
 
     private static Playlist getOrCreateFavoritesPlaylist(@NonNull final Context context) {
-        return PlaylistLoader.getPlaylist(context, PlaylistsUtil.createPlaylist(context, context.getString(R.string.favorites)));
+        return new RealPlaylistRepository(context.getContentResolver()).playlist(
+                PlaylistsUtil.createPlaylist(
+                        context,
+                        context.getString(R.string.favorites)
+                )
+        );
     }
 
     public static boolean isVariousArtists(String artistName) {

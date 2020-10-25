@@ -42,7 +42,7 @@ import java.util.*
 object PlaylistMenuHelper : KoinComponent {
 
     private fun getPlaylistSongs(activity: Activity, playlist: Playlist): List<Song> {
-        return if (playlist is AbsCustomPlaylist) playlist.getSongs()
+        return if (playlist is AbsCustomPlaylist) playlist.songs()
         else getPlaylistSongList(
             activity,
             playlist.id

@@ -34,6 +34,7 @@ class LibraryViewModel(
         fetchArtists()
         fetchGenres()
         fetchPlaylists()
+        fetchLegacyPlaylist()
     }
 
     fun getSearchResult(): LiveData<List<Any>> = searchResults
@@ -114,7 +115,10 @@ class LibraryViewModel(
             ReloadType.Songs -> fetchSongs()
             ReloadType.Albums -> fetchAlbums()
             ReloadType.Artists -> fetchArtists()
-            ReloadType.Playlists -> fetchPlaylists()
+            ReloadType.Playlists -> {
+                fetchPlaylists()
+                fetchLegacyPlaylist()
+            }
             ReloadType.Genres -> fetchGenres()
         }
     }
@@ -217,7 +221,6 @@ class LibraryViewModel(
 
     fun deleteTracks(songs: List<Song>) = viewModelScope.launch(IO) {
         repository.deleteSongs(songs)
-        fetchPlaylists()
         loadLibraryContent()
     }
 
