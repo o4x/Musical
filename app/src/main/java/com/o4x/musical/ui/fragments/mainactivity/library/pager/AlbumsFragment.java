@@ -2,6 +2,9 @@ package com.o4x.musical.ui.fragments.mainactivity.library.pager;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
@@ -16,7 +19,11 @@ import com.o4x.musical.model.Album;
 import com.o4x.musical.repository.RealAlbumRepository;
 import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.ui.adapter.album.AlbumAdapter;
+import com.o4x.musical.ui.viewmodel.ReloadType;
 import com.o4x.musical.util.PreferenceUtil;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +31,16 @@ import java.util.List;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridLayoutManager> implements LoaderManager.LoaderCallbacks<List<Album>> {
+public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridLayoutManager> {
 
-    private static final int LOADER_ID = LoaderIds.ALBUMS_FRAGMENT;
-
+    @Nullable
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getLibraryViewModel()
+                .getAlbums().observe(getViewLifecycleOwner(), albums -> {
+            getAdapter().swapDataSet(albums);
+        });
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -69,7 +78,7 @@ public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
 
     @Override
     protected void setSortOrder(String sortOrder) {
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
+        getLibraryViewModel().forceReload(ReloadType.Albums);
     }
 
     @Override
@@ -96,36 +105,5 @@ public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
     @Override
     protected void saveGridSizeLand(int gridSize) {
         PreferenceUtil.setAlbumGridSizeLand(gridSize);
-    }
-
-    @Override
-    public void onMediaStoreChanged() {
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
-    }
-
-    @Override
-    public Loader<List<Album>> onCreateLoader(int id, Bundle args) {
-        return new AsyncAlbumLoader(getActivity());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Album>> loader, List<Album> data) {
-        getAdapter().swapDataSet(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Album>> loader) {
-        getAdapter().swapDataSet(new ArrayList<>());
-    }
-
-    private static class AsyncAlbumLoader extends WrappedAsyncTaskLoader<List<Album>> {
-        public AsyncAlbumLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public List<Album> loadInBackground() {
-            return new RealAlbumRepository(new RealSongRepository(getContext())).albums();
-        }
     }
 }
