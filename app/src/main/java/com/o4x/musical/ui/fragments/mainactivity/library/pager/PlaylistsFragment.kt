@@ -1,6 +1,9 @@
 package com.o4x.musical.ui.fragments.mainactivity.library.pager
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.o4x.musical.R
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
@@ -17,9 +20,12 @@ import java.util.*
 class PlaylistsFragment :
     AbsLibraryPagerRecyclerViewFragment<PlaylistAdapter, LinearLayoutManager>() {
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        libraryFragment.libraryViewModel.getLegacyPlaylist()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        libraryViewModel.getLegacyPlaylist()
             .observe(viewLifecycleOwner, {
                 val playlists: MutableList<Playlist> = it.toMutableList()
 
@@ -28,6 +34,7 @@ class PlaylistsFragment :
                 playlists.add(0, TopTracksPlaylist())
                 adapter?.swapDataSet(playlists)
             })
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun createLayoutManager(): LinearLayoutManager {

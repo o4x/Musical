@@ -14,7 +14,6 @@ import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.interfaces.CabHolder
-import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
@@ -157,7 +156,9 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
         }
         when (item.itemId) {
             R.id.action_shuffle_all -> {
-                MusicPlayerRemote.openAndShuffleQueue(RealSongRepository(mainActivity).songs(), true)
+                libraryViewModel.getSongs().value?.let {
+                    MusicPlayerRemote.openAndShuffleQueue(it, true)
+                }
                 return true
             }
             R.id.action_new_playlist -> {

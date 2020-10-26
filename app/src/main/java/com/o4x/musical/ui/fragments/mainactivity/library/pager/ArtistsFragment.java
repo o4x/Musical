@@ -2,6 +2,9 @@ package com.o4x.musical.ui.fragments.mainactivity.library.pager;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
@@ -17,7 +20,11 @@ import com.o4x.musical.repository.RealAlbumRepository;
 import com.o4x.musical.repository.RealArtistRepository;
 import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.ui.adapter.artist.ArtistAdapter;
+import com.o4x.musical.ui.viewmodel.ReloadType;
 import com.o4x.musical.util.PreferenceUtil;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +32,15 @@ import java.util.List;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class ArtistsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFragment<ArtistAdapter, GridLayoutManager> implements LoaderManager.LoaderCallbacks<List<Artist>> {
+public class ArtistsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFragment<ArtistAdapter, GridLayoutManager> {
 
-    private static final int LOADER_ID = LoaderIds.ARTISTS_FRAGMENT;
-
+    @Nullable
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getLibraryViewModel().getArtists().observe(getViewLifecycleOwner(), artists -> {
+            getAdapter().swapDataSet(artists);
+        });
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @NonNull
@@ -60,11 +68,6 @@ public class ArtistsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFr
     }
 
     @Override
-    public void onMediaStoreChanged() {
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
-    }
-
-    @Override
     protected String loadSortOrder() {
         return PreferenceUtil.getArtistSortOrder();
     }
@@ -76,7 +79,7 @@ public class ArtistsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFr
 
     @Override
     protected void setSortOrder(String sortOrder) {
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
+        getLibraryViewModel().forceReload(ReloadType.Artists);
     }
 
     @Override
@@ -103,37 +106,5 @@ public class ArtistsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFr
     protected void setGridSize(int gridSize) {
         getLayoutManager().setSpanCount(gridSize);
         getAdapter().notifyDataSetChanged();
-    }
-
-
-    @Override
-    public Loader<List<Artist>> onCreateLoader(int id, Bundle args) {
-        return new AsyncArtistLoader(getActivity());
-    }
-
-
-    @Override
-    public void onLoadFinished(Loader<List<Artist>> loader, List<Artist> data) {
-        getAdapter().swapDataSet(data);
-    }
-
-
-    @Override
-    public void onLoaderReset(Loader<List<Artist>> loader) {
-        getAdapter().swapDataSet(new ArrayList<>());
-    }
-
-    private static class AsyncArtistLoader extends WrappedAsyncTaskLoader<List<Artist>> {
-        public AsyncArtistLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public List<Artist> loadInBackground() {
-            return new RealArtistRepository(
-                    new RealSongRepository(getContext()),
-                    new RealAlbumRepository(new RealSongRepository(getContext()))
-            ).artists();
-        }
     }
 }

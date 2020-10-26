@@ -2,6 +2,9 @@ package com.o4x.musical.ui.fragments.mainactivity.library.pager;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
@@ -15,7 +18,11 @@ import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.ui.adapter.song.SongAdapter;
+import com.o4x.musical.ui.viewmodel.ReloadType;
 import com.o4x.musical.util.PreferenceUtil;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +30,15 @@ import java.util.List;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFragment<SongAdapter, GridLayoutManager> implements LoaderManager.LoaderCallbacks<List<Song>> {
+public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFragment<SongAdapter, GridLayoutManager> {
 
-    private static final int LOADER_ID = LoaderIds.SONGS_FRAGMENT;
-
+    @Nullable
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getLibraryViewModel().getSongs().observe(getViewLifecycleOwner(), songs -> {
+            getAdapter().swapDataSet(songs);
+        });
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @NonNull
@@ -62,11 +70,6 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
     }
 
     @Override
-    public void onMediaStoreChanged() {
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
-    }
-
-    @Override
     protected String loadSortOrder() {
         return PreferenceUtil.getSongSortOrder();
     }
@@ -78,7 +81,7 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
 
     @Override
     protected void setSortOrder(String sortOrder) {
-        getLoaderManager().restartLoader(LOADER_ID, null, this);
+        getLibraryViewModel().forceReload(ReloadType.Songs);
     }
 
     @Override
@@ -105,31 +108,5 @@ public class SongsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFrag
     protected void setGridSize(int gridSize) {
         getLayoutManager().setSpanCount(gridSize);
         getAdapter().notifyDataSetChanged();
-    }
-
-    @Override
-    public Loader<List<Song>> onCreateLoader(int id, Bundle args) {
-        return new AsyncSongLoader(getActivity());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Song>> loader, List<Song> data) {
-        getAdapter().swapDataSet(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Song>> loader) {
-        getAdapter().swapDataSet(new ArrayList<>());
-    }
-
-    private static class AsyncSongLoader extends WrappedAsyncTaskLoader<List<Song>> {
-        public AsyncSongLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public List<Song> loadInBackground() {
-            return new RealSongRepository(getContext()).songs();
-        }
     }
 }
