@@ -37,6 +37,7 @@ import java.util.*
 
 object MusicPlayerRemote : KoinComponent {
     val TAG: String = MusicPlayerRemote::class.java.simpleName
+
     private val mConnectionMap = WeakHashMap<Context, ServiceBinder>()
 
     @JvmStatic
