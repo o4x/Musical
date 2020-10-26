@@ -342,13 +342,13 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         override fun onServiceConnected() {
             updatePoster()
             updateQueue()
+            resetToCurrentPosition()
             checkIsEmpty()
         }
 
         override fun onServiceDisconnected() {}
         override fun onQueueChanged() {
             updateQueue()
-            resetToCurrentPosition()
         }
 
         override fun onPlayingMetaChanged() {
