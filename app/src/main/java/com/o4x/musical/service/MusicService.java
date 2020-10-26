@@ -28,6 +28,7 @@ import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ import com.o4x.musical.appwidgets.AppWidgetBig;
 import com.o4x.musical.appwidgets.AppWidgetCard;
 import com.o4x.musical.appwidgets.AppWidgetClassic;
 import com.o4x.musical.appwidgets.AppWidgetSmall;
+import com.o4x.musical.helper.CountDownTimerPausable;
 import com.o4x.musical.helper.ShuffleHelper;
 import com.o4x.musical.helper.StopWatch;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
@@ -142,6 +144,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     @SuppressWarnings("deprecation")
     private MediaSessionCompat mediaSession;
     private PowerManager.WakeLock wakeLock;
+    @Nullable
+    private CountDownTimerPausable countDownTimerPausable;
     private PlaybackHandler playerHandler;
     private final AudioManager.OnAudioFocusChangeListener audioFocusListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
@@ -1067,6 +1071,15 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                 if (!isPlaying && getSongProgressMillis() > 0) {
                     savePositionInTrack();
                 }
+
+                if (countDownTimerPausable != null) {
+                    if (isPlaying) {
+                        countDownTimerPausable.start();
+                    } else {
+                        countDownTimerPausable.pause();
+                    }
+                }
+
                 songPlayCountHelper.notifyPlayStateChanged(isPlaying);
                 break;
             case META_CHANGED:
@@ -1074,12 +1087,27 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                 updateMediaSessionMetaData();
                 savePosition();
                 savePositionInTrack();
+
                 final Song currentSong = getCurrentSong();
-                HistoryStore.getInstance(this).addSongId(currentSong.getId());
-                if (songPlayCountHelper.shouldBumpPlayCount()) {
-                    SongPlayCountStore.getInstance(this).bumpPlayCount(songPlayCountHelper.getSong().getId());
-                }
-                songPlayCountHelper.notifySongChanged(currentSong);
+                Runnable r = () -> {
+                    HistoryStore.getInstance(this).addSongId(currentSong.getId());
+                    if (songPlayCountHelper.shouldBumpPlayCount()) {
+                        SongPlayCountStore.getInstance(this).bumpPlayCount(songPlayCountHelper.getSong().getId());
+                    }
+                    songPlayCountHelper.notifySongChanged(currentSong);
+                    sendChangeInternal(META_CHANGED);
+                };
+                if (countDownTimerPausable != null) countDownTimerPausable.cancel();
+                countDownTimerPausable = new CountDownTimerPausable(
+                        currentSong.getDuration() / 8, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {}
+                    @Override
+                    public void onFinish() { r.run(); }
+
+                };
+                countDownTimerPausable.start();
+
                 break;
             case QUEUE_CHANGED:
                 updateMediaSessionMetaData(); // because playing queue size might have changed
