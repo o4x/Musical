@@ -23,13 +23,12 @@ import java.util.List;
 
 public class GenresFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFragment<GenreAdapter, GridLayoutManager> {
 
-    @Nullable
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         getLibraryViewModel().getGenre().observe(getViewLifecycleOwner(), genres -> {
             getAdapter().swapDataSet(genres);
         });
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @NonNull

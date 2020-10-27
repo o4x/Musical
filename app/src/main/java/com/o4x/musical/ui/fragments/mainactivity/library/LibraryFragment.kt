@@ -59,7 +59,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
         if (PreferenceUtil.LIBRARY_CATEGORIES == key) {
             val current = currentFragment
             pagerAdapter!!.setCategoryInfos(libraryCategory)
-            pager!!.offscreenPageLimit = pagerAdapter!!.count - 1
             var position = current?.let { pagerAdapter?.getItemPosition(it) }
             position?.let {
                 if (it < 0) position = 0
@@ -73,7 +72,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
     private fun setUpViewPager() {
         pagerAdapter = MusicLibraryPagerAdapter(mainActivity, childFragmentManager)
         pager!!.adapter = pagerAdapter
-        pager!!.offscreenPageLimit = pagerAdapter!!.count - 1
         mainActivity.tabs.setupWithViewPager(pager)
         val primaryColor = surfaceColor()
         val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)

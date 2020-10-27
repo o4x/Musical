@@ -33,14 +33,13 @@ import java.util.List;
  */
 public class AlbumsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFragment<AlbumAdapter, GridLayoutManager> {
 
-    @Nullable
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         getLibraryViewModel()
                 .getAlbums().observe(getViewLifecycleOwner(), albums -> {
             getAdapter().swapDataSet(albums);
         });
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override

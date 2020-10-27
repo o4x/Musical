@@ -20,11 +20,8 @@ import java.util.*
 class PlaylistsFragment :
     AbsLibraryPagerRecyclerViewFragment<PlaylistAdapter, LinearLayoutManager>() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         libraryViewModel.getLegacyPlaylist()
             .observe(viewLifecycleOwner, {
                 val playlists: MutableList<Playlist> = it.toMutableList()
@@ -34,7 +31,6 @@ class PlaylistsFragment :
                 playlists.add(0, TopTracksPlaylist())
                 adapter?.swapDataSet(playlists)
             })
-        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun createLayoutManager(): LinearLayoutManager {
