@@ -41,6 +41,19 @@
         android:label="@string/equalizer"
         tools:layout="@layout/fragment_equalizer" />
 
+    <activity
+        android:id="@+id/settings"
+        android:name="com.o4x.musical.ui.activities.SettingsActivity"
+        android:label="@string/settings"
+        tools:layout="@layout/activity_settings"/>
+
+    <activity
+        android:id="@+id/buy_pro"
+        android:name="com.o4x.musical.ui.activities.PurchaseActivity"
+        android:label="@string/buy_pro"
+        tools:layout="@layout/activity_purchase" />
+
+
     <action
         android:id="@+id/action_to_search"
         app:destination="@id/search"
