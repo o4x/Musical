@@ -1,9 +1,9 @@
 package com.o4x.musical.ui.fragments.mainactivity.home
 
-import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
-import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorDark
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
@@ -41,7 +40,6 @@ import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.Util
-import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -72,14 +70,9 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     private var toolbarHeight by Delegates.notNull<Int>()
     private var headerHeight by Delegates.notNull<Int>()
 
-    // animations //
-    private val toolbarAnimation = ValueAnimator.ofFloat(0f, 1f)
-    private val statusAnimation = ValueAnimator.ofFloat(0f, 1f)
 
     override fun onDestroyView() {
         mainActivity.removeMusicServiceEventListener(listener)
-        toolbarAnimation.cancel()
-        statusAnimation.cancel()
         super.onDestroyView()
     }
 
@@ -93,8 +86,8 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
 
         showAppbar()
         if (scrollPositionViewModel.getPositionValue() < headerHeight) {
-            toolbarColorVisible(false)
-            statusBarColorVisible(false)
+            mainActivity.toolbar.setBackgroundColor(Color.TRANSPARENT)
+            mainActivity.window.statusBarColor = Color.TRANSPARENT
             mainActivity.appbar.elevation = 0f
         }
 
@@ -102,8 +95,8 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        onReloadSubToolbar()
         listener = Listener()
-        hideSubToolbar()
         setUpViews()
     }
 
@@ -190,7 +183,7 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         }
         shuffle_btn.backgroundTintList = ColorStateList.valueOf(themeColor())
         shuffle_btn.setColorFilter(
-            getSecondaryTextColor(activity, isColorLight(themeColor())),
+            getPrimaryTextColor(activity, isColorLight(themeColor())),
             PorterDuff.Mode.SRC_IN
         )
         open_queue_button.setBackgroundColor(themeColor())
@@ -456,61 +449,5 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                 (newAdapter.itemCount == 0)
             ) View.VISIBLE else View.GONE
         }
-    }
-
-    private fun toolbarColorVisible(show: Boolean) {
-        toolbarAnimation.cancel()
-
-        val color = surfaceColor()
-        val current = ViewUtil.getViewBackgroundColor(mainActivity.toolbar)
-
-        // break if current color equal final color
-        if (
-            show && current == ColorUtil.withAlpha(current, 1f)
-            ||
-            !show && current == ColorUtil.withAlpha(current, 0f)
-        ) {
-            mainActivity.toolbar.setBackgroundColor(
-                if (show) color else ColorUtil.withAlpha(
-                    color,
-                    0f
-                )
-            )
-            return
-        }
-
-        toolbarAnimation.duration =
-            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
-        toolbarAnimation.addUpdateListener { animator: ValueAnimator ->
-            val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
-            mainActivity.toolbar.setBackgroundColor(ColorUtil.withAlpha(color, f))
-        }
-        toolbarAnimation.start()
-    }
-
-    private fun statusBarColorVisible(show: Boolean) {
-        statusAnimation.cancel()
-
-        val color = surfaceColor()
-        val current = mainActivity.window.statusBarColor
-
-        // break if current color equal final color
-        if (
-            show && current == ColorUtil.withAlpha(current, 1f)
-            ||
-            !show && current == ColorUtil.withAlpha(current, 0f)
-        ) {
-            mainActivity.window.statusBarColor = if (show) color else ColorUtil.withAlpha(color, 0f)
-            return
-        }
-
-        statusAnimation.duration =
-            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
-        statusAnimation.addUpdateListener { animator: ValueAnimator ->
-            val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
-            mainActivity.window.statusBarColor = ColorUtil.withAlpha(color, f)
-        }
-        mainActivity.setLightStatusBarAuto(color)
-        statusAnimation.start()
     }
 }

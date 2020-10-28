@@ -51,9 +51,9 @@ import org.koin.android.ext.android.get
 
 class MainActivity : AbsMusicPanelActivity() {
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
 
-    lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var toggle: ActionBarDrawerToggle
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,26 +148,37 @@ class MainActivity : AbsMusicPanelActivity() {
         rectangle.setColor(themeColor)
         rectangleRadius.setColor(withAlpha(themeColor, 0.2f))
 
-        navigation_view.setNavigationItemSelectedListener { menuItem: MenuItem ->
-            drawer_layout.closeDrawers()
-            Handler(Looper.getMainLooper()).postDelayed(
-                {
-                    when (menuItem.itemId) {
-                        R.id.nav_home -> setMusicChooser(R.id.nav_home)
-                        R.id.nav_queue -> setMusicChooser(R.id.nav_queue)
-                        R.id.nav_library -> setMusicChooser(R.id.nav_library)
-                        R.id.nav_folders -> setMusicChooser(R.id.nav_folders)
-                        R.id.nav_eq -> setMusicChooser(R.id.nav_eq)
-                        R.id.action_scan -> {
+        var lastItem: MenuItem? = null
+
+        drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+            override fun onDrawerStateChanged(newState: Int) {}
+            override fun onDrawerOpened(drawerView: View) {}
+
+            override fun onDrawerClosed(drawerView: View) {
+
+                when (lastItem?.itemId) {
+                    R.id.nav_home -> setMusicChooser(R.id.nav_home)
+                    R.id.nav_queue -> setMusicChooser(R.id.nav_queue)
+                    R.id.nav_library -> setMusicChooser(R.id.nav_library)
+                    R.id.nav_folders -> setMusicChooser(R.id.nav_folders)
+                    R.id.nav_eq -> setMusicChooser(R.id.nav_eq)
+                    R.id.action_scan -> {
 //                            val dialog = ScanMediaFolderChooserDialog.create()
 //                            dialog.show(supportFragmentManager, "SCAN_MEDIA_FOLDER_CHOOSER")
-                        }
-                        R.id.nav_settings -> navController.navigate(R.id.settings)
-                        R.id.buy_pro -> navController.navigate(R.id.buy_pro)
                     }
-                },
-                200
-            )
+                    R.id.nav_settings -> navController.navigate(R.id.settings)
+                    R.id.buy_pro -> navController.navigate(R.id.buy_pro)
+                }
+
+            }
+        })
+
+        navigation_view.setNavigationItemSelectedListener { menuItem: MenuItem ->
+            lastItem = menuItem
+            drawer_layout.closeDrawers()
+
             false
         }
     }
@@ -330,6 +341,6 @@ class MainActivity : AbsMusicPanelActivity() {
         get() = main_bread_crumbs
 
     companion object {
-        val TAG = MainActivity::class.java.simpleName
+        val TAG: String = MainActivity::class.java.simpleName
     }
 }
