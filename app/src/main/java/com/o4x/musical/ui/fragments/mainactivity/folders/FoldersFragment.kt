@@ -101,6 +101,11 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
         setUpAdapter()
     }
 
+    override fun onReloadSubToolbar() {
+        super.onReloadSubToolbar()
+        mainActivity.bread_crumbs.visibility = View.VISIBLE
+    }
+
     private fun setUpAppbarColor() {
         val primaryColor = surfaceColor()
         mainActivity.bread_crumbs.setBackgroundColor(primaryColor)
@@ -111,7 +116,6 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
     }
 
     private fun setUpBreadCrumbs() {
-        mainActivity.bread_crumbs.visibility = View.VISIBLE
         mainActivity.bread_crumbs.setCallback(this)
     }
 

@@ -2,13 +2,15 @@ package com.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.misc.OverScrollGridLayoutManager
@@ -19,6 +21,7 @@ import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.util.Util
+import com.o4x.musical.util.ViewUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.max
 import kotlin.math.min
@@ -34,6 +37,11 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
     val mainActivity: MainActivity
         get() = requireActivity() as MainActivity
 
+    // animations //
+    private var appbarAnimation: ValueAnimator? = null
+    private val toolbarAnimation = ValueAnimator.ofFloat(0f, 1f)
+    private val statusAnimation = ValueAnimator.ofFloat(0f, 1f)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,9 +55,8 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
         super.onViewCreated(view, savedInstanceState)
         mainActivity.setStatusBarColorAuto()
         mainActivity.toolbar.setBackgroundColor(surfaceColor())
-        mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
-        hideSubToolbar()
         showAppbar()
+        onReloadSubToolbar()
     }
 
     override fun onResume() {
@@ -59,11 +66,13 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
 
     override fun onDestroy() {
         mainActivity.removeMusicServiceEventListener(libraryViewModel)
-        animation?.cancel()
+        appbarAnimation?.cancel()
+        toolbarAnimation.cancel()
+        statusAnimation.cancel()
         super.onDestroy()
     }
 
-    fun hideSubToolbar() {
+    open fun onReloadSubToolbar() {
         mainActivity.search.visibility = View.GONE
         mainActivity.tabs.visibility = View.GONE
         mainActivity.bread_crumbs.visibility = View.GONE
@@ -91,19 +100,19 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
         }
     }
 
-    private var animation: ValueAnimator? = null
+
     fun showAppbar() {
         mainActivity.appbar.setExpanded(true, true)
         val from = mainActivity.appbar.y.toInt()
         val to = 0
-        animation?.cancel()
-        animation = ValueAnimator.ofInt(from, to)
-        animation?.duration =
+        appbarAnimation?.cancel()
+        appbarAnimation = ValueAnimator.ofInt(from, to)
+        appbarAnimation?.duration =
             resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
-        animation?.addUpdateListener { animator: ValueAnimator ->
+        appbarAnimation?.addUpdateListener { animator: ValueAnimator ->
             mainActivity.appbar.y = (animator.animatedValue as Int).toFloat()
         }
-        animation?.start()
+        appbarAnimation?.start()
     }
 
     fun setAppbarPadding(view: View) {
@@ -142,11 +151,11 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
             object : VerticalScrollListener() {
                 override fun onScroll(dy: Int) {
                     if (recyclerView.isRecyclerScrollable()) {
-                        animation?.cancel()
+                        appbarAnimation?.cancel()
                         handler(dy, true)
                     } else {
                         if (mainActivity.appbar.y != 0f) {
-                            if (animation?.isRunning != true)
+                            if (appbarAnimation?.isRunning != true)
                                 showAppbar()
                         }
                         if (recyclerView.paddingTop != appbarHeight) {
@@ -162,5 +171,61 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
         } else if (lm is OverScrollGridLayoutManager) {
             lm.setOnVerticalScrollListener(verticalScrollListener)
         }
+    }
+
+    fun toolbarColorVisible(show: Boolean) {
+        toolbarAnimation.cancel()
+
+        val color = surfaceColor()
+        val current = ViewUtil.getViewBackgroundColor(mainActivity.toolbar)
+
+        // break if current color equal final color
+        if (
+            show && current == ColorUtil.withAlpha(current, 1f)
+            ||
+            !show && current == ColorUtil.withAlpha(current, 0f)
+        ) {
+            mainActivity.toolbar.setBackgroundColor(
+                if (show) color else ColorUtil.withAlpha(
+                    color,
+                    0f
+                )
+            )
+            return
+        }
+
+        toolbarAnimation.duration =
+            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
+        toolbarAnimation.addUpdateListener { animator: ValueAnimator ->
+            val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
+            mainActivity.toolbar.setBackgroundColor(ColorUtil.withAlpha(color, f))
+        }
+        toolbarAnimation.start()
+    }
+
+    fun statusBarColorVisible(show: Boolean) {
+        statusAnimation.cancel()
+
+        val color = surfaceColor()
+        val current = mainActivity.window.statusBarColor
+
+        // break if current color equal final color
+        if (
+            show && current == ColorUtil.withAlpha(current, 1f)
+            ||
+            !show && current == ColorUtil.withAlpha(current, 0f)
+        ) {
+            mainActivity.window.statusBarColor = if (show) color else ColorUtil.withAlpha(color, 0f)
+            return
+        }
+
+        statusAnimation.duration =
+            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong() // milliseconds
+        statusAnimation.addUpdateListener { animator: ValueAnimator ->
+            val f = if (show) animator.animatedFraction else 1 - animator.animatedFraction
+            mainActivity.window.statusBarColor = ColorUtil.withAlpha(color, f)
+        }
+        mainActivity.setLightStatusBarAuto(color)
+        statusAnimation.start()
     }
 }
