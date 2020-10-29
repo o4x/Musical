@@ -35,7 +35,7 @@ class CoverUtil constructor(val context: Context) {
 
 
         // Render char's
-        val paint = Paint()
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.color = ColorUtil.withAlpha(context.textColorPrimary(), 0.5f)// Text Color
         paint.textSize = charSize // Text Size
         paint.isFakeBoldText = true
@@ -82,7 +82,7 @@ class CoverUtil constructor(val context: Context) {
     companion object {
 
         @JvmField
-        val DEFAULT_SIZE = Util.getScreenWidth() / 2
+        val DEFAULT_SIZE = Util.getScreenWidth() / 4
 
         @JvmStatic
         fun createSquareCoverWithText(
