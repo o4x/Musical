@@ -108,6 +108,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':appthemehelper')
+    implementation project(':recyclerview-fastscroll')
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.annotation:annotation:1.1.0'
@@ -134,7 +135,6 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-    implementation 'com.github.kabouzeid:RecyclerView-FastScroll:1.0.16-kmod'
     implementation 'com.github.kabouzeid:SeekArc:1.2-kmod'
     implementation 'com.github.kabouzeid:AndroidSlidingUpPanel:6'
 
