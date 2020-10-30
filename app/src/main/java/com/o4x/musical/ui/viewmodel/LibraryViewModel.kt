@@ -1,13 +1,26 @@
 package com.o4x.musical.ui.viewmodel
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.util.Log
+import androidx.annotation.ColorInt
+import androidx.core.view.setPadding
 import androidx.lifecycle.*
+import code.name.monkey.appthemehelper.util.ColorUtil
+import com.o4x.musical.App
 import com.o4x.musical.db.*
+import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.helper.MusicPlayerRemote
+import com.o4x.musical.imageloader.glide.loader.GlideLoader
+import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.*
 import com.o4x.musical.repository.RealRepository
+import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.util.Util
+import com.o4x.musical.util.color.MediaNotificationProcessor
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
@@ -15,7 +28,9 @@ class LibraryViewModel(
     private val repository: RealRepository
 ) : ViewModel(), MusicServiceEventListener {
 
-    private val _paletteColor = MutableLiveData<Int>()
+    private val paletteColor = MutableLiveData<Int>()
+    private val posterBitmap = MutableLiveData<Bitmap>()
+
     private val albums = MutableLiveData<List<Album>>()
     private val songs = MutableLiveData<List<Song>>()
     private val artists = MutableLiveData<List<Artist>>()
@@ -27,7 +42,18 @@ class LibraryViewModel(
     private val recentlyPlayed = MutableLiveData<List<Song>>()
     private val queue = MutableLiveData<List<Song>>()
 
-    val paletteColor: LiveData<Int> = _paletteColor
+    fun getPaletteColor(): LiveData<Int> = paletteColor
+    fun getPosterBitmap(): LiveData<Bitmap> = posterBitmap
+    fun getSearchResult(): LiveData<List<Any>> = searchResults
+    fun getSongs(): LiveData<List<Song>> = songs
+    fun getAlbums(): LiveData<List<Album>> = albums
+    fun getArtists(): LiveData<List<Artist>> = artists
+    fun getPlaylists(): LiveData<List<PlaylistWithSongs>> = playlists
+    fun getLegacyPlaylist(): LiveData<List<Playlist>> = legacyPlaylists
+    fun getGenre(): LiveData<List<Genre>> = genres
+    fun getRecentlyPlayed(): LiveData<List<Song>> = recentlyPlayed
+    fun getRecentlyAdded(): LiveData<List<Song>> = recentlyAdded
+    fun getQueue(): LiveData<List<Song>> = queue
 
     init {
         loadLibraryContent()
@@ -40,48 +66,11 @@ class LibraryViewModel(
         fetchGenres()
         fetchPlaylists()
         fetchLegacyPlaylist()
-
         fetchRecentlyPlayed()
         fetchRecentlyAdded()
         fetchQueue()
-    }
 
-    fun getSearchResult(): LiveData<List<Any>> = searchResults
-
-    fun getSongs(): LiveData<List<Song>> {
-        return songs
-    }
-
-    fun getAlbums(): LiveData<List<Album>> {
-        return albums
-    }
-
-    fun getArtists(): LiveData<List<Artist>> {
-        return artists
-    }
-
-    fun getPlaylists(): LiveData<List<PlaylistWithSongs>> {
-        return playlists
-    }
-
-    fun getLegacyPlaylist(): LiveData<List<Playlist>> {
-        return legacyPlaylists
-    }
-
-    fun getGenre(): LiveData<List<Genre>> {
-        return genres
-    }
-
-    fun getRecentlyPlayed(): LiveData<List<Song>> {
-        return recentlyPlayed
-    }
-
-    fun getRecentlyAdded(): LiveData<List<Song>> {
-        return recentlyAdded
-    }
-
-    fun getQueue(): LiveData<List<Song>> {
-        return queue
+        fetchPosterBitmap()
     }
 
     private fun fetchSongs() {
@@ -144,9 +133,33 @@ class LibraryViewModel(
         }
     }
 
-    fun search(query: String?) = viewModelScope.launch(IO) {
-        val result = repository.search(query)
-        searchResults.postValue(result)
+    private fun fetchPosterBitmap() {
+        viewModelScope.launch {
+
+            val songs = repository.allSongs()
+            if (songs.isEmpty()) return@launch
+
+            var colors: MediaNotificationProcessor? = null
+            var bitmap = GlideLoader.with(App.getContext())
+                .withListener(
+                    object : MusicColoredTargetListener() {
+                        override fun onColorReady(c: MediaNotificationProcessor) { colors = c }
+                    }
+                ).load(songs.random()).withSize(Util.getMaxScreenSize()).createSync(App.getContext())
+
+            bitmap = if (App.getContext().isDarkMode ==
+                ColorUtil.isColorDark(colors!!.backgroundColor)
+            ) {
+                CoverUtil.addGradientTo(bitmap)
+            } else {
+                CoverUtil.doubleGradient(
+                    colors!!.backgroundColor,
+                    colors!!.mightyColor
+                )
+            }
+
+            posterBitmap.postValue(bitmap)
+        }
     }
 
     fun forceReload(reloadType: ReloadType) = viewModelScope.launch {
@@ -163,7 +176,7 @@ class LibraryViewModel(
     }
 
     fun updateColor(newColor: Int) {
-        _paletteColor.postValue(newColor)
+        paletteColor.postValue(newColor)
     }
 
     override fun onMediaStoreChanged() {
@@ -201,6 +214,11 @@ class LibraryViewModel(
 
     override fun onShuffleModeChanged() {
         println("onShuffleModeChanged")
+    }
+
+    fun search(query: String?) = viewModelScope.launch(IO) {
+        val result = repository.search(query)
+        searchResults.postValue(result)
     }
 
     fun shuffleSongs() = viewModelScope.launch(IO) {

@@ -38,6 +38,7 @@ import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
+import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.NavigationUtil
@@ -61,7 +62,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private lateinit var newAdapter: HomeAdapter
     private lateinit var recentlyLayoutManager: GridLayoutManager
     private lateinit var newLayoutManager: GridLayoutManager
-    private lateinit var listener: Listener
 
 
     // Heights //
@@ -72,12 +72,10 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
 
     override fun onDestroyView() {
-        mainActivity.removeMusicServiceEventListener(listener)
         super.onDestroyView()
     }
 
     override fun onPause() {
-        mainActivity.removeMusicServiceEventListener(listener)
         super.onPause()
     }
 
@@ -91,12 +89,10 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             mainActivity.appbar.elevation = 0f
         }
 
-        mainActivity.addMusicServiceEventListener(listener)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         onReloadSubToolbar()
-        listener = Listener()
         setUpViews()
     }
 
@@ -137,12 +133,14 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private fun setUpViews() {
         setUpHeights()
         setupButtons()
+        setupPoster()
         setUpBounceScrollView()
         setUpQueueView()
         setUpRecentlyView()
         setUpNewView()
         checkIsEmpty()
     }
+
 
     private fun setUpHeights() {
         displayHeight = Resources.getSystem().displayMetrics.heightPixels
@@ -191,6 +189,13 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             getPrimaryTextColor(activity, isColorLight(themeColor()))
         )
     }
+
+    private fun setupPoster() {
+        libraryViewModel.getPosterBitmap().observe(viewLifecycleOwner, {
+            poster.setImageBitmap(it)
+        })
+    }
+
 
     private fun setUpBounceScrollView() {
 
@@ -336,73 +341,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private val gridSize: Int
         get() = resources.getInteger(R.integer.home_grid_columns)
 
-    internal inner class Listener : MusicServiceEventListener {
-        override fun onServiceConnected() {
-            updatePoster()
-            checkIsEmpty()
-        }
-
-        override fun onServiceDisconnected() {}
-        override fun onQueueChanged() {}
-
-        override fun onPlayingMetaChanged() {}
-
-        override fun onPlayStateChanged() {}
-
-        override fun onRepeatModeChanged() {}
-        override fun onShuffleModeChanged() {}
-        override fun onMediaStoreChanged() {}
-
-        private fun updatePoster() {
-
-            if (MusicPlayerRemote.playingQueue.isNotEmpty()) {
-                val song = MusicPlayerRemote.currentSong
-
-                GlideLoader.with(requireContext())
-                    .withListener(
-                    object : MusicColoredTargetListener() {
-
-                        var bitmap: Bitmap? = null
-
-                        override fun onResourceReady(resource: Bitmap?) {
-                            super.onResourceReady(resource)
-                            bitmap = resource
-                        }
-
-                        override fun onColorReady(colors: MediaNotificationProcessor) {
-                            if (poster == null) return
-
-                            poster.background =
-                                BitmapDrawable(
-                                    resources,
-                                    CoverUtil.doubleGradient(
-                                        colors.backgroundColor,
-                                        colors.mightyColor
-                                    )
-                                )
-
-                            bitmap?.let {
-                                if (requireContext().isDarkMode ==
-                                    isColorDark(colors.backgroundColor)) {
-                                    poster.setPadding(0)
-                                    poster.setImageBitmap(CoverUtil.addGradientTo(it))
-                                } else {
-                                    poster.setPadding(appbarHeight)
-                                    poster.setImageBitmap(it)
-                                }
-                            }
-                        }
-
-                    }
-                ).load(song).withSize(Util.getMaxScreenSize()).into(poster)
-
-            }
-        }
-
-        init {
-            updatePoster()
-        }
-    }
 
     private fun checkIsEmpty() {
         if (empty != null) {

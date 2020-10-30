@@ -171,6 +171,12 @@ class GlideLoader {
         }
 
         fun intoSync(image: ImageView) {
+            image.setImageBitmap(
+                createSync(image.context)
+            )
+        }
+
+        fun createSync(context: Context): Bitmap {
             var bitmap: Bitmap? = null
 
             val thread = Thread {
@@ -179,7 +185,7 @@ class GlideLoader {
                         .submit()
                         .get()
                 } catch(e: Exception) {
-                    listener.coverData.create(image.context)
+                    listener.coverData.create(context)
                 }
             }
 
@@ -188,7 +194,8 @@ class GlideLoader {
 
             listener.isSync = true
             listener.onResourceReady(bitmap)
-            image.setImageBitmap(bitmap)
+
+            return bitmap!!
         }
     }
 }
