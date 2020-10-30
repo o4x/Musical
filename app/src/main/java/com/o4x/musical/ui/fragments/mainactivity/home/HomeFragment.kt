@@ -11,6 +11,7 @@ import android.util.DisplayMetrics
 import android.view.*
 import androidx.core.view.setPadding
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -36,6 +37,7 @@ import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
+import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.NavigationUtil
@@ -49,16 +51,14 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
 
-class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
+class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
         parametersOf(null)
     }
 
-    private lateinit var queueAdapter: HomeAdapter
     private lateinit var recentlyAdapter: HomeAdapter
     private lateinit var newAdapter: HomeAdapter
-    private lateinit var queueLayoutManager: LinearLayoutManager
     private lateinit var recentlyLayoutManager: GridLayoutManager
     private lateinit var newLayoutManager: GridLayoutManager
     private lateinit var listener: Listener
@@ -259,15 +259,20 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
         queue_recycler_view.layoutManager = queueLayoutManager
         queueAdapter = HomeAdapter(
             mainActivity,
-            MusicPlayerRemote.playingQueue,
-            MusicPlayerRemote.position,
+            ArrayList(),
+            0,
             R.layout.item_card_home,
             null,
             true
         )
         queue_recycler_view.adapter = queueAdapter
         queue_recycler_view.itemAnimator = animator
-        queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.position, 0)
+
+        libraryViewModel.getQueue().observe(viewLifecycleOwner, {
+            val firstLoad = queueAdapter.itemCount == 0
+            queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
+            if (firstLoad) toCurrentPosition()
+        })
     }
 
     private fun setUpRecentlyView() {
@@ -334,37 +339,19 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
     internal inner class Listener : MusicServiceEventListener {
         override fun onServiceConnected() {
             updatePoster()
-            updateQueue()
-            resetToCurrentPosition()
             checkIsEmpty()
         }
 
         override fun onServiceDisconnected() {}
-        override fun onQueueChanged() {
-            updateQueue()
-        }
+        override fun onQueueChanged() {}
 
-        override fun onPlayingMetaChanged() {
-            updateQueue()
-            resetToCurrentPosition()
-        }
+        override fun onPlayingMetaChanged() {}
 
-        override fun onPlayStateChanged() {
-            updateQueue()
-        }
+        override fun onPlayStateChanged() {}
 
         override fun onRepeatModeChanged() {}
         override fun onShuffleModeChanged() {}
-        override fun onMediaStoreChanged() {
-            updateQueue()
-        }
-
-        private fun updateQueue() {
-            queueAdapter.swapDataSet(
-                MusicPlayerRemote.playingQueue,
-                MusicPlayerRemote.position
-            )
-        }
+        override fun onMediaStoreChanged() {}
 
         private fun updatePoster() {
 
@@ -410,31 +397,6 @@ class HomeFragment : AbsMainActivityFragment(R.layout.fragment_home) {
                 ).load(song).withSize(Util.getMaxScreenSize()).into(poster)
 
             }
-        }
-
-        private fun resetToCurrentPosition() {
-            if (queueAdapter.itemCount == 0) return
-            queue_recycler_view.stopScroll()
-            val from = queueLayoutManager.findFirstVisibleItemPosition()
-            val to = MusicPlayerRemote.position
-            val delta = abs(to - from)
-
-            val smoothScroller: SmoothScroller = object : LinearSmoothScroller(activity) {
-                override fun getHorizontalSnapPreference(): Int {
-                    return SNAP_TO_ANY
-                }
-
-                override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                    return if (delta < 20) {
-                        super.calculateSpeedPerPixel(displayMetrics) * 5
-                    } else {
-                        super.calculateSpeedPerPixel(displayMetrics)
-                    }
-                }
-            }
-
-            smoothScroller.targetPosition = to
-            queueLayoutManager.startSmoothScroll(smoothScroller)
         }
 
         init {
