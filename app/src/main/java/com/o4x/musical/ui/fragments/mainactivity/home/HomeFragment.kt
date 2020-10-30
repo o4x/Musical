@@ -2,52 +2,34 @@ package com.o4x.musical.ui.fragments.mainactivity.home
 
 import android.content.res.ColorStateList
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.*
-import androidx.core.view.setPadding
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.SmoothScroller
-import code.name.monkey.appthemehelper.util.ColorUtil.isColorDark
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
-import code.name.monkey.appthemehelper.util.MaterialValueHelper.getSecondaryTextColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.o4x.musical.R
-import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.imageloader.glide.loader.GlideLoader
-import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
-import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
-import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
-import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
-import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.NavigationUtil
-import com.o4x.musical.util.Util
-import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
@@ -138,7 +120,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         setUpQueueView()
         setUpRecentlyView()
         setUpNewView()
-        checkIsEmpty()
+        setupEmpty()
     }
 
 
@@ -274,6 +256,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         queue_recycler_view.itemAnimator = animator
 
         libraryViewModel.getQueue().observe(viewLifecycleOwner, {
+            queue_container.isVisible = it.isNotEmpty()
             val firstLoad = queueAdapter.itemCount == 0
             queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
             if (firstLoad) toCurrentPosition()
@@ -293,6 +276,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         )
         recently_recycler_view.adapter = recentlyAdapter
         libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner, {
+            recently_container.isVisible = it.isNotEmpty()
             recentlyAdapter.swapDataSet(it)
         })
     }
@@ -309,7 +293,9 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             false,
         )
         new_recycler_view.adapter = newAdapter
+
         libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner, {
+            newly_container.isVisible = it.isNotEmpty()
             newAdapter.swapDataSet(it)
         })
     }
@@ -342,12 +328,10 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         get() = resources.getInteger(R.integer.home_grid_columns)
 
 
-    private fun checkIsEmpty() {
-        if (empty != null) {
-            empty.visibility = if ((queueAdapter.itemCount == 0) and
-                (recentlyAdapter.itemCount == 0) and
-                (newAdapter.itemCount == 0)
-            ) View.VISIBLE else View.GONE
-        }
+    private fun setupEmpty() {
+        libraryViewModel.getSongs().observe(viewLifecycleOwner, {
+            empty.isVisible = it.isEmpty()
+            shuffle_btn.isVisible = it.isNotEmpty()
+        })
     }
 }
