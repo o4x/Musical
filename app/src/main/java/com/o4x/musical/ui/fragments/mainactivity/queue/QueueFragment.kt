@@ -19,33 +19,13 @@ import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
+import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import kotlinx.android.synthetic.main.fragment_queue.*
 
-class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
+class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
 
-    private var queueAdapter: PlayingQueueAdapter? = null
-    private var queueLayoutManager: LinearLayoutManager? = null
-    private var queueListener: QueueListener? = null
-    private var wrappedAdapter: RecyclerView.Adapter<*>? = null
-    private var recyclerViewDragDropManager: RecyclerViewDragDropManager? = null
-
-    override fun onDestroyView() {
-        mainActivity.removeMusicServiceEventListener(queueListener)
-        queueAdapter = null
-        queueLayoutManager = null
-        queueListener = null
-        super.onDestroyView()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        queueListener = QueueListener()
-        mainActivity.addMusicServiceEventListener(queueListener)
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
+    private lateinit var wrappedAdapter: RecyclerView.Adapter<*>
+    private lateinit var recyclerViewDragDropManager: RecyclerViewDragDropManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -98,71 +78,25 @@ class QueueFragment : AbsMainActivityFragment(R.layout.fragment_queue) {
             MusicPlayerRemote.position,
             R.layout.item_list,
             null)
-        wrappedAdapter = recyclerViewDragDropManager!!.createWrappedAdapter(queueAdapter!!)
+        wrappedAdapter = recyclerViewDragDropManager.createWrappedAdapter(queueAdapter)
         queueLayoutManager = OverScrollLinearLayoutManager(requireContext())
-        queue_recycler_view!!.layoutManager = queueLayoutManager
-        queue_recycler_view!!.adapter = wrappedAdapter
-        queue_recycler_view!!.itemAnimator = animator
-        recyclerViewDragDropManager!!.attachRecyclerView(queue_recycler_view!!)
-        queueLayoutManager!!.scrollToPositionWithOffset(MusicPlayerRemote.position, 0)
+        queue_recycler_view?.layoutManager = queueLayoutManager
+        queue_recycler_view?.adapter = wrappedAdapter
+        queue_recycler_view?.itemAnimator = animator
+        recyclerViewDragDropManager.attachRecyclerView(queue_recycler_view)
+
+        libraryViewModel.getQueue().observe(viewLifecycleOwner, {
+            queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
+            checkIsEmpty()
+        })
 
         queue_recycler_view.addAppbarListener()
-    }
-
-    internal inner class QueueListener : MusicServiceEventListener {
-        override fun onServiceConnected() {
-            updateQueue()
-        }
-
-        override fun onServiceDisconnected() {}
-        override fun onQueueChanged() {
-            updateQueue()
-        }
-
-        override fun onPlayingMetaChanged() {
-            updateQueue()
-        }
-
-        override fun onPlayStateChanged() {}
-        override fun onRepeatModeChanged() {}
-        override fun onShuffleModeChanged() {}
-        override fun onMediaStoreChanged() {
-            updateQueue()
-        }
-
-        private fun updateQueue() {
-            queueAdapter!!.swapDataSet(MusicPlayerRemote.playingQueue,
-                MusicPlayerRemote.position)
-            resetToCurrentPosition()
-            checkIsEmpty()
-        }
-
-        private fun resetToCurrentPosition() {
-            if (queueAdapter!!.itemCount == 0) return
-            queue_recycler_view!!.stopScroll()
-            val smoothScroller: SmoothScroller = object : LinearSmoothScroller(context) {
-                override fun getVerticalSnapPreference(): Int {
-                    return SNAP_TO_ANY
-                }
-            }
-            try {
-                smoothScroller.targetPosition = MusicPlayerRemote.position + 2
-                queueLayoutManager!!.startSmoothScroll(smoothScroller)
-            } catch (e: Exception) {
-            }
-        }
     }
 
     private fun checkIsEmpty() {
         if (empty != null) {
             empty!!.visibility =
-                if (queueAdapter == null || queueAdapter!!.itemCount == 0) View.VISIBLE else View.GONE
-        }
-    }
-
-    companion object {
-        fun newInstance(): QueueFragment {
-            return QueueFragment()
+                if (queueAdapter.itemCount == 0) View.VISIBLE else View.GONE
         }
     }
 }

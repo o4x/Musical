@@ -2,8 +2,6 @@ package com.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
