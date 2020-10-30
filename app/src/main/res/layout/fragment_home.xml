@@ -27,7 +27,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:animateLayoutChanges="true">
 
                 <View
                     android:id="@+id/header"
@@ -37,127 +38,137 @@
                     android:clickable="true"
                     android:background="?android:attr/selectableItemBackground"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/queue_parent"
+                <LinearLayout
+                    android:id="@+id/queue_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/queue_playing_text"
-                        android:layout_width="wrap_content"
+                    <FrameLayout
+                        android:id="@+id/queue_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:fontFamily="sans-serif-medium"
-                        android:singleLine="true"
-                        android:text="@string/playing_queue"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="?android:attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/queue_playing_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:singleLine="true"
+                            android:text="@string/playing_queue"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:layout_gravity="start|center_vertical" />
+
+                        <Button
+                            android:id="@+id/open_queue_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="0dp"
+                            android:minWidth="0dp"
+                            android:layout_margin="16dp"
+                            android:text="@string/open"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                            android:layout_gravity="end|center_vertical" />
+
+                    </FrameLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/queue_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="4dp"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="always" />
 
                     <Space
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recently_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/recently_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/open_queue_button"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/queue_playing_text"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="?android:attr/selectableItemBackground" >
 
-                    <Button
-                        android:id="@+id/open_queue_button"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:layout_centerInParent="true"
+                            android:text="@string/recently_played"
+                            android:fontFamily="sans-serif-medium"
+                            android:singleLine="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                    </RelativeLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recently_recycler_view"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="0dp"
-                        android:minWidth="0dp"
-                        android:layout_margin="16dp"
-                        android:text="@string/open"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:paddingVertical="4dp"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/queue_recycler_view"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/newly_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingVertical="4dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="always" />
-                
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp" />
+                    android:orientation="vertical">
 
-                <RelativeLayout
-                    android:id="@+id/recently_parent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/newly_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:layout_centerInParent="true"
-                        android:text="@string/recently_played"
-                        android:fontFamily="sans-serif-medium"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                        />
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:background="?android:attr/selectableItemBackground">
 
-                </RelativeLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:layout_centerInParent="true"
+                            android:text="@string/recently_added"
+                            android:fontFamily="sans-serif-medium"
+                            android:singleLine="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recently_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="4dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"/>
+                    </RelativeLayout>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp" />
-
-                <RelativeLayout
-                    android:id="@+id/newly_parent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/new_recycler_view"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:layout_centerInParent="true"
-                        android:text="@string/recently_added"
-                        android:fontFamily="sans-serif-medium"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                        />
+                        android:paddingVertical="4dp"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never" />
 
-                </RelativeLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/new_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="4dp"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never" />
+                </LinearLayout>
 
             </LinearLayout>
 
