@@ -28,6 +28,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
@@ -202,12 +203,12 @@ public class FastScroller {
                 if (mIsDragging) {
                     // Update the fastscroller section name at this touch position
                     int top = 0;
-                    int bottom = mRecyclerView.getHeight() - mThumbHeight;
+                    int bottom = mRecyclerView.getHeight() - mThumbHeight - mRecyclerView.getPaddingTop();
                     float boundedY = (float) Math.max(top, Math.min(bottom, y - mTouchOffset));
                     String sectionName = mRecyclerView.scrollToPositionAtProgress((boundedY - top) / (bottom - top));
                     mPopup.setSectionName(sectionName);
                     mPopup.animateVisibility(!sectionName.isEmpty());
-                    mRecyclerView.invalidate(mPopup.updateFastScrollerBounds(mRecyclerView, mThumbPosition.y));
+                    mRecyclerView.invalidate(mPopup.updateFastScrollerBounds(mRecyclerView, mThumbPosition.y + mRecyclerView.getPaddingTop()));
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -225,6 +226,8 @@ public class FastScroller {
     }
 
     public void draw(Canvas canvas) {
+
+        mOffset = new Point(mOffset.x, mRecyclerView.getPaddingTop());
 
         if (mThumbPosition.x < 0 || mThumbPosition.y < 0) {
             return;
@@ -247,7 +250,7 @@ public class FastScroller {
         mTmpRect.set(mThumbPosition.x, mThumbPosition.y, mThumbPosition.x + mWidth,
                 mThumbPosition.y + mThumbHeight);
         mTmpRect.inset(mTouchInset, mTouchInset);
-        return mTmpRect.contains(x, y);
+        return mTmpRect.contains(x, y - mRecyclerView.getPaddingTop());
     }
 
     public void setThumbPosition(int x, int y) {
