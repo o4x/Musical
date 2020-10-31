@@ -94,7 +94,6 @@ class MainActivity : AbsMusicPanelActivity() {
 
     private fun setupToolbar() {
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
-        setTitle(R.string.app_name)
         setSupportActionBar(toolbar)
     }
 

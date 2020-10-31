@@ -35,15 +35,6 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_main, menu)
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
-            mainActivity.toolbar,
-            menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, mainActivity.toolbar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

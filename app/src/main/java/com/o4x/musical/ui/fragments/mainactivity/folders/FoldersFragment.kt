@@ -169,15 +169,6 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_folders, menu)
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
-            mainActivity.toolbar,
-            menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, mainActivity.toolbar)
     }
 
     override fun onCrumbSelection(crumb: Crumb, index: Int) {

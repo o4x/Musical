@@ -51,11 +51,15 @@ class PlaylistDetailFragment : AbsMainActivityFragment(R.layout.fragment_detail_
         ButterKnife.bind(view)
         playlist = requireArguments().getParcelable(EXTRA_PLAYLIST)
         setUpRecyclerView()
-        setUpToolbar()
         mainActivity.addMusicServiceEventListener(viewModel)
         viewModel.playListSongs.observe(viewLifecycleOwner, {
             adapter?.swapDataSet(it)
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setToolbarTitle(playlist!!.name)
     }
 
     private fun setUpRecyclerView() {
@@ -100,14 +104,6 @@ class PlaylistDetailFragment : AbsMainActivityFragment(R.layout.fragment_detail_
                 checkIsEmpty()
             }
         })
-    }
-
-    private fun setUpToolbar() {
-        setToolbarTitle(playlist!!.name)
-    }
-
-    private fun setToolbarTitle(title: String) {
-        mainActivity.toolbar.title = title
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {

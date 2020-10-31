@@ -63,6 +63,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
 
     override fun onResume() {
         super.onResume()
+        setToolbarTitle(navController().currentDestination?.label.toString())
         mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
     }
 
@@ -88,6 +89,10 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
 
     override fun handleBackPress(): Boolean {
         return false
+    }
+
+    fun setToolbarTitle(title: String?) {
+        mainActivity.toolbar.title = title
     }
 
     fun toolbarHeight(): Int {
