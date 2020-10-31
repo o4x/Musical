@@ -42,7 +42,6 @@ object PreferenceUtil {
     const val CLASSIC_NOTIFICATION = "classic_notification"
     const val AUDIO_DUCKING = "audio_ducking"
     const val GAPLESS_PLAYBACK = "gapless_playback"
-    const val LAST_ADDED_CUTOFF = "last_added_interval"
     const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
     const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
     const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
@@ -56,6 +55,7 @@ object PreferenceUtil {
     const val LANGUAGE_NAME = "language_name"
     const val IGNORE_MEDIA = "ignore_media_store_artwork"
     const val REMEMBER_SHUFFLE = "remember_shuffle"
+    const val SMART_PLAYLIST_LIMIT = "smart_playlist_limit"
 
     @JvmStatic
     fun isAllowedToDownloadMetadata(context: Context): Boolean {
@@ -155,6 +155,11 @@ object PreferenceUtil {
         set(value) = sharedPreferences.edit { putBoolean(CLASSIC_NOTIFICATION, value) }
 
     @JvmStatic
+    var smartPlaylistLimit
+        get() = sharedPreferences.getInt(SMART_PLAYLIST_LIMIT, 100)
+        set(value) = sharedPreferences.edit { putInt(SMART_PLAYLIST_LIMIT, value) }
+
+    @JvmStatic
     var isColoredNotification
         get() = sharedPreferences.getBoolean(
             COLORED_NOTIFICATION, true
@@ -249,23 +254,6 @@ object PreferenceUtil {
             val editor = sharedPreferences.edit()
             editor.putString(GENRE_SORT_ORDER, sortOrder)
             editor.apply()
-        }
-
-    @JvmStatic
-    val lastAddedCutoff: Long
-        get() {
-            val calendarUtil = CalendarUtil()
-            val interval: Long
-            interval = when (sharedPreferences.getString(LAST_ADDED_CUTOFF, "")) {
-                "today" -> calendarUtil.elapsedToday
-                "this_week" -> calendarUtil.elapsedWeek
-                "past_seven_days" -> calendarUtil.getElapsedDays(7)
-                "past_three_months" -> calendarUtil.getElapsedMonths(3)
-                "this_year" -> calendarUtil.elapsedYear
-                "this_month" -> calendarUtil.elapsedMonth
-                else -> calendarUtil.elapsedMonth
-            }
-            return (System.currentTimeMillis() - interval) / 1000
         }
 
     @JvmStatic
@@ -366,25 +354,6 @@ object PreferenceUtil {
             GENRE_GRID_SIZE,
             context.resources.getInteger(R.integer.default_list_columns)
         )
-    }
-
-    private fun getCutoffTimeMillis(cutoff: String): Long {
-        val calendarUtil = CalendarUtil()
-        val interval: Long
-        interval = when (sharedPreferences.getString(cutoff, "")) {
-            "today" -> calendarUtil.elapsedToday
-            "this_week" -> calendarUtil.elapsedWeek
-            "past_seven_days" -> calendarUtil.getElapsedDays(7)
-            "past_three_months" -> calendarUtil.getElapsedMonths(3)
-            "this_year" -> calendarUtil.elapsedYear
-            "this_month" -> calendarUtil.elapsedMonth
-            else -> calendarUtil.elapsedMonth
-        }
-        return System.currentTimeMillis() - interval
-    }
-
-    fun getRecentlyPlayedCutoffTimeMillis(): Long {
-        return getCutoffTimeMillis(RECENTLY_PLAYED_CUTOFF)
     }
 
     @JvmStatic

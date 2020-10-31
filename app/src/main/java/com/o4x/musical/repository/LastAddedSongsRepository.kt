@@ -19,7 +19,7 @@ import android.provider.MediaStore
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.util.PreferenceUtil.smartPlaylistLimit
 
 /**
  * Created by hemanths on 16/08/17.
@@ -37,23 +37,35 @@ class RealLastAddedRepository(
     private val albumRepository: RealAlbumRepository,
     private val artistRepository: RealArtistRepository
 ) : LastAddedRepository {
-    override fun recentSongs(): List<Song> {
+
+    private fun getAllRecentSongs(): List<Song> {
         return songRepository.songs(makeLastAddedCursor())
     }
 
-    override fun recentAlbums(): List<Album> {
-        return albumRepository.splitIntoAlbums(recentSongs())
+    override fun recentSongs(): List<Song> {
+        return getAllRecentSongs().take(smartPlaylistLimit)
     }
 
-    override fun recentArtists(): List<Artist> {
+    private fun getAllRecentAlbums(): List<Album> {
+        return albumRepository.splitIntoAlbums(getAllRecentSongs())
+    }
+
+    override fun recentAlbums(): List<Album> {
+        return getAllRecentAlbums().take(smartPlaylistLimit)
+    }
+
+    private fun getAllRecentArtist(): List<Artist> {
         return artistRepository.splitIntoArtists(recentAlbums())
     }
 
+    override fun recentArtists(): List<Artist> {
+        return getAllRecentArtist().take(smartPlaylistLimit)
+    }
+
     private fun makeLastAddedCursor(): Cursor? {
-        val cutoff = PreferenceUtil.lastAddedCutoff
         return songRepository.makeSongCursor(
-            MediaStore.Audio.Media.DATE_ADDED + ">?",
-            arrayOf(cutoff.toString()),
+            null,
+            null,
             MediaStore.Audio.Media.DATE_ADDED + " DESC"
         )
     }

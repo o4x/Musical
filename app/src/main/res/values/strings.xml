@@ -445,5 +445,8 @@
     <string name="permission_summary">The app needs permission to access your device storage for playing music</string>
     <string name="lets_go">Let\'s go</string>
     <string name="just_another">Just another music player</string>
+    <string name="change_smart_playlist_limit">Change smart playlist\'s limit</string>
+    <string name="change">Change</string>
+    <string name="limit_size">The limit can not be less than 10</string>
 
 </resources>

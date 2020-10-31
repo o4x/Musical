@@ -52,8 +52,6 @@ object Constants {
         MediaStore.Audio.AudioColumns.COMPOSER,// 11
         "album_artist"//12
     )
-
-    const val NUMBER_OF_TOP_TRACKS = 99
 }
 const val EXTRA_GENRE = "extra_genre"
 const val EXTRA_PLAYLIST = "extra_playlist"
@@ -118,14 +116,12 @@ const val ARTIST_GRID_SIZE = "artist_grid_size"
 const val ARTIST_GRID_SIZE_LAND = "artist_grid_size_land"
 const val COLORED_APP_SHORTCUTS = "colored_app_shortcuts"
 const val AUDIO_DUCKING = "audio_ducking"
-const val LAST_ADDED_CUTOFF = "last_added_interval"
 const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
 const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
 const val IGNORE_MEDIA_STORE_ARTWORK = "ignore_media_store_artwork"
 const val LAST_CHANGELOG_VERSION = "last_changelog_version"
 const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"
 const val START_DIRECTORY = "start_directory"
-const val RECENTLY_PLAYED_CUTOFF = "recently_played_interval"
 const val LOCK_SCREEN = "lock_screen"
 const val ALBUM_ARTISTS_ONLY = "album_artists_only"
 const val ALBUM_DETAIL_SONG_SORT_ORDER = "album_detail_song_sort_order"

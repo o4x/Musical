@@ -18,13 +18,12 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
 import android.provider.MediaStore
-import com.o4x.musical.Constants.NUMBER_OF_TOP_TRACKS
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
 import com.o4x.musical.provider.HistoryStore
 import com.o4x.musical.provider.SongPlayCountStore
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.util.PreferenceUtil.smartPlaylistLimit
 
 
 /**
@@ -117,7 +116,7 @@ class RealTopPlayedRepository(
     private fun makeTopTracksCursorImpl(): SortedLongCursor? {
         // first get the top results ids from the internal database
         val cursor =
-            SongPlayCountStore.getInstance(context).getTopPlayedResults(NUMBER_OF_TOP_TRACKS)
+            SongPlayCountStore.getInstance(context).getTopPlayedResults(smartPlaylistLimit)
 
         cursor.use { songs ->
             return makeSortedCursor(
@@ -170,31 +169,21 @@ class RealTopPlayedRepository(
     }
 
     private fun makeRecentTracksCursorAndClearUpDatabase(): Cursor? {
-        return makeRecentTracksCursorAndClearUpDatabaseImpl(
-            ignoreCutoffTime = false,
-            reverseOrder = false
-        )
+        return makeRecentTracksCursorAndClearUpDatabaseImpl(reverseOrder = false)
     }
 
     private fun makePlayedTracksCursorAndClearUpDatabase(): Cursor? {
-        return makeRecentTracksCursorAndClearUpDatabaseImpl(
-            ignoreCutoffTime = true,
-            reverseOrder = false
-        )
+        return makeRecentTracksCursorAndClearUpDatabaseImpl(reverseOrder = false)
     }
 
     private fun makeNotRecentTracksCursorAndClearUpDatabase(): Cursor? {
-        return makeRecentTracksCursorAndClearUpDatabaseImpl(
-            ignoreCutoffTime = false,
-            reverseOrder = true
-        )
+        return makeRecentTracksCursorAndClearUpDatabaseImpl(reverseOrder = true)
     }
 
     private fun makeRecentTracksCursorAndClearUpDatabaseImpl(
-        ignoreCutoffTime: Boolean,
         reverseOrder: Boolean
     ): SortedLongCursor? {
-        val retCursor = makeRecentTracksCursorImpl(ignoreCutoffTime, reverseOrder)
+        val retCursor = makeRecentTracksCursorImpl(reverseOrder)
         // clean up the databases with any ids not found
         // clean up the databases with any ids not found
         if (retCursor != null) {
@@ -209,13 +198,10 @@ class RealTopPlayedRepository(
     }
 
     private fun makeRecentTracksCursorImpl(
-        ignoreCutoffTime: Boolean,
         reverseOrder: Boolean
     ): SortedLongCursor? {
-        val cutoff =
-            (if (ignoreCutoffTime) 0 else PreferenceUtil.getRecentlyPlayedCutoffTimeMillis()).toLong()
         val songs =
-            HistoryStore.getInstance(context).queryRecentIds(cutoff * if (reverseOrder) -1 else 1)
+            HistoryStore.getInstance(context).queryRecentIds(smartPlaylistLimit, reverseOrder)
         return songs.use {
             makeSortedCursor(
                 it,
