@@ -6,15 +6,10 @@
         android:title="@string/pref_header_lists"
         app:allowDividerBelow="false">
 
-        <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
-            android:defaultValue="this_month"
-            android:entries="@array/pref_playlists_last_added_interval_titles"
-            android:entryValues="@array/pref_playlists_last_added_interval_values"
-            android:key="last_added_interval"
+        <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreference
+            android:key="smart_playlist_limit"
             android:layout="@layout/list_item_view"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/pref_title_last_added_interval"
+            android:title="Smart playlists restriction"
             app:icon="@drawable/ic_playlist_add" />
 
     </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>

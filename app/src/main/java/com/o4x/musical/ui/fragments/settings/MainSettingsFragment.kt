@@ -31,8 +31,10 @@ import code.name.monkey.appthemehelper.util.ColorUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.color.colorChooser
 import com.o4x.musical.R
+import com.o4x.musical.ui.dialogs.ChangeSmartPlaylistLimit
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.util.PreferenceUtil.smartPlaylistLimit
 
 class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -167,11 +169,15 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
          // ADVANCED SETTINGS //
         ///////////////////////
 
-        val preference: Preference? = findPreference("last_added_interval")
-        preference?.setOnPreferenceChangeListener { lastAdded, newValue ->
-            setSummary(lastAdded, newValue)
-            true
+        val smartPlaylistPreference: Preference = findPreference("smart_playlist_limit")!!
+        setSummary(smartPlaylistPreference, smartPlaylistLimit)
+        smartPlaylistPreference.setOnPreferenceClickListener {
+            ChangeSmartPlaylistLimit.create().show(
+                childFragmentManager, "SETTINGS"
+            )
+            return@setOnPreferenceClickListener true
         }
+
         val languagePreference: Preference? = findPreference("language_name")
         languagePreference?.setOnPreferenceChangeListener { prefs, newValue ->
             setSummary(prefs, newValue)
@@ -192,6 +198,10 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
                     findPreference<Preference>("colored_notification")?.isEnabled =
                         sharedPreferences.getBoolean(key, false)
                 }
+            }
+            PreferenceUtil.SMART_PLAYLIST_LIMIT -> {
+                findPreference<Preference>("smart_playlist_limit")?.summary =
+                    smartPlaylistLimit.toString()
             }
         }
     }

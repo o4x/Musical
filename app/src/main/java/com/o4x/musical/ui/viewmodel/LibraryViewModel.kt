@@ -1,11 +1,14 @@
 package com.o4x.musical.ui.viewmodel
 
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.core.view.setPadding
 import androidx.lifecycle.*
+import androidx.preference.Preference
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.App
 import com.o4x.musical.db.*
@@ -26,7 +29,7 @@ import kotlinx.coroutines.launch
 
 class LibraryViewModel(
     private val repository: RealRepository
-) : ViewModel(), MusicServiceEventListener {
+) : ViewModel(), MusicServiceEventListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val paletteColor = MutableLiveData<Int>()
     private val posterBitmap = MutableLiveData<Bitmap>()
@@ -170,6 +173,8 @@ class LibraryViewModel(
             ReloadType.Playlists -> {
                 fetchPlaylists()
                 fetchLegacyPlaylist()
+                fetchRecentlyPlayed()
+                fetchRecentlyAdded()
             }
             ReloadType.Genres -> fetchGenres()
         }
@@ -214,6 +219,12 @@ class LibraryViewModel(
 
     override fun onShuffleModeChanged() {
         println("onShuffleModeChanged")
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+        when (key) {
+            PreferenceUtil.SMART_PLAYLIST_LIMIT -> forceReload(ReloadType.Playlists)
+        }
     }
 
     fun search(query: String?) = viewModelScope.launch(IO) {

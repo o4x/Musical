@@ -18,6 +18,7 @@ import com.o4x.musical.misc.isRecyclerScrollable
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
+import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.ViewUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -46,6 +47,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
         savedInstanceState: Bundle?
     ): View? {
         mainActivity.addMusicServiceEventListener(libraryViewModel)
+        PreferenceUtil.registerOnSharedPreferenceChangedListener(libraryViewModel)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -63,6 +65,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
     }
 
     override fun onDestroy() {
+        PreferenceUtil.unregisterOnSharedPreferenceChangedListener(libraryViewModel)
         mainActivity.removeMusicServiceEventListener(libraryViewModel)
         appbarAnimation?.cancel()
         toolbarAnimation.cancel()
