@@ -15,14 +15,12 @@ import androidx.core.util.Pair;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.model.Genre;
-import com.o4x.musical.model.Playlist;
 import com.o4x.musical.ui.activities.LicenseActivity;
 import com.o4x.musical.ui.activities.PurchaseActivity;
 import com.o4x.musical.ui.activities.SupportDevelopmentActivity;
 import com.o4x.musical.ui.activities.details.AlbumDetailActivity;
 import com.o4x.musical.ui.activities.details.ArtistDetailActivity;
 import com.o4x.musical.ui.activities.details.GenreDetailActivity;
-import com.o4x.musical.ui.activities.details.PlaylistDetailActivity;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -44,13 +42,6 @@ public class NavigationUtil {
     public static void goToGenre(@NonNull final Activity activity, final Genre genre, @Nullable Pair... sharedElements) {
         final Intent intent = new Intent(activity, GenreDetailActivity.class);
         intent.putExtra(GenreDetailActivity.EXTRA_GENRE, genre);
-
-        activity.startActivity(intent);
-    }
-
-    public static void goToPlaylist(@NonNull final Activity activity, final Playlist playlist, @Nullable Pair... sharedElements) {
-        final Intent intent = new Intent(activity, PlaylistDetailActivity.class);
-        intent.putExtra(PlaylistDetailActivity.EXTRA_PLAYLIST, playlist);
 
         activity.startActivity(intent);
     }
