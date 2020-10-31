@@ -10,8 +10,6 @@ import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.StateListDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.view.MenuItem
 import android.view.View
@@ -26,7 +24,7 @@ import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
-import code.name.monkey.retromusic.extensions.findNavController
+import com.o4x.musical.extensions.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
@@ -51,8 +49,7 @@ import org.koin.android.ext.android.get
 
 class MainActivity : AbsMusicPanelActivity() {
 
-    private lateinit var navController: NavController
-
+    lateinit var navController: NavController
     private lateinit var toggle: ActionBarDrawerToggle
 
 

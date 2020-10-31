@@ -41,6 +41,12 @@
         android:label="@string/equalizer"
         tools:layout="@layout/fragment_equalizer" />
 
+    <fragment
+        android:id="@+id/detail_playlist"
+        android:name="com.o4x.musical.ui.fragments.mainactivity.datails.PlaylistDetailFragment"
+        android:label="@string/playlists"
+        tools:layout="@layout/fragment_detail_playlist" />
+
     <activity
         android:id="@+id/settings"
         android:name="com.o4x.musical.ui.activities.SettingsActivity"
@@ -97,5 +103,14 @@
         app:exitAnim="@anim/retro_fragment_open_exit"
         app:popEnterAnim="@anim/retro_fragment_close_enter"
         app:popExitAnim="@anim/retro_fragment_close_exit"/>
+
+    <action
+        android:id="@+id/action_to_playlist"
+        app:destination="@id/detail_playlist"
+        app:enterAnim="@anim/retro_fragment_open_enter"
+        app:exitAnim="@anim/retro_fragment_open_exit"
+        app:popEnterAnim="@anim/retro_fragment_close_enter"
+        app:popExitAnim="@anim/retro_fragment_close_exit" />
+
 
 </navigation>

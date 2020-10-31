@@ -36,6 +36,8 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
     val mainActivity: MainActivity
         get() = requireActivity() as MainActivity
 
+    fun navController() = mainActivity.navController
+
     // animations //
     private var appbarAnimation: ValueAnimator? = null
     private val toolbarAnimation = ValueAnimator.ofFloat(0f, 1f)

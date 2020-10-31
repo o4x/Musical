@@ -3,7 +3,7 @@ package com.o4x.musical.ui.activities
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.navigation.NavController
-import code.name.monkey.retromusic.extensions.findNavController
+import com.o4x.musical.extensions.findNavController
 import com.o4x.musical.R
 import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.ui.activities.base.AbsBaseActivity

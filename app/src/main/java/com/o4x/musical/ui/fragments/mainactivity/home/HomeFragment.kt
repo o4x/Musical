@@ -19,6 +19,7 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemA
 import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.extensions.themeColor
+import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
@@ -26,7 +27,6 @@ import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
-import com.o4x.musical.util.NavigationUtil
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -52,14 +52,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private var toolbarHeight by Delegates.notNull<Int>()
     private var headerHeight by Delegates.notNull<Int>()
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
 
     override fun onResume() {
         super.onResume()
@@ -149,14 +141,10 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         queue_parent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         open_queue_button.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         recently_parent.setOnClickListener {
-            NavigationUtil.goToPlaylist(
-                mainActivity, HistoryPlaylist()
-            )
+            navController().toPlaylistDetail(HistoryPlaylist())
         }
         newly_parent.setOnClickListener {
-            NavigationUtil.goToPlaylist(
-                mainActivity, LastAddedPlaylist()
-            )
+            navController().toPlaylistDetail(LastAddedPlaylist())
         }
         shuffle_btn.setOnClickListener {
             libraryViewModel.shuffleSongs()
