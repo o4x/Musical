@@ -6,7 +6,6 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
-import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialcab.MaterialCab
 import com.o4x.musical.R
@@ -135,15 +134,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
             menu.removeItem(R.id.action_grid_size)
             menu.removeItem(R.id.action_sort_order)
         }
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
-            mainActivity.toolbar,
-            menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, mainActivity.toolbar)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

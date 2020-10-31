@@ -61,6 +61,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             mainActivity.toolbar.setBackgroundColor(Color.TRANSPARENT)
             mainActivity.window.statusBarColor = Color.TRANSPARENT
             mainActivity.appbar.elevation = 0f
+            setToolbarTitle(null)
         }
 
     }
@@ -183,6 +184,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
             // Scroll appbar
             if (scrollY > headerHeight + toolbarHeight && !isAppbarFlat) {
+                setToolbarTitle(navController().currentDestination?.label.toString())
                 toolbarColorVisible(true)
                 mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
                 isAppbarFlat = true
@@ -209,6 +211,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
                 }
             } else { // inside header
                 if (isStatusFlat) {
+                    setToolbarTitle(null)
                     toolbarColorVisible(false)
                     statusBarColorVisible(false)
                     mainActivity.appbar.elevation = 0f

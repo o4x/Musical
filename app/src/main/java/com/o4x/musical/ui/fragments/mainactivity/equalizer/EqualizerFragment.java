@@ -45,9 +45,6 @@ import com.o4x.musical.views.AnalogController;
 
 import java.util.ArrayList;
 
-import code.name.monkey.appthemehelper.common.ATHToolbarActivity;
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -441,11 +438,6 @@ public class EqualizerFragment extends AbsMainActivityFragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_equalizer, menu);
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(getMainActivity(),
-                getMainActivity().getToolbar(),
-                menu,
-                ATHToolbarActivity.getToolbarBackgroundColor(getMainActivity().getToolbar())
-        );
 
         MenuItem item = menu.findItem(R.id.equalizer_switch);
         item.setActionView(R.layout.switch_layout);
