@@ -14,11 +14,15 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
-import com.afollestad.materialcab.MaterialCab
+import com.afollestad.materialcab.attached.AttachedCab
+import com.afollestad.materialcab.attached.destroy
+import com.afollestad.materialcab.attached.isActive
+import com.afollestad.materialcab.createCab
 import com.o4x.musical.R
 import com.o4x.musical.extensions.withAlpha
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
+import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.interfaces.PaletteColorHolder
 import com.o4x.musical.model.Song
@@ -54,7 +58,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     @BindView(R.id.toolbar)
     lateinit var toolbar: Toolbar
 
-    var cab: MaterialCab? = null
+    var cab: AttachedCab? = null
     var imageHeight: Int? = null
     var colors: MediaNotificationProcessor? = null
 
@@ -80,30 +84,28 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         return colors!!.actionBarColor
     }
 
-    override fun openCab(menuRes: Int, callback: MaterialCab.Callback): MaterialCab {
-        if (cab != null && cab!!.isActive) cab!!.finish()
-        cab = MaterialCab(this, R.id.cab_stub)
-            .setMenu(menuRes)
-            .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-            .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(paletteColor))
-            .start(object : MaterialCab.Callback {
-                override fun onCabCreated(materialCab: MaterialCab, menu: Menu): Boolean {
-                    return callback.onCabCreated(materialCab, menu)
-                }
+    override fun openCab(menuRes: Int, callback: CabCallback): AttachedCab {
+        if (cab != null && cab!!.isActive()) cab!!.destroy()
+        cab = createCab(R.id.cab_stub) {
+            menu(menuRes)
+            closeDrawable(R.drawable.ic_close_white_24dp)
+            backgroundColor(paletteColor)
 
-                override fun onCabItemClicked(menuItem: MenuItem): Boolean {
-                    return callback.onCabItemClicked(menuItem)
-                }
-
-                override fun onCabFinished(materialCab: MaterialCab): Boolean {
-                    return callback.onCabFinished(materialCab)
-                }
-            })
+            onCreate { cab, menu ->
+                callback.onCreate(cab, menu)
+            }
+            onSelection { item ->
+                return@onSelection callback.onSelection(item)
+            }
+            onDestroy { cab ->
+                return@onDestroy callback.onDestroy(cab)
+            }
+        }
         return cab!!
     }
 
     override fun onBackPressed() {
-        if (cab != null && cab!!.isActive) cab!!.finish() else {
+        if (cab != null && cab!!.isActive()) cab!!.destroy() else {
             songRecyclerView.stopScroll()
             super.onBackPressed()
         }

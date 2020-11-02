@@ -436,7 +436,6 @@ public class EqualizerFragment extends AbsMainActivityFragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_equalizer, menu);
 
         MenuItem item = menu.findItem(R.id.equalizer_switch);
@@ -454,6 +453,7 @@ public class EqualizerFragment extends AbsMainActivityFragment {
                 Settings.equalizerModel.setEqualizerEnabled(isChecked);
             }
         });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -478,11 +478,6 @@ public class EqualizerFragment extends AbsMainActivityFragment {
         }
 
         Settings.isEditing = false;
-    }
-
-    @Override
-    public boolean handleBackPress() {
-        return false;
     }
 
 }

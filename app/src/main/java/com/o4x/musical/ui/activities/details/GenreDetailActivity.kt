@@ -12,10 +12,15 @@ import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import butterknife.BindView
 import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
-import com.afollestad.materialcab.MaterialCab
+import com.afollestad.materialcab.attached.AttachedCab
+import com.afollestad.materialcab.attached.destroy
+import com.afollestad.materialcab.attached.isActive
+import com.afollestad.materialcab.createCab
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.o4x.musical.R
+import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
+import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Genre
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
@@ -46,7 +51,7 @@ class GenreDetailActivity : AbsMusicPanelActivity(), CabHolder {
     lateinit var empty: TextView
 
     private var genre: Genre? = null
-    private var cab: MaterialCab? = null
+    private var cab: AttachedCab? = null
     private var adapter: SongAdapter? = null
     private var wrappedAdapter: RecyclerView.Adapter<*>? = null
 
@@ -112,18 +117,28 @@ class GenreDetailActivity : AbsMusicPanelActivity(), CabHolder {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun openCab(menu: Int, callback: MaterialCab.Callback): MaterialCab {
-        if (cab != null && cab!!.isActive) cab!!.finish()
-        cab = MaterialCab(this, R.id.cab_stub)
-            .setMenu(menu)
-            .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-            .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(themeColor(this)))
-            .start(callback)
+    override fun openCab(menuRes: Int, callback: CabCallback): AttachedCab {
+        if (cab != null && cab!!.isActive()) cab!!.destroy()
+        cab = createCab(R.id.cab_stub) {
+            menu(menuRes)
+            closeDrawable(R.drawable.ic_close_white_24dp)
+            backgroundColor(literal = themeColor())
+
+            onCreate { cab, menu ->
+                callback.onCreate(cab, menu)
+            }
+            onSelection { item ->
+                return@onSelection callback.onSelection(item)
+            }
+            onDestroy { cab ->
+                return@onDestroy callback.onDestroy(cab)
+            }
+        }
         return cab!!
     }
 
     override fun onBackPressed() {
-        if (cab != null && cab!!.isActive) cab!!.finish() else {
+        if (cab != null && cab!!.isActive()) cab!!.destroy() else {
             recyclerView.stopScroll()
             super.onBackPressed()
         }

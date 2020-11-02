@@ -17,9 +17,7 @@ import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
-import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
-import com.afollestad.materialcab.MaterialCab
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
@@ -27,7 +25,6 @@ import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.menu.SongMenuHelper
 import com.o4x.musical.helper.menu.SongsMenuHelper
-import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.interfaces.LoaderIds
 import com.o4x.musical.misc.DialogAsyncTask
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
@@ -38,7 +35,6 @@ import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ArrayListPathsAsyncTask.OnPathsListedCallback
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ListSongsAsyncTask.OnSongsListedCallback
 import com.o4x.musical.util.FileUtil
-import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.PreferenceUtil.startDirectory
 import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.scanPaths
@@ -50,11 +46,10 @@ import java.io.FileFilter
 import java.lang.ref.WeakReference
 import java.util.*
 
-class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHolder, SelectionCallback,
+class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), SelectionCallback,
     SongFileAdapter.Callbacks, LoaderManager.LoaderCallbacks<List<File>> {
 
     private var adapter: SongFileAdapter? = null
-    private var cab: MaterialCab? = null
 
     fun setCrumb(crumb: Crumb?, addToHistory: Boolean) {
         if (crumb == null) return
@@ -127,7 +122,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
     }
 
     private fun setUpAdapter() {
-        adapter = SongFileAdapter(mainActivity, LinkedList(), R.layout.item_list, this, this)
+        adapter = SongFileAdapter(mainActivity, LinkedList(), R.layout.item_list, this, mainActivity)
         adapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
@@ -144,10 +139,6 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
     }
 
     override fun handleBackPress(): Boolean {
-        if (cab != null && cab!!.isActive) {
-            cab!!.finish()
-            return true
-        }
         if (mainActivity.bread_crumbs.popHistory()) {
             setCrumb(mainActivity.bread_crumbs.lastHistory(), false)
             return true
@@ -155,20 +146,9 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), CabHo
         return false
     }
 
-    override fun openCab(menuRes: Int, callback: MaterialCab.Callback): MaterialCab {
-        if (cab != null && cab!!.isActive) cab!!.finish()
-        cab = MaterialCab(mainActivity, R.id.cab_stub)
-            .setMenu(menuRes)
-            .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-            .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(themeColor(
-                mainActivity)))
-            .start(callback)
-        return cab!!
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_folders, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onCrumbSelection(crumb: Crumb, index: Int) {

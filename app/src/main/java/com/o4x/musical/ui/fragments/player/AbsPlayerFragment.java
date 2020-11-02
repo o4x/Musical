@@ -211,7 +211,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
 
     private void setUpPlayerToolbar() {
         toolbar.inflateMenu(R.menu.menu_player);
-        toolbar.setNavigationIcon(R.drawable.mcab_nav_back);
+        toolbar.setNavigationIcon(R.drawable.icon_back_white);
         toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         toolbar.setOnMenuItemClickListener(this);
     }

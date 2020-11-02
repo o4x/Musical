@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -21,13 +19,12 @@ import com.o4x.musical.R
 import com.o4x.musical.extensions.showToast
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.ui.adapter.SearchAdapter
-import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
-import com.o4x.musical.util.Util
+import com.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
 import kotlinx.android.synthetic.main.fragment_search.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWatcher {
+class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
 
     companion object {
         const val QUERY = "query"
@@ -41,15 +38,8 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
     private lateinit var searchAdapter: SearchAdapter
     private var query: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainActivity.setDrawerEnabled(false)
 
         val search = mainActivity.search
         search.visibility = View.VISIBLE
@@ -77,20 +67,6 @@ class SearchFragment : AbsMainActivityFragment(R.layout.fragment_search), TextWa
         libraryViewModel.getSearchResult().observe(viewLifecycleOwner, {
             showData(it)
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mainActivity.setDrawerEnabled(true)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            Util.hideSoftKeyboard(mainActivity)
-            mainActivity.onBackPressed()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun showData(data: List<Any>) {
