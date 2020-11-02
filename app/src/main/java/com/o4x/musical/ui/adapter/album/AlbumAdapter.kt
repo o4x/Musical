@@ -12,7 +12,6 @@ import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil.albumSortOrder
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.SectionedAdapter
 import java.util.*
 
 /**
@@ -25,7 +24,7 @@ open class AlbumAdapter(
     cabHolder: CabHolder?
 ) : AbsAdapter<AlbumAdapter.ViewHolder, Album>(
     activity, dataSet, itemLayoutRes, cabHolder
-), SectionedAdapter {
+) {
 
     init {
         setHasStableIds(true)
