@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemState;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
@@ -97,8 +98,7 @@ public class OrderablePlaylistSongAdapter extends PlaylistSongAdapter implements
     }
 
     public class ViewHolder extends PlaylistSongAdapter.ViewHolder implements DraggableItemViewHolder {
-        @DraggableItemStateFlags
-        private int mDragStateFlags;
+        private final DraggableItemState draggableItemState = new DraggableItemState();
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -128,13 +128,19 @@ public class OrderablePlaylistSongAdapter extends PlaylistSongAdapter implements
 
         @Override
         public void setDragStateFlags(@DraggableItemStateFlags int flags) {
-            mDragStateFlags = flags;
+            draggableItemState.setFlags(flags);
         }
 
         @Override
         @DraggableItemStateFlags
         public int getDragStateFlags() {
-            return mDragStateFlags;
+            return draggableItemState.getFlags();
+        }
+
+        @NonNull
+        @Override
+        public DraggableItemState getDragState() {
+            return draggableItemState;
         }
     }
 }
