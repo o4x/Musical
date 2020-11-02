@@ -29,7 +29,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class OrderablePlaylistSongAdapter extends PlaylistSongAdapter implements DraggableItemAdapter<OrderablePlaylistSongAdapter.ViewHolder> {
 
-    private OnMoveItemListener onMoveItemListener;
+    private final OnMoveItemListener onMoveItemListener;
 
     public OrderablePlaylistSongAdapter(@NonNull AppCompatActivity activity, @NonNull List<PlaylistSong> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder, @Nullable OnMoveItemListener onMoveItemListener) {
         super(activity, (List<Song>) (List) dataSet, itemLayoutRes, cabHolder);
