@@ -121,10 +121,10 @@
     </style>
 
     <style name="MaterialCardWithoutCorner" parent="Widget.MaterialComponents.CardView">
-        <item name="cardCornerRadius">@dimen/cornerRadius</item>
+        <item name="cardCornerRadius">0dp</item>
     </style>
-
     <style name="CardWithoutCorner" parent="CardView">
-        <item name="cardCornerRadius">@dimen/cornerRadius</item>
+        <item name="cardCornerRadius">0dp</item>
     </style>
+    
 </resources>
