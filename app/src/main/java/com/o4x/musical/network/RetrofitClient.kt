@@ -6,9 +6,7 @@ import com.o4x.musical.App
 import com.o4x.musical.BuildConfig
 import com.o4x.musical.network.service.DeezerService
 import com.o4x.musical.network.service.LastFMService
-import okhttp3.Cache
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -41,7 +39,7 @@ fun headerInterceptor(context: Context): Interceptor {
         val request = original.newBuilder()
             .header("User-Agent", context.packageName)
             .addHeader("Content-Type", "application/json; charset=utf-8")
-            .method(original.method(), original.body())
+            .method(original.method, original.body)
             .build()
         it.proceed(request)
     }
@@ -64,7 +62,11 @@ fun provideLastFmRetrofit(client: OkHttpClient): Retrofit {
     return Retrofit.Builder()
         .baseUrl("https://ws.audioscrobbler.com/2.0/")
         .addConverterFactory(GsonConverterFactory.create(gson))
-        .callFactory { request -> client.newCall(request) }
+        .callFactory(object: Call.Factory {
+            override fun newCall(request: Request): Call {
+                return client.newCall(request)
+            }
+        })
         .build()
 }
 
