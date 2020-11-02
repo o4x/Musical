@@ -70,7 +70,7 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         }
 
         if (holder.title != null && holder.text != null) {
-            final Typeface typeface = position == MusicPlayerRemote.getPosition() ?
+            final Typeface typeface = getItemType(position) == CURRENT ?
                     Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
             holder.title.setTypeface(typeface);
             holder.text.setTypeface(typeface);

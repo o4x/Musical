@@ -41,7 +41,7 @@ class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlis
     }
 
     private var playlist: Playlist? = null
-    private var adapter: SongAdapter? = null
+    private var adapter: PlaylistSongAdapter? = null
     private var wrappedAdapter: RecyclerView.Adapter<*>? = null
     private var recyclerViewDragDropManager: RecyclerViewDragDropManager? = null
 
@@ -52,6 +52,9 @@ class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlis
         mainActivity.addMusicServiceEventListener(viewModel)
         viewModel.playListSongs.observe(viewLifecycleOwner, {
             adapter?.swapDataSet(it)
+        })
+        libraryViewModel.getQueue().observe(viewLifecycleOwner, {
+            adapter?.notifyDataSetChanged()
         })
     }
 

@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.graphics.Typeface;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
 import com.o4x.musical.R;
+import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.MusicUtil;
@@ -25,6 +27,8 @@ import code.name.monkey.appthemehelper.ThemeStore;
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
+
+    protected static final int CURRENT = 1;
 
     public PlaylistSongAdapter(AppCompatActivity activity, @NonNull List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
         super(activity, dataSet, itemLayoutRes, cabHolder, false);
@@ -60,8 +64,21 @@ public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
                 holder.dragView.setVisibility(View.GONE);
             }
         } else {
-            super.onBindViewHolder(holder, position - 1);
+            position -= 1;
+            super.onBindViewHolder(holder, position);
+
+            if (holder.title != null && holder.text != null) {
+                final Typeface typeface = getItemType(position) == CURRENT ?
+                        Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
+                holder.title.setTypeface(typeface);
+                holder.text.setTypeface(typeface);
+            }
         }
+    }
+
+    protected int getItemType(int position) {
+        return dataSet.get(position).getId() == MusicPlayerRemote.getCurrentSong().getId() ?
+            CURRENT : -1;
     }
 
     public class ViewHolder extends AbsOffsetSongAdapter.ViewHolder {

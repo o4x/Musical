@@ -1,24 +1,20 @@
 package com.o4x.musical.ui.fragments.mainactivity.queue
 
 import android.os.Bundle
-import android.view.*
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.SmoothScroller
-import code.name.monkey.appthemehelper.common.ATHToolbarActivity
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
-import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import kotlinx.android.synthetic.main.fragment_queue.*
 
