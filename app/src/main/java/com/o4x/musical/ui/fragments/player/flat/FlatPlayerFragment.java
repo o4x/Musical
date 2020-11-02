@@ -17,6 +17,10 @@ import com.o4x.musical.util.ViewUtil;
 
 public class FlatPlayerFragment extends AbsPlayerFragment {
 
+    public FlatPlayerFragment() {
+        super(R.layout.fragment_player_flat);
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (Util.isLandscape(getResources())) {
@@ -26,11 +30,6 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
         }
 
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    protected int getLayoutRes() {
-        return R.layout.fragment_player_flat;
     }
 
     private static abstract class BaseImpl implements Impl {

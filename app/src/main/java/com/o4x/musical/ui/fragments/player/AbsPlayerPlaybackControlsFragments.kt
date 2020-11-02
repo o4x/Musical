@@ -41,7 +41,7 @@ import com.o4x.musical.util.color.MediaNotificationProcessor
 import com.o4x.musical.views.PlayPauseDrawable
 import java.util.*
 
-abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
+abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsMusicServiceFragment(layout),
     MusicProgressViewUpdateHelper.Callback, PopupMenu.OnMenuItemClickListener {
     private var unbinder: Unbinder? = null
 
@@ -103,14 +103,6 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         progressViewUpdateHelper = MusicProgressViewUpdateHelper(this)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(layoutRes, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -351,9 +343,6 @@ abstract class AbsPlayerPlaybackControlsFragments : AbsMusicServiceFragment(),
         songTotalTime?.text = MusicUtil.getReadableDurationString(total.toLong())
         songCurrentProgress!!.text = MusicUtil.getReadableDurationString(progress.toLong())
     }
-
-    @get:LayoutRes
-    protected abstract val layoutRes: Int
 
 
     fun setColor(colors: MediaNotificationProcessor) {

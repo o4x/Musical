@@ -18,6 +18,7 @@ import com.o4x.musical.misc.VerticalScrollListener
 import com.o4x.musical.misc.isRecyclerScrollable
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
+import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.Util
@@ -30,7 +31,8 @@ import kotlin.math.min
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout), MainActivityFragmentCallbacks {
+abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
+    AbsMusicServiceFragment(layout), MainActivityFragmentCallbacks {
 
     val libraryViewModel: LibraryViewModel by sharedViewModel()
 
