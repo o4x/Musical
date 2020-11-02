@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.annotation.SuppressLint;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -18,11 +19,14 @@ import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.PlaylistSong;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.dialogs.RemoveFromPlaylistDialog;
+import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.ViewUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import code.name.monkey.appthemehelper.util.ColorUtil;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -100,11 +104,18 @@ public class OrderablePlaylistSongAdapter extends PlaylistSongAdapter implements
     public class ViewHolder extends PlaylistSongAdapter.ViewHolder implements DraggableItemViewHolder {
         private final DraggableItemState draggableItemState = new DraggableItemState();
 
+        @SuppressLint("ClickableViewAccessibility")
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            itemView.setBackgroundColor(ColorUtil.INSTANCE.withAlpha(
+                    PhonographColorUtil.getWindowColor(activity), 0.8f));
+
             if (dragView != null) {
                 if (onMoveItemListener != null) {
                     dragView.setVisibility(View.VISIBLE);
+                    // Set this for not focus in parent
+                    dragView.setOnTouchListener((view, motionEvent) -> true);
                 } else {
                     dragView.setVisibility(View.GONE);
                 }

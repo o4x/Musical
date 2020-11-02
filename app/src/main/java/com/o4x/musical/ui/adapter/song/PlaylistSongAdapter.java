@@ -81,6 +81,12 @@ public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
             CURRENT : -1;
     }
 
+    @NonNull
+    @Override
+    public String getSectionName(int position) {
+        return "";
+    }
+
     public class ViewHolder extends AbsOffsetSongAdapter.ViewHolder {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

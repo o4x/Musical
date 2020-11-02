@@ -58,9 +58,6 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
 
     protected void customizeItem(@NonNull SongAdapter.ViewHolder holder, int position) {
 
-        holder.itemView.setBackgroundColor(ColorUtil.INSTANCE.withAlpha(
-                PhonographColorUtil.getWindowColor(activity), 0.8f));
-
         if (holder.imageText != null) {
             holder.imageText.setText(String.valueOf(position - current));
         }
@@ -152,6 +149,10 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         @SuppressLint("ClickableViewAccessibility")
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            itemView.setBackgroundColor(ColorUtil.INSTANCE.withAlpha(
+                    PhonographColorUtil.getWindowColor(activity), 0.8f));
+
             if (imageText != null) {
                 imageText.setVisibility(View.VISIBLE);
                 // Set this for not focus in parent
