@@ -29,6 +29,10 @@ import butterknife.Unbinder;
  */
 public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements ViewPager.OnPageChangeListener, MusicProgressViewUpdateHelper.Callback {
 
+    public PlayerAlbumCoverFragment() {
+        super(R.layout.fragment_player_album_cover);
+    }
+
     public static final int VISIBILITY_ANIM_DURATION = 300;
 
     private Unbinder unbinder;
@@ -50,15 +54,9 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
     private MusicProgressViewUpdateHelper progressViewUpdateHelper;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_player_album_cover, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        unbinder = ButterKnife.bind(this, view);
         viewPager.addOnPageChangeListener(this);
         viewPager.setPageTransformer(true, new ParallaxPageTransformer());
         progressViewUpdateHelper = new MusicProgressViewUpdateHelper(this, 500, 1000);

@@ -52,6 +52,10 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         implements Toolbar.OnMenuItemClickListener,
         PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks {
 
+    public AbsPlayerFragment(int layout) {
+        super(layout);
+    }
+
     private Callbacks callbacks;
 
     protected Unbinder unbinder;
@@ -73,16 +77,9 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     protected Impl impl;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutRes(), container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        unbinder = ButterKnife.bind(this, view);
         impl.init();
 
         setUpPlayerToolbar();
@@ -299,9 +296,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     public void onHide() {
         playbackControlsFragment.hide();
     }
-
-    @LayoutRes
-    protected abstract int getLayoutRes();
 
     public Callbacks getCallbacks() {
         return callbacks;

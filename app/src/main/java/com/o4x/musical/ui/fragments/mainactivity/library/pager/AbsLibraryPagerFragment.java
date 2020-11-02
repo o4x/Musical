@@ -12,6 +12,10 @@ import com.o4x.musical.ui.viewmodel.LibraryViewModel;
  */
 public class AbsLibraryPagerFragment extends AbsMusicServiceFragment {
 
+    public AbsLibraryPagerFragment(int layout) {
+        super(layout);
+    }
+
     /* http://stackoverflow.com/a/2888433 */
     @Override
     public LoaderManager getLoaderManager() {

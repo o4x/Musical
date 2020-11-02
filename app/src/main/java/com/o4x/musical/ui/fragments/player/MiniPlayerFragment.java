@@ -42,6 +42,10 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
  */
 public class MiniPlayerFragment extends AbsMusicServiceFragment implements MusicProgressViewUpdateHelper.Callback {
 
+    public MiniPlayerFragment() {
+        super(R.layout.fragment_mini_player);
+    }
+
     private Unbinder unbinder;
 
     @BindView(R.id.container)
@@ -65,12 +69,6 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         progressViewUpdateHelper = new MusicProgressViewUpdateHelper(this);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_mini_player, container, false);
     }
 
     @Override

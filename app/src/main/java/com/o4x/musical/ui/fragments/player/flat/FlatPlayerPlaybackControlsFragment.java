@@ -8,8 +8,7 @@ import com.o4x.musical.ui.fragments.player.AbsPlayerPlaybackControlsFragments;
  */
 public class FlatPlayerPlaybackControlsFragment extends AbsPlayerPlaybackControlsFragments {
 
-    @Override
-    protected int getLayoutRes() {
-        return R.layout.fragment_player_playback_controls_flat;
+    public FlatPlayerPlaybackControlsFragment() {
+        super(R.layout.fragment_player_playback_controls_flat);
     }
 }

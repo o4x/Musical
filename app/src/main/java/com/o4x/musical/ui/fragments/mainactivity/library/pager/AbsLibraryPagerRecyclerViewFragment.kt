@@ -18,20 +18,12 @@ import kotlinx.android.synthetic.main.fragment_library_recycler_view.*
  * @author Karim Abou Zeid (kabouzeid)
  */
 abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : RecyclerView.LayoutManager?> :
-    AbsLibraryPagerFragment() {
+    AbsLibraryPagerFragment(R.layout.fragment_library_recycler_view) {
 
     protected var adapter: A? = null
         private set
     protected var layoutManager: LM? = null
         private set
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(layoutRes, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -88,11 +80,7 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
 
     @get:StringRes
     protected open val emptyMessage: Int
-        protected get() = R.string.empty
-
-    @get:LayoutRes
-    protected val layoutRes: Int
-        protected get() = R.layout.fragment_library_recycler_view
+        get() = R.string.empty
 
     val recyclerView: RecyclerView?
         get() = recycler_view

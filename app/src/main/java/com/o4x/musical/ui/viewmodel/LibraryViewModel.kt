@@ -309,6 +309,10 @@ class LibraryViewModel(
         emit(repository.artistById(artistId))
     }
 
+    fun playlist(playListId: Long): LiveData<Playlist> = liveData {
+        emit(repository.playlist(playListId))
+    }
+
     fun observableHistorySongs() = repository.observableHistorySongs()
 
     fun favorites() = repository.favorites()

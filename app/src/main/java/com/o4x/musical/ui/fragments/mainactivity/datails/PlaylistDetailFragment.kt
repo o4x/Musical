@@ -123,23 +123,25 @@ class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlis
         return PlaylistMenuHelper.handleMenuClick(mainActivity, playlist!!, item)
     }
 
-//    override fun onMediaStoreChanged() {
-//        super.onMediaStoreChanged()
-//        if (playlist !is AbsCustomPlaylist) {
-//            // Playlist deleted
-//            if (!PlaylistsUtil.doesPlaylistExist(this, playlist!!.id)) {
-//                finish()
-//                return
-//            }
-//
-//            // Playlist renamed
-//            val playlistName = PlaylistsUtil.getNameForPlaylist(this, playlist!!.id)
-//            if (playlistName != playlist!!.name) {
-////                playlist = PlaylistLoader.getPlaylist(this, playlist!!.id)
-//                setToolbarTitle(playlist!!.name)
-//            }
-//        }
-//    }
+    override fun onMediaStoreChanged() {
+        super.onMediaStoreChanged()
+        if (playlist !is AbsCustomPlaylist) {
+            // Playlist deleted
+            if (!PlaylistsUtil.doesPlaylistExist(requireContext(), playlist!!.id)) {
+                navController().popBackStack()
+                return
+            }
+
+            // Playlist renamed
+            val playlistName = PlaylistsUtil.getNameForPlaylist(requireContext(), playlist!!.id)
+            if (playlistName != playlist!!.name) {
+                libraryViewModel.playlist(playlist!!.id).observe(viewLifecycleOwner, {
+                    playlist = it
+                    setToolbarTitle(playlist!!.name)
+                })
+            }
+        }
+    }
 
     private fun checkIsEmpty() {
         empty.visibility =

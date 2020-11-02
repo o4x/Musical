@@ -126,5 +126,5 @@
     <style name="CardWithoutCorner" parent="CardView">
         <item name="cardCornerRadius">0dp</item>
     </style>
-    
+
 </resources>
