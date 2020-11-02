@@ -43,7 +43,7 @@ class PlaylistsFragment :
             libraryFragment.mainActivity,
             dataSet,
             R.layout.item_list_single_row,
-            libraryFragment
+            libraryFragment.mainActivity
         )
     }
 

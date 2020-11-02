@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.adapter.song;
 
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -9,13 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.afollestad.materialcab.MaterialCab;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.SortOrder;
 import com.o4x.musical.helper.menu.SongMenuHelper;
-import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.glide.targets.PaletteColoredTargetListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.adapter.base.AbsAdapter;
@@ -23,8 +19,6 @@ import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.PreferenceUtil;
-import com.o4x.musical.util.Util;
-import com.o4x.musical.util.ViewUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +27,7 @@ import java.util.List;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> implements MaterialCab.Callback {
+public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
 
     public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
         this(activity, dataSet, itemLayoutRes, cabHolder, true);

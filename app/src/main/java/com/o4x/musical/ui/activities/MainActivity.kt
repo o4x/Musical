@@ -20,25 +20,34 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import butterknife.ButterKnife
+import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
-import com.o4x.musical.extensions.findNavController
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.afollestad.materialcab.attached.AttachedCab
+import com.afollestad.materialcab.attached.destroy
+import com.afollestad.materialcab.attached.isActive
+import com.afollestad.materialcab.createCab
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.R
-import com.o4x.musical.extensions.surfaceColor
+import com.o4x.musical.extensions.*
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper.getSongs
+import com.o4x.musical.interfaces.CabCallback
+import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Song
 import com.o4x.musical.repository.PlaylistSongsLoader
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.activities.intro.PermissionActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
+import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
+import com.o4x.musical.util.theme.ThemeManager
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
@@ -47,11 +56,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
-class MainActivity : AbsMusicPanelActivity() {
+class MainActivity : AbsMusicPanelActivity(), CabHolder {
+
+    companion object {
+        val TAG: String = MainActivity::class.java.simpleName
+
+        private val popupAbleFragments: Array<Int> = arrayOf(R.id.search, R.id.detail_playlist)
+    }
 
     lateinit var navController: NavController
     private lateinit var toggle: ActionBarDrawerToggle
-
+    private var cab: AttachedCab? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,11 +92,9 @@ class MainActivity : AbsMusicPanelActivity() {
         setUpNavigationView()
     }
 
-
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
 
     override fun createContentView(): View {
         @SuppressLint("InflateParams") val contentView =
@@ -194,8 +207,12 @@ class MainActivity : AbsMusicPanelActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            if (navController.currentDestination?.id == R.id.search)
-                return false
+
+            for (id in popupAbleFragments) {
+                if (navController.currentDestination?.id == id)
+                    return false
+            }
+
             if (drawer_layout.isDrawerOpen(navigation_view)) {
                 drawer_layout.closeDrawer(navigation_view)
             } else {
@@ -206,12 +223,41 @@ class MainActivity : AbsMusicPanelActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun openCab(menuRes: Int, callback: CabCallback): AttachedCab {
+        if (cab != null && cab!!.isActive()) cab!!.destroy()
+
+        cab = createCab(R.id.cab_stub_container) {
+            closeDrawable(R.drawable.ic_close_white_24dp)
+            backgroundColor(literal = surfaceColor())
+            titleColor(literal = textColorPrimary())
+            subtitleColor(literal = textColorSecondary())
+            popupTheme(ThemeManager.getThemeResValue())
+            menu(menuRes)
+            menuIconColor(literal = textColorPrimary())
+
+            onCreate { cab, menu ->
+                callback.onCreate(cab, menu)
+            }
+            onSelection { item ->
+                return@onSelection callback.onSelection(item)
+            }
+            onDestroy { cab ->
+                return@onDestroy callback.onDestroy(cab)
+            }
+        }
+
+        return cab!!
+    }
+
     override fun handleBackPress(): Boolean {
         if (drawer_layout.isDrawerOpen(navigation_view)) {
             drawer_layout.closeDrawers()
             return true
+        } else if (cab != null && cab!!.isActive()) {
+            cab!!.destroy()
+            return true
         }
-        return super.handleBackPress() || navController.popBackStack()
+        return navController.popBackStack() || super.handleBackPress()
     }
 
     private fun handlePlaybackIntent(intent: Intent) {
@@ -335,8 +381,4 @@ class MainActivity : AbsMusicPanelActivity() {
 
     val bread_crumbs: BreadCrumbLayout
         get() = main_bread_crumbs
-
-    companion object {
-        val TAG: String = MainActivity::class.java.simpleName
-    }
 }

@@ -17,15 +17,7 @@
             android:id="@+id/content_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_gravity="bottom"
-                android:background="@drawable/shadow_up" />
-
-        </FrameLayout>
+            android:layout_weight="1" />
 
         <FrameLayout
             android:id="@+id/panel_container"

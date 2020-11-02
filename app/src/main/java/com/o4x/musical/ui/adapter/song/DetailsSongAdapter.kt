@@ -5,15 +5,12 @@ import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import butterknife.BindView
-import code.name.monkey.appthemehelper.util.ColorUtil
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
 import com.o4x.musical.extensions.withAlpha

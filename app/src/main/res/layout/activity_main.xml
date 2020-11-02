@@ -36,10 +36,10 @@
 
             </com.google.android.material.appbar.MaterialToolbar>
 
-            <ViewStub
-                android:id="@+id/cab_stub"
+            <FrameLayout
+                android:id="@+id/cab_stub_container"
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize" />
+                android:layout_height="wrap_content" />
 
         </FrameLayout>
 

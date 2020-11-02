@@ -2,13 +2,14 @@ package com.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ColorUtil
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.misc.OverScrollGridLayoutManager
@@ -82,13 +83,26 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) : Fragment(layout
         mainActivity.bread_crumbs.visibility = View.GONE
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
+            mainActivity.toolbar,
+            menu,
+            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(activity, mainActivity.toolbar)
+        super.onPrepareOptionsMenu(menu)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
     override fun handleBackPress(): Boolean {
-        return false
+        return true
     }
 
     fun setToolbarTitle(title: String?) {

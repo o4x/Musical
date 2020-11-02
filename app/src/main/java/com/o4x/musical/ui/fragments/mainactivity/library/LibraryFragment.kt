@@ -7,17 +7,14 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
-import com.afollestad.materialcab.MaterialCab
 import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
-import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.*
-import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.PreferenceUtil.lastPage
 import com.o4x.musical.util.PreferenceUtil.libraryCategory
@@ -27,11 +24,10 @@ import com.o4x.musical.util.PreferenceUtil.unregisterOnSharedPreferenceChangedLi
 import com.o4x.musical.util.Util
 import kotlinx.android.synthetic.main.fragment_library.*
 
-class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabHolder, OnPageChangeListener,
+class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPageChangeListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var pagerAdapter: MusicLibraryPagerAdapter? = null
-    private var cab: MaterialCab? = null
 
     override fun onDestroyView() {
         unregisterOnSharedPreferenceChangedListener(this)
@@ -103,19 +99,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
     private val isPlaylistPage: Boolean
         get() = currentFragment is PlaylistsFragment
 
-    override fun openCab(menuRes: Int, callback: MaterialCab.Callback): MaterialCab {
-        if (cab != null && cab!!.isActive) cab?.finish()
-        cab = MaterialCab(mainActivity, R.id.cab_stub)
-            .setMenu(menuRes)
-            .setCloseDrawableRes(R.drawable.ic_close_white_24dp)
-            .setBackgroundColor(PhonographColorUtil.shiftBackgroundColorForLightText(surfaceColor()))
-            .start(callback)
-        return cab!!
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        if (pager == null) return
         inflater.inflate(R.menu.menu_main, menu)
         if (isPlaylistPage) {
             menu.add(0, R.id.action_new_playlist, 0, R.string.new_playlist_title)
@@ -134,6 +118,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
             menu.removeItem(R.id.action_grid_size)
             menu.removeItem(R.id.action_sort_order)
         }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -330,14 +315,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), CabH
         if (sortOrder != null) {
             item.isChecked = true
             fragment.setAndSaveSortOrder(sortOrder)
-            return true
-        }
-        return false
-    }
-
-    override fun handleBackPress(): Boolean {
-        if (cab != null && cab!!.isActive) {
-            cab!!.finish()
             return true
         }
         return false
