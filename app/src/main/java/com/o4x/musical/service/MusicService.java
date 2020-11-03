@@ -495,6 +495,10 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         setPosition(getNextPosition(force));
     }
 
+    public void playNextSong(boolean force) {
+        playSongAt(getNextPosition(force));
+    }
+
     private boolean openTrackAndPrepareNextAt(int position) {
         synchronized (this) {
             this.position = position;
@@ -1253,7 +1257,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                             break;
                         }
                     } else {
-                        service.nextSong(false);
+                        service.playNextSong(false);
                     }
                     sendEmptyMessage(RELEASE_WAKELOCK);
                     break;
