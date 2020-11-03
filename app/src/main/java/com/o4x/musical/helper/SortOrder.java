@@ -164,4 +164,14 @@ public final class SortOrder {
         String GENRE_Z_A = GENRE_A_Z + " DESC";
     }
 
+    /**
+     * Playlist sort order entries.
+     */
+    public interface PlaylistSortOrder {
+        /* Playlist sort order A-Z */
+        String PLAYLIST_A_Z = MediaStore.Audio.Playlists.DEFAULT_SORT_ORDER;
+
+        /* Playlist sort order Z-A */
+        String PLAYLIST_Z_A = PLAYLIST_A_Z + " DESC";
+    }
 }
