@@ -65,12 +65,13 @@ class PlaylistAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val playlist = dataSet[position]
         holder.itemView.isActivated = isChecked(playlist)
-        if (holder.title != null) {
-            holder.title!!.text = playlist.name
+
+        holder.title?.text = playlist.name
+        if (playlist !is AbsSmartPlaylist) {
+            holder.text?.text = MusicUtil.getSongCountString(activity, playlist.getSongs().size)
         }
-        if (holder.image != null) {
-            holder.image!!.setImageResource(getIconRes(playlist))
-        }
+
+        holder.image?.setImageResource(getIconRes(playlist))
     }
 
     private fun getIconRes(playlist: Playlist): Int {
