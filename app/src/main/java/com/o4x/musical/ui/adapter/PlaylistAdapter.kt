@@ -1,7 +1,5 @@
 package com.o4x.musical.ui.adapter
 
-import android.graphics.PorterDuff
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -9,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.LifecycleOwner
-import code.name.monkey.appthemehelper.util.ATHUtil.resolveColor
 import com.o4x.musical.R
 import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.menu.PlaylistMenuHelper.handleMenuClick
@@ -61,7 +58,7 @@ class PlaylistAdapter(
     }
 
     fun createViewHolder(view: View, viewType: Int): ViewHolder {
-        return ViewHolder(view, viewType)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -110,7 +107,7 @@ class PlaylistAdapter(
         handleMultipleItemAction(activity, selection, menuItem)
     }
 
-    inner class ViewHolder(itemView: View, itemViewType: Int) : MediaEntryViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : MediaEntryViewHolder(itemView) {
         override fun onClick(view: View) {
             if (isInQuickSelectMode) {
                 toggleChecked(adapterPosition)
@@ -126,13 +123,6 @@ class PlaylistAdapter(
         }
 
         init {
-            if (itemViewType == SMART_PLAYLIST) {
-                itemView.setBackgroundColor(resolveColor(activity, R.attr.cardBackgroundColor))
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    itemView.elevation =
-                        activity.resources.getDimensionPixelSize(R.dimen.card_elevation).toFloat()
-                }
-            }
 
             if (menu != null) {
                 menu!!.setOnClickListener { view: View? ->
