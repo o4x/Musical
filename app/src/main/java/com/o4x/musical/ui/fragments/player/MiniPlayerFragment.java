@@ -105,7 +105,6 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
 
     private void updateSongTitle() {
         miniPlayerTitle.setText(MusicPlayerRemote.getCurrentSong().getTitle());
-        miniPlayerTitle.setSelected(true);
     }
 
     @Override
@@ -188,5 +187,8 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
         miniPlayerImage.setColorFilter(fg);
         miniPlayerPlayPauseButton.setColorFilter(fg, PorterDuff.Mode.SRC_IN);
         miniPlayerTitle.setTextColor(fg);
+
+        // I want title slide show just when it colored
+        miniPlayerTitle.setSelected(true);
     }
 }
