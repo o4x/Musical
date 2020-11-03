@@ -34,4 +34,14 @@
         android:title="@string/save_playlist_title"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_set_image"
+        android:title="@string/set_image"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reset_image"
+        android:title="@string/reset_image"
+        app:showAsAction="never" />
+
 </menu>

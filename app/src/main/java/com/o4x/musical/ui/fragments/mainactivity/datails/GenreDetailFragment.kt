@@ -1,6 +1,9 @@
 package com.o4x.musical.ui.fragments.mainactivity.datails
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -9,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.o4x.musical.R
+import com.o4x.musical.extensions.showToast
+import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
@@ -17,6 +22,7 @@ import com.o4x.musical.ui.adapter.GenreAdapter
 import com.o4x.musical.ui.adapter.song.SongAdapter
 import com.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
 import com.o4x.musical.ui.viewmodel.GenreDetailsViewModel
+import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.ViewUtil
 import kotlinx.android.synthetic.main.fragment_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -66,7 +72,27 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
                 openAndShuffleQueue(adapter!!.dataSet, true)
                 return true
             }
+            R.id.action_set_image -> {
+                startImagePicker(REQUEST_CODE_SELECT_IMAGE)
+                return true
+            }
+            R.id.action_reset_image -> {
+                showToast(resources.getString(R.string.updating))
+                CustomImageUtil(data).resetCustomImage()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE_SELECT_IMAGE -> if (resultCode == Activity.RESULT_OK) {
+                data?.data?.let {
+                    CustomImageUtil(this.data).setCustomImage(it)
+                }
+            }
+        }
     }
 }

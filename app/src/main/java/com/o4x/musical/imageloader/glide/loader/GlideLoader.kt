@@ -16,10 +16,7 @@ import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.imageloader.model.MultiImage
-import com.o4x.musical.model.Album
-import com.o4x.musical.model.Artist
-import com.o4x.musical.model.Genre
-import com.o4x.musical.model.Song
+import com.o4x.musical.model.*
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.PreferenceUtil
@@ -124,6 +121,13 @@ class GlideLoader {
             )
         }
 
+        fun load(playlist: Playlist, songs: List<Song>): GlideFinisher {
+            return load(
+                CustomImageUtil(playlist),
+                MultiImage.fromPlaylist(playlist, songs)
+            )
+        }
+
         fun load(
             url: String,
             name: String,
@@ -158,11 +162,13 @@ class GlideLoader {
             return this
         }
 
-        fun into(image: ImageView) {
-            requestBuilder
-                .into(
-                    BitmapPaletteTarget(image, listener)
-                )
+        fun into(image: ImageView?) {
+            image?.let {
+                requestBuilder
+                    .into(
+                        BitmapPaletteTarget(it, listener)
+                    )
+            }
         }
 
         fun into(target: Target<Bitmap>) {

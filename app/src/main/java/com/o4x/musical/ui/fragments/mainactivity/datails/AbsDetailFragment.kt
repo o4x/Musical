@@ -1,16 +1,23 @@
 package com.o4x.musical.ui.fragments.mainactivity.datails
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.o4x.musical.R
+import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.extensions.themeColor
+import com.o4x.musical.helper.MusicPlayerRemote
+import com.o4x.musical.helper.menu.PlaylistMenuHelper
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
+import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder
 import com.o4x.musical.ui.adapter.song.PlaylistSongAdapter
 import com.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
+import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.ViewUtil
 import kotlinx.android.synthetic.main.fragment_detail.*
 
@@ -18,6 +25,7 @@ open class AbsDetailFragment<T, A: RecyclerView.Adapter<*>> : AbsPopupFragment(R
 
     companion object {
         const val EXTRA = "extra"
+        const val REQUEST_CODE_SELECT_IMAGE = 1400
     }
 
     var data: T? = null

@@ -80,5 +80,5 @@ fun Fragment.showToast(@StringRes stringRes: Int) {
 }
 
 fun Fragment.showToast(message: String) {
-    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 }

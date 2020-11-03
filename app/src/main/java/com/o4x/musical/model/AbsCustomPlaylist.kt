@@ -11,7 +11,9 @@ abstract class AbsCustomPlaylist(
     name: String
 ) : Playlist(id, name), KoinComponent {
 
-    abstract fun songs(): List<Song>
+    override fun songs(): List<Song> {
+        return emptyList()
+    }
 
     protected val songRepository by inject<SongRepository>()
 
