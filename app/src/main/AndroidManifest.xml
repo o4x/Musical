@@ -100,7 +100,6 @@
         </activity>
         <activity android:name=".ui.activities.details.AlbumDetailActivity" />
         <activity android:name=".ui.activities.details.ArtistDetailActivity" />
-        <activity android:name=".ui.activities.details.GenreDetailActivity" />
         <activity
             android:name=".ui.activities.tageditor.SongTagEditorActivity"
             android:windowSoftInputMode="adjustResize" />

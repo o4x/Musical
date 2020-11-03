@@ -19,37 +19,29 @@ import com.o4x.musical.model.AbsCustomPlaylist
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.ui.adapter.song.OrderablePlaylistSongAdapter
 import com.o4x.musical.ui.adapter.song.PlaylistSongAdapter
-import com.o4x.musical.ui.adapter.song.SongAdapter
 import com.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
 import com.o4x.musical.ui.viewmodel.PlaylistDetailsViewModel
 import com.o4x.musical.util.PlaylistsUtil
 import com.o4x.musical.util.ViewUtil
-import kotlinx.android.synthetic.main.fragment_detail_playlist.*
+import kotlinx.android.synthetic.main.fragment_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlist) {
-
-    companion object {
-        @JvmField
-        var EXTRA_PLAYLIST = "extra_playlist"
-    }
+class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>() {
 
     private val viewModel by viewModel<PlaylistDetailsViewModel> {
-        parametersOf(requireArguments().getParcelable(EXTRA_PLAYLIST))
+        parametersOf(requireArguments().getParcelable(EXTRA))
     }
 
-    private var playlist: Playlist? = null
-    private var adapter: PlaylistSongAdapter? = null
-    private var wrappedAdapter: RecyclerView.Adapter<*>? = null
+
     private var recyclerViewDragDropManager: RecyclerViewDragDropManager? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        playlist = requireArguments().getParcelable(EXTRA_PLAYLIST)
-        setUpRecyclerView()
         mainActivity.addMusicServiceEventListener(viewModel)
+
+        setUpRecyclerView()
         viewModel.playListSongs.observe(viewLifecycleOwner, {
             adapter?.swapDataSet(it)
         })
@@ -60,17 +52,12 @@ class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlis
 
     override fun onResume() {
         super.onResume()
-        setToolbarTitle(playlist!!.name)
+        setToolbarTitle(data?.name)
     }
 
-    private fun setUpRecyclerView() {
-        ViewUtil.setUpFastScrollRecyclerViewColor(
-            requireContext(),
-            recycler_view,
-            ThemeStore.themeColor(requireContext())
-        )
-        recycler_view.layoutManager = OverScrollLinearLayoutManager(requireContext())
-        if (playlist is AbsCustomPlaylist) {
+    override fun setUpRecyclerView() {
+        super.setUpRecyclerView()
+        if (data is AbsCustomPlaylist) {
             adapter = PlaylistSongAdapter(mainActivity, ArrayList(), R.layout.item_list, mainActivity)
             recycler_view.adapter = adapter
         } else {
@@ -84,7 +71,7 @@ class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlis
             ) { fromPosition: Int, toPosition: Int ->
                 if (PlaylistsUtil.moveItem(
                         requireContext(),
-                        playlist!!.id,
+                        data!!.id,
                         fromPosition,
                         toPosition
                     )
@@ -99,18 +86,17 @@ class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlis
             recycler_view.itemAnimator = animator
             recyclerViewDragDropManager!!.attachRecyclerView(recycler_view)
         }
-        adapter!!.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+        adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
                 checkIsEmpty()
             }
         })
-        recycler_view.addAppbarListener()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(
-            if (playlist is AbsCustomPlaylist) R.menu.menu_smart_playlist_detail else R.menu.menu_playlist_detail,
+            if (data is AbsCustomPlaylist) R.menu.menu_smart_playlist_detail else R.menu.menu_playlist_detail,
             menu
         )
         super.onCreateOptionsMenu(menu, inflater)
@@ -123,32 +109,27 @@ class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlis
                 return true
             }
         }
-        return PlaylistMenuHelper.handleMenuClick(mainActivity, playlist!!, item)
+        return PlaylistMenuHelper.handleMenuClick(mainActivity, data!!, item)
     }
 
     override fun onMediaStoreChanged() {
         super.onMediaStoreChanged()
-        if (playlist !is AbsCustomPlaylist) {
+        if (data !is AbsCustomPlaylist) {
             // Playlist deleted
-            if (!PlaylistsUtil.doesPlaylistExist(requireContext(), playlist!!.id)) {
+            if (!PlaylistsUtil.doesPlaylistExist(requireContext(), data!!.id)) {
                 navController().popBackStack()
                 return
             }
 
             // Playlist renamed
-            val playlistName = PlaylistsUtil.getNameForPlaylist(requireContext(), playlist!!.id)
-            if (playlistName != playlist!!.name) {
-                libraryViewModel.playlist(playlist!!.id).observe(viewLifecycleOwner, {
-                    playlist = it
-                    setToolbarTitle(playlist!!.name)
+            val playlistName = PlaylistsUtil.getNameForPlaylist(requireContext(), data!!.id)
+            if (playlistName != data!!.name) {
+                libraryViewModel.playlist(data!!.id).observe(viewLifecycleOwner, {
+                    data = it
+                    setToolbarTitle(data!!.name)
                 })
             }
         }
-    }
-
-    private fun checkIsEmpty() {
-        empty.visibility =
-            if (adapter!!.itemCount == 0) View.VISIBLE else View.GONE
     }
 
     override fun onPause() {
@@ -165,12 +146,6 @@ class PlaylistDetailFragment : AbsPopupFragment(R.layout.fragment_detail_playlis
             recyclerViewDragDropManager = null
         }
         recycler_view.itemAnimator = null
-        recycler_view.adapter = null
-        if (wrappedAdapter != null) {
-            WrapperAdapterUtils.releaseAll(wrappedAdapter)
-            wrappedAdapter = null
-        }
-        adapter = null
         super.onDestroyView()
     }
 }
