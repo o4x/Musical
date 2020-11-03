@@ -88,7 +88,7 @@ class RealGenreRepository(
     }
 
     private fun makeAllSongsWithGenreCursor(): Cursor? {
-        println(MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI.toString())
+        println(Genres.EXTERNAL_CONTENT_URI.toString())
         return contentResolver.query(
             Uri.parse("content://media/external/audio/genres/all/members"),
             arrayOf(Genres.Members.AUDIO_ID), null, null, null

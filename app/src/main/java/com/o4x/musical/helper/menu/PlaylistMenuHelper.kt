@@ -40,18 +40,13 @@ import java.util.*
 
 object PlaylistMenuHelper : KoinComponent {
 
-    private fun getPlaylistSongs(activity: Activity, playlist: Playlist): List<Song> {
-        return if (playlist is AbsCustomPlaylist) playlist.songs()
-        else playlist.getSongs()
-    }
-
-    private fun getPlaylistsSongs(activity: Activity, playlists: List<Playlist>): List<Song> {
+    private fun getPlaylistsSongs(playlists: List<Playlist>): List<Song> {
         val songs: MutableList<Song> = ArrayList()
         for (playlist in playlists) {
             if (playlist is AbsCustomPlaylist) {
-                songs.addAll(playlist.getSongs())
+                songs.addAll(playlist.songs())
             } else {
-                songs.addAll(playlist.getSongs())
+                songs.addAll(playlist.songs())
             }
         }
         return songs
@@ -123,21 +118,21 @@ object PlaylistMenuHelper : KoinComponent {
         when (item.itemId) {
             R.id.action_play -> {
                 MusicPlayerRemote.openQueue(
-                    getPlaylistSongs(activity, playlist), 0, true
+                    playlist.songs(), 0, true
                 )
                 return true
             }
             R.id.action_play_next -> {
-                MusicPlayerRemote.playNext(getPlaylistSongs(activity, playlist))
+                MusicPlayerRemote.playNext(playlist.songs())
                 return true
             }
             R.id.action_add_to_playlist -> {
-                AddToPlaylistDialog.create(getPlaylistSongs(activity, playlist))
+                AddToPlaylistDialog.create(playlist.songs())
                     .show(activity.supportFragmentManager, "ADD_PLAYLIST")
                 return true
             }
             R.id.action_add_to_current_playing -> {
-                MusicPlayerRemote.enqueue(getPlaylistSongs(activity, playlist))
+                MusicPlayerRemote.enqueue(playlist.songs())
                 return true
             }
             R.id.action_rename_playlist -> {
@@ -189,7 +184,7 @@ object PlaylistMenuHelper : KoinComponent {
             }
             else -> SongsMenuHelper.handleMenuClick(
                 activity,
-                getPlaylistsSongs(activity, playlists),
+                getPlaylistsSongs(playlists),
                 item.itemId
             )
         }

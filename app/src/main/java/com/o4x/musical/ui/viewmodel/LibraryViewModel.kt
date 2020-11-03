@@ -275,13 +275,13 @@ class LibraryViewModel(
         playlists.forEach { playlist ->
             val playlistEntity = repository.checkPlaylistExists(playlist.name).firstOrNull()
             if (playlistEntity != null) {
-                val songEntities = playlist.getSongs().map {
+                val songEntities = playlist.songs().map {
                     it.toSongEntity(playlistEntity.playListId)
                 }
                 repository.insertSongs(songEntities)
             } else {
                 val playListId = createPlaylist(PlaylistEntity(playlistName = playlist.name))
-                val songEntities = playlist.getSongs().map {
+                val songEntities = playlist.songs().map {
                     it.toSongEntity(playListId)
                 }
                 repository.insertSongs(songEntities)

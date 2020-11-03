@@ -2,6 +2,7 @@ package com.o4x.musical.imageloader.model;
 
 import com.o4x.musical.model.Artist;
 import com.o4x.musical.model.Genre;
+import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 
 import java.util.ArrayList;
@@ -39,6 +40,15 @@ public class MultiImage {
         }
 
         return new MultiImage(genre.getId(), genre.getName(), covers);
+    }
+
+    static public MultiImage fromPlaylist(Playlist playlist, List<Song> songs) {
+        final List<AlbumCover> covers = new ArrayList<>();
+        for (final Song song : songs) {
+            covers.add(new AlbumCover(song.getAlbumId(), song.getData()));
+        }
+
+        return new MultiImage(playlist.getId(), playlist.getName(), covers);
     }
 
     public String toIdString() {

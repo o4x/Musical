@@ -2,9 +2,15 @@ package com.o4x.musical.model
 
 import android.content.Context
 import android.os.Parcelable
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.liveData
 import com.o4x.musical.repository.RealPlaylistRepository
 import com.o4x.musical.util.MusicUtil
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.get
 
@@ -18,18 +24,17 @@ open class Playlist(
         val empty = Playlist(-1, "")
     }
 
-    // this default implementation covers static playlists
-    fun getSongs(): List<Song> {
+    open fun songs(): List<Song> {
         return RealPlaylistRepository(get()).playlistSongs(id)
     }
 
+    fun getSongsLive(): LiveData<List<Song>> = liveData(IO) {
+        emit(songs())
+    }
+
     open fun getInfoString(context: Context): String {
-        val songCount = getSongs().size
-        val songCountString = MusicUtil.getSongCountString(context, songCount)
-        return MusicUtil.buildInfoString(
-            songCountString,
-            ""
-        )
+        val songCount = songs().size
+        return  MusicUtil.getSongCountString(context, songCount)
     }
 
     override fun equals(other: Any?): Boolean {

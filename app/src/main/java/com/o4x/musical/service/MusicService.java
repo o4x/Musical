@@ -310,13 +310,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                         Playlist playlist = intent.getParcelableExtra(INTENT_EXTRA_PLAYLIST);
                         int shuffleMode = intent.getIntExtra(INTENT_EXTRA_SHUFFLE_MODE, getShuffleMode());
                         if (playlist != null) {
-                            List<Song> playlistSongs;
-                            if (playlist instanceof AbsCustomPlaylist) {
-                                playlistSongs = ((AbsCustomPlaylist) playlist).songs();
-                            } else {
-                                //noinspection unchecked
-                                playlistSongs = playlist.getSongs();
-                            }
+                            List<Song> playlistSongs = playlist.songs();
                             if (!playlistSongs.isEmpty()) {
                                 if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
                                     int startPosition = 0;

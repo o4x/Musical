@@ -19,12 +19,7 @@ public class M3UWriter implements M3UConstants {
             dir.mkdirs();
         File file = new File(dir, playlist.getName().concat("." + EXTENSION));
 
-        List<? extends Song> songs;
-        if (playlist instanceof AbsCustomPlaylist) {
-            songs = ((AbsCustomPlaylist) playlist).songs();
-        } else {
-            songs = playlist.getSongs();
-        }
+        List<Song> songs = playlist.songs();
 
         if (songs.size() > 0) {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));

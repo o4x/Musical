@@ -1,6 +1,9 @@
 package com.o4x.musical.ui.fragments.mainactivity.datails
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -12,6 +15,8 @@ import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemA
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.o4x.musical.R
+import com.o4x.musical.extensions.showToast
+import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.menu.PlaylistMenuHelper
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
@@ -21,6 +26,7 @@ import com.o4x.musical.ui.adapter.song.OrderablePlaylistSongAdapter
 import com.o4x.musical.ui.adapter.song.PlaylistSongAdapter
 import com.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
 import com.o4x.musical.ui.viewmodel.PlaylistDetailsViewModel
+import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.PlaylistsUtil
 import com.o4x.musical.util.ViewUtil
 import kotlinx.android.synthetic.main.fragment_detail.*
@@ -108,6 +114,15 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
                 MusicPlayerRemote.openAndShuffleQueue(adapter!!.dataSet, true)
                 return true
             }
+            R.id.action_set_image -> {
+                startImagePicker(REQUEST_CODE_SELECT_IMAGE)
+                return true
+            }
+            R.id.action_reset_image -> {
+                showToast(resources.getString(R.string.updating))
+                CustomImageUtil(data).resetCustomImage()
+                return true
+            }
         }
         return PlaylistMenuHelper.handleMenuClick(mainActivity, data!!, item)
     }
@@ -147,5 +162,16 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
         }
         recycler_view.itemAnimator = null
         super.onDestroyView()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE_SELECT_IMAGE -> if (resultCode == Activity.RESULT_OK) {
+                data?.data?.let {
+                    CustomImageUtil(this.data).setCustomImage(it)
+                }
+            }
+        }
     }
 }

@@ -11,7 +11,6 @@ class HistoryPlaylist : AbsSmartPlaylist(
     name = App.getContext().getString(R.string.history),
     iconRes = R.drawable.ic_history
 ), KoinComponent {
-
     override fun songs(): List<Song> {
         return topPlayedRepository.recentlyPlayedTracks()
     }

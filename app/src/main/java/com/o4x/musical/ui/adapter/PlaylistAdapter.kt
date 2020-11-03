@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.annotation.LayoutRes
+import androidx.lifecycle.LifecycleOwner
 import code.name.monkey.appthemehelper.util.ATHUtil.resolveColor
 import com.o4x.musical.R
 import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.menu.PlaylistMenuHelper.handleMenuClick
 import com.o4x.musical.helper.menu.PlaylistMenuHelper.handleMultipleItemAction
+import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.smartplaylist.AbsSmartPlaylist
@@ -67,11 +69,14 @@ class PlaylistAdapter(
         holder.itemView.isActivated = isChecked(playlist)
 
         holder.title?.text = playlist.name
-        if (playlist !is AbsSmartPlaylist) {
-            holder.text?.text = MusicUtil.getSongCountString(activity, playlist.getSongs().size)
-        }
 
-        holder.image?.setImageResource(getIconRes(playlist))
+        playlist.getSongsLive().observe(holder.itemView.context as LifecycleOwner, {
+            holder.text?.text = MusicUtil.getSongCountString(activity, it.size)
+            GlideLoader.with(activity).load(playlist, it).into(holder.image)
+        })
+
+
+//        holder.image?.setImageResource(getIconRes(playlist))
     }
 
     private fun getIconRes(playlist: Playlist): Int {
@@ -128,15 +133,7 @@ class PlaylistAdapter(
                         activity.resources.getDimensionPixelSize(R.dimen.card_elevation).toFloat()
                 }
             }
-            if (image != null) {
-                val iconPadding =
-                    activity.resources.getDimensionPixelSize(R.dimen.list_item_image_icon_padding)
-                image!!.setPadding(iconPadding, iconPadding, iconPadding, iconPadding)
-                image!!.setColorFilter(
-                    resolveColor(activity, R.attr.iconColor),
-                    PorterDuff.Mode.SRC_IN
-                )
-            }
+
             if (menu != null) {
                 menu!!.setOnClickListener { view: View? ->
                     val playlist = dataSet[adapterPosition]
