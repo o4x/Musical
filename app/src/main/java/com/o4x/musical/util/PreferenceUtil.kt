@@ -29,6 +29,7 @@ object PreferenceUtil {
     const val ALBUM_SONG_SORT_ORDER = "album_song_sort_order"
     const val SONG_SORT_ORDER = "song_sort_order"
     const val GENRE_SORT_ORDER = "genre_sort_order"
+    const val PLAYLIST_SORT_ORDER = "playlist_sort_order"
     const val ALBUM_GRID_SIZE = "album_grid_size"
     const val ALBUM_GRID_SIZE_LAND = "album_grid_size_land"
     const val SONG_GRID_SIZE = "song_grid_size"
@@ -37,6 +38,8 @@ object PreferenceUtil {
     const val ARTIST_GRID_SIZE_LAND = "artist_grid_size_land"
     const val GENRE_GRID_SIZE = "genre_grid_size"
     const val GENRE_GRID_SIZE_LAND = "genre_grid_size_land"
+    const val PLAYLIST_GRID_SIZE = "playlist_grid_size"
+    const val PLAYLIST_GRID_SIZE_LAND = "playlist_grid_size_land"
     const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
     const val COLORED_NOTIFICATION = "colored_notification"
     const val CLASSIC_NOTIFICATION = "classic_notification"
@@ -257,6 +260,18 @@ object PreferenceUtil {
         }
 
     @JvmStatic
+    var playlistSortOrder: String?
+        get() = sharedPreferences.getString(
+            PLAYLIST_SORT_ORDER,
+            SortOrder.PlaylistSortOrder.PLAYLIST_A_Z
+        )
+        set(sortOrder) {
+            val editor = sharedPreferences.edit()
+            editor.putString(GENRE_SORT_ORDER, sortOrder)
+            editor.apply()
+        }
+
+    @JvmStatic
     var lastSleepTimerValue: Int
         get() = sharedPreferences.getInt(LAST_SLEEP_TIMER_VALUE, 30)
         set(value) {
@@ -357,6 +372,21 @@ object PreferenceUtil {
     }
 
     @JvmStatic
+    fun setPlaylistGridSize(gridSize: Int) {
+        val editor = sharedPreferences.edit()
+        editor.putInt(PLAYLIST_GRID_SIZE, gridSize)
+        editor.apply()
+    }
+
+    @JvmStatic
+    fun getPlaylistGridSize(context: Context): Int {
+        return sharedPreferences.getInt(
+            PLAYLIST_GRID_SIZE,
+            context.resources.getInteger(R.integer.default_list_columns)
+        )
+    }
+
+    @JvmStatic
     fun setAlbumGridSizeLand(gridSize: Int) {
         val editor = sharedPreferences.edit()
         editor.putInt(ALBUM_GRID_SIZE_LAND, gridSize)
@@ -412,6 +442,21 @@ object PreferenceUtil {
     fun getGenreGridSizeLand(context: Context): Int {
         return sharedPreferences.getInt(
             GENRE_GRID_SIZE_LAND,
+            context.resources.getInteger(R.integer.default_list_columns_land)
+        )
+    }
+
+    @JvmStatic
+    fun setPlaylistGridSizeLand(gridSize: Int) {
+        val editor = sharedPreferences.edit()
+        editor.putInt(PLAYLIST_GRID_SIZE_LAND, gridSize)
+        editor.apply()
+    }
+
+    @JvmStatic
+    fun getPlaylistGridSizeLand(context: Context): Int {
+        return sharedPreferences.getInt(
+            PLAYLIST_GRID_SIZE_LAND,
             context.resources.getInteger(R.integer.default_list_columns_land)
         )
     }

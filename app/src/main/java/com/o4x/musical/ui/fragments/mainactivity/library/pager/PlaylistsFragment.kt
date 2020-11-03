@@ -2,21 +2,27 @@ package com.o4x.musical.ui.fragments.mainactivity.library.pager
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.o4x.musical.R
-import com.o4x.musical.misc.OverScrollLinearLayoutManager
+import com.o4x.musical.misc.OverScrollGridLayoutManager
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.model.smartplaylist.TopTracksPlaylist
 import com.o4x.musical.ui.adapter.PlaylistAdapter
+import com.o4x.musical.ui.viewmodel.ReloadType
+import com.o4x.musical.util.PreferenceUtil.getPlaylistGridSize
+import com.o4x.musical.util.PreferenceUtil.getPlaylistGridSizeLand
+import com.o4x.musical.util.PreferenceUtil.playlistSortOrder
+import com.o4x.musical.util.PreferenceUtil.setPlaylistGridSize
+import com.o4x.musical.util.PreferenceUtil.setPlaylistGridSizeLand
 import java.util.*
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 class PlaylistsFragment :
-    AbsLibraryPagerRecyclerViewFragment<PlaylistAdapter, LinearLayoutManager>() {
+    AbsLibraryPagerRecyclerViewCustomGridSizeFragment<PlaylistAdapter, GridLayoutManager>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,8 +37,8 @@ class PlaylistsFragment :
             })
     }
 
-    override fun createLayoutManager(): LinearLayoutManager {
-        return OverScrollLinearLayoutManager(requireActivity())
+    override fun createLayoutManager(): GridLayoutManager {
+        return OverScrollGridLayoutManager(requireActivity(), gridSize)
     }
 
     override fun createAdapter(): PlaylistAdapter {
@@ -40,11 +46,44 @@ class PlaylistsFragment :
         return PlaylistAdapter(
             libraryFragment.mainActivity,
             dataSet,
-            R.layout.item_list_single_row,
+            itemLayoutRes,
             libraryFragment.mainActivity
         )
     }
 
     override val emptyMessage: Int
         get() = R.string.no_playlists
+
+    override fun loadGridSize(): Int {
+        return getPlaylistGridSize(requireActivity())
+    }
+
+    override fun saveGridSize(gridSize: Int) {
+        setPlaylistGridSize(gridSize)
+    }
+
+    override fun loadGridSizeLand(): Int {
+        return getPlaylistGridSizeLand(requireActivity())
+    }
+
+    override fun saveGridSizeLand(gridSize: Int) {
+        setPlaylistGridSizeLand(gridSize)
+    }
+
+    override fun setGridSize(gridSize: Int) {
+        layoutManager?.spanCount = gridSize
+        adapter?.notifyDataSetChanged()
+    }
+
+    override fun loadSortOrder(): String? {
+        return playlistSortOrder
+    }
+
+    override fun saveSortOrder(sortOrder: String?) {
+        playlistSortOrder = sortOrder
+    }
+
+    override fun setSortOrder(sortOrder: String?) {
+        libraryViewModel.forceReload(ReloadType.Playlists)
+    }
 }

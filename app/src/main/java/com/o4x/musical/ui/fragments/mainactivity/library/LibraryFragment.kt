@@ -2,6 +2,7 @@ package com.o4x.musical.ui.fragments.mainactivity.library
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
@@ -105,7 +106,9 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
             menu.add(0, R.id.action_new_playlist, 0, R.string.new_playlist_title)
         }
         val currentFragment = currentFragment
-        if (currentFragment is AbsLibraryPagerRecyclerViewCustomGridSizeFragment<*, *> && currentFragment.isAdded()) {
+        if (currentFragment is AbsLibraryPagerRecyclerViewCustomGridSizeFragment<*, *> &&
+            currentFragment.isAdded()) {
+
             val absLibraryRecyclerViewCustomGridSizeFragment = currentFragment
             val gridSizeItem = menu.findItem(R.id.action_grid_size)
             if (Util.isLandscape(resources)) {
@@ -114,8 +117,12 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
             setUpGridSizeMenu(absLibraryRecyclerViewCustomGridSizeFragment, gridSizeItem.subMenu)
             setUpSortOrderMenu(absLibraryRecyclerViewCustomGridSizeFragment,
                 menu.findItem(R.id.action_sort_order).subMenu)
+
         } else {
             menu.removeItem(R.id.action_grid_size)
+            menu.removeItem(R.id.action_sort_order)
+        }
+        if (currentFragment is PlaylistsFragment) {
             menu.removeItem(R.id.action_sort_order)
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -278,6 +285,18 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
                     R.string.sort_order_year).isChecked =
                     currentSortOrder == SortOrder.SongSortOrder.SONG_YEAR
             }
+            is GenresFragment -> {
+                sortOrderMenu.add(0,
+                    R.id.action_genre_sort_order_asc,
+                    0,
+                    R.string.sort_order_a_z).isChecked =
+                    currentSortOrder == SortOrder.GenreSortOrder.GENRE_A_Z
+                sortOrderMenu.add(0,
+                    R.id.action_genre_sort_order_desc,
+                    1,
+                    R.string.sort_order_z_a).isChecked =
+                    currentSortOrder == SortOrder.GenreSortOrder.GENRE_Z_A
+            }
         }
         sortOrderMenu.setGroupCheckable(0, true, true)
     }
@@ -287,29 +306,41 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
         item: MenuItem
     ): Boolean {
         var sortOrder: String? = null
-        if (fragment is AlbumsFragment) {
-            when (item.itemId) {
-                R.id.action_album_sort_order_asc -> sortOrder = SortOrder.AlbumSortOrder.ALBUM_A_Z
-                R.id.action_album_sort_order_desc -> sortOrder = SortOrder.AlbumSortOrder.ALBUM_Z_A
-                R.id.action_album_sort_order_artist -> sortOrder =
-                    SortOrder.AlbumSortOrder.ALBUM_ARTIST
-                R.id.action_album_sort_order_year -> sortOrder = SortOrder.AlbumSortOrder.ALBUM_YEAR
+        when (fragment) {
+            is AlbumsFragment -> {
+                when (item.itemId) {
+                    R.id.action_album_sort_order_asc -> sortOrder = SortOrder.AlbumSortOrder.ALBUM_A_Z
+                    R.id.action_album_sort_order_desc -> sortOrder = SortOrder.AlbumSortOrder.ALBUM_Z_A
+                    R.id.action_album_sort_order_artist -> sortOrder =
+                        SortOrder.AlbumSortOrder.ALBUM_ARTIST
+                    R.id.action_album_sort_order_year -> sortOrder = SortOrder.AlbumSortOrder.ALBUM_YEAR
+                }
             }
-        } else if (fragment is ArtistsFragment) {
-            when (item.itemId) {
-                R.id.action_artist_sort_order_asc -> sortOrder =
-                    SortOrder.ArtistSortOrder.ARTIST_A_Z
-                R.id.action_artist_sort_order_desc -> sortOrder =
-                    SortOrder.ArtistSortOrder.ARTIST_Z_A
+            is ArtistsFragment -> {
+                when (item.itemId) {
+                    R.id.action_artist_sort_order_asc -> sortOrder =
+                        SortOrder.ArtistSortOrder.ARTIST_A_Z
+                    R.id.action_artist_sort_order_desc -> sortOrder =
+                        SortOrder.ArtistSortOrder.ARTIST_Z_A
+                }
             }
-        } else if (fragment is SongsFragment) {
-            when (item.itemId) {
-                R.id.action_song_sort_order_asc -> sortOrder = SortOrder.SongSortOrder.SONG_A_Z
-                R.id.action_song_sort_order_desc -> sortOrder = SortOrder.SongSortOrder.SONG_Z_A
-                R.id.action_song_sort_order_artist -> sortOrder =
-                    SortOrder.SongSortOrder.SONG_ARTIST
-                R.id.action_song_sort_order_album -> sortOrder = SortOrder.SongSortOrder.SONG_ALBUM
-                R.id.action_song_sort_order_year -> sortOrder = SortOrder.SongSortOrder.SONG_YEAR
+            is SongsFragment -> {
+                when (item.itemId) {
+                    R.id.action_song_sort_order_asc -> sortOrder = SortOrder.SongSortOrder.SONG_A_Z
+                    R.id.action_song_sort_order_desc -> sortOrder = SortOrder.SongSortOrder.SONG_Z_A
+                    R.id.action_song_sort_order_artist -> sortOrder =
+                        SortOrder.SongSortOrder.SONG_ARTIST
+                    R.id.action_song_sort_order_album -> sortOrder = SortOrder.SongSortOrder.SONG_ALBUM
+                    R.id.action_song_sort_order_year -> sortOrder = SortOrder.SongSortOrder.SONG_YEAR
+                }
+            }
+            is GenresFragment -> {
+                when (item.itemId) {
+                    R.id.action_genre_sort_order_asc -> sortOrder =
+                        SortOrder.GenreSortOrder.GENRE_A_Z
+                    R.id.action_genre_sort_order_desc -> sortOrder =
+                        SortOrder.GenreSortOrder.GENRE_Z_A
+                }
             }
         }
         if (sortOrder != null) {
