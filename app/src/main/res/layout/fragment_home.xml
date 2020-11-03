@@ -42,7 +42,8 @@
                     android:id="@+id/queue_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <FrameLayout
                         android:id="@+id/queue_parent"
@@ -95,7 +96,8 @@
                     android:id="@+id/recently_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <RelativeLayout
                         android:id="@+id/recently_parent"
@@ -136,7 +138,8 @@
                     android:id="@+id/newly_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <RelativeLayout
                         android:id="@+id/newly_parent"
