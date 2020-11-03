@@ -14,12 +14,10 @@
 
 package com.o4x.musical.helper
 
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.*
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.os.IBinder
 import android.provider.DocumentsContract
@@ -81,7 +79,7 @@ object MusicPlayerRemote : KoinComponent {
     val playingQueue: List<Song>
         get() = if (musicService != null) {
             musicService?.playingQueue as List<Song>
-        } else listOf<Song>()
+        } else listOf()
 
     @JvmStatic
     val songProgressMillis: Int
