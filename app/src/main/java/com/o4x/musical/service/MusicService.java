@@ -50,7 +50,7 @@ import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.provider.HistoryStore;
-import com.o4x.musical.provider.MusicPlaybackQueueStore;
+import com.o4x.musical.provider.QueueStore;
 import com.o4x.musical.provider.SongPlayCountStore;
 import com.o4x.musical.service.notification.PlayingNotification;
 import com.o4x.musical.service.notification.PlayingNotificationImpl;
@@ -399,7 +399,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     }
 
     private void saveQueuesImpl() {
-        MusicPlaybackQueueStore.getInstance(this).saveQueues(playingQueue, originalPlayingQueue);
+        QueueStore.Companion.getInstance(this).saveQueues(playingQueue, originalPlayingQueue);
     }
 
     private void savePosition() {
@@ -433,8 +433,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
     private synchronized void restoreQueuesAndPositionIfNecessary() {
         if (!queuesRestored && playingQueue.isEmpty()) {
-            List<Song> restoredQueue = MusicPlaybackQueueStore.getInstance(this).getSavedPlayingQueue();
-            List<Song> restoredOriginalQueue = MusicPlaybackQueueStore.getInstance(this).getSavedOriginalPlayingQueue();
+            List<Song> restoredQueue = QueueStore.Companion.getInstance(this).getSavedPlayingQueue();
+            List<Song> restoredOriginalQueue = QueueStore.Companion.getInstance(this).getSavedOriginalPlayingQueue();
             int restoredPosition = PreferenceManager.getDefaultSharedPreferences(this).getInt(SAVED_POSITION, -1);
             int restoredPositionInTrack = PreferenceManager.getDefaultSharedPreferences(this).getInt(SAVED_POSITION_IN_TRACK, -1);
 
@@ -1117,6 +1117,12 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                 } else {
                     playingNotification.stop();
                 }
+                break;
+
+            case MEDIA_STORE_CHANGED:
+                this.playingQueue = QueueStore.Companion.getInstance(this).getSavedPlayingQueue();
+                this.originalPlayingQueue = QueueStore.Companion.getInstance(this).getSavedOriginalPlayingQueue();
+                updateNotification();
                 break;
         }
     }
