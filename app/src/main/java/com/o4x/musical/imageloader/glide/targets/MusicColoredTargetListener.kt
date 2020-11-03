@@ -21,6 +21,8 @@ import com.o4x.musical.util.color.MediaNotificationProcessor
 abstract class MusicColoredTargetListener :
     PaletteTargetListener() {
 
+    var mediaNotificationProcessor: MediaNotificationProcessor? = null
+
     override fun onResourceReady(resource: Bitmap?) {
         if (resource == null) {
             val colors = MediaNotificationProcessor(App.getContext())
@@ -31,8 +33,10 @@ abstract class MusicColoredTargetListener :
                     MediaNotificationProcessor(App.getContext(), resource)
                 )
             } else {
-                MediaNotificationProcessor(
-                    App.getContext()).getPaletteAsync(
+                if (mediaNotificationProcessor == null) {
+                    mediaNotificationProcessor = MediaNotificationProcessor(App.getContext())
+                }
+                mediaNotificationProcessor?.getPaletteAsync(
                     { onColorReady(it) }
                     , resource
                 )
