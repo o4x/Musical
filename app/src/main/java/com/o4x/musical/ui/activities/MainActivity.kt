@@ -61,7 +61,8 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     companion object {
         val TAG: String = MainActivity::class.java.simpleName
 
-        private val popupAbleFragments: Array<Int> = arrayOf(R.id.search, R.id.detail_playlist)
+        private val popupAbleFragments: Array<Int> =
+            arrayOf(R.id.search, R.id.detail_playlist, R.id.detail_genre)
     }
 
     lateinit var navController: NavController
