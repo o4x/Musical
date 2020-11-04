@@ -1,9 +1,7 @@
 package com.o4x.musical.ui.adapter
 
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.LifecycleOwner
@@ -14,9 +12,10 @@ import com.o4x.musical.helper.menu.PlaylistMenuHelper.handleMultipleItemAction
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Playlist
+import com.o4x.musical.model.Song
 import com.o4x.musical.model.smartplaylist.AbsSmartPlaylist
 import com.o4x.musical.ui.activities.MainActivity
-import com.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter
+import com.o4x.musical.ui.adapter.base.AbsAdapter
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder
 import com.o4x.musical.util.MusicUtil
 
@@ -24,12 +23,12 @@ import com.o4x.musical.util.MusicUtil
  * @author Karim Abou Zeid (kabouzeid)
  */
 class PlaylistAdapter(
-    val activity: MainActivity,
-    var dataSet: List<Playlist>,
+    val mainActivity: MainActivity,
+    dataSet: List<Playlist>,
     @param:LayoutRes var itemLayoutRes: Int,
     cabHolder: CabHolder?
-) : AbsMultiSelectAdapter<PlaylistAdapter.ViewHolder, Playlist>(
-    activity, cabHolder, R.menu.menu_playlists_selection
+) : AbsAdapter<PlaylistAdapter.ViewHolder, Playlist>(
+    mainActivity, dataSet, itemLayoutRes, cabHolder, R.menu.menu_playlists_selection
 ) {
 
     companion object {
@@ -41,35 +40,22 @@ class PlaylistAdapter(
         setHasStableIds(true)
     }
 
-    fun swapDataSet(dataSet: List<Playlist>) {
-        this.dataSet = dataSet
-        notifyDataSetChanged()
-    }
-
     override fun getItemId(position: Int): Long {
         return dataSet[position].id
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(activity).inflate(
-            itemLayoutRes, parent, false
-        )
-        return createViewHolder(view, viewType)
-    }
-
-    fun createViewHolder(view: View, viewType: Int): ViewHolder {
+    override fun createViewHolder(view: View, viewType: Int): ViewHolder {
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val playlist = dataSet[position]
-        holder.itemView.isActivated = isChecked(playlist)
 
         holder.title?.text = playlist.name
 
         playlist.getSongsLive().observe(holder.itemView.context as LifecycleOwner, {
             holder.text?.text = MusicUtil.getSongCountString(activity, it.size)
-            GlideLoader.with(activity).load(playlist, it).into(holder.image)
+            getImageLoader(holder).load(playlist, it).into(holder.image)
         })
 
 
@@ -91,16 +77,12 @@ class PlaylistAdapter(
         return if (dataSet[position] is AbsSmartPlaylist) SMART_PLAYLIST else DEFAULT_PLAYLIST
     }
 
-    override fun getItemCount(): Int {
-        return dataSet.size
+    override fun getSectionName(position: Int): String {
+        return  ""
     }
 
-    override fun getIdentifier(position: Int): Playlist? {
-        return dataSet[position]
-    }
-
-    override fun getName(playlist: Playlist): String {
-        return playlist.name
+    override fun getName(`object`: Playlist): String {
+        return `object`.name
     }
 
     override fun onMultipleItemAction(menuItem: MenuItem, selection: MutableList<Playlist>) {
@@ -113,7 +95,7 @@ class PlaylistAdapter(
                 toggleChecked(adapterPosition)
             } else {
                 val playlist = dataSet[adapterPosition]
-                activity.navController.toPlaylistDetail(playlist)
+                mainActivity.navController.toPlaylistDetail(playlist)
             }
         }
 
@@ -138,5 +120,10 @@ class PlaylistAdapter(
                 }
             }
         }
+    }
+
+    override fun loadImage(data: Playlist?, holder: ViewHolder?) {}
+    override fun getSongList(data: MutableList<Playlist>): MutableList<Song> {
+        return mutableListOf()
     }
 }

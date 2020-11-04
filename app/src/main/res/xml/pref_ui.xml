@@ -23,7 +23,15 @@
             android:key="toggle_home_banner"
             android:layout="@layout/list_item_view_switch"
             android:summary="@string/pref_summary_home_banner"
-            android:title="@string/pref_title_home_banner" />
+            android:title="@string/pref_title_home_banner"
+            app:allowDividerBelow="false" />
+
+        <code.name.monkey.appthemehelper.common.prefs.supportv7.ATESwitchPreference
+            android:defaultValue="false"
+            android:key="colored_footer"
+            android:layout="@layout/list_item_view_switch"
+            android:summary="@string/pref_colored_footers_summary"
+            android:title="@string/pref_colored_footers" />
 
     </code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreferenceCategory>
 

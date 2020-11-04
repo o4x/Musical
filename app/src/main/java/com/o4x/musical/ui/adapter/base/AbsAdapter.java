@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.LayoutRes;
+import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.o4x.musical.imageloader.glide.loader.GlideLoader;
 import com.o4x.musical.imageloader.glide.targets.PaletteColoredTargetListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
+import com.o4x.musical.util.PreferenceUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.List;
@@ -31,6 +33,13 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     protected final AppCompatActivity activity;
     protected List<I> dataSet;
     protected int itemLayoutRes;
+
+    public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder, @MenuRes int menu) {
+        super(activity, cabHolder, menu);
+        this.activity = activity;
+        this.dataSet = dataSet;
+        this.itemLayoutRes = itemLayoutRes;
+    }
 
     public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
         super(activity, cabHolder, R.menu.menu_media_selection);
@@ -71,12 +80,15 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
 
     protected GlideLoader.GlideBuilder getImageLoader(final VH holder) {
         return GlideLoader.with(activity)
-                .withListener(new PaletteColoredTargetListener() {
-                    @Override
-                    public void onColorReady(int color) {
-                        setColors(color, holder);
-                    }
-                });
+                .withListener(
+                        PreferenceUtil.isColoredFooter() ?
+                        new PaletteColoredTargetListener() {
+                            @Override
+                            public void onColorReady(int color) {
+                                setColors(color, holder);
+                            }
+                        } : null
+                );
     }
 
     protected void setColors(int color, VH holder) {

@@ -53,8 +53,10 @@ class GlideLoader {
 //                    .placeholder(DEFAULT_PLACEHOLDER_IMAGE)
         }
 
-        fun withListener(listener: PaletteTargetListener): GlideBuilder {
-            this.listener = listener
+        fun withListener(listener: PaletteTargetListener?): GlideBuilder {
+            listener?.let {
+                this.listener = it
+            }
             return this
         }
 

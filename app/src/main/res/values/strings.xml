@@ -450,5 +450,7 @@
     <string name="limit_size">The limit can not be less than 10</string>
     <string name="set_image">Set image</string>
     <string name="reset_image">Reset image</string>
+    <string name="pref_colored_footers">Colored footers</string>
+    <string name="pref_colored_footers_summary">Use cover color for card footer color</string>
 
 </resources>
