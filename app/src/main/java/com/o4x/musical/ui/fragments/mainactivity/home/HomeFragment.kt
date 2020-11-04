@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
+import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,11 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.o4x.musical.R
-import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.MusicPlayerRemote
@@ -27,6 +26,7 @@ import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
+import com.xw.repo.widget.BounceScrollView.OnOverScrollListener
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -211,12 +211,21 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             }
         }
 
+        // zooming poster in over scroll
+
 
         // zooming poster in over scroll
+        val params = poster.layoutParams
+        val width = params.width
+        val height = params.height
         nested_scroll_view.setOnOverScrollListener { _: Boolean, overScrolledDistance: Int ->
             val scale = 1 + overScrolledDistance / displayHeight.toFloat()
-            poster.scaleX = scale
-            poster.scaleY = scale
+            val mParams: ViewGroup.LayoutParams =
+                FrameLayout.LayoutParams(
+                    width,
+                    (height * scale).toInt()
+                )
+            poster.layoutParams = mParams
         }
     }
 
