@@ -13,6 +13,9 @@ import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
+import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage;
+import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImageFactory;
+import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImageLoader;
 import com.o4x.musical.imageloader.glide.module.customcover.CustomCoverLoader;
 import com.o4x.musical.imageloader.model.CoverData;
 import com.o4x.musical.imageloader.model.MultiImage;
@@ -39,6 +42,7 @@ public class MyGlideModule extends AppGlideModule {
 
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
+        registry.append(ArtistImage.class, InputStream.class, new ArtistImageFactory());
         registry.append(AudioFileCover.class, InputStream.class, new AudioFileCoverLoader.Factory());
         registry.append(CoverData.class, Bitmap.class, new CustomCoverLoader.Factory());
         registry.append(MultiImage.class, InputStream.class, new MosaicImageLoader.Factory());
