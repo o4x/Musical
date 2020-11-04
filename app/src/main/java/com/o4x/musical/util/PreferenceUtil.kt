@@ -41,6 +41,7 @@ object PreferenceUtil {
     const val PLAYLIST_GRID_SIZE = "playlist_grid_size"
     const val PLAYLIST_GRID_SIZE_LAND = "playlist_grid_size_land"
     const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
+    const val COLORED_FOOTER = "colored_footer"
     const val COLORED_NOTIFICATION = "colored_notification"
     const val CLASSIC_NOTIFICATION = "classic_notification"
     const val AUDIO_DUCKING = "audio_ducking"
@@ -161,6 +162,12 @@ object PreferenceUtil {
     var smartPlaylistLimit
         get() = sharedPreferences.getInt(SMART_PLAYLIST_LIMIT, 100)
         set(value) = sharedPreferences.edit { putInt(SMART_PLAYLIST_LIMIT, value) }
+
+    @JvmStatic
+    val isColoredFooter
+        get() = sharedPreferences.getBoolean(
+            COLORED_FOOTER, false
+        )
 
     @JvmStatic
     var isColoredNotification
