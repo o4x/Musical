@@ -1,5 +1,6 @@
 package com.o4x.musical.imageloader.glide.loader
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.widget.ImageView
@@ -11,6 +12,7 @@ import com.bumptech.glide.signature.MediaStoreSignature
 import com.bumptech.glide.signature.ObjectKey
 import com.o4x.musical.R
 import com.o4x.musical.imageloader.glide.module.GlideApp
+import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
 import com.o4x.musical.imageloader.glide.targets.BitmapPaletteTarget
 import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener
 import com.o4x.musical.imageloader.model.AudioFileCover
@@ -108,10 +110,24 @@ class GlideLoader {
         }
 
         fun load(artist: Artist): GlideFinisher {
-            return load(
-                CustomImageUtil(artist),
-                MultiImage.fromArtist(artist)
-            )
+
+            listener.coverData = CoverData.from(MultiImage.fromArtist(artist))
+
+            val customImageUtil = CustomImageUtil(artist)
+
+            return if (customImageUtil.hasCustomImage())
+                GlideFinisher(
+                    requestBuilder
+                        .signature(createSignature(customImageUtil))
+                        .load(customImageUtil.file),
+                    listener
+                )
+            else
+                GlideFinisher(
+                    requestBuilder
+                        .load(ArtistImage(artist)),
+                    listener
+                )
         }
 
         fun load(genre: Genre): GlideFinisher {
@@ -176,7 +192,11 @@ class GlideLoader {
                 .into(target)
         }
 
-        fun intoSync(image: ImageView) {
+        @SuppressLint("CheckResult")
+        fun intoSync(image: ImageView, onlyRetrieveFromCache: Boolean = true) {
+
+            requestBuilder.onlyRetrieveFromCache(onlyRetrieveFromCache)
+
             image.setImageBitmap(
                 createSync(image.context)
             )
