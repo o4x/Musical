@@ -84,6 +84,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
         updateTabVisibility()
         if (rememberLastTab()) {
             pager!!.currentItem = lastPage
+            mainActivity.tabs.setScrollPosition(lastPage,0f,true)
         }
         pager!!.addOnPageChangeListener(this)
     }
