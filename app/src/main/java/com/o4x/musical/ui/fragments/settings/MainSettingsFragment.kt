@@ -14,12 +14,15 @@
 
 package com.o4x.musical.ui.fragments.settings
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.media.audiofx.AudioEffect
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.TwoStatePreference
@@ -30,7 +33,12 @@ import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.color.colorChooser
+import com.flask.colorpicker.ColorPickerView
+import com.flask.colorpicker.OnColorSelectedListener
+import com.flask.colorpicker.builder.ColorPickerClickListener
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.o4x.musical.R
+import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.ui.dialogs.ChangeSmartPlaylistLimit
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil
@@ -79,23 +87,25 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
         }
 
         val themeColorPref: ATEColorPreference = findPreference("theme_color")!!
-        val themeColor = ThemeStore.themeColor(requireContext())
+        val themeColor = themeColor()
         themeColorPref.setColor(themeColor, ColorUtil.darkenColor(themeColor))
 
         themeColorPref.setOnPreferenceClickListener {
-            MaterialDialog(requireContext())
-                .title(R.string.theme_color)
-                .colorChooser(
-                    ColorPalette(requireActivity()).materialColorsPrimary,
-                    ColorPalette(requireActivity()).materialColors,
-                    allowCustomArgb = true,
-                    changeActionButtonsColor = true,
-                    showAlphaSelector = false,
-                    initialSelection = themeColor
-                ) { _, color ->
-                    if (ThemeStore.themeColor(requireContext()) != color)
-                        ThemeStore.editTheme(requireContext()).themeColor(color).commit()
+            ColorPickerDialogBuilder
+                .with(context)
+                .setTitle(R.string.theme_color)
+                .initialColor(themeColor)
+                .showAlphaSlider(false)
+                .showBorder(true)
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(14)
+                .setPositiveButton(R.string.ok
+                ) { _, selectedColor, _ ->
+                    if (ThemeStore.themeColor(requireContext()) != selectedColor)
+                        ThemeStore.editTheme(requireContext()).themeColor(selectedColor).commit()
                 }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                .build()
                 .show()
             return@setOnPreferenceClickListener true
         }
