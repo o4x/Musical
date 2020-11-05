@@ -22,11 +22,10 @@ import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
-import com.o4x.musical.ui.adapter.home.HomeAdapter
+import com.o4x.musical.ui.adapter.home.HomeSongAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
-import com.xw.repo.widget.BounceScrollView.OnOverScrollListener
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -40,8 +39,8 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         parametersOf(null)
     }
 
-    private lateinit var recentlyAdapter: HomeAdapter
-    private lateinit var newAdapter: HomeAdapter
+    private lateinit var recentlySongAdapter: HomeSongAdapter
+    private lateinit var newSongAdapter: HomeSongAdapter
     private lateinit var recentlyLayoutManager: GridLayoutManager
     private lateinit var newLayoutManager: GridLayoutManager
 
@@ -67,9 +66,11 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        onReloadSubToolbar()
+        super.onViewCreated(view, savedInstanceState)
         setUpViews()
     }
+
+    override fun onReloadAppbar() {}
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
@@ -233,7 +234,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         val animator: GeneralItemAnimator = RefactoredDefaultItemAnimator()
         queueLayoutManager = linearLayoutManager
         queue_recycler_view.layoutManager = queueLayoutManager
-        queueAdapter = HomeAdapter(
+        queueAdapter = HomeSongAdapter(
             mainActivity,
             ArrayList(),
             0,
@@ -255,7 +256,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private fun setUpRecentlyView() {
         recentlyLayoutManager = gridLayoutManager
         recently_recycler_view.layoutManager = recentlyLayoutManager
-        recentlyAdapter = HomeAdapter(
+        recentlySongAdapter = HomeSongAdapter(
             mainActivity,
             ArrayList(),
             0,
@@ -263,17 +264,17 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             gridSize * 2,
             false,
         )
-        recently_recycler_view.adapter = recentlyAdapter
+        recently_recycler_view.adapter = recentlySongAdapter
         libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner, {
             recently_container.isVisible = it.isNotEmpty()
-            recentlyAdapter.swapDataSet(it)
+            recentlySongAdapter.swapDataSet(it)
         })
     }
 
     private fun setUpNewView() {
         newLayoutManager = gridLayoutManager
         new_recycler_view.layoutManager = newLayoutManager
-        newAdapter = HomeAdapter(
+        newSongAdapter = HomeSongAdapter(
             mainActivity,
             ArrayList(),
             0,
@@ -281,11 +282,11 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             gridSize * 3,
             false,
         )
-        new_recycler_view.adapter = newAdapter
+        new_recycler_view.adapter = newSongAdapter
 
         libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner, {
             newly_container.isVisible = it.isNotEmpty()
-            newAdapter.swapDataSet(it)
+            newSongAdapter.swapDataSet(it)
         })
     }
 

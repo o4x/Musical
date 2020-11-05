@@ -58,9 +58,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainActivity.setStatusBarColorAuto()
-        mainActivity.toolbar.setBackgroundColor(surfaceColor())
-        showAppbar()
+        onReloadAppbar()
         onReloadSubToolbar()
     }
 
@@ -77,6 +75,12 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
         toolbarAnimation.cancel()
         statusAnimation.cancel()
         super.onDestroy()
+    }
+
+    open fun onReloadAppbar() {
+        mainActivity.setStatusBarColorAuto()
+        mainActivity.toolbar.setBackgroundColor(surfaceColor())
+        showAppbar()
     }
 
     open fun onReloadSubToolbar() {
