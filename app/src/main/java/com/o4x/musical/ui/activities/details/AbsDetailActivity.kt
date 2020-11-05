@@ -2,13 +2,14 @@ package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.extensions.withAlpha
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
@@ -48,8 +49,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        ButterKnife.bind(this)
         setDrawUnderStatusBar()
 
         imageHeight = Util.getScreenWidth()
@@ -133,7 +132,8 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         if (colors != null) {
             this.colors = colors
             songAdapter?.colors = colors
-            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.primaryTextColor, this)
+
+            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors!!.primaryTextColor, this)
             setNavigationBarColor(colors.actionBarColor)
             setTaskDescriptionColor(colors.actionBarColor)
 
@@ -156,14 +156,16 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         )
     }
 
-    val imageLoader: GlideLoader.GlideBuilder
-        get() = GlideLoader.with(this)
+    fun getImageLoader(): GlideLoader.GlideBuilder {
+        // if we use this for context glide on load sync in rotation will crashed
+        return GlideLoader.with(App.getContext())
             .withListener(object : MusicColoredTargetListener() {
                 override fun onColorReady(colors: MediaNotificationProcessor) {
                     setColors(colors.backgroundColor, colors)
                     setMiniPlayerColor(colors)
                 }
             })
+    }
 
     abstract fun initObserver()
     abstract fun loadImage()

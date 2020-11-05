@@ -10,7 +10,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.MediaStoreSignature
 import com.bumptech.glide.signature.ObjectKey
-import com.o4x.musical.R
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
 import com.o4x.musical.imageloader.glide.targets.BitmapPaletteTarget
@@ -22,16 +21,11 @@ import com.o4x.musical.model.*
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.PreferenceUtil
-import java.lang.Exception
 
 
 class GlideLoader {
 
     companion object {
-
-        val DEFAULT_DISK_CACHE_STRATEGY: DiskCacheStrategy = DiskCacheStrategy.AUTOMATIC
-        const val DEFAULT_PLACEHOLDER_IMAGE: Int = R.drawable.default_album_art
-
 
         @JvmStatic
         fun with(context: Context): GlideBuilder {
@@ -47,10 +41,10 @@ class GlideLoader {
         constructor(requestBuilder: RequestBuilder<Bitmap>) : this() {
             this@GlideBuilder.requestBuilder =
                 requestBuilder
-                    .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
 //                    .priority(Priority.LOW)
-//                    .placeholder(DEFAULT_PLACEHOLDER_IMAGE)
+//                    .placeholder(R.drawable.default_album_art)
         }
 
         fun withListener(listener: PaletteTargetListener?): GlideBuilder {
@@ -213,6 +207,7 @@ class GlideLoader {
                         .submit()
                         .get()
                 } catch(e: Exception) {
+                    e.printStackTrace()
                     listener.coverData.create(context)
                 }
             }
