@@ -26,6 +26,7 @@ import org.koin.core.parameter.parametersOf
 import java.util.*
 import com.o4x.musical.network.Result
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
+import kotlinx.android.synthetic.main.activity_detail.*
 
 /**
  * Be careful when changing things in this Activity!

@@ -37,7 +37,7 @@
             </com.google.android.material.appbar.MaterialToolbar>
 
             <FrameLayout
-                android:id="@+id/cab_stub_container"
+                android:id="@+id/cab_stub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

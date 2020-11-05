@@ -67,7 +67,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
     lateinit var navController: NavController
     private lateinit var toggle: ActionBarDrawerToggle
-    private var cab: AttachedCab? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -224,41 +223,12 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun openCab(menuRes: Int, callback: CabCallback): AttachedCab {
-        if (cab != null && cab!!.isActive()) cab!!.destroy()
-
-        cab = createCab(R.id.cab_stub_container) {
-            closeDrawable(R.drawable.ic_close_white_24dp)
-            backgroundColor(literal = surfaceColor())
-            titleColor(literal = textColorPrimary())
-            subtitleColor(literal = textColorSecondary())
-            popupTheme(ThemeManager.getThemeResValue())
-            menu(menuRes)
-            menuIconColor(literal = textColorPrimary())
-
-            onCreate { cab, menu ->
-                callback.onCreate(cab, menu)
-            }
-            onSelection { item ->
-                return@onSelection callback.onSelection(item)
-            }
-            onDestroy { cab ->
-                return@onDestroy callback.onDestroy(cab)
-            }
-        }
-
-        return cab!!
-    }
-
     override fun handleBackPress(): Boolean {
         if (drawer_layout.isDrawerOpen(navigation_view)) {
             drawer_layout.closeDrawers()
             return true
-        } else if (cab != null && cab!!.isActive()) {
-            cab!!.destroy()
-            return true
         }
-        return navController.popBackStack() || super.handleBackPress()
+        return super.handleBackPress() || navController.popBackStack()
     }
 
     private fun handlePlaybackIntent(intent: Intent) {

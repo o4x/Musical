@@ -17,6 +17,7 @@ import com.o4x.musical.ui.dialogs.DeleteSongsDialog
 import com.o4x.musical.ui.dialogs.SleepTimerDialog
 import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
 import com.o4x.musical.util.NavigationUtil
+import kotlinx.android.synthetic.main.activity_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
