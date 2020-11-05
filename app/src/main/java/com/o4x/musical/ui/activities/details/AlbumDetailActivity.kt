@@ -70,14 +70,14 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
     }
 
     override fun loadImage() {
-        imageLoader
+        getImageLoader()
             .load(data!!)
             .withSize(imageHeight!!)
             .into(image)
     }
 
     override fun loadImageSync() {
-        imageLoader
+        getImageLoader()
             .load(data!!)
             .withSize(imageHeight!!)
             .intoSync(image)

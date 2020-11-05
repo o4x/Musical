@@ -30,6 +30,7 @@ import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.module.GlideApp
+import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.model.Artist
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
@@ -228,6 +229,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
             GlideLoader.with(this)
                 .load(artist)
+                .withSize(Util.getMaxScreenSize())
                 .into(it)
 
             val items = arrayOf<CharSequence>(
@@ -245,6 +247,31 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
                             2 -> deleteArtistImage()
                         }
                     }.show()
+            }
+        }
+    }
+
+    protected fun setAlbumImageBitmap(bitmap: Bitmap?) {
+        albumImage?.let {
+            if (bitmap == null) {
+                val b: Bitmap = CoverUtil.createSquareCoverWithText(
+                    this, tagUtil?.albumTitle ?: "", id, Util.getMaxScreenSize())
+                it.setImageBitmap(b)
+            } else {
+                it.setImageBitmap(bitmap)
+            }
+        }
+    }
+
+    protected fun setArtistImageBitmap(bitmap: Bitmap?) {
+        artistImage?.let {
+            if (bitmap == null) {
+                val artist = artist
+                val b: Bitmap = CoverUtil.createSquareCoverWithText(
+                    this, artist.name, artist.id, Util.getMaxScreenSize())
+                it.setImageBitmap(b)
+            } else {
+                it.setImageBitmap(bitmap)
             }
         }
     }
@@ -320,31 +347,6 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
                 e.message?.let { Log.e(TAG, it) }
             }
             else -> {
-            }
-        }
-    }
-
-    protected fun setAlbumImageBitmap(bitmap: Bitmap?) {
-        albumImage?.let {
-            if (bitmap == null) {
-                val b: Bitmap = CoverUtil.createSquareCoverWithText(
-                    this, tagUtil?.albumTitle ?: "", id, Util.getMaxScreenSize())
-                it.setImageBitmap(b)
-            } else {
-                it.setImageBitmap(bitmap)
-            }
-        }
-    }
-
-    protected fun setArtistImageBitmap(bitmap: Bitmap?) {
-        artistImage?.let {
-            if (bitmap == null) {
-                val artist = artist
-                val b: Bitmap = CoverUtil.createSquareCoverWithText(
-                    this, artist.name, artist.id, Util.getMaxScreenSize())
-                it.setImageBitmap(b)
-            } else {
-                it.setImageBitmap(bitmap)
             }
         }
     }
