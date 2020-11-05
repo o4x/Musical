@@ -39,7 +39,7 @@
                 android:id="@+id/toolbar"
                 style="@style/Toolbar" />
 
-            <ViewStub
+            <FrameLayout
                 android:id="@+id/cab_stub"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize" />

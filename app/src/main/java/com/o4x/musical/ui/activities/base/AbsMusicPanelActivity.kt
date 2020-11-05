@@ -9,12 +9,23 @@ import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.afollestad.materialcab.attached.AttachedCab
+import com.afollestad.materialcab.attached.destroy
+import com.afollestad.materialcab.attached.isActive
+import com.afollestad.materialcab.createCab
 import com.o4x.musical.R
+import com.o4x.musical.extensions.surfaceColor
+import com.o4x.musical.extensions.textColorPrimary
+import com.o4x.musical.extensions.textColorSecondary
 import com.o4x.musical.helper.MusicPlayerRemote
+import com.o4x.musical.interfaces.CabCallback
+import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.fragments.player.MiniPlayerFragment
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.util.color.MediaNotificationProcessor
+import com.o4x.musical.util.theme.ThemeManager
+import kotlinx.android.synthetic.main.music_panel_layout.*
 import org.jetbrains.annotations.NotNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,16 +36,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Do not use [.setContentView]. Instead wrap your layout with
  * [.wrapSlidingMusicPanel] first and then return it in [.createContentView]
  */
-abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
+abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
 
     protected val libraryViewModel by viewModel<LibraryViewModel>()
 
+    private var cab: AttachedCab? = null
     private lateinit var miniPlayerFragment: MiniPlayerFragment
-
-    @JvmField
-    @BindView(R.id.panel_container)
-    var panelContainer: FrameLayout? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,24 +55,45 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
             val myIntent = Intent(this@AbsMusicPanelActivity, PlayerActivity::class.java)
             this@AbsMusicPanelActivity.startActivity(myIntent)
         }
+
+        libraryViewModel.getQueue().observe(this, {
+            hideBottomBar(it.isEmpty())
+        })
     }
 
     protected abstract fun createContentView(): View?
 
-    override fun onServiceConnected() {
-        super.onServiceConnected()
-    }
+    override fun openCab(menuRes: Int, callback: CabCallback): AttachedCab {
+        if (cab != null && cab!!.isActive()) cab!!.destroy()
 
-    override fun onQueueChanged() {
-        super.onQueueChanged()
-        hideBottomBar(MusicPlayerRemote.playingQueue.isEmpty())
+        cab = createCab(R.id.cab_stub) {
+            closeDrawable(R.drawable.ic_close_white_24dp)
+            backgroundColor(literal = surfaceColor())
+            titleColor(literal = textColorPrimary())
+            subtitleColor(literal = textColorSecondary())
+            popupTheme(ThemeManager.getThemeResValue())
+            menu(menuRes)
+            menuIconColor(literal = textColorPrimary())
+
+            onCreate { cab, menu ->
+                callback.onCreate(cab, menu)
+            }
+            onSelection { item ->
+                return@onSelection callback.onSelection(item)
+            }
+            onDestroy { cab ->
+                return@onDestroy callback.onDestroy(cab)
+            }
+        }
+
+        return cab!!
     }
 
     fun hideBottomBar(hide: Boolean) {
         if (hide) {
-            panelContainer?.visibility = View.GONE
+            panel_container?.visibility = View.GONE
         } else {
-            panelContainer?.visibility = View.VISIBLE
+            panel_container?.visibility = View.VISIBLE
         }
     }
 
@@ -86,6 +114,10 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
     }
 
     open fun handleBackPress(): Boolean {
+        if (cab != null && cab!!.isActive()) {
+            cab!!.destroy()
+            return true
+        }
         return false
     }
 
