@@ -22,6 +22,7 @@ import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
+import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.adapter.home.HomeSongAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
@@ -103,6 +104,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         setUpQueueView()
         setUpRecentlyView()
         setUpNewView()
+        setupHomeRecycler()
         setupEmpty()
     }
 
@@ -233,7 +235,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private fun setUpQueueView() {
         val animator: GeneralItemAnimator = RefactoredDefaultItemAnimator()
         queueLayoutManager = linearLayoutManager
-        queue_recycler_view.layoutManager = queueLayoutManager
+//        queue_recycler_view.layoutManager = queueLayoutManager
         queueAdapter = HomeSongAdapter(
             mainActivity,
             ArrayList(),
@@ -242,20 +244,24 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             null,
             true
         )
-        queue_recycler_view.adapter = queueAdapter
-        queue_recycler_view.itemAnimator = animator
+//        queue_recycler_view.adapter = queueAdapter
+//        queue_recycler_view.itemAnimator = animator
+//
+//        libraryViewModel.getQueue().observe(viewLifecycleOwner, {
+//            queue_container.isVisible = it.isNotEmpty()
+//            val firstLoad = queueAdapter.itemCount == 0
+//            queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
+//            if (firstLoad) toCurrentPosition()
+//        })
 
         libraryViewModel.getQueue().observe(viewLifecycleOwner, {
-            queue_container.isVisible = it.isNotEmpty()
-            val firstLoad = queueAdapter.itemCount == 0
             queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
-            if (firstLoad) toCurrentPosition()
         })
     }
 
     private fun setUpRecentlyView() {
         recentlyLayoutManager = gridLayoutManager
-        recently_recycler_view.layoutManager = recentlyLayoutManager
+//        recently_recycler_view.layoutManager = recentlyLayoutManager
         recentlySongAdapter = HomeSongAdapter(
             mainActivity,
             ArrayList(),
@@ -264,7 +270,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             gridSize * 2,
             false,
         )
-        recently_recycler_view.adapter = recentlySongAdapter
+//        recently_recycler_view.adapter = recentlySongAdapter
         libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner, {
             recently_container.isVisible = it.isNotEmpty()
             recentlySongAdapter.swapDataSet(it)
@@ -273,7 +279,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private fun setUpNewView() {
         newLayoutManager = gridLayoutManager
-        new_recycler_view.layoutManager = newLayoutManager
+//        new_recycler_view.layoutManager = newLayoutManager
         newSongAdapter = HomeSongAdapter(
             mainActivity,
             ArrayList(),
@@ -282,12 +288,36 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             gridSize * 3,
             false,
         )
-        new_recycler_view.adapter = newSongAdapter
+//        new_recycler_view.adapter = newSongAdapter
 
         libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner, {
             newly_container.isVisible = it.isNotEmpty()
             newSongAdapter.swapDataSet(it)
         })
+    }
+
+    private fun setupHomeRecycler() {
+        recycler_view.layoutManager = LinearLayoutManager(requireContext())
+        val homeAdapter = HomeAdapter(this,
+            mutableListOf(
+                HomeAdapter.RecyclerItem(
+                    R.string.playing_queue,
+                    queueAdapter as HomeSongAdapter,
+                    queueLayoutManager
+                ),
+                HomeAdapter.RecyclerItem(
+                    R.string.recently_played,
+                    recentlySongAdapter,
+                    recentlyLayoutManager
+                ),
+                HomeAdapter.RecyclerItem(
+                    R.string.recently_added,
+                    newSongAdapter,
+                    newLayoutManager
+                )
+            )
+        )
+        recycler_view.adapter = homeAdapter
     }
 
     private val gridLayoutManager: GridLayoutManager

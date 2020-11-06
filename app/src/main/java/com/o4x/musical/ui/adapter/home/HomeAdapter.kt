@@ -3,15 +3,18 @@ package com.o4x.musical.ui.adapter.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
+import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.o4x.musical.R
 import com.o4x.musical.model.Song
+import com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment
 
 class HomeAdapter(
-    val activity: AppCompatActivity,
-    val viewLifecycleOwner: LifecycleOwner
+    val homeFragment: HomeFragment,
+    dataSet: MutableList<RecyclerItem>
 ) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
     companion object {
@@ -20,14 +23,27 @@ class HomeAdapter(
         const val OTHER  = 1338
     }
 
-    var dataSet = mapOf<Int, MutableList<Song>>()
+    var dataSet: MutableList<RecyclerItem> = dataSet
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    private fun getRealPosition(position: Int): Int {
+        return position - 1
+    }
+
+    class RecyclerItem(
+        @StringRes val title: Int,
+        val adapter: HomeSongAdapter,
+        val layoutManager: RecyclerView.LayoutManager
+    )
 
     override fun getItemViewType(position: Int): Int {
         if (position == 0) return PADDING
-        return when (dataSet.keys.toIntArray()[position]) {
-            R.string.playing_queue -> QUEUE
-            else -> OTHER
-        }
+        if (dataSet[getRealPosition(position)].title == R.string.playing_queue)
+            return QUEUE
+        return OTHER
     }
 
     private fun getItemLayoutRe(viewType: Int): Int {
@@ -39,22 +55,42 @@ class HomeAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = LayoutInflater.from(activity)
+        val view: View = LayoutInflater.from(homeFragment.requireContext())
             .inflate(getItemLayoutRe(viewType), parent, false)
-        return ViewHolder(view)
+        return when(viewType) {
+            PADDING -> ViewHolder(view)
+            QUEUE -> QueueViewHolder(view)
+            else -> OtherViewHolder(view)
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        if (getItemViewType(position) != PADDING) {
+            val item = dataSet[getRealPosition(position)]
+            (holder as OtherViewHolder).apply {
+                title.text = homeFragment.getText(item.title)
+                recyclerView.layoutManager = item.layoutManager
+                recyclerView.adapter = item.adapter
+            }
+        }
     }
 
     override fun getItemCount(): Int {
-        var count = 1
-        for (i in dataSet) {
-            if (i.value.isNotEmpty()) count += 1
-        }
-        return count
+        return 1 + dataSet.size
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
+    open inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {}
+
+    open inner class OtherViewHolder(view: View) : ViewHolder(view) {
+        @BindView(R.id.recycler_view)
+        lateinit var recyclerView: RecyclerView
+        @BindView(R.id.title)
+        lateinit var title: TextView
+
+        init {
+            ButterKnife.bind(this, itemView)
+        }
+    }
+
+    inner class QueueViewHolder(view: View) : OtherViewHolder(view) {}
 }
