@@ -73,7 +73,9 @@ open class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(la
         resetToCurrentPosition()
     }
 
-    override fun onPlayStateChanged() {}
+    override fun onPlayStateChanged() {
+        queueAdapter.notifyDataSetChanged()
+    }
 
     override fun onRepeatModeChanged() {}
     override fun onShuffleModeChanged() {}
