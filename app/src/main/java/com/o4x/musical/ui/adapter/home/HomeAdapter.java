@@ -18,12 +18,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class HomeSongAdapter extends PlayingQueueAdapter {
+public class HomeAdapter extends PlayingQueueAdapter {
 
     private final Integer limit;
     private final boolean isQueue;
 
-    public HomeSongAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable Integer limit, boolean isQueue) {
+    public HomeAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable Integer limit, boolean isQueue) {
         super(activity, dataSet, current, itemLayoutRes, null);
         this.limit = limit;
         this.isQueue = isQueue;
@@ -31,7 +31,7 @@ public class HomeSongAdapter extends PlayingQueueAdapter {
 
     @Override
     protected SongAdapter.ViewHolder createViewHolder(@NotNull View view, int viewType) {
-        return new HomeSongAdapter.ViewHolder(view);
+        return new HomeAdapter.ViewHolder(view);
     }
 
     @Override
