@@ -20,6 +20,11 @@ open class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(la
     lateinit var queueAdapter: PlayingQueueAdapter
     lateinit var queueLayoutManager: LinearLayoutManager
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        queueLayoutManager = OverScrollLinearLayoutManager(requireContext())
+    }
+
     override fun onResume() {
         super.onResume()
         mainActivity.addMusicServiceEventListener(this)
