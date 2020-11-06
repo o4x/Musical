@@ -2,14 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/window_color"
+    android:background="?backgroundColor"
     android:clickable="true"
     android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/equalizer_action_container"
         android:orientation="vertical">
 
         <com.db.chart.view.LineChartView
