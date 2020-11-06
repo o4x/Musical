@@ -4,19 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/queue_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:singleLine="true"
-        android:text="@string/playing_queue"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:layout_gravity="start|center_vertical" />
+        android:focusable="true"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/queue_playing_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:singleLine="true"
+            android:text="@string/playing_queue"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_gravity="start|center_vertical" />
+
+        <Button
+            android:id="@+id/open_queue_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:layout_margin="16dp"
+            android:text="@string/open"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:layout_gravity="end|center_vertical" />
+
+    </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/queue_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="4dp"
