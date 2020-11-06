@@ -230,7 +230,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     private fun setUpQueueView() {
-        val animator: GeneralItemAnimator = RefactoredDefaultItemAnimator()
         queueLayoutManager = linearLayoutManager
         queue_recycler_view.layoutManager = queueLayoutManager
         queueAdapter = HomeAdapter(
@@ -242,7 +241,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             true
         )
         queue_recycler_view.adapter = queueAdapter
-        queue_recycler_view.itemAnimator = animator
 
         libraryViewModel.getQueue().observe(viewLifecycleOwner, {
             queue_container.isVisible = it.isNotEmpty()
