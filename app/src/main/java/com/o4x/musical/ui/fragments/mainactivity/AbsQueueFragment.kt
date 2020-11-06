@@ -1,16 +1,13 @@
 package com.o4x.musical.ui.fragments.mainactivity
 
-import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.interfaces.MusicServiceEventListener
-import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlin.math.abs
@@ -19,11 +16,6 @@ open class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(la
 
     lateinit var queueAdapter: PlayingQueueAdapter
     lateinit var queueLayoutManager: LinearLayoutManager
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        queueLayoutManager = OverScrollLinearLayoutManager(requireContext())
-    }
 
     override fun onResume() {
         super.onResume()
