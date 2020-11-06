@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@color/window_color">
+    android:background="?backgroundColor">
 
     <ScrollView
         android:layout_width="match_parent"
