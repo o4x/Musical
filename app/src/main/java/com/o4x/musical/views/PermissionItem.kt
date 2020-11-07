@@ -2,10 +2,8 @@ package com.o4x.musical.views
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import androidx.annotation.ColorInt
 import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.R
@@ -32,7 +30,7 @@ class PermissionItem @JvmOverloads constructor(
         button.setIconResource(
             attributes.getResourceId(
                 R.styleable.PermissionItem_permissionIcon,
-                R.drawable.ic_album_white_24dp
+                R.drawable.ic_album
             )
         )
 

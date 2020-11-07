@@ -10,10 +10,8 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.AsyncTask
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -260,16 +258,16 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
     private fun updateRepeatState() {
         when (MusicPlayerRemote.repeatMode) {
             MusicService.REPEAT_MODE_NONE -> {
-                repeatButton!!.setImageResource(R.drawable.ic_repeat_white_24dp)
+                repeatButton!!.setImageResource(R.drawable.ic_repeat)
                 repeatButton!!.setColorFilter(lastDisabledPlaybackControlsColor,
                     PorterDuff.Mode.SRC_IN)
             }
             MusicService.REPEAT_MODE_ALL -> {
-                repeatButton!!.setImageResource(R.drawable.ic_repeat_white_24dp)
+                repeatButton!!.setImageResource(R.drawable.ic_repeat)
                 repeatButton!!.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
             }
             MusicService.REPEAT_MODE_THIS -> {
-                repeatButton!!.setImageResource(R.drawable.ic_repeat_one_white_24dp)
+                repeatButton!!.setImageResource(R.drawable.ic_repeat_one)
                 repeatButton!!.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
             }
         }
@@ -400,9 +398,9 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
                 val activity = activity
                 if (activity != null) {
                     val res = if (isFavorite!!)
-                        R.drawable.ic_favorite_white_24dp
+                        R.drawable.ic_star
                     else
-                        R.drawable.ic_favorite_border_white_24dp
+                        R.drawable.ic_star_border
 
                     val drawable = TintHelper.createTintedDrawable(activity, res, Color.WHITE)
                     songFavourite?.setImageDrawable(drawable)

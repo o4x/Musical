@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:tint="?attr/colorControlNormal"
-            tools:srcCompat="@drawable/ic_telegram_white" />
+            tools:srcCompat="@drawable/ic_telegram" />
 
     </FrameLayout>
 

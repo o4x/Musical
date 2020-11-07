@@ -31,7 +31,7 @@
         android:layout_height="24dp"
         android:scaleType="fitXY"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_keyboard_arrow_right_white_24dp"
+        app:srcCompat="@drawable/ic_keyboard_arrow_right"
         tools:tint="#000"
         tools:visibility="visible" />
 

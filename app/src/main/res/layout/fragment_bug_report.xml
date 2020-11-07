@@ -45,6 +45,6 @@
         style="@style/Fab"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin_top_left_right"
-        app:srcCompat="@drawable/ic_send_white_24dp" />
+        app:srcCompat="@drawable/ic_send" />
 
 </FrameLayout>

@@ -8,7 +8,6 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
@@ -58,7 +57,7 @@ public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
                 final int padding = activity.getResources().getDimensionPixelSize(R.dimen.default_item_margin) / 2;
                 holder.image.setPadding(padding, padding, padding, padding);
                 holder.image.setColorFilter(textColor);
-                holder.image.setImageResource(R.drawable.ic_timer_white_24dp);
+                holder.image.setImageResource(R.drawable.ic_timer);
             }
             if (holder.dragView != null) {
                 holder.dragView.setVisibility(View.GONE);

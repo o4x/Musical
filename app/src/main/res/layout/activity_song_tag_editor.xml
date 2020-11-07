@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         style="@style/Toolbar"
         android:elevation="@dimen/appbar_elevation"
-        app:navigationIcon="@drawable/ic_keyboard_backspace"
+        app:navigationIcon="@drawable/ic_arrow_back"
         app:title="@string/action_tag_editor" />
 
     <androidx.core.widget.NestedScrollView

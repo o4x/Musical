@@ -40,7 +40,7 @@
                 android:id="@+id/icon_author"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_person_white_24dp"
+                app:srcCompat="@drawable/ic_person"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
             <LinearLayout
@@ -84,7 +84,7 @@
                 android:id="@+id/icon_email"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_email_white_24dp"
+                app:srcCompat="@drawable/ic_email_white"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -115,7 +115,7 @@
                 android:id="@+id/icon_twitter"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_twitter_white_24dp"
+                app:srcCompat="@drawable/ic_twitter"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -146,7 +146,7 @@
                 android:id="@+id/icon_website"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_open_in_browser_white_24dp"
+                app:srcCompat="@drawable/ic_open_in_browser"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
             <com.google.android.material.textview.MaterialTextView

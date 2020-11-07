@@ -20,16 +20,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import butterknife.ButterKnife
-import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
 import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
-import com.afollestad.materialcab.attached.AttachedCab
-import com.afollestad.materialcab.attached.destroy
-import com.afollestad.materialcab.attached.isActive
-import com.afollestad.materialcab.createCab
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
@@ -37,7 +31,6 @@ import com.o4x.musical.R
 import com.o4x.musical.extensions.*
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper.getSongs
-import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Song
 import com.o4x.musical.repository.PlaylistSongsLoader
@@ -45,9 +38,7 @@ import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.activities.intro.PermissionActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
-import com.o4x.musical.util.PhonographColorUtil
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
-import com.o4x.musical.util.theme.ThemeManager
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
@@ -106,7 +97,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     }
 
     private fun setupToolbar() {
-        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
     }
 

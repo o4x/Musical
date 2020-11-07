@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class LastAddedPlaylist : AbsSmartPlaylist(
     name = App.getContext().getString(R.string.last_added),
-    iconRes = R.drawable.ic_library_add_white_24dp
+    iconRes = R.drawable.ic_library_add
 ) {
     override fun songs(): List<Song> {
         return lastAddedRepository.recentSongs()

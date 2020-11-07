@@ -26,7 +26,7 @@
             style="@style/Toolbar"
             app:layout_collapseMode="pin"
             app:title="@string/action_settings"
-            app:navigationIcon="@drawable/ic_keyboard_backspace" />
+            app:navigationIcon="@drawable/ic_arrow_back" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

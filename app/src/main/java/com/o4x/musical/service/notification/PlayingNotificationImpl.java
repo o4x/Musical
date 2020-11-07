@@ -140,9 +140,9 @@ public class PlayingNotificationImpl extends PlayingNotification {
                                 int primary = MaterialValueHelper.getPrimaryTextColor(service, dark);
                                 int secondary = MaterialValueHelper.getSecondaryTextColor(service, dark);
 
-                                Bitmap prev = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_previous_white_24dp, primary), 1.5f);
-                                Bitmap next = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_next_white_24dp, primary), 1.5f);
-                                Bitmap playPause = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, isPlaying ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp, primary), 1.5f);
+                                Bitmap prev = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_previous, primary), 1.5f);
+                                Bitmap next = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_next, primary), 1.5f);
+                                Bitmap playPause = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, isPlaying ? R.drawable.ic_pause : R.drawable.ic_play_arrow, primary), 1.5f);
 
                                 notificationLayout.setTextColor(R.id.album_name, primary);
                                 notificationLayout.setTextColor(R.id.text, secondary);

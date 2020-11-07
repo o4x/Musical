@@ -22,7 +22,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/icon_web"
+                android:src="@drawable/app_icon_fg"
                 tools:ignore="ContentDescription" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -52,7 +52,7 @@
                 android:id="@+id/icon_info"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_info_outline_white_24dp"
+                app:srcCompat="@drawable/ic_info_outline"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
             <LinearLayout
@@ -97,7 +97,7 @@
                 android:id="@+id/icon_changelog"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_restore_white_24dp"
+                app:srcCompat="@drawable/ic_restore"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -128,7 +128,7 @@
                 android:id="@+id/icon_github"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_github_circle_white_24dp"
+                app:srcCompat="@drawable/ic_github_circle"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -159,7 +159,7 @@
                 android:id="@+id/icon_licenses"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_description_white_24dp"
+                app:srcCompat="@drawable/ic_description"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
             <com.google.android.material.textview.MaterialTextView
