@@ -23,7 +23,7 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="16dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_expand_less_white_24dp"
+            app:srcCompat="@drawable/ic_expand_less"
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textview.MaterialTextView

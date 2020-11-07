@@ -22,7 +22,7 @@
             android:layout="@layout/list_item_view_switch"
             android:summary="@string/pref_summary_gapless_playback"
             android:title="@string/pref_title_gapless_playback"
-            app:icon="@drawable/ic_play_arrow_white_32dp"
+            app:icon="@drawable/ic_play_arrow"
             app:allowDividerBelow="false"  />
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEPreference

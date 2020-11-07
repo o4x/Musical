@@ -9,16 +9,13 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
@@ -208,7 +205,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
 
     private void setUpPlayerToolbar() {
         toolbar.inflateMenu(R.menu.menu_player);
-        toolbar.setNavigationIcon(R.drawable.ic_keyboard_backspace);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
         toolbar.setOnMenuItemClickListener(this);
     }
@@ -248,7 +245,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
                     if (toolbar != null && activity != null)
                         if (toolbar.getMenu().findItem(R.id.action_show_lyrics) == null) {
                             int color = ToolbarContentTintHelper.toolbarContentColor(activity, Color.TRANSPARENT);
-                            Drawable drawable = ImageUtil.getTintedVectorDrawable(activity, R.drawable.ic_comment_text_outline_white_24dp, color);
+                            Drawable drawable = ImageUtil.getTintedVectorDrawable(activity, R.drawable.ic_comment_text_outline, color);
                             toolbar.getMenu()
                                     .add(Menu.NONE, R.id.action_show_lyrics, Menu.NONE, R.string.action_show_lyrics)
                                     .setIcon(drawable)

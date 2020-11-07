@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 app:permissionColor="@color/deep_purple_A200"
                 app:permissionButtonTitle="Grant access"
-                app:permissionIcon="@drawable/ic_sd_storage"
+                app:permissionIcon="@drawable/ic_sd_card"
                 app:permissionTitle="@string/permission_title"
                 app:permissionTitleNumber="1"
                 app:permissionTitleSubTitle="@string/permission_summary" />

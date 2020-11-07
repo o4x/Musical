@@ -47,7 +47,7 @@
         android:minHeight="@dimen/md_listitem_height"
         android:tint="?attr/iconColor"
         android:tintMode="src_in"
-        app:srcCompat="@drawable/ic_drag_vertical_white_24dp"
+        app:srcCompat="@drawable/ic_drag_vertical"
         tools:ignore="ContentDescription" />
 
 </LinearLayout>

@@ -13,7 +13,6 @@
             android:layout="@layout/list_item_view_switch"
             android:summary="@string/pref_summary_ignore_media_store_artwork"
             android:title="@string/pref_title_ignore_media_store_artwork"
-            app:icon="@drawable/ic_image"
             app:allowDividerBelow="false"/>
 
         <code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference

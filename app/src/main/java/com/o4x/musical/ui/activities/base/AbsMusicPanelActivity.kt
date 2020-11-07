@@ -5,9 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
-import butterknife.BindView
 import butterknife.ButterKnife
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
@@ -17,7 +15,6 @@ import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.extensions.textColorPrimary
 import com.o4x.musical.extensions.textColorSecondary
-import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.activities.PlayerActivity
@@ -26,7 +23,6 @@ import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.util.color.MediaNotificationProcessor
 import com.o4x.musical.util.theme.ThemeManager
 import kotlinx.android.synthetic.main.music_panel_layout.*
-import org.jetbrains.annotations.NotNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -67,7 +63,7 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
         if (cab != null && cab!!.isActive()) cab!!.destroy()
 
         cab = createCab(R.id.cab_stub) {
-            closeDrawable(R.drawable.ic_close_white_24dp)
+            closeDrawable(R.drawable.ic_close)
             backgroundColor(literal = surfaceColor())
             titleColor(literal = textColorPrimary())
             subtitleColor(literal = textColorSecondary())

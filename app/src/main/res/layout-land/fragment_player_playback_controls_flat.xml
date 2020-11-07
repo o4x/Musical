@@ -21,7 +21,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/titleContainer"
-            app:srcCompat="@drawable/ic_more_vert_white_24dp" />
+            app:srcCompat="@drawable/ic_more_vert" />
 
         <LinearLayout
             android:id="@+id/titleContainer"
@@ -74,7 +74,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/titleContainer"
-            app:srcCompat="@drawable/ic_favorite_border_white_24dp" />
+            app:srcCompat="@drawable/ic_star_border" />
 
 
         <!--  If layout_width not equals with 0dp when update ui is lagging  -->
@@ -136,7 +136,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/player_prev_button"
-            app:srcCompat="@drawable/ic_repeat_white_24dp"
+            app:srcCompat="@drawable/ic_repeat"
             tools:ignore="MissingPrefix"
             tools:tint="@color/black" />
 
@@ -152,7 +152,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/player_repeat_button"
             app:layout_constraintTop_toTopOf="@+id/player_play_pause_button"
-            app:srcCompat="@drawable/ic_skip_previous_white_24dp"
+            app:srcCompat="@drawable/ic_skip_previous"
             tools:ignore="MissingPrefix"
             tools:tint="@color/black" />
 
@@ -169,7 +169,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/player_prev_button"
             app:layout_constraintTop_toBottomOf="@+id/player_progress_slider"
-            app:srcCompat="@drawable/ic_pause_white_24dp"
+            app:srcCompat="@drawable/ic_pause"
             tools:tint="@color/black" />
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -184,7 +184,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/player_play_pause_button"
             app:layout_constraintTop_toTopOf="@+id/player_play_pause_button"
-            app:srcCompat="@drawable/ic_skip_next_white_24dp"
+            app:srcCompat="@drawable/ic_skip_next"
             tools:ignore="MissingPrefix"
             tools:tint="@color/black" />
 

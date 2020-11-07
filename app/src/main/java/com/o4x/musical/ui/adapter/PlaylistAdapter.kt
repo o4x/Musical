@@ -9,7 +9,6 @@ import com.o4x.musical.R
 import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.menu.PlaylistMenuHelper.handleMenuClick
 import com.o4x.musical.helper.menu.PlaylistMenuHelper.handleMultipleItemAction
-import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.Song
@@ -70,7 +69,7 @@ class PlaylistAdapter(
                 activity,
                 playlist
             )
-        ) R.drawable.ic_favorite_white_24dp else R.drawable.ic_queue_music_white_24dp
+        ) R.drawable.ic_star else R.drawable.ic_queue_music
     }
 
     override fun getItemViewType(position: Int): Int {
