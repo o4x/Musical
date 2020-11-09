@@ -10,21 +10,22 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.R;
 import com.o4x.musical.appwidgets.base.BaseAppWidget;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
+import com.o4x.musical.helper.MyPalette;
+import com.o4x.musical.imageloader.glide.loader.GlideLoader;
+import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener;
+import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.util.ImageUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
@@ -94,28 +95,12 @@ public class AppWidgetClassic extends BaseAppWidget {
                 if (target != null) {
                     Glide.with(appContext).clear(target);
                 }
-                target = SongGlideRequest.Builder.from(Glide.with(appContext), song)
-                        .asBitmap()
-                        .build()
-                        .centerCrop()
-                        .into(new CustomTarget<Bitmap>(imageSize, imageSize) {
 
+                target = GlideLoader.with(service)
+                        .withListener(new PaletteTargetListener(service) {
                             @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                Palette palette = Palette.from(resource).generate();
-                                update(resource, palette.getVibrantColor(palette.getMutedColor(MaterialValueHelper.getSecondaryTextColor(appContext, true))));
-                            }
-
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                            }
-
-
-                            @Override
-                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                                super.onLoadFailed(errorDrawable);
-                                update(null, MaterialValueHelper.getSecondaryTextColor(appContext, true));
+                            public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
+                                update(resource, colors.getBackgroundColor());
                             }
 
                             private void update(@Nullable Bitmap bitmap, int color) {
@@ -133,7 +118,9 @@ public class AppWidgetClassic extends BaseAppWidget {
 
                                 pushUpdate(appContext, appWidgetIds, appWidgetView);
                             }
-                        });
+                        })
+                        .load(song)
+                        .into(new PlaceHolderCustomTarget(service, imageSize, imageSize));
             }
         });
     }

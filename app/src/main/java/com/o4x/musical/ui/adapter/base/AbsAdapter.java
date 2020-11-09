@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.adapter.base;
 
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,11 +17,13 @@ import com.o4x.musical.R;
 import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener;
+import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.PreferenceUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -83,9 +86,9 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
         return GlideLoader.with(activity)
                 .withListener(
                         PreferenceUtil.isColoredFooter() ?
-                        new PaletteTargetListener() {
+                        new PaletteTargetListener(activity) {
                             @Override
-                            public void onColorReady(MyPalette colors) {
+                            public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
                                 setColors(colors.getBackgroundColor(), holder);
                             }
                         } : null

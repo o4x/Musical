@@ -17,6 +17,7 @@ import com.o4x.musical.ui.adapter.AlbumCoverPagerAdapter;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.util.PreferenceUtil;
+import com.o4x.musical.util.color.MediaNotificationProcessor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,9 +104,10 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
         }
     }
 
-    private AlbumCoverPagerAdapter.AlbumCoverFragment.ColorReceiver colorReceiver = new AlbumCoverPagerAdapter.AlbumCoverFragment.ColorReceiver() {
+    private AlbumCoverPagerAdapter.AlbumCoverFragment.ColorReceiver colorReceiver =
+            new AlbumCoverPagerAdapter.AlbumCoverFragment.ColorReceiver() {
         @Override
-        public void onColorReady(MyPalette colors, int requestCode) {
+        public void onColorReady(MediaNotificationProcessor colors, int requestCode) {
             if (currentPosition == requestCode) {
                 notifyColorChange(colors);
             }
@@ -150,7 +152,7 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
         lyricsLayout.animate().alpha(1f).setDuration(PlayerAlbumCoverFragment.VISIBILITY_ANIM_DURATION);
     }
 
-    private void notifyColorChange(MyPalette colors) {
+    private void notifyColorChange(MediaNotificationProcessor colors) {
         if (callbacks != null) callbacks.onColorChanged(colors);
     }
 
@@ -197,7 +199,7 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
     }
 
     public interface Callbacks {
-        void onColorChanged(MyPalette colors);
+        void onColorChanged(MediaNotificationProcessor colors);
 
         void onFavoriteToggled();
     }

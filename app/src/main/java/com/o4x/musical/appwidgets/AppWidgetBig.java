@@ -6,21 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.R;
 import com.o4x.musical.appwidgets.base.BaseAppWidget;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
+import com.o4x.musical.imageloader.glide.loader.GlideLoader;
+import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
@@ -98,33 +93,16 @@ public class AppWidgetBig extends BaseAppWidget {
                 if (target != null) {
                     Glide.with(appContext).clear(target);
                 }
-                target = SongGlideRequest.Builder.from(Glide.with(appContext), song)
-                        .asBitmap()
-                        .build()
-                        .into(new CustomTarget<Bitmap>(widgetImageSize, widgetImageSize) {
 
+                target = GlideLoader.with(appContext).load(song)
+                        .into(new PlaceHolderCustomTarget(appContext, widgetImageSize, widgetImageSize) {
                             @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            protected void setResource(Bitmap resource) {
                                 update(resource);
                             }
 
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                            }
-
-                            @Override
-                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                                super.onLoadFailed(errorDrawable);
-                                update(null);
-                            }
-
-                            private void update(@Nullable Bitmap bitmap) {
-                                if (bitmap == null) {
-                                    appWidgetView.setImageViewResource(R.id.image, R.drawable.default_album_art);
-                                } else {
-                                    appWidgetView.setImageViewBitmap(R.id.image, bitmap);
-                                }
+                            private void update(Bitmap bitmap) {
+                                appWidgetView.setImageViewBitmap(R.id.image, bitmap);
                                 pushUpdate(appContext, appWidgetIds, appWidgetView);
                             }
                         });

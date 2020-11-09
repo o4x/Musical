@@ -7,27 +7,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.R;
-import com.o4x.musical.imageloader.glide.SongGlideRequest;
+import com.o4x.musical.helper.MyPalette;
+import com.o4x.musical.imageloader.glide.loader.GlideLoader;
+import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener;
+import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.PreferenceUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 import code.name.monkey.appthemehelper.util.ColorUtil;
 import code.name.monkey.appthemehelper.util.MaterialValueHelper;
@@ -90,24 +90,12 @@ public class PlayingNotificationImpl extends PlayingNotification {
                 if (target != null) {
                     Glide.with(service).clear(target);
                 }
-                target = SongGlideRequest.Builder.from(Glide.with(service), song)
-                        .asBitmap()
-                        .build()
-                        .into(new CustomTarget<Bitmap>(bigNotificationImageSize, bigNotificationImageSize) {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                update(resource, Palette.from(resource).generate().getDominantColor(Color.TRANSPARENT));
-                            }
 
+                target = GlideLoader.with(service)
+                        .withListener(new PaletteTargetListener(service) {
                             @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                            }
-
-                            @Override
-                            public void onLoadFailed(Drawable errorDrawable) {
-                                super.onLoadFailed(errorDrawable);
-                                update(null, Color.WHITE);
+                            public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
+                                update(resource, colors.getBackgroundColor());
                             }
 
                             private void update(@Nullable Bitmap bitmap, int bgColor) {
@@ -156,7 +144,11 @@ public class PlayingNotificationImpl extends PlayingNotification {
                                 notificationLayoutBig.setImageViewBitmap(R.id.action_next, next);
                                 notificationLayoutBig.setImageViewBitmap(R.id.action_play_pause, playPause);
                             }
-                        });
+
+                        })
+                        .load(song)
+                        .into(new PlaceHolderCustomTarget(service,
+                                bigNotificationImageSize, bigNotificationImageSize));
             }
         });
     }

@@ -21,6 +21,7 @@ import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.helper.MyPalette;
+import com.o4x.musical.util.color.MediaNotificationProcessor;
 import com.o4x.musical.views.IconImageView;
 import com.o4x.musical.views.PlayPauseDrawable;
 
@@ -176,8 +177,8 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
         }
     }
 
-    public void setColor(@NotNull MyPalette colors) {
-        final int fg = colors.getTextColorPrimary();
+    public void setColor(@NotNull MediaNotificationProcessor colors) {
+        final int fg = colors.getPrimaryTextColor();
 
         container.setBackgroundColor(colors.getBackgroundColor());
         setProgressColor(fg);

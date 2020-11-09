@@ -9,12 +9,13 @@ import com.o4x.musical.db.*
 import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
-import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener
+import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.*
 import com.o4x.musical.repository.RealRepository
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.helper.MyPalette
+import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers.IO
@@ -135,26 +136,34 @@ class LibraryViewModel(
             val songs = repository.allSongs()
             if (songs.isEmpty()) return@launch
 
-            var colors: MyPalette? = null
-            var bitmap = GlideLoader.with(App.getContext())
+
+            GlideLoader.with(App.getContext())
                 .withListener(
-                    object : PaletteTargetListener() {
-                        override fun onColorReady(c: MyPalette) { colors = c }
+                    object : PaletteTargetListener(App.getContext()) {
+                        override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
+                            if (resource == null) return
+
+                            val bitmap = if (App.getContext().isDarkMode ==
+                                ColorUtil.isColorDark(colors.backgroundColor)
+                            ) {
+                                CoverUtil.addGradientTo(resource)
+                            } else {
+                                CoverUtil.doubleGradient(
+                                    colors.backgroundColor,
+                                    colors.mightyColor
+                                )
+                            }
+
+                            posterBitmap.postValue(bitmap)
+                        }
                     }
-                ).load(songs.random()).withSize(Util.getMaxScreenSize()).createSync(App.getContext())
-
-            bitmap = if (App.getContext().isDarkMode ==
-                ColorUtil.isColorDark(colors!!.backgroundColor)
-            ) {
-                CoverUtil.addGradientTo(bitmap)
-            } else {
-                CoverUtil.doubleGradient(
-                    colors!!.backgroundColor,
-                    colors!!.mightyColor
+                ).load(songs.random())
+                .into(
+                    PlaceHolderCustomTarget(
+                        App.getContext(),
+                        Util.getMaxScreenSize(), Util.getMaxScreenSize(),
+                    )
                 )
-            }
-
-            posterBitmap.postValue(bitmap)
         }
     }
 

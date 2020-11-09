@@ -5,8 +5,7 @@ import androidx.palette.graphics.Palette
 import com.o4x.musical.App
 import com.o4x.musical.extensions.*
 
-class MyPalette(palette: Palette?) {
-    private val context = App.getContext()
+class MyPalette(context: Context, palette: Palette?) {
 
     private val domain = palette?.dominantSwatch
     val backgroundColor = domain?.rgb ?: context.cardColor()
