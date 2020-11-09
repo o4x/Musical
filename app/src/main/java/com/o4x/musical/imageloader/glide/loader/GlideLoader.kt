@@ -12,6 +12,7 @@ import com.bumptech.glide.signature.MediaStoreSignature
 import com.bumptech.glide.signature.ObjectKey
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
+import com.o4x.musical.imageloader.glide.targets.AbsBitmapPaletteTarget
 import com.o4x.musical.imageloader.glide.targets.BitmapPaletteTarget
 import com.o4x.musical.imageloader.glide.targets.AbsPaletteTargetListener
 import com.o4x.musical.imageloader.model.AudioFileCover
@@ -168,11 +169,11 @@ class GlideLoader {
 
     class GlideFinisher(
         private val requestBuilder: RequestBuilder<Bitmap>,
-        private val listenerAbs: AbsPaletteTargetListener,
+        private val listener: AbsPaletteTargetListener,
     ) {
 
         fun withSize(size: Int): GlideFinisher {
-            listenerAbs.coverData.size = size
+            listener.coverData.size = size
             return this
         }
 
@@ -180,17 +181,17 @@ class GlideLoader {
             image?.let {
                 requestBuilder
                     .into(
-                        BitmapPaletteTarget(it, listenerAbs)
+                        BitmapPaletteTarget(it, listener)
                     )
             }
         }
 
         fun into(image: SquareImageView?) {
             image?.let {
-                it.coverData = listenerAbs.coverData
+                it.coverData = listener.coverData
 
                 requestBuilder
-                    .into(image)
+                    .into(AbsBitmapPaletteTarget(it, listener))
             }
         }
 
@@ -219,15 +220,15 @@ class GlideLoader {
                         .get()
                 } catch(e: Exception) {
                     e.printStackTrace()
-                    listenerAbs.coverData.create(context)
+                    listener.coverData.create(context)
                 }
             }
 
             thread.start()
             thread.join()
 
-            listenerAbs.isSync = true
-            listenerAbs.onResourceReady(bitmap)
+            listener.isSync = true
+            listener.onResourceReady(bitmap)
 
             return bitmap!!
         }
