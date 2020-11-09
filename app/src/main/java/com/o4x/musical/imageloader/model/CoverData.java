@@ -9,8 +9,9 @@ import androidx.annotation.Nullable;
 
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.CoverUtil;
+import com.o4x.musical.views.SquareImageView;
 
-import static com.o4x.musical.util.CoverUtil.createSquareCoverWithText;
+import static com.o4x.musical.views.SquareImageView.createSquareCoverWithText;
 
 public class CoverData {
 
@@ -18,7 +19,7 @@ public class CoverData {
     public Context context;
     @Nullable
     public ImageView image;
-    public int size = CoverUtil.DEFAULT_SIZE;
+    public int size = SquareImageView.DEFAULT_SIZE;
 
     public final long id;
     public final String text;

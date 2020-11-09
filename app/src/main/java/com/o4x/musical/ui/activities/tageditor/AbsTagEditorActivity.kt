@@ -39,6 +39,7 @@ import com.o4x.musical.ui.dialogs.DiscardTagsDialog
 import com.o4x.musical.util.*
 import com.o4x.musical.util.TagUtil.ArtworkInfo
 import com.o4x.musical.util.TextUtil.makeTextWithTitle
+import com.o4x.musical.views.SquareImageView
 import org.jaudiotagger.tag.FieldKey
 import java.io.Serializable
 import java.util.*
@@ -254,7 +255,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     protected fun setAlbumImageBitmap(bitmap: Bitmap?) {
         albumImage?.let {
             if (bitmap == null) {
-                val b: Bitmap = CoverUtil.createSquareCoverWithText(
+                val b: Bitmap = SquareImageView.createSquareCoverWithText(
                     this, tagUtil?.albumTitle ?: "", id, Util.getMaxScreenSize())
                 it.setImageBitmap(b)
             } else {
@@ -267,7 +268,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         artistImage?.let {
             if (bitmap == null) {
                 val artist = artist
-                val b: Bitmap = CoverUtil.createSquareCoverWithText(
+                val b: Bitmap = SquareImageView.createSquareCoverWithText(
                     this, artist.name, artist.id, Util.getMaxScreenSize())
                 it.setImageBitmap(b)
             } else {
