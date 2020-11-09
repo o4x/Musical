@@ -20,8 +20,8 @@ import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter
 import com.o4x.musical.util.MusicUtil
+import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.util.NavigationUtil
-import com.o4x.musical.util.color.MediaNotificationProcessor
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -32,7 +32,7 @@ class DetailsSongAdapter(
     @LayoutRes itemLayoutRes: Int,
     val cabHolder: CabHolder?,
     data: Any,
-    colors: MediaNotificationProcessor
+    colors: MyPalette
 ) : SongAdapter(activity, dataSet, itemLayoutRes, cabHolder) {
 
     companion object {
@@ -40,7 +40,7 @@ class DetailsSongAdapter(
         private const val SONG = 1
     }
 
-    var colors: MediaNotificationProcessor? = null
+    var colors: MyPalette? = null
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -131,11 +131,11 @@ class DetailsSongAdapter(
                     }
 
                     colors?.let {
-                        hTitle.setTextColor(it.primaryTextColor)
-                        hSubtitle.setTextColor(it.secondaryTextColor)
+                        hTitle.setTextColor(it.textColorPrimary)
+                        hSubtitle.setTextColor(it.textColorSecondary)
                         hGradient.backgroundTintList = ColorStateList.valueOf(it.backgroundColor)
                         headerView.setBackgroundColor(it.backgroundColor)
-                        setLineColor(it.secondaryTextColor)
+                        setLineColor(it.textColorSecondary)
                     }
                 }
             }
@@ -160,10 +160,10 @@ class DetailsSongAdapter(
 
                 colors?.let {
                     holder.apply {
-                        title?.setTextColor(it.primaryTextColor)
-                        text?.setTextColor(it.secondaryTextColor)
-                        imageText?.setTextColor(it.secondaryTextColor)
-                        menu?.setColorFilter(it.secondaryTextColor, PorterDuff.Mode.SRC_IN)
+                        title?.setTextColor(it.textColorPrimary)
+                        text?.setTextColor(it.textColorSecondary)
+                        imageText?.setTextColor(it.textColorSecondary)
+                        menu?.setColorFilter(it.textColorSecondary, PorterDuff.Mode.SRC_IN)
 
                         itemView.setBackgroundColor(it.backgroundColor)
                     }
@@ -215,9 +215,9 @@ class DetailsSongAdapter(
         }
 
         fun setLineColor(color: Int) {
-            hTrackCount.setTextColor(color.withAlpha(.9f))
-            hLeftLine.setBackgroundColor(color.withAlpha(.5f))
-            hRightLine.setBackgroundColor(color.withAlpha(.5f))
+            hTrackCount.setTextColor(color)
+            hLeftLine.setBackgroundColor(color)
+            hRightLine.setBackgroundColor(color)
         }
 
         // We don't want to click in this holder

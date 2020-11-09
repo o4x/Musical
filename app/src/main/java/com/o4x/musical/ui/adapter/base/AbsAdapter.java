@@ -13,9 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.o4x.musical.R;
+import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.helper.menu.SongsMenuHelper;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.glide.targets.PaletteColoredTargetListener;
+import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.PreferenceUtil;
@@ -82,10 +83,10 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
         return GlideLoader.with(activity)
                 .withListener(
                         PreferenceUtil.isColoredFooter() ?
-                        new PaletteColoredTargetListener() {
+                        new PaletteTargetListener() {
                             @Override
-                            public void onColorReady(int color) {
-                                setColors(color, holder);
+                            public void onColorReady(MyPalette colors) {
+                                setColors(colors.getBackgroundColor(), holder);
                             }
                         } : null
                 );

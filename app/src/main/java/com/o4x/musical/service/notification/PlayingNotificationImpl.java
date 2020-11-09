@@ -27,7 +27,6 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.util.ImageUtil;
-import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.PreferenceUtil;
 
 import code.name.monkey.appthemehelper.util.ColorUtil;
@@ -97,7 +96,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
                         .into(new CustomTarget<Bitmap>(bigNotificationImageSize, bigNotificationImageSize) {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                update(resource, PhonographColorUtil.getColor(Palette.from(resource).generate(), Color.TRANSPARENT));
+                                update(resource, Palette.from(resource).generate().getDominantColor(Color.TRANSPARENT));
                             }
 
                             @Override

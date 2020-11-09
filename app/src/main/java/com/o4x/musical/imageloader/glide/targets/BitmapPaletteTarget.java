@@ -3,8 +3,6 @@ package com.o4x.musical.imageloader.glide.targets;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -16,10 +14,10 @@ import com.bumptech.glide.request.transition.Transition;
 
 public class BitmapPaletteTarget extends ImageViewTarget<Bitmap> {
 
-    private final PaletteTargetListener listener;
+    private final AbsPaletteTargetListener listener;
     private final AsyncTaskLoader<Bitmap> task;
 
-    public BitmapPaletteTarget(ImageView view, PaletteTargetListener paletteTargetListener) {
+    public BitmapPaletteTarget(ImageView view, AbsPaletteTargetListener paletteTargetListener) {
         super(view);
         this.listener = paletteTargetListener;
 

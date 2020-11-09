@@ -23,8 +23,6 @@ import androidx.core.content.ContextCompat
 import code.name.monkey.appthemehelper.util.ATHUtil
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.R
-import com.o4x.musical.util.PhonographColorUtil
-import com.o4x.musical.util.PreferenceUtil
 
 
 class ColorIconsImageView @JvmOverloads constructor(
@@ -47,7 +45,7 @@ class ColorIconsImageView @JvmOverloads constructor(
     fun setIconBackgroundColor(color: Int) {
         background = ContextCompat.getDrawable(context, R.drawable.color_circle_gradient)
         if (ATHUtil.isWindowBackgroundDark(context)) {
-            val desaturatedColor = PhonographColorUtil.desaturateColor(color, 0.4f)
+            val desaturatedColor = ColorUtil.desaturateColor(color, 0.4f)
             backgroundTintList = ColorStateList.valueOf(desaturatedColor)
             imageTintList =
                 ColorStateList.valueOf(ATHUtil.resolveColor(context, R.attr.colorSurface))

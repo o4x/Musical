@@ -15,12 +15,12 @@ import com.o4x.musical.R
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.extensions.textColorPrimary
 import com.o4x.musical.extensions.textColorSecondary
+import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.fragments.player.MiniPlayerFragment
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
-import com.o4x.musical.util.color.MediaNotificationProcessor
 import com.o4x.musical.util.theme.ThemeManager
 import kotlinx.android.synthetic.main.music_panel_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -117,7 +117,7 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
         return false
     }
 
-    fun setMiniPlayerColor(colors: MediaNotificationProcessor) {
+    fun setMiniPlayerColor(colors: MyPalette) {
         miniPlayerFragment.setColor(colors)
     }
 }

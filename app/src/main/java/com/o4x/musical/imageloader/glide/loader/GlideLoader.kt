@@ -13,7 +13,7 @@ import com.bumptech.glide.signature.ObjectKey
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
 import com.o4x.musical.imageloader.glide.targets.BitmapPaletteTarget
-import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener
+import com.o4x.musical.imageloader.glide.targets.AbsPaletteTargetListener
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.imageloader.model.MultiImage
@@ -37,7 +37,8 @@ class GlideLoader {
     class GlideBuilder() {
 
         private lateinit var requestBuilder: RequestBuilder<Bitmap>
-        private var listener = PaletteTargetListener()
+        private var listener =
+            AbsPaletteTargetListener()
 
         constructor(requestBuilder: RequestBuilder<Bitmap>) : this() {
             this@GlideBuilder.requestBuilder =
@@ -48,8 +49,8 @@ class GlideLoader {
 //                    .placeholder(R.drawable.default_album_art)
         }
 
-        fun withListener(listener: PaletteTargetListener?): GlideBuilder {
-            listener?.let {
+        fun withListener(listenerAbs: AbsPaletteTargetListener?): GlideBuilder {
+            listenerAbs?.let {
                 this.listener = it
             }
             return this
@@ -167,11 +168,11 @@ class GlideLoader {
 
     class GlideFinisher(
         private val requestBuilder: RequestBuilder<Bitmap>,
-        private val listener: PaletteTargetListener,
+        private val listenerAbs: AbsPaletteTargetListener,
     ) {
 
         fun withSize(size: Int): GlideFinisher {
-            listener.coverData.size = size
+            listenerAbs.coverData.size = size
             return this
         }
 
@@ -179,14 +180,14 @@ class GlideLoader {
             image?.let {
                 requestBuilder
                     .into(
-                        BitmapPaletteTarget(it, listener)
+                        BitmapPaletteTarget(it, listenerAbs)
                     )
             }
         }
 
         fun into(image: SquareImageView?) {
             image?.let {
-                it.coverData = listener.coverData
+                it.coverData = listenerAbs.coverData
 
                 requestBuilder
                     .into(image)
@@ -218,15 +219,15 @@ class GlideLoader {
                         .get()
                 } catch(e: Exception) {
                     e.printStackTrace()
-                    listener.coverData.create(context)
+                    listenerAbs.coverData.create(context)
                 }
             }
 
             thread.start()
             thread.join()
 
-            listener.isSync = true
-            listener.onResourceReady(bitmap)
+            listenerAbs.isSync = true
+            listenerAbs.onResourceReady(bitmap)
 
             return bitmap!!
         }

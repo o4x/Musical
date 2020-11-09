@@ -2,7 +2,6 @@ package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,15 +12,16 @@ import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.extensions.withAlpha
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
-import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
+import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener
 import com.o4x.musical.interfaces.PaletteColorHolder
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
+import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.ViewUtil
-import com.o4x.musical.util.color.MediaNotificationProcessor
+
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -43,7 +43,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
 
 
     var imageHeight: Int? = null
-    var colors: MediaNotificationProcessor? = null
+    var colors: MyPalette = MyPalette(null)
 
     var songAdapter: DetailsSongAdapter? = null
 
@@ -62,7 +62,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     }
 
     override fun getPaletteColor(): Int {
-        return colors!!.actionBarColor
+        return colors.backgroundColor
     }
 
 
@@ -78,7 +78,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.post {
-            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors!!.primaryTextColor, this)
+            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.textColorPrimary, this)
             setAppbarAlpha(0f)
         }
     }
@@ -90,7 +90,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
 
     private fun setupSongsRecycler() {
         songAdapter = DetailsSongAdapter(
-            this, getSongs(), R.layout.item_list,  this, data!!, colors!!
+            this, getSongs(), R.layout.item_list,  this, data!!, colors
         )
         song_recycler.layoutManager = LinearLayoutManager(this)
         song_recycler.adapter = songAdapter
@@ -128,39 +128,38 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     }
 
 
-    fun setColors(color: Int, colors: MediaNotificationProcessor?) {
+    fun setColors(color: Int, colors: MyPalette?) {
         if (colors != null) {
             this.colors = colors
             songAdapter?.colors = colors
 
-            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors!!.primaryTextColor, this)
-            setNavigationBarColor(colors.actionBarColor)
-            setTaskDescriptionColor(colors.actionBarColor)
+            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.textColorPrimary, this)
+            setNavigationBarColor(colors.backgroundColor)
+            setTaskDescriptionColor(colors.backgroundColor)
 
-            ViewUtil.setScrollBarColor(song_recycler, colors.secondaryTextColor.withAlpha(.3f))
+            ViewUtil.setScrollBarColor(song_recycler, colors.textColorSecondary.withAlpha(.3f))
         }
 
         findViewById<View>(android.R.id.content).rootView.setBackgroundColor(color)
     }
 
     private fun setAppbarAlpha(alpha: Float) {
-        if (colors == null) return
         toolbar.setBackgroundColor(
-            withAlpha(colors!!.actionBarColor, alpha)
+            withAlpha(colors.backgroundColor, alpha)
         )
         setStatusBarColor(
-            withAlpha(colors!!.actionBarColor, alpha)
+            withAlpha(colors.backgroundColor, alpha)
         )
         toolbar.setTitleTextColor(
-            withAlpha(colors!!.primaryTextColor, alpha)
+            withAlpha(colors.textColorPrimary, alpha)
         )
     }
 
     fun getImageLoader(): GlideLoader.GlideBuilder {
         // if we use this for context glide on load sync in rotation will crashed
         return GlideLoader.with(App.getContext())
-            .withListener(object : MusicColoredTargetListener() {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
+            .withListener(object : PaletteTargetListener() {
+                override fun onColorReady(colors: MyPalette) {
                     setColors(colors.backgroundColor, colors)
                     setMiniPlayerColor(colors)
                 }
