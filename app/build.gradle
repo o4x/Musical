@@ -227,4 +227,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
+
+    implementation 'com.blankj:utilcodex:1.30.4'
 }
