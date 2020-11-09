@@ -21,6 +21,7 @@ import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.fragments.player.MiniPlayerFragment
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
+import com.o4x.musical.util.color.MediaNotificationProcessor
 import com.o4x.musical.util.theme.ThemeManager
 import kotlinx.android.synthetic.main.music_panel_layout.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -117,7 +118,7 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
         return false
     }
 
-    fun setMiniPlayerColor(colors: MyPalette) {
+    fun setMiniPlayerColor(colors: MediaNotificationProcessor) {
         miniPlayerFragment.setColor(colors)
     }
 }

@@ -12,9 +12,10 @@ import com.bumptech.glide.signature.MediaStoreSignature
 import com.bumptech.glide.signature.ObjectKey
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
-import com.o4x.musical.imageloader.glide.targets.AbsBitmapPaletteTarget
-import com.o4x.musical.imageloader.glide.targets.BitmapPaletteTarget
-import com.o4x.musical.imageloader.glide.targets.AbsPaletteTargetListener
+import com.o4x.musical.imageloader.glide.targets.AbsImageBitmapTarget
+import com.o4x.musical.imageloader.glide.targets.PlaceHolderBitmapTarget
+import com.o4x.musical.imageloader.glide.targets.palette.AbsPaletteTargetListener
+import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.imageloader.model.MultiImage
@@ -181,7 +182,10 @@ class GlideLoader {
             image?.let {
                 requestBuilder
                     .into(
-                        BitmapPaletteTarget(it, listener)
+                        PlaceHolderBitmapTarget(
+                            it,
+                            listener
+                        )
                     )
             }
         }
@@ -191,12 +195,19 @@ class GlideLoader {
                 it.coverData = listener.coverData
 
                 requestBuilder
-                    .into(AbsBitmapPaletteTarget(it, listener))
+                    .into(
+                        AbsImageBitmapTarget(
+                            it,
+                            listener
+                        )
+                    )
             }
         }
 
-        fun into(target: Target<Bitmap>) {
-            requestBuilder
+        fun into(target: PlaceHolderCustomTarget): Target<Bitmap> {
+            target.setListener(listener)
+
+            return requestBuilder
                 .into(target)
         }
 

@@ -1,20 +1,24 @@
 package com.o4x.musical.ui.adapter;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener;
+import com.o4x.musical.imageloader.glide.targets.palette.NotificationPaletteTargetListener;
+import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.helper.MyPalette;
+import com.o4x.musical.util.color.MediaNotificationProcessor;
 import com.o4x.musical.views.SquareImageView;
 
 import org.jetbrains.annotations.NotNull;
@@ -84,7 +88,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         SquareImageView albumCover;
 
         private boolean isColorReady;
-        private MyPalette colors;
+        private MediaNotificationProcessor colors;
         private Song song;
         private ColorReceiver colorReceiver;
         private int request;
@@ -125,9 +129,9 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
 
         private void loadAlbumCover() {
             GlideLoader.with(requireContext())
-                    .withListener(new PaletteTargetListener() {
+                    .withListener(new NotificationPaletteTargetListener(requireContext()) {
                         @Override
-                        public void onColorReady(@NotNull MyPalette colors) {
+                        public void onColorReady(@NotNull MediaNotificationProcessor colors) {
                             setColor(colors);
                         }
                     })
@@ -135,7 +139,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
                     .into(albumCover);
         }
 
-        private void setColor(MyPalette colors) {
+        private void setColor(MediaNotificationProcessor colors) {
             this.colors = colors;
             isColorReady = true;
             if (colorReceiver != null) {
@@ -154,7 +158,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
 
         public interface ColorReceiver {
-            void onColorReady(MyPalette colors, int request);
+            void onColorReady(MediaNotificationProcessor colors, int request);
         }
     }
 }

@@ -10,12 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
 import com.bumptech.glide.request.transition.Transition;
+import com.o4x.musical.imageloader.glide.targets.palette.AbsPaletteTargetListener;
 
-public class BitmapPaletteTarget extends AbsBitmapPaletteTarget {
+public class PlaceHolderBitmapTarget extends AbsImageBitmapTarget {
 
     private final AsyncTaskLoader<Bitmap> task;
 
-    public BitmapPaletteTarget(ImageView view, AbsPaletteTargetListener paletteTargetListener) {
+    public PlaceHolderBitmapTarget(ImageView view, AbsPaletteTargetListener paletteTargetListener) {
         super(view, paletteTargetListener);
 
         task = new AsyncTaskLoader<Bitmap>(view.getContext()) {

@@ -38,6 +38,8 @@ import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.Util;
+import com.o4x.musical.util.color.MediaNotificationProcessor;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -273,7 +275,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     }
 
     @Override
-    public void onColorChanged(MyPalette colors) {
+    public void onColorChanged(MediaNotificationProcessor colors) {
         animateColorChange(ColorUtil.INSTANCE.withAlpha(colors.getBackgroundColor(), 0.7f));
         playbackControlsFragment.setColor(colors);
         getCallbacks().onPaletteColorChanged();

@@ -46,6 +46,7 @@ import com.o4x.musical.helper.CountDownTimerPausable;
 import com.o4x.musical.helper.ShuffleHelper;
 import com.o4x.musical.helper.StopWatch;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
+import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget;
 import com.o4x.musical.model.AbsCustomPlaylist;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
@@ -58,6 +59,7 @@ import com.o4x.musical.service.notification.PlayingNotificationImpl24;
 import com.o4x.musical.service.playback.Playback;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.PreferenceUtil;
+import com.o4x.musical.util.Util;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -590,30 +592,20 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         }
 
         if (PreferenceUtil.albumArtOnLockscreen()) {
-            runOnNewThread(new Runnable() {
-                @Override
-                public void run() {
+            runOnNewThread(() ->
                     GlideLoader.with(App.Companion.getContext())
-                            .load(song).into(new CustomTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource);
-                            mediaSession.setMetadata(metaData.build());
-                        }
-
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                        }
-
-                        @Override
-                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                            super.onLoadFailed(errorDrawable);
-                            mediaSession.setMetadata(metaData.build());
-                        }
-                    });
+                    .load(song).into(
+                            new PlaceHolderCustomTarget(
+                                    App.Companion.getContext(),
+                                    Util.getScreenWidth(),
+                                    Util.getScreenHeight()
+                            ) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource);
+                    mediaSession.setMetadata(metaData.build());
                 }
-            });
+            }));
         } else {
             mediaSession.setMetadata(metaData.build());
         }
