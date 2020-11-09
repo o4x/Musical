@@ -21,6 +21,7 @@ import com.o4x.musical.model.*
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.views.SquareImageView
 
 
 class GlideLoader {
@@ -180,6 +181,15 @@ class GlideLoader {
                     .into(
                         BitmapPaletteTarget(it, listener)
                     )
+            }
+        }
+
+        fun into(image: SquareImageView?) {
+            image?.let {
+                it.coverData = listener.coverData
+
+                requestBuilder
+                    .into(image)
             }
         }
 

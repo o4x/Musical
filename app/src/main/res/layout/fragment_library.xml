@@ -8,8 +8,19 @@
     android:background="?backgroundColor"
     tools:context=".ui.fragments.mainactivity.library.LibraryFragment">
 
+<!--    <GridView-->
+<!--        android:id="@+id/list_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:numColumns="4"-->
+<!--        android:fastScrollEnabled="true"-->
+<!--        android:fastScrollAlwaysVisible="false"-->
+<!--        android:horizontalSpacing="16dp"-->
+<!--        android:verticalSpacing="16dp"-->
+<!--        android:layout_height="match_parent" />-->
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
