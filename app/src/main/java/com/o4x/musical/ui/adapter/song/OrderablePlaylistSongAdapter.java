@@ -15,11 +15,11 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHold
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 import com.o4x.musical.R;
+import com.o4x.musical.extensions.ColorExtKt;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.PlaylistSong;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.dialogs.RemoveFromPlaylistDialog;
-import com.o4x.musical.util.PhonographColorUtil;
 import com.o4x.musical.util.ViewUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -109,7 +109,7 @@ public class OrderablePlaylistSongAdapter extends PlaylistSongAdapter implements
             super(itemView);
 
             itemView.setBackgroundColor(ColorUtil.INSTANCE.withAlpha(
-                    PhonographColorUtil.getWindowColor(activity), 0.8f));
+                    ColorExtKt.backgroundColor(activity), 0.8f));
 
             if (dragView != null) {
                 if (onMoveItemListener != null) {

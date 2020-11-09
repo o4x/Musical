@@ -2,28 +2,21 @@ package com.o4x.musical.ui.viewmodel
 
 import android.content.SharedPreferences
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.os.Build
-import android.util.Log
-import androidx.annotation.ColorInt
-import androidx.core.view.setPadding
 import androidx.lifecycle.*
-import androidx.preference.Preference
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.App
 import com.o4x.musical.db.*
 import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
-import com.o4x.musical.imageloader.glide.targets.MusicColoredTargetListener
+import com.o4x.musical.imageloader.glide.targets.PaletteTargetListener
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.*
 import com.o4x.musical.repository.RealRepository
 import com.o4x.musical.util.CoverUtil
+import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.Util
-import com.o4x.musical.util.color.MediaNotificationProcessor
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
@@ -142,11 +135,11 @@ class LibraryViewModel(
             val songs = repository.allSongs()
             if (songs.isEmpty()) return@launch
 
-            var colors: MediaNotificationProcessor? = null
+            var colors: MyPalette? = null
             var bitmap = GlideLoader.with(App.getContext())
                 .withListener(
-                    object : MusicColoredTargetListener() {
-                        override fun onColorReady(c: MediaNotificationProcessor) { colors = c }
+                    object : PaletteTargetListener() {
+                        override fun onColorReady(c: MyPalette) { colors = c }
                     }
                 ).load(songs.random()).withSize(Util.getMaxScreenSize()).createSync(App.getContext())
 

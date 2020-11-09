@@ -70,6 +70,9 @@ fun Fragment.colorControlNormal() = resolveColor(android.R.attr.colorControlNorm
 fun Context.textColorPrimary() = resolveColor(android.R.attr.textColorPrimary)
 fun Fragment.textColorPrimary() = resolveColor(android.R.attr.textColorPrimary)
 
+fun Context.cardColor() = resolveColor(R.attr.cardBackgroundColor)
+fun Fragment.cardColor() = resolveColor(R.attr.cardBackgroundColor)
+
 fun Context.resolveColor(@AttrRes attr: Int, fallBackColor: Int = 0) =
     ATHUtil.resolveColor(this, attr, fallBackColor)
 fun Fragment.resolveColor(@AttrRes attr: Int, fallBackColor: Int = 0) =

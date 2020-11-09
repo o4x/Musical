@@ -5,16 +5,13 @@ import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.o4x.musical.R;
@@ -23,7 +20,7 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
-import com.o4x.musical.util.color.MediaNotificationProcessor;
+import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.views.IconImageView;
 import com.o4x.musical.views.PlayPauseDrawable;
 
@@ -179,10 +176,10 @@ public class MiniPlayerFragment extends AbsMusicServiceFragment implements Music
         }
     }
 
-    public void setColor(@NotNull MediaNotificationProcessor colors) {
-        final int fg = colors.getPrimaryTextColor();
+    public void setColor(@NotNull MyPalette colors) {
+        final int fg = colors.getTextColorPrimary();
 
-        container.setBackgroundColor(colors.getActionBarColor());
+        container.setBackgroundColor(colors.getBackgroundColor());
         setProgressColor(fg);
         miniPlayerImage.setColorFilter(fg);
         miniPlayerPlayPauseButton.setColorFilter(fg, PorterDuff.Mode.SRC_IN);

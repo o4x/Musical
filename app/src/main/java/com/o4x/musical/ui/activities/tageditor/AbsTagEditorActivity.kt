@@ -60,10 +60,10 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     var toolbar: Toolbar? = null
     @JvmField
     @BindView(R.id.album_image)
-    var albumImage: ImageView? = null
+    var albumImage: SquareImageView? = null
     @JvmField
     @BindView(R.id.artist_image)
-    var artistImage: ImageView? = null
+    var artistImage: SquareImageView? = null
     @JvmField
     @BindView(R.id.header)
     var header: CardView? = null

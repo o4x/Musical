@@ -35,7 +35,7 @@ import com.o4x.musical.model.Song
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.color.MediaNotificationProcessor
+import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.views.PlayPauseDrawable
 import java.util.*
 
@@ -343,18 +343,18 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
     }
 
 
-    fun setColor(colors: MediaNotificationProcessor) {
-        lastPlaybackControlsColor = colors.primaryTextColor
-        lastDisabledPlaybackControlsColor = ColorUtil.withAlpha(colors.primaryTextColor, 0.3f)
+    fun setColor(colors: MyPalette) {
+        lastPlaybackControlsColor = colors.textColorPrimary
+        lastDisabledPlaybackControlsColor = ColorUtil.withAlpha(colors.textColorPrimary, 0.3f)
 
-        val tintList = ColorStateList.valueOf(colors.primaryTextColor)
+        val tintList = ColorStateList.valueOf(colors.textColorPrimary)
         playerMenu?.imageTintList = tintList
         songFavourite?.imageTintList = tintList
-        progressSlider?.applyColor(colors.primaryTextColor)
-        title?.setTextColor(colors.primaryTextColor)
-        text?.setTextColor(colors.secondaryTextColor)
-        songCurrentProgress?.setTextColor(colors.secondaryTextColor)
-        songTotalTime?.setTextColor(colors.secondaryTextColor)
+        progressSlider?.applyColor(colors.textColorPrimary)
+        title?.setTextColor(colors.textColorPrimary)
+        text?.setTextColor(colors.textColorSecondary)
+        songCurrentProgress?.setTextColor(colors.textColorSecondary)
+        songTotalTime?.setTextColor(colors.textColorSecondary)
 
         playPauseButton?.backgroundTintList = tintList
         playPauseButton?.imageTintList = ColorStateList.valueOf(colors.backgroundColor)
