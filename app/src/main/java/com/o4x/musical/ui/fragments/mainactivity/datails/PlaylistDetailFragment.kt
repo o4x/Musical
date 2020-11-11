@@ -132,7 +132,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
         if (data !is AbsCustomPlaylist) {
             // Playlist deleted
             if (!PlaylistsUtil.doesPlaylistExist(requireContext(), data!!.id)) {
-                navController().popBackStack()
+                navController.popBackStack()
                 return
             }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.R
 import com.o4x.musical.extensions.showToast
+import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.util.CustomImageUtil
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,7 @@ class DeleteCustomImagesDialog : DialogFragment() {
                     CustomImageUtil.deleteAll()
                 }
 
+                MusicPlayerRemote.notifyMediaStoreChanged()
                 showToast(R.string.delete_success)
             }
             .negativeButton(R.string.no)

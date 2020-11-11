@@ -21,6 +21,7 @@ import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.fragments.player.MiniPlayerFragment
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
+import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 import com.o4x.musical.util.theme.ThemeManager
 import kotlinx.android.synthetic.main.music_panel_layout.*
@@ -35,27 +36,35 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
 
-    protected val libraryViewModel by viewModel<LibraryViewModel>()
+    val libraryViewModel by viewModel<LibraryViewModel>()
 
     private var cab: AttachedCab? = null
     private lateinit var miniPlayerFragment: MiniPlayerFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(createContentView())
         ButterKnife.bind(this)
 
+        addMusicServiceEventListener(libraryViewModel)
+        PreferenceUtil.registerOnSharedPreferenceChangedListener(libraryViewModel)
+
         miniPlayerFragment =
             supportFragmentManager.findFragmentById(R.id.mini_player_fragment) as MiniPlayerFragment
-
         miniPlayerFragment.requireView().setOnClickListener { _: View? ->
             val myIntent = Intent(this@AbsMusicPanelActivity, PlayerActivity::class.java)
             this@AbsMusicPanelActivity.startActivity(myIntent)
         }
-
         libraryViewModel.getQueue().observe(this, {
             hideBottomBar(it.isEmpty())
         })
+    }
+
+    override fun onDestroy() {
+        PreferenceUtil.unregisterOnSharedPreferenceChangedListener(libraryViewModel)
+        removeMusicServiceEventListener(libraryViewModel)
+        super.onDestroy()
     }
 
     protected abstract fun createContentView(): View?

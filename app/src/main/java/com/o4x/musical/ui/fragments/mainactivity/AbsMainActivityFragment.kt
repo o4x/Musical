@@ -2,10 +2,10 @@ package com.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ColorUtil
@@ -19,11 +19,8 @@ import com.o4x.musical.misc.isRecyclerScrollable
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
-import com.o4x.musical.ui.viewmodel.LibraryViewModel
-import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.ViewUtil
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.max
 import kotlin.math.min
 
@@ -34,27 +31,15 @@ import kotlin.math.min
 abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     AbsMusicServiceFragment(layout), MainActivityFragmentCallbacks {
 
-    val libraryViewModel: LibraryViewModel by sharedViewModel()
+    val mainActivity: MainActivity by lazy { requireActivity() as MainActivity }
 
-    val mainActivity: MainActivity
-        get() = requireActivity() as MainActivity
-
-    fun navController() = mainActivity.navController
+    val libraryViewModel by lazy { mainActivity.libraryViewModel }
+    val navController by lazy { mainActivity.navController }
 
     // animations //
     private var appbarAnimation: ValueAnimator? = null
     private val toolbarAnimation = ValueAnimator.ofFloat(0f, 1f)
     private val statusAnimation = ValueAnimator.ofFloat(0f, 1f)
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        mainActivity.addMusicServiceEventListener(libraryViewModel)
-        PreferenceUtil.registerOnSharedPreferenceChangedListener(libraryViewModel)
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,13 +51,11 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
 
     override fun onResume() {
         super.onResume()
-        setToolbarTitle(navController().currentDestination?.label.toString())
+        setToolbarTitle(navController.currentDestination?.label.toString())
         mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
     }
 
     override fun onDestroy() {
-        PreferenceUtil.unregisterOnSharedPreferenceChangedListener(libraryViewModel)
-        mainActivity.removeMusicServiceEventListener(libraryViewModel)
         appbarAnimation?.cancel()
         toolbarAnimation.cancel()
         statusAnimation.cancel()

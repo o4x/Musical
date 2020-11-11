@@ -131,10 +131,10 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         queue_parent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         open_queue_button.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         recently_parent.setOnClickListener {
-            navController().toPlaylistDetail(HistoryPlaylist())
+            navController.toPlaylistDetail(HistoryPlaylist())
         }
         newly_parent.setOnClickListener {
-            navController().toPlaylistDetail(LastAddedPlaylist())
+            navController.toPlaylistDetail(LastAddedPlaylist())
         }
         shuffle_btn.setOnClickListener {
             libraryViewModel.shuffleSongs()
@@ -173,7 +173,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
             // Scroll appbar
             if (scrollY > headerHeight + toolbarHeight && !isAppbarFlat) {
-                setToolbarTitle(navController().currentDestination?.label.toString())
+                setToolbarTitle(navController.currentDestination?.label.toString())
                 toolbarColorVisible(true)
                 mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
                 isAppbarFlat = true
