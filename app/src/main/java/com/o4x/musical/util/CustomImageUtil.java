@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -183,4 +185,10 @@ public class CustomImageUtil {
         GENRE,
         PLAYLIST
     }
+
+    public static void deleteAll() {
+        File dir = new File(App.Companion.getContext().getFilesDir(), FOLDER_NAME);
+        FileUtils.delete(dir);
+    }
 }
+

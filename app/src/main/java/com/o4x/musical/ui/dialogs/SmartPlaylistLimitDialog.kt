@@ -8,23 +8,20 @@ import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.o4x.musical.R
-import com.o4x.musical.model.Song
-import com.o4x.musical.util.PlaylistsUtil
 import com.o4x.musical.util.PreferenceUtil.smartPlaylistLimit
-import java.util.ArrayList
 
-class ChangeSmartPlaylistLimit : DialogFragment() {
+class SmartPlaylistLimitDialog : DialogFragment() {
 
     companion object {
         @JvmStatic
-        fun create(): ChangeSmartPlaylistLimit {
-            return ChangeSmartPlaylistLimit()
+        fun create(): SmartPlaylistLimitDialog {
+            return SmartPlaylistLimitDialog()
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog(requireContext())
-            .title(R.string.change_smart_playlist_limit)
+            .title(R.string.pref_title_smart_playlist_limit)
             .positiveButton(R.string.change)
             .negativeButton(android.R.string.cancel)
             .input(

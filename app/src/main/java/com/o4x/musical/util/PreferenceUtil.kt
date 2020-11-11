@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
@@ -19,7 +20,27 @@ import com.o4x.musical.util.theme.ThemeMode
 import java.io.File
 
 object PreferenceUtil {
+
     const val GENERAL_THEME = "general_theme"
+    const val THEME_COLOR = "theme_color"
+    const val AUDIO_DUCKING = "audio_ducking"
+    const val GAPLESS_PLAYBACK = "gapless_playback"
+    const val EQUALIZER = "equalizer"
+    const val COLORED_FOOTER = "colored_footer"
+    const val LIBRARY_CATEGORIES = "library_categories"
+    const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
+    const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"
+    const val IGNORE_MEDIA = "ignore_media_store_artwork"
+    const val CACHE_IMAGES = "cache_images"
+    const val DELETE_CACHED_IMAGES = "delete_cached_images"
+    const val DELETE_CUSTOM_IMAGES = "delete_custom_images"
+    const val CLASSIC_NOTIFICATION = "classic_notification"
+    const val COLORED_NOTIFICATION = "colored_notification"
+    const val SMART_PLAYLIST_LIMIT = "smart_playlist_limit"
+    const val LANGUAGE_NAME = "language_name"
+    const val ABOUT = "about"
+
+
     const val REMEMBER_LAST_TAB = "remember_last_tab"
     const val LAST_PAGE = "last_start_page"
     const val ARTIST_SORT_ORDER = "artist_sort_order"
@@ -41,25 +62,14 @@ object PreferenceUtil {
     const val PLAYLIST_GRID_SIZE = "playlist_grid_size"
     const val PLAYLIST_GRID_SIZE_LAND = "playlist_grid_size_land"
     const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
-    const val COLORED_FOOTER = "colored_footer"
-    const val COLORED_NOTIFICATION = "colored_notification"
-    const val CLASSIC_NOTIFICATION = "classic_notification"
-    const val AUDIO_DUCKING = "audio_ducking"
-    const val GAPLESS_PLAYBACK = "gapless_playback"
-    const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
     const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
     const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
     const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
     const val LAST_CHANGELOG_VERSION = "last_changelog_version"
-    const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"
     const val START_DIRECTORY = "start_directory"
     const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
     const val INITIALIZED_BLACKLIST = "initialized_blacklist"
-    const val LIBRARY_CATEGORIES = "library_categories"
-    const val LANGUAGE_NAME = "language_name"
-    const val IGNORE_MEDIA = "ignore_media_store_artwork"
     const val REMEMBER_SHUFFLE = "remember_shuffle"
-    const val SMART_PLAYLIST_LIMIT = "smart_playlist_limit"
 
     @JvmStatic
     fun isAllowedToDownloadMetadata(context: Context): Boolean {
@@ -484,10 +494,19 @@ object PreferenceUtil {
     }
 
     @JvmStatic
+    fun isCacheImages(): Boolean {
+        return sharedPreferences.getBoolean(
+            CACHE_IMAGES,
+            true
+        )
+    }
+
+
+    @JvmStatic
     fun isIgnoreMediaStore(): Boolean {
         return sharedPreferences.getBoolean(
             IGNORE_MEDIA,
-            false
+            true
         )
     }
 

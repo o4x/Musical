@@ -45,7 +45,12 @@ class GlideLoader {
         constructor(requestBuilder: RequestBuilder<Bitmap>) : this() {
             this@GlideBuilder.requestBuilder =
                 requestBuilder
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .diskCacheStrategy(
+                        if (PreferenceUtil.isCacheImages())
+                         DiskCacheStrategy.AUTOMATIC
+                        else
+                            DiskCacheStrategy.NONE
+                    )
                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
 //                    .priority(Priority.LOW)
 //                    .placeholder(R.drawable.default_album_art)
@@ -125,6 +130,7 @@ class GlideLoader {
             else
                 GlideFinisher(
                     requestBuilder
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .load(ArtistImage(artist)),
                     listener
                 )

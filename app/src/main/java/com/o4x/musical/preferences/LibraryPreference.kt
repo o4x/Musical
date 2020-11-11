@@ -35,21 +35,6 @@ import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.adapter.CategoryInfoAdapter
 import com.o4x.musical.util.PreferenceUtil
 
-
-class LibraryPreference @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
-) : ATEDialogPreference(context, attrs, defStyleAttr, defStyleRes) {
-    init {
-        icon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-            context.colorControlNormal(),
-            SRC_IN
-        )
-    }
-}
-
 class LibraryPreferenceDialog : DialogFragment() {
 
     @SuppressLint("InflateParams")

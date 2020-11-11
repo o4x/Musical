@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="@string/pref_header_general">
+
+
+        <ListPreference
+            app:defaultValue="@string/theme_entry_value_black"
+            app:entries="@array/pref_general_theme_list_titles"
+            app:entryValues="@array/pref_general_theme_list_values"
+            app:negativeButtonText=""
+            app:positiveButtonText=""
+            app:key="@string/key_general_theme"
+            app:summary="%s"
+            app:title="@string/pref_title_general_theme" />
+
+        <Preference
+            app:key="@string/key_theme_color"
+            app:persistent="false"
+            app:summary="@string/theme_color_desc"
+            app:title="@string/theme_color" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_header_audio">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="@string/key_audio_ducking"
+            app:summary="@string/pref_summary_audio_ducking"
+            app:title="@string/pref_title_audio_ducking" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="@string/key_gapless_playback"
+            app:summary="@string/pref_summary_gapless_playback"
+            app:title="@string/pref_title_gapless_playback" />
+
+        <Preference
+            app:key="@string/key_equalizer"
+            app:title="@string/equalizer" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_header_interface">
+
+        <Preference
+            app:key="@string/key_library_categories"
+            app:summary="@string/pref_summary_library_categories"
+            app:title="@string/library_categories" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="@string/key_colored_footer"
+            app:summary="@string/pref_colored_footers_summary"
+            app:title="@string/pref_colored_footers" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="@string/key_album_art_on_lockscreen"
+            app:summary="@string/pref_summary_album_art_on_lockscreen"
+            app:title="@string/pref_title_album_art_on_lockscreen" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_header_images">
+
+        <ListPreference
+            app:defaultValue="@string/auto_download_images_entry_value_only_wifi"
+            app:entries="@array/pref_auto_download_images_titles"
+            app:entryValues="@array/pref_auto_download_images_values"
+            app:negativeButtonText=""
+            app:positiveButtonText=""
+            app:key="@string/key_auto_download_images_policy"
+            app:summary="%s"
+            app:title="@string/pref_title_auto_download_artist_images" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="@string/key_ignore_media_store_artwork"
+            app:summary="@string/pref_summary_ignore_media_store_artwork"
+            app:title="@string/pref_title_ignore_media_store_artwork" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="@string/key_cache_images"
+            app:summary="@string/pref_summary_cache_images"
+            app:title="@string/pref_title_cache_images" />
+
+        <Preference
+            app:title="@string/pref_title_delete_cached_images"
+            app:summary="@string/pref_summary_delete_cached_images"
+            app:key="@string/key_delete_cached_images"/>
+
+        <Preference
+            app:title="@string/pref_title_delete_custom_images"
+            app:summary="@string/pref_summary_delete_custom_images"
+            app:key="@string/key_delete_custom_images" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_header_notification">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="@string/key_classic_notification"
+            app:summary="@string/pref_summary_classic_notification"
+            app:title="@string/pref_title_classic_notification" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="@string/key_colored_notification"
+            app:summary="@string/pref_summary_colored_notification"
+            app:title="@string/pref_title_colored_notification" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_header_advanced">
+
+        <Preference
+            app:key="@string/key_smart_playlist_limit"
+            app:title="@string/pref_title_smart_playlist_limit" />
+
+        <SeekBarPreference
+            android:max="120"
+            app:defaultValue="30"
+            app:key="@string/key_filter_song"
+            app:summary="@string/pref_filter_song_summary"
+            app:title="@string/pref_filter_song_title"
+            app:showSeekBarValue="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_header_other">
+
+        <ListPreference
+            app:defaultValue="auto"
+            app:entries="@array/pref_language_names"
+            app:entryValues="@array/pref_language_codes"
+            app:key="@string/key_language_name"
+            app:negativeButtonText=""
+            app:positiveButtonText=""
+            android:summary="%s"
+            app:title="@string/pref_language_name" />
+
+        <Preference
+            app:key="@string/key_about"
+            app:title="@string/action_about"
+            app:summary="@string/about_settings_summary" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
