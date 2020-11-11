@@ -43,6 +43,10 @@ object MusicPlayerRemote : KoinComponent {
 
     private val songRepository by inject<SongRepository>()
 
+    @JvmStatic
+    fun notifyMediaStoreChanged() {
+        musicService?.sendChangeInternal(MusicService.MEDIA_STORE_CHANGED)
+    }
 
     @JvmStatic
     val isPlaying: Boolean

@@ -1036,7 +1036,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         sendStickyBroadcast(intent);
     }
 
-    private void sendChangeInternal(final String what) {
+    public void sendChangeInternal(final String what) {
         sendBroadcast(new Intent(what));
         appWidgetBig.notifyChange(this, what);
         appWidgetClassic.notifyChange(this, what);

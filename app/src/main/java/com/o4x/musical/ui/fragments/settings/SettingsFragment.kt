@@ -18,6 +18,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.o4x.musical.R
 import com.o4x.musical.extensions.backgroundColor
 import com.o4x.musical.extensions.themeColor
+import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.preferences.LibraryPreferenceDialog
 import com.o4x.musical.ui.dialogs.DeleteCachedDialog
 import com.o4x.musical.ui.dialogs.DeleteCustomImagesDialog
@@ -96,10 +97,21 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             return@setOnPreferenceClickListener true
         }
 
+        val coloredFooterPref: Preference = findPreference(PreferenceUtil.COLORED_FOOTER)!!
+        coloredFooterPref.setOnPreferenceChangeListener { _, _ ->
+            MusicPlayerRemote.notifyMediaStoreChanged()
+            return@setOnPreferenceChangeListener true
+        }
 
           ////////////////////
          // IMAGE SETTINGS //
         ////////////////////
+
+        val ignorePref: Preference = findPreference(PreferenceUtil.IGNORE_MEDIA)!!
+        ignorePref.setOnPreferenceChangeListener { _, _ ->
+            MusicPlayerRemote.notifyMediaStoreChanged()
+            return@setOnPreferenceChangeListener true
+        }
 
         val deleteCachedPref: Preference = findPreference(PreferenceUtil.DELETE_CACHED_IMAGES)!!
         deleteCachedPref.setOnPreferenceClickListener {
