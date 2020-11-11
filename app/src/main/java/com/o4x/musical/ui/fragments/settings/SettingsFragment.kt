@@ -97,21 +97,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             return@setOnPreferenceClickListener true
         }
 
-        val coloredFooterPref: Preference = findPreference(PreferenceUtil.COLORED_FOOTER)!!
-        coloredFooterPref.setOnPreferenceChangeListener { _, _ ->
-            MusicPlayerRemote.notifyMediaStoreChanged()
-            return@setOnPreferenceChangeListener true
-        }
-
           ////////////////////
          // IMAGE SETTINGS //
         ////////////////////
-
-        val ignorePref: Preference = findPreference(PreferenceUtil.IGNORE_MEDIA)!!
-        ignorePref.setOnPreferenceChangeListener { _, _ ->
-            MusicPlayerRemote.notifyMediaStoreChanged()
-            return@setOnPreferenceChangeListener true
-        }
 
         val deleteCachedPref: Preference = findPreference(PreferenceUtil.DELETE_CACHED_IMAGES)!!
         deleteCachedPref.setOnPreferenceClickListener {
@@ -216,6 +204,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 findPreference<Preference>(PreferenceUtil.SMART_PLAYLIST_LIMIT)?.summary =
                     PreferenceUtil.smartPlaylistLimit.toString()
             }
+            PreferenceUtil.COLORED_FOOTER,
+            PreferenceUtil.IGNORE_MEDIA -> MusicPlayerRemote.notifyMediaStoreChanged()
         }
     }
 
