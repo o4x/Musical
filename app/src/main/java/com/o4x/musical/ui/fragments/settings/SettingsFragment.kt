@@ -1,54 +1,38 @@
-/*
- * Copyright (c) 2019 Hemanth Savarala.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by
- *  the Free Software Foundation either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.o4x.musical.ui.fragments.settings
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.media.audiofx.AudioEffect
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
-import code.name.monkey.appthemehelper.ColorPalette
 import code.name.monkey.appthemehelper.ThemeStore
-import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEColorPreference
-import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEListPreference
-import code.name.monkey.appthemehelper.util.ColorUtil
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.color.colorChooser
 import com.flask.colorpicker.ColorPickerView
-import com.flask.colorpicker.OnColorSelectedListener
-import com.flask.colorpicker.builder.ColorPickerClickListener
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.o4x.musical.R
+import com.o4x.musical.extensions.backgroundColor
 import com.o4x.musical.extensions.themeColor
-import com.o4x.musical.ui.dialogs.ChangeSmartPlaylistLimit
+import com.o4x.musical.preferences.LibraryPreferenceDialog
+import com.o4x.musical.ui.dialogs.DeleteCachedDialog
+import com.o4x.musical.ui.dialogs.DeleteCustomImagesDialog
+import com.o4x.musical.ui.dialogs.SmartPlaylistLimitDialog
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.util.PreferenceUtil.smartPlaylistLimit
 
-class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         PreferenceUtil.registerOnSharedPreferenceChangedListener(this)
+
+        listView.setBackgroundColor(backgroundColor())
+        invalidateSettings()
     }
 
     override fun onDestroyView() {
@@ -57,25 +41,15 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        // THEME PREFS //
-        addPreferencesFromResource(R.xml.pref_theme)
-        // AUDIO PREFS //
-        addPreferencesFromResource(R.xml.pref_audio)
-        // UI PREFS //
-        addPreferencesFromResource(R.xml.pref_ui)
-        // IMAGE PREFS //
-        addPreferencesFromResource(R.xml.pref_images)
-        // NOTIFICATION PREFS //
-        addPreferencesFromResource(R.xml.pref_notification)
-        // ADVANCED PREFS //
-        addPreferencesFromResource(R.xml.pref_advanced)
+        addPreferencesFromResource(R.xml.prefs)
     }
 
-    override fun invalidateSettings() {
+    private fun invalidateSettings() {
+
           ////////////////////
          // THEME SETTINGS //
         ////////////////////
-        val generalTheme: Preference? = findPreference("general_theme")
+        val generalTheme: Preference? = findPreference(PreferenceUtil.GENERAL_THEME)
         var lastTheme = generalTheme?.summary.toString()
         generalTheme?.setOnPreferenceChangeListener { _, newValue ->
             val newTheme = newValue.toString()
@@ -86,9 +60,9 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
             true
         }
 
-        val themeColorPref: ATEColorPreference = findPreference("theme_color")!!
+        val themeColorPref: Preference = findPreference(PreferenceUtil.THEME_COLOR)!!
         val themeColor = themeColor()
-        themeColorPref.setColor(themeColor, ColorUtil.darkenColor(themeColor))
+//        themeColorPref.setColor(themeColor, ColorUtil.darkenColor(themeColor))
 
         themeColorPref.setOnPreferenceClickListener {
             ColorPickerDialogBuilder
@@ -99,14 +73,47 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
                 .showBorder(true)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(14)
-                .setPositiveButton(R.string.ok
+                .setPositiveButton(
+                    R.string.ok
                 ) { _, selectedColor, _ ->
                     if (ThemeStore.themeColor(requireContext()) != selectedColor)
                         ThemeStore.editTheme(requireContext()).themeColor(selectedColor).commit()
                 }
-                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                .setNegativeButton(R.string.cancel) { _, _ -> }
                 .build()
                 .show()
+            return@setOnPreferenceClickListener true
+        }
+
+          ////////////////////////
+         // INTERFACE SETTINGS //
+        ////////////////////////
+
+        val libraryPref: Preference = findPreference(PreferenceUtil.LIBRARY_CATEGORIES)!!
+        libraryPref.setOnPreferenceClickListener {
+            val fragment = LibraryPreferenceDialog.newInstance()
+            fragment.show(childFragmentManager, libraryPref.key)
+            return@setOnPreferenceClickListener true
+        }
+
+
+          ////////////////////
+         // IMAGE SETTINGS //
+        ////////////////////
+
+        val deleteCachedPref: Preference = findPreference(PreferenceUtil.DELETE_CACHED_IMAGES)!!
+        deleteCachedPref.setOnPreferenceClickListener {
+            DeleteCachedDialog.create().show(
+                childFragmentManager, it.key
+            )
+            return@setOnPreferenceClickListener true
+        }
+
+        val deleteCustomPref: Preference = findPreference(PreferenceUtil.DELETE_CUSTOM_IMAGES)!!
+        deleteCustomPref.setOnPreferenceClickListener {
+            DeleteCustomImagesDialog.create().show(
+                childFragmentManager, it.key
+            )
             return@setOnPreferenceClickListener true
         }
 
@@ -114,7 +121,7 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
          // AUDIO SETTINGS //
         ////////////////////
 
-        val findPreference: Preference = findPreference("equalizer")!!
+        val findPreference: Preference = findPreference(PreferenceUtil.EQUALIZER)!!
         if (!hasEqualizer()) {
             findPreference.isEnabled = false
             findPreference.summary = resources.getString(R.string.no_equalizer)
@@ -126,28 +133,11 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
             true
         }
 
-        val homeArtistStyle: ATEListPreference? = findPreference("home_artist_grid_style")
-        homeArtistStyle?.setOnPreferenceChangeListener { preference, newValue ->
-            setSummary(preference, newValue)
-            true
-        }
-
-          ////////////////////
-         // IMAGE SETTINGS //
-        ////////////////////
-
-        val autoDownloadImagesPolicy: Preference = findPreference("auto_download_images_policy")!!
-        setSummary(autoDownloadImagesPolicy)
-        autoDownloadImagesPolicy.setOnPreferenceChangeListener { _, o ->
-            setSummary(autoDownloadImagesPolicy, o)
-            true
-        }
-
           ///////////////////////////
          // NOTIFICATION SETTINGS //
         ///////////////////////////
 
-        val classicNotification: TwoStatePreference? = findPreference("classic_notification")
+        val classicNotification: TwoStatePreference? = findPreference(PreferenceUtil.CLASSIC_NOTIFICATION)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             classicNotification?.isVisible = false
         } else {
@@ -162,7 +152,7 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
             }
         }
 
-        val coloredNotification: TwoStatePreference? = findPreference("colored_notification")
+        val coloredNotification: TwoStatePreference? = findPreference(PreferenceUtil.COLORED_NOTIFICATION)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             coloredNotification?.isEnabled = PreferenceUtil.isClassicNotification
         } else {
@@ -179,39 +169,40 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
          // ADVANCED SETTINGS //
         ///////////////////////
 
-        val smartPlaylistPreference: Preference = findPreference("smart_playlist_limit")!!
-        setSummary(smartPlaylistPreference, smartPlaylistLimit)
+        val smartPlaylistPreference: Preference = findPreference(PreferenceUtil.SMART_PLAYLIST_LIMIT)!!
+        setSummary(smartPlaylistPreference, PreferenceUtil.smartPlaylistLimit)
         smartPlaylistPreference.setOnPreferenceClickListener {
-            ChangeSmartPlaylistLimit.create().show(
-                childFragmentManager, "SETTINGS"
+            SmartPlaylistLimitDialog.create().show(
+                childFragmentManager, it.key
             )
             return@setOnPreferenceClickListener true
         }
 
-        val languagePreference: Preference? = findPreference("language_name")
+        val languagePreference: Preference? = findPreference(PreferenceUtil.LANGUAGE_NAME)
         languagePreference?.setOnPreferenceChangeListener { prefs, newValue ->
             setSummary(prefs, newValue)
             requireActivity().recreate()
             true
         }
-        val aboutPreference: Preference? = findPreference("about")
+        val aboutPreference: Preference? = findPreference(PreferenceUtil.ABOUT)
         aboutPreference?.setOnPreferenceClickListener {
             findNavController().navigate(R.id.action_mainSettings_to_about)
             true
         }
     }
 
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
             PreferenceUtil.CLASSIC_NOTIFICATION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    findPreference<Preference>("colored_notification")?.isEnabled =
+                    findPreference<Preference>(PreferenceUtil.COLORED_NOTIFICATION)?.isEnabled =
                         sharedPreferences.getBoolean(key, false)
                 }
             }
             PreferenceUtil.SMART_PLAYLIST_LIMIT -> {
-                findPreference<Preference>("smart_playlist_limit")?.summary =
-                    smartPlaylistLimit.toString()
+                findPreference<Preference>(PreferenceUtil.SMART_PLAYLIST_LIMIT)?.summary =
+                    PreferenceUtil.smartPlaylistLimit.toString()
             }
         }
     }
@@ -223,5 +214,22 @@ class MainSettingsFragment : AbsSettingsFragment(), SharedPreferences.OnSharedPr
         val pm = requireActivity().packageManager
         val ri = pm.resolveActivity(effects, 0)
         return ri != null
+    }
+
+
+    private fun showProToastAndNavigate(message: String) {
+        Toast.makeText(requireContext(), "$message is Pro version feature.", Toast.LENGTH_SHORT)
+            .show()
+        NavigationUtil.goToProVersion(requireActivity())
+    }
+
+    private fun setSummary(preference: Preference, value: Any?) {
+        val stringValue = value.toString()
+        if (preference is ListPreference) {
+            val index = preference.findIndexOfValue(stringValue)
+            preference.setSummary(if (index >= 0) preference.entries[index] else null)
+        } else {
+            preference.summary = stringValue
+        }
     }
 }

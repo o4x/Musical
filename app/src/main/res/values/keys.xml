@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="key_general_theme" translatable="false">general_theme</string>
+    <string name="key_theme_color" translatable="false">theme_color</string>
+    <string name="key_audio_ducking" translatable="false">audio_ducking</string>
+    <string name="key_gapless_playback" translatable="false">gapless_playback</string>
+    <string name="key_equalizer" translatable="false">equalizer</string>
+    <string name="key_colored_footer" translatable="false">colored_footer</string>
+    <string name="key_library_categories" translatable="false">library_categories</string>
+    <string name="key_album_art_on_lockscreen" translatable="false">album_art_on_lockscreen</string>
+    <string name="key_ignore_media_store_artwork" translatable="false">ignore_media_store_artwork</string>
+    <string name="key_auto_download_images_policy" translatable="false">auto_download_images_policy</string>
+    <string name="key_cache_images" translatable="false">cache_images</string>
+    <string name="key_delete_cached_images" translatable="false">delete_cached_images</string>
+    <string name="key_delete_custom_images" translatable="false">delete_custom_images</string>
+    <string name="key_classic_notification" translatable="false">classic_notification</string>
+    <string name="key_colored_notification" translatable="false">colored_notification</string>
+    <string name="key_smart_playlist_limit" translatable="false">smart_playlist_limit</string>
+    <string name="key_filter_song" translatable="false">filter_song</string>
+    <string name="key_language_name" translatable="false">language_name</string>
+    <string name="key_about" translatable="false">about</string>
+
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- theme's -->
+    <string name="theme_entry_value_light" translatable="false">light</string>
+    <string name="theme_entry_value_dark" translatable="false">dark</string>
+    <string name="theme_entry_value_black" translatable="false">black</string>
+
+    <!-- Download images -->
+    <string name="auto_download_images_entry_value_always" translatable="false">always</string>
+    <string name="auto_download_images_entry_value_only_wifi" translatable="false">only_wifi</string>
+    <string name="auto_download_images_entry_value_never" translatable="false">never</string>
+
+</resources>
