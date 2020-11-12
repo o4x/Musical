@@ -16,6 +16,11 @@ class AbsImageBitmapTarget(view: ImageView?, private val listener: AbsPaletteTar
         listener.onResourceReady(resource)
     }
 
+    override fun onLoadFailed(errorDrawable: Drawable?) {
+        super.onLoadFailed(errorDrawable)
+        listener.onResourceReady(null)
+    }
+
     override fun setResource(resource: Bitmap?) {
         view.setImageBitmap(resource)
     }
