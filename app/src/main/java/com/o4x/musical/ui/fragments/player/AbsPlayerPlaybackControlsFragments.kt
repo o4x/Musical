@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
@@ -82,7 +83,7 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
 
     @JvmField
     @BindView(R.id.player_progress_slider)
-    var progressSlider: Slider? = null
+    var progressSlider: SeekBar? = null
 
     @JvmField
     @BindView(R.id.player_song_total_time)
@@ -310,24 +311,17 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
     private fun setUpProgressSlider() {
         updateProgressSliderColor()
 
-        progressSlider?.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-            override fun onStartTrackingTouch(slider: Slider) {
+        progressSlider?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            }
-
-            override fun onStopTrackingTouch(slider: Slider) {
-                MusicPlayerRemote.seekTo(slider.value.toInt())
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                MusicPlayerRemote.seekTo(seekBar.progress)
                 onUpdateProgressViews(MusicPlayerRemote.songProgressMillis,
                     MusicPlayerRemote.songDurationMillis)
             }
 
         })
-
-        progressSlider?.addOnChangeListener { _, value, fromUser ->
-            if (fromUser) {
-
-            }
-        }
     }
 
     private fun updateProgressSliderColor() {
@@ -336,8 +330,8 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {
         if (total > progress) {
-            progressSlider?.valueTo = total.toFloat()
-            progressSlider?.value = progress.toFloat()
+            progressSlider?.max = total
+            progressSlider?.progress = progress
         }
         songTotalTime?.text = MusicUtil.getReadableDurationString(total.toLong())
         songCurrentProgress!!.text = MusicUtil.getReadableDurationString(progress.toLong())
@@ -453,4 +447,15 @@ fun Slider.applyColor(@ColorInt color: Int) {
     trackTintList = tintList
     trackActiveTintList = ColorStateList.valueOf(ColorUtil.withAlpha(color, 0.8f))
     trackInactiveTintList = ColorStateList.valueOf(ColorUtil.withAlpha(color, 0.3f))
+}
+
+fun SeekBar.applyColor(@ColorInt color: Int) {
+
+    val tintList = ColorStateList.valueOf(color)
+
+    thumbTintList = tintList
+    indeterminateTintList = tintList
+    progressBackgroundTintList = tintList
+    secondaryProgressTintList = tintList
+    tickMarkTintList = tintList
 }

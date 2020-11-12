@@ -94,14 +94,20 @@
             tools:ignore="RtlHardcoded,RtlSymmetry"
             tools:text="@tools:sample/date/hhmmss" />
 
-        <com.google.android.material.slider.Slider
+        <SeekBar
             android:id="@+id/player_progress_slider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginTop="16dp"
-            app:thumbRadius="6dp"
-            app:haloRadius="10dp"
-            app:labelBehavior="gone"
+            android:background="@null"
+            android:clickable="false"
+            android:focusable="false"
+            android:maxHeight="2dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:progressDrawable="@drawable/color_progress_seek"
+            android:thumbOffset="2dp"
             app:layout_constraintEnd_toStartOf="@id/player_song_total_time"
             app:layout_constraintStart_toEndOf="@id/player_song_current_progress"
             app:layout_constraintTop_toBottomOf="@id/titleContainer" />

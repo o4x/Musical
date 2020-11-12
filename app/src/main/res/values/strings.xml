@@ -189,7 +189,6 @@
     <string name="grid_size_7">7</string>
     <string name="grid_size_8">8</string>
     <string name="colored_footers">Colored footers</string>
-    <string name="special_thanks_to">Special thanks to</string>
     <string name="changelog">Changelog</string>
     <string name="licenses">Licenses</string>
     <string name="permissions_denied">Permissions denied.</string>
@@ -212,11 +211,6 @@
     <string name="rate_on_google_play_summary">Leave a positive rating on Google Play if you like Musical.</string>
     <string name="donate">Donate</string>
     <string name="donate_summary">If you think I deserve to get paid for my work, you can leave me a few dollars here.</string>
-    <string name="aidan_follestad_summary">For the theme engine and some other great stuff.</string>
-    <string name="michael_cook_summary">For the pretty material app icon.</string>
-    <string name="maarten_corpel_summary">For making the Play Store illustration and the empty album cover.</string>
-    <string name="aleksandar_tesic_summary">For helping me with the design.</string>
-    <string name="website">Website</string>
     <string name="loading_products">Loading products…</string>
     <string name="up_next">Up next</string>
     <string name="pref_title_now_playing_screen_appearance">Appearance</string>
@@ -280,8 +274,6 @@
     <string name="purchase">Purchase</string>
     <string name="restore">Restore</string>
     <string name="no_purchase_found">No purchase found.</string>
-    <string name="eugene_cheung_summary">For his contributions to the source code.</string>
-    <string name="adrian_summary">For creating the album page design.</string>
     <string name="add_action">Add</string>
     <string name="blacklist">Blacklist</string>
     <string name="remove_from_blacklist">Remove from blacklist</string>
@@ -392,7 +384,7 @@
     <string name="done">Done</string>
     <string name="pref_title_auto_download_artist_images">Auto-download artist images</string>
     <string name="pref_summary_ignore_media_store_artwork">Can increase the album cover quality, but causes slower image loading times</string>
-    <string name="changelog_summary">Changelog maintained on the Telegram channel</string>
+    <string name="changelog_summary">Also you can see that on telegram</string>
     <string name="pref_summary_open_source_licences">License details for open source software</string>
     <string name="pref_title_open_source_licences">Open source licences</string>
     <string name="made_with_love">Made with ❤️ in India</string>
@@ -412,7 +404,7 @@
     <string name="instagram_page">Instagram</string>
     <string name="twitter_page_summary">Share your design with Retro Music</string>
     <string name="twitter_page">Twitter</string>
-    <string name="telegram_group_summary">Join the Telegram group to discuss bugs, make suggestions, show off and more</string>
+    <string name="telegram_group_summary">Join the Telegram channel</string>
     <string name="telegram_group">Telegram</string>
     <string name="share_app">Share app</string>
     <string name="app_share">Hey check out this cool music player at: https://play.google.com/store/apps/details?id=%s</string>
@@ -462,5 +454,8 @@
     <string name="yes">Yes</string>
     <string name="no">NO</string>
     <string name="delete_success">Successfully deleted</string>
+    <string name="visit_website_summary">kar afsharan</string>
+    <string name="copyright">Copyright</string>
+    <string name="copyright_summary">© 2020</string>
 
 </resources>

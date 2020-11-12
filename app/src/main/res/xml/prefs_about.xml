@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:key="@string/key_app_version"
+        app:title="@string/version"
+        app:summary="%s"/>
+
+    <Preference
+        app:key="@string/key_changelog"
+        app:title="@string/changelog"
+        app:summary="@string/changelog_summary"/>
+
+    <Preference
+        app:key="@string/key_telegram"
+        app:title="@string/telegram_group"
+        app:summary="@string/telegram_group_summary" />
+
+    <Preference
+        app:key="@string/key_report_bugs"
+        app:title="@string/report_bugs"
+        app:summary="@string/report_bugs_summary" />
+
+    <Preference
+        app:key="@string/key_translate"
+        app:title="@string/translate"
+        app:summary="@string/translate_summary" />
+
+    <Preference
+        app:key="@string/key_rate_on_google_play"
+        app:title="@string/rate_on_google_play"
+        app:summary="@string/rate_on_google_play_summary" />
+
+    <Preference
+        app:key="@string/key_donate"
+        app:title="@string/donate"
+        app:summary="@string/donate_summary" />
+
+    <Preference
+        app:key="@string/key_write_an_email"
+        app:title="@string/write_an_email"
+        app:summary="%s"/>
+
+    <Preference
+        app:key="@string/key_visit_website"
+        app:title="@string/visit_website"
+        app:summary="@string/visit_website_summary" />
+
+    <Preference
+        app:key="@string/key_licenses"
+        app:title="@string/licenses" />
+
+    <Preference
+        app:title="@string/copyright"
+        app:summary="@string/copyright_summary"/>
+
+</PreferenceScreen>

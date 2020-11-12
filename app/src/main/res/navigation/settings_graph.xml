@@ -26,8 +26,7 @@
     <fragment
         android:id="@+id/about"
         android:name="com.o4x.musical.ui.fragments.about.AboutFragment"
-        android:label="@string/action_about"
-        tools:layout="@layout/fragment_about">
+        android:label="@string/action_about">
 
         <action
             android:id="@+id/action_about_to_bug"
