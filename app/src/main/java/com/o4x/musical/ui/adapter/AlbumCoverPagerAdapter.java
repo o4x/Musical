@@ -1,25 +1,21 @@
 package com.o4x.musical.ui.adapter;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.o4x.musical.R;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
 import com.o4x.musical.imageloader.glide.targets.palette.NotificationPaletteTargetListener;
-import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener;
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
-import com.o4x.musical.views.SquareImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -85,7 +81,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         private Unbinder unbinder;
 
         @BindView(R.id.player_image)
-        SquareImageView albumCover;
+        ImageView albumCover;
 
         private boolean isColorReady;
         private MediaNotificationProcessor colors;

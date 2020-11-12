@@ -20,10 +20,9 @@ import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper;
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
-import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
 import com.o4x.musical.views.IconImageView;
-import com.o4x.musical.views.PlayPauseDrawable;
+import com.o4x.musical.drawables.PlayPauseDrawable;
 
 import org.jetbrains.annotations.NotNull;
 

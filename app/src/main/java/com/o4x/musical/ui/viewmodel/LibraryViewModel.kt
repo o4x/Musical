@@ -15,7 +15,7 @@ import com.o4x.musical.model.*
 import com.o4x.musical.repository.RealRepository
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.helper.MyPalette
-import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget
+import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers.IO
@@ -159,8 +159,7 @@ class LibraryViewModel(
                     }
                 ).load(songs.random())
                 .into(
-                    PlaceHolderCustomTarget(
-                        App.getContext(),
+                    CustomBitmapTarget(
                         Util.getMaxScreenSize(), Util.getMaxScreenSize(),
                     )
                 )

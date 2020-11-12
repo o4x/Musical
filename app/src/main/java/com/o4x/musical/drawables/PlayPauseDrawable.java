@@ -1,4 +1,4 @@
-package com.o4x.musical.views;
+package com.o4x.musical.drawables;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

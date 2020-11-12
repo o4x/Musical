@@ -20,8 +20,8 @@ import android.graphics.Bitmap
 import com.o4x.musical.App
 import com.o4x.musical.util.color.MediaNotificationProcessor
 
-abstract class NotificationPaletteTargetListener(val context: Context) :
-    AbsPaletteTargetListener() {
+abstract class NotificationPaletteTargetListener(context: Context) :
+    AbsPaletteTargetListener(context) {
 
     var mediaNotificationProcessor: MediaNotificationProcessor? = null
 

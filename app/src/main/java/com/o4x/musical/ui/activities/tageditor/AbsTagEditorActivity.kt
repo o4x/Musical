@@ -15,6 +15,7 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.NestedScrollView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -26,11 +27,12 @@ import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
+import com.o4x.musical.drawables.CharCoverDrawable
+import com.o4x.musical.drawables.CoverData
 import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.module.GlideApp
-import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.model.Artist
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
@@ -39,7 +41,6 @@ import com.o4x.musical.ui.dialogs.DiscardTagsDialog
 import com.o4x.musical.util.*
 import com.o4x.musical.util.TagUtil.ArtworkInfo
 import com.o4x.musical.util.TextUtil.makeTextWithTitle
-import com.o4x.musical.views.SquareImageView
 import org.jaudiotagger.tag.FieldKey
 import java.io.Serializable
 import java.util.*
@@ -60,10 +61,10 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     var toolbar: Toolbar? = null
     @JvmField
     @BindView(R.id.album_image)
-    var albumImage: SquareImageView? = null
+    var albumImage: ImageView? = null
     @JvmField
     @BindView(R.id.artist_image)
-    var artistImage: SquareImageView? = null
+    var artistImage: ImageView? = null
     @JvmField
     @BindView(R.id.header)
     var header: CardView? = null
@@ -230,7 +231,6 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
             GlideLoader.with(this)
                 .load(artist)
-                .withSize(Util.getMaxScreenSize())
                 .into(it)
 
             val items = arrayOf<CharSequence>(
@@ -255,8 +255,9 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     protected fun setAlbumImageBitmap(bitmap: Bitmap?) {
         albumImage?.let {
             if (bitmap == null) {
-                val b: Bitmap = SquareImageView.createSquareCoverWithText(
-                    this, tagUtil?.albumTitle ?: "", id, Util.getMaxScreenSize())
+                val b: Bitmap =
+                    CharCoverDrawable(this, CoverData(id, tagUtil?.albumTitle ?: ""))
+                    .toBitmap(Util.getScreenWidth(), Util.getScreenHeight())
                 it.setImageBitmap(b)
             } else {
                 it.setImageBitmap(bitmap)
@@ -268,9 +269,8 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         artistImage?.let {
             if (bitmap == null) {
                 val artist = artist
-                val b: Bitmap = SquareImageView.createSquareCoverWithText(
-                    this, artist.name, artist.id, Util.getMaxScreenSize())
-                it.setImageBitmap(b)
+                GlideLoader.with(this)
+                    .load(artist).into(it)
             } else {
                 it.setImageBitmap(bitmap)
             }

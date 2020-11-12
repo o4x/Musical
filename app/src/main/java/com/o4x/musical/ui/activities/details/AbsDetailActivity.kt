@@ -1,7 +1,6 @@
 package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,18 +12,15 @@ import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.extensions.withAlpha
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
-import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener
+import com.o4x.musical.imageloader.glide.targets.palette.NotificationPaletteTargetListener
 import com.o4x.musical.interfaces.PaletteColorHolder
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
-import com.o4x.musical.helper.MyPalette
-import com.o4x.musical.imageloader.glide.targets.palette.NotificationPaletteTargetListener
 import com.o4x.musical.util.Util
 import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
-
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -172,6 +168,5 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
 
     abstract fun initObserver()
     abstract fun loadImage()
-    abstract fun loadImageSync()
     protected abstract fun getSongs(): List<Song>
 }

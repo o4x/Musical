@@ -19,8 +19,8 @@ import com.bumptech.glide.request.target.Target;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
+import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget;
 import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener;
-import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
@@ -147,7 +147,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
 
                         })
                         .load(song)
-                        .into(new PlaceHolderCustomTarget(service,
+                        .into(new CustomBitmapTarget(
                                 bigNotificationImageSize, bigNotificationImageSize));
             }
         });

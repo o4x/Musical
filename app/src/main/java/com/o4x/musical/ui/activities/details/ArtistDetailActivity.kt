@@ -57,14 +57,9 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
     }
 
     private fun setArtist(artist: Artist) {
-        val isFirst = this.data == null
         this.data = artist
 
-        if (isFirst) {
-            loadImageSync()
-        } else {
-            loadImage()
-        }
+        loadImage()
 
         toolbar.title = artist.name
 
@@ -79,15 +74,7 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
     override fun loadImage() {
         getImageLoader()
             .load(data!!)
-            .withSize(imageHeight!!)
             .into(image)
-    }
-
-    override fun loadImageSync() {
-        getImageLoader()
-            .load(data!!)
-            .withSize(imageHeight!!)
-            .intoSync(image)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
