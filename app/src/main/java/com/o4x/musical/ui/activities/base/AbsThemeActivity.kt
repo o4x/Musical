@@ -6,6 +6,7 @@ import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import code.name.monkey.appthemehelper.ATH
+import code.name.monkey.appthemehelper.ATHActivity
 import code.name.monkey.appthemehelper.common.ATHToolbarActivity
 import code.name.monkey.appthemehelper.util.ATHUtil
 import code.name.monkey.appthemehelper.util.ColorUtil
@@ -19,7 +20,7 @@ import com.o4x.musical.util.Util
 import com.o4x.musical.util.theme.ThemeManager
 import java.util.*
 
-abstract class AbsThemeActivity : ATHToolbarActivity() {
+abstract class AbsThemeActivity : ATHActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme()
@@ -78,7 +79,7 @@ abstract class AbsThemeActivity : ATHToolbarActivity() {
     }
 
     fun setTaskDescriptionColorAuto() {
-        setTaskDescriptionColor(ATHUtil.resolveColor(this, R.attr.colorSurface))
+        setTaskDescriptionColor(surfaceColor())
     }
 
     open fun setNavigationBarColor(color: Int) {
