@@ -184,6 +184,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             requireActivity().recreate()
             true
         }
+
         val aboutPreference: Preference? = findPreference(PreferenceUtil.ABOUT)
         aboutPreference?.setOnPreferenceClickListener {
             findNavController().navigate(R.id.action_mainSettings_to_about)

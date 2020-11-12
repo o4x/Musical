@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    // setting's //
     <string name="key_general_theme" translatable="false">general_theme</string>
     <string name="key_theme_color" translatable="false">theme_color</string>
     <string name="key_audio_ducking" translatable="false">audio_ducking</string>
@@ -20,5 +21,17 @@
     <string name="key_filter_song" translatable="false">filter_song</string>
     <string name="key_language_name" translatable="false">language_name</string>
     <string name="key_about" translatable="false">about</string>
+
+    // about //
+    <string name="key_app_version" translatable="false">app_version</string>
+    <string name="key_changelog" translatable="false">changelog</string>
+    <string name="key_licenses" translatable="false">licenses</string>
+    <string name="key_write_an_email" translatable="false">write_an_email</string>
+    <string name="key_telegram" translatable="false">telegram</string>
+    <string name="key_visit_website" translatable="false">visit_website</string>
+    <string name="key_report_bugs" translatable="false">report_bugs</string>
+    <string name="key_translate" translatable="false">translate</string>
+    <string name="key_rate_on_google_play" translatable="false">rate_on_google_play</string>
+    <string name="key_donate" translatable="false">donate</string>
 
 </resources>
