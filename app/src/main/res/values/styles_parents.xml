@@ -25,7 +25,7 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="toolbarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="preferenceTheme">@style/DefaultPreferenceTheme</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
@@ -66,7 +66,7 @@
         <item name="windowActionBarOverlay">true</item>
         <item name="toolbarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="preferenceTheme">@style/DefaultPreferenceTheme</item>
         <item name="windowActionBar">false</item>
         <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
         <item name="materialButtonStyle">@style/MaterialButtonTheme</item>
