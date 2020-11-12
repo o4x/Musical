@@ -15,12 +15,14 @@ import com.bumptech.glide.request.target.Target;
 import com.o4x.musical.R;
 import com.o4x.musical.appwidgets.base.BaseAppWidget;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget;
+import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.Util;
+
+import org.jetbrains.annotations.NotNull;
 
 import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
@@ -95,9 +97,10 @@ public class AppWidgetBig extends BaseAppWidget {
                 }
 
                 target = GlideLoader.with(appContext).load(song)
-                        .into(new PlaceHolderCustomTarget(appContext, widgetImageSize, widgetImageSize) {
+                        .into(new CustomBitmapTarget(widgetImageSize, widgetImageSize) {
                             @Override
-                            protected void setResource(Bitmap resource) {
+                            public void setResource(@NotNull Bitmap resource) {
+                                super.setResource(resource);
                                 update(resource);
                             }
 

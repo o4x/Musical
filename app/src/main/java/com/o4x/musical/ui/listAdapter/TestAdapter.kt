@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.o4x.musical.R
 import com.o4x.musical.imageloader.glide.loader.GlideLoader.Companion.with
 import com.o4x.musical.model.Song
-import com.o4x.musical.views.SquareImageView
 
 class TestAdapter(
     val activity: AppCompatActivity,
@@ -41,7 +40,7 @@ class TestAdapter(
             convertView = activity.layoutInflater.inflate(itemLayoutRes, parent, false)
         }
         with(activity).load(getItem(position)).into(
-            convertView?.findViewById(R.id.image) as SquareImageView
+            convertView?.findViewById(R.id.image) as ImageView
         )
         return convertView
     }

@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.o4x.musical.R;
 import com.o4x.musical.views.IconImageView;
-import com.o4x.musical.views.SquareImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +20,7 @@ import butterknife.ButterKnife;
 public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
     @Nullable
     @BindView(R.id.image)
-    public SquareImageView image;
+    public ImageView image;
 
     @Nullable
     @BindView(R.id.icon)

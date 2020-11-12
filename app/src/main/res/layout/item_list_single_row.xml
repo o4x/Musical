@@ -33,7 +33,7 @@
             android:paddingRight="0dp"
             android:paddingStart="16dp">
 
-            <com.o4x.musical.views.SquareImageView
+            <ImageView
                 android:id="@+id/image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

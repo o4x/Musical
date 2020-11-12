@@ -36,9 +36,8 @@ import com.o4x.musical.model.Song
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.util.color.MediaNotificationProcessor
-import com.o4x.musical.views.PlayPauseDrawable
+import com.o4x.musical.drawables.PlayPauseDrawable
 import java.util.*
 
 abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsMusicServiceFragment(layout),
@@ -180,7 +179,8 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
     }
 
     private fun setUpPlayPauseButton() {
-        playPauseDrawable = PlayPauseDrawable(requireActivity())
+        playPauseDrawable =
+            PlayPauseDrawable(requireActivity())
         playPauseButton?.setImageDrawable(playPauseDrawable)
         updatePlayPauseColor()
         playPauseButton!!.setOnClickListener(PlayPauseButtonOnClickHandler())

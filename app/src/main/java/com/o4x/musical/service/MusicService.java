@@ -11,7 +11,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
 import android.os.Binder;
@@ -28,14 +27,11 @@ import android.provider.MediaStore;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.o4x.musical.App;
 import com.o4x.musical.R;
 import com.o4x.musical.appwidgets.AppWidgetBig;
@@ -46,8 +42,7 @@ import com.o4x.musical.helper.CountDownTimerPausable;
 import com.o4x.musical.helper.ShuffleHelper;
 import com.o4x.musical.helper.StopWatch;
 import com.o4x.musical.imageloader.glide.loader.GlideLoader;
-import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget;
-import com.o4x.musical.model.AbsCustomPlaylist;
+import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.provider.HistoryStore;
@@ -60,6 +55,8 @@ import com.o4x.musical.service.playback.Playback;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.PreferenceUtil;
 import com.o4x.musical.util.Util;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -594,14 +591,14 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         if (PreferenceUtil.albumArtOnLockscreen()) {
             runOnNewThread(() ->
                     GlideLoader.with(App.Companion.getContext())
-                    .load(song).into(
-                            new PlaceHolderCustomTarget(
-                                    App.Companion.getContext(),
+
+                            .load(song).into(new CustomBitmapTarget(
                                     Util.getScreenWidth(),
                                     Util.getScreenHeight()
                             ) {
                 @Override
-                protected void setResource(Bitmap resource) {
+                public void setResource(@NotNull Bitmap resource) {
+                    super.setResource(resource);
                     metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource);
                     mediaSession.setMetadata(metaData.build());
                 }

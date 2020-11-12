@@ -10,20 +10,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.MediaStoreSignature
 import com.bumptech.glide.signature.ObjectKey
+import com.o4x.musical.drawables.CharCoverDrawable
+import com.o4x.musical.drawables.CoverData
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
 import com.o4x.musical.imageloader.glide.targets.AbsImageBitmapTarget
-import com.o4x.musical.imageloader.glide.targets.PlaceHolderBitmapTarget
+import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.imageloader.glide.targets.palette.AbsPaletteTargetListener
-import com.o4x.musical.imageloader.glide.targets.PlaceHolderCustomTarget
 import com.o4x.musical.imageloader.model.AudioFileCover
-import com.o4x.musical.imageloader.model.CoverData
 import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.model.*
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.views.SquareImageView
 
 
 class GlideLoader {
@@ -32,29 +31,26 @@ class GlideLoader {
 
         @JvmStatic
         fun with(context: Context): GlideBuilder {
-            return GlideBuilder(GlideApp.with(context).asBitmap())
+            return GlideBuilder(context, GlideApp.with(context).asBitmap())
         }
     }
 
-    class GlideBuilder() {
+    class GlideBuilder(context: Context, requestBuilder: RequestBuilder<Bitmap>) {
 
-        private lateinit var requestBuilder: RequestBuilder<Bitmap>
+        private var requestBuilder: RequestBuilder<Bitmap> = requestBuilder
+            .diskCacheStrategy(
+                if (PreferenceUtil.isCacheImages())
+                    DiskCacheStrategy.AUTOMATIC
+                else
+                    DiskCacheStrategy.NONE
+            )
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+//            .priority(Priority.LOW)
+
         private var listener =
-            AbsPaletteTargetListener()
+            AbsPaletteTargetListener(context)
 
-        constructor(requestBuilder: RequestBuilder<Bitmap>) : this() {
-            this@GlideBuilder.requestBuilder =
-                requestBuilder
-                    .diskCacheStrategy(
-                        if (PreferenceUtil.isCacheImages())
-                         DiskCacheStrategy.AUTOMATIC
-                        else
-                            DiskCacheStrategy.NONE
-                    )
-                    .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-//                    .priority(Priority.LOW)
-//                    .placeholder(R.drawable.default_album_art)
-        }
+
 
         fun withListener(listenerAbs: AbsPaletteTargetListener?): GlideBuilder {
             listenerAbs?.let {
@@ -68,13 +64,12 @@ class GlideLoader {
                 load(AudioFileCover(song.albumName, song.data, song.dateModified))
             } else {
 
-                listener.coverData = CoverData.from(song)
-
                 GlideFinisher(
                     requestBuilder
                         .signature(createSignature(song))
                         .load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId)),
-                    listener
+                    listener,
+                    CoverData.from(song)
                 )
             }
         }
@@ -85,38 +80,39 @@ class GlideLoader {
 
         fun load(audioFileCover: AudioFileCover): GlideFinisher {
 
-            listener.coverData = CoverData.from(audioFileCover)
-
             return GlideFinisher(
                 requestBuilder
                     .load(audioFileCover),
-                listener
+                listener,
+                CoverData.from(audioFileCover)
             )
         }
 
         private fun load(customImageUtil: CustomImageUtil, multiImage: MultiImage): GlideFinisher {
 
-            listener.coverData = CoverData.from(multiImage)
+            val coverData = CoverData.from(multiImage)
 
             return if (customImageUtil.hasCustomImage()) {
                 GlideFinisher(
                     requestBuilder
                         .signature(createSignature(customImageUtil))
                         .load(customImageUtil.file),
-                    listener
+                    listener,
+                    coverData
                 )
             } else {
                 GlideFinisher(
                     requestBuilder
                         .load(multiImage),
-                    listener
+                    listener,
+                    coverData
                 )
             }
         }
 
         fun load(artist: Artist): GlideFinisher {
 
-            listener.coverData = CoverData.from(MultiImage.fromArtist(artist))
+            val coverData = CoverData.from(MultiImage.fromArtist(artist))
 
             val customImageUtil = CustomImageUtil(artist)
 
@@ -125,14 +121,16 @@ class GlideLoader {
                     requestBuilder
                         .signature(createSignature(customImageUtil))
                         .load(customImageUtil.file),
-                    listener
+                    listener,
+                    coverData
                 )
             else
                 GlideFinisher(
                     requestBuilder
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .load(ArtistImage(artist)),
-                    listener
+                    listener,
+                    coverData
                 )
         }
 
@@ -155,13 +153,12 @@ class GlideLoader {
             name: String,
         ): GlideFinisher {
 
-            listener.coverData = CoverData.from(url, name)
-
             return GlideFinisher(
                 requestBuilder
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .load(url),
-                listener
+                listener,
+                CoverData.from(url, name)
             )
         }
 
@@ -174,32 +171,25 @@ class GlideLoader {
         }
     }
 
+    @SuppressLint("CheckResult")
     class GlideFinisher(
         private val requestBuilder: RequestBuilder<Bitmap>,
         private val listener: AbsPaletteTargetListener,
+        coverData: CoverData?
     ) {
 
-        fun withSize(size: Int): GlideFinisher {
-            listener.coverData.size = size
-            return this
-        }
+        init {
 
-        fun into(image: ImageView?) {
-            image?.let {
+            coverData?.let {
                 requestBuilder
-                    .into(
-                        PlaceHolderBitmapTarget(
-                            it,
-                            listener
-                        )
+                    .placeholder(
+                        CharCoverDrawable(listener.context, it)
                     )
             }
         }
 
-        fun into(image: SquareImageView?) {
+        fun into(image: ImageView?) {
             image?.let {
-                it.coverData = listener.coverData
-
                 requestBuilder
                     .into(
                         AbsImageBitmapTarget(
@@ -210,44 +200,11 @@ class GlideLoader {
             }
         }
 
-        fun into(target: PlaceHolderCustomTarget): Target<Bitmap> {
+        fun into(target: CustomBitmapTarget): Target<Bitmap> {
             target.setListener(listener)
 
             return requestBuilder
                 .into(target)
-        }
-
-        @SuppressLint("CheckResult")
-        fun intoSync(image: ImageView, onlyRetrieveFromCache: Boolean = true) {
-
-            requestBuilder.onlyRetrieveFromCache(onlyRetrieveFromCache)
-
-            image.setImageBitmap(
-                createSync(image.context)
-            )
-        }
-
-        fun createSync(context: Context): Bitmap {
-            var bitmap: Bitmap? = null
-
-            val thread = Thread {
-                bitmap = try {
-                    requestBuilder
-                        .submit()
-                        .get()
-                } catch(e: Exception) {
-                    e.printStackTrace()
-                    listener.coverData.create(context)
-                }
-            }
-
-            thread.start()
-            thread.join()
-
-            listener.isSync = true
-            listener.onResourceReady(bitmap)
-
-            return bitmap!!
         }
     }
 }

@@ -50,15 +50,9 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
     }
 
     private fun setAlbum(album: Album) {
-        val isFirst = this.data == null
         this.data = album
 
-        if (isFirst) {
-            loadImageSync()
-        } else {
-            loadImage()
-        }
-
+        loadImage()
 
         toolbar.title = album.title
         songAdapter?.swapDataSet(album.songs)
@@ -72,15 +66,7 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
     override fun loadImage() {
         getImageLoader()
             .load(data!!)
-            .withSize(imageHeight!!)
             .into(image)
-    }
-
-    override fun loadImageSync() {
-        getImageLoader()
-            .load(data!!)
-            .withSize(imageHeight!!)
-            .intoSync(image)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
