@@ -505,7 +505,7 @@ object PreferenceUtil {
     fun isIgnoreMediaStore(): Boolean {
         return sharedPreferences.getBoolean(
             IGNORE_MEDIA,
-            true
+            false
         )
     }
 
