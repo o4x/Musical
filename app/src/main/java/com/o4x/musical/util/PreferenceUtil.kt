@@ -1,22 +1,21 @@
 package com.o4x.musical.util
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
-import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import com.o4x.musical.extensions.getStringOrDefault
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.o4x.musical.*
+import com.o4x.musical.extensions.getStringOrDefault
+import com.o4x.musical.extensions.isDark
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment
-import com.o4x.musical.util.theme.ThemeMode
 import java.io.File
 
 object PreferenceUtil {
@@ -541,16 +540,54 @@ object PreferenceUtil {
         }
 
 
-    @JvmStatic
-    fun getGeneralThemeValue(): ThemeMode {
+
+    fun getGeneralThemeRes(): Int {
         val themeMode: String =
             sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
         return when (themeMode) {
-            "light" -> ThemeMode.LIGHT
-            "dark" -> ThemeMode.DARK
-            "black" -> ThemeMode.BLACK
-            else -> ThemeMode.BLACK
+            "light" -> R.style.Theme_Musical_Light
+            "dark" -> R.style.Theme_Musical_Base
+            "black" -> R.style.Theme_Musical_Black
+            else -> R.style.Theme_Musical_Black
         }
     }
 
+    fun getThemeColorRes(): Int {
+        val themeColor: String =
+            sharedPreferences.getStringOrDefault(THEME_COLOR, "purple")
+        return when (themeColor) {
+            "red" -> if (isDarkMode) R.style.ThemeColorRed else R.style.ThemeColorRedLight
+            "deep_purple" -> if (isDarkMode) R.style.ThemeColorDeepPurple else R.style.ThemeColorDeepPurpleLight
+            "light_blue" -> if (isDarkMode) R.style.ThemeColorLightBlue else R.style.ThemeColorLightBlueLight
+            "green" -> if (isDarkMode) R.style.ThemeColorGreen else R.style.ThemeColorGreenLight
+            "yellow" -> if (isDarkMode) R.style.ThemeColorYellow else R.style.ThemeColorYellowLight
+            "deep_orange" -> if (isDarkMode) R.style.ThemeColorDeepOrange else R.style.ThemeColorDeepOrangeLight
+            "blue_grey" -> if (isDarkMode) R.style.ThemeColorBlueGrey else R.style.ThemeColorBlueGreyLight
+            "pink" -> if (isDarkMode) R.style.ThemeColorPink else R.style.ThemeColorPinkLight
+            "indigo" -> if (isDarkMode) R.style.ThemeColorIndigo else R.style.ThemeColorIndigoLight
+            "cyan" -> if (isDarkMode) R.style.ThemeColorCyan else R.style.ThemeColorCyanLight
+            "light_green" -> if (isDarkMode) R.style.ThemeColorLightGreen else R.style.ThemeColorLightGreenLight
+            "amber" -> if (isDarkMode) R.style.ThemeColorAmber else R.style.ThemeColorAmberLight
+            "purple" -> if (isDarkMode) R.style.ThemeColorPurple else R.style.ThemeColorPurpleLight
+            "blue" -> if (isDarkMode) R.style.ThemeColorBlue else R.style.ThemeColorBlueLight
+            "teal" -> if (isDarkMode) R.style.ThemeColorTeal else R.style.ThemeColorTealLight
+            "lime" -> if (isDarkMode) R.style.ThemeColorLime else R.style.ThemeColorLimeLight
+            "orange" -> if (isDarkMode) R.style.ThemeColorOrange else R.style.ThemeColorOrangeLight
+            else -> if (isDarkMode) R.style.ThemeColorGrey else R.style.ThemeColorGreyLight
+        }
+    }
+
+    val nightMode: Int
+        get() {
+            return if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
+        }
+
+    val isDarkMode: Boolean
+        get() {
+            if (getGeneralThemeRes() == R.style.Theme_Musical_Light) {
+                return false
+            }
+            return true;
+        }
 }

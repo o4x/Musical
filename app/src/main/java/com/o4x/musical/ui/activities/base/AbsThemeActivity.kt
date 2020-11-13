@@ -7,17 +7,14 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import code.name.monkey.appthemehelper.ATH
 import code.name.monkey.appthemehelper.ATHActivity
-import code.name.monkey.appthemehelper.common.ATHToolbarActivity
-import code.name.monkey.appthemehelper.util.ATHUtil
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.VersionUtils
 import com.o4x.musical.LanguageContextWrapper
-import com.o4x.musical.R
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.util.PreferenceUtil.nightMode
 import com.o4x.musical.util.Util
-import com.o4x.musical.util.theme.ThemeManager
 import java.util.*
 
 abstract class AbsThemeActivity : ATHActivity() {
@@ -29,8 +26,9 @@ abstract class AbsThemeActivity : ATHActivity() {
     }
 
     private fun setTheme() {
-        setTheme(ThemeManager.getThemeResValue())
-        setDefaultNightMode(ThemeManager.getNightMode())
+        setTheme(PreferenceUtil.getGeneralThemeRes())
+        setDefaultNightMode(nightMode)
+        theme.applyStyle(PreferenceUtil.getThemeColorRes(), true)
         DynamicShortcutManager(this).updateDynamicShortcuts()
     }
 

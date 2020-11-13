@@ -256,7 +256,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         albumImage?.let {
             if (bitmap == null) {
                 val b: Bitmap =
-                    CharCoverDrawable(this, CoverData(id, tagUtil?.albumTitle ?: ""))
+                    CharCoverDrawable(CoverData(id, tagUtil?.albumTitle ?: ""))
                     .toBitmap(Util.getScreenWidth(), Util.getScreenHeight())
                 it.setImageBitmap(b)
             } else {

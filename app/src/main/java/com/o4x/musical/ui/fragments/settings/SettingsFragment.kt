@@ -13,8 +13,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import code.name.monkey.appthemehelper.ThemeStore
-import com.flask.colorpicker.ColorPickerView
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import com.o4x.musical.R
 import com.o4x.musical.extensions.backgroundColor
 import com.o4x.musical.extensions.themeColor
@@ -62,28 +60,14 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         }
 
         val themeColorPref: Preference = findPreference(PreferenceUtil.THEME_COLOR)!!
-        val themeColor = themeColor()
-//        themeColorPref.setColor(themeColor, ColorUtil.darkenColor(themeColor))
-
-        themeColorPref.setOnPreferenceClickListener {
-            ColorPickerDialogBuilder
-                .with(context)
-                .setTitle(R.string.theme_color)
-                .initialColor(themeColor)
-                .showAlphaSlider(false)
-                .showBorder(true)
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .density(14)
-                .setPositiveButton(
-                    R.string.ok
-                ) { _, selectedColor, _ ->
-                    if (ThemeStore.themeColor(requireContext()) != selectedColor)
-                        ThemeStore.editTheme(requireContext()).themeColor(selectedColor).commit()
-                }
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .build()
-                .show()
-            return@setOnPreferenceClickListener true
+        var lastThemeColor = themeColorPref.summary.toString()
+        themeColorPref.setOnPreferenceChangeListener { _, newValue ->
+            val newThemeColor = newValue.toString()
+            if (lastThemeColor != newThemeColor) {
+                lastThemeColor = newThemeColor
+                ThemeStore.markChanged(requireContext())
+            }
+            true
         }
 
           ////////////////////////

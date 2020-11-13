@@ -98,9 +98,6 @@
     <string name="action_save_playing_queue">Save playing queue</string>
     <string name="action_go_to_start_directory">Go to start directory</string>
     <string name="action_show_lyrics">Show lyrics</string>
-    <string name="light_theme_name">Light</string>
-    <string name="dark_theme_name">Dark</string>
-    <string name="black_theme_name">Black (AMOLED)</string>
     <string name="always">Always</string>
     <string name="only_on_wifi">Only on Wi-Fi</string>
     <string name="never">Never</string>
@@ -142,7 +139,6 @@
     <string name="reset_action">Reset</string>
     <string name="x_selected">%1$d selected</string>
     <string name="theme_color">Theme color</string>
-    <string name="theme_color_desc">The theme color.</string>
     <string name="update_image">Update image</string>
     <string name="playlist_empty_text">Empty playlist</string>
     <string name="no_playlists">No playlists</string>
@@ -441,7 +437,7 @@
     <string name="reset_image">Reset image</string>
     <string name="pref_colored_footers">Colored footers</string>
     <string name="pref_colored_footers_summary">Use cover color for card footer color</string>
-    <string name="pref_header_interface">Interface</string>
+    <string name="pref_header_interface">User Interface</string>
     <string name="cancel">CANCEL</string>
     <string name="pref_header_other">Other</string>
     <string name="pref_title_delete_cached_images">Delete cache</string>

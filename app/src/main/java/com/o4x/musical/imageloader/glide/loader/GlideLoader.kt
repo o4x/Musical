@@ -183,7 +183,7 @@ class GlideLoader {
             coverData?.let {
                 requestBuilder
                     .placeholder(
-                        CharCoverDrawable(listener.context, it)
+                        CharCoverDrawable(it)
                     )
             }
         }

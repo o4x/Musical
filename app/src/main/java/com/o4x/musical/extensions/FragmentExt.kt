@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.util.theme.ThemeMode
 
 fun Fragment.getIntRes(@IntegerRes int: Int): Int {
     return resources.getInteger(int)
@@ -21,17 +20,6 @@ fun Fragment.getIntRes(@IntegerRes int: Int): Int {
 fun Context.getIntRes(@IntegerRes int: Int): Int {
     return resources.getInteger(int)
 }
-
-val generalThemeValue
-    get() = PreferenceUtil.getGeneralThemeValue()
-
-val Context.isDarkMode: Boolean
-    get() {
-        if (PreferenceUtil.getGeneralThemeValue() == ThemeMode.LIGHT) {
-            return false
-        }
-        return true;
-    }
 
 
 fun Context.isSystemDarkModeEnabled(): Boolean {
