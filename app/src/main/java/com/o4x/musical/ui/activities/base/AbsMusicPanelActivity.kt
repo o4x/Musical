@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import butterknife.ButterKnife
+import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.extensions.textColorPrimary
+import code.name.monkey.appthemehelper.extensions.textColorSecondary
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.attached.isActive
 import com.afollestad.materialcab.createCab
 import com.o4x.musical.R
-import com.o4x.musical.extensions.surfaceColor
-import com.o4x.musical.extensions.textColorPrimary
-import com.o4x.musical.extensions.textColorSecondary
 import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.activities.PlayerActivity

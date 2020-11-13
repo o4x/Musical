@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.o4x.musical.R

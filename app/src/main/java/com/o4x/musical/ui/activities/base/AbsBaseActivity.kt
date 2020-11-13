@@ -12,6 +12,7 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.core.app.ActivityCompat
 import code.name.monkey.appthemehelper.ThemeStore
+import code.name.monkey.appthemehelper.extensions.accentColor
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
 
@@ -107,7 +108,7 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
                             Snackbar.LENGTH_INDEFINITE
                         )
                             .setAction(R.string.action_grant) { requestPermissions() }
-                            .setActionTextColor(ThemeStore.themeColor(this)).show()
+                            .setActionTextColor(accentColor()).show()
                     } else {
                         // User has deny permission and checked never show permission dialog so you can redirect to Application settings page
                         Snackbar.make(
@@ -124,7 +125,7 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
                             )
                             intent.data = uri
                             startActivity(intent)
-                        }.setActionTextColor(ThemeStore.themeColor(this)).show()
+                        }.setActionTextColor(accentColor()).show()
                     }
                     return
                 }

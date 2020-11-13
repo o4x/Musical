@@ -15,6 +15,7 @@ import com.o4x.musical.R;
 import com.o4x.musical.util.ImageUtil;
 
 import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 
 /**
  * @author Adrian Campos
@@ -33,7 +34,7 @@ public final class AppShortcutIconGenerator {
 
         // Return an Icon of iconId with those colors
         return generateThemedIcon(context, iconId,
-                ThemeStore.Companion.themeColor(context),
+                ColorExtKt.accentColor(context),
                 typedColorBackground.data
         );
     }

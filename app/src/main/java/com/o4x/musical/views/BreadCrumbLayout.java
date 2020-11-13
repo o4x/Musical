@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 
 /**
  * @author Aidan Follestad (afollestad), modified for Musical by Karim Abou Zeid (kabouzeid)
@@ -136,8 +137,8 @@ public class BreadCrumbLayout extends HorizontalScrollView implements View.OnCli
     private SelectionCallback mCallback;
 
     private void init() {
-        contentColorActivated = ThemeStore.Companion.textColorPrimary(getContext());
-        contentColorDeactivated = ThemeStore.Companion.textColorSecondary(getContext());
+        contentColorActivated = ColorExtKt.textColorPrimary(getContext());
+        contentColorDeactivated = ColorExtKt.textColorSecondary(getContext());
         setMinimumHeight((int) getResources().getDimension(R.dimen.tab_height));
         setClipToPadding(false);
         setHorizontalScrollBarEnabled(false);

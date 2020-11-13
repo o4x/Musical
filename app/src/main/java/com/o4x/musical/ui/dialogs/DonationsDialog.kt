@@ -16,8 +16,8 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import butterknife.BindView
 import butterknife.ButterKnife
-import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
-import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorSecondary
+import code.name.monkey.appthemehelper.extensions.textColorPrimary
+import code.name.monkey.appthemehelper.extensions.textColorSecondary
 import code.name.monkey.appthemehelper.util.ATHUtil.resolveColor
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
@@ -156,12 +156,8 @@ class DonationsDialog : DialogFragment(), IBillingHandler {
             val titleTextColor = if (purchased) resolveColor(
                 context,
                 android.R.attr.textColorHint
-            ) else textColorPrimary(
-                context
-            )
-            val contentTextColor = if (purchased) titleTextColor else textColorSecondary(
-                context
-            )
+            ) else context.textColorPrimary()
+            val contentTextColor = if (purchased) titleTextColor else context.textColorSecondary()
             viewHolder.title!!.setTextColor(titleTextColor)
             viewHolder.text!!.setTextColor(contentTextColor)
             viewHolder.price!!.setTextColor(titleTextColor)

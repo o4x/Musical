@@ -3,6 +3,7 @@ package code.name.monkey.appthemehelper.util
 import android.content.res.ColorStateList
 import android.graphics.Color
 import code.name.monkey.appthemehelper.ThemeStore
+import code.name.monkey.appthemehelper.extensions.accentColor
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
@@ -12,7 +13,7 @@ object MaterialUtil {
     @JvmStatic
     fun setTint(
         button: MaterialButton, background: Boolean = true,
-        color: Int = ThemeStore.themeColor(button.context)
+        color: Int = button.context.accentColor()
     ) {
 
         button.isAllCaps = false
@@ -55,7 +56,7 @@ object MaterialUtil {
     @JvmStatic
     fun setTint(textInputLayout: TextInputLayout, background: Boolean = true) {
         val context = textInputLayout.context
-        val accentColor = ThemeStore.themeColor(context)
+        val accentColor = context.accentColor()
         val colorState = ColorStateList.valueOf(accentColor)
 
         if (background) {

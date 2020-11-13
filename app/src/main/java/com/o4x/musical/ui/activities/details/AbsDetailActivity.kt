@@ -6,11 +6,11 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import code.name.monkey.appthemehelper.extensions.withAlpha
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.extensions.withAlpha
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.palette.NotificationPaletteTargetListener
 import com.o4x.musical.interfaces.PaletteColorHolder

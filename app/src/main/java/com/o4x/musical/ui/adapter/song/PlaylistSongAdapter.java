@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -42,7 +43,7 @@ public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
     @Override
     public void onBindViewHolder(@NonNull final SongAdapter.ViewHolder holder, int position) {
         if (holder.getItemViewType() == OFFSET_ITEM) {
-            int textColor = ThemeStore.Companion.textColorSecondary(activity);
+            int textColor = ColorExtKt.textColorSecondary(activity);
             if (holder.title != null) {
                 holder.title.setText(MusicUtil.getPlaylistInfoString(activity, dataSet));
                 holder.title.setTextColor(textColor);

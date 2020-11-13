@@ -3,6 +3,7 @@ package code.name.monkey.appthemehelper.util
 import android.content.res.ColorStateList
 import androidx.annotation.ColorInt
 import code.name.monkey.appthemehelper.ThemeStore
+import code.name.monkey.appthemehelper.extensions.accentColor
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
@@ -22,7 +23,7 @@ object NavigationViewUtil {
         val drawable = navigationView.itemBackground
         navigationView.itemBackground = TintHelper.createTintedDrawable(
             drawable,
-            ColorUtil.withAlpha(ThemeStore.themeColor(navigationView.context), 0.2f)
+            ColorUtil.withAlpha(navigationView.context.accentColor(), 0.2f)
         )
     }
 

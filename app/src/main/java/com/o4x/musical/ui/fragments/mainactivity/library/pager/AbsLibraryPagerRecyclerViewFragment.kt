@@ -1,14 +1,11 @@
 package com.o4x.musical.ui.fragments.mainactivity.library.pager
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
+import code.name.monkey.appthemehelper.extensions.accentColor
 import com.o4x.musical.R
 import com.o4x.musical.util.ViewUtil
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
@@ -36,8 +33,7 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
         if (recycler_view is FastScrollRecyclerView) {
             ViewUtil.setUpFastScrollRecyclerViewColor(activity,
                 recycler_view,
-                themeColor(
-                    requireContext()))
+                accentColor())
         }
         recycler_view!!.layoutManager = layoutManager
         recycler_view!!.adapter = adapter

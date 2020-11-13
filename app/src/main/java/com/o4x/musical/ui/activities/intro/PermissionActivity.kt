@@ -15,19 +15,12 @@
 package com.o4x.musical.ui.activities.intro
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.core.text.HtmlCompat
-import code.name.monkey.appthemehelper.ThemeStore
 import com.o4x.musical.R
-import com.o4x.musical.extensions.backgroundColor
 import com.o4x.musical.extensions.themeBackgroundColor
 import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
-import com.o4x.musical.util.CoverUtil
 import kotlinx.android.synthetic.main.activity_permission.*
 import kotlin.properties.Delegates
 

@@ -20,8 +20,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import butterknife.ButterKnife
-import code.name.monkey.appthemehelper.ThemeStore.Companion.textColorPrimary
-import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
+import code.name.monkey.appthemehelper.extensions.accentColor
+import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.extensions.textColorPrimary
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.NavigationViewUtil.setItemTextColors
 import com.google.android.material.appbar.AppBarLayout
@@ -133,11 +134,11 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-        val themeColor = themeColor(this)
+        val themeColor = accentColor()
 
         navigation_view.setBackgroundColor(surfaceColor())
 
-        setItemTextColors(navigation_view, textColorPrimary(this), themeColor)
+        setItemTextColors(navigation_view, textColorPrimary(), themeColor)
 
         val stateListDrawable = navigation_view.itemBackground as StateListDrawable
         val layerDrawable = stateListDrawable.getStateDrawable(0) as LayerDrawable

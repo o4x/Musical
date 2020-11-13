@@ -12,12 +12,10 @@ import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import code.name.monkey.appthemehelper.extensions.accentColor
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
-import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
-import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.o4x.musical.R
-import com.o4x.musical.extensions.themeColor
 import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
@@ -26,7 +24,6 @@ import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
-import com.xw.repo.widget.BounceScrollView.OnOverScrollListener
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -139,14 +136,14 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         shuffle_btn.setOnClickListener {
             libraryViewModel.shuffleSongs()
         }
-        shuffle_btn.backgroundTintList = ColorStateList.valueOf(themeColor())
+        shuffle_btn.backgroundTintList = ColorStateList.valueOf(accentColor())
         shuffle_btn.setColorFilter(
-            getPrimaryTextColor(activity, isColorLight(themeColor())),
+            getPrimaryTextColor(activity, isColorLight(accentColor())),
             PorterDuff.Mode.SRC_IN
         )
-        open_queue_button.setBackgroundColor(themeColor())
+        open_queue_button.setBackgroundColor(accentColor())
         open_queue_button.setTextColor(
-            getPrimaryTextColor(activity, isColorLight(themeColor()))
+            getPrimaryTextColor(activity, isColorLight(accentColor()))
         )
     }
 

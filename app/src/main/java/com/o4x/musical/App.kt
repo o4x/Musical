@@ -37,12 +37,6 @@ class App : MultiDexApplication() {
             androidContext(this@App)
             modules(appModules)
         }
-        // default theme
-        if (!ThemeStore.isConfigured(this, 3)) {
-            ThemeStore.editTheme(this)
-                .themeColorRes(R.color.deep_purple_A200)
-                .commit()
-        }
 
         if (VersionUtils.hasNougatMR())
             DynamicShortcutManager(this).initDynamicShortcuts()

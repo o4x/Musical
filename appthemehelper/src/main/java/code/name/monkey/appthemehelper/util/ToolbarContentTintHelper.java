@@ -37,6 +37,8 @@ import androidx.appcompat.widget.ToolbarWidgetWrapper;
 import androidx.core.graphics.drawable.DrawableCompat;
 import code.name.monkey.appthemehelper.R;
 import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -396,7 +398,7 @@ public final class ToolbarContentTintHelper {
     }
 
     public static void handleOnPrepareOptionsMenu(Activity activity, Toolbar toolbar) {
-        handleOnPrepareOptionsMenu(activity, toolbar, ThemeStore.Companion.themeColor(activity));
+        handleOnPrepareOptionsMenu(activity, toolbar, ColorExtKt.accentColor(activity));
     }
 
     public static void handleOnPrepareOptionsMenu(Activity activity, Toolbar toolbar,
@@ -494,7 +496,7 @@ public final class ToolbarContentTintHelper {
             @Nullable Menu menu,
             int toolbarColor) {
         setToolbarContentColorBasedOnToolbarColor(context, toolbar, menu, toolbarColor,
-                ThemeStore.Companion.themeColor(context));
+                ColorExtKt.accentColor(context));
     }
 
     public static void setToolbarContentColorBasedOnToolbarColor(

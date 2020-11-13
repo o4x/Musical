@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import code.name.monkey.appthemehelper.ThemeStore
+import code.name.monkey.appthemehelper.extensions.accentColor
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.R
 import com.o4x.musical.extensions.themeOutlineColor
@@ -35,7 +36,7 @@ class PermissionItem @JvmOverloads constructor(
         )
 
         val color =
-            attributes.getColor(R.styleable.PermissionItem_permissionColor, ThemeStore.themeColor(context))
+            attributes.getColor(R.styleable.PermissionItem_permissionColor, context.accentColor())
 
         number.backgroundTintList = ColorStateList.valueOf(ColorUtil.withAlpha(color, 0.22f))
 
