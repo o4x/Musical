@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -101,7 +102,8 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
         final int iconColor = ATHUtil.INSTANCE.resolveColor(activity, R.attr.iconColor);
         if (file.isDirectory()) {
             holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
-            holder.image.setImageResource(R.drawable.ic_folder);
+            holder.image.setScaleType(ImageView.ScaleType.CENTER);
+            holder.image.setImageResource(R.drawable.ic_keyboard_arrow_right);
         } else {
             GlideLoader.with(activity)
                     .load(new AudioFileCover(file.getName(), file.getPath(), file.lastModified()))
