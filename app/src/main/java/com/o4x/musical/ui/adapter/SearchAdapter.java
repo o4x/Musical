@@ -23,6 +23,7 @@ import com.o4x.musical.util.NavigationUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 import code.name.monkey.appthemehelper.util.ATHUtil;
 
 /**
@@ -102,8 +103,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             super(itemView);
             itemView.setOnLongClickListener(null);
 
-            if (itemViewType != HEADER) {
-                itemView.setBackgroundColor(ATHUtil.INSTANCE.resolveColor(activity, R.attr.cardBackgroundColor));
+            if (itemViewType == HEADER) {
+                itemView.setBackgroundColor(ColorExtKt.cardColor(activity));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     itemView.setElevation(activity.getResources().getDimensionPixelSize(R.dimen.card_elevation));
                 }
