@@ -48,8 +48,8 @@ class SettingsActivity : AbsBaseActivity() {
     }
 
     override fun updateTheme() {
-        startActivity(intent);
-        finish();
-        overridePendingTransition(0, 0);
+        startActivity(intent)
+        finish()
+        overridePendingTransition(0, 0)
     }
 }
