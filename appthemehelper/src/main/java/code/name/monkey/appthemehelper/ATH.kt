@@ -10,6 +10,8 @@ import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.Toolbar
+import code.name.monkey.appthemehelper.extensions.primaryColor
+import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ATHUtil
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.TintHelper
@@ -60,7 +62,7 @@ object ATH {
     }
 
     fun setNavigationbarColorAuto(activity: Activity) {
-        setNavigationbarColor(activity, ThemeStore.navigationBarColor(activity))
+        setNavigationbarColor(activity, activity.surfaceColor())
     }
 
     fun setNavigationbarColor(activity: Activity, color: Int) {
@@ -83,7 +85,7 @@ object ATH {
     }
 
     fun setActivityToolbarColorAuto(activity: Activity, toolbar: Toolbar?) {
-        setActivityToolbarColor(activity, toolbar, ThemeStore.themeColor(activity))
+        setActivityToolbarColor(activity, toolbar, activity.surfaceColor())
     }
 
     fun setActivityToolbarColor(
@@ -98,7 +100,7 @@ object ATH {
     }
 
     fun setTaskDescriptionColorAuto(activity: Activity) {
-        setTaskDescriptionColor(activity, ThemeStore.themeColor(activity))
+        setTaskDescriptionColor(activity, activity.surfaceColor())
     }
 
     fun setTaskDescriptionColor(activity: Activity, @ColorInt color: Int) {

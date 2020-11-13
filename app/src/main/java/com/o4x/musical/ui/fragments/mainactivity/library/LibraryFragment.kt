@@ -2,23 +2,19 @@ package com.o4x.musical.ui.fragments.mainactivity.library
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.*
-import androidx.collection.arraySetOf
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
+import code.name.monkey.appthemehelper.extensions.accentColor
+import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
-import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.*
-import com.o4x.musical.ui.listAdapter.TestAdapter
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.PreferenceUtil.lastPage
 import com.o4x.musical.util.PreferenceUtil.libraryCategory
@@ -27,7 +23,6 @@ import com.o4x.musical.util.PreferenceUtil.rememberLastTab
 import com.o4x.musical.util.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
 import com.o4x.musical.util.Util
 import kotlinx.android.synthetic.main.fragment_library.*
-import kotlinx.android.synthetic.main.fragment_library_recycler_view.*
 
 class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPageChangeListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -93,7 +88,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
         val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
         mainActivity.tabs.setBackgroundColor(primaryColor)
         mainActivity.tabs.setTabTextColors(normalColor, selectedColor)
-        mainActivity.tabs.setSelectedTabIndicatorColor(themeColor(mainActivity))
+        mainActivity.tabs.setSelectedTabIndicatorColor(accentColor())
         updateTabVisibility()
         if (rememberLastTab()) {
             pager!!.currentItem = lastPage

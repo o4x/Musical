@@ -16,21 +16,15 @@ package com.o4x.musical.preferences
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.core.graphics.BlendModeColorFilterCompat
-import androidx.core.graphics.BlendModeCompat.SRC_IN
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import code.name.monkey.appthemehelper.common.prefs.supportv7.ATEDialogPreference
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.o4x.musical.R
-import com.o4x.musical.extensions.colorControlNormal
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.adapter.CategoryInfoAdapter
 import com.o4x.musical.util.PreferenceUtil

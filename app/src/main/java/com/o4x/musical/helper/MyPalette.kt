@@ -2,6 +2,10 @@ package com.o4x.musical.helper
 
 import android.content.Context
 import androidx.palette.graphics.Palette
+import code.name.monkey.appthemehelper.extensions.cardColor
+import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.extensions.textColorPrimary
+import code.name.monkey.appthemehelper.extensions.textColorSecondary
 import com.o4x.musical.App
 import com.o4x.musical.extensions.*
 

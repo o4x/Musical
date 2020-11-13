@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
+import code.name.monkey.appthemehelper.extensions.accentColor
 import code.name.monkey.appthemehelper.util.TintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -129,7 +129,7 @@ class BugReportFragment : Fragment() {
     }
 
     private fun initViews() {
-        val themeColor = themeColor(requireContext())
+        val themeColor = accentColor()
         optionUseAccount!!.setOnClickListener {
             inputTitle!!.isEnabled = true
             inputDescription!!.isEnabled = true

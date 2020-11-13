@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import code.name.monkey.appthemehelper.ThemeStore
+import code.name.monkey.appthemehelper.extensions.accentColor
+import code.name.monkey.appthemehelper.extensions.textColorPrimary
+import code.name.monkey.appthemehelper.extensions.textColorSecondary
 import code.name.monkey.appthemehelper.util.ATHUtil
 import code.name.monkey.appthemehelper.util.TintHelper
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
@@ -23,8 +26,6 @@ import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.SkuDetails
 import com.anjlab.android.iab.v3.TransactionDetails
 import com.o4x.musical.R
-import com.o4x.musical.extensions.textColorPrimary
-import com.o4x.musical.extensions.textColorSecondary
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import kotlinx.android.synthetic.main.activity_donation.*
 import java.lang.ref.WeakReference
@@ -66,8 +67,8 @@ class SupportDevelopmentActivity : AbsBaseActivity(), BillingProcessor.IBillingH
         setupToolbar()
 
 //        billingProcessor = BillingProcessor(this, BuildConfig.GOOGLE_PLAY_LICENSING_KEY, this)
-        TintHelper.setTint(progress, ThemeStore.themeColor(this))
-        donation.setTextColor(ThemeStore.themeColor(this))
+        TintHelper.setTint(progress, accentColor())
+        donation.setTextColor(accentColor())
     }
 
     private fun setupToolbar() {

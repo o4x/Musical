@@ -19,6 +19,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.NestedScrollView
 import butterknife.BindView
 import butterknife.ButterKnife
+import code.name.monkey.appthemehelper.extensions.surfaceColor
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -30,7 +31,6 @@ import com.o4x.musical.R
 import com.o4x.musical.drawables.CharCoverDrawable
 import com.o4x.musical.drawables.CoverData
 import com.o4x.musical.extensions.startImagePicker
-import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.model.Artist

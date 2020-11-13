@@ -16,7 +16,6 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHold
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 import com.o4x.musical.R;
-import com.o4x.musical.extensions.ColorExtKt;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
@@ -26,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 import code.name.monkey.appthemehelper.util.ColorUtil;
 
 /**

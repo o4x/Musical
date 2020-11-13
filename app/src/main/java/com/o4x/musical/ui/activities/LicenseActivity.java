@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 import code.name.monkey.appthemehelper.ThemeStore;
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 import code.name.monkey.appthemehelper.util.ATHUtil;
 import code.name.monkey.appthemehelper.util.ColorUtil;
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
@@ -73,9 +74,9 @@ public class LicenseActivity extends AbsBaseActivity {
             final String changeLog = buf.toString()
                     .replace("{style-placeholder}",
                             String.format("body { background-color: %s; color: %s; }", backgroundColor, contentColor))
-                    .replace("{link-color}", colorToCSS(ThemeStore.Companion.themeColor(this)))
+                    .replace("{link-color}", colorToCSS(ColorExtKt.accentColor(this)))
                     .replace("{link-color-active}",
-                            colorToCSS(ColorUtil.INSTANCE.lightenColor(ThemeStore.Companion.themeColor(this))));
+                            colorToCSS(ColorUtil.INSTANCE.lightenColor(ColorExtKt.accentColor(this))));
 
             webView.loadData(changeLog, "text/html", "UTF-8");
         } catch (Throwable e) {

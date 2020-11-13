@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import butterknife.BindView
+import code.name.monkey.appthemehelper.extensions.withAlpha
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
-import com.o4x.musical.extensions.withAlpha
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist

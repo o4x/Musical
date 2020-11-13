@@ -16,12 +16,12 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import code.name.monkey.appthemehelper.ThemeStore.Companion.themeColor
+import code.name.monkey.appthemehelper.extensions.accentColor
+import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
-import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.menu.SongMenuHelper
 import com.o4x.musical.helper.menu.SongsMenuHelper
@@ -115,8 +115,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private fun setUpRecyclerView() {
-        ViewUtil.setUpFastScrollRecyclerViewColor(activity, recycler_view, themeColor(
-            mainActivity))
+        ViewUtil.setUpFastScrollRecyclerViewColor(activity, recycler_view, accentColor())
         recycler_view.layoutManager = OverScrollLinearLayoutManager(requireContext())
         recycler_view.addAppbarListener()
     }
@@ -208,7 +207,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                                 .setAction(R.string.action_scan) {
                                     scanPaths(arrayOf(canonicalFile.path))
                                 }
-                                .setActionTextColor(themeColor(mainActivity))
+                                .setActionTextColor(accentColor())
                                 .show()
                         }
                     }
@@ -238,7 +237,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                                 }
                                 scanPaths(paths)
                             }
-                            .setActionTextColor(themeColor(mainActivity))
+                            .setActionTextColor(accentColor())
                             .show()
                     }
                 }
@@ -323,7 +322,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                                             .setAction(R.string.action_scan) {
                                                 scanPaths(arrayOf(FileUtil.safeGetCanonicalPath(file)))
                                             }
-                                            .setActionTextColor(themeColor(mainActivity))
+                                            .setActionTextColor(accentColor())
                                             .show()
                                     }
                                 }

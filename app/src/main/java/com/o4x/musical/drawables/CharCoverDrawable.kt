@@ -1,11 +1,9 @@
 package com.o4x.musical.drawables
 
-import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import code.name.monkey.appthemehelper.util.ColorUtil
-import com.o4x.musical.extensions.textColorPrimary
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.model.Song

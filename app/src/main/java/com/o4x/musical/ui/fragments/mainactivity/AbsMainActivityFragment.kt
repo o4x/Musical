@@ -7,11 +7,10 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import code.name.monkey.appthemehelper.common.ATHToolbarActivity
+import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
-import com.o4x.musical.extensions.surfaceColor
 import com.o4x.musical.misc.OverScrollGridLayoutManager
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.misc.VerticalScrollListener
@@ -69,10 +68,10 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
-            mainActivity.toolbar,
-            menu,
-            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
+//        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
+//            mainActivity.toolbar,
+//            menu,
+//            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
         super.onCreateOptionsMenu(menu, inflater)
     }
 

@@ -9,9 +9,9 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import code.name.monkey.appthemehelper.extensions.backgroundColor
 import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.extensions.backgroundColor
 import com.o4x.musical.ui.activities.PurchaseActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
 import com.o4x.musical.ui.dialogs.DonationsDialog
