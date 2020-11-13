@@ -22,13 +22,12 @@ abstract class AbsThemeActivity : ATHActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme()
         super.onCreate(savedInstanceState)
+        theme.applyStyle(PreferenceUtil.getThemeColorRes(), true)
         toggleScreenOn()
     }
 
     private fun setTheme() {
-        theme.applyStyle(PreferenceUtil.getThemeColorRes(), true)
         setTheme(PreferenceUtil.getGeneralThemeRes())
-        theme.applyStyle(PreferenceUtil.getThemeColorRes(), true)
         setDefaultNightMode(nightMode)
         DynamicShortcutManager(this).updateDynamicShortcuts()
     }
