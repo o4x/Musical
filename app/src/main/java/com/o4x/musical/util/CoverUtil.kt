@@ -35,7 +35,7 @@ object CoverUtil {
     fun doubleGradient(color1: Int, color2: Int): Bitmap {
         val gd = GradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
-            intArrayOf(color1.withAlpha(.8f), color2.withAlpha(.8f))
+            intArrayOf(color1.withAlpha(.6f), color2.withAlpha(.6f))
         )
         gd.cornerRadius = 0f
 
