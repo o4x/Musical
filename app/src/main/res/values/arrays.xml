@@ -53,6 +53,50 @@
         <item>@string/theme_entry_value_black</item>
     </string-array>
 
+    <string-array name="pref_color_theme_list_titles">
+        <item>@string/default_color</item>
+        <item>@string/red</item>
+        <item>@string/deep_purple</item>
+        <item>@string/light_blue</item>
+        <item>@string/green</item>
+        <item>@string/yellow</item>
+        <item>@string/deep_orange</item>
+        <item>@string/blue_grey</item>
+        <item>@string/pink</item>
+        <item>@string/indigo</item>
+        <item>@string/cyan</item>
+        <item>@string/light_green</item>
+        <item>@string/amber</item>
+        <item>@string/brown</item>
+        <item>@string/purple</item>
+        <item>@string/blue</item>
+        <item>@string/teal</item>
+        <item>@string/lime</item>
+        <item>@string/orange</item>
+    </string-array>
+
+    <string-array name="pref_color_theme_list_values">
+        <item>@string/theme_color_entry_value_default</item>
+        <item>@string/theme_color_entry_value_red</item>
+        <item>@string/theme_color_entry_value_deep_purple</item>
+        <item>@string/theme_color_entry_value_light_blue</item>
+        <item>@string/theme_color_entry_value_green</item>
+        <item>@string/theme_color_entry_value_yellow</item>
+        <item>@string/theme_color_entry_value_deep_orange</item>
+        <item>@string/theme_color_entry_value_blue_grey</item>
+        <item>@string/theme_color_entry_value_pink</item>
+        <item>@string/theme_color_entry_value_indigo</item>
+        <item>@string/theme_color_entry_value_cyan</item>
+        <item>@string/theme_color_entry_value_light_green</item>
+        <item>@string/theme_color_entry_value_amber</item>
+        <item>@string/theme_color_entry_value_brown</item>
+        <item>@string/theme_color_entry_value_purple</item>
+        <item>@string/theme_color_entry_value_blue</item>
+        <item>@string/theme_color_entry_value_teal</item>
+        <item>@string/theme_color_entry_value_lime</item>
+        <item>@string/theme_color_entry_value_orange</item>
+    </string-array>
+
     <string-array name="pref_grid_style_list_titles">
         <item>@string/normal_style</item>
         <item>@string/card_style</item>

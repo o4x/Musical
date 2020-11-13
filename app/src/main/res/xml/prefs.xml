@@ -16,11 +16,15 @@
             app:summary="%s"
             app:title="@string/pref_title_general_theme" />
 
-        <Preference
+        <ListPreference
             app:key="@string/key_theme_color"
-            app:persistent="false"
-            app:summary="@string/theme_color_desc"
-            app:title="@string/theme_color" />
+            app:defaultValue="@string/theme_color_entry_value_purple"
+            app:entries="@array/pref_color_theme_list_titles"
+            app:entryValues="@array/pref_color_theme_list_values"
+            app:summary="%s"
+            app:title="@string/theme_color"
+            app:negativeButtonText=""
+            app:positiveButtonText=""/>
 
     </PreferenceCategory>
 

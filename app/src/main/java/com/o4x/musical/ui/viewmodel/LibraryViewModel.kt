@@ -6,7 +6,6 @@ import androidx.lifecycle.*
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.App
 import com.o4x.musical.db.*
-import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener
@@ -17,6 +16,7 @@ import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.util.PreferenceUtil.isDarkMode
 import com.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -143,7 +143,7 @@ class LibraryViewModel(
                         override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
                             if (resource == null) return
 
-                            val bitmap = if (App.getContext().isDarkMode ==
+                            val bitmap = if (isDarkMode ==
                                 ColorUtil.isColorDark(colors.backgroundColor)
                             ) {
                                 CoverUtil.addGradientTo(resource)

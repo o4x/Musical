@@ -15,7 +15,7 @@ import code.name.monkey.appthemehelper.util.ATHUtil.resolveColor
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.o4x.musical.R
-import com.o4x.musical.extensions.isDarkMode
+import com.o4x.musical.util.PreferenceUtil.isDarkMode
 import com.o4x.musical.util.PreferenceUtil.setLastChangeLogVersion
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -61,11 +61,11 @@ class ChangelogDialog : DialogFragment() {
                 resolveColor(
                     requireActivity(),
                     R.attr.backgroundColor,
-                    Color.parseColor(if (requireContext().isDarkMode) "#424242" else "#ffffff")
+                    Color.parseColor(if (isDarkMode) "#424242" else "#ffffff")
                 )
             )
             val contentColor =
-                colorToCSS(Color.parseColor(if (requireContext().isDarkMode) "#ffffff" else "#000000"))
+                colorToCSS(Color.parseColor(if (isDarkMode) "#ffffff" else "#000000"))
             val changeLog = buf.toString()
                 .replace(
                     "{style-placeholder}",

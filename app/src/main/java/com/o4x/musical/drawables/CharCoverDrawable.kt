@@ -5,17 +5,16 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import code.name.monkey.appthemehelper.util.ColorUtil
-import com.o4x.musical.App
-import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.extensions.textColorPrimary
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.model.Song
+import com.o4x.musical.util.PreferenceUtil.isDarkMode
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 
-class CharCoverDrawable(private val context: Context, private val coverData: CoverData) : Drawable() {
+class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
 
     companion object {
         private const val TAG = "CharCoverDrawable"
@@ -64,7 +63,7 @@ class CharCoverDrawable(private val context: Context, private val coverData: Cov
 
 
     private fun drawGradient(canvas: Canvas, id: Int) {
-        val colors = if (context.isDarkMode) {
+        val colors = if (isDarkMode) {
             val pos = (id) % COLORS_DARK.size
             COLORS_DARK[abs(pos)]
         } else {
@@ -88,7 +87,9 @@ class CharCoverDrawable(private val context: Context, private val coverData: Cov
         // Render char's
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.color =
-            ColorUtil.withAlpha(context.textColorPrimary(), 0.2f) // Text Color
+            ColorUtil.withAlpha(
+                if (isDarkMode) Color.WHITE else Color.BLACK, 0.2f) // Text Color
+
         paint.textSize = max(canvas.width, canvas.height) * 1.4f // Text Size
         paint.isFakeBoldText = true
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.OVERLAY) // Text Overlapping Pattern

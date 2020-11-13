@@ -12,10 +12,10 @@ import androidx.preference.PreferenceFragmentCompat
 import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.extensions.backgroundColor
-import com.o4x.musical.extensions.isDarkMode
 import com.o4x.musical.ui.activities.PurchaseActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
 import com.o4x.musical.ui.dialogs.DonationsDialog
+import com.o4x.musical.util.PreferenceUtil.isDarkMode
 import de.psdev.licensesdialog.LicensesDialog
 
 class AboutFragment : PreferenceFragmentCompat() {
@@ -127,10 +127,10 @@ class AboutFragment : PreferenceFragmentCompat() {
             .setNotices(R.raw.notices)
             .setTitle(R.string.licenses)
             .setNoticesCssStyle(getString(R.string.license_dialog_style)
-                .replace("{bg-color}", if (requireContext().isDarkMode) "424242" else "ffffff")
-                .replace("{text-color}", if (requireContext().isDarkMode) "ffffff" else "000000")
+                .replace("{bg-color}", if (isDarkMode) "424242" else "ffffff")
+                .replace("{text-color}", if (isDarkMode) "ffffff" else "000000")
                 .replace("{license-bg-color}",
-                    if (requireContext().isDarkMode) "535353" else "eeeeee")
+                    if (isDarkMode) "535353" else "eeeeee")
             )
             .setIncludeOwnLicense(true)
             .build()

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--GREY-->
+
+    <style name="ThemeColorGrey">
+        <item name="colorAccent">@color/grey_200</item>
+    </style>
+    <style name="ThemeColorGreyLight">
+        <item name="colorAccent">@color/grey_700</item>
+    </style>
+
+    <!--RED-->
+
+    <style name="ThemeColorRed">
+        <item name="colorAccent">@color/red_900</item>
+    </style>
+    <style name="ThemeColorRedLight">
+        <item name="colorAccent">@color/red_600</item>
+    </style>
+
+    <!--DEEP PURPLE-->
+
+    <style name="ThemeColorDeepPurple">
+        <item name="colorAccent">@color/deep_purple_A100</item>
+    </style>
+    <style name="ThemeColorDeepPurpleLight">
+        <item name="colorAccent">@color/deep_purple_A400</item>
+    </style>
+
+    <!--LIGHT BLUE-->
+
+    <style name="ThemeColorLightBlue">
+        <item name="colorAccent">@color/light_blue_A200</item>
+    </style>
+    <style name="ThemeColorLightBlueLight">
+        <item name="colorAccent">@color/light_blue_A700</item>
+    </style>
+
+    <!--GREEN-->
+
+    <style name="ThemeColorGreen">
+        <item name="colorAccent">@color/green_A200</item>
+    </style>
+    <style name="ThemeColorGreenLight">
+        <item name="colorAccent">@color/green_A700</item>
+    </style>
+
+    <!--YELLOW-->
+
+    <style name="ThemeColorYellow">
+        <item name="colorAccent">@color/yellow_A200</item>
+    </style>
+    <style name="ThemeColorYellowLight">
+        <item name="colorAccent">@color/yellow_A700</item>
+    </style>
+
+    <!--DEEP ORANGE-->
+
+    <style name="ThemeColorDeepOrange">
+        <item name="colorAccent">@color/deep_orange_A100</item>
+    </style>
+    <style name="ThemeColorDeepOrangeLight">
+        <item name="colorAccent">@color/deep_orange_A700</item>
+    </style>
+
+    <!--BLUE GREY-->
+
+    <style name="ThemeColorBlueGrey">
+        <item name="colorAccent">@color/blue_grey_200</item>
+    </style>
+    <style name="ThemeColorBlueGreyLight">
+        <item name="colorAccent">@color/blue_grey_600</item>
+    </style>
+
+    <!--PINK-->
+
+    <style name="ThemeColorPink">
+        <item name="colorAccent">@color/pink_A100</item>
+    </style>
+    <style name="ThemeColorPinkLight">
+        <item name="colorAccent">@color/pink_A400</item>
+    </style>
+
+    <!--INDIGO-->
+
+    <style name="ThemeColorIndigo">
+        <item name="colorAccent">@color/indigo_A100</item>
+    </style>
+    <style name="ThemeColorIndigoLight">
+        <item name="colorAccent">@color/indigo_A400</item>
+    </style>
+
+    <!--CYAN-->
+
+    <style name="ThemeColorCyan">
+        <item name="colorAccent">@color/cyan_A200</item>
+    </style>
+    <style name="ThemeColorCyanLight">
+        <item name="colorAccent">@color/cyan_A700</item>
+    </style>
+
+    <!--Light GREEN-->
+
+    <style name="ThemeColorLightGreen">
+        <item name="colorAccent">@color/light_green_A200</item>
+    </style>
+    <style name="ThemeColorLightGreenLight">
+        <item name="colorAccent">@color/light_green_A700</item>
+    </style>
+
+    <!--AMBER-->
+
+    <style name="ThemeColorAmber">
+        <item name="colorAccent">@color/amber_A200</item>
+    </style>
+    <style name="ThemeColorAmberLight">
+        <item name="colorAccent">@color/amber_A700</item>
+    </style>
+
+    <!--BROWN-->
+
+    <style name="ThemeColorBrown">
+        <item name="colorAccent">@color/brown_300</item>
+    </style>
+    <style name="ThemeColorBrownLight">
+        <item name="colorAccent">@color/brown_700</item>
+    </style>
+
+    <!--PURPLE-->
+
+    <style name="ThemeColorPurple">
+        <item name="colorAccent">@color/purple_200</item>
+    </style>
+    <style name="ThemeColorPurpleLight">
+        <item name="colorAccent">@color/purple_700</item>
+    </style>
+
+
+    <!--BLUE-->
+
+    <style name="ThemeColorBlue">
+        <item name="colorAccent">@color/blue_A100</item>
+    </style>
+    <style name="ThemeColorBlueLight">
+        <item name="colorAccent">@color/blue_A400</item>
+    </style>
+
+
+    <!--TEAL-->
+
+    <style name="ThemeColorTeal">
+        <item name="colorAccent">@color/teal_A200</item>
+    </style>
+    <style name="ThemeColorTealLight">
+        <item name="colorAccent">@color/teal_A700</item>
+    </style>
+
+    <!--LIME-->
+
+    <style name="ThemeColorLime">
+        <item name="colorAccent">@color/lime_A200</item>
+    </style>
+    <style name="ThemeColorLimeLight">
+        <item name="colorAccent">@color/lime_A700</item>
+    </style>
+
+    <!--ORANGE-->
+
+    <style name="ThemeColorOrange">
+        <item name="colorAccent">@color/orange_A200</item>
+    </style>
+    <style name="ThemeColorOrangeLight">
+        <item name="colorAccent">@color/orange_A700</item>
+    </style>
+
+
+</resources>
