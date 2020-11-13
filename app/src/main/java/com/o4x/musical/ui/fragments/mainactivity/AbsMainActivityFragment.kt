@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
+import code.name.monkey.appthemehelper.extensions.colorControlNormal
 import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
@@ -68,10 +69,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        ToolbarContentTintHelper.handleOnCreateOptionsMenu(mainActivity,
-//            mainActivity.toolbar,
-//            menu,
-//            ATHToolbarActivity.getToolbarBackgroundColor(mainActivity.toolbar))
+        ToolbarContentTintHelper.tintAllIcons(menu, colorControlNormal())
         super.onCreateOptionsMenu(menu, inflater)
     }
 
