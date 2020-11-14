@@ -138,31 +138,29 @@ class LibraryViewModel(
 
 
             GlideLoader.with(App.getContext())
-                .withListener(
-                    object : PaletteTargetListener(App.getContext()) {
-                        override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
-                            if (resource == null) return
-
-                            val bitmap = if (isDarkMode ==
-                                ColorUtil.isColorDark(colors.backgroundColor)
-                            ) {
-                                CoverUtil.addGradientTo(resource)
-                            } else {
-                                CoverUtil.doubleGradient(
-                                    colors.backgroundColor,
-                                    colors.mightyColor
-                                )
-                            }
-
-                            posterBitmap.postValue(bitmap)
-                        }
-                    }
-                ).load(songs.random())
+                .load(songs.random())
                 .into(
                     CustomBitmapTarget(
-                        Util.getMaxScreenSize(), Util.getMaxScreenSize(),
+                        Util.getMaxScreenSize(), Util.getMaxScreenSize()
                     )
-                )
+                ).setListener(object : PaletteTargetListener(App.getContext()) {
+                    override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
+                        if (resource == null) return
+
+                        val bitmap = if (isDarkMode ==
+                            ColorUtil.isColorDark(colors.backgroundColor)
+                        ) {
+                            CoverUtil.addGradientTo(resource)
+                        } else {
+                            CoverUtil.doubleGradient(
+                                colors.backgroundColor,
+                                colors.mightyColor
+                            )
+                        }
+
+                        posterBitmap.postValue(bitmap)
+                    }
+                })
         }
     }
 

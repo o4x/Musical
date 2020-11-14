@@ -103,7 +103,9 @@ public class AppWidgetSmall extends BaseAppWidget {
                 }
 
                 target = GlideLoader.with(service)
-                        .withListener(new PaletteTargetListener(service) {
+                        .load(song)
+                        .into(new CustomBitmapTarget(imageSize, imageSize))
+                        .setListener(new PaletteTargetListener(service) {
                             @Override
                             public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
                                 update(resource, colors.getBackgroundColor());
@@ -124,9 +126,7 @@ public class AppWidgetSmall extends BaseAppWidget {
 
                                 pushUpdate(appContext, appWidgetIds, appWidgetView);
                             }
-                        })
-                        .load(song)
-                        .into(new CustomBitmapTarget(imageSize, imageSize));
+                        });
             }
         });
     }

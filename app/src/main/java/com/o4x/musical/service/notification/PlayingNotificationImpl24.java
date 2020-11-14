@@ -52,7 +52,10 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
         service.runOnNewThread(() ->
                 GlideLoader.with(service)
-                        .withListener(new PaletteTargetListener(service) {
+                        .load(song)
+                        .into(new CustomBitmapTarget(
+                                bigNotificationImageSize, bigNotificationImageSize))
+                        .setListener(new PaletteTargetListener(service) {
                             @Override
                             public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
                                 update(resource, colors.getBackgroundColor());
@@ -96,9 +99,6 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
                                 updateNotifyModeAndPostNotification(builder.build());
                             }
                         })
-                        .load(song)
-                        .into(new CustomBitmapTarget(
-                                bigNotificationImageSize, bigNotificationImageSize))
         );
     }
 
