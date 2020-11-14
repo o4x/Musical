@@ -35,6 +35,7 @@ import com.o4x.musical.R;
 
 import java.util.List;
 
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 import code.name.monkey.appthemehelper.util.ATHUtil;
 import code.name.monkey.appthemehelper.util.ColorUtil;
 
@@ -193,7 +194,7 @@ public class MediaNotificationProcessor {
             int width = drawable.getIntrinsicWidth();
             int height = drawable.getIntrinsicHeight();
             int area = width * height;
-            if (area > RESIZE_BITMAP_AREA) {
+//            if (area > RESIZE_BITMAP_AREA) {
                 double factor = Math.sqrt((float) RESIZE_BITMAP_AREA / area);
                 width = (int) (factor * width);
                 height = (int) (factor * height);
@@ -231,7 +232,7 @@ public class MediaNotificationProcessor {
                 int foregroundColor = selectForegroundColor(backgroundColor, palette);
                 ensureColors(backgroundColor, foregroundColor);
             }
-        }
+//        }
 
     }
 
@@ -476,22 +477,21 @@ public class MediaNotificationProcessor {
                 backgroundColor);
     }
 
-    // composite for remove alpha
-
+    // remove alpha
     public int getPrimaryTextColor() {
-        return ColorUtils.compositeColors(primaryTextColor, Color.BLACK);
+        return ColorExtKt.withAlpha(primaryTextColor, 1f);
     }
 
     public int getSecondaryTextColor() {
-        return ColorUtils.compositeColors(secondaryTextColor, Color.BLACK);
+        return ColorExtKt.withAlpha(secondaryTextColor, 1f);
     }
 
     public int getActionBarColor() {
-        return ColorUtils.compositeColors(actionBarColor, Color.WHITE);
+        return ColorExtKt.withAlpha(actionBarColor, 1f);
     }
 
     public int getBackgroundColor() {
-        return ColorUtils.compositeColors(backgroundColor, Color.WHITE);
+        return ColorExtKt.withAlpha(backgroundColor, 1f);
     }
 
     boolean isWhiteColor(int color) {
@@ -499,7 +499,7 @@ public class MediaNotificationProcessor {
     }
 
     public int getMightyColor() {
-        boolean isDarkBg = ColorUtil.INSTANCE.isColorLight(ATHUtil.INSTANCE.resolveColor(context, R.attr.colorSurface));
+        boolean isDarkBg = ColorUtil.INSTANCE.isColorLight(ColorExtKt.surfaceColor(context));
         if (isDarkBg) {
             if (isColorLight(backgroundColor)) {
                 return primaryTextColor;

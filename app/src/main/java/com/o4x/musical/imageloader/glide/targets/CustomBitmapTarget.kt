@@ -16,8 +16,9 @@ open class CustomBitmapTarget(
 ) {
 
     private var listener: AbsPaletteTargetListener? = null
-    fun setListener(listener: AbsPaletteTargetListener?) {
+    fun setListener(listener: AbsPaletteTargetListener?): CustomBitmapTarget {
         this.listener = listener
+        return this
     }
 
     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {

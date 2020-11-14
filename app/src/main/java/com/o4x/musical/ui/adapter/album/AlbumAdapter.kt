@@ -60,7 +60,7 @@ open class AlbumAdapter(
 
     override fun loadImage(album: Album, holder: ViewHolder) {
         if (holder.image == null) return
-        getImageLoader(holder)
+        getImageLoader()
             .load(album)
             .into(holder.image!!)
     }

@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 import code.name.monkey.appthemehelper.util.ColorUtil;
 import code.name.monkey.appthemehelper.util.MaterialValueHelper;
 
@@ -71,28 +72,34 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     protected abstract VH createViewHolder(@NonNull View view, int viewType);
 
     @Override
+    public void onViewRecycled(@NonNull VH holder) {
+        super.onViewRecycled(holder);
+        setColors(ColorExtKt.cardColor(activity), holder);
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         final I data = dataSet.get(position);
 
         boolean isChecked = isChecked(data);
         holder.itemView.setActivated(isChecked);
 
-        loadImage(data, holder);
-    }
-
-    protected abstract void loadImage(I data, final VH holder);
-
-    protected GlideLoader.GlideBuilder getImageLoader(final VH holder) {
-        return GlideLoader.with(activity)
-                .withListener(
-                        PreferenceUtil.isColoredFooter() ?
+        holder.image.setBitmapListener(
+                PreferenceUtil.isColoredFooter() ?
                         new PaletteTargetListener(activity) {
                             @Override
                             public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
                                 setColors(colors.getBackgroundColor(), holder);
                             }
                         } : null
-                );
+        );
+        loadImage(data, holder);
+    }
+
+    protected abstract void loadImage(I data, final VH holder);
+
+    protected GlideLoader.GlideBuilder getImageLoader() {
+        return GlideLoader.with(activity);
     }
 
     protected void setColors(int color, VH holder) {

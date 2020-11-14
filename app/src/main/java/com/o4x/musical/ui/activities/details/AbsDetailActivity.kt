@@ -2,6 +2,7 @@ package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,8 +51,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
         super.onCreate(savedInstanceState)
         setDrawUnderStatusBar()
 
-        imageHeight = Util.getScreenWidth()
-        colors = MediaNotificationProcessor(this)
+        setupImage()
         initObserver()
         setUpToolBar()
         setupViews()
@@ -72,6 +72,18 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
             initObserver()
             setResult(RESULT_OK)
         }
+    }
+
+    private fun setupImage() {
+        imageHeight = Util.getScreenWidth()
+        colors = MediaNotificationProcessor(this)
+        image.drawableListener =
+            object : NotificationPaletteTargetListener(this) {
+                override fun onColorReady(colors: MediaNotificationProcessor) {
+                    setAllColors(colors)
+                    setMiniPlayerColor(colors)
+                }
+            }
     }
 
     private fun setUpToolBar() {
@@ -128,19 +140,17 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     }
 
 
-    fun setColors(color: Int, colors: MediaNotificationProcessor?) {
-        if (colors != null) {
-            this.colors = colors
-            songAdapter?.colors = colors
+    fun setAllColors(colors: MediaNotificationProcessor) {
+        this.colors = colors
+        songAdapter?.colors = colors
 
-            ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.primaryTextColor, this)
-            setNavigationBarColor(colors.backgroundColor)
-            setTaskDescriptionColor(colors.backgroundColor)
+        ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.primaryTextColor, this)
+        setNavigationBarColor(colors.backgroundColor)
+        setTaskDescriptionColor(colors.backgroundColor)
 
-            ViewUtil.setScrollBarColor(song_recycler, colors.secondaryTextColor.withAlpha(.3f))
-        }
+        ViewUtil.setScrollBarColor(song_recycler, colors.secondaryTextColor.withAlpha(.3f))
 
-        findViewById<View>(android.R.id.content).rootView.setBackgroundColor(color)
+        findViewById<View>(android.R.id.content).rootView.setBackgroundColor(colors.backgroundColor)
     }
 
     private fun setAppbarAlpha(alpha: Float) {
@@ -158,12 +168,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     fun getImageLoader(): GlideLoader.GlideBuilder {
         // if we use this for context glide on load sync in rotation will crashed
         return GlideLoader.with(App.getContext())
-            .withListener(object : NotificationPaletteTargetListener(this) {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
-                    setColors(colors.backgroundColor, colors)
-                    setMiniPlayerColor(colors)
-                }
-            })
     }
 
     abstract fun initObserver()

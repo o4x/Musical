@@ -14,7 +14,6 @@ import com.o4x.musical.drawables.CharCoverDrawable
 import com.o4x.musical.drawables.CoverData
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
-import com.o4x.musical.imageloader.glide.targets.AbsImageBitmapTarget
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.imageloader.glide.targets.palette.AbsPaletteTargetListener
 import com.o4x.musical.imageloader.model.AudioFileCover
@@ -31,11 +30,11 @@ class GlideLoader {
 
         @JvmStatic
         fun with(context: Context): GlideBuilder {
-            return GlideBuilder(context, GlideApp.with(context).asBitmap())
+            return GlideBuilder(GlideApp.with(context).asBitmap())
         }
     }
 
-    class GlideBuilder(context: Context, requestBuilder: RequestBuilder<Bitmap>) {
+    class GlideBuilder(requestBuilder: RequestBuilder<Bitmap>) {
 
         private var requestBuilder: RequestBuilder<Bitmap> = requestBuilder
             .diskCacheStrategy(
@@ -47,17 +46,6 @@ class GlideLoader {
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
 //            .priority(Priority.LOW)
 
-        private var listener =
-            AbsPaletteTargetListener(context)
-
-
-
-        fun withListener(listenerAbs: AbsPaletteTargetListener?): GlideBuilder {
-            listenerAbs?.let {
-                this.listener = it
-            }
-            return this
-        }
 
         fun load(song: Song): GlideFinisher {
             return if (PreferenceUtil.isIgnoreMediaStore()) {
@@ -68,7 +56,6 @@ class GlideLoader {
                     requestBuilder
                         .signature(createSignature(song))
                         .load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId)),
-                    listener,
                     CoverData.from(song)
                 )
             }
@@ -83,7 +70,6 @@ class GlideLoader {
             return GlideFinisher(
                 requestBuilder
                     .load(audioFileCover),
-                listener,
                 CoverData.from(audioFileCover)
             )
         }
@@ -97,14 +83,12 @@ class GlideLoader {
                     requestBuilder
                         .signature(createSignature(customImageUtil))
                         .load(customImageUtil.file),
-                    listener,
                     coverData
                 )
             } else {
                 GlideFinisher(
                     requestBuilder
                         .load(multiImage),
-                    listener,
                     coverData
                 )
             }
@@ -121,7 +105,6 @@ class GlideLoader {
                     requestBuilder
                         .signature(createSignature(customImageUtil))
                         .load(customImageUtil.file),
-                    listener,
                     coverData
                 )
             else
@@ -129,7 +112,6 @@ class GlideLoader {
                     requestBuilder
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .load(ArtistImage(artist)),
-                    listener,
                     coverData
                 )
         }
@@ -157,7 +139,6 @@ class GlideLoader {
                 requestBuilder
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .load(url),
-                listener,
                 CoverData.from(url, name)
             )
         }
@@ -174,7 +155,6 @@ class GlideLoader {
     @SuppressLint("CheckResult")
     class GlideFinisher(
         private val requestBuilder: RequestBuilder<Bitmap>,
-        private val listener: AbsPaletteTargetListener,
         coverData: CoverData?
     ) {
 
@@ -191,18 +171,11 @@ class GlideLoader {
         fun into(image: ImageView?) {
             image?.let {
                 requestBuilder
-                    .into(
-                        AbsImageBitmapTarget(
-                            it,
-                            listener
-                        )
-                    )
+                    .into(it)
             }
         }
 
-        fun into(target: CustomBitmapTarget): Target<Bitmap> {
-            target.setListener(listener)
-
+        fun into(target: CustomBitmapTarget): CustomBitmapTarget {
             return requestBuilder
                 .into(target)
         }
