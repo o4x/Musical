@@ -9,7 +9,7 @@ import android.graphics.Bitmap
 import android.media.AudioManager
 import android.media.audiofx.AudioEffect
 import android.os.*
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.provider.MediaStore
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -32,8 +32,6 @@ import com.o4x.musical.model.Song.Companion.emptySong
 import com.o4x.musical.provider.HistoryStore
 import com.o4x.musical.provider.QueueStore.Companion.getInstance
 import com.o4x.musical.provider.SongPlayCountStore
-import com.o4x.musical.service.MusicService
-import com.o4x.musical.service.MusicService.SongPlayCountHelper
 import com.o4x.musical.service.notification.PlayingNotification
 import com.o4x.musical.service.notification.PlayingNotificationImpl
 import com.o4x.musical.service.notification.PlayingNotificationImpl24
@@ -63,7 +61,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     private val appWidgetCard = AppWidgetCard.getInstance()
     private val playback: Playback by lazy { MultiPlayer(this) }
     var playingQueue = mutableListOf<Song>()
-        private set
     private var originalPlayingQueue = mutableListOf<Song>()
     @JvmField
     var position = -1
@@ -75,35 +72,35 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     private var queuesRestored = false
     private var pausedByTransientLossOfFocus = false
     private var playingNotification: PlayingNotification? = null
-    private var audioManager: AudioManager? = null
-        private get() {
-            if (field == null) {
-                field = getSystemService(AUDIO_SERVICE) as AudioManager
-            }
-            return field
-        }
-    var mediaSession: MediaSessionCompat? = null
-        private set
+    private val audioManager: AudioManager by lazy { getSystemService(AUDIO_SERVICE) as AudioManager }
+    lateinit var mediaSession: MediaSessionCompat
     private val wakeLock: PowerManager.WakeLock by lazy {
         (getSystemService(POWER_SERVICE) as PowerManager)
             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
     }
     private var countDownTimerPausable: CountDownTimerPausable? = null
     private val playerHandler: PlaybackHandler by lazy {
-        PlaybackHandler(this, musicPlayerHandlerThread!!.looper)
+        PlaybackHandler(this, musicPlayerHandlerThread.looper)
     }
     private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        playerHandler!!.obtainMessage(
+        playerHandler.obtainMessage(
             FOCUS_CHANGE, focusChange, 0
         ).sendToTarget()
     }
-    private var queueSaveHandler: QueueSaveHandler? = null
+    private val queueSaveHandler: QueueSaveHandler by lazy {
+        QueueSaveHandler(this, queueSaveHandlerThread.looper)
+    }
     private val musicPlayerHandlerThread: HandlerThread by lazy {
         HandlerThread("PlaybackHandler")
     }
-    private var queueSaveHandlerThread: HandlerThread? = null
+    // queue saving needs to run on a separate thread so that it doesn't block the playback handler events
+    private val queueSaveHandlerThread: HandlerThread by lazy {
+        HandlerThread("QueueSaveHandler", Process.THREAD_PRIORITY_BACKGROUND)
+    }
     private val songPlayCountHelper = SongPlayCountHelper()
-    private var throttledSeekHandler: ThrottledSeekHandler? = null
+    private val throttledSeekHandler: ThrottledSeekHandler by lazy {
+        ThrottledSeekHandler(playerHandler)
+    }
     private var becomingNoisyReceiverRegistered = false
     private val becomingNoisyReceiverIntentFilter =
         IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
@@ -118,7 +115,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         MediaStoreObserver(playerHandler)
     }
     private var notHandledMetaChangedForCurrentTrack = false
-    private var uiThreadHandler: Handler? = null
+    private val uiThreadHandler by lazy {
+        Handler(Looper.getMainLooper())
+    }
+
     override fun onCreate() {
         super.onCreate()
         wakeLock.setReferenceCounted(false)
@@ -126,16 +126,12 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         playback.setCallbacks(this)
         setupMediaSession()
 
-        // queue saving needs to run on a separate thread so that it doesn't block the playback handler events
-        queueSaveHandlerThread =
-            HandlerThread("QueueSaveHandler", Process.THREAD_PRIORITY_BACKGROUND)
-        queueSaveHandlerThread!!.start()
-        queueSaveHandler = QueueSaveHandler(this, queueSaveHandlerThread!!.looper)
-        uiThreadHandler = Handler()
+
+        queueSaveHandlerThread.start()
         registerReceiver(widgetIntentReceiver, IntentFilter(APP_WIDGET_UPDATE))
         initNotification()
 
-        throttledSeekHandler = ThrottledSeekHandler(playerHandler)
+
         contentResolver.registerContentObserver(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             true,
@@ -188,7 +184,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         )
         registerOnSharedPreferenceChangedListener(this)
         restoreState()
-        mediaSession!!.isActive = true
+        mediaSession.isActive = true
         sendBroadcast(Intent("com.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_CREATED"))
     }
 
@@ -206,7 +202,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             mediaButtonReceiverComponentName,
             mediaButtonReceiverPendingIntent
         )
-        mediaSession!!.setCallback(object : MediaSessionCompat.Callback() {
+        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
             override fun onPlay() {
                 play()
             }
@@ -235,15 +231,14 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 return MediaButtonIntentReceiver.handleIntent(this@MusicService, mediaButtonEvent)
             }
         })
-        mediaSession!!.setMediaButtonReceiver(mediaButtonReceiverPendingIntent)
+        mediaSession.setMediaButtonReceiver(mediaButtonReceiverPendingIntent)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent != null) {
             if (intent.action != null) {
                 restoreQueuesAndPositionIfNecessary()
-                val action = intent.action
-                when (action) {
+                when (intent.action) {
                     ACTION_TOGGLE_PAUSE -> if (isPlaying) {
                         pause()
                     } else {
@@ -257,10 +252,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                             intent.getIntExtra(INTENT_EXTRA_SHUFFLE_MODE, getShuffleMode())
                         if (playlist != null) {
                             val playlistSongs = playlist.songs()
-                            if (!playlistSongs.isEmpty()) {
+                            if (playlistSongs.isNotEmpty()) {
                                 if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
                                     var startPosition = 0
-                                    if (!playlistSongs.isEmpty()) {
+                                    if (playlistSongs.isNotEmpty()) {
                                         startPosition = Random().nextInt(playlistSongs.size)
                                     }
                                     openQueue(playlistSongs, startPosition, true)
@@ -302,12 +297,12 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             unregisterReceiver(becomingNoisyReceiver)
             becomingNoisyReceiverRegistered = false
         }
-        mediaSession!!.isActive = false
+        mediaSession.isActive = false
         quit()
         releaseResources()
-        contentResolver.unregisterContentObserver(mediaStoreObserver!!)
+        contentResolver.unregisterContentObserver(mediaStoreObserver)
         unregisterOnSharedPreferenceChangedListener(this)
-        wakeLock!!.release()
+        wakeLock.release()
         sendBroadcast(Intent("com.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_DESTROYED"))
     }
 
@@ -316,16 +311,13 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     private class QueueSaveHandler(service: MusicService, looper: Looper) : Handler(looper) {
-        private val mService: WeakReference<MusicService>
+        private val mService: WeakReference<MusicService> = WeakReference(service)
+
         override fun handleMessage(msg: Message) {
             val service = mService.get()
             when (msg.what) {
                 SAVE_QUEUES -> service!!.saveQueuesImpl()
             }
-        }
-
-        init {
-            mService = WeakReference(service)
         }
     }
 
@@ -343,15 +335,15 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             .putInt(SAVED_POSITION_IN_TRACK, songProgressMillis).apply()
     }
 
-    fun saveState() {
+    private fun saveState() {
         saveQueues()
         savePosition()
         savePositionInTrack()
     }
 
     private fun saveQueues() {
-        queueSaveHandler!!.removeMessages(SAVE_QUEUES)
-        queueSaveHandler!!.sendEmptyMessage(SAVE_QUEUES)
+        queueSaveHandler.removeMessages(SAVE_QUEUES)
+        queueSaveHandler.sendEmptyMessage(SAVE_QUEUES)
     }
 
     private fun restoreState() {
@@ -361,8 +353,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             PreferenceManager.getDefaultSharedPreferences(this).getInt(SAVED_REPEAT_MODE, 0)
         handleAndSendChangeInternal(SHUFFLE_MODE_CHANGED)
         handleAndSendChangeInternal(REPEAT_MODE_CHANGED)
-        playerHandler!!.removeMessages(RESTORE_QUEUES)
-        playerHandler!!.sendEmptyMessage(RESTORE_QUEUES)
+        playerHandler.removeMessages(RESTORE_QUEUES)
+        playerHandler.sendEmptyMessage(RESTORE_QUEUES)
     }
 
     @Synchronized
@@ -377,7 +369,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 PreferenceManager.getDefaultSharedPreferences(this).getInt(
                     SAVED_POSITION_IN_TRACK, -1
                 )
-            if (restoredQueue.size > 0 && restoredQueue.size == restoredOriginalQueue.size && restoredPosition != -1) {
+            if (restoredQueue.isNotEmpty() && restoredQueue.size == restoredOriginalQueue.size && restoredPosition != -1) {
                 originalPlayingQueue = restoredOriginalQueue.toMutableList()
                 playingQueue = restoredQueue.toMutableList()
                 position = restoredPosition
@@ -396,32 +388,24 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         pause()
         playingNotification!!.stop()
         closeAudioEffectSession()
-        audioManager!!.abandonAudioFocus(audioFocusListener)
+        audioManager.abandonAudioFocus(audioFocusListener)
         stopSelf()
     }
 
     private fun releaseResources() {
-        playerHandler!!.removeCallbacksAndMessages(null)
-        if (Build.VERSION.SDK_INT >= 18) {
-            musicPlayerHandlerThread!!.quitSafely()
-        } else {
-            musicPlayerHandlerThread!!.quit()
-        }
-        queueSaveHandler!!.removeCallbacksAndMessages(null)
-        if (Build.VERSION.SDK_INT >= 18) {
-            queueSaveHandlerThread!!.quitSafely()
-        } else {
-            queueSaveHandlerThread!!.quit()
-        }
-        playback!!.release()
+        playerHandler.removeCallbacksAndMessages(null)
+        musicPlayerHandlerThread.quitSafely()
+        queueSaveHandler.removeCallbacksAndMessages(null)
+        queueSaveHandlerThread.quitSafely()
+        playback.release()
 //        playback = null
-        mediaSession!!.release()
+        mediaSession.release()
     }
 
     val isPlaying: Boolean
-        get() = playback != null && playback!!.isPlaying
+        get() = playback.isPlaying
 
-    fun getPosition(): Int {
+    private fun getPosition(): Int {
         return position
     }
 
@@ -447,7 +431,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     private fun openCurrent(): Boolean {
         synchronized(this) {
             return try {
-                playback!!.setDataSource(getTrackUri(currentSong))
+                playback.setDataSource(getTrackUri(currentSong))
             } catch (e: Exception) {
                 false
             }
@@ -455,15 +439,15 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     private fun prepareNext() {
-        playerHandler!!.removeMessages(PREPARE_NEXT)
-        playerHandler!!.obtainMessage(PREPARE_NEXT).sendToTarget()
+        playerHandler.removeMessages(PREPARE_NEXT)
+        playerHandler.obtainMessage(PREPARE_NEXT).sendToTarget()
     }
 
     private fun prepareNextImpl(): Boolean {
         synchronized(this) {
             return try {
                 val nextPosition = getNextPosition(false)
-                playback!!.setNextDataSource(getTrackUri(getSongAt(nextPosition)))
+                playback.setNextDataSource(getTrackUri(getSongAt(nextPosition)))
                 this.nextPosition = nextPosition
                 true
             } catch (e: Exception) {
@@ -474,37 +458,37 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     private fun closeAudioEffectSession() {
         val audioEffectsIntent = Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION)
-        audioEffectsIntent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, playback!!.audioSessionId)
+        audioEffectsIntent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, playback.audioSessionId)
         audioEffectsIntent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, packageName)
         sendBroadcast(audioEffectsIntent)
     }
 
     private fun requestFocus(): Boolean {
-        return audioManager!!.requestAudioFocus(
+        return audioManager.requestAudioFocus(
             audioFocusListener,
             AudioManager.STREAM_MUSIC,
             AudioManager.AUDIOFOCUS_GAIN
         ) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
 
-    fun initNotification() {
+    private fun initNotification() {
         playingNotification =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isClassicNotification) {
                 PlayingNotificationImpl24()
             } else {
                 PlayingNotificationImpl()
             }
-        playingNotification!!.init(this)
+        playingNotification?.init(this)
     }
 
-    fun updateNotification() {
+    private fun updateNotification() {
         if (playingNotification != null && currentSong.id != -1L) {
-            playingNotification!!.update()
+            playingNotification?.update()
         }
     }
 
     private fun updateMediaSessionPlaybackState() {
-        mediaSession!!.setPlaybackState(
+        mediaSession.setPlaybackState(
             PlaybackStateCompat.Builder()
                 .setActions(MEDIA_SESSION_ACTIONS)
                 .setState(
@@ -518,7 +502,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     private fun updateMediaSessionMetaData() {
         val song = currentSong
         if (song.id == -1L) {
-            mediaSession!!.setMetadata(null)
+            mediaSession.setMetadata(null)
             return
         }
         val metaData = MediaMetadataCompat.Builder()
@@ -546,27 +530,27 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                         override fun setResource(resource: Bitmap) {
                             super.setResource(resource)
                             metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource)
-                            mediaSession!!.setMetadata(metaData.build())
+                            mediaSession.setMetadata(metaData.build())
                         }
                     })
             }
         } else {
-            mediaSession!!.setMetadata(metaData.build())
+            mediaSession.setMetadata(metaData.build())
         }
     }
 
-    fun runOnUiThread(runnable: Runnable?) {
-        uiThreadHandler!!.post(runnable!!)
+    fun runOnUiThread(runnable: Runnable) {
+        uiThreadHandler.post(runnable)
     }
 
-    fun runOnNewThread(runnable: Runnable?) {
+    fun runOnNewThread(runnable: Runnable) {
         Thread(runnable).start()
     }
 
     val currentSong: Song
         get() = getSongAt(getPosition())
 
-    fun getSongAt(position: Int): Song {
+    private fun getSongAt(position: Int): Song {
         return if (position >= 0 && position < playingQueue.size) {
             playingQueue[position]
         } else {
@@ -574,7 +558,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         }
     }
 
-    fun getNextPosition(force: Boolean): Int {
+    private fun getNextPosition(force: Boolean): Int {
         var position = getPosition() + 1
         when (getRepeatMode()) {
             REPEAT_MODE_ALL -> if (isLastTrack) {
@@ -598,13 +582,13 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     private val isLastTrack: Boolean
-        private get() = getPosition() == playingQueue.size - 1
+        get() = getPosition() == playingQueue.size - 1
 
     fun getRepeatMode(): Int {
         return repeatMode
     }
 
-    fun setRepeatMode(repeatMode: Int) {
+    private fun setRepeatMode(repeatMode: Int) {
         when (repeatMode) {
             REPEAT_MODE_NONE, REPEAT_MODE_ALL, REPEAT_MODE_THIS -> {
                 this.repeatMode = repeatMode
@@ -618,7 +602,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun openQueue(playingQueue: List<Song>?, startPosition: Int, startPlaying: Boolean) {
-        if (playingQueue != null && !playingQueue.isEmpty() && startPosition >= 0 && startPosition < playingQueue.size) {
+        if (playingQueue != null && playingQueue.isNotEmpty() && startPosition >= 0 && startPosition < playingQueue.size) {
             // it is important to copy the playing queue here first as we might add/remove songs later
             originalPlayingQueue = ArrayList(playingQueue)
             this.playingQueue = ArrayList(originalPlayingQueue)
@@ -708,12 +692,16 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             val tmpSong: Song = originalPlayingQueue.removeAt(from)
             originalPlayingQueue.add(to, tmpSong)
         }
-        if (from > currentPosition && to <= currentPosition) {
-            position = currentPosition + 1
-        } else if (from < currentPosition && to >= currentPosition) {
-            position = currentPosition - 1
-        } else if (from == currentPosition) {
-            position = to
+        when {
+            currentPosition in to until from -> {
+                position = currentPosition + 1
+            }
+            currentPosition in (from + 1)..to -> {
+                position = currentPosition - 1
+            }
+            from == currentPosition -> {
+                position = to
+            }
         }
         notifyChange(QUEUE_CHANGED)
     }
@@ -727,14 +715,14 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     fun playSongAt(position: Int) {
         // handle this on the handlers thread to avoid blocking the ui thread
-        playerHandler!!.removeMessages(PLAY_SONG)
-        playerHandler!!.obtainMessage(PLAY_SONG, position, 0).sendToTarget()
+        playerHandler.removeMessages(PLAY_SONG)
+        playerHandler.obtainMessage(PLAY_SONG, position, 0).sendToTarget()
     }
 
-    fun setPosition(position: Int) {
+    private fun setPosition(position: Int) {
         // handle this on the handlers thread to avoid blocking the ui thread
-        playerHandler!!.removeMessages(SET_POSITION)
-        playerHandler!!.obtainMessage(SET_POSITION, position, 0).sendToTarget()
+        playerHandler.removeMessages(SET_POSITION)
+        playerHandler.obtainMessage(SET_POSITION, position, 0).sendToTarget()
     }
 
     private fun playSongAtImpl(position: Int) {
@@ -748,8 +736,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     fun pause() {
         pausedByTransientLossOfFocus = false
-        if (playback!!.isPlaying) {
-            playback!!.pause()
+        if (playback.isPlaying) {
+            playback.pause()
             notifyChange(PLAY_STATE_CHANGED)
         }
     }
@@ -757,11 +745,11 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     fun play() {
         synchronized(this) {
             if (requestFocus()) {
-                if (!playback!!.isPlaying) {
-                    if (!playback!!.isInitialized) {
+                if (!playback.isPlaying) {
+                    if (!playback.isInitialized) {
                         playSongAt(getPosition())
                     } else {
-                        playback!!.start()
+                        playback.start()
                         if (!becomingNoisyReceiverRegistered) {
                             registerReceiver(
                                 becomingNoisyReceiver,
@@ -776,8 +764,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                         notifyChange(PLAY_STATE_CHANGED)
 
                         // fixes a bug where the volume would stay ducked because the AudioManager.AUDIOFOCUS_GAIN event is not sent
-                        playerHandler!!.removeMessages(DUCK)
-                        playerHandler!!.sendEmptyMessage(UNDUCK)
+                        playerHandler.removeMessages(DUCK)
+                        playerHandler.sendEmptyMessage(UNDUCK)
                     }
                 }
             } else {
@@ -790,11 +778,11 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         }
     }
 
-    fun playSongs(songs: List<Song>?, shuffleMode: Int) {
-        if (songs != null && !songs.isEmpty()) {
+    fun playSongs(songs: List<Song>, shuffleMode: Int) {
+        if (songs.isNotEmpty()) {
             if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
                 var startPosition = 0
-                if (!songs.isEmpty()) {
+                if (songs.isNotEmpty()) {
                     startPosition = Random().nextInt(songs.size)
                 }
                 openQueue(songs, startPosition, false)
@@ -820,7 +808,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         }
     }
 
-    fun getPreviousPosition(force: Boolean): Int {
+    private fun getPreviousPosition(force: Boolean): Int {
         var newPosition = getPosition() - 1
         when (repeatMode) {
             REPEAT_MODE_ALL -> if (newPosition < 0) {
@@ -844,9 +832,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     val songProgressMillis: Int
-        get() = playback!!.position()
+        get() = playback.position()
     val songDurationMillis: Int
-        get() = playback!!.duration()
+        get() = playback.duration()
 
     fun getQueueDurationMillis(position: Int): Long {
         var duration: Long = 0
@@ -857,8 +845,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     fun seek(millis: Int): Int {
         synchronized(this) {
             return try {
-                val newPosition = playback!!.seek(millis)
-                throttledSeekHandler!!.notifySeek()
+                val newPosition = playback.seek(millis)
+                throttledSeekHandler.notifySeek()
                 newPosition
             } catch (e: Exception) {
                 -1
@@ -882,11 +870,11 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         }
     }
 
-    fun getShuffleMode(): Int {
+    private fun getShuffleMode(): Int {
         return shuffleMode
     }
 
-    fun setShuffleMode(shuffleMode: Int) {
+    private fun setShuffleMode(shuffleMode: Int) {
         PreferenceManager.getDefaultSharedPreferences(this).edit()
             .putInt(SAVED_SHUFFLE_MODE, shuffleMode)
             .apply()
@@ -1008,16 +996,16 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     val audioSessionId: Int
-        get() = playback!!.audioSessionId
+        get() = playback.audioSessionId
 
     fun releaseWakeLock() {
-        if (wakeLock!!.isHeld) {
-            wakeLock!!.release()
+        if (wakeLock.isHeld) {
+            wakeLock.release()
         }
     }
 
-    fun acquireWakeLock(milli: Long) {
-        wakeLock!!.acquire(milli)
+    private fun acquireWakeLock(milli: Long) {
+        wakeLock.acquire(milli)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
@@ -1025,7 +1013,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             PreferenceUtil.GAPLESS_PLAYBACK -> if (sharedPreferences.getBoolean(key, false)) {
                 prepareNext()
             } else {
-                playback!!.setNextDataSource(null)
+                playback.setNextDataSource(null)
             }
             PreferenceUtil.ALBUM_ART_ON_LOCKSCREEN -> updateMediaSessionMetaData()
             PreferenceUtil.COLORED_NOTIFICATION -> updateNotification()
@@ -1037,16 +1025,16 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     override fun onTrackWentToNext() {
-        playerHandler!!.sendEmptyMessage(TRACK_WENT_TO_NEXT)
+        playerHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT)
     }
 
     override fun onTrackEnded() {
         acquireWakeLock(30000)
-        playerHandler!!.sendEmptyMessage(TRACK_ENDED)
+        playerHandler.sendEmptyMessage(TRACK_ENDED)
     }
 
     private class PlaybackHandler(service: MusicService, looper: Looper) : Handler(looper) {
-        private val mService: WeakReference<MusicService>
+        private val mService: WeakReference<MusicService> = WeakReference(service)
         private var currentDuckVolume = 1.0f
         override fun handleMessage(msg: Message) {
             val service = mService.get() ?: return
@@ -1062,7 +1050,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                     } else {
                         currentDuckVolume = 1f
                     }
-                    service.playback!!.setVolume(currentDuckVolume)
+                    service.playback.setVolume(currentDuckVolume)
                 }
                 UNDUCK -> {
                     if (audioDucking()) {
@@ -1146,9 +1134,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             }
         }
 
-        init {
-            mService = WeakReference(service)
-        }
     }
 
     inner class MusicBinder : Binder() {
