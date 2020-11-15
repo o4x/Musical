@@ -54,6 +54,10 @@ private val roomModule = module {
     }
 
     factory {
+        get<RetroDatabase>().queueDao()
+    }
+
+    factory {
         get<RetroDatabase>().playCountDao()
     }
 
