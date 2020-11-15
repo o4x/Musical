@@ -35,6 +35,7 @@ object PreferenceUtil {
     const val DELETE_CUSTOM_IMAGES = "delete_custom_images"
     const val CLASSIC_NOTIFICATION = "classic_notification"
     const val COLORED_NOTIFICATION = "colored_notification"
+    const val FILTER_SONG = "filter_song"
     const val SMART_PLAYLIST_LIMIT = "smart_playlist_limit"
     const val LANGUAGE_NAME = "language_name"
     const val ABOUT = "about"
@@ -69,6 +70,8 @@ object PreferenceUtil {
     const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
     const val INITIALIZED_BLACKLIST = "initialized_blacklist"
     const val REMEMBER_SHUFFLE = "remember_shuffle"
+    const val TOGGLE_SHUFFLE = "toggle_shuffle"
+    const val ALBUM_ARTISTS_ONLY = "album_artists_only"
 
     @JvmStatic
     fun isAllowedToDownloadMetadata(context: Context): Boolean {
@@ -148,8 +151,6 @@ object PreferenceUtil {
     fun rememberLastTab(): Boolean {
         return sharedPreferences.getBoolean(REMEMBER_LAST_TAB, true)
     }
-
-    val isScreenOnEnabled get() = sharedPreferences.getBoolean(KEEP_SCREEN_ON, false)
 
     val languageCode get() = sharedPreferences.getString(LANGUAGE_NAME, "auto")
 
