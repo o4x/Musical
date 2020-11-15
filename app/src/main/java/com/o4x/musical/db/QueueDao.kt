@@ -20,7 +20,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.o4x.musical.db.QueueEntity
 
 @Dao
 interface QueueDao {
@@ -68,20 +67,20 @@ interface QueueDao {
     fun insert(queue: QueueEntity)
 
     @Query("SELECT * FROM queue_songs")
-    fun getQueueSongs(): LiveData<List<SongEntity>>
+    fun getQueueSongs(): LiveData<List<QueueSongEntity>>
 
     @Query("SELECT * FROM queue_songs")
-    fun getQueueSongsSync(): List<SongEntity>
+    fun getQueueSongsSync(): List<QueueSongEntity>
 
     @Query("DELETE from queue_songs")
     fun clearQueueSongs()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllSongs(songs: List<SongEntity>)
+    fun insertAllSongs(songs: List<QueueSongEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSong(song: SongEntity)
+    fun insertSong(song: QueueSongEntity)
 
     @Delete
-    fun delete(song: SongEntity)
+    fun delete(song: QueueSongEntity)
 }
