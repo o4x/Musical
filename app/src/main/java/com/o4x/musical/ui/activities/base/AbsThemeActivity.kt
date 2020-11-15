@@ -23,7 +23,6 @@ abstract class AbsThemeActivity : ATHActivity() {
         setTheme()
         super.onCreate(savedInstanceState)
         theme.applyStyle(PreferenceUtil.getThemeColorRes(), true)
-        toggleScreenOn()
     }
 
     private fun setTheme() {
@@ -34,14 +33,6 @@ abstract class AbsThemeActivity : ATHActivity() {
 
     override fun updateTheme() {
         recreate()
-    }
-
-    private fun toggleScreenOn() {
-        if (PreferenceUtil.isScreenOnEnabled) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        } else {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
     }
 
     fun setDrawUnderBar() {
