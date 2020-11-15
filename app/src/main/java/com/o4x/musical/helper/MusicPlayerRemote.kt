@@ -44,6 +44,48 @@ object MusicPlayerRemote : KoinComponent {
     private val songRepository by inject<SongRepository>()
 
     @JvmStatic
+    fun bindToService(context: Context, callback: ServiceConnection): ServiceToken? {
+
+        var realActivity: Activity? = (context as Activity).parent
+        if (realActivity == null) {
+            realActivity = context
+        }
+
+        val contextWrapper = ContextWrapper(realActivity)
+        val intent = Intent(contextWrapper, MusicService::class.java)
+        try {
+            contextWrapper.startService(intent)
+        } catch (ignored: IllegalStateException) {
+            ContextCompat.startForegroundService(context, intent)
+        }
+        val binder = ServiceBinder(callback)
+
+        if (contextWrapper.bindService(
+                Intent().setClass(contextWrapper, MusicService::class.java),
+                binder,
+                Context.BIND_AUTO_CREATE
+            )
+        ) {
+            mConnectionMap[contextWrapper] = binder
+            return ServiceToken(contextWrapper)
+        }
+        return null
+    }
+
+    @JvmStatic
+    fun unbindFromService(token: ServiceToken?) {
+        if (token == null) {
+            return
+        }
+        val mContextWrapper = token.mWrappedContext
+        val mBinder = mConnectionMap.remove(mContextWrapper) ?: return
+        mContextWrapper.unbindService(mBinder)
+        if (mConnectionMap.isEmpty()) {
+            musicService = null
+        }
+    }
+
+    @JvmStatic
     fun notifyMediaStoreChanged() {
         musicService?.sendChangeInternal(MusicService.MEDIA_STORE_CHANGED)
     }
@@ -118,48 +160,6 @@ object MusicPlayerRemote : KoinComponent {
     @JvmStatic
     val isServiceConnected: Boolean
         get() = musicService != null
-
-    @JvmStatic
-    fun bindToService(context: Context, callback: ServiceConnection): ServiceToken? {
-
-        var realActivity: Activity? = (context as Activity).parent
-        if (realActivity == null) {
-            realActivity = context
-        }
-
-        val contextWrapper = ContextWrapper(realActivity)
-        val intent = Intent(contextWrapper, MusicService::class.java)
-        try {
-            contextWrapper.startService(intent)
-        } catch (ignored: IllegalStateException) {
-            ContextCompat.startForegroundService(context, intent)
-        }
-        val binder = ServiceBinder(callback)
-
-        if (contextWrapper.bindService(
-                Intent().setClass(contextWrapper, MusicService::class.java),
-                binder,
-                Context.BIND_AUTO_CREATE
-            )
-        ) {
-            mConnectionMap[contextWrapper] = binder
-            return ServiceToken(contextWrapper)
-        }
-        return null
-    }
-
-    @JvmStatic
-    fun unbindFromService(token: ServiceToken?) {
-        if (token == null) {
-            return
-        }
-        val mContextWrapper = token.mWrappedContext
-        val mBinder = mConnectionMap.remove(mContextWrapper) ?: return
-        mContextWrapper.unbindService(mBinder)
-        if (mConnectionMap.isEmpty()) {
-            musicService = null
-        }
-    }
 
     @JvmStatic
     private fun getFilePathFromUri(context: Context, uri: Uri): String? {
