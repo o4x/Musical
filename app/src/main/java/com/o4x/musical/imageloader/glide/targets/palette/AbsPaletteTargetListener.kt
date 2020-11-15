@@ -7,6 +7,8 @@ open class AbsPaletteTargetListener(val context: Context) {
 
     @JvmField
     var isSync = false
+    @JvmField
+    var loadPlaceholderPalette = false
 
     open fun onResourceReady(resource: Bitmap?) {}
 }

@@ -54,7 +54,7 @@ class PlaylistAdapter(
 
         playlist.getSongsLive().observe(holder.itemView.context as LifecycleOwner, {
             holder.text?.text = MusicUtil.getSongCountString(activity, it.size)
-            getImageLoader().load(playlist, it).into(holder.image)
+            getImageLoader(holder).load(playlist, it).into(holder.image)
         })
 
 

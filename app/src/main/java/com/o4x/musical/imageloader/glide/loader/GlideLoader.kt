@@ -15,6 +15,7 @@ import com.o4x.musical.drawables.CoverData
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
+import com.o4x.musical.imageloader.glide.targets.PalettableImageTarget
 import com.o4x.musical.imageloader.glide.targets.palette.AbsPaletteTargetListener
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.MultiImage
@@ -30,11 +31,13 @@ class GlideLoader {
 
         @JvmStatic
         fun with(context: Context): GlideBuilder {
-            return GlideBuilder(GlideApp.with(context).asBitmap())
+            return GlideBuilder(context, GlideApp.with(context).asBitmap())
         }
     }
 
-    class GlideBuilder(requestBuilder: RequestBuilder<Bitmap>) {
+    class GlideBuilder(val context: Context, requestBuilder: RequestBuilder<Bitmap>) {
+
+        private var listener = AbsPaletteTargetListener(context)
 
         private var requestBuilder: RequestBuilder<Bitmap> = requestBuilder
             .diskCacheStrategy(
@@ -46,6 +49,14 @@ class GlideLoader {
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
 //            .priority(Priority.LOW)
 
+        fun withListener(listener: AbsPaletteTargetListener?): GlideBuilder {
+            if (listener == null) {
+                this.listener = AbsPaletteTargetListener(context)
+            } else {
+                this.listener = listener
+            }
+            return this
+        }
 
         fun load(song: Song): GlideFinisher {
             return if (PreferenceUtil.isIgnoreMediaStore()) {
@@ -56,7 +67,8 @@ class GlideLoader {
                     requestBuilder
                         .signature(createSignature(song))
                         .load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId)),
-                    CoverData.from(song)
+                    CoverData.from(song),
+                    listener
                 )
             }
         }
@@ -70,7 +82,8 @@ class GlideLoader {
             return GlideFinisher(
                 requestBuilder
                     .load(audioFileCover),
-                CoverData.from(audioFileCover)
+                CoverData.from(audioFileCover),
+                listener
             )
         }
 
@@ -83,13 +96,15 @@ class GlideLoader {
                     requestBuilder
                         .signature(createSignature(customImageUtil))
                         .load(customImageUtil.file),
-                    coverData
+                    coverData,
+                    listener
                 )
             } else {
                 GlideFinisher(
                     requestBuilder
                         .load(multiImage),
-                    coverData
+                    coverData,
+                    listener
                 )
             }
         }
@@ -105,14 +120,16 @@ class GlideLoader {
                     requestBuilder
                         .signature(createSignature(customImageUtil))
                         .load(customImageUtil.file),
-                    coverData
+                    coverData,
+                    listener
                 )
             else
                 GlideFinisher(
                     requestBuilder
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .load(ArtistImage(artist)),
-                    coverData
+                    coverData,
+                    listener
                 )
         }
 
@@ -139,7 +156,8 @@ class GlideLoader {
                 requestBuilder
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .load(url),
-                CoverData.from(url, name)
+                CoverData.from(url, name),
+                listener
             )
         }
 
@@ -155,7 +173,8 @@ class GlideLoader {
     @SuppressLint("CheckResult")
     class GlideFinisher(
         private val requestBuilder: RequestBuilder<Bitmap>,
-        coverData: CoverData?
+        coverData: CoverData?,
+        val listener: AbsPaletteTargetListener
     ) {
 
         init {
@@ -168,16 +187,19 @@ class GlideLoader {
             }
         }
 
-        fun into(image: ImageView?) {
+        fun into(image: ImageView?): PalettableImageTarget? {
             image?.let {
-                requestBuilder
-                    .into(it)
+                return requestBuilder
+                    .into(
+                        PalettableImageTarget(it).setListener(listener)
+                    )
             }
+            return null
         }
 
         fun into(target: CustomBitmapTarget): CustomBitmapTarget {
             return requestBuilder
-                .into(target)
+                .into(target.setListener(listener))
         }
     }
 }
