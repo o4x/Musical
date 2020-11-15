@@ -77,13 +77,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     private fun setupImage() {
         imageHeight = Util.getScreenWidth()
         colors = MediaNotificationProcessor(this)
-        image.drawableListener =
-            object : NotificationPaletteTargetListener(this) {
-                override fun onColorReady(colors: MediaNotificationProcessor) {
-                    setAllColors(colors)
-                    setMiniPlayerColor(colors)
-                }
-            }
     }
 
     private fun setUpToolBar() {
@@ -168,6 +161,12 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
     fun getImageLoader(): GlideLoader.GlideBuilder {
         // if we use this for context glide on load sync in rotation will crashed
         return GlideLoader.with(App.getContext())
+            .withListener(object : NotificationPaletteTargetListener(this) {
+                override fun onColorReady(colors: MediaNotificationProcessor) {
+                    setAllColors(colors)
+                    setMiniPlayerColor(colors)
+                }
+            }.apply { loadPlaceholderPalette = true })
     }
 
     abstract fun initObserver()

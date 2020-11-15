@@ -83,23 +83,20 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
 
         boolean isChecked = isChecked(data);
         holder.itemView.setActivated(isChecked);
-
-        holder.image.setBitmapListener(
-                PreferenceUtil.isColoredFooter() ?
-                        new PaletteTargetListener(activity) {
-                            @Override
-                            public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
-                                setColors(colors.getBackgroundColor(), holder);
-                            }
-                        } : null
-        );
         loadImage(data, holder);
     }
 
     protected abstract void loadImage(I data, final VH holder);
 
-    protected GlideLoader.GlideBuilder getImageLoader() {
-        return GlideLoader.with(activity);
+    protected GlideLoader.GlideBuilder getImageLoader(@NonNull VH holder) {
+        return GlideLoader.with(activity)
+                .withListener(PreferenceUtil.isColoredFooter() ?
+                        new PaletteTargetListener(activity) {
+                            @Override
+                            public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
+                                setColors(colors.getBackgroundColor(), holder);
+                            }
+                        } : null);
     }
 
     protected void setColors(int color, VH holder) {

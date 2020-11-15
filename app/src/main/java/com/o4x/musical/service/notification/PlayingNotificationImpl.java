@@ -92,10 +92,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
                 }
 
                 target = GlideLoader.with(service)
-                        .load(song)
-                        .into(new CustomBitmapTarget(
-                                bigNotificationImageSize, bigNotificationImageSize))
-                        .setListener(new PaletteTargetListener(service) {
+                        .withListener(new PaletteTargetListener(service) {
                             @Override
                             public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
                                 update(resource, colors.getBackgroundColor());
@@ -148,7 +145,10 @@ public class PlayingNotificationImpl extends PlayingNotification {
                                 notificationLayoutBig.setImageViewBitmap(R.id.action_play_pause, playPause);
                             }
 
-                        });
+                        })
+                        .load(song)
+                        .into(new CustomBitmapTarget(
+                                bigNotificationImageSize, bigNotificationImageSize));
             }
         });
     }

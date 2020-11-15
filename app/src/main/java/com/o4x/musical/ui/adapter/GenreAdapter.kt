@@ -42,7 +42,7 @@ class GenreAdapter(
 
     override fun loadImage(genre: Genre?, holder: ViewHolder?) {
         if (holder?.image == null) return
-        getImageLoader()
+        getImageLoader(holder)
             .load(genre!!)
             .into(holder.image!!)
     }

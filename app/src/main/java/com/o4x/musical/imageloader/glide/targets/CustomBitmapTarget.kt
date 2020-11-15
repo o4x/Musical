@@ -16,6 +16,7 @@ open class CustomBitmapTarget(
 ) {
 
     private var listener: AbsPaletteTargetListener? = null
+    // Only use in glide loader
     fun setListener(listener: AbsPaletteTargetListener?): CustomBitmapTarget {
         this.listener = listener
         return this

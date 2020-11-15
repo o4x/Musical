@@ -66,7 +66,7 @@ public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
     @Override
     protected void loadImage(Song song, final ViewHolder holder) {
         if (holder.image == null) return;
-        getImageLoader()
+        getImageLoader(holder)
                 .load(song)
                 .into(holder.image);
     }

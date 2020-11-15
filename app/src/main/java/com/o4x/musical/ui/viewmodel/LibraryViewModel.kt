@@ -138,12 +138,7 @@ class LibraryViewModel(
 
 
             GlideLoader.with(App.getContext())
-                .load(songs.random())
-                .into(
-                    CustomBitmapTarget(
-                        Util.getMaxScreenSize(), Util.getMaxScreenSize()
-                    )
-                ).setListener(object : PaletteTargetListener(App.getContext()) {
+                .withListener(object : PaletteTargetListener(App.getContext()) {
                     override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
                         if (resource == null) return
 
@@ -161,6 +156,12 @@ class LibraryViewModel(
                         posterBitmap.postValue(bitmap)
                     }
                 })
+                .load(songs.random())
+                .into(
+                    CustomBitmapTarget(
+                        Util.getMaxScreenSize(), Util.getMaxScreenSize()
+                    )
+                )
         }
     }
 

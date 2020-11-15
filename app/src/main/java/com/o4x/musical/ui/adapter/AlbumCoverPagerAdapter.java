@@ -16,7 +16,6 @@ import com.o4x.musical.imageloader.glide.targets.palette.NotificationPaletteTarg
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
-import com.o4x.musical.views.SquareImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -82,7 +81,7 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         private Unbinder unbinder;
 
         @BindView(R.id.player_image)
-        SquareImageView albumCover;
+        ImageView albumCover;
 
         private boolean isColorReady;
         private MediaNotificationProcessor colors;
@@ -125,13 +124,13 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
 
         private void loadAlbumCover() {
-            albumCover.setDrawableListener(new NotificationPaletteTargetListener(requireContext()) {
-                @Override
-                public void onColorReady(@NotNull MediaNotificationProcessor colors) {
-                    setColor(colors);
-                }
-            });
             GlideLoader.with(requireContext())
+                    .withListener(new NotificationPaletteTargetListener(requireContext()) {
+                        @Override
+                        public void onColorReady(@NotNull MediaNotificationProcessor colors) {
+                            setColor(colors);
+                        }
+                    })
                     .load(song)
                     .into(albumCover);
         }
