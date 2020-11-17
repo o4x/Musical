@@ -42,4 +42,12 @@ val viewModules = module {
             genre
         )
     }
+
+    viewModel {
+        MainViewModel(get(), get(), get(), get(), get(), get())
+    }
+
+    viewModel {
+        NowPlayingViewModel(get())
+    }
 }
