@@ -39,7 +39,7 @@ interface SongRepository {
 
     fun songs(query: String): List<Song>
 
-    fun songsForIds(idList: LongArray): List<Song>
+    fun songs(idList: LongArray): List<Song>
 
     fun songsByFilePath(filePath: String): List<Song>
 
@@ -83,7 +83,7 @@ class RealSongRepository(private val context: Context) : SongRepository {
         return song(makeSongCursor(AudioColumns._ID + "=?", arrayOf(songId.toString())))
     }
 
-    override fun songsForIds(idList: LongArray): List<Song> {
+    override fun songs(idList: LongArray): List<Song> {
         var selection = "_id IN ("
         for (id in idList) {
             selection += "$id,"

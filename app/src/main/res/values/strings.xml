@@ -454,5 +454,7 @@
     <string name="copyright">Copyright</string>
     <string name="copyright_summary">© 2020</string>
     <string name="all_songs">All Songs</string>
+    <string name="media_playback">Media Playback</string>
+    <string name="media_playback_controls">Media playback controls</string>
 
 </resources>
