@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'com.google.gms.google-services'
 
 static def gitBranch() {
     def branch = 'GitHub'
@@ -234,4 +235,7 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-ui:$exo_player_version"
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
