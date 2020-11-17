@@ -39,6 +39,8 @@ interface SongRepository {
 
     fun songs(query: String): List<Song>
 
+    fun songsForIds(idList: LongArray): List<Song>
+
     fun songsByFilePath(filePath: String): List<Song>
 
     fun song(cursor: Cursor?): Song
@@ -79,6 +81,19 @@ class RealSongRepository(private val context: Context) : SongRepository {
 
     override fun song(songId: Long): Song {
         return song(makeSongCursor(AudioColumns._ID + "=?", arrayOf(songId.toString())))
+    }
+
+    override fun songsForIds(idList: LongArray): List<Song> {
+        var selection = "_id IN ("
+        for (id in idList) {
+            selection += "$id,"
+        }
+        if (idList.isNotEmpty()) {
+            selection = selection.substring(0, selection.length - 1)
+        }
+        selection += ")"
+
+        return songs(makeSongCursor(selection, null))
     }
 
     override fun songsByFilePath(filePath: String): List<Song> {
@@ -153,7 +168,7 @@ class RealSongRepository(private val context: Context) : SongRepository {
                 baseProjection,
                 selectionFinal,
                 selectionValuesFinal,
-                sortOrder
+                sortOrder,
             )
         } catch (ex: SecurityException) {
             return null
