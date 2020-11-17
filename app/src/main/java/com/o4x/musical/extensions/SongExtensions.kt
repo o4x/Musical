@@ -37,7 +37,7 @@ fun List<Song?>.toQueue(): List<MediaSessionCompat.QueueItem> {
 }
 
 fun LongArray.toQueue(songsRepository: SongRepository): List<MediaSessionCompat.QueueItem> {
-    val songList = songsRepository.songsForIds(this)
+    val songList = songsRepository.songs(this)
     // the list returned above is sorted in default order, need to map it to same as the input array and preserve the original order
     songList.keepInOrder(this)?.let {
         return it.toQueue()
@@ -58,7 +58,7 @@ fun List<Song>.keepInOrder(queue: LongArray): List<Song>? {
 }
 
 fun LongArray.toQueueSongEntityList(songsRepository: SongRepository): List<QueueSongEntity> {
-    return songsRepository.songsForIds(this).toQueueSongEntityList()
+    return songsRepository.songs(this).toQueueSongEntityList()
 }
 
 fun List<MediaSessionCompat.QueueItem>?.toIDList(): LongArray {

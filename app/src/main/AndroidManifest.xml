@@ -126,6 +126,16 @@
             android:name=".service.MusicService"
             android:enabled="true" />
 
+        <service
+            android:name=".playback.TimberMusicService"
+            android:enabled="true"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
         <receiver android:name=".service.MediaButtonIntentReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
