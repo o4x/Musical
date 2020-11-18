@@ -39,8 +39,4 @@ val roomModule = module {
     single {
         RealRoomRepository(get(), get(), get(), get())
     } bind RoomRepository::class
-
-    factory {
-        RealQueueHelper(get(), get())
-    } bind QueueHelper::class
 }
