@@ -1,4 +1,4 @@
-package com.o4x.musical.service;
+package com.o4x.musical.service.player;
 
 import android.content.Context;
 import android.content.Intent;
