@@ -10,103 +10,59 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.AsyncTask
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageButton
+import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.annotation.LayoutRes
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.TintHelper
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
-import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
+import com.o4x.musical.databinding.FragmentPlayerPlaybackControlsBinding
+import com.o4x.musical.drawables.PlayPauseDrawable
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler
 import com.o4x.musical.model.Song
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
+import com.o4x.musical.ui.viewmodel.ProgressViewModel
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
-import com.o4x.musical.drawables.PlayPauseDrawable
+import org.koin.android.ext.android.inject
 import java.util.*
 
-abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsMusicServiceFragment(layout),
-    MusicProgressViewUpdateHelper.Callback, PopupMenu.OnMenuItemClickListener {
-    private var unbinder: Unbinder? = null
+open class PlayerPlaybackControlsFragments() :
+    AbsMusicServiceFragment(R.layout.fragment_player_playback_controls), PopupMenu.OnMenuItemClickListener {
 
-    @JvmField
-    @BindView(R.id.title)
-    var title: MaterialTextView? = null
+    private val progressViewModel by inject<ProgressViewModel>()
 
-    @JvmField
-    @BindView(R.id.text)
-    var text: MaterialTextView? = null
-
-    @JvmField
-    @BindView(R.id.playerMenu)
-    var playerMenu: AppCompatImageView? = null
-
-    @JvmField
-    @BindView(R.id.songFavourite)
-    var songFavourite: AppCompatImageView? = null
-
-    @JvmField
-    @BindView(R.id.player_play_pause_button)
-    var playPauseButton: FloatingActionButton? = null
-
-    @JvmField
-    @BindView(R.id.player_prev_button)
-    var prevButton: ImageButton? = null
-
-    @JvmField
-    @BindView(R.id.player_next_button)
-    var nextButton: ImageButton? = null
-
-    @JvmField
-    @BindView(R.id.player_repeat_button)
-    var repeatButton: ImageButton? = null
-
-    @JvmField
-    @BindView(R.id.player_shuffle_button)
-    var shuffleButton: ImageButton? = null
-
-    @JvmField
-    @BindView(R.id.player_progress_slider)
-    var progressSlider: SeekBar? = null
-
-    @JvmField
-    @BindView(R.id.player_song_total_time)
-    var songTotalTime: TextView? = null
-
-    @JvmField
-    @BindView(R.id.player_song_current_progress)
-    var songCurrentProgress: TextView? = null
+    private var _binding: FragmentPlayerPlaybackControlsBinding? = null
+    private val binding get() = _binding!!
 
     private var playPauseDrawable: PlayPauseDrawable? = null
     private var lastPlaybackControlsColor = 0
     private var lastDisabledPlaybackControlsColor = 0
-    private var progressViewUpdateHelper: MusicProgressViewUpdateHelper? = null
     private var musicControllerAnimationSet: AnimatorSet? = null
     private var hidden = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        progressViewUpdateHelper = MusicProgressViewUpdateHelper(this)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentPlayerPlaybackControlsBinding.inflate(inflater, container, false)
+        binding.progressViewModel = progressViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        unbinder = ButterKnife.bind(this, view)
 
         setupTitle()
         setUpMusicControllers()
@@ -115,19 +71,7 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
 
     override fun onDestroyView() {
         super.onDestroyView()
-        unbinder!!.unbind()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        onUpdateProgressViews(MusicPlayerRemote.songProgressMillis,
-            MusicPlayerRemote.songDurationMillis)
-        progressViewUpdateHelper!!.start()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        progressViewUpdateHelper!!.stop()
+        _binding = null
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
@@ -160,17 +104,17 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
 
     private fun updateSong() {
         val song = MusicPlayerRemote.currentSong
-        title?.text = song.title
-        text?.text = song.artistName
+        binding.title.text = song.title
+        binding.text.text = song.artistName
         updateIsFavorite()
     }
 
     private fun setupTitle() {
-        title?.isSelected = true
+        binding.title.isSelected = true
     }
 
     private fun setupMenu() {
-        playerMenu?.setOnClickListener {
+        binding.playerMenu.setOnClickListener {
             val popupMenu = PopupMenu(requireContext(), it)
             popupMenu.setOnMenuItemClickListener(this)
             popupMenu.inflate(R.menu.menu_player)
@@ -181,18 +125,16 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
     private fun setUpPlayPauseButton() {
         playPauseDrawable =
             PlayPauseDrawable(requireActivity())
-        playPauseButton?.setImageDrawable(playPauseDrawable)
+        binding.playerPlayPauseButton.setImageDrawable(playPauseDrawable)
         updatePlayPauseColor()
-        playPauseButton!!.setOnClickListener(PlayPauseButtonOnClickHandler())
-        playPauseButton!!.post {
-            if (playPauseButton != null) {
-                playPauseButton!!.pivotX = playPauseButton!!.width / 2.toFloat()
-                playPauseButton!!.pivotY = playPauseButton!!.height / 2.toFloat()
-            }
+        binding.playerPlayPauseButton.setOnClickListener(PlayPauseButtonOnClickHandler())
+        binding.playerPlayPauseButton.post {
+            binding.playerPlayPauseButton.pivotX = binding.playerPlayPauseButton.width / 2.toFloat()
+            binding.playerPlayPauseButton.pivotY = binding.playerPlayPauseButton.height / 2.toFloat()
         }
     }
 
-    protected fun updatePlayPauseDrawableState(animate: Boolean) {
+    private fun updatePlayPauseDrawableState(animate: Boolean) {
         if (MusicPlayerRemote.isPlaying) {
             playPauseDrawable!!.setPause(animate)
         } else {
@@ -212,35 +154,35 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
 
     private fun setUpPrevNext() {
         updatePrevNextColor()
-        nextButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.playNextSong() }
-        prevButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.back() }
+        binding.playerNextButton.setOnClickListener { v: View? -> MusicPlayerRemote.playNextSong() }
+        binding.playerPrevButton.setOnClickListener { v: View? -> MusicPlayerRemote.back() }
     }
 
     private fun updateProgressTextColor() {
-        songTotalTime!!.setTextColor(lastPlaybackControlsColor)
-        songCurrentProgress!!.setTextColor(lastPlaybackControlsColor)
+        binding.playerSongTotalTime.setTextColor(lastPlaybackControlsColor)
+        binding.playerSongCurrentProgress.setTextColor(lastPlaybackControlsColor)
     }
 
     private fun updatePrevNextColor() {
-        nextButton!!.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
-        prevButton!!.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
+        binding.playerNextButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
+        binding.playerPrevButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
     }
 
     private fun updatePlayPauseColor() {
-        playPauseButton!!.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
+        binding.playerPlayPauseButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
     }
 
     private fun setUpShuffleButton() {
-        shuffleButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.toggleShuffleMode() }
+        binding.playerShuffleButton.setOnClickListener { v: View? -> MusicPlayerRemote.toggleShuffleMode() }
     }
 
     fun updateShuffleState() {
         when (MusicPlayerRemote.shuffleMode) {
-            MusicService.SHUFFLE_MODE_SHUFFLE -> shuffleButton?.setColorFilter(
+            MusicService.SHUFFLE_MODE_SHUFFLE -> binding.playerShuffleButton.setColorFilter(
                 lastPlaybackControlsColor,
                 PorterDuff.Mode.SRC_IN
             )
-            else -> shuffleButton?.setColorFilter(
+            else -> binding.playerShuffleButton.setColorFilter(
                 lastDisabledPlaybackControlsColor,
                 PorterDuff.Mode.SRC_IN
             )
@@ -248,11 +190,11 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
     }
 
     private fun setUpRepeatButton() {
-        repeatButton!!.setOnClickListener { v: View? -> MusicPlayerRemote.cycleRepeatMode() }
+        binding.playerRepeatButton.setOnClickListener { v: View? -> MusicPlayerRemote.cycleRepeatMode() }
     }
 
     private fun setupFavourite() {
-        songFavourite?.setOnClickListener {
+        binding.songFavourite.setOnClickListener {
             toggleFavorite(MusicPlayerRemote.currentSong)
         }
     }
@@ -260,17 +202,17 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
     private fun updateRepeatState() {
         when (MusicPlayerRemote.repeatMode) {
             MusicService.REPEAT_MODE_NONE -> {
-                repeatButton!!.setImageResource(R.drawable.ic_repeat)
-                repeatButton!!.setColorFilter(lastDisabledPlaybackControlsColor,
+                binding.playerRepeatButton.setImageResource(R.drawable.ic_repeat)
+                binding.playerRepeatButton.setColorFilter(lastDisabledPlaybackControlsColor,
                     PorterDuff.Mode.SRC_IN)
             }
             MusicService.REPEAT_MODE_ALL -> {
-                repeatButton!!.setImageResource(R.drawable.ic_repeat)
-                repeatButton!!.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
+                binding.playerRepeatButton.setImageResource(R.drawable.ic_repeat)
+                binding.playerRepeatButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
             }
             MusicService.REPEAT_MODE_THIS -> {
-                repeatButton!!.setImageResource(R.drawable.ic_repeat_one)
-                repeatButton!!.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
+                binding.playerRepeatButton.setImageResource(R.drawable.ic_repeat_one)
+                binding.playerRepeatButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
             }
         }
     }
@@ -281,11 +223,11 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
                 val interpolator: TimeInterpolator = FastOutSlowInInterpolator()
                 val duration = 300
                 val animators = LinkedList<Animator>()
-                addAnimation(animators, playPauseButton, interpolator, duration, 0)
-                addAnimation(animators, nextButton, interpolator, duration, 100)
-                addAnimation(animators, prevButton, interpolator, duration, 100)
-                addAnimation(animators, shuffleButton, interpolator, duration, 200)
-                addAnimation(animators, repeatButton, interpolator, duration, 200)
+                addAnimation(animators, binding.playerPlayPauseButton, interpolator, duration, 0)
+                addAnimation(animators, binding.playerNextButton, interpolator, duration, 100)
+                addAnimation(animators, binding.playerPrevButton, interpolator, duration, 100)
+                addAnimation(animators, binding.playerShuffleButton, interpolator, duration, 200)
+                addAnimation(animators, binding.playerRepeatButton, interpolator, duration, 200)
                 musicControllerAnimationSet = AnimatorSet()
                 musicControllerAnimationSet!!.playTogether(animators)
             } else {
@@ -300,41 +242,22 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
         if (musicControllerAnimationSet != null) {
             musicControllerAnimationSet!!.cancel()
         }
-        prepareForAnimation(playPauseButton)
-        prepareForAnimation(nextButton)
-        prepareForAnimation(prevButton)
-        prepareForAnimation(shuffleButton)
-        prepareForAnimation(repeatButton)
+        prepareForAnimation(binding.playerPlayPauseButton)
+        prepareForAnimation(binding.playerNextButton)
+        prepareForAnimation(binding.playerPrevButton)
+        prepareForAnimation(binding.playerShuffleButton)
+        prepareForAnimation(binding.playerRepeatButton)
         hidden = true
     }
 
     private fun setUpProgressSlider() {
         updateProgressSliderColor()
 
-        progressSlider?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                MusicPlayerRemote.seekTo(seekBar.progress)
-                onUpdateProgressViews(MusicPlayerRemote.songProgressMillis,
-                    MusicPlayerRemote.songDurationMillis)
-            }
-
-        })
+        binding.playerProgressSlider.setOnSeekBarChangeListener(progressViewModel)
     }
 
     private fun updateProgressSliderColor() {
-        progressSlider?.applyColor(lastPlaybackControlsColor)
-    }
-
-    override fun onUpdateProgressViews(progress: Int, total: Int) {
-        if (total > progress) {
-            progressSlider?.max = total
-            progressSlider?.progress = progress
-        }
-        songTotalTime?.text = MusicUtil.getReadableDurationString(total.toLong())
-        songCurrentProgress!!.text = MusicUtil.getReadableDurationString(progress.toLong())
+        binding.playerProgressSlider.applyColor(lastPlaybackControlsColor)
     }
 
 
@@ -343,17 +266,17 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
         lastDisabledPlaybackControlsColor = ColorUtil.withAlpha(colors.primaryTextColor, 0.3f)
 
         val tintList = ColorStateList.valueOf(colors.primaryTextColor)
-        playerMenu?.imageTintList = tintList
-        songFavourite?.imageTintList = tintList
-        progressSlider?.applyColor(colors.primaryTextColor)
-        title?.setTextColor(colors.primaryTextColor)
-        text?.setTextColor(colors.secondaryTextColor)
-        songCurrentProgress?.setTextColor(colors.secondaryTextColor)
-        songTotalTime?.setTextColor(colors.secondaryTextColor)
+        binding.playerMenu.imageTintList = tintList
+        binding.songFavourite.imageTintList = tintList
+        binding.playerProgressSlider.applyColor(colors.primaryTextColor)
+        binding.title.setTextColor(colors.primaryTextColor)
+        binding.text.setTextColor(colors.secondaryTextColor)
+        binding.playerSongCurrentProgress.setTextColor(colors.secondaryTextColor)
+        binding.playerSongTotalTime.setTextColor(colors.secondaryTextColor)
 
-        playPauseButton?.backgroundTintList = tintList
-        playPauseButton?.imageTintList = ColorStateList.valueOf(colors.backgroundColor)
-        playPauseButton!!.setColorFilter(colors.backgroundColor, PorterDuff.Mode.SRC_IN)
+        binding.playerPlayPauseButton.backgroundTintList = tintList
+        binding.playerPlayPauseButton.imageTintList = ColorStateList.valueOf(colors.backgroundColor)
+        binding.playerPlayPauseButton.setColorFilter(colors.backgroundColor, PorterDuff.Mode.SRC_IN)
 
         updateRepeatState()
         updateShuffleState()
@@ -398,7 +321,7 @@ abstract class AbsPlayerPlaybackControlsFragments(@LayoutRes layout: Int) : AbsM
                         R.drawable.ic_star_border
 
                     val drawable = TintHelper.createTintedDrawable(activity, res, Color.WHITE)
-                    songFavourite?.setImageDrawable(drawable)
+                    binding.songFavourite.setImageDrawable(drawable)
                 }
             }
         }.execute(MusicPlayerRemote.currentSong)

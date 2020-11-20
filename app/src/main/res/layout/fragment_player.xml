@@ -25,7 +25,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/playback_controls_fragment"
-        class="com.o4x.musical.ui.fragments.player.flat.PlayerPlaybackControlsFragment"
+        class="com.o4x.musical.ui.fragments.player.PlayerPlaybackControlsFragments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"/>
