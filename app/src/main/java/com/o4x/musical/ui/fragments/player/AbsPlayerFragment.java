@@ -35,7 +35,6 @@ import com.o4x.musical.ui.dialogs.SongShareDialog;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.util.ImageUtil;
 import com.o4x.musical.util.MusicUtil;
-import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.util.NavigationUtil;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
@@ -65,7 +64,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
 
     protected int lastColor;
 
-    protected AbsPlayerPlaybackControlsFragments playbackControlsFragment;
+    protected PlayerPlaybackControlsFragments playbackControlsFragment;
     protected PlayerAlbumCoverFragment playerAlbumCoverFragment;
 
     protected AsyncTask updateLyricsAsyncTask;
@@ -198,7 +197,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     }
 
     private void setUpSubFragments() {
-        playbackControlsFragment = (AbsPlayerPlaybackControlsFragments) getChildFragmentManager().findFragmentById(R.id.playback_controls_fragment);
+        playbackControlsFragment = (PlayerPlaybackControlsFragments) getChildFragmentManager().findFragmentById(R.id.playback_controls_fragment);
         playerAlbumCoverFragment = (PlayerAlbumCoverFragment) getChildFragmentManager().findFragmentById(R.id.player_album_cover_fragment);
 
         playerAlbumCoverFragment.setCallbacks(this);
