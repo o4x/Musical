@@ -6,13 +6,7 @@ import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.ColorInt
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import code.name.monkey.appthemehelper.extensions.accentColor
 import code.name.monkey.appthemehelper.extensions.textColorSecondary
 import code.name.monkey.appthemehelper.util.ATHUtil.resolveColor
@@ -24,32 +18,24 @@ import com.o4x.musical.helper.MusicPlayerRemote.currentSong
 import com.o4x.musical.helper.MusicPlayerRemote.isPlaying
 import com.o4x.musical.helper.MusicPlayerRemote.playNextSong
 import com.o4x.musical.helper.MusicPlayerRemote.playPreviousSong
-import com.o4x.musical.helper.MusicPlayerRemote.songDurationMillis
-import com.o4x.musical.helper.MusicPlayerRemote.songProgressMillis
-import com.o4x.musical.helper.MusicProgressViewUpdateHelper
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
+import com.o4x.musical.ui.viewmodel.ProgressViewModel
 import com.o4x.musical.util.color.MediaNotificationProcessor
-import com.o4x.musical.views.IconImageView
-import me.zhanghai.android.materialprogressbar.MaterialProgressBar
+import org.koin.android.ext.android.inject
 import kotlin.math.abs
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_player),
-    MusicProgressViewUpdateHelper.Callback {
+open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_player) {
+
+    private val progressViewModel by inject<ProgressViewModel>()
 
     private var _binding: FragmentMiniPlayerBinding? = null
     private val binding get() = _binding!!
 
     private var miniPlayerPlayPauseDrawable: PlayPauseDrawable? = null
-    private var progressViewUpdateHelper: MusicProgressViewUpdateHelper? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        progressViewUpdateHelper = MusicProgressViewUpdateHelper(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +43,8 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMiniPlayerBinding.inflate(inflater, container, false)
+        binding.progressViewModel = progressViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -101,10 +89,6 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
     override fun onServiceConnected() {
         updateSongTitle()
         updatePlayPauseDrawableState(false)
-        onUpdateProgressViews(
-            songProgressMillis,
-            songDurationMillis
-        )
     }
 
     override fun onPlayingMetaChanged() {
@@ -113,21 +97,6 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
 
     override fun onPlayStateChanged() {
         updatePlayPauseDrawableState(true)
-    }
-
-    override fun onUpdateProgressViews(progress: Int, total: Int) {
-        binding.progressBar.max = total
-        binding.progressBar.progress = progress
-    }
-
-    override fun onResume() {
-        super.onResume()
-        progressViewUpdateHelper!!.start()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        progressViewUpdateHelper!!.stop()
     }
 
     private class FlingPlayBackController(context: Context?) : View.OnTouchListener {

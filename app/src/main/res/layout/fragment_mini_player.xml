@@ -1,75 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/mini_player_height"
-    android:background="?attr/colorSurface"
-    android:clickable="true"
-    android:focusable="true"
-    android:transitionName="@string/transition_mini_player"
-    android:id="@+id/container"
-    tools:ignore="UnusedAttribute">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <com.o4x.musical.views.IconImageView
-            android:id="@+id/mini_player_image"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="16dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_expand_less"
-            tools:ignore="ContentDescription" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/mini_player_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:freezesText="true"
-            android:gravity="center"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            tools:text="@tools:sample/lorem/random" />
-
-        <com.o4x.musical.views.IconImageView
-            android:id="@+id/mini_player_play_pause_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:scaleType="center"
-            tools:ignore="ContentDescription" />
-
-    </LinearLayout>
+    <data>
+        <variable
+            name="progressViewModel"
+            type="com.o4x.musical.ui.viewmodel.ProgressViewModel"/>
+    </data>
 
     <FrameLayout
-        android:id="@+id/progress_bar_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top">
+        android:layout_height="@dimen/mini_player_height"
+        android:background="?attr/colorSurface"
+        android:clickable="true"
+        android:focusable="true"
+        android:transitionName="@string/transition_mini_player"
+        android:id="@+id/container"
+        tools:ignore="UnusedAttribute">
 
-        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            app:mpb_showProgressBackground="false"
-            app:mpb_progressStyle="horizontal"
-            app:mpb_useIntrinsicPadding="false" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.o4x.musical.views.IconImageView
+                android:id="@+id/mini_player_image"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="16dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_expand_less"
+                tools:ignore="ContentDescription" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mini_player_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                tools:text="@tools:sample/lorem/random" />
+
+            <com.o4x.musical.views.IconImageView
+                android:id="@+id/mini_player_play_pause_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:scaleType="center"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/progress_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top">
+
+            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                app:mpb_showProgressBackground="false"
+                app:mpb_progressStyle="horizontal"
+                app:mpb_useIntrinsicPadding="false"
+                android:progress="@{progressViewModel.progress}"
+                android:max="@{progressViewModel.total}" />
+
+        </FrameLayout>
 
     </FrameLayout>
 
-</FrameLayout>
+</layout>

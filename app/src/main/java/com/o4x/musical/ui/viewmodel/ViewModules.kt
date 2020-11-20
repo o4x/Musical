@@ -42,4 +42,8 @@ val viewModules = module {
             genre
         )
     }
+
+    viewModel {
+        ProgressViewModel()
+    }
 }
