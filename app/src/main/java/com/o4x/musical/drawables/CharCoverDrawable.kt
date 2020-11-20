@@ -38,7 +38,13 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
         }
     }
 
-    private val paint = Paint()
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    fun setBlur(radius: Float): CharCoverDrawable {
+        paint.maskFilter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+        invalidateSelf()
+        return this
+    }
 
     override fun draw(canvas: Canvas) {
         drawGradient(canvas, coverData.id.toInt())
@@ -58,7 +64,6 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
     override fun getOpacity(): Int {
         return PixelFormat.TRANSLUCENT
     }
-
 
     private fun drawGradient(canvas: Canvas, id: Int) {
         val colors = if (isDarkMode) {
@@ -83,7 +88,6 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
 
     private fun drawChars(canvas: Canvas, text: String) {
         // Render char's
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.color =
             ColorUtil.withAlpha(
                 if (isDarkMode) Color.WHITE else Color.BLACK, 0.2f) // Text Color

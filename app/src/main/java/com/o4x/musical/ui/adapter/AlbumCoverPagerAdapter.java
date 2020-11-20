@@ -124,13 +124,19 @@ public class AlbumCoverPagerAdapter extends CustomFragmentStatePagerAdapter {
         }
 
         private void loadAlbumCover() {
+
+            final NotificationPaletteTargetListener listener =
+                new NotificationPaletteTargetListener(requireContext()) {
+                    @Override
+                    public void onColorReady(@NotNull MediaNotificationProcessor colors) {
+                        setColor(colors);
+                    }
+                };
+            listener.loadPlaceholderPalette = true;
+
             GlideLoader.with(requireContext())
-                    .withListener(new NotificationPaletteTargetListener(requireContext()) {
-                        @Override
-                        public void onColorReady(@NotNull MediaNotificationProcessor colors) {
-                            setColor(colors);
-                        }
-                    })
+                    .withListener(listener)
+                    .withBlur(100f)
                     .load(song)
                     .into(albumCover);
         }

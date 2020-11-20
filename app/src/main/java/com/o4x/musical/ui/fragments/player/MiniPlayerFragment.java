@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import code.name.monkey.appthemehelper.ThemeStore;
 import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 import code.name.monkey.appthemehelper.util.ATHUtil;
 import code.name.monkey.appthemehelper.util.ColorUtil;

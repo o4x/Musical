@@ -15,10 +15,10 @@ import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
 import com.o4x.musical.util.Util;
 import com.o4x.musical.util.ViewUtil;
 
-public class FlatPlayerFragment extends AbsPlayerFragment {
+public class PlayerFragment extends AbsPlayerFragment {
 
-    public FlatPlayerFragment() {
-        super(R.layout.fragment_player_flat);
+    public PlayerFragment() {
+        super(R.layout.fragment_player);
     }
 
     @Override
@@ -33,9 +33,9 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
     }
 
     private static abstract class BaseImpl implements Impl {
-        protected FlatPlayerFragment fragment;
+        protected PlayerFragment fragment;
 
-        public BaseImpl(FlatPlayerFragment fragment) {
+        public BaseImpl(PlayerFragment fragment) {
             this.fragment = fragment;
         }
 
@@ -57,7 +57,7 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
     private static class PortraitImpl extends BaseImpl {
         Song currentSong = Song.getEmptySong();
 
-        public PortraitImpl(FlatPlayerFragment fragment) {
+        public PortraitImpl(PlayerFragment fragment) {
             super(fragment);
         }
 
@@ -78,7 +78,7 @@ public class FlatPlayerFragment extends AbsPlayerFragment {
 
     @SuppressWarnings("ConstantConditions")
     private static class LandscapeImpl extends BaseImpl {
-        public LandscapeImpl(FlatPlayerFragment fragment) {
+        public LandscapeImpl(PlayerFragment fragment) {
             super(fragment);
         }
 

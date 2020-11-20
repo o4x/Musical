@@ -9,11 +9,11 @@ import androidx.annotation.ColorInt;
 import com.o4x.musical.R;
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
 import com.o4x.musical.ui.fragments.player.AbsPlayerFragment;
-import com.o4x.musical.ui.fragments.player.flat.FlatPlayerFragment;
+import com.o4x.musical.ui.fragments.player.flat.PlayerFragment;
 
 import code.name.monkey.appthemehelper.util.ColorUtil;
 
-public class PlayerActivity extends AbsMusicServiceActivity implements FlatPlayerFragment.Callbacks {
+public class PlayerActivity extends AbsMusicServiceActivity implements PlayerFragment.Callbacks {
 
     private int navigationBarColor;
     private int taskColor;
@@ -30,7 +30,7 @@ public class PlayerActivity extends AbsMusicServiceActivity implements FlatPlaye
 
         setDrawUnderBar();
 
-        playerFragment = new FlatPlayerFragment();
+        playerFragment = new PlayerFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.player_fragment_container, playerFragment).commit();
         getSupportFragmentManager().executePendingTransactions();
