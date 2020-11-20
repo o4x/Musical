@@ -15,7 +15,6 @@ import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics;
 import com.o4x.musical.model.lyrics.Lyrics;
 import com.o4x.musical.ui.adapter.AlbumCoverPagerAdapter;
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
-import com.o4x.musical.helper.MyPalette;
 import com.o4x.musical.util.PreferenceUtil;
 import com.o4x.musical.util.color.MediaNotificationProcessor;
 
@@ -210,8 +209,20 @@ public class PlayerAlbumCoverFragment extends AbsMusicServiceFragment implements
             int pageWidth = view.getWidth();
             int pageHeight = view.getHeight();
 
-            if (position <= 1) { // [-1,1]
-                view.findViewById(R.id.player_image).setTranslationX(-position * pageWidth / 2);
+//            if (position <= 1) { // [-1,1]
+//                view.findViewById(R.id.player_image).setTranslationX(-position * pageWidth / 2);
+//            }
+
+            if(position <= -1.0F || position >= 1.0F) {
+                view.setTranslationX(view.getWidth() * position);
+                view.setAlpha(0.0F);
+            } else if( position == 0.0F ) {
+                view.setTranslationX(view.getWidth() * position);
+                view.setAlpha(1.0F);
+            } else {
+                // position is between -1.0F & 0.0F OR 0.0F & 1.0F
+                view.setTranslationX(view.getWidth() * -position);
+                view.setAlpha(1.0F - Math.abs(position));
             }
         }
     }

@@ -3,7 +3,10 @@ package com.o4x.musical.imageloader.glide.loader
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import androidx.core.graphics.drawable.toBitmap
+import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -17,6 +20,7 @@ import com.o4x.musical.imageloader.glide.module.artistimage.ArtistImage
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.imageloader.glide.targets.PalettableImageTarget
 import com.o4x.musical.imageloader.glide.targets.palette.AbsPaletteTargetListener
+import com.o4x.musical.imageloader.glide.transformation.blur.BlurTransformation
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.model.*
@@ -35,9 +39,11 @@ class GlideLoader {
         }
     }
 
+    @SuppressLint("CheckResult")
     class GlideBuilder(val context: Context, requestBuilder: RequestBuilder<Bitmap>) {
 
         private var listener = AbsPaletteTargetListener(context)
+        private var radius: Float? = null
 
         private var requestBuilder: RequestBuilder<Bitmap> = requestBuilder
             .diskCacheStrategy(
@@ -58,17 +64,23 @@ class GlideLoader {
             return this
         }
 
+
+        fun withBlur(radius: Float): GlideBuilder {
+            this.radius = radius
+            return this
+        }
+
         fun load(song: Song): GlideFinisher {
             return if (PreferenceUtil.isIgnoreMediaStore()) {
                 load(AudioFileCover(song.albumName, song.data, song.dateModified))
             } else {
 
+                requestBuilder
+                    .signature(createSignature(song))
+                    .load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId))
+
                 GlideFinisher(
-                    requestBuilder
-                        .signature(createSignature(song))
-                        .load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId)),
-                    CoverData.from(song),
-                    listener
+                    CoverData.from(song)
                 )
             }
         }
@@ -79,11 +91,11 @@ class GlideLoader {
 
         fun load(audioFileCover: AudioFileCover): GlideFinisher {
 
+            requestBuilder
+                .load(audioFileCover)
+
             return GlideFinisher(
-                requestBuilder
-                    .load(audioFileCover),
-                CoverData.from(audioFileCover),
-                listener
+                CoverData.from(audioFileCover)
             )
         }
 
@@ -92,20 +104,16 @@ class GlideLoader {
             val coverData = CoverData.from(multiImage)
 
             return if (customImageUtil.hasCustomImage()) {
-                GlideFinisher(
-                    requestBuilder
-                        .signature(createSignature(customImageUtil))
-                        .load(customImageUtil.file),
-                    coverData,
-                    listener
-                )
+                requestBuilder
+                    .signature(createSignature(customImageUtil))
+                    .load(customImageUtil.file)
+
+                GlideFinisher(coverData)
             } else {
-                GlideFinisher(
-                    requestBuilder
-                        .load(multiImage),
-                    coverData,
-                    listener
-                )
+                requestBuilder
+                    .load(multiImage)
+
+                GlideFinisher(coverData)
             }
         }
 
@@ -115,22 +123,21 @@ class GlideLoader {
 
             val customImageUtil = CustomImageUtil(artist)
 
-            return if (customImageUtil.hasCustomImage())
-                GlideFinisher(
-                    requestBuilder
-                        .signature(createSignature(customImageUtil))
-                        .load(customImageUtil.file),
-                    coverData,
-                    listener
-                )
-            else
-                GlideFinisher(
-                    requestBuilder
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .load(ArtistImage(artist)),
-                    coverData,
-                    listener
-                )
+            return if (customImageUtil.hasCustomImage()) {
+                requestBuilder
+                    .signature(createSignature(customImageUtil))
+                    .load(customImageUtil.file)
+
+                GlideFinisher(coverData)
+
+            } else {
+                requestBuilder
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .load(ArtistImage(artist))
+
+                GlideFinisher(coverData)
+            }
+
         }
 
         fun load(genre: Genre): GlideFinisher {
@@ -152,12 +159,12 @@ class GlideLoader {
             name: String,
         ): GlideFinisher {
 
+            requestBuilder
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .load(url)
+
             return GlideFinisher(
-                requestBuilder
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .load(url),
-                CoverData.from(url, name),
-                listener
+                CoverData.from(url, name)
             )
         }
 
@@ -168,38 +175,42 @@ class GlideLoader {
         private fun createSignature(customImageUtil: CustomImageUtil): Key {
             return ObjectKey(customImageUtil.file.lastModified())
         }
-    }
 
-    @SuppressLint("CheckResult")
-    class GlideFinisher(
-        private val requestBuilder: RequestBuilder<Bitmap>,
-        coverData: CoverData?,
-        val listener: AbsPaletteTargetListener
-    ) {
+        inner class GlideFinisher(
+            coverData: CoverData?
+        ) {
 
-        init {
+            init {
+                radius?.let {
+                    requestBuilder
+                        .transform(BlurTransformation(it.toInt(), 1))
+                }
 
-            coverData?.let {
-                requestBuilder
-                    .placeholder(
-                        CharCoverDrawable(it)
-                    )
+                coverData?.let {
+
+                    requestBuilder
+                        .placeholder(
+                            CharCoverDrawable(it).apply {
+                                radius?.let { setBlur(it) }
+                            }
+                        )
+                }
             }
-        }
 
-        fun into(image: ImageView?): PalettableImageTarget? {
-            image?.let {
+            fun into(image: ImageView?): PalettableImageTarget? {
+                image?.let {
+                    return requestBuilder
+                        .into(
+                            PalettableImageTarget(it).setListener(listener)
+                        )
+                }
+                return null
+            }
+
+            fun into(target: CustomBitmapTarget): CustomBitmapTarget {
                 return requestBuilder
-                    .into(
-                        PalettableImageTarget(it).setListener(listener)
-                    )
+                    .into(target.setListener(listener))
             }
-            return null
-        }
-
-        fun into(target: CustomBitmapTarget): CustomBitmapTarget {
-            return requestBuilder
-                .into(target.setListener(listener))
         }
     }
 }

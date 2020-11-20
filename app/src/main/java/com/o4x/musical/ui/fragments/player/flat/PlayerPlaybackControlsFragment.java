@@ -6,9 +6,9 @@ import com.o4x.musical.ui.fragments.player.AbsPlayerPlaybackControlsFragments;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class FlatPlayerPlaybackControlsFragment extends AbsPlayerPlaybackControlsFragments {
+public class PlayerPlaybackControlsFragment extends AbsPlayerPlaybackControlsFragments {
 
-    public FlatPlayerPlaybackControlsFragment() {
-        super(R.layout.fragment_player_playback_controls_flat);
+    public PlayerPlaybackControlsFragment() {
+        super(R.layout.fragment_player_playback_controls);
     }
 }
