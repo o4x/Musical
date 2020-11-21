@@ -138,12 +138,12 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         }
         shuffle_btn.backgroundTintList = ColorStateList.valueOf(accentColor())
         shuffle_btn.setColorFilter(
-            getPrimaryTextColor(activity, isColorLight(accentColor())),
+            getPrimaryTextColor(serviceActivity, isColorLight(accentColor())),
             PorterDuff.Mode.SRC_IN
         )
         open_queue_button.setBackgroundColor(accentColor())
         open_queue_button.setTextColor(
-            getPrimaryTextColor(activity, isColorLight(accentColor()))
+            getPrimaryTextColor(serviceActivity, isColorLight(accentColor()))
         )
     }
 
@@ -287,7 +287,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private val gridLayoutManager: GridLayoutManager
         get() {
             val size = gridSize
-            return object : GridLayoutManager(activity, size) {
+            return object : GridLayoutManager(serviceActivity, size) {
                 override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
                     lp.width = (width / size) - (lp.marginStart * 2 /* for left and right */)
                     lp.height = (lp.width * 1.5).toInt()
@@ -299,7 +299,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private val linearLayoutManager: LinearLayoutManager
         get() {
             val size = gridSize
-            return object : LinearLayoutManager(activity, HORIZONTAL, false) {
+            return object : LinearLayoutManager(serviceActivity, HORIZONTAL, false) {
                 override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
                     lp.width = (width / size) - (lp.marginStart * 2 /* for left and right */)
                     lp.height = (lp.width * 1.5).toInt()

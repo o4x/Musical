@@ -115,7 +115,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private fun setUpRecyclerView() {
-        ViewUtil.setUpFastScrollRecyclerViewColor(activity, recycler_view, accentColor())
+        ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity, recycler_view, accentColor())
         recycler_view.layoutManager = OverScrollLinearLayoutManager(requireContext())
         recycler_view.addAppbarListener()
     }
@@ -163,7 +163,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
             R.id.action_scan -> {
                 val crumb = activeCrumb
                 if (crumb != null) {
-                    ArrayListPathsAsyncTask(activity,
+                    ArrayListPathsAsyncTask(serviceActivity,
                         object : OnPathsListedCallback {
                             override fun onPathsListed(paths: Array<String>) {
                                 scanPaths(paths)
@@ -186,7 +186,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
             val fileFilter = FileFilter { pathname: File ->
                 !pathname.isDirectory && AUDIO_FILE_FILTER.accept(pathname)
             }
-            ListSongsAsyncTask(activity,
+            ListSongsAsyncTask(serviceActivity,
                 null,
                 object : OnSongsListedCallback {
                     override fun onSongsListed(songs: List<Song?>, extra: Any?) {
@@ -219,7 +219,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
 
     override fun onMultipleItemAction(item: MenuItem, files: List<File>) {
         val itemId = item.itemId
-        ListSongsAsyncTask(activity,
+        ListSongsAsyncTask(serviceActivity,
             null,
             object : OnSongsListedCallback {
                 override fun onSongsListed(songs: List<Song?>, extra: Any?) {
@@ -261,14 +261,14 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     override fun onFileMenuClicked(file: File, view: View) {
-        val popupMenu = PopupMenu(activity, view)
+        val popupMenu = PopupMenu(serviceActivity, view)
         if (file.isDirectory) {
             popupMenu.inflate(R.menu.menu_item_directory)
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
                 val itemId = item.itemId
                 when (itemId) {
                     R.id.action_play_next, R.id.action_add_to_current_playing, R.id.action_add_to_playlist, R.id.action_delete_from_device -> {
-                        ListSongsAsyncTask(activity,
+                        ListSongsAsyncTask(serviceActivity,
                             null,
                             object : OnSongsListedCallback {
                                 override fun onSongsListed(songs: List<Song?>, extra: Any?) {
@@ -283,13 +283,13 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                     }
                     R.id.action_set_as_start_directory -> {
                         startDirectory = file
-                        Toast.makeText(activity,
+                        Toast.makeText(serviceActivity,
                             String.format(getString(R.string.new_start_directory), file.path),
                             Toast.LENGTH_SHORT).show()
                         return@setOnMenuItemClickListener true
                     }
                     R.id.action_scan -> {
-                        ArrayListPathsAsyncTask(activity,
+                        ArrayListPathsAsyncTask(serviceActivity,
                             object : OnPathsListedCallback {
                                 override fun onPathsListed(paths: Array<String>) {
                                     scanPaths(paths)
@@ -306,7 +306,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
                 when (val itemId = item.itemId) {
                     R.id.action_play_next, R.id.action_add_to_current_playing, R.id.action_add_to_playlist, R.id.action_go_to_album, R.id.action_go_to_artist, R.id.action_share, R.id.action_tag_editor, R.id.action_details, R.id.action_delete_from_device -> {
-                        ListSongsAsyncTask(activity,
+                        ListSongsAsyncTask(serviceActivity,
                             null,
                             object : OnSongsListedCallback {
                                 override fun onSongsListed(songs: List<Song?>, extra: Any?) {
@@ -372,7 +372,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private class AsyncFileLoader(foldersFragment: FoldersFragment) :
-        WrappedAsyncTaskLoader<List<File?>?>(foldersFragment.activity) {
+        WrappedAsyncTaskLoader<List<File?>?>(foldersFragment.serviceActivity) {
         private val fragmentWeakReference: WeakReference<FoldersFragment>
         override fun loadInBackground(): List<File>? {
             val foldersFragment = fragmentWeakReference.get()

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="progressViewModel"
-            type="com.o4x.musical.ui.viewmodel.ProgressViewModel" />
+            type="com.o4x.musical.ui.viewmodel.PlayerViewModel" />
     </data>
 
     <FrameLayout

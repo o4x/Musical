@@ -23,7 +23,7 @@ public abstract class PlayingNotification {
 
     private NotificationManager notificationManager;
     protected MusicService service;
-    boolean stopped;
+    boolean stopped = true;
 
     public synchronized void init(MusicService service) {
         this.service = service;
@@ -34,6 +34,12 @@ public abstract class PlayingNotification {
     }
 
     public abstract void update();
+
+    public void start() {
+        if (service.isPlaying()) {
+            stopped = false;
+        }
+    }
 
     public synchronized void stop() {
         stopped = true;

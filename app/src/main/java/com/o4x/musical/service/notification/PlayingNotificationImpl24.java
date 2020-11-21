@@ -31,7 +31,8 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
 
     @Override
     public synchronized void update() {
-        stopped = false;
+        if (stopped)
+            return;
 
         final Song song = service.getCurrentSong();
 

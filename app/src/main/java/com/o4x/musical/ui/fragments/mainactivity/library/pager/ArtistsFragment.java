@@ -1,24 +1,14 @@
 package com.o4x.musical.ui.fragments.mainactivity.library.pager;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.o4x.musical.R;
-import com.o4x.musical.interfaces.LoaderIds;
 import com.o4x.musical.misc.OverScrollGridLayoutManager;
-import com.o4x.musical.misc.WrappedAsyncTaskLoader;
 import com.o4x.musical.model.Artist;
-import com.o4x.musical.repository.RealAlbumRepository;
-import com.o4x.musical.repository.RealArtistRepository;
-import com.o4x.musical.repository.RealSongRepository;
 import com.o4x.musical.ui.adapter.artist.ArtistAdapter;
 import com.o4x.musical.ui.viewmodel.ReloadType;
 import com.o4x.musical.util.PreferenceUtil;
@@ -45,7 +35,7 @@ public class ArtistsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFr
     @NonNull
     @Override
     protected GridLayoutManager createLayoutManager() {
-        return new OverScrollGridLayoutManager(getActivity(), getGridSize());
+        return new OverScrollGridLayoutManager(getServiceActivity(), getGridSize());
     }
 
     @NonNull
@@ -93,7 +83,7 @@ public class ArtistsFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFr
 
     @Override
     protected int loadGridSizeLand() {
-        return PreferenceUtil.getArtistGridSizeLand(getActivity());
+        return PreferenceUtil.getArtistGridSizeLand(getServiceActivity());
     }
 
     @Override

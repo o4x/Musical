@@ -569,6 +569,7 @@ object PreferenceUtil {
             "cyan" -> if (isDarkMode) R.style.ThemeColorCyan else R.style.ThemeColorCyanLight
             "light_green" -> if (isDarkMode) R.style.ThemeColorLightGreen else R.style.ThemeColorLightGreenLight
             "amber" -> if (isDarkMode) R.style.ThemeColorAmber else R.style.ThemeColorAmberLight
+            "brown" -> if (isDarkMode) R.style.ThemeColorBrown else R.style.ThemeColorBrownLight
             "purple" -> if (isDarkMode) R.style.ThemeColorPurple else R.style.ThemeColorPurpleLight
             "blue" -> if (isDarkMode) R.style.ThemeColorBlue else R.style.ThemeColorBlueLight
             "teal" -> if (isDarkMode) R.style.ThemeColorTeal else R.style.ThemeColorTealLight

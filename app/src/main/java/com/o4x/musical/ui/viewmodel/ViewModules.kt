@@ -44,6 +44,6 @@ val viewModules = module {
     }
 
     viewModel {
-        ProgressViewModel()
+        PlayerViewModel()
     }
 }

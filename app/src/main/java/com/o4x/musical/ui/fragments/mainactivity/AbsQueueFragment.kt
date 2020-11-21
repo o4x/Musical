@@ -1,7 +1,6 @@
 package com.o4x.musical.ui.fragments.mainactivity
 
 import android.util.DisplayMetrics
-import android.util.Log
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -44,7 +43,7 @@ open class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(la
         val to = MusicPlayerRemote.position
         val delta = abs(to - from)
 
-        val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(activity) {
+        val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(serviceActivity) {
             override fun getHorizontalSnapPreference(): Int {
                 return SNAP_TO_ANY
             }

@@ -44,13 +44,4 @@ interface PlaylistDao {
 
     @Delete
     suspend fun deletePlaylistSongs(songs: List<SongEntity>)
-
-
-    @Query("SELECT * FROM SongEntity WHERE playlist_creator_id= :playlistId")
-    fun favoritesSongsLiveData(playlistId: Long): LiveData<List<SongEntity>>
-
-    @Query("SELECT * FROM SongEntity WHERE playlist_creator_id= :playlistId")
-    fun favoritesSongs(playlistId: Long): List<SongEntity>
-
-
 }
