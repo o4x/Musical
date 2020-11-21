@@ -54,8 +54,10 @@ import java.util.*
 class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListener, Playback.PlaybackCallbacks {
 
     companion object {
+
         const val PHONOGRAPH_PACKAGE_NAME = "com.o4x.musical"
         const val MUSIC_PACKAGE_NAME = "com.android.music"
+
         const val ACTION_TOGGLE_PAUSE = PHONOGRAPH_PACKAGE_NAME + ".togglepause"
         const val ACTION_PLAY = PHONOGRAPH_PACKAGE_NAME + ".play"
         const val ACTION_PLAY_PLAYLIST = PHONOGRAPH_PACKAGE_NAME + ".play.playlist"
@@ -65,8 +67,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         const val ACTION_REWIND = PHONOGRAPH_PACKAGE_NAME + ".rewind"
         const val ACTION_QUIT = PHONOGRAPH_PACKAGE_NAME + ".quitservice"
         const val ACTION_PENDING_QUIT = PHONOGRAPH_PACKAGE_NAME + ".pendingquitservice"
+
         const val INTENT_EXTRA_PLAYLIST = PHONOGRAPH_PACKAGE_NAME + "intentextra.playlist"
         const val INTENT_EXTRA_SHUFFLE_MODE = PHONOGRAPH_PACKAGE_NAME + ".intentextra.shufflemode"
+
         const val APP_WIDGET_UPDATE = PHONOGRAPH_PACKAGE_NAME + ".appwidgetupdate"
         const val EXTRA_APP_WIDGET_NAME = PHONOGRAPH_PACKAGE_NAME + "app_widget_name"
 
@@ -77,10 +81,12 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         const val REPEAT_MODE_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".repeatmodechanged"
         const val SHUFFLE_MODE_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".shufflemodechanged"
         const val MEDIA_STORE_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".mediastorechanged"
+
         const val SAVED_POSITION = "POSITION"
         const val SAVED_POSITION_IN_TRACK = "POSITION_IN_TRACK"
         const val SAVED_SHUFFLE_MODE = "SHUFFLE_MODE"
         const val SAVED_REPEAT_MODE = "REPEAT_MODE"
+
         const val RELEASE_WAKELOCK = 0
         const val TRACK_ENDED = 1
         const val TRACK_WENT_TO_NEXT = 2
@@ -88,16 +94,24 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         const val PREPARE_NEXT = 4
         const val SET_POSITION = 5
         const val FOCUS_CHANGE = 6
+
+        // SHUFFLE MODE //
         const val DUCK = 7
         const val UNDUCK = 8
-        const val RESTORE_QUEUES = 9
+
+        // SHUFFLE MODE //
         const val SHUFFLE_MODE_NONE = 0
         const val SHUFFLE_MODE_SHUFFLE = 1
+
+        // REPEAT MODE //
         const val REPEAT_MODE_NONE = 0
         const val REPEAT_MODE_ALL = 1
         const val REPEAT_MODE_THIS = 2
+
+        // QUEUES ACTIONS //
         const val SAVE_QUEUES = 0
-        
+        const val RESTORE_QUEUES = 9
+
         private fun getTrackUri(song: Song): String {
             return MusicUtil.getSongFileUri(song.id).toString()
         }
@@ -351,6 +365,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     private fun updateNotification() {
         if (playingNotification != null && currentSong.id != -1L) {
+            playingNotification?.start()
             playingNotification?.update()
         }
     }
@@ -453,7 +468,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             PLAY_STATE_CHANGED -> {
                 updateNotification()
                 updateMediaSessionPlaybackState()
-                val isPlaying = isPlaying
                 if (!isPlaying && songProgressMillis > 0) {
                     savePositionInTrack()
                 }
@@ -935,7 +949,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         return newPosition
     }
 
-    private fun setPosition(position: Int) {
+    fun setPosition(position: Int) {
         // handle this on the handlers thread to avoid blocking the ui thread
         playerHandler.removeMessages(SET_POSITION)
         playerHandler.obtainMessage(SET_POSITION, position, 0).sendToTarget()

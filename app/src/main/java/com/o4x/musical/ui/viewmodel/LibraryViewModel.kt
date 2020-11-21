@@ -258,8 +258,6 @@ class LibraryViewModel(
 
     suspend fun albumById(id: Long) = repository.albumById(id)
     suspend fun artistById(id: Long) = repository.artistById(id)
-    suspend fun favoritePlaylist() = repository.favoritePlaylist()
-    suspend fun isFavoriteSong(song: SongEntity) = repository.isFavoriteSong(song)
     suspend fun insertSongs(songs: List<SongEntity>) = repository.insertSongs(songs)
     suspend fun removeSongFromPlaylist(songEntity: SongEntity) =
         repository.removeSongFromPlaylist(songEntity)
@@ -314,8 +312,6 @@ class LibraryViewModel(
     }
 
     fun observableHistorySongs() = repository.observableHistorySongs()
-
-    fun favorites() = repository.favorites()
 
     fun clearSearchResult() {
         viewModelScope.launch {

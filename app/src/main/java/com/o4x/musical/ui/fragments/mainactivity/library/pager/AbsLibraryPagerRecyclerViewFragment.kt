@@ -31,7 +31,7 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
 
     private fun setUpRecyclerView() {
         if (recycler_view is FastScrollRecyclerView) {
-            ViewUtil.setUpFastScrollRecyclerViewColor(activity,
+            ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity,
                 recycler_view,
                 accentColor())
         }

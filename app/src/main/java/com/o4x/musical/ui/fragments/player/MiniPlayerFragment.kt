@@ -20,17 +20,13 @@ import com.o4x.musical.helper.MusicPlayerRemote.playNextSong
 import com.o4x.musical.helper.MusicPlayerRemote.playPreviousSong
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
-import com.o4x.musical.ui.viewmodel.ProgressViewModel
 import com.o4x.musical.util.color.MediaNotificationProcessor
-import org.koin.android.ext.android.inject
 import kotlin.math.abs
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_player) {
-
-    private val progressViewModel by inject<ProgressViewModel>()
 
     private var _binding: FragmentMiniPlayerBinding? = null
     private val binding get() = _binding!!
@@ -43,14 +39,14 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMiniPlayerBinding.inflate(inflater, container, false)
-        binding.progressViewModel = progressViewModel
+        binding.progressViewModel = serviceActivity.playerViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.setOnTouchListener(FlingPlayBackController(activity))
+        view.setOnTouchListener(FlingPlayBackController(serviceActivity))
         setUpMiniPlayer()
     }
 

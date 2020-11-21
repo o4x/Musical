@@ -4,7 +4,6 @@ import androidx.annotation.LayoutRes;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.o4x.musical.R;
-import com.o4x.musical.util.PreferenceUtil;
 import com.o4x.musical.util.Util;
 
 /**
@@ -101,9 +100,9 @@ public abstract class AbsLibraryPagerRecyclerViewCustomGridSizeFragment<A extend
 
     protected int getMaxGridSizeForList() {
         if (isLandscape()) {
-            return getActivity().getResources().getInteger(R.integer.default_list_columns_land);
+            return getServiceActivity().getResources().getInteger(R.integer.default_list_columns_land);
         }
-        return getActivity().getResources().getInteger(R.integer.default_list_columns);
+        return getServiceActivity().getResources().getInteger(R.integer.default_list_columns);
     }
 
     protected final boolean isLandscape() {

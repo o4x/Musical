@@ -4,11 +4,9 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.TimeInterpolator
-import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -18,6 +16,7 @@ import android.widget.PopupMenu
 import android.widget.SeekBar
 import androidx.annotation.ColorInt
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.lifecycle.lifecycleScope
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.TintHelper
 import com.google.android.material.slider.Slider
@@ -25,21 +24,19 @@ import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerPlaybackControlsBinding
 import com.o4x.musical.drawables.PlayPauseDrawable
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.helper.MusicProgressViewUpdateHelper
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler
 import com.o4x.musical.model.Song
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
-import com.o4x.musical.ui.viewmodel.ProgressViewModel
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
-import org.koin.android.ext.android.inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
-open class PlayerPlaybackControlsFragments() :
+open class PlayerPlaybackControlsFragments :
     AbsMusicServiceFragment(R.layout.fragment_player_playback_controls), PopupMenu.OnMenuItemClickListener {
-
-    private val progressViewModel by inject<ProgressViewModel>()
 
     private var _binding: FragmentPlayerPlaybackControlsBinding? = null
     private val binding get() = _binding!!
@@ -47,8 +44,6 @@ open class PlayerPlaybackControlsFragments() :
     private var playPauseDrawable: PlayPauseDrawable? = null
     private var lastPlaybackControlsColor = 0
     private var lastDisabledPlaybackControlsColor = 0
-    private var musicControllerAnimationSet: AnimatorSet? = null
-    private var hidden = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +51,7 @@ open class PlayerPlaybackControlsFragments() :
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPlayerPlaybackControlsBinding.inflate(inflater, container, false)
-        binding.progressViewModel = progressViewModel
+        binding.progressViewModel = serviceActivity.playerViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
@@ -176,7 +171,7 @@ open class PlayerPlaybackControlsFragments() :
         binding.playerShuffleButton.setOnClickListener { v: View? -> MusicPlayerRemote.toggleShuffleMode() }
     }
 
-    fun updateShuffleState() {
+    private fun updateShuffleState() {
         when (MusicPlayerRemote.shuffleMode) {
             MusicService.SHUFFLE_MODE_SHUFFLE -> binding.playerShuffleButton.setColorFilter(
                 lastPlaybackControlsColor,
@@ -217,43 +212,10 @@ open class PlayerPlaybackControlsFragments() :
         }
     }
 
-    fun show() {
-        if (hidden) {
-            if (musicControllerAnimationSet == null) {
-                val interpolator: TimeInterpolator = FastOutSlowInInterpolator()
-                val duration = 300
-                val animators = LinkedList<Animator>()
-                addAnimation(animators, binding.playerPlayPauseButton, interpolator, duration, 0)
-                addAnimation(animators, binding.playerNextButton, interpolator, duration, 100)
-                addAnimation(animators, binding.playerPrevButton, interpolator, duration, 100)
-                addAnimation(animators, binding.playerShuffleButton, interpolator, duration, 200)
-                addAnimation(animators, binding.playerRepeatButton, interpolator, duration, 200)
-                musicControllerAnimationSet = AnimatorSet()
-                musicControllerAnimationSet!!.playTogether(animators)
-            } else {
-                musicControllerAnimationSet!!.cancel()
-            }
-            musicControllerAnimationSet!!.start()
-        }
-        hidden = false
-    }
-
-    fun hide() {
-        if (musicControllerAnimationSet != null) {
-            musicControllerAnimationSet!!.cancel()
-        }
-        prepareForAnimation(binding.playerPlayPauseButton)
-        prepareForAnimation(binding.playerNextButton)
-        prepareForAnimation(binding.playerPrevButton)
-        prepareForAnimation(binding.playerShuffleButton)
-        prepareForAnimation(binding.playerRepeatButton)
-        hidden = true
-    }
-
     private fun setUpProgressSlider() {
         updateProgressSliderColor()
 
-        binding.playerProgressSlider.setOnSeekBarChangeListener(progressViewModel)
+        binding.playerProgressSlider.setOnSeekBarChangeListener(serviceActivity.playerViewModel)
     }
 
     private fun updateProgressSliderColor() {
@@ -287,76 +249,37 @@ open class PlayerPlaybackControlsFragments() :
     }
 
     private fun toggleFavorite(song: Song) {
-        MusicUtil.toggleFavorite(requireContext(), song)
-        if (song.id == MusicPlayerRemote.currentSong.id) {
-            updateIsFavorite()
+        lifecycleScope.launch(Dispatchers.IO) {
+            MusicUtil.toggleFavorite(requireContext(), song)
+
+            if (song.id == MusicPlayerRemote.currentSong.id) {
+                withContext(Dispatchers.Main) {
+                    updateIsFavorite()
+                }
+            }
         }
     }
 
+    private fun updateIsFavorite() {
 
-    private var updateIsFavoriteTask: AsyncTask<*, *, *>? = null
+        lifecycleScope.launch(Dispatchers.IO) {
+            val isFavorite =
+                MusicUtil.isFavorite(requireContext(), MusicPlayerRemote.currentSong)
 
-    @SuppressLint("StaticFieldLeak")
-    fun updateIsFavorite() {
-        if (updateIsFavoriteTask != null) {
-            updateIsFavoriteTask?.cancel(false)
+            withContext(Dispatchers.Main) {
+                val res = if (isFavorite)
+                    R.drawable.ic_star
+                else
+                    R.drawable.ic_star_border
+
+                val drawable = TintHelper.createTintedDrawable(requireContext(), res, Color.WHITE)
+                binding.songFavourite.setImageDrawable(drawable)
+            }
         }
-        updateIsFavoriteTask = object : AsyncTask<Song, Void, Boolean>() {
-            override fun doInBackground(vararg params: Song): Boolean? {
-                val activity = activity
-                return if (activity != null) {
-                    MusicUtil.isFavorite(requireActivity(), params[0])
-                } else {
-                    cancel(false)
-                    null
-                }
-            }
-
-            override fun onPostExecute(isFavorite: Boolean?) {
-                val activity = activity
-                if (activity != null) {
-                    val res = if (isFavorite!!)
-                        R.drawable.ic_star
-                    else
-                        R.drawable.ic_star_border
-
-                    val drawable = TintHelper.createTintedDrawable(activity, res, Color.WHITE)
-                    binding.songFavourite.setImageDrawable(drawable)
-                }
-            }
-        }.execute(MusicPlayerRemote.currentSong)
     }
 
     fun onFavoriteToggled() {
         toggleFavorite(MusicPlayerRemote.currentSong)
-    }
-
-    companion object {
-        private fun addAnimation(
-            animators: MutableCollection<Animator>,
-            view: View?,
-            interpolator: TimeInterpolator,
-            duration: Int,
-            delay: Int
-        ) {
-            val scaleX: Animator = ObjectAnimator.ofFloat(view, View.SCALE_X, 0f, 1f)
-            scaleX.interpolator = interpolator
-            scaleX.duration = duration.toLong()
-            scaleX.startDelay = delay.toLong()
-            animators.add(scaleX)
-            val scaleY: Animator = ObjectAnimator.ofFloat(view, View.SCALE_Y, 0f, 1f)
-            scaleY.interpolator = interpolator
-            scaleY.duration = duration.toLong()
-            scaleY.startDelay = delay.toLong()
-            animators.add(scaleY)
-        }
-
-        private fun prepareForAnimation(view: View?) {
-            if (view != null) {
-                view.scaleX = 0f
-                view.scaleY = 0f
-            }
-        }
     }
 }
 

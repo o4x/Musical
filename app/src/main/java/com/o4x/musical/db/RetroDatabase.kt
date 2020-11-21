@@ -13,7 +13,7 @@ import androidx.room.RoomDatabase
         QueueSongEntity::class,
         LyricsEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class RetroDatabase : RoomDatabase() {

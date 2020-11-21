@@ -14,30 +14,26 @@ import java.lang.RuntimeException
  * @author Karim Abou Zeid (kabouzeid)
  */
 open class AbsMusicServiceFragment(@LayoutRes layout: Int) : Fragment(layout), MusicServiceEventListener {
-    private var activity: AbsMusicServiceActivity? = null
+
+    lateinit var serviceActivity: AbsMusicServiceActivity
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        activity = try {
+        serviceActivity = try {
             context as AbsMusicServiceActivity
         } catch (e: ClassCastException) {
             throw RuntimeException(context.javaClass.simpleName + " must be an instance of " + AbsMusicServiceActivity::class.java.simpleName)
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        activity = null
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.addMusicServiceEventListener(this)
+        serviceActivity.addMusicServiceEventListener(this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        activity?.removeMusicServiceEventListener(this)
+        serviceActivity.removeMusicServiceEventListener(this)
     }
 
     override fun onPlayingMetaChanged() {}

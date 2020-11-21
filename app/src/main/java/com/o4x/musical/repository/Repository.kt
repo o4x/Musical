@@ -36,7 +36,6 @@ interface Repository {
     fun playlistsFlow(): Flow<Result<List<Playlist>>>
     fun genresFlow(): Flow<Result<List<Genre>>>
     fun historySong(): List<HistoryEntity>
-    fun favorites(): LiveData<List<SongEntity>>
     fun observableHistorySongs(): LiveData<List<Song>>
     fun albumById(albumId: Long): Album
     fun playlistSongs(playlistEntity: PlaylistEntity): LiveData<List<SongEntity>>
@@ -69,12 +68,9 @@ interface Repository {
     suspend fun deleteSongsInPlaylist(songs: List<SongEntity>)
     suspend fun removeSongFromPlaylist(songEntity: SongEntity)
     suspend fun deletePlaylistSongs(playlists: List<PlaylistEntity>)
-    suspend fun favoritePlaylist(): PlaylistEntity
-    suspend fun isFavoriteSong(songEntity: SongEntity): List<SongEntity>
     suspend fun addSongToHistory(currentSong: Song)
     suspend fun songPresentInHistory(currentSong: Song): HistoryEntity?
     suspend fun updateHistorySong(currentSong: Song)
-    suspend fun favoritePlaylistSongs(): List<SongEntity>
     suspend fun recentSongs(): List<Song>
     suspend fun topPlayedSongs(): List<Song>
     suspend fun insertSongInPlayCount(playCountEntity: PlayCountEntity)
@@ -217,12 +213,6 @@ class RealRepository(
     override suspend fun deletePlaylistSongs(playlists: List<PlaylistEntity>) =
         roomRepository.deletePlaylistSongs(playlists)
 
-    override suspend fun favoritePlaylist(): PlaylistEntity =
-        roomRepository.favoritePlaylist(context.getString(R.string.favorites))
-
-    override suspend fun isFavoriteSong(songEntity: SongEntity): List<SongEntity> =
-        roomRepository.isFavoriteSong(songEntity)
-
     override suspend fun addSongToHistory(currentSong: Song) =
         roomRepository.addSongToHistory(currentSong)
 
@@ -231,9 +221,6 @@ class RealRepository(
 
     override suspend fun updateHistorySong(currentSong: Song) =
         roomRepository.updateHistorySong(currentSong)
-
-    override suspend fun favoritePlaylistSongs(): List<SongEntity> =
-        roomRepository.favoritePlaylistSongs(context.getString(R.string.favorites))
 
     override suspend fun recentSongs(): List<Song> = lastAddedRepository.recentSongs()
 
@@ -261,9 +248,6 @@ class RealRepository(
 
     override fun historySong(): List<HistoryEntity> =
         roomRepository.historySongs()
-
-    override fun favorites(): LiveData<List<SongEntity>> =
-        roomRepository.favoritePlaylistLiveData(context.getString(R.string.favorites))
 
     override fun songsFlow(): Flow<Result<List<Song>>> = flow {
         emit(Loading)

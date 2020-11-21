@@ -117,7 +117,7 @@ object MusicPlayerRemote : KoinComponent {
         } else -1
         set(position) {
             if (musicService != null) {
-                musicService!!.position = position
+                musicService!!.setPosition(position)
             }
         }
 

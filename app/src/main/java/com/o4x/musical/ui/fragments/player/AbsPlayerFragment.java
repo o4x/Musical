@@ -47,7 +47,7 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
 
 public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
         implements Toolbar.OnMenuItemClickListener,
-        PaletteColorHolder, PlayerAlbumCoverFragment.Callbacks {
+        PaletteColorHolder {
 
     public AbsPlayerFragment(int layout) {
         super(layout);
@@ -100,6 +100,14 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+
+        serviceActivity.getPlayerViewModel().getCurrentPalette().observe(getViewLifecycleOwner(),
+                colors -> {
+                    animateColorChange(ColorUtil.INSTANCE.withAlpha(colors.getBackgroundColor(), 0.7f));
+                    playbackControlsFragment.setColor(colors);
+                    getCallbacks().onPaletteColorChanged();
+                }
+        );
     }
 
     @Override
@@ -134,7 +142,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
                 SongShareDialog.create(song).show(getFragmentManager(), "SHARE_SONG");
                 return true;
             case R.id.action_equalizer:
-                NavigationUtil.openEqualizer(getActivity());
+                NavigationUtil.openEqualizer(getServiceActivity());
                 return true;
             case R.id.action_add_to_playlist:
                 AddToPlaylistDialog.create(song).show(getFragmentManager(), "ADD_PLAYLIST");
@@ -143,10 +151,10 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
                 MusicPlayerRemote.clearQueue();
                 return true;
             case R.id.action_save_playing_queue:
-                CreatePlaylistDialog.create(MusicPlayerRemote.getPlayingQueue()).show(getActivity().getSupportFragmentManager(), "ADD_TO_PLAYLIST");
+                CreatePlaylistDialog.create(MusicPlayerRemote.getPlayingQueue()).show(getServiceActivity().getSupportFragmentManager(), "ADD_TO_PLAYLIST");
                 return true;
             case R.id.action_tag_editor:
-                Intent intent = new Intent(getActivity(), SongTagEditorActivity.class);
+                Intent intent = new Intent(getServiceActivity(), SongTagEditorActivity.class);
                 intent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.getId());
                 startActivity(intent);
                 return true;
@@ -154,10 +162,10 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
                 SongDetailDialog.create(song).show(getFragmentManager(), "SONG_DETAIL");
                 return true;
             case R.id.action_go_to_album:
-                NavigationUtil.goToAlbum(getActivity(), song.getAlbumId());
+                NavigationUtil.goToAlbum(getServiceActivity(), song.getAlbumId());
                 return true;
             case R.id.action_go_to_artist:
-                NavigationUtil.goToArtist(getActivity(), song.getArtistId());
+                NavigationUtil.goToArtist(getServiceActivity(), song.getArtistId());
                 return true;
         }
         return false;
@@ -199,14 +207,12 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     private void setUpSubFragments() {
         playbackControlsFragment = (PlayerPlaybackControlsFragments) getChildFragmentManager().findFragmentById(R.id.playback_controls_fragment);
         playerAlbumCoverFragment = (PlayerAlbumCoverFragment) getChildFragmentManager().findFragmentById(R.id.player_album_cover_fragment);
-
-        playerAlbumCoverFragment.setCallbacks(this);
     }
 
     private void setUpPlayerToolbar() {
         toolbar.inflateMenu(R.menu.menu_player);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+        toolbar.setNavigationOnClickListener(v -> getServiceActivity().onBackPressed());
         toolbar.setOnMenuItemClickListener(this);
     }
 
@@ -241,7 +247,7 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
                         toolbar.getMenu().removeItem(R.id.action_show_lyrics);
                     }
                 } else {
-                    Activity activity = getActivity();
+                    Activity activity = getServiceActivity();
                     if (toolbar != null && activity != null)
                         if (toolbar.getMenu().findItem(R.id.action_show_lyrics) == null) {
                             int color = ToolbarContentTintHelper.toolbarContentColor(activity, Color.TRANSPARENT);
@@ -271,27 +277,6 @@ public abstract class AbsPlayerFragment extends AbsMusicServiceFragment
     private void animateColorChange(final int newColor) {
         impl.animateColorChange(newColor);
         lastColor = newColor;
-    }
-
-    @Override
-    public void onColorChanged(MediaNotificationProcessor colors) {
-        animateColorChange(ColorUtil.INSTANCE.withAlpha(colors.getBackgroundColor(), 0.7f));
-        playbackControlsFragment.setColor(colors);
-        getCallbacks().onPaletteColorChanged();
-    }
-
-    @Override
-    public void onFavoriteToggled() {
-        playbackControlsFragment.onFavoriteToggled();
-    }
-
-
-    public void onShow() {
-        playbackControlsFragment.show();
-    }
-
-    public void onHide() {
-        playbackControlsFragment.hide();
     }
 
     public Callbacks getCallbacks() {

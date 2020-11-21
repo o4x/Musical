@@ -9,7 +9,6 @@ import com.o4x.musical.model.Song
 
 interface RoomRepository {
     fun historySongs(): List<HistoryEntity>
-    fun favoritePlaylistLiveData(favorite: String): LiveData<List<SongEntity>>
     fun observableHistorySongs(): LiveData<List<HistoryEntity>>
     fun getSongs(playlistEntity: PlaylistEntity): LiveData<List<SongEntity>>
     suspend fun createPlaylist(playlistEntity: PlaylistEntity): Long
@@ -21,13 +20,10 @@ interface RoomRepository {
     suspend fun renamePlaylistEntity(playlistId: Long, name: String)
     suspend fun deleteSongsInPlaylist(songs: List<SongEntity>)
     suspend fun deletePlaylistSongs(playlists: List<PlaylistEntity>)
-    suspend fun favoritePlaylist(favorite: String): PlaylistEntity
-    suspend fun isFavoriteSong(songEntity: SongEntity): List<SongEntity>
     suspend fun removeSongFromPlaylist(songEntity: SongEntity)
     suspend fun addSongToHistory(currentSong: Song)
     suspend fun songPresentInHistory(song: Song): HistoryEntity?
     suspend fun updateHistorySong(song: Song)
-    suspend fun favoritePlaylistSongs(favorite: String): List<SongEntity>
     suspend fun insertSongInPlayCount(playCountEntity: PlayCountEntity)
     suspend fun updateSongInPlayCount(playCountEntity: PlayCountEntity)
     suspend fun deleteSongInPlayCount(playCountEntity: PlayCountEntity)
@@ -84,22 +80,6 @@ class RealRoomRepository(
             playlistDao.deletePlaylistSongs(it.playListId)
         }
 
-    override suspend fun favoritePlaylist(favorite: String): PlaylistEntity {
-        val playlist: PlaylistEntity? = playlistDao.isPlaylistExists(favorite).firstOrNull()
-        return if (playlist != null) {
-            playlist
-        } else {
-            createPlaylist(PlaylistEntity(playlistName = favorite))
-            playlistDao.isPlaylistExists(favorite).first()
-        }
-    }
-
-    override suspend fun isFavoriteSong(songEntity: SongEntity): List<SongEntity> =
-        playlistDao.isSongExistsInPlaylist(
-            songEntity.playlistCreatorId,
-            songEntity.id
-        )
-
     override suspend fun removeSongFromPlaylist(songEntity: SongEntity) =
         playlistDao.deleteSongFromPlaylist(songEntity.playlistCreatorId, songEntity.id)
 
@@ -116,17 +96,6 @@ class RealRoomRepository(
         historyDao.observableHistorySongs()
 
     override fun historySongs(): List<HistoryEntity> = historyDao.historySongs()
-
-    override fun favoritePlaylistLiveData(favorite: String): LiveData<List<SongEntity>> =
-        playlistDao.favoritesSongsLiveData(
-            playlistDao.isPlaylistExists(favorite).first().playListId
-        )
-
-    override suspend fun favoritePlaylistSongs(favorite: String): List<SongEntity> =
-        if (playlistDao.isPlaylistExists(favorite).isNotEmpty())
-            playlistDao.favoritesSongs(
-                playlistDao.isPlaylistExists(favorite).first().playListId
-            ) else emptyList()
 
     override suspend fun insertSongInPlayCount(playCountEntity: PlayCountEntity) =
         playCountDao.insertSongInPlayCount(playCountEntity)
