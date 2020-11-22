@@ -239,7 +239,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         )
         queue_recycler_view.adapter = queueAdapter
 
-        libraryViewModel.getQueue().observe(viewLifecycleOwner, {
+        playerViewModel.queue.observe(viewLifecycleOwner, {
             queue_container.isVisible = it.isNotEmpty()
             val firstLoad = queueAdapter.itemCount == 0
             queueAdapter.swapDataSet(it, MusicPlayerRemote.position)

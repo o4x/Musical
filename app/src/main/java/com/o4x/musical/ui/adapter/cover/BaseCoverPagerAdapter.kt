@@ -14,11 +14,6 @@ import com.o4x.musical.model.Song
 open class BaseCoverPagerAdapter(fm: FragmentManager?, private var dataSet: List<Song>) :
     CustomFragmentStatePagerAdapter(fm) {
 
-    fun swapData(dataSet: List<Song>) {
-        this.dataSet = dataSet
-        notifyDataSetChanged()
-    }
-
     override fun getItem(position: Int): Fragment {
         return AlbumCoverPagerAdapter.AlbumCoverFragment.newInstance(dataSet[position])
     }

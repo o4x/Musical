@@ -478,7 +478,6 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
     companion object {
         const val EXTRA_ID = "extra_id"
-        const val EXTRA_PALETTE = "extra_palette"
         private val TAG = AbsTagEditorActivity::class.java.simpleName
         private const val REQUEST_CODE_SELECT_ALBUM_IMAGE = 1000
         private const val REQUEST_CODE_SELECT_ARTIST_IMAGE = 1001

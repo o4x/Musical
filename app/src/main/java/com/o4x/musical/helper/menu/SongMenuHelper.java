@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
-import com.o4x.musical.interfaces.PaletteColorHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
 import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity;
@@ -20,7 +19,6 @@ import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
 import com.o4x.musical.ui.dialogs.SongDetailDialog;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
-import com.o4x.musical.util.RingtoneManager;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -56,8 +54,6 @@ public class SongMenuHelper {
             case R.id.action_tag_editor:
                 Intent tagEditorIntent = new Intent(activity, SongTagEditorActivity.class);
                 tagEditorIntent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.getId());
-                if (activity instanceof PaletteColorHolder)
-                    tagEditorIntent.putExtra(AbsTagEditorActivity.EXTRA_PALETTE, ((PaletteColorHolder) activity).getPaletteColor());
                 activity.startActivity(tagEditorIntent);
                 return true;
             case R.id.action_details:

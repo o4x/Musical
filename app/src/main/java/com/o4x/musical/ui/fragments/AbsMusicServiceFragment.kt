@@ -16,6 +16,7 @@ import java.lang.RuntimeException
 open class AbsMusicServiceFragment(@LayoutRes layout: Int) : Fragment(layout), MusicServiceEventListener {
 
     lateinit var serviceActivity: AbsMusicServiceActivity
+    val playerViewModel by lazy { serviceActivity.playerViewModel }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

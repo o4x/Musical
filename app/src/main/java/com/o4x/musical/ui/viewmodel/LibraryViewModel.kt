@@ -37,7 +37,6 @@ class LibraryViewModel(
     private val searchResults = MutableLiveData<List<Any>>()
     private val recentlyAdded = MutableLiveData<List<Song>>()
     private val recentlyPlayed = MutableLiveData<List<Song>>()
-    private val queue = MutableLiveData<List<Song>>()
 
     fun getPaletteColor(): LiveData<Int> = paletteColor
     fun getPosterBitmap(): LiveData<Bitmap> = posterBitmap
@@ -50,7 +49,6 @@ class LibraryViewModel(
     fun getGenre(): LiveData<List<Genre>> = genres
     fun getRecentlyPlayed(): LiveData<List<Song>> = recentlyPlayed
     fun getRecentlyAdded(): LiveData<List<Song>> = recentlyAdded
-    fun getQueue(): LiveData<List<Song>> = queue
 
     init {
         loadLibraryContent()
@@ -65,7 +63,6 @@ class LibraryViewModel(
         fetchLegacyPlaylist()
         fetchRecentlyPlayed()
         fetchRecentlyAdded()
-        fetchQueue()
 
         fetchPosterBitmap()
     }
@@ -121,12 +118,6 @@ class LibraryViewModel(
     private fun fetchRecentlyAdded() {
         viewModelScope.launch(IO) {
             recentlyAdded.postValue(repository.recentSongs())
-        }
-    }
-
-    private fun fetchQueue() {
-        viewModelScope.launch(IO) {
-            queue.postValue(MusicPlayerRemote.playingQueue)
         }
     }
 
@@ -191,7 +182,6 @@ class LibraryViewModel(
 
     override fun onServiceConnected() {
         println("onServiceConnected")
-        fetchQueue()
     }
 
     override fun onServiceDisconnected() {
@@ -200,12 +190,10 @@ class LibraryViewModel(
 
     override fun onQueueChanged() {
         println("onQueueChanged")
-        fetchQueue()
     }
 
     override fun onPlayingMetaChanged() {
         println("onPlayingMetaChanged")
-        fetchQueue()
         fetchRecentlyPlayed()
     }
 

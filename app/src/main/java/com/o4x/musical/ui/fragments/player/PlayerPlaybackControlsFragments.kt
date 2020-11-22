@@ -1,25 +1,19 @@
 package com.o4x.musical.ui.fragments.player
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.TimeInterpolator
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
+import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.annotation.ColorInt
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.lifecycleScope
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.TintHelper
-import com.google.android.material.slider.Slider
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerPlaybackControlsBinding
 import com.o4x.musical.drawables.PlayPauseDrawable
@@ -27,23 +21,20 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.PlayPauseButtonOnClickHandler
 import com.o4x.musical.model.Song
 import com.o4x.musical.service.MusicService
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 open class PlayerPlaybackControlsFragments :
-    AbsMusicServiceFragment(R.layout.fragment_player_playback_controls), PopupMenu.OnMenuItemClickListener {
+    AbsMusicServiceFragment(R.layout.fragment_player_playback_controls) {
 
     private var _binding: FragmentPlayerPlaybackControlsBinding? = null
     private val binding get() = _binding!!
 
     private var playPauseDrawable: PlayPauseDrawable? = null
-    private var lastPlaybackControlsColor = 0
-    private var lastDisabledPlaybackControlsColor = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +42,7 @@ open class PlayerPlaybackControlsFragments :
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPlayerPlaybackControlsBinding.inflate(inflater, container, false)
-        binding.progressViewModel = serviceActivity.playerViewModel
+        binding.playerViewModel = serviceActivity.playerViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
@@ -59,9 +50,16 @@ open class PlayerPlaybackControlsFragments :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupTitle()
+        setColor()
+        binding.title.isSelected = true
         setUpMusicControllers()
-        updateProgressTextColor()
+
+        playerViewModel.position.observe(viewLifecycleOwner, {
+            updateIsFavorite()
+        })
+        playerViewModel.isPlaying.observe(viewLifecycleOwner, {
+            updatePlayPauseDrawableState()
+        })
     }
 
     override fun onDestroyView() {
@@ -69,51 +67,10 @@ open class PlayerPlaybackControlsFragments :
         _binding = null
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        return (parentFragment as AbsPlayerFragment).onMenuItemClick(item!!)
-    }
-
-    override fun onServiceConnected() {
-        updatePlayPauseDrawableState(true)
-        updateRepeatState()
-        updateShuffleState()
-        updateSong()
-    }
-
-    override fun onPlayingMetaChanged() {
-        super.onPlayingMetaChanged()
-        updateSong()
-    }
-
-    override fun onPlayStateChanged() {
-        updatePlayPauseDrawableState(true)
-    }
-
-    override fun onRepeatModeChanged() {
-        updateRepeatState()
-    }
-
-    override fun onShuffleModeChanged() {
-        updateShuffleState()
-    }
-
-    private fun updateSong() {
-        val song = MusicPlayerRemote.currentSong
-        binding.title.text = song.title
-        binding.text.text = song.artistName
-        updateIsFavorite()
-    }
-
-    private fun setupTitle() {
-        binding.title.isSelected = true
-    }
-
     private fun setupMenu() {
-        binding.playerMenu.setOnClickListener {
-            val popupMenu = PopupMenu(requireContext(), it)
-            popupMenu.setOnMenuItemClickListener(this)
-            popupMenu.inflate(R.menu.menu_player)
-            popupMenu.show()
+        binding.playerAdd.setOnClickListener {
+            AddToPlaylistDialog
+                .create(MusicPlayerRemote.currentSong).show(childFragmentManager, "ADD_PLAYLIST")
         }
     }
 
@@ -121,7 +78,6 @@ open class PlayerPlaybackControlsFragments :
         playPauseDrawable =
             PlayPauseDrawable(requireActivity())
         binding.playerPlayPauseButton.setImageDrawable(playPauseDrawable)
-        updatePlayPauseColor()
         binding.playerPlayPauseButton.setOnClickListener(PlayPauseButtonOnClickHandler())
         binding.playerPlayPauseButton.post {
             binding.playerPlayPauseButton.pivotX = binding.playerPlayPauseButton.width / 2.toFloat()
@@ -129,63 +85,20 @@ open class PlayerPlaybackControlsFragments :
         }
     }
 
-    private fun updatePlayPauseDrawableState(animate: Boolean) {
+    private fun updatePlayPauseDrawableState() {
+        val animate = true
         if (MusicPlayerRemote.isPlaying) {
-            playPauseDrawable!!.setPause(animate)
+            playPauseDrawable?.setPause(animate)
         } else {
-            playPauseDrawable!!.setPlay(animate)
+            playPauseDrawable?.setPlay(animate)
         }
     }
 
     private fun setUpMusicControllers() {
         setUpPlayPauseButton()
-        setUpPrevNext()
-        setUpRepeatButton()
-        setUpShuffleButton()
         setUpProgressSlider()
         setupFavourite()
         setupMenu()
-    }
-
-    private fun setUpPrevNext() {
-        updatePrevNextColor()
-        binding.playerNextButton.setOnClickListener { v: View? -> MusicPlayerRemote.playNextSong() }
-        binding.playerPrevButton.setOnClickListener { v: View? -> MusicPlayerRemote.back() }
-    }
-
-    private fun updateProgressTextColor() {
-        binding.playerSongTotalTime.setTextColor(lastPlaybackControlsColor)
-        binding.playerSongCurrentProgress.setTextColor(lastPlaybackControlsColor)
-    }
-
-    private fun updatePrevNextColor() {
-        binding.playerNextButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
-        binding.playerPrevButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
-    }
-
-    private fun updatePlayPauseColor() {
-        binding.playerPlayPauseButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
-    }
-
-    private fun setUpShuffleButton() {
-        binding.playerShuffleButton.setOnClickListener { v: View? -> MusicPlayerRemote.toggleShuffleMode() }
-    }
-
-    private fun updateShuffleState() {
-        when (MusicPlayerRemote.shuffleMode) {
-            MusicService.SHUFFLE_MODE_SHUFFLE -> binding.playerShuffleButton.setColorFilter(
-                lastPlaybackControlsColor,
-                PorterDuff.Mode.SRC_IN
-            )
-            else -> binding.playerShuffleButton.setColorFilter(
-                lastDisabledPlaybackControlsColor,
-                PorterDuff.Mode.SRC_IN
-            )
-        }
-    }
-
-    private fun setUpRepeatButton() {
-        binding.playerRepeatButton.setOnClickListener { v: View? -> MusicPlayerRemote.cycleRepeatMode() }
     }
 
     private fun setupFavourite() {
@@ -194,58 +107,33 @@ open class PlayerPlaybackControlsFragments :
         }
     }
 
-    private fun updateRepeatState() {
-        when (MusicPlayerRemote.repeatMode) {
-            MusicService.REPEAT_MODE_NONE -> {
-                binding.playerRepeatButton.setImageResource(R.drawable.ic_repeat)
-                binding.playerRepeatButton.setColorFilter(lastDisabledPlaybackControlsColor,
-                    PorterDuff.Mode.SRC_IN)
-            }
-            MusicService.REPEAT_MODE_ALL -> {
-                binding.playerRepeatButton.setImageResource(R.drawable.ic_repeat)
-                binding.playerRepeatButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
-            }
-            MusicService.REPEAT_MODE_THIS -> {
-                binding.playerRepeatButton.setImageResource(R.drawable.ic_repeat_one)
-                binding.playerRepeatButton.setColorFilter(lastPlaybackControlsColor, PorterDuff.Mode.SRC_IN)
-            }
-        }
-    }
-
     private fun setUpProgressSlider() {
-        updateProgressSliderColor()
-
         binding.playerProgressSlider.setOnSeekBarChangeListener(serviceActivity.playerViewModel)
     }
 
-    private fun updateProgressSliderColor() {
-        binding.playerProgressSlider.applyColor(lastPlaybackControlsColor)
-    }
 
+    private fun setColor() {
+        val tintList = ColorStateList.valueOf(primaryColor)
 
-    fun setColor(colors: MediaNotificationProcessor) {
-        lastPlaybackControlsColor = colors.primaryTextColor
-        lastDisabledPlaybackControlsColor = ColorUtil.withAlpha(colors.primaryTextColor, 0.3f)
-
-        val tintList = ColorStateList.valueOf(colors.primaryTextColor)
-        binding.playerMenu.imageTintList = tintList
+        binding.playerAdd.imageTintList = tintList
         binding.songFavourite.imageTintList = tintList
-        binding.playerProgressSlider.applyColor(colors.primaryTextColor)
-        binding.title.setTextColor(colors.primaryTextColor)
-        binding.text.setTextColor(colors.secondaryTextColor)
-        binding.playerSongCurrentProgress.setTextColor(colors.secondaryTextColor)
-        binding.playerSongTotalTime.setTextColor(colors.secondaryTextColor)
+        binding.playerProgressSlider.applyColor(primaryColor)
+        binding.title.setTextColor(primaryColor)
+        binding.text.setTextColor(secondaryColor)
+        binding.playerSongCurrentProgress.setTextColor(secondaryColor)
+        binding.playerSongTotalTime.setTextColor(secondaryColor)
 
         binding.playerPlayPauseButton.backgroundTintList = tintList
-        binding.playerPlayPauseButton.imageTintList = ColorStateList.valueOf(colors.backgroundColor)
-        binding.playerPlayPauseButton.setColorFilter(colors.backgroundColor, PorterDuff.Mode.SRC_IN)
+        binding.playerPlayPauseButton.imageTintList = ColorStateList.valueOf(backgroundColor)
+        binding.playerPlayPauseButton.setColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN)
 
-        updateRepeatState()
-        updateShuffleState()
-        updatePrevNextColor()
-//        updatePlayPauseColor()
-        updateProgressTextColor()
-        updateProgressSliderColor()
+        binding.playerNextButton.setColorFilter(primaryColor, PorterDuff.Mode.SRC_IN)
+        binding.playerPrevButton.setColorFilter(primaryColor, PorterDuff.Mode.SRC_IN)
+
+        binding.playerSongTotalTime.setTextColor(primaryColor)
+        binding.playerSongCurrentProgress.setTextColor(primaryColor)
+
+        binding.playerProgressSlider.applyColor(primaryColor)
     }
 
     private fun toggleFavorite(song: Song) {
@@ -277,31 +165,46 @@ open class PlayerPlaybackControlsFragments :
             }
         }
     }
+}
 
-    fun onFavoriteToggled() {
-        toggleFavorite(MusicPlayerRemote.currentSong)
+private const val backgroundColor = Color.BLACK
+private const val primaryColor = Color.WHITE
+private val secondaryColor = ColorUtil.withAlpha(primaryColor, 0.6f)
+private val disabledPrimaryColor = ColorUtil.withAlpha(primaryColor, 0.3f)
+
+@BindingAdapter("repeatMode")
+fun setRepeatMode(view: ImageView, mode: Int) {
+    when (mode) {
+        MusicService.REPEAT_MODE_ALL -> view.setImageResource(R.drawable.ic_repeat)
+        MusicService.REPEAT_MODE_THIS -> view.setImageResource(R.drawable.ic_repeat_one)
+        else -> view.setImageResource(R.drawable.ic_repeat)
+    }
+
+    view.setColorMode(mode != MusicService.REPEAT_MODE_NONE)
+}
+
+@BindingAdapter("shuffleMode")
+fun setShuffleMode(view: ImageView, mode: Int) {
+    when (mode) {
+        MusicService.SHUFFLE_MODE_SHUFFLE -> view.setColorMode(true)
+        else -> view.setColorMode(false)
     }
 }
 
-
-fun Slider.applyColor(@ColorInt color: Int) {
-
-    val tintList = ColorStateList.valueOf(color)
-
-    thumbTintList = tintList
-    haloTintList = ColorStateList.valueOf(color)
-    trackTintList = tintList
-    trackActiveTintList = ColorStateList.valueOf(ColorUtil.withAlpha(color, 0.8f))
-    trackInactiveTintList = ColorStateList.valueOf(ColorUtil.withAlpha(color, 0.3f))
+private fun ImageView.setColorMode(enable: Boolean) {
+    setColorFilter(
+        if (enable)
+            primaryColor
+        else
+            disabledPrimaryColor,
+        PorterDuff.Mode.SRC_IN
+    )
 }
 
 fun SeekBar.applyColor(@ColorInt color: Int) {
-
     val tintList = ColorStateList.valueOf(color)
 
     thumbTintList = tintList
-    indeterminateTintList = tintList
+    progressTintList = tintList
     progressBackgroundTintList = tintList
-    secondaryProgressTintList = tintList
-    tickMarkTintList = tintList
 }

@@ -15,23 +15,20 @@ import com.o4x.musical.helper.MusicProgressViewUpdateHelper
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics
 import com.o4x.musical.model.lyrics.Lyrics
 import com.o4x.musical.ui.adapter.cover.AlbumCoverPagerAdapter
-import com.o4x.musical.ui.adapter.cover.BaseCoverPagerAdapter
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import com.o4x.musical.util.PreferenceUtil.synchronizedLyricsShow
-import com.o4x.musical.util.color.MediaNotificationProcessor
+
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_player_album_cover),
-    OnPageChangeListener, MusicProgressViewUpdateHelper.Callback {
+    OnPageChangeListener {
 
     private var _binding: FragmentPlayerAlbumCoverBinding? = null
     private val binding get() = _binding!!
 
-    private var currentPosition = 0
     private var lyrics: Lyrics? = null
-    private var progressViewUpdateHelper: MusicProgressViewUpdateHelper? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,45 +42,35 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.playerAlbumCoverViewpager.adapter = AlbumCoverPagerAdapter(
-            childFragmentManager,
-            playingQueue
-        )
-        binding.playerAlbumCoverViewpager.addOnPageChangeListener(this)
-        binding.playerAlbumCoverViewpager.setPageTransformer(true, ParallaxPageTransformer())
 
-        progressViewUpdateHelper = MusicProgressViewUpdateHelper(this, 500, 1000)
-        progressViewUpdateHelper?.start()
+        binding.playerAlbumCoverViewpager
+            .addOnPageChangeListener(this)
+        binding.playerAlbumCoverViewpager
+            .setPageTransformer(true, ParallaxPageTransformer())
+
+        playerViewModel.queue.observe(viewLifecycleOwner, {
+            binding.playerAlbumCoverViewpager.adapter =
+                AlbumCoverPagerAdapter(childFragmentManager, it)
+            binding.playerAlbumCoverViewpager.currentItem = position
+            onPageSelected(position)
+        })
+        playerViewModel.position.observe(viewLifecycleOwner, {
+            binding.playerAlbumCoverViewpager.setCurrentItem(it, true)
+        })
+        playerViewModel.progress.observe(viewLifecycleOwner, {
+            updateLyricsProgress(it)
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding.playerAlbumCoverViewpager.removeOnPageChangeListener(this)
-        progressViewUpdateHelper?.stop()
         _binding = null
     }
 
-    override fun onServiceConnected() {
-        updatePlayingQueue()
-    }
-
-    override fun onPlayingMetaChanged() {
-        binding.playerAlbumCoverViewpager.setCurrentItem(position, true)
-    }
-
-    override fun onQueueChanged() {
-        updatePlayingQueue()
-    }
-
-    private fun updatePlayingQueue() {
-        (binding.playerAlbumCoverViewpager.adapter as BaseCoverPagerAdapter).swapData(playingQueue)
-        binding.playerAlbumCoverViewpager.currentItem = position
-        onPageSelected(position)
-    }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
     override fun onPageSelected(position: Int) {
-        currentPosition = position
         if (position != MusicPlayerRemote.position) {
             MusicPlayerRemote.position = position
         }
@@ -115,7 +102,7 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
         binding.playerLyrics.animate().alpha(1f).duration = VISIBILITY_ANIM_DURATION.toLong()
     }
 
-    override fun onUpdateProgressViews(progress: Int, total: Int) {
+    fun updateLyricsProgress(progress: Int) {
         if (!isLyricsLayoutVisible) {
             hideLyricsLayout()
             return

@@ -54,7 +54,7 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
             val myIntent = Intent(this@AbsMusicPanelActivity, PlayerActivity::class.java)
             this@AbsMusicPanelActivity.startActivity(myIntent)
         }
-        libraryViewModel.getQueue().observe(this, {
+        playerViewModel.queue.observe(this, {
             hideBottomBar(it.isEmpty())
         })
     }
