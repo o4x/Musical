@@ -14,7 +14,6 @@ import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.palette.NotificationPaletteTargetListener
-import com.o4x.musical.interfaces.PaletteColorHolder
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
@@ -28,7 +27,7 @@ import org.koin.core.parameter.parametersOf
 import kotlin.math.max
 import kotlin.math.min
 
-abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolder {
+abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
 
     companion object {
         const val EXTRA_ID = "extra_id"
@@ -59,10 +58,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity(), PaletteColorHolde
 
     override fun createContentView(): View? {
         return wrapSlidingMusicPanel(R.layout.activity_detail)
-    }
-
-    override fun getPaletteColor(): Int {
-        return colors.backgroundColor
     }
 
 

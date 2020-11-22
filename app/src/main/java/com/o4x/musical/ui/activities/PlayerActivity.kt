@@ -6,15 +6,14 @@ import androidx.annotation.ColorInt
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import com.o4x.musical.R
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
-import com.o4x.musical.ui.fragments.player.AbsPlayerFragment
-import com.o4x.musical.ui.fragments.player.flat.PlayerFragment
+import com.o4x.musical.ui.fragments.player.PlayerFragment
 
-class PlayerActivity : AbsMusicServiceActivity(), AbsPlayerFragment.Callbacks {
+class PlayerActivity : AbsMusicServiceActivity() {
 
     private var navigationBarColor = 0
     private var taskColor = 0
     private var lightStatusBar = false
-    lateinit var playerFragment: AbsPlayerFragment
+    lateinit var playerFragment: PlayerFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,9 +24,7 @@ class PlayerActivity : AbsMusicServiceActivity(), AbsPlayerFragment.Callbacks {
         supportFragmentManager.beginTransaction()
             .replace(R.id.player_fragment_container, playerFragment).commit()
         supportFragmentManager.executePendingTransactions()
-        val playerFragmentColor = playerFragment.paletteColor
         setLightStatusBar(false)
-        setTaskDescriptionColor(playerFragmentColor)
         setNavigationBarColor(Color.TRANSPARENT)
     }
 
@@ -42,12 +39,6 @@ class PlayerActivity : AbsMusicServiceActivity(), AbsPlayerFragment.Callbacks {
         super.onStop()
         playerFragment.setMenuVisibility(false)
         playerFragment.userVisibleHint = false
-    }
-
-    override fun onPaletteColorChanged() {
-        val playerFragmentColor = playerFragment.paletteColor
-        setTaskDescriptionColor(playerFragmentColor)
-        setLightNavigationBar(isColorLight(playerFragmentColor))
     }
 
     override fun setNavigationBarColor(color: Int) {

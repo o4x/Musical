@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/player_album_cover_fragment"
-        class="com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment"
+        android:name="com.o4x.musical.ui.fragments.player.PlayerAlbumCoverFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:id="@+id/content"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/translucent_layer" />
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/player_toolbar"
+            android:id="@+id/toolbar"
             style="@style/Toolbar"
             android:background="@android:color/transparent" />
 
-    </LinearLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/playback_controls_fragment"
+            android:name="com.o4x.musical.ui.fragments.player.PlayerPlaybackControlsFragments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"/>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/playback_controls_fragment"
-        class="com.o4x.musical.ui.fragments.player.PlayerPlaybackControlsFragments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
-
-    <View
-        android:id="@+id/toolbar_container"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_scrim_height"
-        android:background="@drawable/toolbar_gradient" />
+    </FrameLayout>
 
 </FrameLayout>

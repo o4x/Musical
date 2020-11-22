@@ -12,6 +12,7 @@ import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.viewmodel.PlayerViewModel
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -25,7 +26,7 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
     private var musicStateReceiver: MusicStateReceiver? = null
     private var receiverRegistered = false
 
-    val playerViewModel by inject<PlayerViewModel>()
+    val playerViewModel by viewModel<PlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

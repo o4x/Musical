@@ -1,10 +1,7 @@
 package com.o4x.musical.ui.viewmodel
 
 import android.widget.SeekBar
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import com.o4x.musical.App
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.MusicProgressViewUpdateHelper
@@ -16,7 +13,7 @@ import com.o4x.musical.model.Song
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 
-class PlayerViewModel() : ViewModel(),
+class PlayerViewModel : ViewModel(),
     MusicProgressViewUpdateHelper.Callback,
     SeekBar.OnSeekBarChangeListener, MusicServiceEventListener {
 
@@ -24,22 +21,12 @@ class PlayerViewModel() : ViewModel(),
      // PROGRESS PART //
     ///////////////////
 
-    private val _progress = MutableLiveData<Int>().also {
-        it.value = MusicPlayerRemote.position
-    }
-    private val _total = MutableLiveData<Int>().also {
-        it.value = MusicPlayerRemote.songDurationMillis
-    }
+    private val _progress = MutableLiveData<Int>()
+    private val _total = MutableLiveData<Int>()
 
-    private val progressViewUpdateHelper = MusicProgressViewUpdateHelper(this)
-
-    init {
-        progressViewUpdateHelper.start()
-    }
-
-    override fun onCleared() {
-        progressViewUpdateHelper.stop()
-        super.onCleared()
+    private fun updateTimes() {
+        _progress.postValue(MusicPlayerRemote.position)
+        _total.postValue(MusicPlayerRemote.songDurationMillis)
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {
@@ -80,12 +67,38 @@ class PlayerViewModel() : ViewModel(),
      // STATE PART //
     ////////////////
 
-    private val _repeatMode = MutableLiveData<Int>().also {
-        it.value = MusicPlayerRemote.repeatMode
+    private val _isPlaying = MutableLiveData<Boolean>()
+    val isPlaying: LiveData<Boolean> = _isPlaying
+    private fun updateIsPlaying() {
+        _isPlaying.postValue(MusicPlayerRemote.isPlaying)
     }
+
+    private val _repeatMode = MutableLiveData<Int>()
     val repeatMode: LiveData<Int> = _repeatMode
     private fun updateRepeatMode() {
         _repeatMode.postValue(MusicPlayerRemote.repeatMode)
+    }
+
+    private val _shuffleMode = MutableLiveData<Int>()
+    val shuffleMode: LiveData<Int> = _shuffleMode
+    private fun updateShuffleMode() {
+        _shuffleMode.postValue(MusicPlayerRemote.shuffleMode)
+    }
+
+      ///////////
+     // QUEUE //
+    ///////////
+
+    private val _queue = MutableLiveData<List<Song>>()
+    val queue: LiveData<List<Song>> = _queue
+    private fun updateQueue() {
+        _queue.postValue(MusicPlayerRemote.playingQueue)
+    }
+
+    private val _position = MutableLiveData<Int>()
+    val position: LiveData<Int> = _position
+    private fun updatePosition() {
+        _position.postValue(MusicPlayerRemote.position)
     }
 
       //////////////////
@@ -100,50 +113,65 @@ class PlayerViewModel() : ViewModel(),
         _currentSong.postValue(MusicPlayerRemote.currentSong)
     }
 
+      //////////
+     // INIT //
+    //////////
 
-    val _currentPalette = MutableLiveData<MediaNotificationProcessor>().apply {
-        currentSong.observeForever {
-            val listener: NotificationPaletteTargetListener =
-                object : NotificationPaletteTargetListener(App.getContext()) {
-                    override fun onColorReady(colors: MediaNotificationProcessor) {
-                        postValue(colors)
-                    }
-                }
+    private val progressViewUpdateHelper = MusicProgressViewUpdateHelper(this)
 
-            listener.loadPlaceholderPalette = true
+    init {
+        progressViewUpdateHelper.start()
 
-            GlideLoader.with(App.getContext())
-                .withListener(listener)
-                .load(it)
-                .into(CustomBitmapTarget(100, 100))
-        }
+        updateAll()
     }
-    val currentPalette: LiveData<MediaNotificationProcessor> = _currentPalette
 
-      ///////////////////////
-     // SERVICE CALLBACKS //
+    private fun updateAll() {
+        updateTimes()
+        updateIsPlaying()
+        updateRepeatMode()
+        updateShuffleMode()
+        updateQueue()
+        updatePosition()
+        updateCurrentSong()
+    }
+
+    override fun onCleared() {
+        progressViewUpdateHelper.stop()
+        super.onCleared()
+    }
+
+    ///////////////////////
+    // SERVICE CALLBACKS //
     ///////////////////////
 
     override fun onServiceConnected() {
-        updateRepeatMode()
-        updateCurrentSong()
+        updateAll()
     }
 
     override fun onServiceDisconnected() {}
 
-    override fun onQueueChanged() {}
+    override fun onQueueChanged() {
+        updateQueue()
+        updatePosition()
+    }
 
     override fun onPlayingMetaChanged() {
+        updateQueue()
+        updatePosition()
         updateCurrentSong()
     }
 
-    override fun onPlayStateChanged() {}
+    override fun onPlayStateChanged() {
+        updateIsPlaying()
+    }
 
     override fun onRepeatModeChanged() {
         updateRepeatMode()
     }
 
-    override fun onShuffleModeChanged() {}
+    override fun onShuffleModeChanged() {
+        updateShuffleMode()
+    }
 
     override fun onMediaStoreChanged() {
         updateCurrentSong()

@@ -4,8 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.o4x.musical.helper.MusicPlayerRemote" />
+        <import type="com.o4x.musical.helper.PlayPauseButtonOnClickHandler" />
+
         <variable
-            name="progressViewModel"
+            name="playerViewModel"
             type="com.o4x.musical.ui.viewmodel.PlayerViewModel" />
     </data>
 
@@ -21,7 +24,7 @@
             android:paddingTop="16dp">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/playerMenu"
+                android:id="@+id/playerAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/roundSelector"
@@ -29,7 +32,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/titleContainer"
-                app:srcCompat="@drawable/ic_more_vert" />
+                app:srcCompat="@drawable/ic_add_circle_outline" />
 
             <LinearLayout
                 android:id="@+id/titleContainer"
@@ -37,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@+id/player_progress_slider"
-                app:layout_constraintEnd_toStartOf="@+id/playerMenu"
+                app:layout_constraintEnd_toStartOf="@+id/playerAdd"
                 app:layout_constraintStart_toEndOf="@+id/songFavourite"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -52,6 +55,7 @@
                     android:textAppearance="@style/TextViewHeadline6"
                     android:textColor="@color/white"
                     android:textStyle="bold"
+                    android:text="@{playerViewModel.currentSong.title}"
                     tools:text="@tools:sample/lorem/random" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -64,6 +68,7 @@
                     android:maxLines="1"
                     android:paddingTop="6dp"
                     android:textColor="@color/white"
+                    android:text="@{playerViewModel.currentSong.artistName}"
                     app:layout_constraintBottom_toTopOf="@+id/player_progress_slider"
                     app:layout_constraintEnd_toStartOf="@+id/playerMenu"
                     app:layout_constraintStart_toEndOf="@+id/songFavourite"
@@ -96,32 +101,26 @@
                 android:singleLine="true"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
-                android:text="@{progressViewModel.progressText}"
+                android:text="@{playerViewModel.progressText}"
                 app:layout_constraintBottom_toBottomOf="@+id/player_progress_slider"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/player_progress_slider"
                 tools:ignore="RtlHardcoded,RtlSymmetry"
                 tools:text="@tools:sample/date/hhmmss" />
 
-            <SeekBar
+            <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/player_progress_slider"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:maxHeight="3dp"
                 android:layout_marginTop="16dp"
-                android:background="@null"
-                android:clickable="false"
-                android:focusable="false"
-                android:maxHeight="2dp"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
                 android:progressDrawable="@drawable/color_progress_seek"
-                android:thumbOffset="2dp"
-                android:max="@{progressViewModel.total}"
-                android:progress="@{progressViewModel.progress}"
+                android:max="@{playerViewModel.total}"
+                android:progress="@{playerViewModel.progress}"
                 app:layout_constraintEnd_toStartOf="@id/player_song_total_time"
                 app:layout_constraintStart_toEndOf="@id/player_song_current_progress"
-                app:layout_constraintTop_toBottomOf="@id/titleContainer" />
+                app:layout_constraintTop_toBottomOf="@id/titleContainer"
+                tools:progress="20" />
 
             <!--  If layout_width not equals with 0dp when update ui is lagging  -->
             <com.google.android.material.textview.MaterialTextView
@@ -134,7 +133,7 @@
                 android:singleLine="true"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
-                android:text="@{progressViewModel.totalText}"
+                android:text="@{playerViewModel.totalText}"
                 app:layout_constraintBottom_toBottomOf="@+id/player_progress_slider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/player_progress_slider"
@@ -149,6 +148,7 @@
                 android:background="?attr/roundSelector"
                 android:padding="16dp"
                 android:scaleType="fitCenter"
+                android:onClick="@{() -> MusicPlayerRemote.cycleRepeatMode()}"
                 app:layout_constraintBottom_toBottomOf="@+id/player_prev_button"
                 app:layout_constraintEnd_toStartOf="@+id/player_prev_button"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -156,7 +156,8 @@
                 app:layout_constraintTop_toTopOf="@+id/player_prev_button"
                 app:srcCompat="@drawable/ic_repeat"
                 tools:ignore="MissingPrefix"
-                tools:tint="@color/black" />
+                tools:tint="@color/black"
+                repeatMode="@{playerViewModel.repeatMode}"/>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/player_prev_button"
@@ -165,6 +166,7 @@
                 android:background="?attr/roundSelector"
                 android:padding="16dp"
                 android:scaleType="fitCenter"
+                android:onClick="@{() -> MusicPlayerRemote.back()}"
                 app:layout_constraintBottom_toBottomOf="@+id/player_play_pause_button"
                 app:layout_constraintEnd_toStartOf="@+id/player_play_pause_button"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -181,6 +183,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="?attr/roundSelector"
+                android:onClick="@{() -> PlayPauseButtonOnClickHandler.playPause()}"
                 app:fabCustomSize="64dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/player_next_button"
@@ -188,7 +191,8 @@
                 app:layout_constraintStart_toEndOf="@+id/player_prev_button"
                 app:layout_constraintTop_toBottomOf="@+id/player_progress_slider"
                 app:srcCompat="@drawable/ic_pause"
-                tools:tint="@color/black" />
+                tools:tint="@color/black"
+                tools:ignore="ContentDescription" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/player_next_button"
@@ -197,6 +201,7 @@
                 android:background="?attr/roundSelector"
                 android:padding="16dp"
                 android:scaleType="fitCenter"
+                android:onClick="@{() -> MusicPlayerRemote.playNextSong()}"
                 app:layout_constraintBottom_toBottomOf="@+id/player_play_pause_button"
                 app:layout_constraintEnd_toStartOf="@+id/player_shuffle_button"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -213,6 +218,7 @@
                 android:background="?attr/roundSelector"
                 android:padding="16dp"
                 android:scaleType="fitCenter"
+                android:onClick="@{() -> MusicPlayerRemote.toggleShuffleMode()}"
                 app:layout_constraintBottom_toBottomOf="@+id/player_next_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -220,7 +226,8 @@
                 app:layout_constraintTop_toTopOf="@+id/player_next_button"
                 app:srcCompat="@drawable/ic_shuffle"
                 tools:ignore="MissingPrefix"
-                tools:tint="@color/black" />
+                tools:tint="@color/black"
+                shuffleMode="@{playerViewModel.shuffleMode}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

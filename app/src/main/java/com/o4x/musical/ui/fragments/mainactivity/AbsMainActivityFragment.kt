@@ -74,7 +74,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(serviceActivity, mainActivity.toolbar)
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(mainActivity, mainActivity.toolbar)
         super.onPrepareOptionsMenu(menu)
     }
 

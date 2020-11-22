@@ -51,7 +51,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
         viewModel.playListSongs.observe(viewLifecycleOwner, {
             adapter?.swapDataSet(it)
         })
-        libraryViewModel.getQueue().observe(viewLifecycleOwner, {
+        playerViewModel.queue.observe(viewLifecycleOwner, {
             adapter?.notifyDataSetChanged()
         })
     }

@@ -72,7 +72,7 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
         queue_recycler_view?.itemAnimator = animator
         recyclerViewDragDropManager.attachRecyclerView(queue_recycler_view)
 
-        libraryViewModel.getQueue().observe(viewLifecycleOwner, {
+        playerViewModel.queue.observe(viewLifecycleOwner, {
             queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
             checkIsEmpty()
         })
