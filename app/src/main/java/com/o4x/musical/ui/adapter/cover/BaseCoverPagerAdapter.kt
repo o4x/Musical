@@ -11,11 +11,11 @@ import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter
 import com.o4x.musical.model.Song
 
-open class BaseCoverPagerAdapter(fm: FragmentManager?, private var dataSet: List<Song>) :
+open class BaseCoverPagerAdapter(fm: FragmentManager?, var dataSet: List<Song>) :
     CustomFragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
-        return AlbumCoverPagerAdapter.AlbumCoverFragment.newInstance(dataSet[position])
+        return BaseCoverFragment.newInstance(dataSet[position])
     }
 
     override fun getCount(): Int {
