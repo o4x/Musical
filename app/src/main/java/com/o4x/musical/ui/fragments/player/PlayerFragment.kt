@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
@@ -89,42 +90,19 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
         lifecycleScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
                 lyrics = null
-                playerAlbumCoverFragment!!.setLyrics(null)
-                binding.toolbar.menu.removeItem(R.id.action_show_lyrics)
+                playerAlbumCoverFragment?.setLyrics(null)
             }
 
             val data = MusicUtil.getLyrics(song)
-            val lyrics = if (TextUtils.isEmpty(data)) {
+            lyrics = if (TextUtils.isEmpty(data)) {
                 null
             } else Lyrics.parse(song, data)
 
             withContext(Dispatchers.Main) {
-                playerAlbumCoverFragment!!.setLyrics(lyrics)
-                if (lyrics == null) {
-                    binding.toolbar.menu.removeItem(R.id.action_show_lyrics)
-                } else {
-                    val activity: Activity = serviceActivity
-                    if (binding.toolbar.menu.findItem(R.id.action_show_lyrics) == null) {
-                        val color = ToolbarContentTintHelper.toolbarContentColor(
-                            activity,
-                            Color.TRANSPARENT
-                        )
-                        val drawable = ImageUtil.getTintedVectorDrawable(
-                            activity,
-                            R.drawable.ic_comment_text_outline,
-                            color
-                        )
-                        binding.toolbar.menu
-                            .add(
-                                Menu.NONE,
-                                R.id.action_show_lyrics,
-                                Menu.NONE,
-                                R.string.action_show_lyrics
-                            )
-                            .setIcon(drawable)
-                            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-                    }
-                }
+                playerAlbumCoverFragment?.setLyrics(lyrics)
+
+                binding.toolbar.menu.findItem(R.id.action_lyrics)
+                    .isVisible = lyrics != null
             }
         }
     }
@@ -132,8 +110,10 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
     override fun onMenuItemClick(item: MenuItem): Boolean {
         val song = currentSong
         when (item.itemId) {
-            R.id.action_show_lyrics -> {
-                if (lyrics != null) create(lyrics!!).show(childFragmentManager, "LYRICS")
+            R.id.action_lyrics -> {
+                if (lyrics != null)
+                    create(lyrics!!).show(childFragmentManager, "LYRICS")
+
                 return true
             }
             R.id.action_sleep_timer -> {
