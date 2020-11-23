@@ -27,6 +27,12 @@
         android:title="@string/action_details" />
 
     <item
+        android:id="@+id/action_lyrics"
+        android:orderInCategory="1"
+        android:title="@string/lyrics"
+        android:visible="false"/>
+
+    <item
         android:id="@+id/action_clear_playing_queue"
         android:orderInCategory="1"
         android:title="@string/action_clear_playing_queue"
