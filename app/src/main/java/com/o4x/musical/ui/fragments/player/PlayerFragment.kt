@@ -1,15 +1,11 @@
 package com.o4x.musical.ui.fragments.player
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerBinding
 import com.o4x.musical.helper.MusicPlayerRemote.clearQueue
@@ -25,10 +21,9 @@ import com.o4x.musical.ui.dialogs.SleepTimerDialog
 import com.o4x.musical.ui.dialogs.SongDetailDialog
 import com.o4x.musical.ui.dialogs.SongShareDialog
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
-import com.o4x.musical.util.ImageUtil
+import com.o4x.musical.ui.fragments.player.albumcover.AlbumCoverFragment
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.NavigationUtil
-import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,7 +36,7 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
 
 
     private var playbackControlsFragment: PlayerPlaybackControlsFragments? = null
-    private var playerAlbumCoverFragment: PlayerAlbumCoverFragment? = null
+    private var playerAlbumCoverFragment: AlbumCoverFragment? = null
     var lyrics: Lyrics? = null
 
     override fun onCreateView(
@@ -75,7 +70,7 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
                     as PlayerPlaybackControlsFragments?
         playerAlbumCoverFragment =
             childFragmentManager.findFragmentById(R.id.player_album_cover_fragment)
-                    as PlayerAlbumCoverFragment?
+                    as AlbumCoverFragment?
     }
 
     private fun setUpPlayerToolbar() {

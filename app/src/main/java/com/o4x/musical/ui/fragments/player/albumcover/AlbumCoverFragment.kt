@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.fragments.player
+package com.o4x.musical.ui.fragments.player.albumcover
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +9,10 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerAlbumCoverBinding
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.helper.MusicPlayerRemote.playingQueue
 import com.o4x.musical.helper.MusicPlayerRemote.position
-import com.o4x.musical.helper.MusicProgressViewUpdateHelper
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics
 import com.o4x.musical.model.lyrics.Lyrics
-import com.o4x.musical.ui.adapter.cover.AlbumCoverPagerAdapter
+import com.o4x.musical.ui.adapter.cover.BaseCoverPagerAdapter
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import com.o4x.musical.util.PreferenceUtil.synchronizedLyricsShow
 
@@ -22,7 +20,7 @@ import com.o4x.musical.util.PreferenceUtil.synchronizedLyricsShow
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_player_album_cover),
+class AlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_player_album_cover),
     OnPageChangeListener {
 
     private var _binding: FragmentPlayerAlbumCoverBinding? = null
@@ -50,7 +48,7 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
 
         playerViewModel.queue.observe(viewLifecycleOwner, {
             binding.playerAlbumCoverViewpager.adapter =
-                AlbumCoverPagerAdapter(childFragmentManager, it)
+                BaseCoverPagerAdapter(childFragmentManager, it)
             binding.playerAlbumCoverViewpager.currentItem = position
             onPageSelected(position)
         })
@@ -141,19 +139,9 @@ class PlayerAlbumCoverFragment : AbsMusicServiceFragment(R.layout.fragment_playe
             val pageWidth = view.width
             val pageHeight = view.height
 
-//            if (position <= 1) { // [-1,1]
-//                view.findViewById(R.id.player_image).setTranslationX(-position * pageWidth / 2);
-//            }
-            if (position <= -1.0f || position >= 1.0f) {
-                view.translationX = view.width * position
-                view.alpha = 0.0f
-            } else if (position == 0.0f) {
-                view.translationX = view.width * position
-                view.alpha = 1.0f
-            } else {
-                // position is between -1.0F & 0.0F OR 0.0F & 1.0F
-                view.translationX = view.width * -position
-                view.alpha = 1.0f - Math.abs(position)
+            if (position <= 1) { // [-1,1]
+                view.findViewById<View>(R.id.player_image)
+                    .translationX = -position * pageWidth / 2
             }
         }
     }

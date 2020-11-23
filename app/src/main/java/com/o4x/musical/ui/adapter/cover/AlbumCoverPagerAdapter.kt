@@ -1,6 +1,7 @@
 package com.o4x.musical.ui.adapter.cover
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.model.Song
@@ -12,12 +13,11 @@ import com.o4x.musical.util.color.MediaNotificationProcessor
 class AlbumCoverPagerAdapter(fm: FragmentManager?, dataSet: List<Song>) :
     BaseCoverPagerAdapter(fm, dataSet) {
 
+    override fun getItem(position: Int): Fragment {
+        return AlbumCoverFragment.newInstance(dataSet[position])
+    }
+
     class AlbumCoverFragment : BaseCoverFragment() {
-
-
-        private var isColorReady = false
-        private var colors: MediaNotificationProcessor? = null
-        private var request = 0
 
         override fun loadAlbumCover() {
             GlideLoader.with(requireContext())
