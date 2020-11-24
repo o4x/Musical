@@ -98,7 +98,11 @@ class PlayerViewModel : ViewModel(),
     private val _position = MutableLiveData<Int>()
     val position: LiveData<Int> = _position
     private fun updatePosition() {
-        _position.postValue(MusicPlayerRemote.position)
+        MusicPlayerRemote.position.let {
+            if (it >= 0) {
+                _position.postValue(it)
+            }
+        }
     }
 
       //////////////////
@@ -152,11 +156,9 @@ class PlayerViewModel : ViewModel(),
 
     override fun onQueueChanged() {
         updateQueue()
-        updatePosition()
     }
 
     override fun onPlayingMetaChanged() {
-        updateQueue()
         updatePosition()
         updateCurrentSong()
     }

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/player_background_album_cover_fragment"
-        android:name="com.o4x.musical.ui.fragments.player.albumcover.BackgroundAlbumCoverFragment"
+    <com.o4x.musical.views.SyncPager
+        android:id="@+id/back_album_art_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:overScrollMode="never" />
 
     <View
         android:layout_width="match_parent"
@@ -35,11 +36,49 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="42dp">
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/player_album_cover_fragment"
-                    android:name="com.o4x.musical.ui.fragments.player.albumcover.AlbumCoverFragment"
+                <com.o4x.musical.views.SyncPager
+                    android:id="@+id/front_album_art_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"/>
+
+                <FrameLayout
+                    android:id="@+id/player_lyrics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/shadow_up"
+                    android:padding="16dp"
+                    android:clipToPadding="false"
+                    android:visibility="gone"
+                    android:alpha="0">
+
+                    <TextView
+                        android:id="@+id/player_lyrics_line1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:textAlignment="center"
+                        android:textSize="22sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowRadius="4"
+                        android:visibility="gone"
+                        tools:ignore="RtlCompat" />
+
+                    <TextView
+                        android:id="@+id/player_lyrics_line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:textAlignment="center"
+                        android:textSize="22sp"
+                        android:textColor="@color/white"
+                        android:shadowColor="@color/black"
+                        android:shadowRadius="4"
+                        tools:ignore="RtlCompat" />
+
+                </FrameLayout>
 
             </com.o4x.musical.views.WidthFitSquareLayout>
 
