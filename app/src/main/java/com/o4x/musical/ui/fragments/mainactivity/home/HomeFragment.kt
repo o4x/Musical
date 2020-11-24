@@ -31,7 +31,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
 
-class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
+class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
         parametersOf(null)
@@ -64,9 +64,11 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        onReloadSubToolbar()
+        super.onViewCreated(view, savedInstanceState)
         setUpViews()
     }
+
+    override fun showStatusBar() {}
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
@@ -96,7 +98,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         setupButtons()
         setupPoster()
         setUpBounceScrollView()
-        setUpQueueView()
         setUpRecentlyView()
         setUpNewView()
         setupEmpty()
@@ -226,7 +227,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         }
     }
 
-    private fun setUpQueueView() {
+    override fun initQueueView() {
         queueLayoutManager = linearLayoutManager
         queue_recycler_view.layoutManager = queueLayoutManager
         queueAdapter = HomeAdapter(
@@ -241,9 +242,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
         playerViewModel.queue.observe(viewLifecycleOwner, {
             queue_container.isVisible = it.isNotEmpty()
-            val firstLoad = queueAdapter.itemCount == 0
-            queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
-            if (firstLoad) toCurrentPosition()
         })
     }
 

@@ -1,46 +1,56 @@
 package com.o4x.musical.ui.fragments.mainactivity
 
+import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlin.math.abs
 
-open class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(layout), MusicServiceEventListener {
+abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(layout) {
 
     lateinit var queueAdapter: PlayingQueueAdapter
     lateinit var queueLayoutManager: LinearLayoutManager
 
-    override fun onResume() {
-        super.onResume()
-        mainActivity.addMusicServiceEventListener(this)
-        toCurrentPosition()
+    var isRestored = false
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initQueueView()
+
+        playerViewModel.queue.observe(viewLifecycleOwner, {
+            queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
+            isRestored = false
+        })
+        playerViewModel.position.observe(viewLifecycleOwner, {
+            queueAdapter.setCurrent(it)
+            toPosition(it)
+        })
+        playerViewModel.isPlaying.observe(viewLifecycleOwner, {
+            queueAdapter.notifyDataSetChanged()
+        })
     }
 
-    override fun onDestroyView() {
-        mainActivity.removeMusicServiceEventListener(this)
-        super.onDestroyView()
+    abstract fun initQueueView()
+
+    private fun toPosition(position: Int) {
+        if (isRestored) {
+            resetToPosition(position)
+        } else {
+            queueLayoutManager.scrollToPosition(position)
+            isRestored = true
+        }
     }
 
-    override fun onPause() {
-        mainActivity.removeMusicServiceEventListener(this)
-        super.onPause()
-    }
-
-    fun toCurrentPosition() {
-        queueLayoutManager.scrollToPositionWithOffset(MusicPlayerRemote.position, 0)
-    }
-
-    private fun resetToCurrentPosition() {
+    private fun resetToPosition(to: Int) {
         if (queueAdapter.itemCount == 0) return
         queue_recycler_view.stopScroll()
         val from = queueLayoutManager.findFirstVisibleItemPosition()
-        val to = MusicPlayerRemote.position
         val delta = abs(to - from)
 
         val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(serviceActivity) {
@@ -60,23 +70,4 @@ open class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(la
         smoothScroller.targetPosition = to
         queueLayoutManager.startSmoothScroll(smoothScroller)
     }
-
-    override fun onServiceConnected() {
-        resetToCurrentPosition()
-    }
-
-    override fun onServiceDisconnected() {}
-    override fun onQueueChanged() {}
-
-    override fun onPlayingMetaChanged() {
-        resetToCurrentPosition()
-    }
-
-    override fun onPlayStateChanged() {
-        queueAdapter.notifyDataSetChanged()
-    }
-
-    override fun onRepeatModeChanged() {}
-    override fun onShuffleModeChanged() {}
-    override fun onMediaStoreChanged() {}
 }

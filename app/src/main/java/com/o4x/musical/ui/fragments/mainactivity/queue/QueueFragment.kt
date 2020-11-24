@@ -52,11 +52,11 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
     }
 
     private fun setUpViews() {
-        setUpQueueView()
+        queue_recycler_view.addAppbarListener()
         checkIsEmpty()
     }
 
-    private fun setUpQueueView() {
+    override fun initQueueView() {
         recyclerViewDragDropManager = RecyclerViewDragDropManager()
         val animator: GeneralItemAnimator = RefactoredDefaultItemAnimator()
         queueAdapter = PlayingQueueAdapter(
@@ -73,11 +73,8 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
         recyclerViewDragDropManager.attachRecyclerView(queue_recycler_view)
 
         playerViewModel.queue.observe(viewLifecycleOwner, {
-            queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
             checkIsEmpty()
         })
-
-        queue_recycler_view.addAppbarListener()
     }
 
     private fun checkIsEmpty() {

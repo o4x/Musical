@@ -52,13 +52,13 @@ public class HomeAdapter extends PlayingQueueAdapter {
     @Override
     protected void customizeItem(@NonNull SongAdapter.ViewHolder holder, int position) {
         if (isQueue) {
-            final int visibility = position == MusicPlayerRemote.getPosition() ?
+            final int visibility = getItemType(position) == CURRENT ?
                     View.VISIBLE : View.GONE;
             if(holder.icon != null) {
                 holder.icon.setVisibility(visibility);
                 final int background = MusicPlayerRemote.isPlaying() ?
                         R.drawable.ic_play_arrow : R.drawable.ic_pause;
-                holder.icon.setBackground(activity.getDrawable(background));
+                holder.icon.setBackgroundResource(background);
             }
         }
     }
