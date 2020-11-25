@@ -36,6 +36,11 @@ abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragmen
         })
     }
 
+    override fun onStop() {
+        super.onStop()
+        isRestored = false
+    }
+
     abstract fun initQueueView()
 
     private fun toPosition(position: Int) {

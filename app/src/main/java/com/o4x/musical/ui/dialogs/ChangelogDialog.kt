@@ -24,6 +24,7 @@ import java.io.InputStreamReader
  * @author Aidan Follestad (afollestad)
  */
 class ChangelogDialog : DialogFragment() {
+
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val customView: View

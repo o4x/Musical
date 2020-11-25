@@ -10,7 +10,9 @@ import com.o4x.musical.helper.MusicPlayerRemote.bindToService
 import com.o4x.musical.helper.MusicPlayerRemote.unbindFromService
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.service.MusicService
+import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.ui.viewmodel.PlayerViewModel
+import com.o4x.musical.util.PreferenceUtil
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.ref.WeakReference
@@ -26,10 +28,15 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
     private var musicStateReceiver: MusicStateReceiver? = null
     private var receiverRegistered = false
 
+    val libraryViewModel by viewModel<LibraryViewModel>()
     val playerViewModel by viewModel<PlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        addMusicServiceEventListener(libraryViewModel)
+        PreferenceUtil.registerOnSharedPreferenceChangedListener(libraryViewModel)
+
         serviceToken = bindToService(this, object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
                 this@AbsMusicServiceActivity.onServiceConnected()
@@ -45,6 +52,8 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
 
     override fun onDestroy() {
         super.onDestroy()
+        PreferenceUtil.unregisterOnSharedPreferenceChangedListener(libraryViewModel)
+        removeMusicServiceEventListener(libraryViewModel)
         unbindFromService(serviceToken)
         if (receiverRegistered) {
             unregisterReceiver(musicStateReceiver)

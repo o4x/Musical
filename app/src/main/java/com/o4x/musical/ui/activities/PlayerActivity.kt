@@ -2,6 +2,7 @@ package com.o4x.musical.ui.activities
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.annotation.ColorInt
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import com.o4x.musical.R
@@ -54,5 +55,13 @@ class PlayerActivity : AbsMusicServiceActivity() {
     override fun setTaskDescriptionColor(@ColorInt color: Int) {
         taskColor = color
         super.setTaskDescriptionColor(color)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

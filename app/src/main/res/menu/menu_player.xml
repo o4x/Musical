@@ -2,19 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_go_to_album"
-        android:orderInCategory="1"
-        android:title="@string/action_go_to_album" />
-
-    <item
         android:id="@+id/action_go_to_artist"
-        android:orderInCategory="1"
-        android:title="@string/action_go_to_artist" />
+        android:icon="@drawable/ic_artist"
+        android:title="@string/action_go_to_artist"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_add_to_playlist"
-        android:orderInCategory="1"
-        android:title="@string/action_add_to_playlist" />
+        android:id="@+id/action_go_to_album"
+        android:icon="@drawable/ic_album"
+        android:title="@string/action_go_to_album"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_share"
@@ -31,12 +28,6 @@
         android:orderInCategory="1"
         android:title="@string/lyrics"
         android:visible="false"/>
-
-    <item
-        android:id="@+id/action_clear_playing_queue"
-        android:orderInCategory="1"
-        android:title="@string/action_clear_playing_queue"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_save_playing_queue"

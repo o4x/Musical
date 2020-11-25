@@ -20,6 +20,7 @@ import android.graphics.Bitmap
 import android.provider.MediaStore
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
@@ -29,7 +30,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.o4x.musical.R
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 
-fun AppCompatActivity.applyToolbar(toolbar: MaterialToolbar) {
+fun AppCompatActivity.applyToolbar(toolbar: Toolbar) {
     toolbar.setBackgroundColor(surfaceColor())
     ToolbarContentTintHelper.colorBackButton(toolbar)
     setSupportActionBar(toolbar)
