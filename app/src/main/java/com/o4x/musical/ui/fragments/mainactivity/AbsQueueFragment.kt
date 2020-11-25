@@ -44,6 +44,7 @@ abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragmen
     abstract fun initQueueView()
 
     private fun toPosition(position: Int) {
+        queue_recycler_view.stopScroll()
         if (isRestored) {
             resetToPosition(position)
         } else {
@@ -54,7 +55,6 @@ abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragmen
 
     private fun resetToPosition(to: Int) {
         if (queueAdapter.itemCount == 0) return
-        queue_recycler_view.stopScroll()
         val from = queueLayoutManager.findFirstVisibleItemPosition()
         val delta = abs(to - from)
 

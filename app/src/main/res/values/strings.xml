@@ -174,7 +174,7 @@
     <string name="cancel_current_timer">Cancel current timer</string>
     <string name="sleep_timer_canceled">Sleep timer canceled.</string>
     <string name="sleep_timer_set">Sleep timer set for %d minutes from now.</string>
-    <string name="action_new_playlist">New playlist…</string>
+    <string name="action_new_playlist">New playlist</string>
     <string name="new_playlist_title">New playlist</string>
     <string name="grid_size_1">1</string>
     <string name="grid_size_2">2</string>
@@ -456,5 +456,6 @@
     <string name="all_songs">All Songs</string>
     <string name="media_playback">Media Playback</string>
     <string name="media_playback_controls">Media playback controls</string>
+    <string name="shuffle">Shuffle</string>
 
 </resources>

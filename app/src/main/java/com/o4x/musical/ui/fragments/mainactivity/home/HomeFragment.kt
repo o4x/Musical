@@ -13,18 +13,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import code.name.monkey.appthemehelper.extensions.accentColor
+import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
 import com.o4x.musical.R
+import com.o4x.musical.databinding.FragmentHomeBinding
 import com.o4x.musical.extensions.toPlaylistDetail
-import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
-import kotlinx.android.synthetic.main.fragment_home.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.math.max
@@ -49,6 +49,22 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     private var toolbarHeight by Delegates.notNull<Int>()
     private var headerHeight by Delegates.notNull<Int>()
 
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onResume() {
         super.onResume()
@@ -71,7 +87,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     override fun showStatusBar() {}
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
+        inflater.inflate(R.menu.menu_home, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -109,48 +125,38 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         var params: ViewGroup.LayoutParams
 
         // Set up header height
-        params = header.layoutParams
+        params = binding.header.layoutParams
         params.height = displayHeight / 3
-        header.layoutParams = params
+        binding.header.layoutParams = params
 
         // Set up poster image height
-        params = poster.layoutParams
+        params = binding.poster.layoutParams
         params.height = (displayHeight / 1.5f).toInt()
-        poster.layoutParams = params
+        binding.poster.layoutParams = params
 
 
         appbarHeight = appbarHeight()
         toolbarHeight = toolbarHeight()
         // get real header height
-        headerHeight = header.layoutParams.height - appbarHeight
+        headerHeight = binding.header.layoutParams.height - appbarHeight
     }
 
     private fun setupButtons() {
-        queue_parent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
-        open_queue_button.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
-        recently_parent.setOnClickListener {
+        binding.queueParent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
+        binding.queueShuffleButton.setOnClickListener {libraryViewModel.shuffleSongs() }
+        binding.recentlyParent.setOnClickListener {
             navController.toPlaylistDetail(HistoryPlaylist())
         }
-        newly_parent.setOnClickListener {
+        binding.newlyParent.setOnClickListener {
             navController.toPlaylistDetail(LastAddedPlaylist())
         }
-        shuffle_btn.setOnClickListener {
-            libraryViewModel.shuffleSongs()
-        }
-        shuffle_btn.backgroundTintList = ColorStateList.valueOf(accentColor())
-        shuffle_btn.setColorFilter(
-            getPrimaryTextColor(serviceActivity, isColorLight(accentColor())),
-            PorterDuff.Mode.SRC_IN
-        )
-        open_queue_button.setBackgroundColor(accentColor())
-        open_queue_button.setTextColor(
-            getPrimaryTextColor(serviceActivity, isColorLight(accentColor()))
-        )
+
+
     }
 
     private fun setupPoster() {
         libraryViewModel.getPosterBitmap().observe(viewLifecycleOwner, {
-            poster.setImageBitmap(it)
+            binding.poster.setImageBitmap(it)
         })
     }
 
@@ -160,13 +166,13 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         var isStatusFlat = false
         var isAppbarFlat = false
 
-        nested_scroll_view.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+        binding.nestedScrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
             scrollPositionViewModel.setPosition(scrollY)
 
             // Scroll poster
-            poster.y =
-                ((-scrollY / (displayHeight * 2 / poster.layoutParams.height.toFloat())).toInt())
+            binding.poster.y =
+                ((-scrollY / (displayHeight * 2 / binding.poster.layoutParams.height.toFloat())).toInt())
                     .toFloat()
 
             // Scroll appbar
@@ -188,12 +194,10 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
                                 -toolbarHeight.toFloat(),
                                 mainActivity.appbar.y + (oldScrollY - scrollY)
                             )
-                        shuffle_btn.hide()
                     } else { // Scrolling down
                         mainActivity.appbar.y = min(
                             0f, mainActivity.appbar.y + (oldScrollY - scrollY)
                         )
-                        shuffle_btn.show()
                     }
                 }
             } else { // inside header
@@ -213,23 +217,23 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
 
         // zooming poster in over scroll
-        val params = poster.layoutParams
+        val params = binding.poster.layoutParams
         val width = params.width
         val height = params.height
-        nested_scroll_view.setOnOverScrollListener { _: Boolean, overScrolledDistance: Int ->
+        binding.nestedScrollView.setOnOverScrollListener { _: Boolean, overScrolledDistance: Int ->
             val scale = 1 + overScrolledDistance / displayHeight.toFloat()
             val mParams: ViewGroup.LayoutParams =
                 FrameLayout.LayoutParams(
                     width,
                     (height * scale).toInt()
                 )
-            poster.layoutParams = mParams
+            binding.poster.layoutParams = mParams
         }
     }
 
     override fun initQueueView() {
         queueLayoutManager = linearLayoutManager
-        queue_recycler_view.layoutManager = queueLayoutManager
+        binding.queueRecyclerView.layoutManager = queueLayoutManager
         queueAdapter = HomeAdapter(
             mainActivity,
             ArrayList(),
@@ -238,16 +242,16 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             null,
             true
         )
-        queue_recycler_view.adapter = queueAdapter
+        binding.queueRecyclerView.adapter = queueAdapter
 
         playerViewModel.queue.observe(viewLifecycleOwner, {
-            queue_container.isVisible = it.isNotEmpty()
+            binding.queueContainer.isVisible = it.isNotEmpty()
         })
     }
 
     private fun setUpRecentlyView() {
         recentlyLayoutManager = gridLayoutManager
-        recently_recycler_view.layoutManager = recentlyLayoutManager
+        binding.recentlyRecyclerView.layoutManager = recentlyLayoutManager
         recentlyAdapter = HomeAdapter(
             mainActivity,
             ArrayList(),
@@ -256,16 +260,16 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             gridSize * 2,
             false,
         )
-        recently_recycler_view.adapter = recentlyAdapter
+        binding.recentlyRecyclerView.adapter = recentlyAdapter
         libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner, {
-            recently_container.isVisible = it.isNotEmpty()
+            binding.recentlyContainer.isVisible = it.isNotEmpty()
             recentlyAdapter.swapDataSet(it)
         })
     }
 
     private fun setUpNewView() {
         newLayoutManager = gridLayoutManager
-        new_recycler_view.layoutManager = newLayoutManager
+        binding.newRecyclerView.layoutManager = newLayoutManager
         newAdapter = HomeAdapter(
             mainActivity,
             ArrayList(),
@@ -274,10 +278,10 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             gridSize * 3,
             false,
         )
-        new_recycler_view.adapter = newAdapter
+        binding.newRecyclerView.adapter = newAdapter
 
         libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner, {
-            newly_container.isVisible = it.isNotEmpty()
+            binding.newlyContainer.isVisible = it.isNotEmpty()
             newAdapter.swapDataSet(it)
         })
     }
@@ -312,8 +316,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private fun setupEmpty() {
         libraryViewModel.getSongs().observe(viewLifecycleOwner, {
-            empty.isVisible = it.isEmpty()
-            shuffle_btn.isVisible = it.isNotEmpty()
+            binding.empty.isVisible = it.isEmpty()
         })
     }
 }
