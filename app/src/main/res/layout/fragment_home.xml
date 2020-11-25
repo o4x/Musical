@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.mainactivity.home.HomeFragment">
+    tools:context=".ui.fragments.mainactivity.home.HomeFragment"> 
 
     <FrameLayout
         android:id="@+id/container"
@@ -43,7 +43,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <FrameLayout
                         android:id="@+id/queue_parent"
@@ -64,16 +65,19 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:layout_gravity="start|center_vertical" />
 
-                        <Button
-                            android:id="@+id/open_queue_button"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:id="@+id/queue_shuffle_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:minHeight="0dp"
-                            android:minWidth="0dp"
-                            android:layout_margin="16dp"
-                            android:text="@string/open"
+                            android:text="@string/shuffle"
+                            android:textAllCaps="true"
+                            android:fontFamily="sans-serif-medium"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:layout_gravity="end|center_vertical" />
+                            android:textColor="?android:textColorSecondary"
+                            android:layout_gravity="end|center_vertical"
+                            app:icon="@drawable/ic_shuffle"
+                            app:iconSize="18dp" />
 
                     </FrameLayout>
 
@@ -86,10 +90,6 @@
                         android:nestedScrollingEnabled="false"
                         android:overScrollMode="always" />
 
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -97,7 +97,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <RelativeLayout
                         android:id="@+id/recently_parent"
@@ -115,7 +116,7 @@
                             android:text="@string/recently_played"
                             android:fontFamily="sans-serif-medium"
                             android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     </RelativeLayout>
 
@@ -128,10 +129,6 @@
                         android:nestedScrollingEnabled="false"
                         android:overScrollMode="never"/>
 
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -139,7 +136,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <RelativeLayout
                         android:id="@+id/newly_parent"
@@ -157,8 +155,7 @@
                             android:text="@string/recently_added"
                             android:fontFamily="sans-serif-medium"
                             android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                            />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     </RelativeLayout>
 
@@ -188,15 +185,5 @@
             android:textSize="@dimen/empty_text_size" />
 
     </FrameLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/shuffle_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_shuffle"
-        app:layout_anchor="@id/nested_scroll_view"
-        app:layout_anchorGravity="bottom|right|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

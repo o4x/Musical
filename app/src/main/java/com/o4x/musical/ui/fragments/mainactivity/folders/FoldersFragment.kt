@@ -5,10 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import android.text.Html
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.webkit.MimeTypeMap
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -22,6 +19,7 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
+import com.o4x.musical.databinding.FragmentFolderBinding
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.menu.SongMenuHelper
 import com.o4x.musical.helper.menu.SongsMenuHelper
@@ -40,7 +38,6 @@ import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.scanPaths
 import com.o4x.musical.views.BreadCrumbLayout.Crumb
 import com.o4x.musical.views.BreadCrumbLayout.SelectionCallback
-import kotlinx.android.synthetic.main.fragment_folder.*
 import java.io.File
 import java.io.FileFilter
 import java.lang.ref.WeakReference
@@ -49,7 +46,24 @@ import java.util.*
 class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), SelectionCallback,
     SongFileAdapter.Callbacks, LoaderManager.LoaderCallbacks<List<File>> {
 
-    private var adapter: SongFileAdapter? = null
+    private lateinit var adapter: SongFileAdapter
+
+    private var _binding: FragmentFolderBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentFolderBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     fun setCrumb(crumb: Crumb?, addToHistory: Boolean) {
         if (crumb == null) return
@@ -65,7 +79,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         val crumb = activeCrumb
         if (crumb != null) {
             crumb.scrollPosition =
-                (recycler_view!!.layoutManager as LinearLayoutManager?)!!.findFirstVisibleItemPosition()
+                (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstVisibleItemPosition()
         }
     }
 
@@ -115,20 +129,20 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private fun setUpRecyclerView() {
-        ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity, recycler_view, accentColor())
-        recycler_view.layoutManager = OverScrollLinearLayoutManager(requireContext())
-        recycler_view.addAppbarListener()
+        ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity, binding.recyclerView, accentColor())
+        binding.recyclerView.layoutManager = OverScrollLinearLayoutManager(requireContext())
+        binding.recyclerView.addAppbarListener()
     }
 
     private fun setUpAdapter() {
         adapter = SongFileAdapter(mainActivity, LinkedList(), R.layout.item_list, this, mainActivity)
-        adapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
+        adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
                 checkIsEmpty()
             }
         })
-        recycler_view!!.adapter = adapter
+        binding.recyclerView.adapter = adapter
         checkIsEmpty()
     }
 
@@ -200,7 +214,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                         if (startIndex > -1) {
                             MusicPlayerRemote.openQueue(songs as List<Song>, startIndex, true)
                         } else {
-                            Snackbar.make(coordinator_layout!!,
+                            Snackbar.make(binding.coordinatorLayout,
                                 Html.fromHtml(String.format(getString(R.string.not_listed_in_media_store),
                                     canonicalFile.name)),
                                 Snackbar.LENGTH_LONG)
@@ -227,7 +241,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                         SongsMenuHelper.handleMenuClick(mainActivity, songs, itemId)
                     }
                     if (songs.size != files.size) {
-                        Snackbar.make(coordinator_layout!!,
+                        Snackbar.make(binding.coordinatorLayout!!,
                             R.string.some_files_are_not_listed_in_the_media_store,
                             Snackbar.LENGTH_LONG)
                             .setAction(R.string.action_scan) { v: View? ->
@@ -315,7 +329,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                                             songs[0]!!,
                                             itemId)
                                     } else {
-                                        Snackbar.make(coordinator_layout!!,
+                                        Snackbar.make(binding.coordinatorLayout,
                                             Html.fromHtml(String.format(getString(R.string.not_listed_in_media_store),
                                                 file.name)),
                                             Snackbar.LENGTH_LONG)
@@ -343,17 +357,15 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private fun checkIsEmpty() {
-        if (empty != null) {
-            empty!!.visibility =
-                if (adapter == null || adapter!!.itemCount == 0) View.VISIBLE else View.GONE
-        }
+        binding.empty.visibility =
+            if (adapter.itemCount == 0) View.VISIBLE else View.GONE
     }
 
     private fun updateAdapter(files: List<File>) {
         adapter!!.swapDataSet(files)
         val crumb = activeCrumb
-        if (crumb != null && recycler_view != null) {
-            (recycler_view!!.layoutManager as LinearLayoutManager?)!!.scrollToPositionWithOffset(
+        if (crumb != null) {
+            (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.scrollToPositionWithOffset(
                 crumb.scrollPosition,
                 0)
         }

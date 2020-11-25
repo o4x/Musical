@@ -9,6 +9,7 @@ import code.name.monkey.appthemehelper.extensions.accentColor
 import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
+import com.o4x.musical.databinding.FragmentLibraryBinding
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
@@ -22,26 +23,32 @@ import com.o4x.musical.util.PreferenceUtil.registerOnSharedPreferenceChangedList
 import com.o4x.musical.util.PreferenceUtil.rememberLastTab
 import com.o4x.musical.util.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
 import com.o4x.musical.util.Util
-import kotlinx.android.synthetic.main.fragment_library.*
 
 class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPageChangeListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private var pagerAdapter: MusicLibraryPagerAdapter? = null
+    private lateinit var pagerAdapter: MusicLibraryPagerAdapter
 
-    override fun onDestroyView() {
-        unregisterOnSharedPreferenceChangedListener(this)
-        super.onDestroyView()
-        pager!!.removeOnPageChangeListener(this)
-    }
+    private var _binding: FragmentLibraryBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View? {
+
         registerOnSharedPreferenceChangedListener(this)
-        return super.onCreateView(inflater, container, savedInstanceState)
+
+        _binding = FragmentLibraryBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        unregisterOnSharedPreferenceChangedListener(this)
+        binding.pager.removeOnPageChangeListener(this)
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,12 +73,12 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
     override fun onSharedPreferenceChanged(preferences: SharedPreferences, key: String) {
         if (PreferenceUtil.LIBRARY_CATEGORIES == key) {
             val current = currentFragment
-            pagerAdapter!!.setCategoryInfos(libraryCategory)
-            pager!!.offscreenPageLimit = pagerAdapter!!.count
-            var position = current?.let { pagerAdapter?.getItemPosition(it) }
+            pagerAdapter.setCategoryInfos(libraryCategory)
+            binding.pager.offscreenPageLimit = pagerAdapter.count
+            var position = current?.let { pagerAdapter.getItemPosition(it) }
             position?.let {
                 if (it < 0) position = 0
-                pager!!.currentItem = it
+                binding.pager.currentItem = it
                 lastPage = it
             }
             updateTabVisibility()
@@ -80,9 +87,9 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
 
     private fun setUpViewPager() {
         pagerAdapter = MusicLibraryPagerAdapter(mainActivity, childFragmentManager)
-        pager!!.adapter = pagerAdapter
-        pager!!.offscreenPageLimit = pagerAdapter!!.count
-        mainActivity.tabs.setupWithViewPager(pager)
+        binding.pager.adapter = pagerAdapter
+        binding.pager.offscreenPageLimit = pagerAdapter.count
+        mainActivity.tabs.setupWithViewPager(binding.pager)
         val primaryColor = surfaceColor()
         val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
         val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
@@ -91,20 +98,20 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
         mainActivity.tabs.setSelectedTabIndicatorColor(accentColor())
         updateTabVisibility()
         if (rememberLastTab()) {
-            pager!!.currentItem = lastPage
+            binding.pager.currentItem = lastPage
             mainActivity.tabs.setScrollPosition(lastPage,0f,true)
         }
-        pager!!.addOnPageChangeListener(this)
+        binding.pager.addOnPageChangeListener(this)
     }
 
     private fun updateTabVisibility() {
         // hide the tab bar when only a single tab is visible
         mainActivity.tabs.visibility =
-            if (pagerAdapter?.count == 1) View.GONE else View.VISIBLE
+            if (pagerAdapter.count == 1) View.GONE else View.VISIBLE
     }
 
     private val currentFragment: Fragment?
-        get() = pagerAdapter?.getFragment(pager!!.currentItem)
+        get() = pagerAdapter.getFragment(binding.pager.currentItem)
 
     private val isPlaylistPage: Boolean
         get() = currentFragment is PlaylistsFragment
@@ -138,7 +145,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (pager == null) return false
         val currentFragment = currentFragment
         if (currentFragment is AbsLibraryPagerRecyclerViewCustomGridSizeFragment<*, *>) {
             val absLibraryRecyclerViewCustomGridSizeFragment = currentFragment
