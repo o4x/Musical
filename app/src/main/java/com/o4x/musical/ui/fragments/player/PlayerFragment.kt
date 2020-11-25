@@ -1,13 +1,16 @@
 package com.o4x.musical.ui.fragments.player
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
+import code.name.monkey.appthemehelper.extensions.colorControlNormal
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerBinding
 import com.o4x.musical.helper.MusicPlayerRemote
@@ -16,6 +19,7 @@ import com.o4x.musical.helper.MusicPlayerRemote.currentSong
 import com.o4x.musical.helper.MusicPlayerRemote.playingQueue
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics
 import com.o4x.musical.model.lyrics.Lyrics
+import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity
 import com.o4x.musical.ui.adapter.cover.AlbumCoverPagerAdapter
@@ -33,9 +37,12 @@ import com.o4x.musical.util.PreferenceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.abs
 
 class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
-    Toolbar.OnMenuItemClickListener, ViewPager.OnPageChangeListener {
+    ViewPager.OnPageChangeListener {
+
+    private val playerActivity by lazy { activity as PlayerActivity }
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
@@ -53,6 +60,13 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
+
+        playerActivity.setSupportActionBar(binding.toolbar)
+        setHasOptionsMenu(true)
+        playerActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        playerActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
+        playerActivity.supportActionBar?.title = null
+
         return binding.root
     }
 
@@ -65,19 +79,22 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpPlayerToolbar()
         setupPagers()
-
         playerViewModel.currentSong.observe(viewLifecycleOwner, {
             updateLyrics()
         })
     }
 
-    private fun setUpPlayerToolbar() {
-        binding.toolbar.inflateMenu(R.menu.menu_player)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-        binding.toolbar.setNavigationOnClickListener { serviceActivity.onBackPressed() }
-        binding.toolbar.setOnMenuItemClickListener(this)
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_player, menu)
+        ToolbarContentTintHelper.tintAllIcons(menu, colorControlNormal())
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(serviceActivity, binding.toolbar)
+        super.onPrepareOptionsMenu(menu)
     }
 
     private fun setupPagers() {
@@ -132,9 +149,18 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val song = currentSong
         when (item.itemId) {
+            R.id.action_go_to_album -> {
+                NavigationUtil.goToAlbum(serviceActivity, song.albumId)
+                return true
+            }
+            R.id.action_go_to_artist -> {
+                NavigationUtil.goToArtist(serviceActivity, song.artistId)
+                return true
+            }
             R.id.action_lyrics -> {
                 if (lyrics != null)
                     create(lyrics!!).show(childFragmentManager, "LYRICS")
@@ -153,14 +179,6 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
                 NavigationUtil.openEqualizer(serviceActivity)
                 return true
             }
-            R.id.action_add_to_playlist -> {
-                create(song).show(childFragmentManager, "ADD_PLAYLIST")
-                return true
-            }
-            R.id.action_clear_playing_queue -> {
-                clearQueue()
-                return true
-            }
             R.id.action_save_playing_queue -> {
                 CreatePlaylistDialog.create(playingQueue)
                     .show(serviceActivity.supportFragmentManager, "ADD_TO_PLAYLIST")
@@ -176,16 +194,8 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
                 SongDetailDialog.create(song).show(childFragmentManager, "SONG_DETAIL")
                 return true
             }
-            R.id.action_go_to_album -> {
-                NavigationUtil.goToAlbum(serviceActivity, song.albumId)
-                return true
-            }
-            R.id.action_go_to_artist -> {
-                NavigationUtil.goToArtist(serviceActivity, song.artistId)
-                return true
-            }
         }
-        return false
+        return super.onOptionsItemSelected(item)
     }
 
     private val isLyricsLayoutVisible: Boolean
@@ -201,7 +211,7 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
             }
     }
 
-    fun swapLyrics(l: Lyrics?) {
+    private fun swapLyrics(l: Lyrics?) {
         lyrics = l
         if (!isLyricsLayoutVisible) {
             hideLyricsLayout()
@@ -213,7 +223,7 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
         binding.playerLyrics.animate().alpha(1f).duration = VISIBILITY_ANIM_DURATION.toLong()
     }
 
-    fun updateLyricsProgress(progress: Int) {
+    private fun updateLyricsProgress(progress: Int) {
         if (!isLyricsLayoutVisible) {
             hideLyricsLayout()
             return
@@ -266,7 +276,7 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
             } else {
                 // position is between -1.0F & 0.0F OR 0.0F & 1.0F
                 view.translationX = view.width * -position
-                view.alpha = 1.0f - Math.abs(position)
+                view.alpha = 1.0f - abs(position)
             }
         }
     }
@@ -285,5 +295,6 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
 
     companion object {
         const val VISIBILITY_ANIM_DURATION = 300
+        private const val primaryColor = Color.WHITE
     }
 }

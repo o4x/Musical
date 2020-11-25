@@ -19,7 +19,9 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.NestedScrollView
 import butterknife.BindView
 import butterknife.ButterKnife
+import code.name.monkey.appthemehelper.extensions.colorControlNormal
 import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -30,6 +32,7 @@ import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
 import com.o4x.musical.drawables.CharCoverDrawable
 import com.o4x.musical.drawables.CoverData
+import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.module.GlideApp
@@ -138,15 +141,20 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         setStatusBarColorAuto()
         setNavigationBarColorAuto()
         setNavigationBarDividerColorAuto()
-        toolbar?.setBackgroundColor(surfaceColor())
-        setSupportActionBar(toolbar)
+        applyToolbar(toolbar!!)
         supportActionBar!!.setTitle(R.string.action_tag_editor)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_tag_editor, menu);
+        ToolbarContentTintHelper.tintAllIcons(menu, colorControlNormal())
         return super.onCreateOptionsMenu(menu);
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(this, toolbar)
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

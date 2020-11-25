@@ -16,6 +16,7 @@ import java.util.*
  * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
  */
 class CreatePlaylistDialog : DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog(requireContext())
             .title(R.string.new_playlist_title)
