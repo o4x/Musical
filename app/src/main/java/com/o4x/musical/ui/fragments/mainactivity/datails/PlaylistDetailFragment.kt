@@ -3,33 +3,26 @@ package com.o4x.musical.ui.fragments.mainactivity.datails
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import code.name.monkey.appthemehelper.ThemeStore
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
-import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.o4x.musical.R
 import com.o4x.musical.extensions.showToast
 import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.menu.PlaylistMenuHelper
-import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.model.AbsCustomPlaylist
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.ui.adapter.song.OrderablePlaylistSongAdapter
 import com.o4x.musical.ui.adapter.song.PlaylistSongAdapter
-import com.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
 import com.o4x.musical.ui.viewmodel.PlaylistDetailsViewModel
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.PlaylistsUtil
-import com.o4x.musical.util.ViewUtil
-import kotlinx.android.synthetic.main.fragment_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
@@ -65,7 +58,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
         super.setUpRecyclerView()
         if (data is AbsCustomPlaylist) {
             adapter = PlaylistSongAdapter(mainActivity, ArrayList(), R.layout.item_list, mainActivity)
-            recycler_view.adapter = adapter
+            binding.recyclerView.adapter = adapter
         } else {
             recyclerViewDragDropManager = RecyclerViewDragDropManager()
             val animator: GeneralItemAnimator = RefactoredDefaultItemAnimator()
@@ -88,9 +81,9 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
                 }
             }
             wrappedAdapter = recyclerViewDragDropManager!!.createWrappedAdapter(adapter!!)
-            recycler_view.adapter = wrappedAdapter
-            recycler_view.itemAnimator = animator
-            recyclerViewDragDropManager!!.attachRecyclerView(recycler_view)
+            binding.recyclerView.adapter = wrappedAdapter
+            binding.recyclerView.itemAnimator = animator
+            recyclerViewDragDropManager!!.attachRecyclerView(binding.recyclerView)
         }
         adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
@@ -160,7 +153,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
             recyclerViewDragDropManager!!.release()
             recyclerViewDragDropManager = null
         }
-        recycler_view.itemAnimator = null
+        binding.recyclerView.itemAnimator = null
         super.onDestroyView()
     }
 

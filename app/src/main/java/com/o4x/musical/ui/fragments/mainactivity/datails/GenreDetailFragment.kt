@@ -16,7 +16,6 @@ import com.o4x.musical.model.Genre
 import com.o4x.musical.ui.adapter.song.SongAdapter
 import com.o4x.musical.ui.viewmodel.GenreDetailsViewModel
 import com.o4x.musical.util.CustomImageUtil
-import kotlinx.android.synthetic.main.fragment_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
@@ -44,7 +43,7 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
     override fun setUpRecyclerView() {
         super.setUpRecyclerView()
         adapter = SongAdapter(mainActivity, ArrayList(), R.layout.item_list, mainActivity)
-        recycler_view.adapter = adapter
+        binding.recyclerView.adapter = adapter
         adapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
