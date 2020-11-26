@@ -62,6 +62,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.recyclerView.adapter?.unregisterAdapterDataObserver(observer)
         _binding = null
     }
 
@@ -134,14 +135,16 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         binding.recyclerView.addAppbarListener()
     }
 
+    val observer = object : AdapterDataObserver() {
+        override fun onChanged() {
+            super.onChanged()
+            checkIsEmpty()
+        }
+    }
+
     private fun setUpAdapter() {
         adapter = SongFileAdapter(mainActivity, LinkedList(), R.layout.item_list, this, mainActivity)
-        adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
-            override fun onChanged() {
-                super.onChanged()
-                checkIsEmpty()
-            }
-        })
+        adapter.registerAdapterDataObserver(observer)
         binding.recyclerView.adapter = adapter
         checkIsEmpty()
     }
@@ -362,10 +365,11 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private fun updateAdapter(files: List<File>) {
-        adapter!!.swapDataSet(files)
+        if (_binding == null) return
+        adapter.swapDataSet(files)
         val crumb = activeCrumb
         if (crumb != null) {
-            (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.scrollToPositionWithOffset(
+            (binding.recyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
                 crumb.scrollPosition,
                 0)
         }
