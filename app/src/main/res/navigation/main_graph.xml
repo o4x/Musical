@@ -42,6 +42,12 @@
         tools:layout="@layout/fragment_equalizer" />
 
     <fragment
+        android:id="@+id/timer"
+        android:name="com.o4x.musical.ui.fragments.mainactivity.timer.TimerFragment"
+        android:label="@string/sleep_timer"
+        tools:layout="@layout/fragment_timer" />
+
+    <fragment
         android:id="@+id/detail_playlist"
         android:name="com.o4x.musical.ui.fragments.mainactivity.datails.PlaylistDetailFragment"
         android:label="@string/playlists"
@@ -51,7 +57,7 @@
         android:id="@+id/detail_genre"
         android:name="com.o4x.musical.ui.fragments.mainactivity.datails.GenreDetailFragment"
         android:label="@string/genres"
-        tools:layout="@layout/activity_genre_detail" />
+        tools:layout="@layout/fragment_detail" />
 
     <activity
         android:id="@+id/settings"
@@ -104,6 +110,15 @@
     <action
         android:id="@+id/action_to_equalizer"
         app:destination="@id/equalizer"
+        app:popUpTo="@id/home"
+        app:enterAnim="@anim/retro_fragment_open_enter"
+        app:exitAnim="@anim/retro_fragment_open_exit"
+        app:popEnterAnim="@anim/retro_fragment_close_enter"
+        app:popExitAnim="@anim/retro_fragment_close_exit"/>
+
+    <action
+        android:id="@+id/action_to_timer"
+        app:destination="@id/timer"
         app:popUpTo="@id/home"
         app:enterAnim="@anim/retro_fragment_open_enter"
         app:exitAnim="@anim/retro_fragment_open_exit"

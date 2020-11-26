@@ -116,6 +116,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
             R.id.nav_library -> navController.navigate(R.id.action_to_library)
             R.id.nav_folders -> navController.navigate(R.id.action_to_folders)
             R.id.nav_eq -> navController.navigate(R.id.action_to_equalizer)
+            R.id.nav_timer -> navController.navigate(R.id.action_to_timer)
         }
     }
 
@@ -166,6 +167,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                     R.id.nav_library -> setMusicChooser(R.id.nav_library)
                     R.id.nav_folders -> setMusicChooser(R.id.nav_folders)
                     R.id.nav_eq -> setMusicChooser(R.id.nav_eq)
+                    R.id.nav_timer -> setMusicChooser(R.id.nav_timer)
                     R.id.action_scan -> {
 //                            val dialog = ScanMediaFolderChooserDialog.create()
 //                            dialog.show(supportFragmentManager, "SCAN_MEDIA_FOLDER_CHOOSER")
@@ -327,6 +329,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                 R.id.library -> navigation_view.setCheckedItem(R.id.nav_library)
                 R.id.folders -> navigation_view.setCheckedItem(R.id.nav_folders)
                 R.id.equalizer -> navigation_view.setCheckedItem(R.id.nav_eq)
+                R.id.timer -> navigation_view.setCheckedItem(R.id.nav_timer)
             }
         }
     }
