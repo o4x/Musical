@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.extensions.textColorPrimary
 import code.name.monkey.appthemehelper.extensions.textColorSecondary
@@ -15,13 +14,13 @@ import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.attached.isActive
 import com.afollestad.materialcab.createCab
 import com.o4x.musical.R
+import com.o4x.musical.databinding.MusicPanelLayoutBinding
 import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.fragments.player.MiniPlayerFragment
 import com.o4x.musical.util.PreferenceUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
-import kotlinx.android.synthetic.main.music_panel_layout.*
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -35,15 +34,16 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
     private var cab: AttachedCab? = null
     private lateinit var miniPlayerFragment: MiniPlayerFragment
 
+    private val binding by lazy { MusicPanelLayoutBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(createContentView())
-        ButterKnife.bind(this)
 
         miniPlayerFragment =
             supportFragmentManager.findFragmentById(R.id.mini_player_fragment) as MiniPlayerFragment
-        miniPlayerFragment.requireView().setOnClickListener { _: View? ->
+        miniPlayerFragment.requireView().setOnClickListener {
             val myIntent = Intent(this@AbsMusicPanelActivity, PlayerActivity::class.java)
             this@AbsMusicPanelActivity.startActivity(myIntent)
         }
@@ -80,21 +80,19 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
         return cab!!
     }
 
-    fun hideBottomBar(hide: Boolean) {
+    private fun hideBottomBar(hide: Boolean) {
         if (hide) {
-            panel_container?.visibility = View.GONE
+            binding.panelContainer.visibility = View.GONE
         } else {
-            panel_container?.visibility = View.VISIBLE
+            binding.panelContainer.visibility = View.VISIBLE
         }
     }
 
     protected fun wrapSlidingMusicPanel(@LayoutRes resId: Int): View {
-        @SuppressLint("InflateParams") val slidingMusicPanelLayout =
-            layoutInflater.inflate(R.layout.music_panel_layout, null)
         val contentContainer =
-            slidingMusicPanelLayout.findViewById<ViewGroup>(R.id.content_container)
+            binding.root.findViewById<ViewGroup>(R.id.content_container)
         layoutInflater.inflate(resId, contentContainer)
-        return slidingMusicPanelLayout
+        return binding.root
     }
 
     override val snackBarContainer: View
