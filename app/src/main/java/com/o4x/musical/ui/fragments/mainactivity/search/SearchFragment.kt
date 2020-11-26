@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
@@ -16,11 +18,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.o4x.musical.R
+import com.o4x.musical.databinding.FragmentSearchBinding
 import com.o4x.musical.extensions.showToast
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.ui.adapter.SearchAdapter
 import com.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
-import kotlinx.android.synthetic.main.fragment_search.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -37,6 +39,23 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
 
     private lateinit var searchAdapter: SearchAdapter
     private var query: String? = null
+
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,10 +102,10 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
         searchAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
-                empty.isVisible = searchAdapter.itemCount < 1
+                binding.empty.isVisible = searchAdapter.itemCount < 1
             }
         })
-        recyclerView.apply {
+        binding.recyclerView.apply {
             layoutManager = OverScrollLinearLayoutManager(requireContext())
             adapter = searchAdapter
             addAppbarListener()
