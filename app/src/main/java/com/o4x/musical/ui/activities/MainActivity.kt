@@ -13,13 +13,11 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.extensions.accentColor
 import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.extensions.textColorPrimary
@@ -29,7 +27,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.R
-import com.o4x.musical.extensions.*
+import com.o4x.musical.extensions.findNavController
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper.getSongs
 import com.o4x.musical.interfaces.CabHolder
@@ -42,7 +40,6 @@ import com.o4x.musical.ui.dialogs.ChangelogDialog
 import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
 import kotlinx.android.synthetic.main.search_bar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,6 +56,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
     lateinit var navController: NavController
     private lateinit var toggle: ActionBarDrawerToggle
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,12 +85,8 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     }
 
     override fun createContentView(): View {
-        @SuppressLint("InflateParams") val contentView =
-            layoutInflater.inflate(R.layout.activity_main_drawer_layout, null)
-        val drawerContent = contentView.findViewById<ViewGroup>(R.id.drawer_content_container)
-        drawerContent.addView(wrapSlidingMusicPanel(R.layout.activity_main))
 
-        return contentView
+        return wrapSlidingMusicPanel(R.layout.activity_main)
     }
 
     private fun setupToolbar() {
