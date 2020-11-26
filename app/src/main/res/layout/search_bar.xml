@@ -1,55 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_search"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
 
-    <LinearLayout
-        android:id="@+id/main_search"
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:layout_weight="1"
+        android:background="@null"
+        android:hint="@string/action_search"
+        android:imeOptions="actionSearch"
+        android:inputType="text|textAutoComplete"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textAppearance="@style/TextViewSubtitle1">
+    </com.google.android.material.textfield.TextInputEditText>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:hint="@string/action_search"
-            android:imeOptions="actionSearch"
-            android:inputType="text|textAutoComplete"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textAppearance="@style/TextViewSubtitle1">
-        </com.google.android.material.textfield.TextInputEditText>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0">
 
-        <FrameLayout
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/voice_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0">
+            android:background="?roundSelector"
+            android:padding="12dp"
+            app:srcCompat="@drawable/ic_mic"
+            app:tint="?attr/colorControlNormal"
+            tools:visibility="visible" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/voice_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?roundSelector"
-                android:padding="12dp"
-                app:srcCompat="@drawable/ic_mic"
-                app:tint="?attr/colorControlNormal"
-                tools:visibility="visible" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/clear_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?roundSelector"
-                android:padding="12dp"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_close"
-                app:tint="?attr/colorControlNormal"
-                tools:visibility="visible" />
-        </FrameLayout>
-    </LinearLayout>
-
-</merge>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/clear_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?roundSelector"
+            android:padding="12dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_close"
+            app:tint="?attr/colorControlNormal"
+            tools:visibility="visible" />
+    </FrameLayout>
+</LinearLayout>
