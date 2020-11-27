@@ -85,7 +85,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     }
 
     override fun createContentView(): View {
-
         return wrapSlidingMusicPanel(R.layout.activity_main)
     }
 
