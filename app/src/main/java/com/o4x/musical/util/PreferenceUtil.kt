@@ -289,11 +289,11 @@ object PreferenceUtil {
         }
 
     @JvmStatic
-    var lastSleepTimerValue: Int
-        get() = sharedPreferences.getInt(LAST_SLEEP_TIMER_VALUE, 30)
+    var lastSleepTimerValue: Long
+        get() = sharedPreferences.getLong(LAST_SLEEP_TIMER_VALUE, 30)
         set(value) {
             val editor = sharedPreferences.edit()
-            editor.putInt(LAST_SLEEP_TIMER_VALUE, value)
+            editor.putLong(LAST_SLEEP_TIMER_VALUE, value)
             editor.apply()
         }
 

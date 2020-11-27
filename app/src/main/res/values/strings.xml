@@ -457,5 +457,7 @@
     <string name="media_playback_controls">Media playback controls</string>
     <string name="shuffle">Shuffle</string>
     <string name="sleep_timer">Sleep timer</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
 
 </resources>
