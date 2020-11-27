@@ -66,6 +66,8 @@
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
         <item name="android:textColor">@android:color/holo_red_light</item>
         <item name="android:textSize">@dimen/text_size_label</item>
+        <item name="android:minWidth">@dimen/text_size_label</item>
+        <item name="android:minHeight">@dimen/text_size_label</item>
         <item name="android:textStyle">bold</item>
     </style>
 

@@ -27,6 +27,9 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
             field = value
         }
 
+    private val start by lazy { resources.getString(R.string.start) }
+    private val stop by lazy { resources.getString(R.string.stop) }
+
     private var _binding: FragmentTimerBinding? = null
     private val binding get() = _binding!!
 
@@ -36,7 +39,6 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentTimerBinding.inflate(inflater, container, false)
-        setAppbarPadding(binding.root)
         return binding.root
     }
 
@@ -49,59 +51,67 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setAppbarPadding(binding.root)
 
-        binding.start.setOnClickListener {
 
-            PreferenceUtil.sleepTimerFinishMusic =
-                binding.shouldFinishLastSong.isChecked
-
+        binding.btn.setOnClickListener {
             val millis = binding.timePicker.getMillis()
-            val pi = makeTimerPendingIntent(PendingIntent.FLAG_CANCEL_CURRENT)
-            val nextSleepTimerElapsedTime = SystemClock.elapsedRealtime() + millis
-            PreferenceUtil.setNextSleepTimerElapsedRealtime(nextSleepTimerElapsedTime)
-            val am = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            am[AlarmManager.ELAPSED_REALTIME_WAKEUP, nextSleepTimerElapsedTime] = pi
-
             PreferenceUtil.lastSleepTimerValue = millis
-            timerUpdater = TimerUpdater(millis)
-            timerUpdater?.start()
-        }
 
-        binding.stop.setOnClickListener {
-            val previous = makeTimerPendingIntent(PendingIntent.FLAG_NO_CREATE)
-            if (previous != null) {
-                val am = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                am.cancel(previous)
-                previous.cancel()
+            when (binding.btn.text) {
+                start -> {
+                    binding.btn.text = stop
+
+                    PreferenceUtil.sleepTimerFinishMusic =
+                        binding.shouldFinishLastSong.isChecked
+
+                    val pi = makeTimerPendingIntent(PendingIntent.FLAG_CANCEL_CURRENT)
+                    val nextSleepTimerElapsedTime = SystemClock.elapsedRealtime() + millis
+                    PreferenceUtil.setNextSleepTimerElapsedRealtime(nextSleepTimerElapsedTime)
+                    val am = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                    am[AlarmManager.ELAPSED_REALTIME_WAKEUP, nextSleepTimerElapsedTime] = pi
+
+
+                    timerUpdater = TimerUpdater(millis)
+                    timerUpdater?.start()
+                }
+                stop -> {
+                    binding.btn.text = start
+
+                    val previous = makeTimerPendingIntent(PendingIntent.FLAG_NO_CREATE)
+                    if (previous != null) {
+                        val am = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                        am.cancel(previous)
+                        previous.cancel()
+                    }
+                    val musicService = MusicPlayerRemote.musicService
+                    if (musicService != null && musicService.pendingQuit) {
+                        musicService.pendingQuit = false
+                    }
+
+                    timerUpdater?.cancel()
+                }
             }
-            val musicService = MusicPlayerRemote.musicService
-            if (musicService != null && musicService.pendingQuit) {
-                musicService.pendingQuit = false
-            }
-
-            Toast.makeText(
-                activity,
-                requireActivity().resources.getString(R.string.sleep_timer_canceled),
-                Toast.LENGTH_SHORT
-            ).show()
-
-            timerUpdater?.cancel()
         }
 
-
-        if (makeTimerPendingIntent(PendingIntent.FLAG_NO_CREATE) != null) {
-            val nextSleepTimerElapsed =
-                PreferenceUtil.nextSleepTimerElapsedRealTime - SystemClock.elapsedRealtime()
-            binding.timePicker.setMillis(nextSleepTimerElapsed, false)
-            timerUpdater = TimerUpdater(nextSleepTimerElapsed)
-            timerUpdater?.start()
-        } else {
-            binding.timePicker.setMillis(PreferenceUtil.lastSleepTimerValue, false)
-        }
 
         val finishMusic = PreferenceUtil.sleepTimerFinishMusic
         binding.shouldFinishLastSong.isChecked = finishMusic
-        binding.timePicker.setMillis(PreferenceUtil.lastSleepTimerValue, false)
+
+        val nextSleepTimerElapsed =
+            PreferenceUtil.nextSleepTimerElapsedRealTime - SystemClock.elapsedRealtime()
+        if (
+            makeTimerPendingIntent(PendingIntent.FLAG_NO_CREATE) != null
+            && nextSleepTimerElapsed > 0
+        ) {
+            binding.timePicker.setMillis(nextSleepTimerElapsed, false)
+            timerUpdater = TimerUpdater(nextSleepTimerElapsed)
+            timerUpdater?.start()
+            binding.btn.text = stop
+        } else {
+            binding.timePicker.setMillis(PreferenceUtil.lastSleepTimerValue, false)
+            binding.btn.text = start
+        }
     }
 
     private fun makeTimerPendingIntent(flag: Int): PendingIntent? {
@@ -128,7 +138,7 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
         val minutes = ((m / 1000 / 60) % 60).toInt()
         val hours = ((m / 1000 / 60 / 60) % 24).toInt()
 
-        binding.timePicker.setTime(
+        this.setTime(
             hours, minutes, seconds, smooth)
     }
 
@@ -140,7 +150,7 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
         }
 
         override fun onFinish() {
-//            updateCancelButton()
+            binding.btn.text = start
         }
     }
 }
