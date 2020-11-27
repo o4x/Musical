@@ -14,7 +14,6 @@ import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
 import com.o4x.musical.ui.dialogs.DeleteSongsDialog
-import com.o4x.musical.ui.dialogs.SleepTimerDialog
 import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
 import com.o4x.musical.util.NavigationUtil
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -78,10 +77,6 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
         val id = item.itemId
         val songs = getSongs()
         when (id) {
-            R.id.action_sleep_timer -> {
-                SleepTimerDialog().show(supportFragmentManager, "SET_SLEEP_TIMER")
-                return true
-            }
             R.id.action_equalizer -> {
                 NavigationUtil.openEqualizer(this)
                 return true
