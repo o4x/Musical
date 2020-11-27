@@ -4,19 +4,28 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote.enqueue
 import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.MusicPlayerRemote.playNext
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
+import com.o4x.musical.network.Models.LastFmArtist
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import com.o4x.musical.ui.activities.tageditor.ArtistTagEditorActivity
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
+import com.o4x.musical.ui.dialogs.SleepTimerDialog
 import com.o4x.musical.ui.viewmodel.ArtistDetailsViewModel
+import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.NavigationUtil
+import com.o4x.musical.util.PreferenceUtil.isAllowedToDownloadMetadata
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
+import com.o4x.musical.network.Result
+import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
 
 /**
@@ -77,6 +86,10 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
         val id = item.itemId
         val songs = getSongs()
         when (id) {
+            R.id.action_sleep_timer -> {
+                SleepTimerDialog().show(supportFragmentManager, "SET_SLEEP_TIMER")
+                return true
+            }
             R.id.action_equalizer -> {
                 NavigationUtil.openEqualizer(this)
                 return true
