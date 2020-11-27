@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import code.name.monkey.appthemehelper.extensions.colorControlNormal
@@ -12,6 +14,7 @@ import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerBinding
 import com.o4x.musical.helper.MusicPlayerRemote
+import com.o4x.musical.helper.MusicPlayerRemote.clearQueue
 import com.o4x.musical.helper.MusicPlayerRemote.currentSong
 import com.o4x.musical.helper.MusicPlayerRemote.playingQueue
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics
@@ -21,8 +24,10 @@ import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity
 import com.o4x.musical.ui.adapter.cover.AlbumCoverPagerAdapter
 import com.o4x.musical.ui.adapter.cover.BaseCoverPagerAdapter
+import com.o4x.musical.ui.dialogs.AddToPlaylistDialog.Companion.create
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.dialogs.LyricsDialog.Companion.create
+import com.o4x.musical.ui.dialogs.SleepTimerDialog
 import com.o4x.musical.ui.dialogs.SongDetailDialog
 import com.o4x.musical.ui.dialogs.SongShareDialog
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
@@ -160,6 +165,10 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
                 if (lyrics != null)
                     create(lyrics!!).show(childFragmentManager, "LYRICS")
 
+                return true
+            }
+            R.id.action_sleep_timer -> {
+                SleepTimerDialog().show(childFragmentManager, "SET_SLEEP_TIMER")
                 return true
             }
             R.id.action_share -> {
