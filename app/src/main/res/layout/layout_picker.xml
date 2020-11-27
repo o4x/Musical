@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal">
 
     <com.o4x.musical.views.timepicker.NumberPickerView
         android:id="@+id/pickerHours"
         style="@style/ScrollNumberPickerStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         app:npv_MaxValue="23"
         app:npv_MinValue="0"
-        app:npv_TextArray="@array/array_0to23"
-        app:npv_WrapSelectorWheel="false" />
+        app:npv_TextArray="@array/array_0to23" />
 
     <TextView
         android:id="@+id/textHours"
@@ -28,8 +28,9 @@
     <com.o4x.musical.views.timepicker.NumberPickerView
         android:id="@+id/pickerMinutes"
         style="@style/ScrollNumberPickerStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         app:npv_MaxValue="59"
         app:npv_MinValue="0"
         app:npv_TextArray="@array/array_0to59" />
@@ -47,8 +48,9 @@
     <com.o4x.musical.views.timepicker.NumberPickerView
         android:id="@+id/pickerSeconds"
         style="@style/ScrollNumberPickerStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         app:npv_MaxValue="59"
         app:npv_MinValue="0"
         app:npv_TextArray="@array/array_0to59" />
