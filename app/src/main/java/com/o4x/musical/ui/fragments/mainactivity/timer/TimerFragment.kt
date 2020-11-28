@@ -10,7 +10,6 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentTimerBinding
 import com.o4x.musical.helper.MusicPlayerRemote
