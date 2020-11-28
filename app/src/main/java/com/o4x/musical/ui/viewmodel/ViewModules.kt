@@ -46,4 +46,8 @@ val viewModules = module {
     viewModel {
         PlayerViewModel()
     }
+
+    viewModel {
+        EqualizerViewModel()
+    }
 }
