@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.fragments.bugreport.model.github;
+package com.o4x.musical.ui.fragments.settings.bug.model.github;
 
 import android.text.TextUtils;
 

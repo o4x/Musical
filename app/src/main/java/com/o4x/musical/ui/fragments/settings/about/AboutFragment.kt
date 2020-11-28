@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.fragments.about
+package com.o4x.musical.ui.fragments.settings.about
 
 import android.content.Context
 import android.content.Intent
@@ -21,9 +21,7 @@ import de.psdev.licensesdialog.LicensesDialog
 class AboutFragment : PreferenceFragmentCompat() {
 
     companion object {
-        private const val WEBSITE = "https://afshar.com/"
         private const val TRANSLATE = "https://phonograph.oneskyapp.com/collaboration/project?id=26521"
-        private const val RATE_ON_GOOGLE_PLAY = "https://play.google.com/store/apps/details?id=com.o4x.musical"
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -65,12 +63,6 @@ class AboutFragment : PreferenceFragmentCompat() {
             return@setOnPreferenceClickListener true
         }
 
-        val visitWebsite = R.string.key_visit_website.getPreference()
-        visitWebsite.setOnPreferenceClickListener {
-            openUrl(WEBSITE)
-            return@setOnPreferenceClickListener true
-        }
-
         val reportBugs = R.string.key_report_bugs.getPreference()
         reportBugs.setOnPreferenceClickListener {
             findNavController().navigate(R.id.action_about_to_bug)
@@ -80,12 +72,6 @@ class AboutFragment : PreferenceFragmentCompat() {
         val translate = R.string.key_translate.getPreference()
         translate.setOnPreferenceClickListener {
             openUrl(TRANSLATE)
-            return@setOnPreferenceClickListener true
-        }
-
-        val rateOnGooglePlay = R.string.key_rate_on_google_play.getPreference()
-        rateOnGooglePlay.setOnPreferenceClickListener {
-            openUrl(RATE_ON_GOOGLE_PLAY)
             return@setOnPreferenceClickListener true
         }
 
