@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.fragments.bugreport.model
+package com.o4x.musical.ui.fragments.settings.bug.model
 
 import android.app.Activity
 import android.app.Dialog
@@ -32,9 +32,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.o4x.musical.R
 import com.o4x.musical.misc.DialogAsyncTask
-import com.o4x.musical.ui.fragments.bugreport.model.github.ExtraInfo
-import com.o4x.musical.ui.fragments.bugreport.model.github.GithubLogin
-import com.o4x.musical.ui.fragments.bugreport.model.github.GithubTarget
+import com.o4x.musical.ui.fragments.settings.bug.model.github.ExtraInfo
+import com.o4x.musical.ui.fragments.settings.bug.model.github.GithubLogin
+import com.o4x.musical.ui.fragments.settings.bug.model.github.GithubTarget
 import org.eclipse.egit.github.core.Issue
 import org.eclipse.egit.github.core.client.GitHubClient
 import org.eclipse.egit.github.core.client.RequestException

@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.fragments.bugreport.model;
+package com.o4x.musical.ui.fragments.settings.bug.model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/about"
-        android:name="com.o4x.musical.ui.fragments.about.AboutFragment"
+        android:name="com.o4x.musical.ui.fragments.settings.about.AboutFragment"
         android:label="@string/action_about">
 
         <action
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/bugReport"
-        android:name="com.o4x.musical.ui.fragments.bugreport.model.BugReportFragment"
+        android:name="com.o4x.musical.ui.fragments.settings.bug.model.BugReportFragment"
         android:label="@string/report_bug"
         tools:layout="@layout/fragment_bug_report" />
 

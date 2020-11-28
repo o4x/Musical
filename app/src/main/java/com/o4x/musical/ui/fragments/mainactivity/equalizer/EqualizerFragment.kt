@@ -34,7 +34,6 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
     var seekBarFinal = arrayOfNulls<SeekBar>(5)
 
 
-
     private var _binding: FragmentEqualizerBinding? = null
     private val binding get() = _binding!!
 
@@ -58,7 +57,7 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
         setAppbarPadding(view)
 
         binding.spinnerDropdownIcon.setOnClickListener { binding.presetSpinner.performClick() }
-        
+
         binding.controllerBass.label = "BASS"
         binding.controllerBass.circlePaint2.color = themeColor
         binding.controllerBass.linePaint.color = themeColor

@@ -28,10 +28,8 @@
     <string name="key_licenses" translatable="false">licenses</string>
     <string name="key_write_an_email" translatable="false">write_an_email</string>
     <string name="key_telegram" translatable="false">telegram</string>
-    <string name="key_visit_website" translatable="false">visit_website</string>
     <string name="key_report_bugs" translatable="false">report_bugs</string>
     <string name="key_translate" translatable="false">translate</string>
-    <string name="key_rate_on_google_play" translatable="false">rate_on_google_play</string>
     <string name="key_donate" translatable="false">donate</string>
 
 </resources>
