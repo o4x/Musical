@@ -193,6 +193,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
+    implementation 'com.diogobernardino:williamchart:3.9.1'
+    implementation 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
+
     def butter_version = "10.2.3"
     implementation "com.jakewharton:butterknife:$butter_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butter_version"
