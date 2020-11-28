@@ -1,250 +1,112 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?backgroundColor"
-    android:clickable="true"
-    android:focusable="true">
+    android:background="?backgroundColor">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/preset_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:fontFamily="sans-serif-black"
+        tools:fontFamily="sans-serif-black"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="20dp"
+        tools:text="FLAT"
+        android:drawableEnd="@drawable/ic_arrow_down"
+        android:drawableTint="?android:textColorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/power_switch"
+        app:layout_constraintBottom_toBottomOf="@+id/power_switch" />
+
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/preset_spinner"
+        app:layout_constraintBottom_toBottomOf="@+id/preset_spinner"
+        app:layout_constraintStart_toEndOf="@+id/preset_spinner"
+        android:src="@drawable/ic_delete" />
+
+    <ImageButton
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/preset_spinner"
+        app:layout_constraintBottom_toBottomOf="@+id/preset_spinner"
+        app:layout_constraintStart_toEndOf="@+id/delete"
+        android:src="@drawable/ic_add_circle_outline"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/power_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:padding="16dp"
+        android:switchPadding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:checked="true" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.db.williamchart.view.LineChartView
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:background="@drawable/graph_back_2"
-            android:paddingBottom="5dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp"
-            android:layout_weight="1"
-            android:background="#33000000">
-
-            <View
-                android:id="@+id/showcase_view_equalizer"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="20dp" />
-
-            <Spinner
-                android:id="@+id/preset_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:background="@android:color/transparent" />
-
-            <ImageView
-                android:id="@+id/spinner_dropdown_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/dropdown_icon"
-                app:tint="#FFFFFF"
-                tools:ignore="ContentDescription" />
-
-        </RelativeLayout>
-
-
-        <LinearLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="6"
-            android:orientation="horizontal"
-            android:padding="3dp"
-            android:baselineAligned="false">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar1"
-                        android:layout_width="0dp"
-                        android:layout_height="290dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text1"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar3"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text3"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar4"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text4"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar5"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text5"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:layout_margin="16dp"
-            android:orientation="horizontal">
-
-            <com.o4x.musical.views.AnalogController
-                android:id="@+id/controller_bass"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <com.o4x.musical.views.AnalogController
-                android:id="@+id/controller_3D"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/blocker"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.7"
-        android:background="@android:color/transparent"
+        android:id="@+id/bands"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/power_switch"
+        android:orientation="horizontal"
+        android:gravity="center"
+        tools:background="@android:color/black"
         android:clickable="true"
-        android:focusable="true"
-        android:visibility="invisible" />
+        android:focusable="true"/>
 
-</RelativeLayout>
+    <com.o4x.musical.views.equalizer.croller.Croller
+        android:id="@+id/bassKnob"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/virtualizerKnob"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bands"
+        app:layout_constraintVertical_bias=".7"
+        app:main_circle_color="#EDEDED"
+        app:back_circle_color="#EDEDED"
+        app:indicator_color="#000"
+        app:indicator_width="10"
+        app:progress_primary_color="?android:textColorPrimary"
+        app:progress_secondary_color="?colorSecondary"
+        app:label="Bass"
+        app:label_color="?android:textColorPrimary"
+        app:label_style="bold"
+        android:layout_marginTop="48dp"
+        app:sweep_angle="270"
+        app:start_offset="60" />
+
+    <com.o4x.musical.views.equalizer.croller.Croller
+        android:id="@+id/virtualizerKnob"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bassKnob"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bassKnob"
+        app:layout_constraintTop_toTopOf="@+id/bassKnob"
+        app:layout_constraintVertical_bias=".7"
+        app:main_circle_color="#EDEDED"
+        app:back_circle_color="#EDEDED"
+        app:indicator_color="#000"
+        app:indicator_width="10"
+        app:progress_primary_color="?android:textColorPrimary"
+        app:progress_secondary_color="?colorSecondary"
+        app:label="Virtualizer"
+        app:label_color="?android:textColorPrimary"
+        app:label_style="bold"
+        app:sweep_angle="270"
+        app:start_offset="60" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
