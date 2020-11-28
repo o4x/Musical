@@ -7,10 +7,14 @@ import android.content.*
 import android.graphics.Bitmap
 import android.media.AudioManager
 import android.media.audiofx.AudioEffect
+import android.media.audiofx.BassBoost
+import android.media.audiofx.Equalizer
+import android.media.audiofx.PresetReverb
 import android.os.*
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.o4x.musical.App.Companion.getContext
@@ -313,6 +317,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         mediaStoreObserver.cancel()
         unregisterOnSharedPreferenceChangedListener(this)
         wakeLock.release()
+        equalizer.release()
+        bassBoost.release()
+        presetReverb.release()
         sendBroadcast(Intent("com.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_DESTROYED"))
     }
 
@@ -1101,6 +1108,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     val audioSessionId: Int
         get() = playback.audioSessionId
+
+    val equalizer: Equalizer by lazy { Equalizer(0, audioSessionId) }
+    val bassBoost: BassBoost by lazy { BassBoost(0, audioSessionId) }
+    val presetReverb: PresetReverb by lazy { PresetReverb(0, audioSessionId) }
 
     override fun onTrackWentToNext() {
         playerHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT)

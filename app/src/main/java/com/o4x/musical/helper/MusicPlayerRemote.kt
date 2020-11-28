@@ -17,10 +17,14 @@ package com.o4x.musical.helper
 import android.app.Activity
 import android.content.*
 import android.database.Cursor
+import android.media.audiofx.BassBoost
+import android.media.audiofx.Equalizer
+import android.media.audiofx.PresetReverb
 import android.net.Uri
 import android.os.Environment
 import android.os.IBinder
 import android.provider.DocumentsContract
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.o4x.musical.R
@@ -156,6 +160,18 @@ object MusicPlayerRemote : KoinComponent {
         get() = if (musicService != null) {
             musicService!!.audioSessionId
         } else -1
+
+    @JvmStatic
+    val equalizer: Equalizer
+        get() = musicService!!.equalizer
+
+    @JvmStatic
+    val bassBoost: BassBoost
+        get() = musicService!!.bassBoost
+
+    @JvmStatic
+    val presetReverb: PresetReverb
+        get() = musicService!!.presetReverb
 
     @JvmStatic
     val isServiceConnected: Boolean
