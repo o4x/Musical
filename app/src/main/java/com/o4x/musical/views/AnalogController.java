@@ -50,21 +50,21 @@ public class AnalogController extends View {
     }
 
     void init() {
-        textPaint = new Paint();
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextSize(33);
         textPaint.setFakeBoldText(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
-        circlePaint = new Paint();
+        circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setColor(Color.parseColor("#222222"));
         circlePaint.setStyle(Paint.Style.FILL);
-        circlePaint2 = new Paint();
-        circlePaint2.setColor(EqualizerFragment.themeColor);
+        circlePaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+        circlePaint2.setColor(progressColor);
 //        circlePaint2.setColor(Color.parseColor("#FFA036"));
         circlePaint2.setStyle(Paint.Style.FILL);
-        linePaint = new Paint();
-        linePaint.setColor(EqualizerFragment.themeColor);
+        linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        linePaint.setColor(progressColor);
 //        linePaint.setColor(Color.parseColor("#FFA036"));
         linePaint.setStrokeWidth(7);
         angle = "0.0";

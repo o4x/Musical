@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?backgroundColor"
@@ -11,8 +12,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.db.chart.view.LineChartView
-            android:id="@+id/lineChart"
+        <com.db.williamchart.view.LineChartView
+            android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
@@ -37,7 +38,7 @@
                 android:layout_marginStart="20dp" />
 
             <Spinner
-                android:id="@+id/equalizer_preset_spinner"
+                android:id="@+id/preset_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
@@ -51,17 +52,20 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/dropdown_icon"
-                app:tint="#FFFFFF" />
+                app:tint="#FFFFFF"
+                tools:ignore="ContentDescription" />
+
         </RelativeLayout>
 
 
         <LinearLayout
-            android:id="@+id/equalizerContainer"
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="6"
             android:orientation="horizontal"
-            android:padding="3dp">
+            android:padding="3dp"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -75,9 +79,9 @@
                     android:layout_weight="8">
 
                     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seekBar1"
+                        android:id="@+id/seek_bar1"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="290dp"
                         android:layout_marginTop="20dp"
                         android:padding="10dp"
                         android:thumb="@drawable/custom_equalizer_thumb"
@@ -85,11 +89,11 @@
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
-                    android:id="@+id/textView1"
+                    style="@style/TextAppearance.MaterialComponents.Overline"
+                    android:id="@+id/text1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textSize="10dp" />
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -104,7 +108,7 @@
                     android:layout_weight="8">
 
                     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seekBar2"
+                        android:id="@+id/seek_bar2"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
@@ -114,11 +118,11 @@
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
-                    android:id="@+id/textView2"
+                    style="@style/TextAppearance.MaterialComponents.Overline"
+                    android:id="@+id/text2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textSize="10dp" />
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,7 +137,7 @@
                     android:layout_weight="8">
 
                     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seekBar3"
+                        android:id="@+id/seek_bar3"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
@@ -143,11 +147,11 @@
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
-                    android:id="@+id/textView3"
+                    style="@style/TextAppearance.MaterialComponents.Overline"
+                    android:id="@+id/text3"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textSize="10dp" />
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -162,7 +166,7 @@
                     android:layout_weight="8">
 
                     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seekBar4"
+                        android:id="@+id/seek_bar4"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
@@ -172,11 +176,11 @@
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
-                    android:id="@+id/textView4"
+                    style="@style/TextAppearance.MaterialComponents.Overline"
+                    android:id="@+id/text4"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textSize="10dp" />
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -191,7 +195,7 @@
                     android:layout_weight="8">
 
                     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seekBar5"
+                        android:id="@+id/seek_bar5"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
@@ -201,11 +205,11 @@
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
-                    android:id="@+id/textView5"
+                    style="@style/TextAppearance.MaterialComponents.Overline"
+                    android:id="@+id/text5"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:textSize="10dp" />
+                    android:layout_weight="1" />
             </LinearLayout>
 
         </LinearLayout>
@@ -213,33 +217,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="10dp"
             android:layout_weight="3"
-            android:background="@android:color/transparent"
+            android:layout_margin="16dp"
             android:orientation="horizontal">
 
             <com.o4x.musical.views.AnalogController
-                android:id="@+id/controllerBass"
+                android:id="@+id/controller_bass"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <com.o4x.musical.views.AnalogController
-                android:id="@+id/controller3D"
+                android:id="@+id/controller_3D"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
+
         </LinearLayout>
 
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/equalizerBlocker"
+        android:id="@+id/blocker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.7"
         android:background="@android:color/transparent"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="invisible" />
 
 </RelativeLayout>
