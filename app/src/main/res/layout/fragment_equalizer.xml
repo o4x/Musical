@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -54,153 +55,27 @@
             android:layout_height="0dp"
             android:layout_weight="6"
             android:orientation="horizontal"
-            android:padding="3dp"
             android:baselineAligned="false">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
+            <include
+                android:id="@+id/vertical0"
+                layout="@layout/layout_vertical_seekbar" />
 
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
+            <include
+                android:id="@+id/vertical1"
+                layout="@layout/layout_vertical_seekbar" />
 
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar1"
-                        android:layout_width="0dp"
-                        android:layout_height="290dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+            <include
+                android:id="@+id/vertical2"
+                layout="@layout/layout_vertical_seekbar" />
 
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text1"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
+            <include
+                android:id="@+id/vertical3"
+                layout="@layout/layout_vertical_seekbar" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar3"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text3"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar4"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text4"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8">
-
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/seek_bar5"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20dp"
-                        android:padding="10dp"
-                        android:thumb="@drawable/custom_equalizer_thumb"
-                        app:seekBarRotation="CW270" />
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-
-                <TextView
-                    style="@style/TextAppearance.MaterialComponents.Overline"
-                    android:id="@+id/text5"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
+            <include
+                android:id="@+id/vertical4"
+                layout="@layout/layout_vertical_seekbar" />
 
         </LinearLayout>
 
@@ -232,7 +107,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.7"
-        android:background="@android:color/transparent"
+        android:background="?backgroundColor"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible" />
