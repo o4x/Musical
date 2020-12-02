@@ -24,7 +24,7 @@ class AlbumDetailsViewModel(
     }
 
     fun getArtist(artistId: Long): LiveData<Artist> = liveData(IO) {
-        val artist = repository.artistById(artistId)
+        val artist = repository.artistByIdAsync(artistId)
         emit(artist)
     }
 

@@ -245,7 +245,7 @@ class LibraryViewModel(
     }
 
     suspend fun albumById(id: Long) = repository.albumById(id)
-    suspend fun artistById(id: Long) = repository.artistById(id)
+    suspend fun artistById(id: Long) = repository.artistByIdAsync(id)
     suspend fun insertSongs(songs: List<SongEntity>) = repository.insertSongs(songs)
     suspend fun removeSongFromPlaylist(songEntity: SongEntity) =
         repository.removeSongFromPlaylist(songEntity)
@@ -292,7 +292,7 @@ class LibraryViewModel(
     }
 
     fun artist(artistId: Long): LiveData<Artist> = liveData {
-        emit(repository.artistById(artistId))
+        emit(repository.artistByIdAsync(artistId))
     }
 
     fun playlist(playListId: Long): LiveData<Playlist> = liveData {

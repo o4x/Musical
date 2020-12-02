@@ -2,55 +2,64 @@ package com.o4x.musical.ui.activities.tageditor
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import butterknife.ButterKnife
-import com.o4x.musical.R
+import com.o4x.musical.extensions.show
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.ITunesModel.Results
 import com.o4x.musical.repository.RealAlbumRepository
 import com.o4x.musical.repository.RealArtistRepository
 import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class AlbumTagEditorActivity : AbsTagEditorActivity<Results>() {
+
+    override fun albumImageView() = binding.backImage
+    override fun artistImageView() = binding.frontImage
+
+    val album by lazy { repository.albumById(id) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ButterKnife.bind(this)
     }
 
-    override val contentViewLayout: Int
-        get() = R.layout.activity_album_tag_editor
+    override fun showViews() {
+        binding.apply {
+            album.show()
+            artist.show()
+            year.show()
+            genre.show()
+        }
+    }
 
     override fun fillViewsWithResult(result: Results) {
         loadImageFromUrl(result.bigArtworkUrl, null)
-        songName?.setText(result.trackName)
-        albumName?.setText(result.collectionName)
-        artistName?.setText(result.artistName)
-        genreName?.setText(result.primaryGenreName)
-        year?.setText(result.year)
-        trackNumber?.setText(result.trackNumber.toString())
+        binding.album.editText?.setText(result.collectionName)
+        binding.artist.editText?.setText(result.artistName)
+        binding.year.editText?.setText(result.year)
+        binding.genre.editText?.setText(result.primaryGenreName)
     }
 
-    override val artist: Artist
-        get() = RealArtistRepository(
-            RealSongRepository(this),
-            RealAlbumRepository(RealSongRepository(this))
-        ).artist(
-            RealAlbumRepository(RealSongRepository(this)).album(id).artistId
-        )
+    override fun createArtist(): Artist =
+        repository.artistById(album.artistId)
 
-    override val songPaths: List<String>
-        get() {
-            val songs = RealAlbumRepository(RealSongRepository(this)).album(id).songs
-            val paths: MutableList<String> = ArrayList(songs.size)
-            for (song in songs) {
-                paths.add(song.data)
-            }
-            return paths
+    override fun createPaths(): List<String> {
+        val songs = album.songs
+        val paths: MutableList<String> = ArrayList(songs.size)
+        for (song in songs) {
+            paths.add(song.data)
         }
+        return paths
+    }
 
     override fun searchImageOnWeb() {
-        searchWebFor(albumName?.text.toString(), artistName?.text.toString())
+        searchWebFor(binding.album.editText?.text.toString(),
+            binding.artist.editText?.text.toString())
     }
 
     override fun searchOnline() {
