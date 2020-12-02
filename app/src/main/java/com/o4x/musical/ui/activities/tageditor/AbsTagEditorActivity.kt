@@ -172,7 +172,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         ).asList()
         albumImageView().setOnClickListener {
             MaterialDialog(this@AbsTagEditorActivity)
-                .title(R.string.update_image)
+                .title(R.string.update_album_image)
                 .listItems(items = items) { dialog, index, text ->
                     when (index) {
                         0 -> startImagePicker(REQUEST_CODE_SELECT_ALBUM_IMAGE)
@@ -198,7 +198,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
             ).asList()
             it.setOnClickListener {
                 MaterialDialog(this@AbsTagEditorActivity)
-                    .title(R.string.update_image)
+                    .title(R.string.update_artist_image)
                     .listItems(items = items) { dialog, index, text ->
                         when (index) {
                             0 -> startImagePicker(REQUEST_CODE_SELECT_ARTIST_IMAGE)
