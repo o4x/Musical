@@ -1,6 +1,7 @@
 package com.o4x.musical.ui.activities.tageditor
 
 import android.content.Intent
+import android.os.Bundle
 import com.o4x.musical.extensions.show
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.ITunesModel.Results
@@ -13,6 +14,11 @@ class SongTagEditorActivity : AbsTagEditorActivity<Results>() {
     override fun artistImageView() = binding.frontImage
 
     val song by lazy { repository.songById(id) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        album = repository.albumById(song.albumId)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun showViews() {
         binding.apply {

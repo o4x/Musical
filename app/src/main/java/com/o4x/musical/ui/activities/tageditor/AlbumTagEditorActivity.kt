@@ -2,10 +2,12 @@ package com.o4x.musical.ui.activities.tageditor
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import butterknife.ButterKnife
 import com.o4x.musical.extensions.show
+import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.ITunesModel.Results
 import com.o4x.musical.repository.RealAlbumRepository
@@ -21,11 +23,9 @@ class AlbumTagEditorActivity : AbsTagEditorActivity<Results>() {
     override fun albumImageView() = binding.backImage
     override fun artistImageView() = binding.frontImage
 
-    val album by lazy { repository.albumById(id) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        album = repository.albumById(id)
         super.onCreate(savedInstanceState)
-        ButterKnife.bind(this)
     }
 
     override fun showViews() {
@@ -46,10 +46,10 @@ class AlbumTagEditorActivity : AbsTagEditorActivity<Results>() {
     }
 
     override fun createArtist(): Artist =
-        repository.artistById(album.artistId)
+        repository.artistById(album!!.artistId)
 
     override fun createPaths(): List<String> {
-        val songs = album.songs
+        val songs = album!!.songs
         val paths: MutableList<String> = ArrayList(songs.size)
         for (song in songs) {
             paths.add(song.data)

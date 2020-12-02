@@ -34,6 +34,7 @@ import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.module.GlideApp
+import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.repository.RealRepository
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
@@ -77,6 +78,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
     private var isChanged: Boolean = false
 
+    var album: Album? = null
     lateinit var artist: Artist
     lateinit var songPaths: List<String>
 
@@ -211,10 +213,10 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     protected fun setAlbumImageBitmap(bitmap: Bitmap?) {
         albumImageView().let {
             if (bitmap == null) {
-                val b: Bitmap =
-                    CharCoverDrawable(CoverData(id, tagUtil?.albumTitle ?: ""))
-                    .toBitmap(Util.getScreenWidth(), Util.getScreenHeight())
-                it.setImageBitmap(b)
+                album?.apply {
+                    GlideLoader.with(this@AbsTagEditorActivity)
+                        .load(this).into(it)
+                }
             } else {
                 it.setImageBitmap(bitmap)
             }
@@ -224,7 +226,6 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     protected fun setArtistImageBitmap(bitmap: Bitmap?) {
         artistImageView().let {
             if (bitmap == null) {
-                val artist = artist
                 GlideLoader.with(this)
                     .load(artist).into(it)
             } else {
@@ -437,13 +438,14 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         songPaths = createPaths()
     }
 
+
     abstract fun artistImageView(): ImageView
     abstract fun albumImageView(): ImageView
-    protected abstract fun showViews()
-    protected abstract fun createArtist(): Artist
-    protected abstract fun createPaths(): List<String>
-    protected abstract fun searchImageOnWeb()
-    protected abstract fun searchOnline()
+    abstract fun showViews()
+    abstract fun createArtist(): Artist
+    abstract fun createPaths(): List<String>
+    abstract fun searchImageOnWeb()
+    abstract fun searchOnline()
 
     companion object {
         const val EXTRA_ID = "extra_id"
