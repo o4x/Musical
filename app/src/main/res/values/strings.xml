@@ -139,7 +139,6 @@
     <string name="reset_action">Reset</string>
     <string name="x_selected">%1$d selected</string>
     <string name="theme_color">Theme color</string>
-    <string name="update_image">Update image</string>
     <string name="playlist_empty_text">Empty playlist</string>
     <string name="no_playlists">No playlists</string>
     <string name="no_albums">No albums</string>
@@ -455,5 +454,7 @@
     <string name="sleep_timer">Sleep timer</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
+    <string name="update_album_image">Update album image</string>
+    <string name="update_artist_image">Update artist image</string>
 
 </resources>
