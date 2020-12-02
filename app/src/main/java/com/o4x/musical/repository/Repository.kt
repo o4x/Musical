@@ -37,7 +37,9 @@ interface Repository {
     fun genresFlow(): Flow<Result<List<Genre>>>
     fun historySong(): List<HistoryEntity>
     fun observableHistorySongs(): LiveData<List<Song>>
+    fun songById(songId: Long): Song
     fun albumById(albumId: Long): Album
+    fun artistById(artistId: Long): Artist
     fun playlistSongs(playlistEntity: PlaylistEntity): LiveData<List<SongEntity>>
     suspend fun fetchAlbums(): List<Album>
     suspend fun albumByIdAsync(albumId: Long): Album
@@ -51,7 +53,7 @@ interface Repository {
     suspend fun getGenre(genreId: Long): List<Song>
     suspend fun artistInfo(name: String, lang: String?, cache: String?): Result<LastFmArtist>
     suspend fun albumInfo(artist: String, album: String): Result<LastFmAlbum>
-    suspend fun artistById(artistId: Long): Artist
+    suspend fun artistByIdAsync(artistId: Long): Artist
     suspend fun recentArtists(): List<Artist>
     suspend fun topArtists(): List<Artist>
     suspend fun topAlbums(): List<Album>
@@ -112,13 +114,17 @@ class RealRepository(
 
     override suspend fun albumByIdAsync(albumId: Long): Album = albumRepository.album(albumId)
 
+    override fun songById(songId: Long): Song = songRepository.song(songId)
+
     override fun albumById(albumId: Long): Album = albumRepository.album(albumId)
+
+    override fun artistById(artistId: Long): Artist = artistRepository.artist(artistId)
 
     override suspend fun fetchArtists(): List<Artist> = artistRepository.artists()
 
     override suspend fun albumArtists(): List<Artist> = artistRepository.albumArtists()
 
-    override suspend fun artistById(artistId: Long): Artist = artistRepository.artist(artistId)
+    override suspend fun artistByIdAsync(artistId: Long): Artist = artistRepository.artist(artistId)
 
     override suspend fun recentArtists(): List<Artist> = lastAddedRepository.recentArtists()
 

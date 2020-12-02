@@ -11,16 +11,14 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.ImageView
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import butterknife.BindView
-import butterknife.ButterKnife
 import code.name.monkey.appthemehelper.extensions.colorControlNormal
 import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.extensions.withAlpha
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
@@ -28,8 +26,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
+import com.o4x.musical.databinding.ActivityTagBinding
 import com.o4x.musical.drawables.CharCoverDrawable
 import com.o4x.musical.drawables.CoverData
 import com.o4x.musical.extensions.applyToolbar
@@ -37,6 +35,7 @@ import com.o4x.musical.extensions.startImagePicker
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.model.Artist
+import com.o4x.musical.repository.RealRepository
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
@@ -45,6 +44,7 @@ import com.o4x.musical.util.*
 import com.o4x.musical.util.TagUtil.ArtworkInfo
 import com.o4x.musical.util.TextUtil.makeTextWithTitle
 import org.jaudiotagger.tag.FieldKey
+import org.koin.android.ext.android.inject
 import java.io.Serializable
 import java.util.*
 
@@ -53,62 +53,9 @@ import java.util.*
  */
 abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
-    @JvmField
-    @BindView(R.id.search_online_btn)
-    var searchBtn: AppCompatButton? = null
-    @JvmField
-    @BindView(R.id.nested_scroll_view)
-    var scrollView: NestedScrollView? = null
-    @JvmField
-    @BindView(R.id.toolbar)
-    var toolbar: Toolbar? = null
-    @JvmField
-    @BindView(R.id.album_image)
-    var albumImage: ImageView? = null
-    @JvmField
-    @BindView(R.id.artist_image)
-    var artistImage: ImageView? = null
-    @JvmField
-    @BindView(R.id.header)
-    var header: CardView? = null
-    @JvmField
-    @BindView(R.id.album_text)
-    var albumText: MaterialTextView? = null
-    @JvmField
-    @BindView(R.id.artist_text)
-    var artistText: MaterialTextView? = null
-    @JvmField
-    @BindView(R.id.genre_text)
-    var genreText: MaterialTextView? = null
-    @JvmField
-    @BindView(R.id.year_text)
-    var yearText: MaterialTextView? = null
-    @JvmField
-    @BindView(R.id.song_name)
-    var songName: TextInputEditText? = null
-    @JvmField
-    @BindView(R.id.album_name)
-    var albumName: TextInputEditText? = null
-    @JvmField
-    @BindView(R.id.artist_name)
-    var artistName: TextInputEditText? = null
-    @JvmField
-    @BindView(R.id.genre_name)
-    var genreName: TextInputEditText? = null
-    @JvmField
-    @BindView(R.id.year)
-    var year: TextInputEditText? = null
-    @JvmField
-    @BindView(R.id.track_number)
-    var trackNumber: TextInputEditText? = null
-    @JvmField
-    @BindView(R.id.disc_number)
-    var discNumber: TextInputEditText? = null
-    @JvmField
-    @BindView(R.id.lyrics)
-    var lyrics: TextInputEditText? = null
-
-    protected var id: Long = 0
+    val repository by inject<RealRepository>()
+    protected val id: Long
+            by lazy { intent.extras?.getLong(EXTRA_ID)!! }
 
     private var headerVariableSpace = 0
 
@@ -130,20 +77,30 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
     private var isChanged: Boolean = false
 
+    lateinit var artist: Artist
+    lateinit var songPaths: List<String>
+
+    val binding by lazy { ActivityTagBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(contentViewLayout)
-        ButterKnife.bind(this)
-        intentExtras
+        setContentView(binding.root)
+        showViews()
+
+        getDataSet()
         createTagUtil()
+
         headerVariableSpace = resources.getDimensionPixelSize(R.dimen.tagEditorHeaderVariableSpace)
+
         setupViews()
         setStatusBarColorAuto()
         setNavigationBarColorAuto()
         setNavigationBarDividerColorAuto()
-        applyToolbar(toolbar!!)
-        supportActionBar!!.setTitle(R.string.action_tag_editor)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        applyToolbar(binding.toolbar)
+
+        supportActionBar?.setTitle(R.string.action_tag_editor)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -153,7 +110,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(this, toolbar)
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(this, binding.toolbar)
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -171,14 +128,6 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private val intentExtras: Unit
-        get() {
-            val intentExtras = intent.extras
-            if (intentExtras != null) {
-                id = intentExtras.getLong(EXTRA_ID)
-            }
-        }
 
     private fun createTagUtil() {
         val songPaths = songPaths
@@ -198,16 +147,15 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 
     private fun setupScrollView() {
-        scrollView?.setOnScrollChangeListener(
+        binding.nestedScrollView.setOnScrollChangeListener(
             NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, _ ->
-                albumImage?.translationY = scrollY / 2f
+                albumImageView().translationY = scrollY / 2f
             }
         )
     }
 
     private fun setupSearchButton() {
-        searchBtn?.setBackgroundColor(surfaceColor())
-        searchBtn?.setOnClickListener { searchOnline() }
+        binding.searchOnline.setOnClickListener { searchOnline() }
     }
 
     private fun setupAlbumImageView() {
@@ -220,7 +168,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
             getString(R.string.web_search),
             getString(R.string.remove_cover)
         ).asList()
-        albumImage?.setOnClickListener {
+        albumImageView().setOnClickListener {
             MaterialDialog(this@AbsTagEditorActivity)
                 .title(R.string.update_image)
                 .listItems(items = items) { dialog, index, text ->
@@ -235,7 +183,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 
     private fun setupArtistImageView() {
-        artistImage?.let {
+        artistImageView().let {
 
             GlideLoader.with(this)
                 .load(artist)
@@ -261,7 +209,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 
     protected fun setAlbumImageBitmap(bitmap: Bitmap?) {
-        albumImage?.let {
+        albumImageView().let {
             if (bitmap == null) {
                 val b: Bitmap =
                     CharCoverDrawable(CoverData(id, tagUtil?.albumTitle ?: ""))
@@ -274,7 +222,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 
     protected fun setArtistImageBitmap(bitmap: Bitmap?) {
-        artistImage?.let {
+        artistImageView().let {
             if (bitmap == null) {
                 val artist = artist
                 GlideLoader.with(this)
@@ -287,29 +235,27 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
     private fun setupTextInputEditTexts() {
         fillViewsWithFileTags()
-        songName?.addTextChangedListener(textWatcher)
-        albumName?.addTextChangedListener(textWatcher)
-        artistName?.addTextChangedListener(textWatcher)
-        genreName?.addTextChangedListener(textWatcher)
-        year?.addTextChangedListener(textWatcher)
-        trackNumber?.addTextChangedListener(textWatcher)
-        lyrics?.addTextChangedListener(textWatcher)
+        binding.song.editText?.addTextChangedListener(textWatcher)
+        binding.album.editText?.addTextChangedListener(textWatcher)
+        binding.artist.editText?.addTextChangedListener(textWatcher)
+        binding.genre.editText?.addTextChangedListener(textWatcher)
+        binding.year.editText?.addTextChangedListener(textWatcher)
+        binding.track.editText?.addTextChangedListener(textWatcher)
+        binding.lyrics.editText?.addTextChangedListener(textWatcher)
     }
 
     private fun fillViewsWithFileTags() {
         tagUtil?.let {
-            albumText?.text = makeTextWithTitle(this, R.string.label_album, it.albumTitle)
-            artistText?.text = makeTextWithTitle(this, R.string.label_artist, it.artistName)
-            genreText?.text = makeTextWithTitle(this, R.string.label_genre, it.genreName)
-            yearText?.text = makeTextWithTitle(this, R.string.label_year, it.songYear)
-            songName?.setText(it.songTitle)
-            albumName?.setText(it.albumTitle)
-            artistName?.setText(it.artistName)
-            genreName?.setText(it.genreName)
-            year?.setText(it.songYear)
-            trackNumber?.setText(it.trackNumber)
-            discNumber?.setText(it.discNumber)
-            lyrics?.setText(it.lyrics)
+            binding.artistTitle.text = artist.name
+            binding.artistText.text = MusicUtil.getArtistInfoString(this, artist)
+            binding.song.editText?.setText(it.songTitle)
+            binding.album.editText?.setText(it.albumTitle)
+            binding.artist.editText?.setText(it.artistName)
+            binding.genre.editText?.setText(it.genreName)
+            binding.year.editText?.setText(it.songYear)
+            binding.track.editText?.setText(it.trackNumber)
+            binding.disc.editText?.setText(it.discNumber)
+            binding.lyrics.editText?.setText(it.lyrics)
         }
     }
 
@@ -388,29 +334,37 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         val fieldKeyValueMap: MutableMap<FieldKey, String?> = EnumMap(
             FieldKey::class.java)
 
-        songName?.let {
-            fieldKeyValueMap[FieldKey.TITLE] = it.getSafeString()
+        binding.song.editText?.let {
+            if (binding.song.isVisible)
+                fieldKeyValueMap[FieldKey.TITLE] = it.getSafeString()
         }
-        albumName?.let {
-            fieldKeyValueMap[FieldKey.ALBUM] = it.getSafeString()
+        binding.album.editText?.let {
+            if (binding.album.isVisible)
+                fieldKeyValueMap[FieldKey.ALBUM] = it.getSafeString()
         }
-        artistName?.let {
-            fieldKeyValueMap[FieldKey.ARTIST] = it.getSafeString()
+        binding.artist.editText?.let {
+            if (binding.artist.isVisible)
+                fieldKeyValueMap[FieldKey.ARTIST] = it.getSafeString()
         }
-        genreName?.let {
-            fieldKeyValueMap[FieldKey.GENRE] = it.getSafeString()
+        binding.genre.editText?.let {
+            if (binding.genre.isVisible)
+                fieldKeyValueMap[FieldKey.GENRE] = it.getSafeString()
         }
-        year?.let {
-            fieldKeyValueMap[FieldKey.YEAR] = it.getSafeString()
+        binding.year.editText?.let {
+            if (binding.year.isVisible)
+                fieldKeyValueMap[FieldKey.YEAR] = it.getSafeString()
         }
-        trackNumber?.let {
-            fieldKeyValueMap[FieldKey.TRACK] = it.getSafeString()
+        binding.track.editText?.let {
+            if (binding.track.isVisible)
+                fieldKeyValueMap[FieldKey.TRACK] = it.getSafeString()
         }
-        discNumber?.let {
-            fieldKeyValueMap[FieldKey.DISC_NO] = it.getSafeString()
+        binding.disc.editText?.let {
+            if (binding.disc.isVisible)
+                fieldKeyValueMap[FieldKey.DISC_NO] = it.getSafeString()
         }
-        lyrics?.let {
-            fieldKeyValueMap[FieldKey.LYRICS] = it.getSafeString()
+        binding.lyrics.editText?.let {
+            if (binding.lyrics.isVisible)
+                fieldKeyValueMap[FieldKey.LYRICS] = it.getSafeString()
         }
 
         tagUtil?.writeValuesToFiles(fieldKeyValueMap,
@@ -478,9 +432,16 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         }
     }
 
-    protected abstract val contentViewLayout: Int
-    protected abstract val artist: Artist
-    protected abstract val songPaths: List<String>
+    private fun getDataSet() {
+        artist = createArtist()
+        songPaths = createPaths()
+    }
+
+    abstract fun artistImageView(): ImageView
+    abstract fun albumImageView(): ImageView
+    protected abstract fun showViews()
+    protected abstract fun createArtist(): Artist
+    protected abstract fun createPaths(): List<String>
     protected abstract fun searchImageOnWeb()
     protected abstract fun searchOnline()
 
@@ -492,7 +453,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 }
 
-private fun TextInputEditText.getSafeString(): String {
+private fun EditText.getSafeString(): String {
     return if (text?.length ?: -1 > 0) {
         text.toString()
     } else ""

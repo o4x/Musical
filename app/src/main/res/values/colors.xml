@@ -27,7 +27,7 @@
 
     <color name="transparent">#00000000</color>
     <color name="translucent">#30000000</color>
-    <color name="semi_transparent">#20000000</color>
+    <color name="semi_transparent">#80000000</color>
 
     <!--  MATERIAL COLORS  -->
 

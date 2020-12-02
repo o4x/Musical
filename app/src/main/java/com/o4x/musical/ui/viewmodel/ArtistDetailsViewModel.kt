@@ -39,7 +39,7 @@ class ArtistDetailsViewModel(
     private fun fetchArtist() {
         viewModelScope.launch(IO) {
             artist.postValue(
-                realRepository.artistById(artistId)
+                realRepository.artistByIdAsync(artistId)
             )
         }
     }
