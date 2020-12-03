@@ -23,7 +23,7 @@ import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
 import com.o4x.musical.provider.HistoryStore
 import com.o4x.musical.provider.SongPlayCountStore
-import com.o4x.musical.util.PreferenceUtil.smartPlaylistLimit
+import com.o4x.musical.prefs.PreferenceUtil.smartPlaylistLimit
 
 
 /**

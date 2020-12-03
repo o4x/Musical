@@ -1,9 +1,7 @@
 package com.o4x.musical.ui.fragments.mainactivity.library.pager;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -13,7 +11,7 @@ import com.o4x.musical.misc.OverScrollGridLayoutManager;
 import com.o4x.musical.model.Genre;
 import com.o4x.musical.ui.adapter.GenreAdapter;
 import com.o4x.musical.ui.viewmodel.ReloadType;
-import com.o4x.musical.util.PreferenceUtil;
+import com.o4x.musical.prefs.PreferenceUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

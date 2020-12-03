@@ -24,14 +24,13 @@ import android.net.Uri
 import android.os.Environment
 import android.os.IBinder
 import android.provider.DocumentsContract
-import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.o4x.musical.R
 import com.o4x.musical.model.Song
 import com.o4x.musical.repository.SongRepository
 import com.o4x.musical.service.MusicService
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.io.File

@@ -11,11 +11,11 @@ import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.model.smartplaylist.TopTracksPlaylist
 import com.o4x.musical.ui.adapter.PlaylistAdapter
 import com.o4x.musical.ui.viewmodel.ReloadType
-import com.o4x.musical.util.PreferenceUtil.getPlaylistGridSize
-import com.o4x.musical.util.PreferenceUtil.getPlaylistGridSizeLand
-import com.o4x.musical.util.PreferenceUtil.playlistSortOrder
-import com.o4x.musical.util.PreferenceUtil.setPlaylistGridSize
-import com.o4x.musical.util.PreferenceUtil.setPlaylistGridSizeLand
+import com.o4x.musical.prefs.PreferenceUtil.getPlaylistGridSize
+import com.o4x.musical.prefs.PreferenceUtil.getPlaylistGridSizeLand
+import com.o4x.musical.prefs.PreferenceUtil.playlistSortOrder
+import com.o4x.musical.prefs.PreferenceUtil.setPlaylistGridSize
+import com.o4x.musical.prefs.PreferenceUtil.setPlaylistGridSizeLand
 import java.util.*
 
 /**

@@ -15,8 +15,8 @@ import code.name.monkey.appthemehelper.util.ATHUtil.resolveColor
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.o4x.musical.R
-import com.o4x.musical.util.PreferenceUtil.isDarkMode
-import com.o4x.musical.util.PreferenceUtil.setLastChangeLogVersion
+import com.o4x.musical.prefs.PreferenceUtil.isDarkMode
+import com.o4x.musical.prefs.PreferenceUtil.setLastChangeLogVersion
 import java.io.BufferedReader
 import java.io.InputStreamReader
 

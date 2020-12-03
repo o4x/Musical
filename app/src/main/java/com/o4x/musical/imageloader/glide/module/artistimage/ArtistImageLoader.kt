@@ -30,7 +30,7 @@ import com.o4x.musical.network.ApiClient
 import com.o4x.musical.network.Models.DeezerArtistModel
 import com.o4x.musical.network.service.DeezerService
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 import java.io.IOException
 import java.io.InputStream
 import java.util.*

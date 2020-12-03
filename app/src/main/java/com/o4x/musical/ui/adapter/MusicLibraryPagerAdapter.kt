@@ -1,7 +1,6 @@
 package com.o4x.musical.ui.adapter
 
 import android.content.Context
-import android.os.Bundle
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -9,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.*
-import com.o4x.musical.util.PreferenceUtil.libraryCategory
+import com.o4x.musical.prefs.PreferenceUtil.libraryCategory
 import java.lang.ref.WeakReference
 import java.util.*
 

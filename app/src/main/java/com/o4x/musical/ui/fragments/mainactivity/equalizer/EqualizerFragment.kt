@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import code.name.monkey.appthemehelper.extensions.primaryColor
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentEqualizerBinding
+import com.o4x.musical.prefs.EqualizerPref
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.viewmodel.EqualizerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,6 +51,7 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAppbarPadding(view)
+        binding.blocker.isVisible = !EqualizerPref.isEqualizerEnabled
 
         binding.spinnerDropdownIcon.setOnClickListener { binding.presetSpinner.performClick() }
 
@@ -87,8 +89,8 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
                 binding.controller3D.progress = y
             }
         } else {
-            val x = equalizerViewModel.bassStrength * 19 / 1000
-            val y = equalizerViewModel.reverbPreset * 19 / 1000
+            val x = equalizerViewModel.em.bassStrength * 19 / 1000
+            val y = equalizerViewModel.em.reverbPreset * 19 / 1000
             if (x == 0) {
                 binding.controllerBass.progress = 1
             } else {
@@ -101,19 +103,19 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
             }
         }
         binding.controllerBass.setOnProgressChangedListener { progress ->
-            equalizerViewModel.bassStrength = (progress * 1000 / 19).toShort()
+            equalizerViewModel.em.bassStrength = (progress * 1000 / 19).toShort()
             try {
-                equalizerViewModel.bassBoost.setStrength(equalizerViewModel.bassStrength)
-                equalizerViewModel.equalizerModel.bassStrength = equalizerViewModel.bassStrength
+                equalizerViewModel.bassBoost.setStrength(equalizerViewModel.em.bassStrength)
+                equalizerViewModel.em.bassStrength = equalizerViewModel.em.bassStrength
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
         binding.controller3D.setOnProgressChangedListener { progress ->
-            equalizerViewModel.reverbPreset = (progress * 1000 / 19).toShort()
-            equalizerViewModel.equalizerModel.reverbPreset = equalizerViewModel.reverbPreset
+            equalizerViewModel.em.reverbPreset = (progress * 1000 / 19).toShort()
+            equalizerViewModel.em.reverbPreset = equalizerViewModel.em.reverbPreset
             try {
-                equalizerViewModel.presetReverb.preset = equalizerViewModel.reverbPreset
+                equalizerViewModel.presetReverb.preset = equalizerViewModel.em.reverbPreset
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -191,11 +193,11 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
             textView.setTextColor(Color.WHITE)
             textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
             if (equalizerViewModel.isEqualizerReloaded) {
-                seekBar.progress = equalizerViewModel.seekbarpos[i] - lowerEqualizerBandLevel
+                seekBar.progress = equalizerViewModel.em.seekbarpos[i] - lowerEqualizerBandLevel
             } else {
                 seekBar.progress =
                     equalizerViewModel.equalizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel
-                equalizerViewModel.seekbarpos[i] = equalizerViewModel.equalizer.getBandLevel(equalizerBandIndex)
+                equalizerViewModel.em.seekbarpos[i] = equalizerViewModel.equalizer.getBandLevel(equalizerBandIndex)
                     .toInt()
                 equalizerViewModel.isEqualizerReloaded = true
             }
@@ -205,15 +207,15 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
                         equalizerBandIndex,
                         (progress + lowerEqualizerBandLevel).toShort()
                     )
-                    equalizerViewModel.seekbarpos[seekBar.id] = progress + lowerEqualizerBandLevel
-                    equalizerViewModel.equalizerModel.seekbarpos[seekBar.id] =
+                    equalizerViewModel.em.seekbarpos[seekBar.id] = progress + lowerEqualizerBandLevel
+                    equalizerViewModel.em.seekbarpos[seekBar.id] =
                         progress + lowerEqualizerBandLevel
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {
                     binding.presetSpinner.setSelection(0)
-                    equalizerViewModel.presetPos = 0
-                    equalizerViewModel.equalizerModel.presetPos = 0
+                    equalizerViewModel.em.presetPos = 0
+                    equalizerViewModel.em.presetPos = 0
                 }
 
                 override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -239,9 +241,9 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
         }
         binding.presetSpinner.adapter = equalizerPresetSpinnerAdapter
         //presetSpinner.setDropDownWidth((Settings.screen_width * 3) / 4);
-        if (equalizerViewModel.isEqualizerReloaded && equalizerViewModel.presetPos != 0) {
+        if (equalizerViewModel.isEqualizerReloaded && equalizerViewModel.em.presetPos != 0) {
 //            correctPosition = false;
-            binding.presetSpinner.setSelection(equalizerViewModel.presetPos)
+            binding.presetSpinner.setSelection(equalizerViewModel.em.presetPos)
         }
         binding.presetSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -253,29 +255,32 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
                 try {
                     if (position != 0) {
                         equalizerViewModel.equalizer.usePreset((position - 1).toShort())
-                        equalizerViewModel.presetPos = position
-                        val numberOfFreqBands: Short = 5
-                        val lowerEqualizerBandLevel = equalizerViewModel.equalizer.bandLevelRange[0]
-                        for (i in 0 until numberOfFreqBands) {
-                            seekBarFinal[i]!!.progress =
-                                equalizerViewModel.equalizer.getBandLevel(i.toShort()) - lowerEqualizerBandLevel
-                            equalizerViewModel.seekbarpos[i] = equalizerViewModel.equalizer.getBandLevel(
-                                i.toShort()
-                            ).toInt()
-                            equalizerViewModel.equalizerModel.seekbarpos[i] = equalizerViewModel
-                                .equalizer.getBandLevel(
-                                    i.toShort()
-                                ).toInt()
-                        }
+                        equalizerViewModel.em.presetPos = position
+                        updateSeekBars()
                     }
                 } catch (e: Exception) {
                     Toast.makeText(context, "Error while updating Equalizer", Toast.LENGTH_SHORT)
                         .show()
                 }
-                equalizerViewModel.equalizerModel.presetPos = position
+                equalizerViewModel.em.presetPos = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    fun updateSeekBars() {
+        val lowerEqualizerBandLevel = equalizerViewModel.equalizer.bandLevelRange[0]
+        for (i in 0 until numberOfFrequencyBands) {
+            seekBarFinal[i]!!.progress =
+                equalizerViewModel.equalizer.getBandLevel(i.toShort()) - lowerEqualizerBandLevel
+            equalizerViewModel.em.seekbarpos[i] = equalizerViewModel.equalizer.getBandLevel(
+                i.toShort()
+            ).toInt()
+            equalizerViewModel.em.seekbarpos[i] = equalizerViewModel
+                .equalizer.getBandLevel(
+                    i.toShort()
+                ).toInt()
         }
     }
 
@@ -285,13 +290,13 @@ class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer) {
         item.setActionView(R.layout.switch_layout)
         val equalizerSwitch: SwitchCompat =
             item.actionView.findViewById(R.id.equalizer_enable_switch)
-        equalizerSwitch.isChecked = equalizerViewModel.isEqualizerEnabled
+        equalizerSwitch.isChecked = EqualizerPref.isEqualizerEnabled
         equalizerSwitch.setOnCheckedChangeListener { _, isChecked ->
             equalizerViewModel.equalizer.enabled = isChecked
             equalizerViewModel.bassBoost.enabled = isChecked
             equalizerViewModel.presetReverb.enabled = isChecked
-            equalizerViewModel.isEqualizerEnabled = isChecked
-            equalizerViewModel.equalizerModel.isEqualizerEnabled = isChecked
+            EqualizerPref.isEqualizerEnabled = isChecked
+            equalizerViewModel.em.isEqualizerEnabled = isChecked
 
             binding.blocker.isVisible = !isChecked
         }

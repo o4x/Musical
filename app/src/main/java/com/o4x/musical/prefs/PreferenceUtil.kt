@@ -1,4 +1,4 @@
-package com.o4x.musical.util
+package com.o4x.musical.prefs
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,10 +12,10 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.o4x.musical.*
 import com.o4x.musical.extensions.getStringOrDefault
-import com.o4x.musical.extensions.isDark
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment
+import com.o4x.musical.util.FileUtil
 import java.io.File
 
 object PreferenceUtil {
@@ -131,13 +131,13 @@ object PreferenceUtil {
 
             val data = sharedPreferences.getStringOrDefault(
                 LIBRARY_CATEGORIES,
-                gson.toJson(this.defaultCategories, collectionType)
+                gson.toJson(defaultCategories, collectionType)
             )
             return try {
                 Gson().fromJson(data, collectionType)
             } catch (e: JsonSyntaxException) {
                 e.printStackTrace()
-                return this.defaultCategories
+                return defaultCategories
             }
         }
         set(value) {

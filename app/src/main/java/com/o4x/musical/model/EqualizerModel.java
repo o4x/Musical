@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 
 public class EqualizerModel implements Serializable {
+
     private boolean isEqualizerEnabled;
     private int[] seekbarpos = new int[5];
     private int presetPos;

@@ -15,8 +15,7 @@
 package com.o4x.musical.model
 
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.PreferenceUtil
-import java.util.*
+import com.o4x.musical.prefs.PreferenceUtil
 
 data class Artist(
     val id: Long,

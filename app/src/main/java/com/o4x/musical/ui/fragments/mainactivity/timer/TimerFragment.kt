@@ -15,7 +15,7 @@ import com.o4x.musical.databinding.FragmentTimerBinding
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.views.timepicker.ScrollHmsPicker
 
 class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {

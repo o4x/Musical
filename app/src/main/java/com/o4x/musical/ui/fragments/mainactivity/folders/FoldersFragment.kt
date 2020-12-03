@@ -33,7 +33,7 @@ import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ArrayListPathsAsyncTask.OnPathsListedCallback
 import com.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ListSongsAsyncTask.OnSongsListedCallback
 import com.o4x.musical.util.FileUtil
-import com.o4x.musical.util.PreferenceUtil.startDirectory
+import com.o4x.musical.prefs.PreferenceUtil.startDirectory
 import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.scanPaths
 import com.o4x.musical.views.BreadCrumbLayout.Crumb

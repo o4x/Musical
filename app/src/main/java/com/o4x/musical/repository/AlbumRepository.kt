@@ -18,9 +18,7 @@ import android.provider.MediaStore.Audio.AudioColumns
 import com.o4x.musical.helper.SortOrder
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.PreferenceUtil
-import java.util.*
-import kotlin.collections.ArrayList
+import com.o4x.musical.prefs.PreferenceUtil
 
 
 /**

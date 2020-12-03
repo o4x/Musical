@@ -44,6 +44,7 @@ import androidx.annotation.Nullable;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.o4x.musical.App;
+import com.o4x.musical.prefs.PreferenceUtil;
 
 import java.text.DecimalFormat;
 

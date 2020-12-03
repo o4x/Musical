@@ -25,7 +25,7 @@ import com.o4x.musical.model.Song;
 import com.o4x.musical.service.MusicService;
 import com.o4x.musical.ui.activities.MainActivity;
 import com.o4x.musical.util.ImageUtil;
-import com.o4x.musical.util.PreferenceUtil;
+import com.o4x.musical.prefs.PreferenceUtil;
 
 import org.jetbrains.annotations.NotNull;
 

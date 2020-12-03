@@ -16,12 +16,12 @@ import com.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.fragments.mainactivity.library.pager.*
-import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.util.PreferenceUtil.lastPage
-import com.o4x.musical.util.PreferenceUtil.libraryCategory
-import com.o4x.musical.util.PreferenceUtil.registerOnSharedPreferenceChangedListener
-import com.o4x.musical.util.PreferenceUtil.rememberLastTab
-import com.o4x.musical.util.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
+import com.o4x.musical.prefs.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil.lastPage
+import com.o4x.musical.prefs.PreferenceUtil.libraryCategory
+import com.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
+import com.o4x.musical.prefs.PreferenceUtil.rememberLastTab
+import com.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
 import com.o4x.musical.util.Util
 
 class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPageChangeListener,
