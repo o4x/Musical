@@ -3,10 +3,7 @@ package com.o4x.musical.imageloader.glide.loader
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.widget.ImageView
-import androidx.core.graphics.drawable.toBitmap
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -26,7 +23,7 @@ import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.model.*
 import com.o4x.musical.util.CustomImageUtil
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 
 
 class GlideLoader {

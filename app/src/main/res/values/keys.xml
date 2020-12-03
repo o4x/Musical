@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     // setting's //
     <string name="key_general_theme" translatable="false">general_theme</string>
     <string name="key_theme_color" translatable="false">theme_color</string>

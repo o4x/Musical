@@ -19,7 +19,7 @@ import android.provider.MediaStore
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.PreferenceUtil.smartPlaylistLimit
+import com.o4x.musical.prefs.PreferenceUtil.smartPlaylistLimit
 
 /**
  * Created by hemanths on 16/08/17.

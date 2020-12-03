@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import com.o4x.musical.service.MusicService
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 import java.lang.ref.WeakReference
 
 class PlaybackHandler(service: MusicService, looper: Looper) : Handler(looper) {

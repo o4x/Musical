@@ -11,7 +11,7 @@ import com.o4x.musical.ui.activities.MainActivity
 import com.o4x.musical.ui.adapter.base.AbsAdapter
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.PreferenceUtil.genreSortOrder
+import com.o4x.musical.prefs.PreferenceUtil.genreSortOrder
 import java.util.*
 
 class GenreAdapter(

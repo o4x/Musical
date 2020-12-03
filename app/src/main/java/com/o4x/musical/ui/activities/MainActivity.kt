@@ -37,7 +37,7 @@ import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.activities.intro.PermissionActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
-import com.o4x.musical.util.PreferenceUtil.lastChangelogVersion
+import com.o4x.musical.prefs.PreferenceUtil.lastChangelogVersion
 import com.o4x.musical.views.BreadCrumbLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.search_bar.*

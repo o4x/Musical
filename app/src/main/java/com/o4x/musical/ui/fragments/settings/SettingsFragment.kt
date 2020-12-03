@@ -21,7 +21,7 @@ import com.o4x.musical.ui.dialogs.DeleteCachedDialog
 import com.o4x.musical.ui.dialogs.DeleteCustomImagesDialog
 import com.o4x.musical.ui.dialogs.SmartPlaylistLimitDialog
 import com.o4x.musical.util.NavigationUtil
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 

@@ -8,7 +8,7 @@ import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.o4x.musical.R
-import com.o4x.musical.util.PreferenceUtil.smartPlaylistLimit
+import com.o4x.musical.prefs.PreferenceUtil.smartPlaylistLimit
 
 class SmartPlaylistLimitDialog : DialogFragment() {
 

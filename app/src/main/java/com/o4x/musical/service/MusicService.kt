@@ -14,7 +14,6 @@ import android.os.*
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.o4x.musical.App.Companion.getContext
@@ -44,11 +43,11 @@ import com.o4x.musical.service.playback.Playback
 import com.o4x.musical.service.playback.PlaybackHandler
 import com.o4x.musical.service.player.MultiPlayer
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.util.PreferenceUtil.albumArtOnLockscreen
-import com.o4x.musical.util.PreferenceUtil.isClassicNotification
-import com.o4x.musical.util.PreferenceUtil.registerOnSharedPreferenceChangedListener
-import com.o4x.musical.util.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
+import com.o4x.musical.prefs.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil.albumArtOnLockscreen
+import com.o4x.musical.prefs.PreferenceUtil.isClassicNotification
+import com.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
+import com.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
 import com.o4x.musical.util.Util
 import java.util.*
 

@@ -15,7 +15,7 @@ import com.o4x.musical.R
 import com.o4x.musical.ui.activities.PurchaseActivity
 import com.o4x.musical.ui.dialogs.ChangelogDialog
 import com.o4x.musical.ui.dialogs.DonationsDialog
-import com.o4x.musical.util.PreferenceUtil.isDarkMode
+import com.o4x.musical.prefs.PreferenceUtil.isDarkMode
 import de.psdev.licensesdialog.LicensesDialog
 
 class AboutFragment : PreferenceFragmentCompat() {

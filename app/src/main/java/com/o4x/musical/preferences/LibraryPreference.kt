@@ -27,7 +27,7 @@ import com.afollestad.materialdialogs.customview.customView
 import com.o4x.musical.R
 import com.o4x.musical.model.CategoryInfo
 import com.o4x.musical.ui.adapter.CategoryInfoAdapter
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 
 class LibraryPreferenceDialog : DialogFragment() {
 

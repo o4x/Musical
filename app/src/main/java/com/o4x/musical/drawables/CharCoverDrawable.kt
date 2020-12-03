@@ -7,7 +7,7 @@ import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.MultiImage
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.PreferenceUtil.isDarkMode
+import com.o4x.musical.prefs.PreferenceUtil.isDarkMode
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max

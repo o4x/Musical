@@ -15,8 +15,8 @@ import com.o4x.musical.repository.RealRepository
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
-import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.util.PreferenceUtil.isDarkMode
+import com.o4x.musical.prefs.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil.isDarkMode
 import com.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch

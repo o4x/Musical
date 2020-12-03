@@ -17,7 +17,7 @@ package com.o4x.musical.repository
 import android.provider.MediaStore.Audio.AudioColumns
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 
 interface ArtistRepository {
     fun artists(): List<Artist>

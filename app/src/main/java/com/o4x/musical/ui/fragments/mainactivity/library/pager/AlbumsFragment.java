@@ -11,7 +11,7 @@ import com.o4x.musical.misc.OverScrollGridLayoutManager;
 import com.o4x.musical.model.Album;
 import com.o4x.musical.ui.adapter.album.AlbumAdapter;
 import com.o4x.musical.ui.viewmodel.ReloadType;
-import com.o4x.musical.util.PreferenceUtil;
+import com.o4x.musical.prefs.PreferenceUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

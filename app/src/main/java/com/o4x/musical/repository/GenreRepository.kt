@@ -18,7 +18,6 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.provider.BaseColumns
-import android.provider.MediaStore
 import android.provider.MediaStore.Audio.Genres
 import com.o4x.musical.Constants.IS_MUSIC
 import com.o4x.musical.Constants.baseProjection
@@ -27,7 +26,7 @@ import com.o4x.musical.extensions.getString
 import com.o4x.musical.extensions.getStringOrNull
 import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 
 interface GenreRepository {
     fun genres(): List<Genre>

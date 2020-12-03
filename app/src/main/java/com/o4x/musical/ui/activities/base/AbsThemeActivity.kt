@@ -2,7 +2,6 @@ package com.o4x.musical.ui.activities.base
 
 import android.content.Context
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import code.name.monkey.appthemehelper.ATH
@@ -12,8 +11,8 @@ import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.VersionUtils
 import com.o4x.musical.LanguageContextWrapper
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
-import com.o4x.musical.util.PreferenceUtil
-import com.o4x.musical.util.PreferenceUtil.nightMode
+import com.o4x.musical.prefs.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil.nightMode
 import com.o4x.musical.util.Util
 import java.util.*
 

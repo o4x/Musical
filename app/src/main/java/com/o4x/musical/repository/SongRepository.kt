@@ -26,7 +26,7 @@ import com.o4x.musical.extensions.getLong
 import com.o4x.musical.extensions.getString
 import com.o4x.musical.extensions.getStringOrNull
 import com.o4x.musical.model.Song
-import com.o4x.musical.util.PreferenceUtil
+import com.o4x.musical.prefs.PreferenceUtil
 
 /**
  * Created by hemanths on 10/08/17.

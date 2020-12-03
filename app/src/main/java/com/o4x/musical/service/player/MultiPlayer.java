@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.o4x.musical.R;
 import com.o4x.musical.service.playback.Playback;
-import com.o4x.musical.util.PreferenceUtil;
+import com.o4x.musical.prefs.PreferenceUtil;
 
 /**
  * @author Andrew Neal, Karim Abou Zeid (kabouzeid)

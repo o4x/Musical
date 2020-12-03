@@ -12,8 +12,7 @@ import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.viewmodel.LibraryViewModel
 import com.o4x.musical.ui.viewmodel.PlayerViewModel
-import com.o4x.musical.util.PreferenceUtil
-import org.koin.android.ext.android.inject
+import com.o4x.musical.prefs.PreferenceUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.ref.WeakReference
 import java.util.*
