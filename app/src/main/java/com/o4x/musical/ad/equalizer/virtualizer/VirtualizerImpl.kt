@@ -5,9 +5,8 @@ import android.media.audiofx.Virtualizer
 import com.o4x.musical.ad.core.prefs.EqualizerPreferencesGateway
 import javax.inject.Inject
 
-class VirtualizerImpl @Inject constructor(
+class VirtualizerImpl constructor(
     private val equalizerPrefsUseCase: EqualizerPreferencesGateway
-
 ) : IVirtualizerInternal {
 
     private var virtualizer: Virtualizer? = null

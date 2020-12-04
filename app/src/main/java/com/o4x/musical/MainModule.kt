@@ -1,6 +1,7 @@
 package com.o4x.musical
 
-import android.content.ComponentName
+import com.o4x.musical.ad.data.eqDataModule
+import com.o4x.musical.ad.equalizer.equalizerModule
 import com.o4x.musical.db.roomModule
 import com.o4x.musical.network.*
 import com.o4x.musical.repository.dataModule
@@ -19,5 +20,8 @@ val appModules = listOf(
     dataModule,
     viewModules,
     networkModule,
-    roomModule
+    roomModule,
+
+    equalizerModule,
+    eqDataModule
 )

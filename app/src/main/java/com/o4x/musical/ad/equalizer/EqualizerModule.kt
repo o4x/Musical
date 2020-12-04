@@ -18,56 +18,46 @@ import com.o4x.musical.ad.equalizer.virtualizer.IVirtualizer
 import com.o4x.musical.ad.equalizer.virtualizer.IVirtualizerInternal
 import com.o4x.musical.ad.equalizer.virtualizer.VirtualizerImpl
 import com.o4x.musical.ad.equalizer.virtualizer.VirtualizerProxy
+import org.koin.dsl.bind
+import org.koin.dsl.module
 import javax.inject.Singleton
 
-@Module
-abstract class EqualizerModule {
+val equalizerModule = module {
 
-    // proxies
-
-    @Binds
-    @Singleton
-    internal abstract fun provideEqualizer(impl: EqualizerProxy): IEqualizer
-
-    @Binds
-    @Singleton
-    internal abstract fun provideBassBoost(impl: BassBoostProxy): IBassBoost
-
-    @Binds
-    @Singleton
-    internal abstract fun provideVirtualizer(impl: VirtualizerProxy): IVirtualizer
-
-
-
-    // implementation
-
-    @Binds
-    internal abstract fun provideBassBoostInternal(impl: BassBoostImpl): IBassBoostInternal
-
-    @Binds
-    internal abstract fun provideVirtualizerInternal(impl: VirtualizerImpl): IVirtualizerInternal
-
-    @Module
-    companion object {
-
-        @Provides
-        @JvmStatic
-        internal fun provideInternalEqualizer(
-            equalizerImpl: Lazy<EqualizerImpl>,
-            equalizerImpl28: Lazy<EqualizerImpl28>
-        ): IEqualizerInternal {
+    single {
+        val equalizerInternal: IEqualizerInternal =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 try {
                     // crashes on some devices
-                    return equalizerImpl28.get()
+                    EqualizerImpl28(get(), get())
                 } catch (ex: Exception) {
                     ex.printStackTrace()
-                    return equalizerImpl.get()
+                    EqualizerImpl(get(), get())
                 }
+            } else {
+                EqualizerImpl(get(), get())
             }
-            return equalizerImpl.get()
-        }
 
-    }
+        equalizerInternal
+    } bind IEqualizerInternal::class
 
+    single {
+        EqualizerProxy(get(), get())
+    } bind IEqualizer::class
+
+    single {
+        BassBoostProxy(get(), get())
+    } bind IBassBoost::class
+
+    single {
+        VirtualizerProxy(get(), get())
+    } bind IVirtualizer::class
+
+    factory {
+        BassBoostImpl(get())
+    } bind IBassBoostInternal::class
+
+    factory {
+        VirtualizerImpl(get())
+    } bind IVirtualizerInternal::class
 }

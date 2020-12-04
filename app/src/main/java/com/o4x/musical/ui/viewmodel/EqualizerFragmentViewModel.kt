@@ -1,4 +1,4 @@
-package com.o4x.musical.ui.fragments.mainactivity.eq
+package com.o4x.musical.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,9 +17,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-internal class EqualizerFragmentViewModel @Inject constructor(
+internal class EqualizerFragmentViewModel constructor(
     private val equalizer: IEqualizer,
     private val bassBoost: IBassBoost,
     private val virtualizer: IVirtualizer,

@@ -9,10 +9,9 @@ import com.o4x.musical.ad.core.entity.EqualizerPreset
 import com.o4x.musical.ad.core.gateway.EqualizerGateway
 import com.o4x.musical.ad.core.prefs.EqualizerPreferencesGateway
 import kotlinx.coroutines.*
-import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.P)
-internal class EqualizerImpl28 @Inject constructor(
+internal class EqualizerImpl28 constructor(
     gateway: EqualizerGateway,
     prefs: EqualizerPreferencesGateway
 ) : AbsEqualizer(gateway, prefs),
