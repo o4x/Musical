@@ -3,9 +3,8 @@ package com.o4x.musical.ad.equalizer.equalizer
 import com.o4x.musical.ad.core.entity.EqualizerBand
 import com.o4x.musical.ad.core.entity.EqualizerPreset
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-internal class EqualizerProxy @Inject constructor(
+internal class EqualizerProxy constructor(
     private val equalizer1: IEqualizerInternal,
     private val equalizer2: IEqualizerInternal
 ) : IEqualizer {

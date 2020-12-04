@@ -1,8 +1,6 @@
 package com.o4x.musical.ad.equalizer.virtualizer
 
-import javax.inject.Inject
-
-internal class VirtualizerProxy @Inject constructor(
+internal class VirtualizerProxy constructor(
     private val virtualizer1: IVirtualizerInternal,
     private val virtualizer2: IVirtualizerInternal
 ) : IVirtualizer {

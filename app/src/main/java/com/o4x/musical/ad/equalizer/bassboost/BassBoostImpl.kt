@@ -3,9 +3,8 @@ package com.o4x.musical.ad.equalizer.bassboost
 import android.media.audiofx.AudioEffect
 import android.media.audiofx.BassBoost
 import com.o4x.musical.ad.core.prefs.EqualizerPreferencesGateway
-import javax.inject.Inject
 
-class BassBoostImpl @Inject constructor(
+class BassBoostImpl constructor(
     private val equalizerPrefsUseCase: EqualizerPreferencesGateway
 
 ) : IBassBoostInternal {

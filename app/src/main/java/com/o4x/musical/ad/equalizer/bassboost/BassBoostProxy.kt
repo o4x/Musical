@@ -1,8 +1,6 @@
 package com.o4x.musical.ad.equalizer.bassboost
 
-import javax.inject.Inject
-
-internal class BassBoostProxy @Inject constructor(
+internal class BassBoostProxy constructor(
     private val bassBoost1: IBassBoostInternal,
     private val bassBoost2: IBassBoostInternal
 ) : IBassBoost {

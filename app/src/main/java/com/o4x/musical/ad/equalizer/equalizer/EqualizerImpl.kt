@@ -1,8 +1,6 @@
 package com.o4x.musical.ad.equalizer.equalizer
 
-import android.content.Context
 import android.media.audiofx.AudioEffect
-import com.o4x.musical.ad.core.dagger.ApplicationContext
 import com.o4x.musical.ad.core.entity.EqualizerBand
 import com.o4x.musical.ad.core.entity.EqualizerPreset
 import com.o4x.musical.ad.core.gateway.EqualizerGateway
@@ -11,10 +9,8 @@ import com.o4x.musical.ad.equalizer.audioeffect.NormalizedEqualizer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-internal class EqualizerImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+internal class EqualizerImpl constructor(
     gateway: EqualizerGateway,
     prefs: EqualizerPreferencesGateway
 
