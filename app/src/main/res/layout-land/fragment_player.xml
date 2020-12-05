@@ -29,14 +29,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.o4x.musical.views.WidthFitSquareLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
-            android:layout_marginVertical="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/playback_controls_fragment"
-            app:layout_constraintEnd_toEndOf="parent"
+        <com.o4x.musical.views.HeightFitSquareLayout
+            android:id="@+id/fit"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/playback_controls_fragment"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <com.o4x.musical.views.SyncPager
@@ -83,16 +83,18 @@
 
             </FrameLayout>
 
-        </com.o4x.musical.views.WidthFitSquareLayout>
+        </com.o4x.musical.views.HeightFitSquareLayout>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/playback_controls_fragment"
             android:name="com.o4x.musical.ui.fragments.player.PlayerPlaybackControlsFragments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toEndOf="@id/fit"
+            app:layout_constraintBottom_toBottomOf="@id/fit"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/fit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
