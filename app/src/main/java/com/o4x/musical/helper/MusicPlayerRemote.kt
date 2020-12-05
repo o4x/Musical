@@ -252,10 +252,8 @@ object MusicPlayerRemote : KoinComponent {
      */
     @JvmStatic
     fun openAndShuffleQueue(queue: List<Song>, startPlaying: Boolean) {
-        var startPosition = 0
-        if (queue.isNotEmpty()) {
-            startPosition = Random().nextInt(queue.size)
-        }
+        val startPosition = 0
+        val queue = queue.shuffled()
 
         if (!tryToHandleOpenPlayingQueue(
                 queue,
