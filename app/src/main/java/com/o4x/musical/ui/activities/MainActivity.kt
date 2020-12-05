@@ -213,6 +213,11 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
             drawer_layout.closeDrawers()
             return true
         }
+        backPressCallbacks.forEach {
+            if (it.handleBackPress()) {
+                return true
+            }
+        }
         return super.handleBackPress() || navController.popBackStack()
     }
 
@@ -293,17 +298,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         return id
     }
 
-    private fun showChangelog() {
-        try {
-            val pInfo = packageManager.getPackageInfo(packageName, 0)
-            val currentVersion = pInfo.versionCode
-            if (currentVersion != lastChangelogVersion) {
-                ChangelogDialog.create().show(supportFragmentManager, "CHANGE_LOG_DIALOG")
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-    }
+    val backPressCallbacks = mutableListOf<MainActivityFragmentCallbacks>()
 
     interface MainActivityFragmentCallbacks {
         fun handleBackPress(): Boolean

@@ -159,7 +159,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
             setCrumb(mainActivity.bread_crumbs.lastHistory(), false)
             return true
         }
-        return false
+        return super.handleBackPress()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -51,8 +51,14 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
 
     override fun onResume() {
         super.onResume()
+        mainActivity.backPressCallbacks.add(this)
         setToolbarTitle(navController.currentDestination?.label.toString())
         mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mainActivity.backPressCallbacks.remove(this)
     }
 
     override fun onDestroy() {
@@ -89,7 +95,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     }
 
     override fun handleBackPress(): Boolean {
-        return true
+        return false
     }
 
     fun setToolbarTitle(title: String?) {
