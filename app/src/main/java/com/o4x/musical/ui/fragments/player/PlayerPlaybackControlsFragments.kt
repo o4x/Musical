@@ -79,10 +79,6 @@ open class PlayerPlaybackControlsFragments :
             PlayPauseDrawable(requireActivity())
         binding.playerPlayPauseButton.setImageDrawable(playPauseDrawable)
         binding.playerPlayPauseButton.setOnClickListener(PlayPauseButtonOnClickHandler())
-        binding.playerPlayPauseButton.post {
-            binding.playerPlayPauseButton.pivotX = binding.playerPlayPauseButton.width / 2.toFloat()
-            binding.playerPlayPauseButton.pivotY = binding.playerPlayPauseButton.height / 2.toFloat()
-        }
     }
 
     private fun updatePlayPauseDrawableState() {

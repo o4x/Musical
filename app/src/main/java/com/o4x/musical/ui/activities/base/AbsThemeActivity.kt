@@ -24,7 +24,7 @@ abstract class AbsThemeActivity : ATHActivity() {
         theme.applyStyle(PreferenceUtil.getThemeColorRes(), true)
     }
 
-    private fun setTheme() {
+    open fun setTheme() {
         setTheme(PreferenceUtil.getGeneralThemeRes())
         setDefaultNightMode(nightMode)
         DynamicShortcutManager(this).updateDynamicShortcuts()

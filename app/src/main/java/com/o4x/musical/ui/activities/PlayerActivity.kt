@@ -4,20 +4,21 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.ColorInt
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import com.o4x.musical.R
+import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
 import com.o4x.musical.ui.fragments.player.PlayerFragment
 
 class PlayerActivity : AbsMusicServiceActivity() {
 
-    private var navigationBarColor = 0
-    private var taskColor = 0
-    private var lightStatusBar = false
     lateinit var playerFragment: PlayerFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_player)
         setDrawUnderBar()
 
@@ -27,6 +28,10 @@ class PlayerActivity : AbsMusicServiceActivity() {
         supportFragmentManager.executePendingTransactions()
         setLightStatusBar(false)
         setNavigationBarColor(Color.TRANSPARENT)
+    }
+
+    override fun setTheme() {
+        setTheme(R.style.Theme_Musical_Black)
     }
 
     override fun onStart() {
@@ -40,21 +45,6 @@ class PlayerActivity : AbsMusicServiceActivity() {
         super.onStop()
         playerFragment.setMenuVisibility(false)
         playerFragment.userVisibleHint = false
-    }
-
-    override fun setNavigationBarColor(color: Int) {
-        navigationBarColor = color
-        super.setNavigationBarColor(color)
-    }
-
-    override fun setLightStatusBar(enabled: Boolean) {
-        lightStatusBar = enabled
-        super.setLightStatusBar(enabled)
-    }
-
-    override fun setTaskDescriptionColor(@ColorInt color: Int) {
-        taskColor = color
-        super.setTaskDescriptionColor(color)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
