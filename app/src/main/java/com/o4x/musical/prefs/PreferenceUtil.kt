@@ -62,6 +62,7 @@ object PreferenceUtil {
     const val PLAYLIST_GRID_SIZE = "playlist_grid_size"
     const val PLAYLIST_GRID_SIZE_LAND = "playlist_grid_size_land"
     const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
+    const val SLEEP_TIMER_ENABLE = "sleep_timer_ENABLE"
     const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
     const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
     const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
@@ -285,6 +286,14 @@ object PreferenceUtil {
         set(sortOrder) {
             val editor = sharedPreferences.edit()
             editor.putString(GENRE_SORT_ORDER, sortOrder)
+            editor.apply()
+        }
+
+    var isSleepTimerEnable: Boolean
+        get() = sharedPreferences.getBoolean(SLEEP_TIMER_ENABLE, false)
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(SLEEP_TIMER_ENABLE, value)
             editor.apply()
         }
 
