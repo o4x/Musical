@@ -61,11 +61,9 @@ public class AnalogController extends View {
         circlePaint.setStyle(Paint.Style.FILL);
         circlePaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint2.setColor(progressColor);
-//        circlePaint2.setColor(Color.parseColor("#FFA036"));
         circlePaint2.setStyle(Paint.Style.FILL);
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint.setColor(progressColor);
-//        linePaint.setColor(Color.parseColor("#FFA036"));
         linePaint.setStrokeWidth(7);
         angle = "0.0";
         label = "Label";
@@ -74,8 +72,8 @@ public class AnalogController extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        midx = canvas.getWidth() / 2;
-        midy = canvas.getHeight() / 2;
+        midx = getWidth() / 2f;
+        midy = getHeight() / 2f;
 
         int ang = 0;
         float x = 0, y = 0;

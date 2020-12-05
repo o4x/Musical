@@ -3,7 +3,6 @@ package com.o4x.musical.ad.equalizer.virtualizer
 import android.media.audiofx.AudioEffect
 import android.media.audiofx.Virtualizer
 import com.o4x.musical.ad.core.prefs.EqualizerPreferencesGateway
-import javax.inject.Inject
 
 class VirtualizerImpl constructor(
     private val equalizerPrefsUseCase: EqualizerPreferencesGateway

@@ -18,6 +18,9 @@ import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.o4x.musical.App.Companion.getContext
 import com.o4x.musical.R
+import com.o4x.musical.ad.equalizer.bassboost.IBassBoost
+import com.o4x.musical.ad.equalizer.equalizer.IEqualizer
+import com.o4x.musical.ad.equalizer.virtualizer.IVirtualizer
 import com.o4x.musical.appwidgets.AppWidgetBig
 import com.o4x.musical.appwidgets.AppWidgetCard
 import com.o4x.musical.appwidgets.AppWidgetClassic
@@ -49,6 +52,7 @@ import com.o4x.musical.prefs.PreferenceUtil.isClassicNotification
 import com.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
 import com.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
 import com.o4x.musical.util.Util
+import org.koin.android.ext.android.inject
 import java.util.*
 
 /**
@@ -140,7 +144,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 or PlaybackStateCompat.ACTION_STOP
                 or PlaybackStateCompat.ACTION_SEEK_TO)
     }
-    
+
+    private val hash by lazy { hashCode() }
+
     private val musicBind: IBinder = MusicBinder()
     inner class MusicBinder : Binder() {
         val service: MusicService
@@ -199,6 +205,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         restoreState()
         mediaSession.isActive = true
         sendBroadcast(Intent("com.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_CREATED"))
+
+        equalizer.onAudioSessionIdChanged(hash, audioSessionId)
+        virtualizer.onAudioSessionIdChanged(hash, audioSessionId)
+        bassBoost.onAudioSessionIdChanged(hash, audioSessionId)
     }
 
     private fun setupMediaSession() {
@@ -316,9 +326,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         mediaStoreObserver.cancel()
         unregisterOnSharedPreferenceChangedListener(this)
         wakeLock.release()
-        equalizer.release()
-        bassBoost.release()
-        presetReverb.release()
+        equalizer.onDestroy(hash)
+        virtualizer.onDestroy(hash)
+        bassBoost.onDestroy(hash)
         sendBroadcast(Intent("com.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_DESTROYED"))
     }
 
@@ -1108,9 +1118,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     val audioSessionId: Int
         get() = playback.audioSessionId
 
-    val equalizer: Equalizer by lazy { Equalizer(0, audioSessionId) }
-    val bassBoost: BassBoost by lazy { BassBoost(0, audioSessionId) }
-    val presetReverb: PresetReverb by lazy { PresetReverb(0, audioSessionId) }
+    val equalizer: IEqualizer by inject()
+    val virtualizer: IVirtualizer by inject()
+    val bassBoost: IBassBoost by inject()
 
     override fun onTrackWentToNext() {
         playerHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT)

@@ -4,18 +4,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="0dp"
     android:layout_height="match_parent"
-    android:layout_weight="2"
+    android:layout_weight="1"
+    android:gravity="center"
     android:orientation="vertical">
+
+    <TextView
+        style="@style/TextAppearance.MaterialComponents.Overline"
+        android:id="@+id/value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:textAllCaps="false"
+        android:textAlignment="center"/>
 
     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8">
+        android:layout_weight="1">
 
         <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
             android:id="@+id/seek_bar"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:seekBarRotation="CW270" />
 
     </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -24,6 +34,9 @@
         style="@style/TextAppearance.MaterialComponents.Overline"
         android:id="@+id/text"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:textAllCaps="false"
+        android:textAlignment="center"/>
+
 </LinearLayout>

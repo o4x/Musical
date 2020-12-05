@@ -1,135 +1,152 @@
 package com.o4x.musical.ui.fragments.mainactivity.equalizer
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.View
+import android.text.InputType
+import android.view.*
+import android.widget.SeekBar
+import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.forEachIndexed
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import code.name.monkey.appthemehelper.extensions.primaryColor
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
+import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
 import com.o4x.musical.R
+import com.o4x.musical.databinding.FragmentEqualizerBinding
+import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.viewmodel.EqualizerFragmentViewModel
-import com.o4x.musical.views.equalizer.bar.BoxedVertical
-import com.o4x.musical.views.equalizer.croller.Croller
-import kotlinx.android.synthetic.main.fragment_eq.*
-import kotlinx.android.synthetic.main.fragment_equalizer_band.view.*
+import com.o4x.musical.views.AnalogController
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.roundToInt
 
-internal class EqualizerFragment : Fragment(R.layout.fragment_eq), CoroutineScope by MainScope() {
+internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer), CoroutineScope by MainScope() {
 
     companion object {
         const val TAG = "EqualizerFragment"
-        const val DEFAULT_BAR_ALPHA = .75f
 
-        @JvmStatic
-        fun newInstance(): EqualizerFragment {
-            return EqualizerFragment()
-        }
+        private const val FACTOR = 19 / 1000f
+        private const val REV_FACTOR = 1000f / 19
     }
-
 
     private val presenter by viewModel<EqualizerFragmentViewModel>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    private val limit by lazy { presenter.getBandLimit().toInt() }
 
-        powerSwitch.isChecked = presenter.isEqualizerEnabled()
+    private var _binding: FragmentEqualizerBinding? = null
+    private val binding get() = _binding!!
 
-        bassKnob.apply {
-            max = 1000
-            progress = presenter.getBassStrength()
-        }
-        virtualizerKnob.apply {
-            max = 1000
-            progress = presenter.getVirtualizerStrength()
-        }
+    private val bands = mutableListOf<VerticalSeekBarLayout>()
 
-        buildBands()
-
-        presenter.observePreset().observe(viewLifecycleOwner, {
-            delete.isVisible = it.isCustom
-
-            presetSpinner.text = it.name
-
-            it.bands.forEachIndexed { index, band ->
-                val layout = bands.getChildAt(index)
-                layout.seekbar.apply {
-                    step = presenter.getBandStep()
-                    max = presenter.getBandLimit()
-                    min = -presenter.getBandLimit()
-                    animateBar(this, band.gain)
-                }
-                layout.seekbar.alpha = DEFAULT_BAR_ALPHA
-                layout.frequency.text = band.displayableFrequency
-            }
-        })
-    }
-
-    private fun animateBar(bar: BoxedVertical, gain: Float) = launch {
-        var duration = 150f
-        val timeDelta = 16f
-        val progressDelta = (gain - bar.value) * (timeDelta / duration)
-        while (duration > 0){
-            delay(timeDelta.toLong())
-            duration -= timeDelta
-            bar.value += progressDelta
-        }
-        bar.value = gain // set exact value
-    }
-
-    private fun buildBands() {
-        for (band in 0 until presenter.getBandCount()) {
-            val layout = layoutInflater.inflate(R.layout.fragment_equalizer_band, null, false)
-            layout.seekbar.apply {
-                step = presenter.getBandStep()
-                max = presenter.getBandLimit()
-                min = -presenter.getBandLimit()
-            }
-            bands.addView(layout)
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentEqualizerBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.updateCurrentPresetIfCustom()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setAppbarPadding(binding.root)
+
+        binding.controllerBass.apply {
+            label = "BASS"
+            circlePaint2.color = primaryColor()
+            linePaint.color = primaryColor()
+            progress = (presenter.getBassStrength() * FACTOR).roundToInt()
+            invalidate()
+        }
+        binding.controller3D.apply {
+            label = "3D"
+            circlePaint2.color = primaryColor()
+            linePaint.color = primaryColor()
+            progress = (presenter.getVirtualizerStrength() * FACTOR).roundToInt()
+            invalidate()
+        }
+
+        buildBands()
+
+        presenter.observePreset().observe(viewLifecycleOwner, {
+            binding.delete.isVisible = it.isCustom
+
+            binding.presetSpinner.text = it.name
+
+            it.bands.forEachIndexed { index, band ->
+                val layout = bands[index]
+                layout.seekBar.apply {
+                    max = limit * 2
+                    this.progress = band.gain.toInt() + limit
+                }
+                layout.value.text = band.displayableGain
+                layout.text.text = band.displayableFrequency
+            }
+        })
+    }
+
+    private fun buildBands() {
+        for (band in 0 until presenter.getBandCount()) {
+            val view = binding.bands.getChildAt(band)
+            view.isVisible = true
+            val layout = VerticalSeekBarLayout(view)
+            layout.seekBar.apply {
+                max = limit * 2
+            }
+            bands.add(layout)
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        bassKnob.setOnProgressChangedListener(onBassKnobChangeListener)
-        virtualizerKnob.setOnProgressChangedListener(onVirtualizerKnobChangeListener)
+        binding.controllerBass.setOnProgressChangedListener(onBassKnobChangeListener)
+        binding.controller3D.setOnProgressChangedListener(onVirtualizerKnobChangeListener)
 
         setupBandListeners { band -> BandListener(band) }
 
-        powerSwitch.setOnCheckedChangeListener { _, isChecked ->
-//            val text = if (isChecked) R.string.common_switch_on else R.string.common_switch_off
-//            powerSwitch.text = getString(text)
-            presenter.setEqualizerEnabled(isChecked)
-        }
-        presetSpinner.setOnClickListener { changePreset() }
-        delete.setOnClickListener { presenter.deleteCurrentPreset() }
-        save.setOnClickListener {
+        binding.presetSpinner.setOnClickListener { changePreset() }
+        binding.delete.setOnClickListener { presenter.deleteCurrentPreset() }
+        binding.save.setOnClickListener {
             // create new preset
-//            TextViewDialog(ctx, "Save preset", null)
-//                .addTextView(customizeWrapper = { hint = "Preset name" })
-//                .show(positiveAction = TextViewDialog.Action("OK") {
-//                    val title = it[0].text.toString()
-//                    !title.isBlank() && presenter.addPreset(title)
-//                }, neutralAction = TextViewDialog.Action("Cancel") { true })
+            MaterialDialog(requireContext())
+                .title(R.string.save_as_preset)
+                .positiveButton(R.string.create_action)
+                .negativeButton(android.R.string.cancel)
+                .input(
+                    hintRes = R.string.title,
+                    inputType = InputType.TYPE_CLASS_TEXT or
+                            InputType.TYPE_TEXT_VARIATION_PERSON_NAME or
+                            InputType.TYPE_TEXT_FLAG_CAP_WORDS
+                ) { _, charSequence ->
+                    if (activity == null) return@input
+                    val name: String = charSequence.toString().trim()
+                    if (name.isNotEmpty()) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            presenter.addPreset(name)
+                        }
+                    }
+                }.show()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        bassKnob.setOnProgressChangedListener(null)
-        virtualizerKnob.setOnProgressChangedListener(null)
+        binding.controllerBass.setOnProgressChangedListener(null)
+        binding.controller3D.setOnProgressChangedListener(null)
 
         setupBandListeners(null)
 
-        powerSwitch.setOnCheckedChangeListener(null)
-        presetSpinner.setOnClickListener(null)
-        delete.setOnClickListener(null)
-        save.setOnClickListener(null)
+        binding.presetSpinner.setOnClickListener(null)
+        binding.delete.setOnClickListener(null)
+        binding.save.setOnClickListener(null)
     }
 
     private fun changePreset() {
@@ -137,14 +154,13 @@ internal class EqualizerFragment : Fragment(R.layout.fragment_eq), CoroutineScop
             val presets = withContext(Dispatchers.IO) {
                 presenter.getPresets()
             }
-            val popup = PopupMenu(requireContext(), presetSpinner)
-//            popup.inflate(R.menu.empty)
+            val popup = PopupMenu(requireContext(), binding.presetSpinner)
             for (preset in presets) {
                 popup.menu.add(Menu.NONE, preset.id.toInt(), Menu.NONE, preset.name)
             }
             popup.setOnMenuItemClickListener { menu ->
                 val preset = presets.first { it.id.toInt() == menu.itemId }
-                presetSpinner.text = preset.name
+                binding.presetSpinner.text = preset.name
                 presenter.setCurrentPreset(preset)
                 true
             }
@@ -154,37 +170,51 @@ internal class EqualizerFragment : Fragment(R.layout.fragment_eq), CoroutineScop
 
     private fun setupBandListeners(listener: ((Int) -> BandListener)?) {
         bands.forEachIndexed { index, view ->
-            view.seekbar.setOnBoxedPointsChangeListener(listener?.invoke(index))
+            view.seekBar.setOnSeekBarChangeListener(listener?.invoke(index))
         }
     }
 
-    inner class BandListener(private val band: Int) : BoxedVertical.OnValuesChangeListener {
+    inner class BandListener(private val band: Int) : SeekBar.OnSeekBarChangeListener {
 
-        override fun onPointsChanged(seekbar: BoxedVertical, value: Float) {
-            presenter.setBandLevel(band, value)
-        }
-        override fun onStartTrackingTouch(seekbar: BoxedVertical) {
-            seekbar.animate()
-                .setDuration(200)
-                .alpha(1f)
-                .scaleX(1.2f)
-                .scaleY(1.05f)
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            presenter.setBandLevel(band, progress.toFloat() - limit)
+            bands[band].value.text = presenter.getBandLevel(band).displayableGain
         }
 
-        override fun onStopTrackingTouch(seekbar: BoxedVertical) {
-            seekbar.animate()
-                .setDuration(200)
-                .alpha(DEFAULT_BAR_ALPHA)
-                .scaleX(1f)
-                .scaleY(1f)
-        }
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
     }
 
-    private val onBassKnobChangeListener = Croller.onProgressChangedListener { progress ->
-        presenter.setBassStrength(progress)
+    private val onBassKnobChangeListener = AnalogController.onProgressChangedListener { progress ->
+        presenter.setBassStrength((progress * REV_FACTOR).roundToInt())
     }
 
-    private val onVirtualizerKnobChangeListener = Croller.onProgressChangedListener { progress ->
-        presenter.setVirtualizerStrength(progress)
+    private val onVirtualizerKnobChangeListener = AnalogController.onProgressChangedListener { progress ->
+        presenter.setVirtualizerStrength((progress * REV_FACTOR).roundToInt())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_equalizer, menu)
+        val item = menu.findItem(R.id.equalizer_switch)
+        item.setActionView(R.layout.switch_layout)
+        val equalizerSwitch: SwitchCompat =
+            item.actionView.findViewById(R.id.equalizer_enable_switch)
+
+        equalizerSwitch.isChecked = presenter.isEqualizerEnabled()
+        binding.blocker.isVisible = !equalizerSwitch.isChecked
+        equalizerSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+            presenter.setEqualizerEnabled(isChecked)
+
+            binding.blocker.isVisible = !isChecked
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    inner class VerticalSeekBarLayout(view: View) {
+        val value = view.findViewById<TextView>(R.id.value)!!
+        val seekBar = view.findViewById<VerticalSeekBar>(R.id.seek_bar)!!
+        val text = view.findViewById<TextView>(R.id.text)!!
     }
 }
