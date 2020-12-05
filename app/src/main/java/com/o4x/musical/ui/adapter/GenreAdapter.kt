@@ -19,10 +19,10 @@ class GenreAdapter(
     dataSet: List<Genre?>?,
     @LayoutRes itemLayoutRes: Int,
     cabHolder: CabHolder?
-) : AbsAdapter<GenreAdapter.ViewHolder?, Genre?>(mainActivity, dataSet, itemLayoutRes, cabHolder) {
+) : AbsAdapter<GenreAdapter.ViewHolder, Genre>(mainActivity, dataSet, itemLayoutRes, cabHolder) {
 
     override fun getItemId(position: Int): Long {
-        return dataSet[position].hashCode().toLong()
+        return dataSet[position].id
     }
 
     override fun createViewHolder(view: View, viewType: Int): ViewHolder {
