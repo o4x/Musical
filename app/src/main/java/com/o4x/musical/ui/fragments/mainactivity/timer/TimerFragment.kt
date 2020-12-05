@@ -73,6 +73,7 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
 
                     timerUpdater = TimerUpdater(millis)
                     timerUpdater?.start()
+                    PreferenceUtil.isSleepTimerEnable = true
                 }
                 stop -> {
                     binding.btn.text = start
@@ -89,6 +90,7 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
                     }
 
                     timerUpdater?.cancel()
+                    PreferenceUtil.isSleepTimerEnable = false
                 }
             }
         }
@@ -101,7 +103,7 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
             PreferenceUtil.nextSleepTimerElapsedRealTime - SystemClock.elapsedRealtime()
         if (
             makeTimerPendingIntent(PendingIntent.FLAG_NO_CREATE) != null
-            && nextSleepTimerElapsed > 0
+            && nextSleepTimerElapsed > 0 && PreferenceUtil.isSleepTimerEnable
         ) {
             binding.timePicker.setMillis(nextSleepTimerElapsed, false)
             timerUpdater = TimerUpdater(nextSleepTimerElapsed)
