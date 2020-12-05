@@ -158,10 +158,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                     R.id.nav_folders -> setMusicChooser(R.id.nav_folders)
                     R.id.nav_eq -> setMusicChooser(R.id.nav_eq)
                     R.id.nav_timer -> setMusicChooser(R.id.nav_timer)
-                    R.id.action_scan -> {
-//                            val dialog = ScanMediaFolderChooserDialog.create()
-//                            dialog.show(supportFragmentManager, "SCAN_MEDIA_FOLDER_CHOOSER")
-                    }
                     R.id.nav_settings -> navController.navigate(R.id.settings)
                     R.id.buy_pro -> navController.navigate(R.id.buy_pro)
                 }
