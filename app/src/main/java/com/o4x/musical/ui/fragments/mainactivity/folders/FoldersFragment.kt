@@ -173,21 +173,12 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_go_to_start_directory -> {
-                setCrumb(Crumb(FileUtil.safeGetCanonicalFile(startDirectory)), true)
+            R.id.action_search -> {
+                mainActivity.openSearch()
                 return true
             }
-            R.id.action_scan -> {
-                val crumb = activeCrumb
-                if (crumb != null) {
-                    ArrayListPathsAsyncTask(serviceActivity,
-                        object : OnPathsListedCallback {
-                            override fun onPathsListed(paths: Array<String>) {
-                                scanPaths(paths)
-                            }
-                        }).execute(
-                        ArrayListPathsAsyncTask.LoadingInfo(crumb.file, AUDIO_FILE_FILTER))
-                }
+            R.id.action_go_to_start_directory -> {
+                setCrumb(Crumb(FileUtil.safeGetCanonicalFile(startDirectory)), true)
                 return true
             }
         }
@@ -305,16 +296,6 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                             Toast.LENGTH_SHORT).show()
                         return@setOnMenuItemClickListener true
                     }
-                    R.id.action_scan -> {
-                        ArrayListPathsAsyncTask(serviceActivity,
-                            object : OnPathsListedCallback {
-                                override fun onPathsListed(paths: Array<String>) {
-                                    scanPaths(paths)
-                                }
-                            }).execute(
-                            ArrayListPathsAsyncTask.LoadingInfo(file, AUDIO_FILE_FILTER))
-                        return@setOnMenuItemClickListener true
-                    }
                 }
                 false
             }
@@ -346,10 +327,6 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                             }).execute(ListSongsAsyncTask.LoadingInfo(toList(file),
                             AUDIO_FILE_FILTER,
                             fileComparator))
-                        return@setOnMenuItemClickListener true
-                    }
-                    R.id.action_scan -> {
-                        scanPaths(arrayOf(FileUtil.safeGetCanonicalPath(file)))
                         return@setOnMenuItemClickListener true
                     }
                 }
