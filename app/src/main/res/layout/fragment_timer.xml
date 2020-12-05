@@ -7,7 +7,7 @@
     android:gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.o4x.musical.views.timepicker.ScrollHmsPicker
+    <com.o4x.musical.views.timepicker.HmsPicker
         android:id="@+id/time_picker"
         android:layout_width="wrap_content"
         android:layout_height="0dp"

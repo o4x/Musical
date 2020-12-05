@@ -16,7 +16,7 @@ import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentEqualizerBinding
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
-import com.o4x.musical.ui.viewmodel.EqualizerFragmentViewModel
+import com.o4x.musical.ui.viewmodel.EqualizerViewModel
 import com.o4x.musical.views.AnalogController
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,7 +31,7 @@ internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equ
         private const val REV_FACTOR = 1000f / 19
     }
 
-    private val presenter by viewModel<EqualizerFragmentViewModel>()
+    private val presenter by viewModel<EqualizerViewModel>()
 
     private val limit by lazy { presenter.getBandLimit().toInt() }
 
