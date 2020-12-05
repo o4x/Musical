@@ -456,5 +456,6 @@
     <string name="stop">Stop</string>
     <string name="update_album_image">Update album image</string>
     <string name="update_artist_image">Update artist image</string>
+    <string name="save_as_preset">Save as preset</string>
 
 </resources>

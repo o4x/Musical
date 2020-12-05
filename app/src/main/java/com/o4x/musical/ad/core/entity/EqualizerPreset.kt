@@ -12,13 +12,28 @@ data class EqualizerBand(
     val frequency: Float
 ) {
 
+    val displayableGain: String
+        get() {
+            val gain = this.gain.toInt()
+            var str = when {
+                gain > 0 -> "+$gain"
+                gain < 0 -> "$gain"
+                else -> gain.toString()
+            }
+            str += "\ndB"
+            return str
+        }
+
     val displayableFrequency: String
         get() {
-            val freq = frequency.toInt()
+            var freq = frequency.toInt().toString()
             if (frequency >= 1000) {
-                return "${freq.toString().dropLast(3)}K"
+                freq = "${freq.dropLast(3)}\nK"
+            } else {
+                freq += "\n"
             }
-            return freq.toString()
+            freq += "Hz"
+            return freq
         }
 
 }

@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,7 +43,9 @@ internal class EqualizerFragmentViewModel constructor(
         equalizer.setCurrentPreset(preset)
     }
     fun getPresets() = equalizer.getPresets()
+
     fun setBandLevel(band: Int, level: Float) = equalizer.setBandLevel(band, level)
+    fun getBandLevel(band: Int) = equalizer.getAllBandsCurrentLevel()[band]
 
     override fun onCleared() {
         viewModelScope.cancel()

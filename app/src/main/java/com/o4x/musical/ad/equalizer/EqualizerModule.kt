@@ -1,26 +1,17 @@
 package com.o4x.musical.ad.equalizer
 
 import android.os.Build
-import dagger.Binds
-import dagger.Lazy
-import dagger.Module
-import dagger.Provides
 import com.o4x.musical.ad.equalizer.bassboost.BassBoostImpl
 import com.o4x.musical.ad.equalizer.bassboost.BassBoostProxy
 import com.o4x.musical.ad.equalizer.bassboost.IBassBoost
 import com.o4x.musical.ad.equalizer.bassboost.IBassBoostInternal
 import com.o4x.musical.ad.equalizer.equalizer.*
-import com.o4x.musical.ad.equalizer.equalizer.EqualizerImpl
-import com.o4x.musical.ad.equalizer.equalizer.EqualizerImpl28
-import com.o4x.musical.ad.equalizer.equalizer.EqualizerProxy
-import com.o4x.musical.ad.equalizer.equalizer.IEqualizerInternal
 import com.o4x.musical.ad.equalizer.virtualizer.IVirtualizer
 import com.o4x.musical.ad.equalizer.virtualizer.IVirtualizerInternal
 import com.o4x.musical.ad.equalizer.virtualizer.VirtualizerImpl
 import com.o4x.musical.ad.equalizer.virtualizer.VirtualizerProxy
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import javax.inject.Singleton
 
 val equalizerModule = module {
 

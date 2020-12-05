@@ -161,18 +161,6 @@ object MusicPlayerRemote : KoinComponent {
         } else -1
 
     @JvmStatic
-    val equalizer: Equalizer
-        get() = musicService!!.equalizer
-
-    @JvmStatic
-    val bassBoost: BassBoost
-        get() = musicService!!.bassBoost
-
-    @JvmStatic
-    val presetReverb: PresetReverb
-        get() = musicService!!.presetReverb
-
-    @JvmStatic
     val isServiceConnected: Boolean
         get() = musicService != null
 
