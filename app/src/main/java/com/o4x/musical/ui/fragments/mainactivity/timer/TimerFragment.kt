@@ -16,7 +16,7 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.prefs.PreferenceUtil
-import com.o4x.musical.views.timepicker.ScrollHmsPicker
+import com.o4x.musical.views.timepicker.HmsPicker
 
 class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
 
@@ -124,7 +124,7 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
         } else intent.setAction(MusicService.ACTION_QUIT)
     }
 
-    private fun ScrollHmsPicker.getMillis(): Long {
+    private fun HmsPicker.getMillis(): Long {
         var millis = 0L
         millis += seconds * 1000
         millis += minutes * 1000 * 60
@@ -132,7 +132,7 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
         return millis
     }
 
-    private fun ScrollHmsPicker.setMillis(m: Long, smooth: Boolean) {
+    private fun HmsPicker.setMillis(m: Long, smooth: Boolean) {
         val seconds = ((m / 1000) % 60).toInt()
         val minutes = ((m / 1000 / 60) % 60).toInt()
         val hours = ((m / 1000 / 60 / 60) % 24).toInt()

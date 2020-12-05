@@ -14,7 +14,7 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.o4x.musical.R
 
-class ScrollHmsPicker (
+class HmsPicker (
         context: Context,
         attrs: AttributeSet
 ) : LinearLayout(context, attrs) {

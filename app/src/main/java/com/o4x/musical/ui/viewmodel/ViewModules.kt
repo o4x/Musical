@@ -48,6 +48,6 @@ val viewModules = module {
     }
 
     viewModel {
-        EqualizerFragmentViewModel(get(), get(), get(), get(), get())
+        EqualizerViewModel(get(), get(), get(), get(), get())
     }
 }
