@@ -35,10 +35,6 @@ class PlaylistAdapter(
         private const val DEFAULT_PLAYLIST = 1
     }
 
-    init {
-        setHasStableIds(true)
-    }
-
     override fun getItemId(position: Int): Long {
         return dataSet[position].id
     }
@@ -48,6 +44,7 @@ class PlaylistAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val playlist = dataSet[position]
 
         holder.title?.text = playlist.name
