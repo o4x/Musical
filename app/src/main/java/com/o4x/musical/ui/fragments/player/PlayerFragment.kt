@@ -14,6 +14,7 @@ import com.o4x.musical.databinding.FragmentPlayerBinding
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.MusicPlayerRemote.currentSong
 import com.o4x.musical.helper.MusicPlayerRemote.playingQueue
+import com.o4x.musical.helper.menu.SongMenuHelper
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics
 import com.o4x.musical.model.lyrics.Lyrics
 import com.o4x.musical.ui.activities.PlayerActivity
@@ -147,42 +148,21 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val song = currentSong
+
+        if (SongMenuHelper
+                .handleMenuClick(requireActivity(),song, item.itemId))
+                    return true
+
         when (item.itemId) {
-            R.id.action_go_to_album -> {
-                NavigationUtil.goToAlbum(serviceActivity, song.albumId)
-                return true
-            }
-            R.id.action_go_to_artist -> {
-                NavigationUtil.goToArtist(serviceActivity, song.artistId)
-                return true
-            }
             R.id.action_lyrics -> {
                 if (lyrics != null)
                     create(lyrics!!).show(childFragmentManager, "LYRICS")
 
                 return true
             }
-            R.id.action_share -> {
-                SongShareDialog.create(song).show(childFragmentManager, "SHARE_SONG")
-                return true
-            }
-            R.id.action_equalizer -> {
-                NavigationUtil.openEqualizer(serviceActivity)
-                return true
-            }
             R.id.action_save_playing_queue -> {
                 CreatePlaylistDialog.create(playingQueue)
                     .show(serviceActivity.supportFragmentManager, "ADD_TO_PLAYLIST")
-                return true
-            }
-            R.id.action_tag_editor -> {
-                val intent = Intent(serviceActivity, SongTagEditorActivity::class.java)
-                intent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.id)
-                startActivity(intent)
-                return true
-            }
-            R.id.action_details -> {
-                SongDetailDialog.create(song).show(childFragmentManager, "SONG_DETAIL")
                 return true
             }
         }

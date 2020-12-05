@@ -77,10 +77,6 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
         val id = item.itemId
         val songs = getSongs()
         when (id) {
-            R.id.action_equalizer -> {
-                NavigationUtil.openEqualizer(this)
-                return true
-            }
             R.id.action_shuffle_album -> {
                 openAndShuffleQueue(songs, true)
                 return true
