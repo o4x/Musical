@@ -3,7 +3,9 @@ package com.o4x.musical.imageloader.glide.loader
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -165,6 +167,28 @@ class GlideLoader {
             )
         }
 
+        fun load(
+            @DrawableRes resource: Int
+        ): GlideFinisher {
+
+            requestBuilder
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .load(resource)
+
+            return GlideFinisher()
+        }
+
+        fun load(
+            uri: Uri
+        ): GlideFinisher {
+
+            requestBuilder
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .load(uri)
+
+            return GlideFinisher()
+        }
+
         private fun createSignature(song: Song): Key {
             return MediaStoreSignature("", song.dateModified, 0)
         }
@@ -174,7 +198,7 @@ class GlideLoader {
         }
 
         inner class GlideFinisher(
-            coverData: CoverData?
+            coverData: CoverData? = null
         ) {
 
             init {

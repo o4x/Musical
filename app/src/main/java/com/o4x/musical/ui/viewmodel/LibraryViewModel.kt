@@ -26,7 +26,6 @@ class LibraryViewModel(
 ) : ViewModel(), MusicServiceEventListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val paletteColor = MutableLiveData<Int>()
-    private val posterBitmap = MutableLiveData<Bitmap>()
 
     private val albums = MutableLiveData<List<Album>>()
     private val songs = MutableLiveData<List<Song>>()
@@ -39,7 +38,6 @@ class LibraryViewModel(
     private val recentlyPlayed = MutableLiveData<List<Song>>()
 
     fun getPaletteColor(): LiveData<Int> = paletteColor
-    fun getPosterBitmap(): LiveData<Bitmap> = posterBitmap
     fun getSearchResult(): LiveData<List<Any>> = searchResults
     fun getSongs(): LiveData<List<Song>> = songs
     fun getAlbums(): LiveData<List<Album>> = albums
@@ -63,8 +61,6 @@ class LibraryViewModel(
         fetchLegacyPlaylist()
         fetchRecentlyPlayed()
         fetchRecentlyAdded()
-
-        fetchPosterBitmap()
     }
 
     private fun fetchSongs() {
@@ -118,41 +114,6 @@ class LibraryViewModel(
     private fun fetchRecentlyAdded() {
         viewModelScope.launch(IO) {
             recentlyAdded.postValue(repository.recentSongs())
-        }
-    }
-
-    private fun fetchPosterBitmap() {
-        viewModelScope.launch {
-
-            val songs = repository.allSongs()
-            if (songs.isEmpty()) return@launch
-
-
-            GlideLoader.with(App.getContext())
-                .withListener(object : PaletteTargetListener(App.getContext()) {
-                    override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
-                        if (resource == null) return
-
-                        val bitmap = if (isDarkMode ==
-                            ColorUtil.isColorDark(colors.backgroundColor)
-                        ) {
-                            CoverUtil.addGradientTo(resource)
-                        } else {
-                            CoverUtil.doubleGradient(
-                                colors.backgroundColor,
-                                colors.mightyColor
-                            )
-                        }
-
-                        posterBitmap.postValue(bitmap)
-                    }
-                })
-                .load(songs.random())
-                .into(
-                    CustomBitmapTarget(
-                        Util.getMaxScreenSize(), Util.getMaxScreenSize()
-                    )
-                )
         }
     }
 
@@ -278,7 +239,6 @@ class LibraryViewModel(
 
     fun deleteTracks(songs: List<Song>) = viewModelScope.launch(IO) {
         repository.deleteSongs(songs)
-        loadLibraryContent()
     }
 
     fun recentSongs(): LiveData<List<Song>> = liveData {

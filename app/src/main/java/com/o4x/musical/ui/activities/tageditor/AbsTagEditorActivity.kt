@@ -296,13 +296,9 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
                             )
                         }
                     }
-                } else {
-                    Log.i(TAG, "ResultCode = $resultCode")
                 }
             } catch (e: Exception) {
                 e.message?.let { Log.e(TAG, it) }
-            }
-            else -> {
             }
         }
     }

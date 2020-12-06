@@ -50,4 +50,8 @@ val viewModules = module {
     viewModel {
         EqualizerViewModel(get(), get(), get(), get(), get())
     }
+
+    viewModel {
+        HomeHeaderViewModel(get())
+    }
 }
