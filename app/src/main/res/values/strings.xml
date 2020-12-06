@@ -274,6 +274,8 @@
     <string name="pref_summary_blacklist">The content of blacklisted folders is hidden from your library.</string>
     <string name="reset_artist_image">Reset artist image</string>
     <string name="set_artist_image">Set artist image</string>
+    <string name="home_header">Home header</string>
+    <string name="pref_summary_home_header">Set an image to display for the Home header</string>
     <string name="library_categories">Library categories</string>
     <string name="pref_summary_library_categories">Configure visibility and order of library categories.</string>
     <string name="you_have_to_select_at_least_one_category">You have to select at least one category.</string>

@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.appbar.MaterialToolbar
 import com.o4x.musical.R
 import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
@@ -69,33 +70,6 @@ fun AppCompatActivity.replaceFragment(
             }
             commit()
         }
-}
-
-
-fun AppCompatActivity.startImagePicker(requestCode: Int) {
-    val intent = Intent(Intent.ACTION_PICK,
-        MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-    intent.type = "image/*"
-    intent.putExtra("crop", "true")
-    intent.putExtra("scale", true)
-    intent.putExtra("aspectX", 1)
-    intent.putExtra("aspectY", 1)
-    startActivityForResult(
-        intent,
-        requestCode)
-}
-
-fun Fragment.startImagePicker(requestCode: Int) {
-    val intent = Intent(Intent.ACTION_PICK,
-        MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-    intent.type = "image/*"
-    intent.putExtra("crop", "true")
-    intent.putExtra("scale", true)
-    intent.putExtra("aspectX", 1)
-    intent.putExtra("aspectY", 1)
-    startActivityForResult(
-        intent,
-        requestCode)
 }
 
 inline fun <reified T : Any> Activity.extra(key: String, default: T? = null) = lazy {

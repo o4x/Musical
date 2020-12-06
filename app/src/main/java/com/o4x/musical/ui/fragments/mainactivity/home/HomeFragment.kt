@@ -24,7 +24,9 @@ import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
+import com.o4x.musical.ui.viewmodel.HomeHeaderViewModel
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.math.max
@@ -32,6 +34,8 @@ import kotlin.math.min
 import kotlin.properties.Delegates
 
 class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
+
+    private val posterViewModel by sharedViewModel<HomeHeaderViewModel>()
 
     private val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
         parametersOf(null)
@@ -155,7 +159,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     private fun setupPoster() {
-        libraryViewModel.getPosterBitmap().observe(viewLifecycleOwner, {
+        posterViewModel.getPosterBitmap().observe(viewLifecycleOwner, {
             binding.poster.setImageBitmap(it)
         })
     }

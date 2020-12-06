@@ -113,7 +113,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
             }
             R.id.action_reset_image -> {
                 showToast(resources.getString(R.string.updating))
-                CustomImageUtil(data).resetCustomImage()
+                CustomImageUtil(data!!).resetCustomImage()
                 return true
             }
         }
@@ -162,7 +162,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
         when (requestCode) {
             REQUEST_CODE_SELECT_IMAGE -> if (resultCode == Activity.RESULT_OK) {
                 data?.data?.let {
-                    CustomImageUtil(this.data).setCustomImage(it)
+                    CustomImageUtil(this.data!!).setCustomImage(it)
                 }
             }
         }
