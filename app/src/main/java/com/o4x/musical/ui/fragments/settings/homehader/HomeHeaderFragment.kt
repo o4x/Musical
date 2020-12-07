@@ -3,20 +3,25 @@ package com.o4x.musical.ui.fragments.settings.homehader
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.RadioGroup
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.dhaval2404.imagepicker.ImagePicker
+import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentHomeHeaderBinding
-import com.o4x.musical.extensions.startHomeHeaderImagePicker
 import com.o4x.musical.prefs.HomeHeaderPref
 import com.o4x.musical.ui.fragments.mainactivity.datails.AbsDetailFragment
-import com.o4x.musical.util.CustomImageUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.File
 
 class HomeHeaderFragment : Fragment(R.layout.fragment_home_header) {
 
@@ -60,7 +65,7 @@ class HomeHeaderFragment : Fragment(R.layout.fragment_home_header) {
             when (checkedId) {
                 binding.radioCustom.id -> {
                     HomeHeaderPref.homeHeaderType = HomeHeaderPref.TYPE_CUSTOM
-                    startHomeHeaderImagePicker(REQUEST_CODE_SELECT_IMAGE)
+                    startHomeHeaderImagePicker()
                 }
                 binding.radioTag.id -> {
                     HomeHeaderPref.homeHeaderType = HomeHeaderPref.TYPE_TAG
@@ -89,10 +94,30 @@ class HomeHeaderFragment : Fragment(R.layout.fragment_home_header) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             AbsDetailFragment.REQUEST_CODE_SELECT_IMAGE -> if (resultCode == Activity.RESULT_OK) {
-                data?.data?.let {
+                data?.data?.let { it ->
+                    GlobalScope.launch(Dispatchers.IO) {
+                        if (headerDir.isDirectory) {
+                            val newImage = it.toFile()
+                            headerDir.listFiles()?.let {
+                                for (image in it) {
+                                    if (image != newImage) image.delete()
+                                }
+                            }
+                        }
+                    }
+
                     HomeHeaderPref.customImagePath = it.toString()
                 }
             }
         }
+    }
+
+    private val headerDir = File(App.getContext().filesDir, "/home_header/")
+
+    private fun startHomeHeaderImagePicker() {
+        ImagePicker.with(this)
+            .saveDir(headerDir)
+            .crop()
+            .start(REQUEST_CODE_SELECT_IMAGE)
     }
 }

@@ -31,6 +31,12 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
 
     init {
         fetchPosterBitmap()
+        HomeHeaderPref.registerOnSharedPreferenceChangedListener(this)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        HomeHeaderPref.unregisterOnSharedPreferenceChangedListener(this)
     }
 
     private fun fetchPosterBitmap() {
@@ -61,7 +67,6 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
             when (HomeHeaderPref.homeHeaderType) {
                 HomeHeaderPref.TYPE_CUSTOM -> {
                     val uri = Uri.parse(HomeHeaderPref.customImagePath)
-                    Log.e("sssssssssssssss", uri.path.toString())
                     finisher = loader
                         .load(uri)
                 }
@@ -82,40 +87,28 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
         }
     }
 
-    override fun onServiceConnected() {
-        TODO("Not yet implemented")
-    }
+    override fun onServiceConnected() {}
 
-    override fun onServiceDisconnected() {
-        TODO("Not yet implemented")
-    }
+    override fun onServiceDisconnected() {}
 
-    override fun onQueueChanged() {
-        TODO("Not yet implemented")
-    }
+    override fun onQueueChanged() {}
 
-    override fun onPlayingMetaChanged() {
-        TODO("Not yet implemented")
-    }
+    override fun onPlayingMetaChanged() {}
 
-    override fun onPlayStateChanged() {
-        TODO("Not yet implemented")
-    }
+    override fun onPlayStateChanged() {}
 
-    override fun onRepeatModeChanged() {
-        TODO("Not yet implemented")
-    }
+    override fun onRepeatModeChanged() {}
 
-    override fun onShuffleModeChanged() {
-        TODO("Not yet implemented")
-    }
+    override fun onShuffleModeChanged() {}
 
     override fun onMediaStoreChanged() {
         fetchPosterBitmap()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        fetchPosterBitmap()
+        key?.let {
+            fetchPosterBitmap()
+        }
     }
 
 }
