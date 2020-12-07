@@ -50,8 +50,12 @@ public class MusicUtil {
         return ContentUris.withAppendedId(sArtworkUri, albumId);
     }
 
-    public static Uri getSongFileUri(long songId) {
+    public static Uri getFileUriFromSong(long songId) {
         return ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
+    }
+
+    public static Long getSongIDFromFileUri(Uri songUri) {
+        return ContentUris.parseId(songUri);
     }
 
     @NonNull

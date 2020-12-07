@@ -24,6 +24,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Musical.Black"
         tools:ignore="UnusedAttribute">
+        <activity
+            android:name=".ui.activities.MusicPickerActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+
+                <data android:mimeType="vnd.android.cursor.dir/audio" />
+            </intent-filter>
+
+        </activity>
         <activity android:name=".ui.activities.PlayerActivity" />
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
@@ -89,14 +102,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PICK" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.OPENABLE" />
-
-                <data android:mimeType="vnd.android.cursor.dir/audio" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.activities.details.AlbumDetailActivity" />
         <activity android:name=".ui.activities.details.ArtistDetailActivity" />
@@ -125,12 +130,10 @@
         <service
             android:name=".service.MusicService"
             android:enabled="true" />
-
         <service
             android:name=".playback.TimberMusicService"
             android:enabled="true"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>

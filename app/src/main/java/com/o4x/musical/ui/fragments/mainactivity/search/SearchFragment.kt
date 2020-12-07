@@ -29,7 +29,6 @@ import kotlin.collections.ArrayList
 class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
 
     companion object {
-        const val QUERY = "query"
         const val REQ_CODE_SPEECH_INPUT = 9001
     }
 
@@ -47,7 +46,7 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -80,9 +79,7 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
         )
         inputManager?.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT)
 
-        if (savedInstanceState != null) {
-            query = savedInstanceState.getString(QUERY)
-        }
+
         libraryViewModel.getSearchResult().observe(viewLifecycleOwner, {
             showData(it)
         })
@@ -126,7 +123,6 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
 
     private fun search(query: String) {
         this.query = query
-//        TransitionManager.beginDelayedTransition(mainActivity.appbar)
         voiceSearch.isGone = query.isNotEmpty()
         clearText.isVisible = query.isNotEmpty()
         libraryViewModel.search(query)

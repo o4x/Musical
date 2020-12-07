@@ -15,7 +15,7 @@ import com.o4x.musical.R
 class RingtoneManager {
     fun setRingtone(context: Context, id: Long) {
         val resolver = context.contentResolver
-        val uri = MusicUtil.getSongFileUri(id)
+        val uri = MusicUtil.getFileUriFromSong(id)
         try {
             val values = ContentValues(2)
             values.put(MediaStore.Audio.AudioColumns.IS_RINGTONE, "1")

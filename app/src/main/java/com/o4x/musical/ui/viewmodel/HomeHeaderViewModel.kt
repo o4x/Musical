@@ -21,7 +21,9 @@ import com.o4x.musical.repository.SongRepository
 import com.o4x.musical.ui.fragments.settings.homehader.defaultImages
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.Util
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
     MusicServiceEventListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -64,26 +66,33 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
 
             var finisher: GlideLoader.GlideBuilder.GlideFinisher? = null
 
-            when (HomeHeaderPref.homeHeaderType) {
-                HomeHeaderPref.TYPE_CUSTOM -> {
-                    val uri = Uri.parse(HomeHeaderPref.customImagePath)
-                    finisher = loader
-                        .load(uri)
+            viewModelScope.launch(Dispatchers.IO) {
+                when (HomeHeaderPref.homeHeaderType) {
+                    HomeHeaderPref.TYPE_CUSTOM -> {
+                        val uri = Uri.parse(HomeHeaderPref.customImagePath)
+                        finisher = loader
+                            .load(uri)
+                    }
+                    HomeHeaderPref.TYPE_TAG -> {
+                        val song =
+                            songRepository.song(HomeHeaderPref.imageSongID)
+                        finisher = loader
+                            .load(song)
+                    }
+                    HomeHeaderPref.TYPE_DEFAULT -> {
+                        finisher = loader
+                            .load(defaultImages[HomeHeaderPref.defaultImageIndex])
+                    }
                 }
-                HomeHeaderPref.TYPE_TAG -> {
 
-                }
-                HomeHeaderPref.TYPE_DEFAULT -> {
-                    finisher = loader
-                        .load(defaultImages[HomeHeaderPref.defaultImageIndex])
+                withContext(Dispatchers.Main) {
+                    finisher?.into(
+                        CustomBitmapTarget(
+                            Util.getMaxScreenSize(), Util.getMaxScreenSize()
+                        )
+                    )
                 }
             }
-
-            finisher?.into(
-                    CustomBitmapTarget(
-                        Util.getMaxScreenSize(), Util.getMaxScreenSize()
-                    )
-                )
         }
     }
 

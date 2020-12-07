@@ -7,9 +7,6 @@ import android.content.*
 import android.graphics.Bitmap
 import android.media.AudioManager
 import android.media.audiofx.AudioEffect
-import android.media.audiofx.BassBoost
-import android.media.audiofx.Equalizer
-import android.media.audiofx.PresetReverb
 import android.os.*
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -120,7 +117,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         const val RESTORE_QUEUES = 9
 
         private fun getTrackUri(song: Song): String {
-            return MusicUtil.getSongFileUri(song.id).toString()
+            return MusicUtil.getFileUriFromSong(song.id).toString()
         }
 
         private fun copy(bitmap: Bitmap): Bitmap? {
