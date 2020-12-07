@@ -32,15 +32,3 @@ fun Fragment.startImagePicker(requestCode: Int) {
         .maxResultSize(2048, 2048)
         .start(requestCode)
 }
-
-private val headerDir = File(getContext().filesDir, "/home_header/")
-
-fun Fragment.startHomeHeaderImagePicker(requestCode: Int) {
-    // for clean
-    FileUtils.delete(headerDir)
-
-    ImagePicker.with(this)
-        .saveDir(headerDir)
-        .crop()
-        .start(requestCode)
-}

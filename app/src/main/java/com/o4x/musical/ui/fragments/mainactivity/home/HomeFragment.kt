@@ -60,13 +60,14 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        mainActivity.removeMusicServiceEventListener(posterViewModel)
         _binding = null
     }
 
@@ -85,6 +86,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainActivity.addMusicServiceEventListener(posterViewModel)
         setUpViews()
     }
 
