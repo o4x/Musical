@@ -18,7 +18,9 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -80,4 +82,12 @@ inline fun <reified T : Any> Activity.extra(key: String, default: T? = null) = l
 inline fun <reified T : Any> Activity.extraNotNull(key: String, default: T? = null) = lazy {
     val value = intent?.extras?.get(key)
     requireNotNull(if (value is T) value else default) { key }
+}
+
+fun Activity.showToast(@StringRes stringRes: Int) {
+    showToast(getString(stringRes))
+}
+
+fun Activity.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
