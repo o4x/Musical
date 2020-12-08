@@ -142,6 +142,12 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         notifyDataSetChanged();
     }
 
+    @NonNull
+    @Override
+    public String getSectionName(int position) {
+        return String.valueOf(position - current);
+    }
+
     public class ViewHolder extends SongAdapter.ViewHolder implements DraggableItemViewHolder {
         private final DraggableItemState draggableItemState = new DraggableItemState();
 

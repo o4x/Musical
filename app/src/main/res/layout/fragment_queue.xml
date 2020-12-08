@@ -8,11 +8,11 @@
     android:background="?backgroundColor"
     tools:context=".ui.fragments.mainactivity.queue.QueueFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/queue_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="none" />
 
     <TextView
         android:id="@android:id/empty"
