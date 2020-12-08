@@ -115,6 +115,7 @@ class HomeHeaderFragment : Fragment(R.layout.fragment_home_header) {
     private fun startHomeHeaderImagePicker() {
         ImagePicker.with(this)
             .saveDir(headerDir)
+            .galleryOnly()
             .crop()
             .start(REQUEST_CODE_SELECT_IMAGE)
     }

@@ -15,6 +15,7 @@ fun AppCompatActivity.startImagePicker(requestCode: Int) {
 
     ImagePicker.with(this)
         .saveDir(dir)
+        .galleryOnly()
         .crop()
         .cropSquare()
         .maxResultSize(2048, 2048)
@@ -27,6 +28,7 @@ fun Fragment.startImagePicker(requestCode: Int) {
 
     ImagePicker.with(this)
         .saveDir(dir)
+        .galleryOnly()
         .crop()
         .cropSquare()
         .maxResultSize(2048, 2048)
