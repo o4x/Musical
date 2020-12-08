@@ -3,6 +3,7 @@ package com.o4x.musical.ui.fragments.mainactivity.queue
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
+import code.name.monkey.appthemehelper.extensions.accentColor
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
@@ -10,10 +11,10 @@ import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentQueueBinding
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
-import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
+import com.o4x.musical.util.ViewUtil
 
 class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
 
@@ -27,7 +28,7 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentQueueBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -66,7 +67,13 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
     }
 
     private fun setUpViews() {
-        binding.queueRecyclerView.addAppbarListener()
+        binding.queueRecyclerView.apply {
+            addAppbarListener()
+            ViewUtil.setUpFastScrollRecyclerViewColor(
+                requireContext(),
+                this,
+                accentColor())
+        }
         checkIsEmpty()
     }
 
