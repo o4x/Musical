@@ -51,6 +51,10 @@ class MusicPickerActivity : AbsMusicServiceActivity(), TextWatcher {
         applyToolbar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        setNavigationBarColorAuto()
+        setNavigationBarDividerColorAuto()
+        setStatusBarColorAuto()
+
         selectSongAdapter =
             SelectSongAdapter(this, emptyList(), R.layout.item_list, null) {
                 val returnIntent = Intent()

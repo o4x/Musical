@@ -23,79 +23,67 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/gram_0"
+                    tools:src="@drawable/default_dark"
                     tools:ignore="ContentDescription" />
 
             </com.o4x.musical.views.WidthFitSquareLayout>
 
-            <RadioGroup
-                android:id="@+id/radioGroup"
+            <LinearLayout
+                android:id="@+id/use_custom"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp">
+                android:paddingVertical="16dp"
+                android:paddingStart="56dp"
+                android:paddingEnd="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground">
 
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/radio_custom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Use custom image" />
-
-                <LinearLayout
+                <TextView
+                    android:text="@string/use_custom_image"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=""/>
+            <LinearLayout
+                android:id="@+id/use_song"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="16dp"
+                android:paddingStart="56dp"
+                android:paddingEnd="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground">
 
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/change"/>
-
-                </LinearLayout>
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/radio_tag"
+                <TextView
+                    android:text="@string/use_album_cover_from_song"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Use cover tag from song" />
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:id="@+id/use_default"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="16dp"
+                android:paddingStart="56dp"
+                android:paddingEnd="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:text="@string/use_default_image"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=""/>
-
-                    <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/change"/>
-
-                </LinearLayout>
-
-                <com.google.android.material.radiobutton.MaterialRadioButton
-                    android:id="@+id/radio_default"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Use default image's" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </RadioGroup>
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
         </LinearLayout>
 
