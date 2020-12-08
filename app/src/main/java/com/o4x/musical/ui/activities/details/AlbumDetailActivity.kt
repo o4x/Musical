@@ -53,7 +53,6 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
 
         loadImage()
 
-        toolbar.title = album.title
         songAdapter?.swapDataSet(album.songs)
         songAdapter?.data = album
     }
