@@ -16,9 +16,11 @@ import code.name.monkey.appthemehelper.extensions.accentColor
 import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentHomeBinding
 import com.o4x.musical.extensions.toPlaylistDetail
+import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.ui.adapter.home.HomeAdapter
@@ -162,7 +164,11 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private fun setupPoster() {
         posterViewModel.getPosterBitmap().observe(viewLifecycleOwner, {
-            binding.poster.setImageBitmap(it)
+            GlideApp.with(this)
+                .asBitmap()
+                .load(it)
+                .transition(BitmapTransitionOptions.withCrossFade())
+                .into(binding.poster)
         })
     }
 

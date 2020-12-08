@@ -3,13 +3,13 @@ package com.o4x.musical.ui.viewmodel
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.App
+import com.o4x.musical.R
 import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
@@ -18,7 +18,6 @@ import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.prefs.HomeHeaderPref
 import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.repository.SongRepository
-import com.o4x.musical.ui.fragments.settings.homehader.defaultImages
 import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers
@@ -33,65 +32,70 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
 
     init {
         fetchPosterBitmap()
+        PreferenceUtil.registerOnSharedPreferenceChangedListener(this)
         HomeHeaderPref.registerOnSharedPreferenceChangedListener(this)
     }
 
     override fun onCleared() {
         super.onCleared()
+        PreferenceUtil.unregisterOnSharedPreferenceChangedListener(this)
         HomeHeaderPref.unregisterOnSharedPreferenceChangedListener(this)
     }
 
     private fun fetchPosterBitmap() {
-        viewModelScope.launch {
 
-            val loader = GlideLoader.with(App.getContext())
-                .withListener(object : PaletteTargetListener(App.getContext()) {
-                    override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
-                        if (resource == null) return
+        val loader = GlideLoader.with(App.getContext())
+            .withListener(object : PaletteTargetListener(App.getContext()) {
+                override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
+                    if (resource == null) return
 
-                        val bitmap = if (PreferenceUtil.isDarkMode ==
-                            ColorUtil.isColorDark(colors.backgroundColor)
-                        ) {
-                            CoverUtil.addGradientTo(resource)
-                        } else {
-                            CoverUtil.doubleGradient(
-                                colors.backgroundColor,
-                                colors.mightyColor
-                            )
-                        }
-
-                        posterBitmap.postValue(bitmap)
-                    }
-                })
-
-            var finisher: GlideLoader.GlideBuilder.GlideFinisher? = null
-
-            viewModelScope.launch(Dispatchers.IO) {
-                when (HomeHeaderPref.homeHeaderType) {
-                    HomeHeaderPref.TYPE_CUSTOM -> {
-                        val uri = Uri.parse(HomeHeaderPref.customImagePath)
-                        finisher = loader
-                            .load(uri)
-                    }
-                    HomeHeaderPref.TYPE_TAG -> {
-                        val song =
-                            songRepository.song(HomeHeaderPref.imageSongID)
-                        finisher = loader
-                            .load(song)
-                    }
-                    HomeHeaderPref.TYPE_DEFAULT -> {
-                        finisher = loader
-                            .load(defaultImages[HomeHeaderPref.defaultImageIndex])
-                    }
-                }
-
-                withContext(Dispatchers.Main) {
-                    finisher?.into(
-                        CustomBitmapTarget(
-                            Util.getMaxScreenSize(), Util.getMaxScreenSize()
+                    val bitmap = if (PreferenceUtil.isDarkMode ==
+                        ColorUtil.isColorDark(colors.backgroundColor)
+                    ) {
+                        CoverUtil.addGradientTo(resource)
+                    } else {
+                        CoverUtil.doubleGradient(
+                            colors.backgroundColor,
+                            colors.mightyColor
                         )
-                    )
+                    }
+
+                    posterBitmap.postValue(bitmap)
                 }
+            })
+
+        var finisher: GlideLoader.GlideBuilder.GlideFinisher? = null
+
+        viewModelScope.launch(Dispatchers.IO) {
+            when (HomeHeaderPref.homeHeaderType) {
+                HomeHeaderPref.TYPE_CUSTOM -> {
+                    val uri = Uri.parse(HomeHeaderPref.customImagePath)
+                    finisher = loader
+                        .load(uri)
+                }
+                HomeHeaderPref.TYPE_SONG -> {
+                    val song =
+                        songRepository.song(HomeHeaderPref.imageSongID)
+                    finisher = loader
+                        .load(song)
+                }
+                HomeHeaderPref.TYPE_DEFAULT -> {
+                    finisher = loader
+                        .load(
+                            if (PreferenceUtil.isDarkMode)
+                                R.drawable.default_dark
+                            else
+                                R.drawable.default_light
+                        )
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                finisher?.into(
+                    CustomBitmapTarget(
+                        Util.getMaxScreenSize(), Util.getMaxScreenSize()
+                    )
+                )
             }
         }
     }
@@ -115,8 +119,11 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        key?.let {
-            fetchPosterBitmap()
+        when (key) {
+            PreferenceUtil.GENERAL_THEME,
+            HomeHeaderPref.CHANGE -> {
+                fetchPosterBitmap()
+            }
         }
     }
 

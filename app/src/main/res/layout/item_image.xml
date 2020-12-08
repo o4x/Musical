@@ -8,6 +8,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        tools:src="@drawable/default_0"
         tools:ignore="ContentDescription" />
+
+    <FrameLayout
+        android:id="@+id/checked"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/semi_transparent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.o4x.musical.views.IconImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_check"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
 
 </FrameLayout>

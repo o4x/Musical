@@ -459,5 +459,8 @@
     <string name="update_album_image">Update album image</string>
     <string name="update_artist_image">Update artist image</string>
     <string name="save_as_preset">Save as preset</string>
+    <string name="use_custom_image">Use custom image</string>
+    <string name="use_album_cover_from_song">Use album cover from song</string>
+    <string name="use_default_image">Use default image</string>
 
 </resources>
