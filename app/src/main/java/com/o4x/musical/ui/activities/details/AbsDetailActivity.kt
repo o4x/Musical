@@ -76,6 +76,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
 
     private fun setUpToolBar() {
         setSupportActionBar(toolbar)
+        supportActionBar?.title = null
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.post {
             ToolbarContentTintHelper.colorizeToolbar(toolbar, colors.primaryTextColor, this)
@@ -147,9 +148,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         )
         setStatusBarColor(
             withAlpha(colors.backgroundColor, alpha)
-        )
-        toolbar.setTitleTextColor(
-            withAlpha(colors.primaryTextColor, alpha)
         )
     }
 
