@@ -22,6 +22,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
+        tools:replace="android:supportsRtl"
         android:theme="@style/Theme.Musical.Black"
         tools:ignore="UnusedAttribute">
         <activity
