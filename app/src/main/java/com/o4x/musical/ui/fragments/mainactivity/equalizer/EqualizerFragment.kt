@@ -9,7 +9,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import code.name.monkey.appthemehelper.extensions.primaryColor
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
@@ -61,15 +60,11 @@ internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equ
 
         binding.controllerBass.apply {
             label = "BASS"
-            circlePaint2.color = primaryColor()
-            linePaint.color = primaryColor()
             progress = (presenter.getBassStrength() * FACTOR).roundToInt()
             invalidate()
         }
         binding.controller3D.apply {
             label = "3D"
-            circlePaint2.color = primaryColor()
-            linePaint.color = primaryColor()
             progress = (presenter.getVirtualizerStrength() * FACTOR).roundToInt()
             invalidate()
         }
@@ -186,12 +181,16 @@ internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equ
         override fun onStopTrackingTouch(seekBar: SeekBar?) {}
     }
 
-    private val onBassKnobChangeListener = AnalogController.onProgressChangedListener { progress ->
-        presenter.setBassStrength((progress * REV_FACTOR).roundToInt())
+    private val onBassKnobChangeListener = object : AnalogController.OnProgressChangedListener {
+        override fun onProgressChanged(progress: Int) {
+            presenter.setBassStrength((progress * REV_FACTOR).roundToInt())
+        }
     }
 
-    private val onVirtualizerKnobChangeListener = AnalogController.onProgressChangedListener { progress ->
-        presenter.setVirtualizerStrength((progress * REV_FACTOR).roundToInt())
+    private val onVirtualizerKnobChangeListener = object : AnalogController.OnProgressChangedListener {
+        override fun onProgressChanged(progress: Int) {
+            presenter.setVirtualizerStrength((progress * REV_FACTOR).roundToInt())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
