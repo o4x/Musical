@@ -18,20 +18,15 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
         private const val TAG = "CharCoverDrawable"
 
         private val COLORS = listOf(
-            arrayOf("#8693AB", "#BDD4E7"),
-            arrayOf("#F5E3E6", "#D9E4F5"),
-            arrayOf("#BBDBBE", "#DEEBDD"),
+
             arrayOf("#E9E9E9", "#F6F6F6"),
-            arrayOf("#FFB4A2", "#FFCDB2"),
-            arrayOf("#EDF1F4", "#C3CBDC"),
-            arrayOf("#F7D4D4", "#F6ECC4"),
         ).map {
             it.map { it -> Color.parseColor(it)
             }.toIntArray()
         }
 
         private val COLORS_DARK = listOf(
-            arrayOf("#2E2E2E", "#373737"),
+            arrayOf("#202020", "#202020"),
         ).map {
             it.map { it -> Color.parseColor(it)
             }.toIntArray()
@@ -90,7 +85,7 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
         // Render char's
         paint.color =
             ColorUtil.withAlpha(
-                if (isDarkMode) Color.WHITE else Color.BLACK, 0.2f) // Text Color
+                if (isDarkMode) Color.WHITE else Color.BLACK, 0.4f) // Text Color
 
         paint.textSize = max(canvas.width, canvas.height) * 1.4f // Text Size
         paint.isFakeBoldText = true
