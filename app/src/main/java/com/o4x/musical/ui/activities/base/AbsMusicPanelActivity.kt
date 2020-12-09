@@ -19,6 +19,7 @@ import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.fragments.player.MiniPlayerFragment
 import com.o4x.musical.prefs.PreferenceUtil
+import com.o4x.musical.ui.activities.intro.PermissionActivity
 import com.o4x.musical.util.color.MediaNotificationProcessor
 
 /**

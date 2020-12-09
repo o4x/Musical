@@ -20,6 +20,7 @@ import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.extensions.showToast
 import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
+import com.o4x.musical.ui.activities.intro.PermissionActivity
 import com.o4x.musical.ui.adapter.song.SelectSongAdapter
 import com.o4x.musical.ui.fragments.mainactivity.search.SearchFragment
 import com.o4x.musical.ui.fragments.mainactivity.search.clearText
@@ -46,6 +47,15 @@ class MusicPickerActivity : AbsMusicServiceActivity(), TextWatcher {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!hasPermissions()) {
+            val myIntent = Intent(
+                this,
+                PermissionActivity::class.java
+            )
+
+            this.startActivity(myIntent)
+        }
 
         setContentView(binding.root)
         applyToolbar(binding.toolbar)

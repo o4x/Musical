@@ -17,6 +17,7 @@ import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.prefs.PreferenceUtil.isDarkMode
+import com.o4x.musical.shared.Permissions
 import com.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -53,14 +54,16 @@ class LibraryViewModel(
     }
 
     private fun loadLibraryContent() = viewModelScope.launch(IO) {
-        fetchSongs()
-        fetchAlbums()
-        fetchArtists()
-        fetchGenres()
-        fetchPlaylists()
-        fetchLegacyPlaylist()
-        fetchRecentlyPlayed()
-        fetchRecentlyAdded()
+        if (Permissions.canReadStorage(App.getContext())) {
+            fetchSongs()
+            fetchAlbums()
+            fetchArtists()
+            fetchGenres()
+            fetchPlaylists()
+            fetchLegacyPlaylist()
+            fetchRecentlyPlayed()
+            fetchRecentlyAdded()
+        }
     }
 
     private fun fetchSongs() {
