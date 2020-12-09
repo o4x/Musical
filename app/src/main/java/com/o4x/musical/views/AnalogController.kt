@@ -34,15 +34,15 @@ class AnalogController : View {
 
     @ColorInt
     private var primaryColor = if (PreferenceUtil.isDarkMode)
-        ColorUtil.shiftColor(context.surfaceColor(), .8f)
+        ColorUtil.shiftColor(context.surfaceColor(), 1f)
     else
-        ColorUtil.shiftColor(context.surfaceColor(), 1.4f)
+        ColorUtil.shiftColor(context.surfaceColor(), 1.2f)
 
     @ColorInt
     private var secondaryColor = if (PreferenceUtil.isDarkMode)
         ColorUtil.shiftColor(context.surfaceColor(), 2f)
     else
-        ColorUtil.shiftColor(context.surfaceColor(), .4f)
+        ColorUtil.shiftColor(context.surfaceColor(), .9f)
 
     interface OnProgressChangedListener {
         fun onProgressChanged(progress: Int)
