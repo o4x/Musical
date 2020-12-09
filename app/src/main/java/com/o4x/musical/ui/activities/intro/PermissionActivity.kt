@@ -48,12 +48,6 @@ class PermissionActivity : AbsMusicServiceActivity() {
         finish.themeBackgroundColor(baseColor)
         finish.setOnClickListener {
             if (hasPermissions()) {
-                startActivity(
-                    Intent(this, MainActivity::class.java).addFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or
-                                Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
-                )
                 finish()
             }
         }

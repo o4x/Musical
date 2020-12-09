@@ -15,6 +15,7 @@ import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.extensions.accentColor
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
+import com.o4x.musical.ui.activities.intro.PermissionActivity
 
 abstract class AbsBaseActivity : AbsThemeActivity() {
     private var hadPermissions: Boolean = false
