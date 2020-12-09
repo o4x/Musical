@@ -112,7 +112,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     }
 
 
-    @SuppressLint("NewApi")
     private fun setUpNavigationView() {
         toggle = object : ActionBarDrawerToggle(
             this,
@@ -123,23 +122,9 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-        val themeColor = accentColor()
-
         navigation_view.setBackgroundColor(surfaceColor())
 
-        setItemTextColors(navigation_view, textColorPrimary(), themeColor)
-
-        val stateListDrawable = navigation_view.itemBackground as StateListDrawable
-        val layerDrawable = stateListDrawable.getStateDrawable(0) as LayerDrawable
-        val rectangle = layerDrawable.findDrawableByLayerId(R.id.rectangle) as GradientDrawable
-        val rectangleRadius =
-            layerDrawable.findDrawableByLayerId(R.id.rectangle_radius) as GradientDrawable
-
-        rectangle.setColor(themeColor)
-        rectangleRadius.setColor(withAlpha(themeColor, 0.2f))
-
         var lastItem: MenuItem? = null
-
         drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
 
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}

@@ -40,7 +40,6 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/buy_pro"
-            android:icon="@drawable/ic_local_play"
             android:title="@string/buy_pro" />
     </group>
 
