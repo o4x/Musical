@@ -221,7 +221,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     fun statusBarColorVisible(show: Boolean) {
         statusAnimation.cancel()
 
-        val color = surfaceColor()
+        val color = ColorUtil.darkenColor(surfaceColor())
         val current = mainActivity.window.statusBarColor
 
         // break if current color equal final color
