@@ -2,7 +2,6 @@ package com.o4x.musical.ui.activities.details
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +22,6 @@ import com.o4x.musical.util.ViewUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import kotlin.math.max
 import kotlin.math.min
 
@@ -34,9 +32,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         const val TAG_EDITOR_REQUEST = 2001
     }
 
-    val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
-        parametersOf(null)
-    }
+    val scrollPositionViewModel by viewModel<ScrollPositionViewModel>()
 
     var data: T? = null
 
@@ -109,6 +105,13 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         val gradientHeight =
             (imageHeight!! + resources.getDimension(R.dimen.detail_header_height)).toInt()
 
+        song_recycler.post {
+            song_recycler.layoutManager?.scrollToPosition(0)
+            scrollPositionViewModel.setPosition(0)
+            image.translationY = 0f
+            setAppbarAlpha(0f)
+        }
+
         song_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -117,7 +120,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
                 val scrollY = scrollPositionViewModel.getPositionValue()
 
                 // Change alpha of overlay
-                val alpha = max(0f, min(1f, 2.toFloat() * scrollY / gradientHeight))
+                val alpha = max(0f, min(0.9f, 2f * scrollY / gradientHeight))
                 setAppbarAlpha(alpha)
 
                 // Scroll poster
