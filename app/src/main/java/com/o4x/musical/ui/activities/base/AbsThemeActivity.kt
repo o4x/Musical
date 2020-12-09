@@ -49,10 +49,7 @@ abstract class AbsThemeActivity : ATHActivity() {
      * @param color the new statusbar color (will be shifted down on Lollipop and above)
      */
     open fun setStatusBarColor(color: Int) {
-        when {
-            VersionUtils.hasMarshmallow() -> window.statusBarColor = color
-            else -> window.statusBarColor = ColorUtil.darkenColor(color)
-        }
+        window.statusBarColor = ColorUtil.darkenColor(color)
         setLightStatusBarAuto(surfaceColor())
     }
 

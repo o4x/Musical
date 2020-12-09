@@ -70,7 +70,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         setDrawUnderStatusBar()
         setNavigationBarColorAuto()
         setLightNavigationBar(true)
-        setStatusBarColor(Color.TRANSPARENT)
 
         setupNavController()
         setupToolbar()
