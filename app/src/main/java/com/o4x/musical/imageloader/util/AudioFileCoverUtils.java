@@ -31,7 +31,7 @@ public class AudioFileCoverUtils {
                 }
             }
             // If there are any exceptions, we ignore them and continue to the other fallback method
-        } catch (ReadOnlyFileException | TagException | InvalidAudioFrameException | IOException | CannotReadException ignored) {}
+        } catch (ReadOnlyFileException | TagException | InvalidAudioFrameException | IOException ignored) {}
 
         // Method 2: look for album art in external files
         final File parent = new File(path).getParentFile();
