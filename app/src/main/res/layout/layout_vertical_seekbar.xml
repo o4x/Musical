@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:maxLines="2"
         android:textAllCaps="false"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:gravity="center"/>
 
     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
         android:layout_width="match_parent"
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:maxLines="2"
         android:textAllCaps="false"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:gravity="center"/>
 
 </LinearLayout>
