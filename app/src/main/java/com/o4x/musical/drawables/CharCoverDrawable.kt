@@ -87,8 +87,8 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
         paint.color =
             ColorUtil.withAlpha(
                 if (isDarkMode) Color.WHITE else Color.BLACK,
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) 0.4f else 0.1f) // Text Color
-        // Because OVERLAY work from API 29
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && canvas.isHardwareAccelerated) 0.4f else 0.1f) // Text Color
+        // Because OVERLAY work from API 28
 
         paint.textSize = max(canvas.width, canvas.height) * 1.4f // Text Size
         paint.isFakeBoldText = true
