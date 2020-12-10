@@ -10,6 +10,43 @@
       "client_info": {
         "mobilesdk_app_id": "1:714174472699:android:ba9f09e9bfc5f7eca22b5e",
         "android_client_info": {
+          "package_name": "com.o4x.musical"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "714174472699-fstrs13llanaicvi1bcee61cb0af1c4f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.o4x.musical",
+            "certificate_hash": "e2fd7385c2523a9ce3abef4bbc41a18659574e51"
+          }
+        },
+        {
+          "client_id": "714174472699-f54klf21kevm57k5e6q5rhb8krv7apit.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4RajKjz5_NiqCLrSCIma8g_xNa8nh52A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "714174472699-f54klf21kevm57k5e6q5rhb8krv7apit.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:714174472699:android:ba9f09e9bfc5f7eca22b5e",
+        "android_client_info": {
           "package_name": "com.o4x.musical.debug"
         }
       },

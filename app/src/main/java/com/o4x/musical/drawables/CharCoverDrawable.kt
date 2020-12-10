@@ -3,6 +3,7 @@ package com.o4x.musical.drawables
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import code.name.monkey.appthemehelper.util.ColorUtil
 import com.o4x.musical.imageloader.model.AudioFileCover
 import com.o4x.musical.imageloader.model.MultiImage
@@ -85,7 +86,9 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
         // Render char's
         paint.color =
             ColorUtil.withAlpha(
-                if (isDarkMode) Color.WHITE else Color.BLACK, 0.4f) // Text Color
+                if (isDarkMode) Color.WHITE else Color.BLACK,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) 0.4f else 0.1f) // Text Color
+        // Because OVERLAY work from API 29
 
         paint.textSize = max(canvas.width, canvas.height) * 1.4f // Text Size
         paint.isFakeBoldText = true
@@ -93,21 +96,20 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
 
         canvas.rotate(30f)
 
-        canvas.drawText(
-            text.split(" ").firstOrNull()?.firstOrNull()
-                .toString().toUpperCase(Locale.ROOT),
-            canvas.width / -12f,
-            canvas.height / 1.3f,
-            paint
-        )
+        val char0 = text.split(" ").firstOrNull()?.firstOrNull()
+            .toString().toUpperCase(Locale.ROOT)
+        val char1 = text.split(" ").lastOrNull()?.firstOrNull()
+            .toString().toUpperCase(Locale.ROOT)
 
-        canvas.drawText(
-            text.split(" ").lastOrNull()?.firstOrNull()
-                .toString().toUpperCase(Locale.ROOT),
-            canvas.width / 2f,
-            canvas.height / 1.3f,
-            paint
-        )
+        val path0 = Path()
+        paint.getTextPath(char0, 0, 1, canvas.width / -12f, canvas.height / 1.3f, path0)
+        path0.close()
+        canvas.drawPath(path0, paint)
+
+        val path1 = Path()
+        paint.getTextPath(char1, 0, 1, canvas.width / 2f, canvas.height / 1.3f, path1)
+        path1.close()
+        canvas.drawPath(path1, paint)
     }
 }
 
