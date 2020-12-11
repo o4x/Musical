@@ -24,7 +24,7 @@ open class BaseCoverPagerAdapter(fm: FragmentManager?, var dataSet: List<Song>) 
 
     open class BaseCoverFragment : Fragment() {
 
-        private var _binding: FragmentAlbumCoverBinding? = null
+        var _binding: FragmentAlbumCoverBinding? = null
         val binding get() = _binding!!
 
         val song: Song by lazy { requireArguments().getParcelable(SONG_ARG)!! }
