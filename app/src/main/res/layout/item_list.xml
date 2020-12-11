@@ -7,7 +7,7 @@
     android:layout_height="72dp"
     android:padding="2dp"
     android:descendantFocusability="blocksDescendants"
-    android:foreground="?attr/rectSelector"
+    android:background="?attr/rectSelector"
     android:orientation="horizontal">
 
     <com.o4x.musical.views.IconImageView
@@ -61,7 +61,7 @@
             android:id="@+id/album_name"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:singleLine="true"
@@ -69,7 +69,7 @@
 
         <TextView
             android:id="@+id/text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:singleLine="true"
