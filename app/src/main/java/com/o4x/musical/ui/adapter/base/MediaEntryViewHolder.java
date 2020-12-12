@@ -14,6 +14,7 @@ import com.o4x.musical.views.IconImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import code.name.monkey.appthemehelper.extensions.ColorExtKt;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -54,6 +55,9 @@ public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements Vie
     public MediaEntryViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+
+        if (paletteColorContainer != null)
+            paletteColorContainer.setBackgroundColor(ColorExtKt.cardColor(itemView.getContext()));
 
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);

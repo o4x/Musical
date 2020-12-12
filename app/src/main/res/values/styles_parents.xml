@@ -4,12 +4,12 @@
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="backgroundColor">@color/window_color_light</item>
         <item name="colorOnBackground">@color/grey_900</item>
-        <item name="colorSurface">@color/white</item>
+        <item name="colorSurface">@color/grey_100</item>
         <item name="colorOnSurface">@color/grey_900</item>
         <item name="colorError">@color/red_A700</item>
         <item name="colorOnError">@color/white</item>
         <item name="android:windowBackground">@color/window_color_light</item>
-        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardBackgroundColor">@color/grey_200</item>
         <item name="defaultFooterColor">@color/grey_300</item>
         <item name="dividerColor">@color/grey_200</item>
         <item name="iconColor">@color/ate_secondary_text_light</item>
@@ -29,6 +29,7 @@
         <item name="cardViewStyle">@style/CardWithoutCorner</item>
 
         <item name="md_corner_radius">@dimen/cornerRadius</item>
+        <item name="dialogCornerRadius">@dimen/cornerRadius</item>
 
         <item name="roundSelector">@drawable/round_selector</item>
         <item name="rectSelector">@drawable/rect_selector</item>
@@ -36,14 +37,16 @@
     </style>
 
     <style name="Theme.Musical.Base" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:textColorPrimary">@color/grey_400</item>
+        <item name="android:textColorSecondary">@color/grey_600</item>
         <item name="backgroundColor">@color/window_color_dark</item>
-        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnBackground">@color/grey_400</item>
         <item name="colorSurface">@color/dark_grey</item>
-        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurface">@color/grey_400</item>
         <item name="colorError">@color/red_900</item>
         <item name="colorOnError">@color/white</item>
         <item name="android:windowBackground">@color/window_color_dark</item>
-        <item name="cardBackgroundColor">@color/dark_color</item>
+        <item name="cardBackgroundColor">@color/dark_grey</item>
         <item name="defaultFooterColor">@color/dark_grey</item>
         <item name="dividerColor">@color/grey_800</item>
         <item name="iconColor">@color/grey_400</item>
@@ -63,6 +66,7 @@
         <item name="cardViewStyle">@style/CardWithoutCorner</item>
 
         <item name="md_corner_radius">@dimen/cornerRadius</item>
+        <item name="dialogCornerRadius">@dimen/cornerRadius</item>
 
         <item name="roundSelector">@drawable/round_selector_dark</item>
         <item name="rectSelector">@drawable/rect_selector_dark</item>
@@ -70,20 +74,22 @@
     </style>
 
     <style name="Theme.Musical.Base.Black" parent="Theme.Musical.Base">
+        <item name="android:textColorPrimary">@color/grey_400</item>
+        <item name="android:textColorSecondary">@color/grey_600</item>
         <item name="backgroundColor">@color/black</item>
-        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnBackground">@color/grey_400</item>
         <item name="colorSurface">@color/black</item>
-        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurface">@color/grey_400</item>
         <item name="colorError">@color/red_900</item>
         <item name="colorOnError">@color/white</item>
         <item name="android:windowBackground">@color/black</item>
-        <item name="cardBackgroundColor">@color/dark_grey</item>
+        <item name="cardBackgroundColor">@color/darker</item>
         <item name="defaultFooterColor">@color/black</item>
         <item name="dividerColor">@color/grey_900</item>
         <item name="iconColor">@color/grey_400</item>
         <item name="colorBackgroundFloating">?cardBackgroundColor</item>
     </style>
-
+00
     <style name="FabParent">
         <item name="borderWidth">0dp</item>
         <item name="android:layout_width">wrap_content</item>
