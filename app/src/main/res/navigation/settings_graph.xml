@@ -10,14 +10,6 @@
         android:name="com.o4x.musical.ui.fragments.settings.SettingsFragment"
         android:label="@string/action_settings">
 
-        <action
-            android:id="@+id/action_mainSettings_to_home_header"
-            app:destination="@id/home_header"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-
 
         <action
             android:id="@+id/action_mainSettings_to_about"
@@ -29,12 +21,6 @@
 
 
     </fragment>
-
-    <fragment
-        android:id="@+id/home_header"
-        android:name="com.o4x.musical.ui.fragments.settings.homehader.HomeHeaderFragment"
-        android:label="@string/home_header"
-        tools:layout="@layout/fragment_home_header"/>
 
 
     <fragment

@@ -1,5 +1,7 @@
 package com.o4x.musical.ui.fragments.mainactivity.home
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
@@ -7,6 +9,7 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
+import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,20 +20,29 @@ import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
+import com.github.dhaval2404.imagepicker.ImagePicker
+import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentHomeBinding
 import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
+import com.o4x.musical.prefs.HomeHeaderPref
+import com.o4x.musical.ui.activities.MusicPickerActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import com.o4x.musical.ui.viewmodel.HomeHeaderViewModel
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
+import com.o4x.musical.util.MusicUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
@@ -111,6 +123,22 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             }
             R.id.action_search -> {
                 mainActivity.openSearch()
+                return true
+            }
+            R.id.action_reset_header -> {
+                HomeHeaderPref.setDefault()
+                return true
+            }
+            R.id.action_use_custom -> {
+                startHomeHeaderImagePicker()
+                return true
+            }
+            R.id.action_use_song -> {
+                val myIntent = Intent(
+                    requireContext(),
+                    MusicPickerActivity::class.java
+                )
+                startActivityForResult(myIntent, REQUEST_CODE_SELECT_SONG)
                 return true
             }
         }
@@ -330,5 +358,47 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         libraryViewModel.getSongs().observe(viewLifecycleOwner, {
             binding.empty.isVisible = it.isEmpty()
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE_SELECT_IMAGE -> if (resultCode == Activity.RESULT_OK) {
+                data?.data?.let { it ->
+                    GlobalScope.launch(Dispatchers.IO) {
+                        if (headerDir.isDirectory) {
+                            val newImage = it.toFile()
+                            headerDir.listFiles()?.let {
+                                for (image in it) {
+                                    if (image != newImage) image.delete()
+                                }
+                            }
+                        }
+                    }
+
+                    HomeHeaderPref.customImagePath = it.toString()
+                }
+            }
+            REQUEST_CODE_SELECT_SONG -> if (resultCode == Activity.RESULT_OK) {
+                data?.data?.let {
+                    HomeHeaderPref.imageSongID = MusicUtil.getSongIDFromFileUri(it)
+                }
+            }
+        }
+    }
+
+    private val headerDir = File(App.getContext().filesDir, "/home_header/")
+
+    private fun startHomeHeaderImagePicker() {
+        ImagePicker.with(this)
+            .saveDir(headerDir)
+            .galleryOnly()
+            .crop()
+            .start(REQUEST_CODE_SELECT_IMAGE)
+    }
+
+    companion object {
+        const val REQUEST_CODE_SELECT_IMAGE = 1600
+        const val REQUEST_CODE_SELECT_SONG = 1700
     }
 }

@@ -53,11 +53,6 @@
         app:title="@string/pref_header_interface">
 
         <Preference
-            app:key="@string/key_home_header"
-            app:summary="@string/pref_summary_home_header"
-            app:title="@string/home_header" />
-
-        <Preference
             app:key="@string/key_library_categories"
             app:summary="@string/pref_summary_library_categories"
             app:title="@string/library_categories" />

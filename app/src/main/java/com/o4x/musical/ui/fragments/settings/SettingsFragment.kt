@@ -73,14 +73,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
          // INTERFACE SETTINGS //
         ////////////////////////
 
-        val homeHeaderPreference: Preference? = findPreference(PreferenceUtil.HOME_HEADER)
-        homeHeaderPreference?.setOnPreferenceClickListener {
-            try {
-                findNavController().navigate(R.id.action_mainSettings_to_home_header)
-            } catch (e: Exception) {}
-            true
-        }
-
         val libraryPref: Preference = findPreference(PreferenceUtil.LIBRARY_CATEGORIES)!!
         libraryPref.setOnPreferenceClickListener {
             val fragment = LibraryPreferenceDialog.newInstance()

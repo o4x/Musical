@@ -26,7 +26,6 @@ object PreferenceUtil {
     const val GAPLESS_PLAYBACK = "gapless_playback"
     const val EQUALIZER = "equalizer"
     const val COLORED_FOOTER = "colored_footer"
-    const val HOME_HEADER = "home_header"
     const val LIBRARY_CATEGORIES = "library_categories"
     const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
     const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"

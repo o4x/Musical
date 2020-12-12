@@ -274,8 +274,6 @@
     <string name="pref_summary_blacklist">The content of blacklisted folders is hidden from your library.</string>
     <string name="reset_artist_image">Reset artist image</string>
     <string name="set_artist_image">Set artist image</string>
-    <string name="home_header">Home header</string>
-    <string name="pref_summary_home_header">Set an image to display for the Home header</string>
     <string name="library_categories">Library categories</string>
     <string name="pref_summary_library_categories">Configure visibility and order of library categories.</string>
     <string name="you_have_to_select_at_least_one_category">You have to select at least one category.</string>
@@ -459,8 +457,8 @@
     <string name="update_album_image">Update album image</string>
     <string name="update_artist_image">Update artist image</string>
     <string name="save_as_preset">Save as preset</string>
-    <string name="use_custom_image">Use custom image</string>
-    <string name="use_album_cover_from_song">Use album cover from song</string>
-    <string name="use_default_image">Use default image</string>
+    <string name="use_custom_image">Use custom header</string>
+    <string name="use_song">Use song for header</string>
+    <string name="reset_header_image">Reset header image</string>
 
 </resources>
