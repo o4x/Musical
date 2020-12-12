@@ -13,7 +13,6 @@ import code.name.monkey.appthemehelper.extensions.backgroundColor
 import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.ui.activities.PurchaseActivity
-import com.o4x.musical.ui.dialogs.ChangelogDialog
 import com.o4x.musical.ui.dialogs.DonationsDialog
 import com.o4x.musical.prefs.PreferenceUtil.isDarkMode
 import de.psdev.licensesdialog.LicensesDialog
@@ -41,8 +40,7 @@ class AboutFragment : PreferenceFragmentCompat() {
 
         val changelog = R.string.key_changelog.getPreference()
         changelog.setOnPreferenceClickListener {
-            ChangelogDialog.create().show(requireActivity().supportFragmentManager,
-                "CHANGELOG_DIALOG")
+            findNavController().navigate(R.id.action_about_to_changes)
             return@setOnPreferenceClickListener true
         }
 

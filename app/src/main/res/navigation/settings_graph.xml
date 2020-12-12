@@ -30,7 +30,15 @@
 
         <action
             android:id="@+id/action_about_to_bug"
-            app:destination="@id/bugReport"
+            app:destination="@id/bug_report"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_about_to_changes"
+            app:destination="@id/change_log"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -39,9 +47,15 @@
     </fragment>
 
     <fragment
-        android:id="@+id/bugReport"
+        android:id="@+id/bug_report"
         android:name="com.o4x.musical.ui.fragments.settings.bug.model.BugReportFragment"
         android:label="@string/report_bug"
         tools:layout="@layout/fragment_bug_report" />
+
+    <fragment
+        android:id="@+id/change_log"
+        android:name="com.o4x.musical.ui.fragments.settings.about.ChangeLogFragment"
+        android:label="@string/changelog"
+        tools:layout="@layout/fragment_web_view" />
 
 </navigation>
