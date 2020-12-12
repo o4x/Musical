@@ -17,6 +17,7 @@
     <color name="dark_color">#292A2E</color>
     <color name="dark_grey">#17181a</color>
     <color name="black_color">#202124</color>
+    <color name="darker">#0c0c0c</color>
 
     <color name="bubbleLight">#ECEFF1</color>
     <color name="bubbleDark">#11171B</color>

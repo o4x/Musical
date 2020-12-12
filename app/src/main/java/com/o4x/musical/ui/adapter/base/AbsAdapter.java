@@ -102,17 +102,32 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     protected void setColors(int color, VH holder) {
         if (holder.paletteColorContainer != null) {
             holder.paletteColorContainer.setBackgroundColor(color);
-            if (holder.title != null) {
-                holder.title.setTextColor(MaterialValueHelper.getPrimaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
-            }
-            if (holder.text != null) {
-                holder.text.setTextColor(MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
-            }
-            if (holder.menu != null) {
-                holder.menu.setColorFilter(
-                        MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)),
-                        PorterDuff.Mode.SRC_IN
-                );
+            if (PreferenceUtil.isColoredFooter()) {
+                if (holder.title != null) {
+                    holder.title.setTextColor(MaterialValueHelper.getPrimaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
+                }
+                if (holder.text != null) {
+                    holder.text.setTextColor(MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
+                }
+                if (holder.menu != null) {
+                    holder.menu.setColorFilter(
+                            MaterialValueHelper.getSecondaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)),
+                            PorterDuff.Mode.SRC_IN
+                    );
+                }
+            } else {
+                if (holder.title != null) {
+                    holder.title.setTextColor(ColorExtKt.textColorPrimary(activity));
+                }
+                if (holder.text != null) {
+                    holder.text.setTextColor(ColorExtKt.textColorSecondary(activity));
+                }
+                if (holder.menu != null) {
+                    holder.menu.setColorFilter(
+                            ColorExtKt.textColorSecondary(activity),
+                            PorterDuff.Mode.SRC_IN
+                    );
+                }
             }
         }
     }
