@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.adapter.song;
 
+import android.graphics.Typeface;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -29,6 +30,9 @@ import java.util.List;
  */
 public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
 
+    protected static final int CURRENT = 1;
+    public boolean boldCurrent = false;
+
     public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
         this(activity, dataSet, itemLayoutRes, cabHolder, true);
     }
@@ -55,11 +59,16 @@ public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
 
         final Song song = dataSet.get(position);
 
+        final Typeface typeface = boldCurrent && getItemType(position) == CURRENT ?
+                Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
+
         if (holder.title != null) {
             holder.title.setText(getSongTitle(song));
+            holder.title.setTypeface(typeface);
         }
         if (holder.text != null) {
             holder.text.setText(getSongText(song));
+            holder.text.setTypeface(typeface);
         }
     }
 
@@ -69,6 +78,11 @@ public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
         getImageLoader(holder)
                 .load(song)
                 .into(holder.image);
+    }
+
+    protected int getItemType(int position) {
+        return dataSet.get(position).getId() == MusicPlayerRemote.getCurrentSong().getId() ?
+                CURRENT : -1;
     }
 
     protected String getSongTitle(Song song) {
