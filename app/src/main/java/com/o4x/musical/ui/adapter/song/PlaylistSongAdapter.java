@@ -28,8 +28,6 @@ import code.name.monkey.appthemehelper.extensions.ColorExtKt;
  */
 public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
 
-    protected static final int CURRENT = 1;
-
     public PlaylistSongAdapter(AppCompatActivity activity, @NonNull List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
         super(activity, dataSet, itemLayoutRes, cabHolder, false);
         setMultiSelectMenuRes(R.menu.menu_cannot_delete_single_songs_playlist_songs_selection);
@@ -66,19 +64,7 @@ public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
         } else {
             position -= 1;
             super.onBindViewHolder(holder, position);
-
-            if (holder.title != null && holder.text != null) {
-                final Typeface typeface = getItemType(position) == CURRENT ?
-                        Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
-                holder.title.setTypeface(typeface);
-                holder.text.setTypeface(typeface);
-            }
         }
-    }
-
-    protected int getItemType(int position) {
-        return dataSet.get(position).getId() == MusicPlayerRemote.getCurrentSong().getId() ?
-            CURRENT : -1;
     }
 
     @NonNull

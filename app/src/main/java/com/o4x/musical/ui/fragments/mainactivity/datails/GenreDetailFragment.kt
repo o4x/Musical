@@ -33,6 +33,9 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
         viewModel.getSongs().observe(viewLifecycleOwner, {
             adapter?.swapDataSet(it)
         })
+        playerViewModel.position.observe(viewLifecycleOwner, {
+            adapter?.notifyDataSetChanged()
+        })
     }
 
     override fun onResume() {
@@ -50,6 +53,7 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
                 checkIsEmpty()
             }
         })
+        adapter?.boldCurrent = true
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

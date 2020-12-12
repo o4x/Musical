@@ -44,7 +44,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
         viewModel.playListSongs.observe(viewLifecycleOwner, {
             adapter?.swapDataSet(it)
         })
-        playerViewModel.queue.observe(viewLifecycleOwner, {
+        playerViewModel.position.observe(viewLifecycleOwner, {
             adapter?.notifyDataSetChanged()
         })
     }
@@ -91,6 +91,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
                 checkIsEmpty()
             }
         })
+        adapter?.boldCurrent = true
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
