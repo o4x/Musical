@@ -7,7 +7,7 @@
         <shape android:shape="rectangle" android:tint="?colorAccent">
             <corners android:topRightRadius="0dp"
                 android:bottomRightRadius="0dp"/>
-            <solid android:color="@color/translucent"/>
+            <solid android:color="@color/light_translucent"/>
         </shape>
     </item>
 
