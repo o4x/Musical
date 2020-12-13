@@ -17,7 +17,7 @@ import com.o4x.musical.util.Util
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-class AlbumCoverPagerAdapter(fm: FragmentManager?, dataSet: List<Song>) :
+class AlbumCoverPagerAdapter(fm: FragmentManager, dataSet: List<Song>) :
     BaseCoverPagerAdapter(fm, dataSet) {
 
     override fun getItem(position: Int): Fragment {
