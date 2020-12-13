@@ -14,39 +14,35 @@
  */
 package com.o4x.musical.ui.activities.intro
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.core.text.HtmlCompat
-import com.o4x.musical.R
-import com.o4x.musical.extensions.themeBackgroundColor
-import com.o4x.musical.ui.activities.MainActivity
+import code.name.monkey.appthemehelper.extensions.accentColor
+import com.o4x.musical.databinding.ActivityPermissionBinding
+import com.o4x.musical.shared.Permissions
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
-import kotlinx.android.synthetic.main.activity_permission.*
-import kotlin.properties.Delegates
 
 class PermissionActivity : AbsMusicServiceActivity() {
 
-    private var baseColor by Delegates.notNull<Int>()
+    val binding by lazy { ActivityPermissionBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView((R.layout.activity_permission))
+        setContentView(binding.root)
+
         setStatusBarColorAuto()
         setNavigationBarColorAuto()
         setNavigationBarDividerColorAuto()
         setLightNavigationBar(true)
         setTaskDescriptionColorAuto()
 
-        baseColor = resources.getColor(R.color.deep_purple_A200)
-
         setupTitle()
+        update()
 
-        storagePermission.setButtonClick {
+        binding.storagePermission.setButtonClick {
             requestPermissions()
         }
 
-        finish.themeBackgroundColor(baseColor)
-        finish.setOnClickListener {
+        binding.finish.setOnClickListener {
             if (hasPermissions()) {
                 finish()
             }
@@ -54,15 +50,26 @@ class PermissionActivity : AbsMusicServiceActivity() {
     }
 
     private fun setupTitle() {
-        val hexColor = String.format("#%06X", 0xFFFFFF and baseColor)
+        val hexColor = String.format("#%06X", 0xFFFFFF and accentColor())
         val appName = HtmlCompat.fromHtml(
             "Welcome to <b><span  style='color:$hexColor';>Musical</span></b>" +
                     " <br/> " +
-                    "We love to see you <span  style='color:$hexColor';>SMILE</span> :)" +
-                    " <br/> " +
-                    "I have not found another sentence yet.",
+                    "We love to see you <span  style='color:$hexColor';>SMILE</span> :)",
             HtmlCompat.FROM_HTML_MODE_COMPACT
         )
-        appNameText.text = appName
+        binding.appNameText.text = appName
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        update()
+    }
+
+    private fun update() {
+        binding.finish.isEnabled = Permissions.canReadStorage(this)
     }
 }

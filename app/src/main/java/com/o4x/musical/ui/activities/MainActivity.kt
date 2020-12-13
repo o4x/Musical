@@ -127,7 +127,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         val headerBinding = ActivityMainNavigationHeaderBinding.inflate(layoutInflater)
         navigation_view.addHeaderView(headerBinding.root)
         headerBinding.plusBanner.setOnClickListener {
-            navController.navigate(R.id.clean)
+//            navController.navigate(R.id.clean)
         }
 
         var lastItem: MenuItem? = null
