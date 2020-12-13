@@ -105,13 +105,20 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
         binding.frontAlbumArtPager
             .setPageTransformer(true, ParallaxPageTransformer())
 
-        val backAdapter = AlbumCoverPagerAdapter(childFragmentManager, emptyList())
-        binding.backAlbumArtPager.adapter = backAdapter
-        val frontAdapter = BaseCoverPagerAdapter(childFragmentManager, emptyList())
-        binding.frontAlbumArtPager.adapter = frontAdapter
+
         playerViewModel.queue.observe(viewLifecycleOwner, {
-            frontAdapter.swapData(it)
-            backAdapter.swapData(it)
+            if (binding.backAlbumArtPager.adapter == null) {
+                binding.frontAlbumArtPager.adapter =
+                    BaseCoverPagerAdapter(childFragmentManager, it)
+                binding.frontAlbumArtPager.currentItem = MusicPlayerRemote.position
+
+                binding.backAlbumArtPager.adapter =
+                    AlbumCoverPagerAdapter(childFragmentManager, it)
+                binding.backAlbumArtPager.currentItem = MusicPlayerRemote.position
+            } else {
+                (binding.backAlbumArtPager.adapter as AlbumCoverPagerAdapter).swapData(it)
+                (binding.frontAlbumArtPager.adapter as BaseCoverPagerAdapter).swapData(it)
+            }
         })
         playerViewModel.position.observe(viewLifecycleOwner, {
             binding.frontAlbumArtPager.setCurrentItem(it, true)
