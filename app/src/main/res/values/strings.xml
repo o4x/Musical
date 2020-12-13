@@ -460,5 +460,10 @@
     <string name="use_custom_image">Use custom header</string>
     <string name="use_song">Use song for header</string>
     <string name="reset_header_image">Reset header image</string>
+    <string name="musical_clean">Musical clean</string>
+    <string name="clean_description_title">Support development, ad free</string>
+    <string name="clean_description_summary">You can save a starving developer for just %s</string>
+    <string name="clean_upgrade">Lifetime upgrade for %1$s %2$s</string>
+    <string name="qksms_plus_upgrade_donate">Unlock + donate for %1$s %2$s</string>
 
 </resources>

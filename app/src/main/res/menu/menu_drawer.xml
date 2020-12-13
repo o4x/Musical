@@ -35,12 +35,4 @@
             android:title="@string/action_settings" />
     </group>
 
-    <group
-        android:id="@+id/navigation_drawer_menu_category_buy_pro"
-        android:checkableBehavior="none">
-        <item
-            android:id="@+id/buy_pro"
-            android:title="@string/buy_pro" />
-    </group>
-
 </menu>

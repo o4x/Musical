@@ -71,6 +71,12 @@
         android:label="@string/buy_pro"
         tools:layout="@layout/activity_purchase" />
 
+    <activity
+        android:id="@+id/clean"
+        android:name="com.o4x.musical.ui.activities.CleanActivity"
+        android:label="@string/musical_clean"
+        tools:layout="@layout/activity_clean" />
+
 
     <action
         android:id="@+id/action_to_search"
