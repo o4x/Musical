@@ -6,7 +6,8 @@
     android:layout_width="104dp"
     android:layout_height="148dp"
     android:layout_marginHorizontal="2dp"
-    android:foreground="?attr/rectSelectorStrong">
+    android:foreground="?attr/rectSelectorStrong"
+    android:id="@+id/palette_color_container">
 
     <LinearLayout
         android:layout_width="match_parent"
