@@ -2,7 +2,6 @@ package com.o4x.musical.ui.adapter.cover
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
@@ -14,7 +13,6 @@ import com.o4x.musical.imageloader.glide.targets.palette.AbsPaletteTargetListene
 import com.o4x.musical.imageloader.glide.transformation.blur.BlurTransformation
 import com.o4x.musical.model.Song
 import com.o4x.musical.util.Util
-import com.o4x.musical.util.color.MediaNotificationProcessor
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
