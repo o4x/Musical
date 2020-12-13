@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.o4x.musical.databinding.FragmentAlbumCoverBinding
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.misc.CustomFragmentStatePagerAdapter
 import com.o4x.musical.model.Song
 
-open class BaseCoverPagerAdapter(fm: FragmentManager?, var dataSet: List<Song>) :
-    CustomFragmentStatePagerAdapter(fm) {
+open class BaseCoverPagerAdapter(fm: FragmentManager, var dataSet: List<Song>) :
+    FragmentStatePagerAdapter(fm) {
 
     fun swapData(dataSet: List<Song>) {
         this.dataSet = dataSet
