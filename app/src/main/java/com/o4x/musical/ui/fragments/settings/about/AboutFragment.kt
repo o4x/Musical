@@ -61,28 +61,28 @@ class AboutFragment : PreferenceFragmentCompat() {
             return@setOnPreferenceClickListener true
         }
 
-        val reportBugs = R.string.key_report_bugs.getPreference()
-        reportBugs.setOnPreferenceClickListener {
-            findNavController().navigate(R.id.action_about_to_bug)
-            return@setOnPreferenceClickListener true
-        }
+//        val reportBugs = R.string.key_report_bugs.getPreference()
+//        reportBugs.setOnPreferenceClickListener {
+//            findNavController().navigate(R.id.action_about_to_bug)
+//            return@setOnPreferenceClickListener true
+//        }
 
-        val translate = R.string.key_translate.getPreference()
-        translate.setOnPreferenceClickListener {
-            openUrl(TRANSLATE)
-            return@setOnPreferenceClickListener true
-        }
+//        val translate = R.string.key_translate.getPreference()
+//        translate.setOnPreferenceClickListener {
+//            openUrl(TRANSLATE)
+//            return@setOnPreferenceClickListener true
+//        }
 
-        val donate = R.string.key_donate.getPreference()
-        donate.setOnPreferenceClickListener {
-            if (App.isProVersion()) {
-                DonationsDialog.create().show(requireActivity().supportFragmentManager,
-                    "DONATION_DIALOG")
-            } else {
-                startActivity(Intent(requireContext(), PurchaseActivity::class.java))
-            }
-            return@setOnPreferenceClickListener true
-        }
+//        val donate = R.string.key_donate.getPreference()
+//        donate.setOnPreferenceClickListener {
+//            if (App.isProVersion()) {
+//                DonationsDialog.create().show(requireActivity().supportFragmentManager,
+//                    "DONATION_DIALOG")
+//            } else {
+//                startActivity(Intent(requireContext(), PurchaseActivity::class.java))
+//            }
+//            return@setOnPreferenceClickListener true
+//        }
     }
 
 
