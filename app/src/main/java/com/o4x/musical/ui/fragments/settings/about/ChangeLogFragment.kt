@@ -40,9 +40,9 @@ class ChangeLogFragment : Fragment(R.layout.fragment_web_view) {
 
         val webView = binding.webView
         try {
-            // Load from phonograph-changelog.html in the assets folder
+            // Load from musical-changelog.html in the assets folder
             val buf = StringBuilder()
-            val json = requireActivity().assets.open("phonograph-changelog.html")
+            val json = requireActivity().assets.open("musical-changelog.html")
             val `in` = BufferedReader(InputStreamReader(json, "UTF-8"))
             var str: String?
             while (`in`.readLine().also { str = it } != null) buf.append(str)
