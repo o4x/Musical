@@ -63,6 +63,7 @@
                             android:singleLine="true"
                             android:text="@string/playing_queue"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?android:textColorTertiary"
                             android:layout_gravity="start|center_vertical" />
 
                         <com.google.android.material.button.MaterialButton
@@ -74,9 +75,10 @@
                             android:textAllCaps="true"
                             android:fontFamily="sans-serif-medium"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:textColor="?android:textColorSecondary"
+                            android:textColor="?android:textColorTertiary"
                             android:layout_gravity="end|center_vertical"
                             app:icon="@drawable/ic_shuffle"
+                            app:iconTint="?android:textColorTertiary"
                             app:iconSize="18dp" />
 
                     </FrameLayout>
@@ -114,6 +116,7 @@
                             android:layout_margin="16dp"
                             android:layout_centerInParent="true"
                             android:text="@string/recently_played"
+                            android:textColor="?android:textColorTertiary"
                             android:fontFamily="sans-serif-medium"
                             android:singleLine="true"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -153,6 +156,7 @@
                             android:layout_margin="16dp"
                             android:layout_centerInParent="true"
                             android:text="@string/recently_added"
+                            android:textColor="?android:textColorTertiary"
                             android:fontFamily="sans-serif-medium"
                             android:singleLine="true"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
