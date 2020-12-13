@@ -19,6 +19,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.R
+import com.o4x.musical.databinding.ActivityMainNavigationHeaderBinding
 import com.o4x.musical.extensions.findNavController
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper.getSongs
@@ -123,6 +124,12 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
         navigation_view.setBackgroundColor(surfaceColor())
 
+        val headerBinding = ActivityMainNavigationHeaderBinding.inflate(layoutInflater)
+        navigation_view.addHeaderView(headerBinding.root)
+        headerBinding.plusBanner.setOnClickListener {
+            navController.navigate(R.id.clean)
+        }
+
         var lastItem: MenuItem? = null
         drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
 
@@ -140,7 +147,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                     R.id.nav_eq -> setMusicChooser(R.id.nav_eq)
                     R.id.nav_timer -> setMusicChooser(R.id.nav_timer)
                     R.id.nav_settings -> navController.navigate(R.id.settings)
-                    R.id.buy_pro -> navController.navigate(R.id.buy_pro)
                 }
 
             }
