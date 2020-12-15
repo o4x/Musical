@@ -1,3 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@layout/md_dialog_stub_recyclerview" />
+
+<!--Be careful when change this!!-->
+<!--Without this part dialog will crash in release-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <resources
+        tools:keep="@layout/md_dialog_stub_recyclerview" />
+
+    <resources
+        tools:keep="@layout/md_dialog_stub_input" />
+
+</resources>
