@@ -1,59 +1,76 @@
 package com.o4x.musical.repository
 
 import android.database.Cursor
-import android.provider.BaseColumns
-import androidx.annotation.WorkerThread
+import android.provider.MediaStore
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.o4x.musical.db.*
-import com.o4x.musical.db.toHistoryEntity
 import com.o4x.musical.model.Song
+import com.o4x.musical.prefs.PreferenceUtil
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RoomRepository(
     private val songRepository: SongRepository,
+    private val historyDao: HistoryDao,
     private val playCountDao: PlayCountDao,
     private val queueDao: QueueDao,
     private val queueOriginalDao: QueueOriginalDao,
-    private val historyDao: HistoryDao,
     private val lyricsDao: LyricsDao
 ) {
 
-    suspend fun addSongToHistory(currentSong: Song) =
-        historyDao.insertSongInHistory(currentSong.toHistoryEntity(System.currentTimeMillis()))
-
-    suspend fun songPresentInHistory(song: Song): HistoryEntity? =
-        historyDao.isSongPresentInHistory(song.id)
-
-    suspend fun updateHistorySong(song: Song) =
-        historyDao.updateHistorySong(song.toHistoryEntity(System.currentTimeMillis()))
-
-    fun observableHistorySongs(): LiveData<List<HistoryEntity>> =
-        historyDao.observableHistorySongs()
-
-    fun historySongs(): List<HistoryEntity> = historyDao.historySongs()
-
-    suspend fun insertSongInPlayCount(playCountEntity: PlayCountEntity) =
-        playCountDao.insertSongInPlayCount(playCountEntity)
-
-    suspend fun updateSongInPlayCount(playCountEntity: PlayCountEntity) =
-        playCountDao.updateSongInPlayCount(playCountEntity)
-
-    suspend fun deleteSongInPlayCount(playCountEntity: PlayCountEntity) =
-        playCountDao.deleteSongInPlayCount(playCountEntity)
-
-    suspend fun checkSongExistInPlayCount(songId: Long): List<PlayCountEntity> =
-        playCountDao.checkSongExistInPlayCount(songId)
-
-    suspend fun playCountSongs(): List<PlayCountEntity> =
-        playCountDao.playCountSongs()
-
-    suspend fun deleteSongs(songs: List<Song>) {
-        songs.forEach {
-            playCountDao.deleteSong(it.id)
+    private fun deleteMissingIds(ids: List<Long>) {
+        GlobalScope.launch(IO) {
+            historyDao.delete(ids)
+            playCountDao.delete(ids)
         }
     }
 
+    private fun getSortedSongAndClearUpDatabase(ids: List<Long>): List<Song> {
+        val selection = songRepository.makeSelection(ids.toLongArray())
+        val cursor = songRepository.makeSongCursor(selection, null)
+            ?: return songRepository.songs(null)
+
+        val sortedLongCursor = SortedLongCursor(
+            cursor, ids.toLongArray(), MediaStore.Audio.AudioColumns._ID)
+        deleteMissingIds(sortedLongCursor.missingIds)
+        return songRepository.songs(sortedLongCursor)
+    }
+
+    fun observableHistorySongs(): LiveData<List<Song>> =
+        Transformations.map(historyDao.observableHistorySongs()) {
+            getSortedSongAndClearUpDatabase(it.historyToIds())
+                .take(PreferenceUtil.smartPlaylistLimit)
+        }
+
+    fun historySongs(): List<Song> =
+        getSortedSongAndClearUpDatabase(historyDao.historySongs().historyToIds())
+            .take(PreferenceUtil.smartPlaylistLimit)
+
+    fun addPlayCount(song: Song) {
+        historyDao.insertSongInHistory(song.toHistoryEntity(System.currentTimeMillis()))
+        val l = playCountDao.checkSongExistInPlayCount(song.id)
+        if (l.isNotEmpty()) {
+            playCountDao.updateQuantity(song.id)
+        } else {
+            playCountDao.insertSongInPlayCount(song.toPlayCount())
+        }
+    }
+
+    fun playCountSongs(): List<Song> =
+        getSortedSongAndClearUpDatabase(playCountDao.playCountSongs().playCountToIds())
+            .take(PreferenceUtil.smartPlaylistLimit)
+
+    fun notRecentlyPlayedTracks(): List<Song> {
+        val allSongs = songRepository.songs().toMutableList()
+        val playedSongs = playCountSongs()
+        allSongs.removeAll(playedSongs)
+        return allSongs.take(PreferenceUtil.smartPlaylistLimit)
+    }
+
     fun savedPlayingQueue(): List<Song> {
-        return songRepository.songs(queueDao.getQueueSongsSync().toIds().toLongArray())
+        return getSortedSongAndClearUpDatabase(queueDao.getQueueSongsSync().queueToIds())
     }
 
     fun saveQueue(songs: List<Song>) {
@@ -62,11 +79,11 @@ class RoomRepository(
     }
 
     fun savedOriginalPlayingQueue(): List<Song> {
-        return songRepository.songs(queueOriginalDao.getQueueSongsSync().toIds().toLongArray())
+        return getSortedSongAndClearUpDatabase(queueOriginalDao.getQueueSongsSync().queueOriginalToIds())
     }
 
     fun saveOriginalQueue(songs: List<Song>) {
         queueOriginalDao.clearQueueSongs()
-        queueOriginalDao.insertAllSongs(songs.toQueuesEntity())
+        queueOriginalDao.insertAllSongs(songs.toQueuesOriginalEntity())
     }
 }

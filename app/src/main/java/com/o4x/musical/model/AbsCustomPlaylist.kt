@@ -1,8 +1,8 @@
 package com.o4x.musical.model
 
 import com.o4x.musical.repository.LastAddedRepository
+import com.o4x.musical.repository.RoomRepository
 import com.o4x.musical.repository.SongRepository
-import com.o4x.musical.repository.TopPlayedRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -17,7 +17,7 @@ abstract class AbsCustomPlaylist(
 
     protected val songRepository by inject<SongRepository>()
 
-    protected val topPlayedRepository by inject<TopPlayedRepository>()
+    protected val roomRepository by inject<RoomRepository>()
 
     protected val lastAddedRepository by inject<LastAddedRepository>()
 }

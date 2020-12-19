@@ -37,13 +37,9 @@ class Repository(
     val genreRepository: GenreRepository,
     val lastAddedRepository: LastAddedRepository,
     val playlistRepository: PlaylistRepository,
-    val searchRepository: RealSearchRepository,
-    val topPlayedRepository: TopPlayedRepository,
+    val searchRepository: SearchRepository,
     val roomRepository: RoomRepository,
 ) {
-
-
-    suspend fun deleteSongs(songs: List<Song>) = roomRepository.deleteSongs(songs)
 
     suspend fun searchSongs(query: String): List<Song> = songRepository.songs(query)
 
@@ -72,9 +68,9 @@ class Repository(
 
     suspend fun recentAlbums(): List<Album> = lastAddedRepository.recentAlbums()
 
-    suspend fun topArtists(): List<Artist> = topPlayedRepository.topArtists()
+    suspend fun topArtists(): List<Artist> = artistRepository.splitIntoArtists(topAlbums())
 
-    suspend fun topAlbums(): List<Album> = topPlayedRepository.topAlbums()
+    suspend fun topAlbums(): List<Album> = albumRepository.splitIntoAlbums(topPlayedSongs())
 
     suspend fun fetchLegacyPlaylist(): List<Playlist> = playlistRepository.playlists()
 
@@ -85,14 +81,14 @@ class Repository(
     suspend fun search(query: String?): MutableList<Any> =
         searchRepository.searchAll(context, query)
 
-    suspend fun getPlaylistSongs(playlist: Playlist): List<Song> =
+    fun getPlaylistSongs(playlist: Playlist): List<Song> =
         if (playlist is AbsCustomPlaylist) {
             playlist.songs()
         } else {
             PlaylistSongsLoader.getPlaylistSongList(context, playlist.id)
         }
 
-    suspend fun getGenre(genreId: Long): List<Song> = genreRepository.songs(genreId)
+    fun getGenre(genreId: Long): List<Song> = genreRepository.songs(genreId)
 
     suspend fun artistInfo(
         name: String,
@@ -120,43 +116,20 @@ class Repository(
         }
     }
 
-    suspend fun playlist(playlistId: Long) =
+    fun playlist(playlistId: Long) =
         playlistRepository.playlist(playlistId)
 
-    suspend fun addSongToHistory(currentSong: Song) =
-        roomRepository.addSongToHistory(currentSong)
+    fun recentSongs(): List<Song> = lastAddedRepository.recentSongs()
 
-    suspend fun songPresentInHistory(currentSong: Song): HistoryEntity? =
-        roomRepository.songPresentInHistory(currentSong)
+    fun topPlayedSongs(): List<Song> = roomRepository.playCountSongs()
 
-    suspend fun updateHistorySong(currentSong: Song) =
-        roomRepository.updateHistorySong(currentSong)
-
-    suspend fun recentSongs(): List<Song> = lastAddedRepository.recentSongs()
-
-    suspend fun topPlayedSongs(): List<Song> = topPlayedRepository.topTracks()
-
-    suspend fun insertSongInPlayCount(playCountEntity: PlayCountEntity) =
-        roomRepository.insertSongInPlayCount(playCountEntity)
-
-    suspend fun updateSongInPlayCount(playCountEntity: PlayCountEntity) =
-        roomRepository.updateSongInPlayCount(playCountEntity)
-
-    suspend fun deleteSongInPlayCount(playCountEntity: PlayCountEntity) =
-        roomRepository.deleteSongInPlayCount(playCountEntity)
-
-    suspend fun checkSongExistInPlayCount(songId: Long): List<PlayCountEntity> =
-        roomRepository.checkSongExistInPlayCount(songId)
-
-    suspend fun playCountSongs(): List<PlayCountEntity> =
+    fun playCountSongs(): List<Song> =
         roomRepository.playCountSongs()
 
     fun observableHistorySongs(): LiveData<List<Song>> =
-        Transformations.map(roomRepository.observableHistorySongs()) {
-            it.fromHistoryToSongs()
-        }
+        roomRepository.observableHistorySongs()
 
-    fun historySong(): List<HistoryEntity> =
+    fun historySong(): List<Song> =
         roomRepository.historySongs()
 
     fun songsFlow(): Flow<Result<List<Song>>> = flow {

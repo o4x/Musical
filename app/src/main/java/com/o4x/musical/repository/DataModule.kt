@@ -16,44 +16,39 @@ val dataModule = module {
             get(),
             get(),
             get(),
-            get(),
         )
     }
 
     single {
-        RealSongRepository(get())
-    } bind SongRepository::class
+        SongRepository(get())
+    }
 
     single {
-        RealGenreRepository(get(), get())
-    } bind GenreRepository::class
+        GenreRepository(get(), get())
+    }
 
     single {
-        RealAlbumRepository(get())
-    } bind AlbumRepository::class
+        AlbumRepository(get())
+    }
 
     single {
-        RealArtistRepository(get(), get())
-    } bind ArtistRepository::class
+        ArtistRepository(get(), get())
+    }
 
     single {
-        RealPlaylistRepository(get())
-    } bind PlaylistRepository::class
+        PlaylistRepository(get())
+    }
 
     single {
-        RealTopPlayedRepository(get(), get(), get(), get())
-    } bind TopPlayedRepository::class
-
-    single {
-        RealLastAddedRepository(
+        LastAddedRepository(
             get(),
             get(),
             get()
         )
-    } bind LastAddedRepository::class
+    }
 
     single {
-        RealSearchRepository(
+        SearchRepository(
             get(),
             get(),
             get(),

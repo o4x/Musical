@@ -18,7 +18,7 @@ import com.o4x.musical.R
 import com.o4x.musical.databinding.ActivityMusicPickerBinding
 import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.extensions.showToast
-import com.o4x.musical.repository.RealSongRepository
+import com.o4x.musical.repository.SongRepository
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
 import com.o4x.musical.ui.activities.intro.PermissionActivity
 import com.o4x.musical.ui.adapter.song.SelectSongAdapter
@@ -38,7 +38,7 @@ class MusicPickerActivity : AbsMusicServiceActivity(), TextWatcher {
         const val SONG_ID = "song_id"
     }
 
-    val songRepository by inject<RealSongRepository>()
+    val songRepository by inject<SongRepository>()
 
     private lateinit var selectSongAdapter: SelectSongAdapter
     private var query: String? = null

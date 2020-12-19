@@ -28,8 +28,6 @@ import com.o4x.musical.imageloader.glide.loader.GlideLoader.Companion.with
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.Song
-import com.o4x.musical.provider.HistoryStore
-import com.o4x.musical.provider.SongPlayCountStore
 import com.o4x.musical.service.misc.MediaStoreObserver
 import com.o4x.musical.service.misc.QueueSaveHandler
 import com.o4x.musical.service.misc.SongPlayCountHelper
@@ -500,11 +498,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 savePositionInTrack()
                 val currentSong = currentSong
                 val r = Runnable {
-                    HistoryStore.getInstance(this).addSongId(currentSong.id)
-                    if (songPlayCountHelper.shouldBumpPlayCount()) {
-                        SongPlayCountStore.getInstance(this)
-                            .bumpPlayCount(songPlayCountHelper.song.id)
-                    }
+                    roomRepository.addPlayCount(currentSong)
                     songPlayCountHelper.notifySongChanged(currentSong)
                     sendChangeInternal(META_CHANGED)
                 }

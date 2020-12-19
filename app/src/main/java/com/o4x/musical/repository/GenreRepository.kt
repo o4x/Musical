@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2019 Hemanth Savarala.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by
- *  the Free Software Foundation either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.o4x.musical.repository
 
 import android.content.ContentResolver
@@ -28,22 +14,16 @@ import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
 import com.o4x.musical.prefs.PreferenceUtil
 
-interface GenreRepository {
-    fun genres(): List<Genre>
-
-    fun songs(genreId: Long): List<Song>
-}
-
-class RealGenreRepository(
+class GenreRepository(
     private val contentResolver: ContentResolver,
-    private val songRepository: RealSongRepository
-) : GenreRepository {
+    private val songRepository: SongRepository
+) {
 
-    override fun genres(): List<Genre> {
+    fun genres(): List<Genre> {
         return getGenresFromCursor(makeGenreCursor())
     }
 
-    override fun songs(genreId: Long): List<Song> {
+    fun songs(genreId: Long): List<Song> {
         // The genres table only stores songs that have a genre specified,
         // so we need to get songs without a genre a different way.
         return if (genreId == -1L) {

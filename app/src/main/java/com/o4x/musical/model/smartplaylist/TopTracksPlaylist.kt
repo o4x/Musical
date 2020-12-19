@@ -11,6 +11,6 @@ class TopTracksPlaylist : AbsSmartPlaylist(
     iconRes = R.drawable.ic_trending_up
 ) {
     override fun songs(): List<Song> {
-        return topPlayedRepository.topTracks()
+        return roomRepository.playCountSongs()
     }
 }

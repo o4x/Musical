@@ -20,22 +20,9 @@ import com.o4x.musical.model.Album
 import com.o4x.musical.model.Song
 import com.o4x.musical.prefs.PreferenceUtil
 
+class AlbumRepository(private val songRepository: SongRepository) {
 
-/**
- * Created by hemanths on 11/08/17.
- */
-interface AlbumRepository {
-    fun albums(): List<Album>
-
-    fun albums(query: String): List<Album>
-
-    fun album(albumId: Long): Album
-}
-
-class RealAlbumRepository(private val songRepository: RealSongRepository) :
-    AlbumRepository {
-
-    override fun albums(): List<Album> {
+    fun albums(): List<Album> {
         val songs = songRepository.songs(
             songRepository.makeSongCursor(
                 null,
@@ -46,7 +33,7 @@ class RealAlbumRepository(private val songRepository: RealSongRepository) :
         return splitIntoAlbums(songs)
     }
 
-    override fun albums(query: String): List<Album> {
+    fun albums(query: String): List<Album> {
         val songs = songRepository.songs(
             songRepository.makeSongCursor(
                 AudioColumns.ALBUM + " LIKE ?",
@@ -57,7 +44,7 @@ class RealAlbumRepository(private val songRepository: RealSongRepository) :
         return splitIntoAlbums(songs)
     }
 
-    override fun album(albumId: Long): Album {
+    fun album(albumId: Long): Album {
         val cursor = songRepository.makeSongCursor(
             AudioColumns.ALBUM_ID + "=?",
             arrayOf(albumId.toString()),

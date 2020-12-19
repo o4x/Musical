@@ -2,20 +2,10 @@ package com.o4x.musical.ui.activities.tageditor
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
-import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
-import butterknife.ButterKnife
 import com.o4x.musical.extensions.show
-import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.ITunesModel.Results
-import com.o4x.musical.repository.RealAlbumRepository
-import com.o4x.musical.repository.RealArtistRepository
-import com.o4x.musical.repository.RealSongRepository
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 class AlbumTagEditorActivity : AbsTagEditorActivity<Results>() {

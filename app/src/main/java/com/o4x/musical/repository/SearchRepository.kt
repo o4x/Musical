@@ -19,7 +19,7 @@ import com.o4x.musical.R
 import com.o4x.musical.model.Genre
 import java.util.*
 
-class RealSearchRepository(
+class SearchRepository(
     private val songRepository: SongRepository,
     private val albumRepository: AlbumRepository,
     private val artistRepository: ArtistRepository,
