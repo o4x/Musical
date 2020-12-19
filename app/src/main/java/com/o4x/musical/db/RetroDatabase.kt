@@ -10,10 +10,9 @@ import androidx.room.RoomDatabase
         HistoryEntity::class,
         PlayCountEntity::class,
         QueueEntity::class,
-        QueueOriginalEntity::class,
         LyricsEntity::class
     ],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 abstract class RetroDatabase : RoomDatabase() {
