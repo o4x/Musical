@@ -10,16 +10,17 @@ import androidx.room.RoomDatabase
         HistoryEntity::class,
         PlayCountEntity::class,
         QueueEntity::class,
-        QueueSongEntity::class,
+        QueueOriginalEntity::class,
         LyricsEntity::class
     ],
-    version = 5,
+    version = 9,
     exportSchema = false
 )
 abstract class RetroDatabase : RoomDatabase() {
     abstract fun playlistDao(): PlaylistDao
     abstract fun playCountDao(): PlayCountDao
     abstract fun queueDao(): QueueDao
+    abstract fun queueOriginalDao(): QueueOriginalDao
     abstract fun historyDao(): HistoryDao
     abstract fun lyricsDao(): LyricsDao
 }

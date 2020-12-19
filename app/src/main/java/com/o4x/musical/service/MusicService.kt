@@ -29,8 +29,6 @@ import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.Song
 import com.o4x.musical.provider.HistoryStore
-import com.o4x.musical.provider.QueueStore
-import com.o4x.musical.provider.QueueStore.Companion.getInstance
 import com.o4x.musical.provider.SongPlayCountStore
 import com.o4x.musical.service.misc.MediaStoreObserver
 import com.o4x.musical.service.misc.QueueSaveHandler
@@ -48,6 +46,7 @@ import com.o4x.musical.prefs.PreferenceUtil.albumArtOnLockscreen
 import com.o4x.musical.prefs.PreferenceUtil.isClassicNotification
 import com.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
 import com.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
+import com.o4x.musical.repository.RoomRepository
 import com.o4x.musical.util.Util
 import org.koin.android.ext.android.inject
 import java.util.*
@@ -142,6 +141,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 or PlaybackStateCompat.ACTION_SEEK_TO)
     }
 
+    private val roomRepository by inject<RoomRepository>()
     private val hash by lazy { hashCode() }
 
     private val musicBind: IBinder = MusicBinder()
@@ -529,8 +529,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 }
             }
             MEDIA_STORE_CHANGED -> {
-                playingQueue = getInstance(this).savedPlayingQueue.toMutableList()
-                originalPlayingQueue = getInstance(this).savedOriginalPlayingQueue.toMutableList()
+                playingQueue = roomRepository.savedPlayingQueue().toMutableList()
+                originalPlayingQueue = roomRepository.savedOriginalPlayingQueue().toMutableList()
                 updateNotification()
             }
         }
@@ -604,8 +604,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     @Synchronized
     fun restoreQueuesAndPositionIfNecessary() {
         if (!queuesRestored && playingQueue.isEmpty()) {
-            val restoredQueue = QueueStore.getInstance(this).savedPlayingQueue
-            val restoredOriginalQueue = QueueStore.getInstance(this).savedOriginalPlayingQueue
+            val restoredQueue = roomRepository.savedPlayingQueue().toMutableList()
+            val restoredOriginalQueue = roomRepository.savedOriginalPlayingQueue().toMutableList()
             val restoredPosition = PreferenceManager.getDefaultSharedPreferences(this).getInt(
                 SAVED_POSITION, -1
             )
@@ -648,7 +648,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun saveQueuesImpl() {
-        QueueStore.getInstance(this).saveQueues(playingQueue, originalPlayingQueue)
+        roomRepository.saveQueue(playingQueue)
+        roomRepository.saveOriginalQueue(originalPlayingQueue)
     }
 
     private fun saveState() {

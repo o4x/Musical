@@ -43,7 +43,7 @@ public class SortedLongCursor extends AbstractCursor {
      * @param order      the list of unique ids in sorted order to display
      * @param columnName the column name of the id to look up in the internal cursor
      */
-    public SortedLongCursor(final Cursor cursor, final long[] order, final String columnName) {
+    public SortedLongCursor(@NonNull final Cursor cursor, final long[] order, final String columnName) {
 
         mCursor = cursor;
         mMissingIds = buildCursorPositionMapping(order, columnName);
