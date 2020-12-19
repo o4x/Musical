@@ -1,16 +1,15 @@
 package com.o4x.musical.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.o4x.musical.ad.core.entity.EqualizerPreset
-import com.o4x.musical.ad.core.gateway.EqualizerGateway
-import com.o4x.musical.ad.core.prefs.EqualizerPreferencesGateway
-import com.o4x.musical.ad.equalizer.bassboost.IBassBoost
-import com.o4x.musical.ad.equalizer.equalizer.IEqualizer
-import com.o4x.musical.ad.equalizer.virtualizer.IVirtualizer
+import com.o4x.musical.equalizer.core.entity.EqualizerPreset
+import com.o4x.musical.equalizer.core.gateway.EqualizerGateway
+import com.o4x.musical.equalizer.core.prefs.EqualizerPreferencesGateway
+import com.o4x.musical.equalizer.equalizer.bassboost.IBassBoost
+import com.o4x.musical.equalizer.equalizer.equalizer.IEqualizer
+import com.o4x.musical.equalizer.equalizer.virtualizer.IVirtualizer
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel

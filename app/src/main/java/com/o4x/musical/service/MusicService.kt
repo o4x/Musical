@@ -15,9 +15,9 @@ import android.widget.Toast
 import androidx.preference.PreferenceManager
 import com.o4x.musical.App.Companion.getContext
 import com.o4x.musical.R
-import com.o4x.musical.ad.equalizer.bassboost.IBassBoost
-import com.o4x.musical.ad.equalizer.equalizer.IEqualizer
-import com.o4x.musical.ad.equalizer.virtualizer.IVirtualizer
+import com.o4x.musical.equalizer.equalizer.bassboost.IBassBoost
+import com.o4x.musical.equalizer.equalizer.equalizer.IEqualizer
+import com.o4x.musical.equalizer.equalizer.virtualizer.IVirtualizer
 import com.o4x.musical.appwidgets.AppWidgetBig
 import com.o4x.musical.appwidgets.AppWidgetCard
 import com.o4x.musical.appwidgets.AppWidgetClassic

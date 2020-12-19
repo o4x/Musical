@@ -1,7 +1,7 @@
 package com.o4x.musical
 
-import com.o4x.musical.ad.data.eqDataModule
-import com.o4x.musical.ad.equalizer.equalizerModule
+import com.o4x.musical.equalizer.data.eqDataModule
+import com.o4x.musical.equalizer.equalizer.equalizerModule
 import com.o4x.musical.db.roomModule
 import com.o4x.musical.network.*
 import com.o4x.musical.repository.dataModule
