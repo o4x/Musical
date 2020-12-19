@@ -139,3 +139,36 @@ fun List<Song>.toSongsEntity(playlistEntity: PlaylistEntity): List<SongEntity> {
     }
 }
 
+
+fun List<QueueEntity>.toIds(): List<Long> {
+    return map {
+        it.id
+    }
+}
+
+fun Song.toQueueEntity(): QueueEntity {
+    return QueueEntity(id = id)
+}
+
+fun List<Song>.toQueuesEntity(): List<QueueEntity> {
+    return map {
+        it.toQueueEntity()
+    }
+}
+
+fun List<QueueOriginalEntity>.toOIds(): List<Long> {
+    return map {
+        it.id
+    }
+}
+
+fun Song.toOQueueEntity(): QueueOriginalEntity {
+    return QueueOriginalEntity(id = id)
+}
+
+fun List<Song>.toOQueuesEntity(): List<QueueOriginalEntity> {
+    return map {
+        it.toOQueueEntity()
+    }
+}
+

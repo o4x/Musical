@@ -61,4 +61,8 @@ val dataModule = module {
             get()
         )
     }
+
+    single {
+        RoomRepository(get(), get(), get(), get(), get(), get(), get())
+    }
 }

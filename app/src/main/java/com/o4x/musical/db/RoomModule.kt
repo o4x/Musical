@@ -1,10 +1,7 @@
 package com.o4x.musical.db
 
 import androidx.room.Room
-import com.o4x.musical.repository.RealRoomRepository
-import com.o4x.musical.repository.RoomRepository
 import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val roomModule = module {
@@ -29,14 +26,14 @@ val roomModule = module {
     }
 
     factory {
+        get<RetroDatabase>().queueOriginalDao()
+    }
+
+    factory {
         get<RetroDatabase>().playCountDao()
     }
 
     factory {
         get<RetroDatabase>().historyDao()
     }
-
-    single {
-        RealRoomRepository(get(), get(), get(), get())
-    } bind RoomRepository::class
 }

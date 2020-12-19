@@ -19,6 +19,7 @@ import android.database.Cursor
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import android.provider.MediaStore.Audio.Media
+import android.util.Log
 import com.o4x.musical.Constants.IS_MUSIC
 import com.o4x.musical.Constants.baseProjection
 import com.o4x.musical.extensions.getInt
@@ -93,7 +94,12 @@ class RealSongRepository(private val context: Context) : SongRepository {
         }
         selection += ")"
 
-        return songs(makeSongCursor(selection, null))
+        val cursor = makeSongCursor(selection, null)
+        return if (cursor == null) {
+            songs(cursor)
+        } else {
+            songs(SortedLongCursor(cursor, idList, AudioColumns._ID))
+        }
     }
 
     override fun songsByFilePath(filePath: String): List<Song> {
