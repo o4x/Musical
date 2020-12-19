@@ -21,28 +21,17 @@ import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
 import com.o4x.musical.prefs.PreferenceUtil.smartPlaylistLimit
 
-/**
- * Created by hemanths on 16/08/17.
- */
-interface LastAddedRepository {
-    fun recentSongs(): List<Song>
-
-    fun recentAlbums(): List<Album>
-
-    fun recentArtists(): List<Artist>
-}
-
-class RealLastAddedRepository(
-    private val songRepository: RealSongRepository,
-    private val albumRepository: RealAlbumRepository,
-    private val artistRepository: RealArtistRepository
-) : LastAddedRepository {
+class LastAddedRepository(
+    private val songRepository: SongRepository,
+    private val albumRepository: AlbumRepository,
+    private val artistRepository: ArtistRepository
+) {
 
     private fun getAllRecentSongs(): List<Song> {
         return songRepository.songs(makeLastAddedCursor())
     }
 
-    override fun recentSongs(): List<Song> {
+    fun recentSongs(): List<Song> {
         return getAllRecentSongs().take(smartPlaylistLimit)
     }
 
@@ -50,7 +39,7 @@ class RealLastAddedRepository(
         return albumRepository.splitIntoAlbums(getAllRecentSongs())
     }
 
-    override fun recentAlbums(): List<Album> {
+    fun recentAlbums(): List<Album> {
         return getAllRecentAlbums().take(smartPlaylistLimit)
     }
 
@@ -58,7 +47,7 @@ class RealLastAddedRepository(
         return artistRepository.splitIntoArtists(recentAlbums())
     }
 
-    override fun recentArtists(): List<Artist> {
+    fun recentArtists(): List<Artist> {
         return getAllRecentArtist().take(smartPlaylistLimit)
     }
 

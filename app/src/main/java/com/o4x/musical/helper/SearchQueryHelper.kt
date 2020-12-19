@@ -18,7 +18,7 @@ import android.app.SearchManager
 import android.os.Bundle
 import android.provider.MediaStore
 import com.o4x.musical.model.Song
-import com.o4x.musical.repository.RealSongRepository
+import com.o4x.musical.repository.SongRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.util.*
@@ -28,7 +28,7 @@ object SearchQueryHelper : KoinComponent {
     private const val ALBUM_SELECTION = "lower(" + MediaStore.Audio.AudioColumns.ALBUM + ") = ?"
     private const val ARTIST_SELECTION = "lower(" + MediaStore.Audio.AudioColumns.ARTIST + ") = ?"
     private const val AND = " AND "
-    private val songRepository by inject<RealSongRepository>()
+    private val songRepository by inject<SongRepository>()
     var songs = ArrayList<Song>()
 
     @JvmStatic

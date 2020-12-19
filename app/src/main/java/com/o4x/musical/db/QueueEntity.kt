@@ -18,7 +18,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "queue_songs")
+@Entity
 data class QueueEntity(
     @PrimaryKey(autoGenerate = true) var uid: Long? = null,
     @ColumnInfo(name = "id") var id: Long

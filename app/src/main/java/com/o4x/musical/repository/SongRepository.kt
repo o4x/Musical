@@ -29,33 +29,13 @@ import com.o4x.musical.extensions.getStringOrNull
 import com.o4x.musical.model.Song
 import com.o4x.musical.prefs.PreferenceUtil
 
-/**
- * Created by hemanths on 10/08/17.
- */
-interface SongRepository {
+class SongRepository(private val context: Context) {
 
-    fun songs(): List<Song>
-
-    fun songs(cursor: Cursor?): List<Song>
-
-    fun songs(query: String): List<Song>
-
-    fun songs(idList: LongArray): List<Song>
-
-    fun songsByFilePath(filePath: String): List<Song>
-
-    fun song(cursor: Cursor?): Song
-
-    fun song(songId: Long): Song
-}
-
-class RealSongRepository(private val context: Context) : SongRepository {
-
-    override fun songs(): List<Song> {
+    fun songs(): List<Song> {
         return songs(makeSongCursor(null, null))
     }
 
-    override fun songs(cursor: Cursor?): List<Song> {
+    fun songs(cursor: Cursor?): List<Song> {
         val songs = arrayListOf<Song>()
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -66,7 +46,7 @@ class RealSongRepository(private val context: Context) : SongRepository {
         return songs
     }
 
-    override fun song(cursor: Cursor?): Song {
+    fun song(cursor: Cursor?): Song {
         val song: Song = if (cursor != null && cursor.moveToFirst()) {
             getSongFromCursorImpl(cursor)
         } else {
@@ -76,25 +56,16 @@ class RealSongRepository(private val context: Context) : SongRepository {
         return song
     }
 
-    override fun songs(query: String): List<Song> {
+    fun songs(query: String): List<Song> {
         return songs(makeSongCursor(AudioColumns.TITLE + " LIKE ?", arrayOf("%$query%")))
     }
 
-    override fun song(songId: Long): Song {
+    fun song(songId: Long): Song {
         return song(makeSongCursor(AudioColumns._ID + "=?", arrayOf(songId.toString())))
     }
 
-    override fun songs(idList: LongArray): List<Song> {
-        var selection = "_id IN ("
-        for (id in idList) {
-            selection += "$id,"
-        }
-        if (idList.isNotEmpty()) {
-            selection = selection.substring(0, selection.length - 1)
-        }
-        selection += ")"
-
-        val cursor = makeSongCursor(selection, null)
+    fun songs(idList: LongArray): List<Song> {
+        val cursor = makeSongCursor(makeSelection(idList), null)
         return if (cursor == null) {
             songs(cursor)
         } else {
@@ -102,7 +73,7 @@ class RealSongRepository(private val context: Context) : SongRepository {
         }
     }
 
-    override fun songsByFilePath(filePath: String): List<Song> {
+    fun songsByFilePath(filePath: String): List<Song> {
         return songs(
             makeSongCursor(
                 AudioColumns.DATA + "=?",
@@ -142,6 +113,19 @@ class RealSongRepository(private val context: Context) : SongRepository {
             composer ?: "",
             albumArtist ?: ""
         )
+    }
+
+    fun makeSelection(idList: LongArray): String {
+        var selection = "_id IN ("
+        for (id in idList) {
+            selection += "$id,"
+        }
+        if (idList.isNotEmpty()) {
+            selection = selection.substring(0, selection.length - 1)
+        }
+        selection += ")"
+
+        return selection
     }
 
     @JvmOverloads

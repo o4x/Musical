@@ -92,7 +92,7 @@ class LibraryViewModel(
 
     private fun fetchRecentlyPlayed() {
         viewModelScope.launch(IO) {
-            recentlyPlayed.postValue(repository.topPlayedRepository.recentlyPlayedTracks())
+            recentlyPlayed.postValue(repository.historySong())
         }
     }
 
@@ -176,18 +176,12 @@ class LibraryViewModel(
     suspend fun albumById(id: Long) = repository.albumById(id)
     suspend fun artistById(id: Long) = repository.artistByIdAsync(id)
 
-    fun deleteTracks(songs: List<Song>) = viewModelScope.launch(IO) {
-        repository.deleteSongs(songs)
-    }
-
     fun recentSongs(): LiveData<List<Song>> = liveData {
         emit(repository.recentSongs())
     }
 
     fun playCountSongs(): LiveData<List<Song>> = liveData {
-        emit(repository.playCountSongs().map {
-            it.toSong()
-        })
+        emit(repository.playCountSongs())
     }
 
     fun artist(artistId: Long): LiveData<Artist> = liveData {

@@ -5,22 +5,18 @@ import androidx.room.*
 
 @Dao
 interface HistoryDao {
-    companion object {
-        private const val HISTORY_LIMIT = 100
-    }
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSongInHistory(historyEntity: HistoryEntity)
+    fun insertSongInHistory(historyEntity: HistoryEntity)
+
+    @Query("DELETE FROM HistoryEntity WHERE id IN (:ids)")
+    fun delete(ids: List<Long>)
 
     @Query("SELECT * FROM HistoryEntity WHERE id = :songId LIMIT 1")
-    suspend fun isSongPresentInHistory(songId: Long): HistoryEntity?
+    fun isSongPresentInHistory(songId: Long): HistoryEntity?
 
-    @Update
-    suspend fun updateHistorySong(historyEntity: HistoryEntity)
-
-    @Query("SELECT * FROM HistoryEntity ORDER BY time_played DESC LIMIT $HISTORY_LIMIT")
+    @Query("SELECT * FROM HistoryEntity ORDER BY time_played")
     fun historySongs(): List<HistoryEntity>
 
-    @Query("SELECT * FROM HistoryEntity ORDER BY time_played DESC LIMIT $HISTORY_LIMIT")
+    @Query("SELECT * FROM HistoryEntity ORDER BY time_played")
     fun observableHistorySongs(): LiveData<List<HistoryEntity>>
 }

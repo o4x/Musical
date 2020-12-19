@@ -27,7 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.o4x.musical.model.Song;
-import com.o4x.musical.repository.RealSongRepository;
+import com.o4x.musical.repository.SongRepository;
 
 import java.util.List;
 
@@ -200,6 +200,6 @@ public class MusicPlaybackQueueStore extends SQLiteOpenHelper {
     private List<Song> getQueue(@NonNull final String tableName) {
         Cursor cursor = getReadableDatabase().query(tableName, null,
                 null, null, null, null, null);
-        return new RealSongRepository(context).songs(cursor);
+        return new SongRepository(context).songs(cursor);
     }
 }

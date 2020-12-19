@@ -20,13 +20,13 @@ import androidx.room.*
 @Dao
 interface QueueDao {
 
-    @Query("SELECT * FROM queue_songs")
+    @Query("SELECT * FROM QueueEntity")
     fun getQueueSongs(): LiveData<List<QueueEntity>>
 
-    @Query("SELECT * FROM queue_songs")
+    @Query("SELECT * FROM QueueEntity")
     fun getQueueSongsSync(): List<QueueEntity>
 
-    @Query("DELETE from queue_songs")
+    @Query("DELETE from QueueEntity")
     fun clearQueueSongs()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

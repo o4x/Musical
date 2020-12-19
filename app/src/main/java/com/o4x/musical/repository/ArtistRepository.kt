@@ -19,27 +19,18 @@ import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.prefs.PreferenceUtil
 
-interface ArtistRepository {
-    fun artists(): List<Artist>
-
-    fun albumArtists(): List<Artist>
-
-    fun artists(query: String): List<Artist>
-
-    fun artist(artistId: Long): Artist
-}
-
-class RealArtistRepository(
-    private val songRepository: RealSongRepository,
-    private val albumRepository: RealAlbumRepository
-) : ArtistRepository {
+class ArtistRepository(
+    private val songRepository: SongRepository,
+    private val albumRepository: AlbumRepository
+) {
 
     private fun getSongLoaderSortOrder(): String {
         return PreferenceUtil.artistSortOrder + ", " +
                 PreferenceUtil.artistAlbumSortOrder + ", " +
                 PreferenceUtil.artistSongSortOrder
     }
-    override fun artist(artistId: Long): Artist {
+
+    fun artist(artistId: Long): Artist {
         if (artistId == Artist.VARIOUS_ARTISTS_ID) {
             // Get Various Artists
             val songs = songRepository.songs(
@@ -62,7 +53,9 @@ class RealArtistRepository(
         )
         return Artist(artistId, albumRepository.splitIntoAlbums(songs))
     }
-    override fun artists(): List<Artist> {
+
+
+    fun artists(): List<Artist> {
         val songs = songRepository.songs(
             songRepository.makeSongCursor(
                 null, null,
@@ -72,7 +65,7 @@ class RealArtistRepository(
         return splitIntoArtists(albumRepository.splitIntoAlbums(songs))
     }
 
-    override fun albumArtists(): List<Artist> {
+    fun albumArtists(): List<Artist> {
         val songs = songRepository.songs(
             songRepository.makeSongCursor(
                 null,
@@ -84,7 +77,7 @@ class RealArtistRepository(
         return splitIntoAlbumArtists(albumRepository.splitIntoAlbums(songs))
     }
 
-    override fun artists(query: String): List<Artist> {
+    fun artists(query: String): List<Artist> {
         val songs = songRepository.songs(
             songRepository.makeSongCursor(
                 AudioColumns.ARTIST + " LIKE ?",

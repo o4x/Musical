@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2019 Hemanth Savarala.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by
- *  the Free Software Foundation either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.o4x.musical.repository
 
 import android.content.ContentResolver
@@ -30,34 +16,11 @@ import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.PlaylistSong
 import com.o4x.musical.model.Song
 
-/**
- * Created by hemanths on 16/08/17.
- */
-interface PlaylistRepository {
-    fun playlist(cursor: Cursor?): Playlist
-
-    fun searchPlaylist(query: String): List<Playlist>
-
-    fun playlist(playlistName: String): Playlist
-
-    fun playlists(): List<Playlist>
-
-    fun playlists(cursor: Cursor?): List<Playlist>
-
-    fun favoritePlaylist(playlistName: String): List<Playlist>
-
-    fun deletePlaylist(playlistId: Long)
-
-    fun playlist(playlistId: Long): Playlist
-
-    fun playlistSongs(playlistId: Long): List<Song>
-}
-
-class RealPlaylistRepository(
+class PlaylistRepository(
     private val contentResolver: ContentResolver
-) : PlaylistRepository {
+) {
 
-    override fun playlist(cursor: Cursor?): Playlist {
+    fun playlist(cursor: Cursor?): Playlist {
         return cursor.use {
             if (cursor?.moveToFirst() == true) {
                 getPlaylistFromCursorImpl(cursor)
@@ -67,11 +30,11 @@ class RealPlaylistRepository(
         }
     }
 
-    override fun playlist(playlistName: String): Playlist {
+    fun playlist(playlistName: String): Playlist {
         return playlist(makePlaylistCursor(PlaylistsColumns.NAME + "=?", arrayOf(playlistName)))
     }
 
-    override fun playlist(playlistId: Long): Playlist {
+    fun playlist(playlistId: Long): Playlist {
         return playlist(
             makePlaylistCursor(
                 BaseColumns._ID + "=?",
@@ -80,15 +43,15 @@ class RealPlaylistRepository(
         )
     }
 
-    override fun searchPlaylist(query: String): List<Playlist> {
+    fun searchPlaylist(query: String): List<Playlist> {
         return playlists(makePlaylistCursor(PlaylistsColumns.NAME + "=?", arrayOf(query)))
     }
 
-    override fun playlists(): List<Playlist> {
+    fun playlists(): List<Playlist> {
         return playlists(makePlaylistCursor(null, null))
     }
 
-    override fun playlists(cursor: Cursor?): List<Playlist> {
+    fun playlists(cursor: Cursor?): List<Playlist> {
         val playlists = mutableListOf<Playlist>()
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -99,7 +62,7 @@ class RealPlaylistRepository(
         return playlists
     }
 
-    override fun favoritePlaylist(playlistName: String): List<Playlist> {
+    fun favoritePlaylist(playlistName: String): List<Playlist> {
         return playlists(
             makePlaylistCursor(
                 PlaylistsColumns.NAME + "=?",
@@ -108,7 +71,7 @@ class RealPlaylistRepository(
         )
     }
 
-    override fun deletePlaylist(playlistId: Long) {
+    fun deletePlaylist(playlistId: Long) {
         val localUri = EXTERNAL_CONTENT_URI
         val localStringBuilder = StringBuilder()
         localStringBuilder.append("_id IN (")
@@ -125,7 +88,7 @@ class RealPlaylistRepository(
         return Playlist(id, name)
     }
 
-    override fun playlistSongs(playlistId: Long): List<Song> {
+    fun playlistSongs(playlistId: Long): List<Song> {
         val songs = arrayListOf<Song>()
         val cursor = makePlaylistSongCursor(playlistId)
 

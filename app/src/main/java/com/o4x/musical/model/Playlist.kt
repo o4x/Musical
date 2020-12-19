@@ -2,17 +2,15 @@ package com.o4x.musical.model
 
 import android.content.Context
 import android.os.Parcelable
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.liveData
-import com.o4x.musical.repository.RealPlaylistRepository
+import com.o4x.musical.repository.Repository
 import com.o4x.musical.util.MusicUtil
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.get
+import org.koin.core.inject
 
 @Parcelize
 open class Playlist(
@@ -24,8 +22,10 @@ open class Playlist(
         val empty = Playlist(-1, "")
     }
 
+    val repository by inject<Repository>()
+
     open fun songs(): List<Song> {
-        return RealPlaylistRepository(get()).playlistSongs(id)
+        return repository.getPlaylistSongs(this)
     }
 
     fun getSongsLive(): LiveData<List<Song>> = liveData(IO) {

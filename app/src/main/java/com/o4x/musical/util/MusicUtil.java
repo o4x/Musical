@@ -26,8 +26,8 @@ import com.o4x.musical.model.Genre;
 import com.o4x.musical.model.Playlist;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics;
-import com.o4x.musical.repository.RealPlaylistRepository;
-import com.o4x.musical.repository.RealSongRepository;
+import com.o4x.musical.repository.PlaylistRepository;
+import com.o4x.musical.repository.SongRepository;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
@@ -253,7 +253,7 @@ public class MusicUtil {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     final long id = cursor.getLong(0);
-                    final Song song = new RealSongRepository(context).song(id);
+                    final Song song = new SongRepository(context).song(id);
                     MusicPlayerRemote.removeFromQueue(song);
                     cursor.moveToNext();
                 }
@@ -295,12 +295,12 @@ public class MusicUtil {
     }
 
     public static Playlist getFavoritesPlaylist(@NonNull final Context context) {
-        return new RealPlaylistRepository(context.getContentResolver())
+        return new PlaylistRepository(context.getContentResolver())
                 .playlist(context.getString(R.string.favorites));
     }
 
     private static Playlist getOrCreateFavoritesPlaylist(@NonNull final Context context) {
-        return new RealPlaylistRepository(context.getContentResolver()).playlist(
+        return new PlaylistRepository(context.getContentResolver()).playlist(
                 PlaylistsUtil.createPlaylist(
                         context,
                         context.getString(R.string.favorites)

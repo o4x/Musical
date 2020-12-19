@@ -11,6 +11,6 @@ class NotPlayedPlaylist : AbsSmartPlaylist(
     iconRes = R.drawable.ic_music_off
 ) {
     override fun songs(): List<Song> {
-        return topPlayedRepository.notRecentlyPlayedTracks()
+        return roomRepository.notRecentlyPlayedTracks()
     }
 }

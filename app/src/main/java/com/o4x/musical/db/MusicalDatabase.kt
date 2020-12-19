@@ -5,13 +5,13 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [
-        SongEntity::class,
         HistoryEntity::class,
         PlayCountEntity::class,
         QueueEntity::class,
+        QueueOriginalEntity::class,
         LyricsEntity::class
     ],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 abstract class MusicalDatabase : RoomDatabase() {
