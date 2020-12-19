@@ -106,11 +106,11 @@ class RoomRepository(
     }
 
     fun savedOriginalPlayingQueue(): List<Song> {
-        return songRepository.songs(queueOriginalDao.getQueueSongsSync().toOIds().toLongArray())
+        return songRepository.songs(queueOriginalDao.getQueueSongsSync().toIds().toLongArray())
     }
 
     fun saveOriginalQueue(songs: List<Song>) {
         queueOriginalDao.clearQueueSongs()
-        queueOriginalDao.insertAllSongs(songs.toOQueuesEntity())
+        queueOriginalDao.insertAllSongs(songs.toQueuesEntity())
     }
 }

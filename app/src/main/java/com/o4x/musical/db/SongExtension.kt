@@ -156,19 +156,3 @@ fun List<Song>.toQueuesEntity(): List<QueueEntity> {
     }
 }
 
-fun List<QueueOriginalEntity>.toOIds(): List<Long> {
-    return map {
-        it.id
-    }
-}
-
-fun Song.toOQueueEntity(): QueueOriginalEntity {
-    return QueueOriginalEntity(id = id)
-}
-
-fun List<Song>.toOQueuesEntity(): List<QueueOriginalEntity> {
-    return map {
-        it.toOQueueEntity()
-    }
-}
-
