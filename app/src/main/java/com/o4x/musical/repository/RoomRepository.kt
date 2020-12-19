@@ -10,56 +10,12 @@ import com.o4x.musical.model.Song
 
 class RoomRepository(
     private val songRepository: SongRepository,
-    private val playlistDao: PlaylistDao,
     private val playCountDao: PlayCountDao,
     private val queueDao: QueueDao,
     private val queueOriginalDao: QueueOriginalDao,
     private val historyDao: HistoryDao,
     private val lyricsDao: LyricsDao
 ) {
-    @WorkerThread
-    suspend fun createPlaylist(playlistEntity: PlaylistEntity): Long =
-        playlistDao.createPlaylist(playlistEntity)
-
-    @WorkerThread
-    suspend fun checkPlaylistExists(playlistName: String): List<PlaylistEntity> =
-        playlistDao.isPlaylistExists(playlistName)
-
-    @WorkerThread
-    suspend fun playlists(): List<PlaylistEntity> = playlistDao.playlists()
-
-    @WorkerThread
-    suspend fun playlistWithSongs(): List<PlaylistWithSongs> =
-        playlistDao.playlistsWithSongs()
-
-    @WorkerThread
-    suspend fun insertSongs(songs: List<SongEntity>) {
-        playlistDao.insertSongsToPlaylist(songs)
-    }
-
-
-    fun getSongs(playlistEntity: PlaylistEntity): LiveData<List<SongEntity>> =
-        playlistDao.songsFromPlaylist(playlistEntity.playListId)
-
-    suspend fun deletePlaylistEntities(playlistEntities: List<PlaylistEntity>) =
-        playlistDao.deletePlaylists(playlistEntities)
-
-    suspend fun renamePlaylistEntity(playlistId: Long, name: String) =
-        playlistDao.renamePlaylist(playlistId, name)
-
-    suspend fun deleteSongsInPlaylist(songs: List<SongEntity>) {
-        songs.forEach {
-            playlistDao.deleteSongFromPlaylist(it.playlistCreatorId, it.id)
-        }
-    }
-
-    suspend fun deletePlaylistSongs(playlists: List<PlaylistEntity>) =
-        playlists.forEach {
-            playlistDao.deletePlaylistSongs(it.playListId)
-        }
-
-    suspend fun removeSongFromPlaylist(songEntity: SongEntity) =
-        playlistDao.deleteSongFromPlaylist(songEntity.playlistCreatorId, songEntity.id)
 
     suspend fun addSongToHistory(currentSong: Song) =
         historyDao.insertSongInHistory(currentSong.toHistoryEntity(System.currentTimeMillis()))

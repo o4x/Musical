@@ -9,7 +9,6 @@ import com.o4x.musical.ad.data.db.AppDatabase
 import com.o4x.musical.ad.data.db.EqualizerPresetsDao
 import com.o4x.musical.ad.data.prefs.EqualizerPreferenceImpl
 import com.o4x.musical.ad.data.repository.EqualizerRepository
-import com.o4x.musical.db.RetroDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.bind
 import org.koin.dsl.module

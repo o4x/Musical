@@ -21,13 +21,13 @@ import androidx.lifecycle.viewModelScope
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.Genre
 import com.o4x.musical.model.Song
-import com.o4x.musical.repository.RealRepository
+import com.o4x.musical.repository.Repository
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class GenreDetailsViewModel(
-    private val realRepository: RealRepository,
+    private val realRepository: Repository,
     private val genre: Genre
 ) : ViewModel(), MusicServiceEventListener {
 

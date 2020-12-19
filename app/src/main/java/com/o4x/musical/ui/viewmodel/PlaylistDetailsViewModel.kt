@@ -20,13 +20,13 @@ import androidx.lifecycle.viewModelScope
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.Song
-import com.o4x.musical.repository.RealRepository
+import com.o4x.musical.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PlaylistDetailsViewModel(
-    private val realRepository: RealRepository,
+    private val realRepository: Repository,
     private var playlist: Playlist
 ) : ViewModel(), MusicServiceEventListener {
 

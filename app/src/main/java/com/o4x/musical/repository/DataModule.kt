@@ -5,7 +5,7 @@ import org.koin.dsl.module
 
 val dataModule = module {
     single {
-        RealRepository(
+        Repository(
             get(),
             get(),
             get(),
@@ -18,7 +18,7 @@ val dataModule = module {
             get(),
             get(),
         )
-    } bind Repository::class
+    }
 
     single {
         RealSongRepository(get())
@@ -63,6 +63,6 @@ val dataModule = module {
     }
 
     single {
-        RoomRepository(get(), get(), get(), get(), get(), get(), get())
+        RoomRepository(get(), get(), get(), get(), get(), get())
     }
 }

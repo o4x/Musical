@@ -133,13 +133,6 @@ fun Song.toPlayCount(): PlayCountEntity {
     )
 }
 
-fun List<Song>.toSongsEntity(playlistEntity: PlaylistEntity): List<SongEntity> {
-    return map {
-        it.toSongEntity(playlistEntity.playListId)
-    }
-}
-
-
 fun List<QueueEntity>.toIds(): List<Long> {
     return map {
         it.id

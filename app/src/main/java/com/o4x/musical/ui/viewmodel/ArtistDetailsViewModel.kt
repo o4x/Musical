@@ -5,12 +5,12 @@ import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Models.LastFmArtist
 import com.o4x.musical.network.Result
-import com.o4x.musical.repository.RealRepository
+import com.o4x.musical.repository.Repository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class ArtistDetailsViewModel(
-    private val realRepository: RealRepository,
+    private val realRepository: Repository,
     private val artistId: Long
 ) : ViewModel(), MusicServiceEventListener {
 

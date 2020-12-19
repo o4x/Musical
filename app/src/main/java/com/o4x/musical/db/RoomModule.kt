@@ -7,33 +7,29 @@ import org.koin.dsl.module
 val roomModule = module {
 
     single {
-        Room.databaseBuilder(androidContext(), RetroDatabase::class.java, "playlist.db")
+        Room.databaseBuilder(androidContext(), MusicalDatabase::class.java, "playlist.db")
             .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
     }
 
     factory {
-        get<RetroDatabase>().lyricsDao()
+        get<MusicalDatabase>().lyricsDao()
     }
 
     factory {
-        get<RetroDatabase>().playlistDao()
+        get<MusicalDatabase>().queueDao()
     }
 
     factory {
-        get<RetroDatabase>().queueDao()
+        get<MusicalDatabase>().queueOriginalDao()
     }
 
     factory {
-        get<RetroDatabase>().queueOriginalDao()
+        get<MusicalDatabase>().playCountDao()
     }
 
     factory {
-        get<RetroDatabase>().playCountDao()
-    }
-
-    factory {
-        get<RetroDatabase>().historyDao()
+        get<MusicalDatabase>().historyDao()
     }
 }
