@@ -30,7 +30,7 @@ import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
-import com.o4x.musical.repository.RealRepository
+import com.o4x.musical.repository.Repository
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
@@ -47,7 +47,7 @@ import java.util.*
  */
 abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
-    val repository by inject<RealRepository>()
+    val repository by inject<Repository>()
     protected val id: Long
             by lazy { intent.extras?.getLong(EXTRA_ID)!! }
 

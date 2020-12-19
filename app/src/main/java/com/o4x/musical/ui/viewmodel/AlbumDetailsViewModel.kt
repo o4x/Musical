@@ -6,12 +6,12 @@ import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Result
 import com.o4x.musical.network.Models.LastFmAlbum
-import com.o4x.musical.repository.RealRepository
+import com.o4x.musical.repository.Repository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class AlbumDetailsViewModel(
-    private val repository: RealRepository,
+    private val repository: Repository,
     private val albumId: Long
 ) : ViewModel(), MusicServiceEventListener {
 
