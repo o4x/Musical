@@ -30,7 +30,6 @@ import com.o4x.musical.model.Playlist
 import com.o4x.musical.model.Song
 import com.o4x.musical.service.misc.MediaStoreObserver
 import com.o4x.musical.service.misc.QueueSaveHandler
-import com.o4x.musical.service.misc.SongPlayCountHelper
 import com.o4x.musical.service.misc.ThrottledSeekHandler
 import com.o4x.musical.service.notification.PlayingNotification
 import com.o4x.musical.service.notification.PlayingNotificationImpl
@@ -166,7 +165,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
     private var countDownTimerPausable: CountDownTimerPausable? = null
 
-    private val songPlayCountHelper = SongPlayCountHelper()
     private var becomingNoisyReceiverRegistered = false
     private val becomingNoisyReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -489,7 +487,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                         countDownTimerPausable!!.pause()
                     }
                 }
-                songPlayCountHelper.notifyPlayStateChanged(isPlaying)
             }
             META_CHANGED -> {
                 updateNotification()
@@ -499,7 +496,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 val currentSong = currentSong
                 val r = Runnable {
                     roomRepository.addPlayCount(currentSong)
-                    songPlayCountHelper.notifySongChanged(currentSong)
                     sendChangeInternal(META_CHANGED)
                 }
                 if (countDownTimerPausable != null) countDownTimerPausable!!.cancel()
