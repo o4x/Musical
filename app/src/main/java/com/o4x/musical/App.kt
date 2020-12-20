@@ -38,9 +38,9 @@ class App : MultiDexApplication() {
             modules(appModules)
         }
 
-        // TODO
-//        if (VersionUtils.hasNougatMR())
-//            DynamicShortcutManager(this).initDynamicShortcuts()
+
+        if (VersionUtils.hasNougatMR())
+            DynamicShortcutManager(this).initDynamicShortcuts()
 
         // automatically restores purchases
         billingProcessor = BillingProcessor(this, BuildConfig.GOOGLE_PLAY_LICENSING_KEY,
