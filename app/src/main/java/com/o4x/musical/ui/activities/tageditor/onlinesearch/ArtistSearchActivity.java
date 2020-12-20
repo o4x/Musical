@@ -10,8 +10,7 @@ import com.o4x.musical.R;
 import com.o4x.musical.network.ApiClient;
 import com.o4x.musical.network.CachingControlInterceptor;
 import com.o4x.musical.network.service.DeezerService;
-import com.o4x.musical.network.service.ITunesService;
-import com.o4x.musical.network.Models.DeezerArtistModel;
+import com.o4x.musical.network.models.DeezerArtistModel;
 import com.o4x.musical.ui.adapter.online.ArtistOnlineAdapter;
 
 import org.jetbrains.annotations.NotNull;

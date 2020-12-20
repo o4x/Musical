@@ -27,7 +27,7 @@ import com.bumptech.glide.signature.ObjectKey
 import com.o4x.musical.App
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.ApiClient
-import com.o4x.musical.network.Models.DeezerArtistModel
+import com.o4x.musical.network.models.DeezerArtistModel
 import com.o4x.musical.network.service.DeezerService
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.prefs.PreferenceUtil

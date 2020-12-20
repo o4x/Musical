@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.o4x.musical.extensions.show
 import com.o4x.musical.model.Artist
-import com.o4x.musical.network.Models.ITunesModel.Results
+import com.o4x.musical.network.models.ITunesModel.Results
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.SongSearchActivity
 import java.util.*
 

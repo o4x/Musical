@@ -16,12 +16,9 @@ package com.o4x.musical.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.o4x.musical.R
-import com.o4x.musical.db.*
 import com.o4x.musical.model.*
-import com.o4x.musical.network.Models.LastFmAlbum
-import com.o4x.musical.network.Models.LastFmArtist
+import com.o4x.musical.network.models.LastFmAlbum
+import com.o4x.musical.network.models.LastFmArtist
 import com.o4x.musical.network.Result
 import com.o4x.musical.network.Result.*
 import com.o4x.musical.network.service.LastFMService

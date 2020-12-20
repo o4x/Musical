@@ -14,8 +14,8 @@
 
 package com.o4x.musical.network.service
 
-import com.o4x.musical.network.Models.LastFmAlbum
-import com.o4x.musical.network.Models.LastFmArtist
+import com.o4x.musical.network.models.LastFmAlbum
+import com.o4x.musical.network.models.LastFmArtist
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

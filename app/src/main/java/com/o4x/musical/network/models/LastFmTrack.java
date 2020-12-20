@@ -12,7 +12,7 @@
  * See the GNU General Public License for more details.
  */
 
-package com.o4x.musical.network.Models;
+package com.o4x.musical.network.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

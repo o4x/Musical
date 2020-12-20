@@ -1,7 +1,7 @@
 package com.o4x.musical.network.service;
 
-import com.o4x.musical.network.Models.DeezerArtistModel;
-import com.o4x.musical.network.Models.DeezerModel;
+import com.o4x.musical.network.models.DeezerArtistModel;
+import com.o4x.musical.network.models.DeezerModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

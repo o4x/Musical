@@ -1,4 +1,4 @@
-package com.o4x.musical.network.Models;
+package com.o4x.musical.network.models;
 
 import com.google.gson.annotations.SerializedName;
 

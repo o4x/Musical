@@ -5,7 +5,7 @@ import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.Result
-import com.o4x.musical.network.Models.LastFmAlbum
+import com.o4x.musical.network.models.LastFmAlbum
 import com.o4x.musical.repository.Repository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch

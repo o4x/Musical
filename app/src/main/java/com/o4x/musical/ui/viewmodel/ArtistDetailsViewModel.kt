@@ -3,7 +3,7 @@ package com.o4x.musical.ui.viewmodel
 import androidx.lifecycle.*
 import com.o4x.musical.interfaces.MusicServiceEventListener
 import com.o4x.musical.model.Artist
-import com.o4x.musical.network.Models.LastFmArtist
+import com.o4x.musical.network.models.LastFmArtist
 import com.o4x.musical.network.Result
 import com.o4x.musical.repository.Repository
 import kotlinx.coroutines.Dispatchers.IO
