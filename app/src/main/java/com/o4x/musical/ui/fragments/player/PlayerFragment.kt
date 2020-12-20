@@ -84,7 +84,6 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_player, menu)
-        ToolbarContentTintHelper.tintAllIcons(menu, colorControlNormal())
         super.onCreateOptionsMenu(menu, inflater)
     }
 

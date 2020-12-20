@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import code.name.monkey.appthemehelper.extensions.colorControlNormal
 import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.extensions.textColorTertiary
 import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
@@ -80,7 +81,11 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        ToolbarContentTintHelper.tintAllIcons(menu, colorControlNormal())
+        val color = colorControlNormal()
+        ToolbarContentTintHelper.colorizeToolbar(mainActivity.toolbar,
+            color, serviceActivity)
+        ToolbarContentTintHelper.tintAllIcons(menu, color)
+        mainActivity.toggle.drawerArrowDrawable.color = color
         super.onCreateOptionsMenu(menu, inflater)
     }
 
