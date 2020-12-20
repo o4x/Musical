@@ -3,6 +3,7 @@ package com.o4x.musical.ui.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -47,7 +48,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     }
 
     lateinit var navController: NavController
-    private lateinit var toggle: ActionBarDrawerToggle
+    lateinit var toggle: ActionBarDrawerToggle
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

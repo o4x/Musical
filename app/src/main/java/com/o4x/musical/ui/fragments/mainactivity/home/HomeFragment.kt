@@ -16,9 +16,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import code.name.monkey.appthemehelper.extensions.accentColor
+import code.name.monkey.appthemehelper.extensions.colorControlNormal
 import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.extensions.textColorTertiary
 import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
 import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
+import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.o4x.musical.App
@@ -33,6 +36,7 @@ import com.o4x.musical.ui.activities.MusicPickerActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
+import com.o4x.musical.ui.fragments.player.PlayerFragment
 import com.o4x.musical.ui.viewmodel.HomeHeaderViewModel
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.MusicUtil
@@ -109,6 +113,11 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_home, menu)
         super.onCreateOptionsMenu(menu, inflater)
+        val color = textColorTertiary()
+        ToolbarContentTintHelper.colorizeToolbar(mainActivity.toolbar,
+            color, serviceActivity)
+        ToolbarContentTintHelper.tintAllIcons(menu, color)
+        mainActivity.toggle.drawerArrowDrawable.color = color
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
