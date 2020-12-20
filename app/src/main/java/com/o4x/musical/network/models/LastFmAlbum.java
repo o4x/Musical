@@ -12,7 +12,7 @@
  * See the GNU General Public License for more details.
  */
 
-package com.o4x.musical.network.Models;
+package com.o4x.musical.network.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -20,35 +20,33 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LastFmArtist {
+public class LastFmAlbum {
 
     @Expose
-    private Artist artist;
+    private Album album;
 
-    public Artist getArtist() {
-        return artist;
+    public Album getAlbum() {
+        return album;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setAlbum(Album album) {
+        this.album = album;
     }
 
-    public static class Artist {
+    public static class Album {
 
         @Expose
-        public Stats stats;
+        public String listeners;
         @Expose
-        private Bio bio;
+        public String playcount;
         @Expose
         private List<Image> image = new ArrayList<>();
-
-        public Bio getBio() {
-            return bio;
-        }
-
-        public void setBio(Bio bio) {
-            this.bio = bio;
-        }
+        @Expose
+        private String name;
+        @Expose
+        private Tags tags;
+        @Expose
+        private Wiki wiki;
 
         public List<Image> getImage() {
             return image;
@@ -56,6 +54,42 @@ public class LastFmArtist {
 
         public void setImage(List<Image> image) {
             this.image = image;
+        }
+
+        public String getListeners() {
+            return listeners;
+        }
+
+        public void setListeners(final String listeners) {
+            this.listeners = listeners;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(final String name) {
+            this.name = name;
+        }
+
+        public String getPlaycount() {
+            return playcount;
+        }
+
+        public void setPlaycount(final String playcount) {
+            this.playcount = playcount;
+        }
+
+        public Tags getTags() {
+            return tags;
+        }
+
+        public Wiki getWiki() {
+            return wiki;
+        }
+
+        public void setWiki(Wiki wiki) {
+            this.wiki = wiki;
         }
 
         public static class Image {
@@ -84,35 +118,40 @@ public class LastFmArtist {
             }
         }
 
-        public static class Stats {
+        public class Tags {
 
             @Expose
-            public String listeners;
+            private List<Tag> tag = null;
 
-            @Expose
-            public String playcount;
-
-            public String getListeners() {
-                return listeners;
-            }
-
-            public void setListeners(final String listeners) {
-                this.listeners = listeners;
-            }
-
-            public String getPlaycount() {
-                return playcount;
-            }
-
-            public void setPlaycount(final String playcount) {
-                this.playcount = playcount;
+            public List<Tag> getTag() {
+                return tag;
             }
         }
 
-        public class Bio {
+        public class Tag {
+
+            @Expose
+            private String name;
+
+            @Expose
+            private String url;
+
+            public String getName() {
+                return name;
+            }
+
+            public String getUrl() {
+                return url;
+            }
+        }
+
+        public class Wiki {
 
             @Expose
             private String content;
+
+            @Expose
+            private String published;
 
             public String getContent() {
                 return content;
@@ -120,6 +159,14 @@ public class LastFmArtist {
 
             public void setContent(String content) {
                 this.content = content;
+            }
+
+            public String getPublished() {
+                return published;
+            }
+
+            public void setPublished(final String published) {
+                this.published = published;
             }
         }
     }

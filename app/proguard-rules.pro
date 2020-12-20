@@ -29,6 +29,7 @@
 -keepattributes Signature
 -keepattributes Exceptions
 -dontwarn javax.annotation.**
+-keep class com.o4x.musical.network.models** {*;}
 
 # Glide settings
 -keep public class * implements com.bumptech.glide.module.GlideModule

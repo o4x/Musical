@@ -10,7 +10,7 @@ import com.o4x.musical.R;
 import com.o4x.musical.network.ApiClient;
 import com.o4x.musical.network.CachingControlInterceptor;
 import com.o4x.musical.network.service.ITunesService;
-import com.o4x.musical.network.Models.ITunesModel;
+import com.o4x.musical.network.models.ITunesModel;
 import com.o4x.musical.ui.adapter.online.SongOnlineAdapter;
 
 import org.jetbrains.annotations.NotNull;

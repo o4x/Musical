@@ -1,15 +1,10 @@
 package com.o4x.musical.ui.activities.tageditor
 
 import android.content.Intent
-import android.graphics.Color
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.widget.FrameLayout
 import com.o4x.musical.extensions.hide
 import com.o4x.musical.extensions.show
 import com.o4x.musical.model.Artist
-import com.o4x.musical.network.Models.DeezerArtistModel
+import com.o4x.musical.network.models.DeezerArtistModel
 import com.o4x.musical.ui.activities.tageditor.onlinesearch.ArtistSearchActivity
 import java.util.*
 

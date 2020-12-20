@@ -1,7 +1,7 @@
 package com.o4x.musical.network.service;
 
 
-import com.o4x.musical.network.Models.ITunesModel;
+import com.o4x.musical.network.models.ITunesModel;
 
 import retrofit2.Call;
 import retrofit2.http.POST;
