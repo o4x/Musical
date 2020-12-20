@@ -118,6 +118,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             color, serviceActivity)
         ToolbarContentTintHelper.tintAllIcons(menu, color)
         mainActivity.toggle.drawerArrowDrawable.color = color
+        mainActivity.toggle.drawerArrowDrawable.alpha = 255
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
