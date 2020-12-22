@@ -209,11 +209,5 @@ dependencies {
 
     implementation 'com.blankj:utilcodex:1.30.4'
 
-    def exo_player_version = "2.12.1"
-    implementation "com.google.android.exoplayer:exoplayer:$exo_player_version"
-    implementation "com.google.android.exoplayer:exoplayer-core:$exo_player_version"
-    implementation "com.google.android.exoplayer:exoplayer-dash:$exo_player_version"
-    implementation "com.google.android.exoplayer:exoplayer-ui:$exo_player_version"
-
     implementation 'com.github.dhaval2404:imagepicker:1.7.5'
 }
