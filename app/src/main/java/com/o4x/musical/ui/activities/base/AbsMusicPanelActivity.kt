@@ -31,7 +31,7 @@ import com.o4x.musical.util.color.MediaNotificationProcessor
  */
 abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
 
-    private var cab: AttachedCab? = null
+    var cab: AttachedCab? = null
     private lateinit var miniPlayerFragment: MiniPlayerFragment
 
     private val binding by lazy { MusicPanelLayoutBinding.inflate(layoutInflater) }
