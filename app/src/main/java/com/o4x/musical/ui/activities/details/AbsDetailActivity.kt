@@ -6,14 +6,23 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.extensions.textColorPrimary
+import code.name.monkey.appthemehelper.extensions.textColorSecondary
 import code.name.monkey.appthemehelper.extensions.withAlpha
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.afollestad.materialcab.attached.AttachedCab
+import com.afollestad.materialcab.attached.destroy
+import com.afollestad.materialcab.attached.isActive
+import com.afollestad.materialcab.createCab
 import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
 import com.o4x.musical.imageloader.glide.targets.palette.NotificationPaletteTargetListener
+import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.model.Song
+import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import com.o4x.musical.ui.adapter.song.DetailsSongAdapter
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
@@ -38,6 +47,8 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
 
 
     var imageHeight: Int? = null
+    var displayHeight: Int? = null
+    var gradientHeight: Int? = null
     lateinit var colors: MediaNotificationProcessor
 
     var songAdapter: DetailsSongAdapter? = null
@@ -68,6 +79,9 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     private fun setupImage() {
         imageHeight = Util.getScreenWidth()
         colors = MediaNotificationProcessor(this)
+        displayHeight = Util.getScreenHeight()
+        gradientHeight =
+            (imageHeight!! + resources.getDimension(R.dimen.detail_header_height)).toInt()
     }
 
     private fun setUpToolBar() {
@@ -101,10 +115,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
 
 
     private fun setupScrollView() {
-        val displayHeight = Util.getScreenHeight()
-        val gradientHeight =
-            (imageHeight!! + resources.getDimension(R.dimen.detail_header_height)).toInt()
-
         song_recycler.post {
             song_recycler.layoutManager?.scrollToPosition(0)
             scrollPositionViewModel.setPosition(0)
@@ -119,16 +129,50 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
                 scrollPositionViewModel.addPosition(dy)
                 val scrollY = scrollPositionViewModel.getPositionValue()
 
-                // Change alpha of overlay
-                val alpha = max(0f, min(0.9f, 2f * scrollY / gradientHeight))
-                setAppbarAlpha(alpha)
-
-                // Scroll poster
-                image.translationY =
-                    max(-scrollY / (displayHeight * 2 / imageHeight!!), -imageHeight!!)
-                        .toFloat()
+                onScrollChange(scrollY)
             }
         })
+    }
+
+    fun onScrollChange(scrollY: Int) {
+        if (cab?.isActive() != true) {
+            // Change alpha of overlay
+            val alpha = max(0f, min(0.9f, 2f * scrollY / gradientHeight!!))
+            setAppbarAlpha(alpha)
+        }
+
+        // Scroll poster
+        image.translationY =
+            max(-scrollY / (displayHeight!! * 2 / imageHeight!!), -imageHeight!!)
+                .toFloat()
+    }
+
+    override fun openCab(menuRes: Int, callback: CabCallback): AttachedCab {
+        if (cab != null && cab!!.isActive()) cab!!.destroy()
+
+        cab = createCab(R.id.cab_stub) {
+            closeDrawable(R.drawable.ic_close)
+            backgroundColor(literal = colors.backgroundColor)
+            titleColor(literal = colors.primaryTextColor)
+            subtitleColor(literal = colors.secondaryTextColor)
+            popupTheme(PreferenceUtil.getGeneralThemeRes())
+            menu(menuRes)
+            menuIconColor(literal = colors.primaryTextColor)
+
+            onCreate { cab, menu ->
+                callback.onCreate(cab, menu)
+                setAppbarAlpha(1f)
+            }
+            onSelection { item ->
+                return@onSelection callback.onSelection(item)
+            }
+            onDestroy { cab ->
+                onScrollChange(scrollPositionViewModel.getPositionValue())
+                return@onDestroy callback.onDestroy(cab)
+            }
+        }
+
+        return cab!!
     }
 
 
