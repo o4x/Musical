@@ -126,8 +126,7 @@ class DetailsSongAdapter(
                                 hAlbumRecyclerView.visibility = View.VISIBLE
                                 hAlbumAdapter?.swapDataSet(it.albums)
                             }
-                            else -> {
-                            }
+                            else -> {}
                         }
                     }
 
@@ -136,6 +135,7 @@ class DetailsSongAdapter(
                         hSubtitle.setTextColor(it.secondaryTextColor)
                         hGradient.backgroundTintList = ColorStateList.valueOf(it.backgroundColor)
                         headerView.setBackgroundColor(it.backgroundColor)
+                        hAlbumAdapter?.colors = it
                         setLineColor(it.secondaryTextColor)
                     }
                 }
@@ -205,7 +205,7 @@ class DetailsSongAdapter(
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-            hAlbumAdapter = HorizontalAlbumAdapter(activity, ArrayList(), cabHolder)
+            hAlbumAdapter = HorizontalAlbumAdapter(activity, ArrayList(), cabHolder, colors!!)
             hAlbumRecyclerView.adapter = hAlbumAdapter
             hAlbumAdapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
                 override fun onChanged() {

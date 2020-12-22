@@ -10,6 +10,7 @@ import com.o4x.musical.helper.HorizontalAdapterHelper
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Album
 import com.o4x.musical.util.MusicUtil
+import com.o4x.musical.util.color.MediaNotificationProcessor
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -17,8 +18,19 @@ import com.o4x.musical.util.MusicUtil
 class HorizontalAlbumAdapter(
     activity: AppCompatActivity,
     dataSet: List<Album>,
-    cabHolder: CabHolder?
+    cabHolder: CabHolder?,
+    colors: MediaNotificationProcessor
 ) : AlbumAdapter(activity, dataSet, HorizontalAdapterHelper.LAYOUT_RES, cabHolder) {
+
+    var colors: MediaNotificationProcessor? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    init {
+        this.colors = colors
+    }
 
     override fun createViewHolder(view: View, viewType: Int): ViewHolder {
         val params = view.layoutParams as ViewGroup.MarginLayoutParams
@@ -26,13 +38,15 @@ class HorizontalAlbumAdapter(
         return ViewHolder(view)
     }
 
-    override fun setColors(color: Int, holder: ViewHolder) {
-        holder.itemView.setBackgroundColor(color)
-        if (holder.title != null) {
-            holder.title!!.setTextColor(getPrimaryTextColor(activity, isColorLight(color)))
-        }
-        if (holder.text != null) {
-            holder.text!!.setTextColor(getSecondaryTextColor(activity, isColorLight(color)))
+    override fun setColors(color: Int, holder: ViewHolder) {}
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+
+        colors?.let {
+            holder.paletteColorContainer?.setBackgroundColor(it.actionBarColor)
+            holder.title?.setTextColor(it.primaryTextColor)
+            holder.text?.setTextColor(it.secondaryTextColor)
         }
     }
 
