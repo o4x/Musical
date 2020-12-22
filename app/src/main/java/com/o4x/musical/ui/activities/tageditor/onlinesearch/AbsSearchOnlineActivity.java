@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static com.o4x.musical.extensions.FragmentExtKt.showToast;
 
@@ -72,13 +73,14 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     private Handler handler;
     private Runnable runnable;
 
+    private Unbinder unbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_online);
         setDrawUnderBar();
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
 
         setStatusBarColorAuto();
         setNavigationBarColorAuto();
@@ -119,6 +121,12 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
         searchView.setText(query);
         voiceSearch.setOnClickListener(v -> startMicSearch());
         clearText.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbinder.unbind();
+        super.onDestroy();
     }
 
     @Override
