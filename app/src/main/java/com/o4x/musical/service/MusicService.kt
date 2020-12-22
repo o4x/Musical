@@ -21,7 +21,6 @@ import com.o4x.musical.equalizer.equalizer.virtualizer.IVirtualizer
 import com.o4x.musical.appwidgets.AppWidgetBig
 import com.o4x.musical.appwidgets.AppWidgetCard
 import com.o4x.musical.appwidgets.AppWidgetClassic
-import com.o4x.musical.appwidgets.AppWidgetSmall
 import com.o4x.musical.helper.CountDownTimerPausable
 import com.o4x.musical.helper.ShuffleHelper
 import com.o4x.musical.imageloader.glide.loader.GlideLoader.Companion.with
@@ -151,7 +150,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     private val appWidgetBig = AppWidgetBig.getInstance()
     private val appWidgetClassic = AppWidgetClassic.getInstance()
-    private val appWidgetSmall = AppWidgetSmall.getInstance()
     private val appWidgetCard = AppWidgetCard.getInstance()
 
 
@@ -468,7 +466,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         sendBroadcast(Intent(what))
         appWidgetBig.notifyChange(this, what)
         appWidgetClassic.notifyChange(this, what)
-        appWidgetSmall.notifyChange(this, what)
         appWidgetCard.notifyChange(this, what)
     }
 
@@ -539,9 +536,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             when (command) {
                 AppWidgetClassic.NAME -> {
                     appWidgetClassic.performUpdate(this@MusicService, ids)
-                }
-                AppWidgetSmall.NAME -> {
-                    appWidgetSmall.performUpdate(this@MusicService, ids)
                 }
                 AppWidgetBig.NAME -> {
                     appWidgetBig.performUpdate(this@MusicService, ids)
