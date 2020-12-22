@@ -14,6 +14,7 @@ import butterknife.BindView
 import code.name.monkey.appthemehelper.extensions.withAlpha
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
+import com.o4x.musical.helper.GridHelper
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Artist
@@ -125,6 +126,7 @@ class DetailsSongAdapter(
                                     MusicUtil.getSongCountString(activity, it.songCount)
                                 hAlbumRecyclerView.visibility = View.VISIBLE
                                 hAlbumAdapter?.swapDataSet(it.albums)
+                                hAlbumAdapter?.colors = colors
                             }
                             else -> {}
                         }
@@ -135,7 +137,6 @@ class DetailsSongAdapter(
                         hSubtitle.setTextColor(it.secondaryTextColor)
                         hGradient.backgroundTintList = ColorStateList.valueOf(it.backgroundColor)
                         headerView.setBackgroundColor(it.backgroundColor)
-                        hAlbumAdapter?.colors = it
                         setLineColor(it.secondaryTextColor)
                     }
                 }
@@ -200,11 +201,7 @@ class DetailsSongAdapter(
         var hAlbumAdapter: HorizontalAlbumAdapter? = null
 
         init {
-            hAlbumRecyclerView.layoutManager = LinearLayoutManager(
-                activity,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
+            hAlbumRecyclerView.layoutManager = GridHelper.linearLayoutManager(activity)
             hAlbumAdapter = HorizontalAlbumAdapter(activity, ArrayList(), cabHolder, colors!!)
             hAlbumRecyclerView.adapter = hAlbumAdapter
             hAlbumAdapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
