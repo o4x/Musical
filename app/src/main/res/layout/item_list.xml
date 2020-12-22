@@ -1,86 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:padding="2dp"
     android:descendantFocusability="blocksDescendants"
-    android:background="?attr/rectSelector"
-    android:orientation="horizontal">
-
-    <com.o4x.musical.views.IconImageView
-        android:id="@+id/drag_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:tint="?attr/iconColor"
-        android:tintMode="src_in"
-        android:visibility="gone"
-        app:srcCompat="@drawable/ic_drag_vertical"
-        tools:ignore="ContentDescription" />
-
-    <com.o4x.musical.views.HeightFitSquareLayout
-        android:id="@+id/image_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/track_number"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:visibility="gone" />
-
-    </com.o4x.musical.views.HeightFitSquareLayout>
+    android:foreground="?attr/rectSelector">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingEnd="0dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="0dp"
-        android:paddingStart="16dp">
+        android:id="@+id/palette_color_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="2dp"
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
 
-        <TextView
-            android:id="@+id/album_name"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+        <com.o4x.musical.views.IconImageView
+            android:id="@+id/drag_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:tint="?attr/iconColor"
+            android:tintMode="src_in"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_drag_vertical"
+            tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/text"
+        <com.o4x.musical.views.HeightFitSquareLayout
+            android:id="@+id/image_container"
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/track_number"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:visibility="gone" />
+
+        </com.o4x.musical.views.HeightFitSquareLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="?android:textColorSecondary" />
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingEnd="0dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="0dp"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:id="@+id/album_name"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="?android:textColorSecondary" />
+        </LinearLayout>
+
+        <com.o4x.musical.views.IconImageView
+            android:id="@+id/menu"
+            style="@style/OverFlowButton"
+            android:layout_gravity="center_vertical"
+            tools:ignore="ContentDescription" />
+
     </LinearLayout>
 
-    <com.o4x.musical.views.IconImageView
-        android:id="@+id/menu"
-        style="@style/OverFlowButton"
-        android:layout_gravity="center_vertical"
-        tools:ignore="ContentDescription" />
-
-</LinearLayout>
+</FrameLayout>
