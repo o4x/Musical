@@ -26,10 +26,6 @@ open class AlbumAdapter(
     activity, dataSet, itemLayoutRes, cabHolder
 ) {
 
-    init {
-        setHasStableIds(true)
-    }
-
     override fun createViewHolder(view: View, viewType: Int): ViewHolder {
         return ViewHolder(view)
     }
