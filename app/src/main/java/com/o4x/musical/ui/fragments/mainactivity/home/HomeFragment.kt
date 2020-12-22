@@ -2,10 +2,8 @@ package com.o4x.musical.ui.fragments.mainactivity.home
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
@@ -13,14 +11,7 @@ import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import code.name.monkey.appthemehelper.extensions.accentColor
-import code.name.monkey.appthemehelper.extensions.colorControlNormal
-import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.extensions.textColorTertiary
-import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
-import code.name.monkey.appthemehelper.util.MaterialValueHelper.getPrimaryTextColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -28,6 +19,8 @@ import com.o4x.musical.App
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentHomeBinding
 import com.o4x.musical.extensions.toPlaylistDetail
+import com.o4x.musical.helper.GridHelper
+import com.o4x.musical.helper.homeGridSize
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
@@ -36,7 +29,6 @@ import com.o4x.musical.ui.activities.MusicPickerActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
-import com.o4x.musical.ui.fragments.player.PlayerFragment
 import com.o4x.musical.ui.viewmodel.HomeHeaderViewModel
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import com.o4x.musical.util.MusicUtil
@@ -282,7 +274,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     override fun initQueueView() {
-        queueLayoutManager = linearLayoutManager
+        queueLayoutManager = GridHelper.linearLayoutManager(requireContext())
         binding.queueRecyclerView.layoutManager = queueLayoutManager
         queueAdapter = HomeAdapter(
             mainActivity,
@@ -300,14 +292,14 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     private fun setUpRecentlyView() {
-        recentlyLayoutManager = gridLayoutManager
+        recentlyLayoutManager = GridHelper.gridLayoutManager(requireContext())
         binding.recentlyRecyclerView.layoutManager = recentlyLayoutManager
         recentlyAdapter = HomeAdapter(
             mainActivity,
             ArrayList(),
             0,
             R.layout.item_card_home,
-            gridSize * 2,
+            requireContext().homeGridSize() * 2,
             false,
         )
         binding.recentlyRecyclerView.adapter = recentlyAdapter
@@ -318,14 +310,14 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     private fun setUpNewView() {
-        newLayoutManager = gridLayoutManager
+        newLayoutManager = GridHelper.gridLayoutManager(requireContext())
         binding.newRecyclerView.layoutManager = newLayoutManager
         newAdapter = HomeAdapter(
             mainActivity,
             ArrayList(),
             0,
             R.layout.item_card_home,
-            gridSize * 3,
+            requireContext().homeGridSize() * 3,
             false,
         )
         binding.newRecyclerView.adapter = newAdapter
@@ -335,33 +327,6 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             newAdapter.swapDataSet(it)
         })
     }
-
-    private val gridLayoutManager: GridLayoutManager
-        get() {
-            val size = gridSize
-            return object : GridLayoutManager(serviceActivity, size) {
-                override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
-                    lp.width = (width / size) - (lp.marginStart * 2 /* for left and right */)
-                    lp.height = (lp.width * 1.5).toInt()
-                    return super.checkLayoutParams(lp)
-                }
-            }
-        }
-
-    private val linearLayoutManager: LinearLayoutManager
-        get() {
-            val size = gridSize
-            return object : LinearLayoutManager(serviceActivity, HORIZONTAL, false) {
-                override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
-                    lp.width = (width / size) - (lp.marginStart * 2 /* for left and right */)
-                    lp.height = (lp.width * 1.5).toInt()
-                    return super.checkLayoutParams(lp)
-                }
-            }
-        }
-
-    private val gridSize: Int
-        get() = resources.getInteger(R.integer.home_grid_columns)
 
 
     private fun setupEmpty() {
