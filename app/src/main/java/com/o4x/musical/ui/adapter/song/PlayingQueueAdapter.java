@@ -107,9 +107,6 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
         if (holder.imageText != null) {
             holder.imageText.setAlpha(alpha);
         }
-        if (holder.paletteColorContainer != null) {
-            holder.paletteColorContainer.setAlpha(alpha);
-        }
     }
 
     @Override
