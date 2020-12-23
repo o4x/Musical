@@ -204,13 +204,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         return ri != null
     }
 
-
-    private fun showProToastAndNavigate(message: String) {
-        Toast.makeText(requireContext(), "$message is Pro version feature.", Toast.LENGTH_SHORT)
-            .show()
-        NavigationUtil.goToProVersion(requireActivity())
-    }
-
     private fun setSummary(preference: Preference, value: Any?) {
         val stringValue = value.toString()
         if (preference is ListPreference) {

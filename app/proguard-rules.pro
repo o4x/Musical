@@ -60,3 +60,6 @@
 -keepnames class * extends android.os.Parcelable
 -keepnames class * extends java.io.Serializable
 -keep class com.o4x.musical.model.** {*;}
+
+#Bazar
+-keep class com.android.vending.billing

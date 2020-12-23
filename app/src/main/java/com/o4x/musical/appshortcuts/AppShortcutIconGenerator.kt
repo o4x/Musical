@@ -31,7 +31,7 @@ import com.o4x.musical.util.RetroUtil
 @RequiresApi(Build.VERSION_CODES.N_MR1)
 object AppShortcutIconGenerator {
     fun generateThemedIcon(context: Context, iconId: Int): Icon {
-        return generateUserThemedIcon(context, iconId)
+        return generateDefaultThemedIcon(context, iconId)
     }
 
     private fun generateDefaultThemedIcon(context: Context, iconId: Int): Icon {

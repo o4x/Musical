@@ -5,19 +5,21 @@ import android.view.MenuItem
 import androidx.navigation.NavController
 import com.o4x.musical.extensions.findNavController
 import com.o4x.musical.R
+import com.o4x.musical.databinding.ActivitySettingsBinding
 import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.ui.activities.base.AbsBaseActivity
-import kotlinx.android.synthetic.main.activity_settings.*
 
 
 class SettingsActivity : AbsBaseActivity() {
 
     lateinit var navController: NavController
 
+    private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_settings)
+        setContentView(binding.root)
         navController = findNavController(R.id.contentFrame)
 
         setStatusBarColorAuto()
@@ -28,9 +30,9 @@ class SettingsActivity : AbsBaseActivity() {
     }
 
     private fun setupToolbar() {
-        applyToolbar(toolbar)
+        applyToolbar(binding.toolbar)
         navController.addOnDestinationChangedListener { _, _, _ ->
-            toolbar.title = navController.currentDestination?.label
+            binding.toolbar.title = navController.currentDestination?.label
         }
     }
 

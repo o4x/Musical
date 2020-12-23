@@ -66,17 +66,16 @@
         tools:layout="@layout/activity_settings"/>
 
     <activity
-        android:id="@+id/buy_pro"
-        android:name="com.o4x.musical.ui.activities.PurchaseActivity"
-        android:label="@string/buy_pro"
+        android:id="@+id/buy_from_google_play"
+        android:name="com.o4x.musical.ui.activities.purchase.PurchaseActivity"
+        android:label="@string/musical_clean"
         tools:layout="@layout/activity_purchase" />
 
     <activity
-        android:id="@+id/clean"
-        android:name="com.o4x.musical.ui.activities.CleanActivity"
+        android:id="@+id/buy_from_bazar"
+        android:name="com.o4x.musical.ui.activities.purchase.BazarPurchaseActivity"
         android:label="@string/musical_clean"
-        tools:layout="@layout/activity_clean" />
-
+        tools:layout="@layout/activity_purchase" />
 
     <action
         android:id="@+id/action_to_search"
