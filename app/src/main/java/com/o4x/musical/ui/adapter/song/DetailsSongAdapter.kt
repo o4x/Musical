@@ -167,7 +167,7 @@ class DetailsSongAdapter(
                         imageText?.setTextColor(it.secondaryTextColor)
                         menu?.setColorFilter(it.secondaryTextColor, PorterDuff.Mode.SRC_IN)
 
-                        paletteColorContainer?.setBackgroundColor(it.backgroundColor)
+                        itemView.setBackgroundColor(it.backgroundColor)
                     }
                 }
             }
