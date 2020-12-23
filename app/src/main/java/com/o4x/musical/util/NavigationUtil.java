@@ -13,8 +13,6 @@ import androidx.core.app.ActivityCompat;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.ui.activities.LicenseActivity;
-import com.o4x.musical.ui.activities.PurchaseActivity;
-import com.o4x.musical.ui.activities.SupportDevelopmentActivity;
 import com.o4x.musical.ui.activities.details.AlbumDetailActivity;
 import com.o4x.musical.ui.activities.details.ArtistDetailActivity;
 
@@ -49,15 +47,6 @@ public class NavigationUtil {
                 Toast.makeText(activity, activity.getResources().getString(R.string.no_equalizer), Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-
-    public static void goToProVersion(@NonNull Context context) {
-        ActivityCompat.startActivity(context, new Intent(context, PurchaseActivity.class), null);
-    }
-
-    public static void goToSupportDevelopment(@NonNull Activity activity) {
-        ActivityCompat.startActivity(activity, new Intent(activity, SupportDevelopmentActivity.class), null);
     }
 
     public static void goToOpenSource(@NonNull Activity activity) {

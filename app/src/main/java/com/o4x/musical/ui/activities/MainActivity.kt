@@ -3,15 +3,18 @@ package com.o4x.musical.ui.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.get
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -19,13 +22,15 @@ import code.name.monkey.appthemehelper.extensions.surfaceColor
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
+import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.databinding.ActivityMainNavigationHeaderBinding
+import com.o4x.musical.databinding.*
 import com.o4x.musical.extensions.findNavController
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper.getSongs
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Song
+import com.o4x.musical.prefs.AppPref
 import com.o4x.musical.repository.PlaylistSongsLoader
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
@@ -49,11 +54,12 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
     lateinit var navController: NavController
     lateinit var toggle: ActionBarDrawerToggle
-
+    lateinit var navigationHeaderBinding: ActivityMainNavHeaderBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        AppPref.registerOnSharedPreferenceChangedListener(this)
         if (!hasPermissions()) {
             val myIntent = Intent(
                 this,
@@ -73,6 +79,16 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         setUpNavigationView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkVersion()
+    }
+
+    override fun onDestroy() {
+        AppPref.unregisterOnSharedPreferenceChangedListener(this)
+        super.onDestroy()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
@@ -90,7 +106,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
     }
-
 
     fun setMusicChooser(id: Int) {
 
@@ -112,6 +127,30 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         navController.navigate(R.id.action_to_search)
     }
 
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        super.onSharedPreferenceChanged(sharedPreferences, key)
+        if (key == AppPref.IS_CLEAN) {
+            checkVersion()
+        }
+    }
+
+    private fun checkVersion() {
+        navigationHeaderBinding.apply {
+            if (App.isCleanVersion()) {
+                proIcon.isVisible = false
+                proNext.isVisible = false
+                proSummary.isVisible = false
+                proTitle.text = resources.getString(R.string.app_name)
+                banner.setOnClickListener {  }
+            } else {
+                proIcon.isVisible = true
+                proNext.isVisible = true
+                proSummary.isVisible = true
+                proTitle.text = resources.getString(R.string.musical_clean)
+                banner.setOnClickListener { navController.navigate(R.id.buy_from_bazar) }
+            }
+        }
+    }
 
     private fun setUpNavigationView() {
         toggle = object : ActionBarDrawerToggle(
@@ -124,12 +163,8 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         toggle.syncState()
 
         navigation_view.setBackgroundColor(surfaceColor())
-
-        val headerBinding = ActivityMainNavigationHeaderBinding.inflate(layoutInflater)
-        navigation_view.addHeaderView(headerBinding.root)
-        headerBinding.plusBanner.setOnClickListener {
-//            navController.navigate(R.id.clean)
-        }
+        navigationHeaderBinding = ActivityMainNavHeaderBinding.inflate(layoutInflater)
+        navigation_view.addHeaderView(navigationHeaderBinding.root)
 
         var lastItem: MenuItem? = null
         drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {

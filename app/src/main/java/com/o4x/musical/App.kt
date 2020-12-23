@@ -14,20 +14,14 @@
 
 package com.o4x.musical
 
-import android.widget.Toast
 import androidx.multidex.MultiDexApplication
-import code.name.monkey.appthemehelper.ThemeStore
 import code.name.monkey.appthemehelper.util.VersionUtils
-import com.anjlab.android.iab.v3.BillingProcessor
-import com.anjlab.android.iab.v3.TransactionDetails
-import com.o4x.musical.Constants.PRO_VERSION_PRODUCT_ID
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
+import com.o4x.musical.prefs.AppPref
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class App : MultiDexApplication() {
-
-    lateinit var billingProcessor: BillingProcessor
 
     override fun onCreate() {
         super.onCreate()
@@ -41,29 +35,10 @@ class App : MultiDexApplication() {
 
         if (VersionUtils.hasNougatMR())
             DynamicShortcutManager(this).initDynamicShortcuts()
-
-        // automatically restores purchases
-        billingProcessor = BillingProcessor(this, BuildConfig.GOOGLE_PLAY_LICENSING_KEY,
-            object : BillingProcessor.IBillingHandler {
-                override fun onProductPurchased(productId: String, details: TransactionDetails?) {}
-
-                override fun onPurchaseHistoryRestored() {
-                    Toast.makeText(
-                        this@App,
-                        R.string.restored_previous_purchase_please_restart,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-
-                override fun onBillingError(errorCode: Int, error: Throwable?) {}
-
-                override fun onBillingInitialized() {}
-            })
     }
 
     override fun onTerminate() {
         super.onTerminate()
-        billingProcessor.release()
     }
 
     companion object {
@@ -73,10 +48,9 @@ class App : MultiDexApplication() {
             return instance!!
         }
 
-        fun isProVersion(): Boolean {
-            return BuildConfig.DEBUG || instance?.billingProcessor!!.isPurchased(
-                PRO_VERSION_PRODUCT_ID
-            )
+        fun isCleanVersion(): Boolean {
+//            return BuildConfig.DEBUG || AppPref.isCleanVersion
+            return AppPref.isCleanVersion
         }
     }
 }

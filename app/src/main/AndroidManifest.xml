@@ -14,6 +14,9 @@
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <!-- VERY IMPORTANT! Don't forget this permission, or in-app billing won't work. -->
+    <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -25,6 +28,7 @@
         tools:replace="android:supportsRtl"
         android:theme="@style/Theme.Musical.Black"
         tools:ignore="UnusedAttribute">
+
         <activity
             android:name=".ui.activities.MusicPickerActivity">
 
@@ -125,8 +129,7 @@
             android:name=".appshortcuts.AppShortcutLauncherActivity"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".ui.activities.PurchaseActivity" />
-        <activity android:name=".ui.activities.CleanActivity" />
+        <activity android:name=".ui.activities.purchase.BazarPurchaseActivity" />
         <activity android:name=".ui.activities.intro.PermissionActivity" />
 
         <service

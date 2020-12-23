@@ -12,8 +12,6 @@ import androidx.preference.PreferenceFragmentCompat
 import code.name.monkey.appthemehelper.extensions.backgroundColor
 import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.ui.activities.PurchaseActivity
-import com.o4x.musical.ui.dialogs.DonationsDialog
 import com.o4x.musical.prefs.PreferenceUtil.isDarkMode
 import de.psdev.licensesdialog.LicensesDialog
 
@@ -99,7 +97,7 @@ class AboutFragment : PreferenceFragmentCompat() {
     private fun getCurrentVersionName(context: Context): String? {
         try {
             return context.packageManager.getPackageInfo(context.packageName,
-                0).versionName + if (App.isProVersion()) " Pro" else ""
+                0).versionName + if (App.isCleanVersion()) " Pro" else ""
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
