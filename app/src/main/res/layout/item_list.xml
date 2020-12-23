@@ -9,7 +9,6 @@
     android:foreground="?attr/rectSelector">
 
     <LinearLayout
-        android:id="@+id/palette_color_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="2dp"
