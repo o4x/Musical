@@ -10,19 +10,41 @@
             type="com.o4x.musical.ui.viewmodel.PlayerViewModel"/>
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/mini_player_height"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
         android:background="?attr/colorSurface"
         android:clickable="true"
         android:focusable="true"
         android:transitionName="@string/transition_mini_player"
         android:id="@+id/container"
+        android:animateLayoutChanges="true"
         tools:ignore="UnusedAttribute">
+
+        <FrameLayout
+            android:id="@+id/progress_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top">
+
+            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                app:mpb_showProgressBackground="false"
+                app:mpb_progressStyle="horizontal"
+                app:mpb_useIntrinsicPadding="false"
+                android:progress="@{progressViewModel.progress}"
+                android:max="@{progressViewModel.total}" />
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/mini_player_height"
             android:orientation="horizontal">
 
             <com.o4x.musical.views.IconImageView
@@ -64,25 +86,12 @@
 
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/progress_bar_container"
-            android:layout_width="match_parent"
+        <ir.tapsell.sdk.bannerads.TapsellBannerView
+            android:id="@+id/banner"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top">
+            app:tapsell_banner_type="banner_320x50" />
 
-            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-                android:id="@+id/progress_bar"
-                style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                app:mpb_showProgressBackground="false"
-                app:mpb_progressStyle="horizontal"
-                app:mpb_useIntrinsicPadding="false"
-                android:progress="@{progressViewModel.progress}"
-                android:max="@{progressViewModel.total}" />
-
-        </FrameLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
 </layout>

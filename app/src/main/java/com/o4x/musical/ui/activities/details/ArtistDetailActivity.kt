@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.activities.details
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,14 +9,12 @@ import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.MusicPlayerRemote.playNext
 import com.o4x.musical.model.Artist
 import com.o4x.musical.model.Song
-import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
-import com.o4x.musical.ui.activities.tageditor.ArtistTagEditorActivity
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
 import com.o4x.musical.ui.viewmodel.ArtistDetailsViewModel
 import com.o4x.musical.util.NavigationUtil
+import kotlinx.android.synthetic.main.activity_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import kotlinx.android.synthetic.main.activity_detail.*
 
 /**
  * Be careful when changing things in this Activity!
@@ -96,9 +93,7 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
                 return true
             }
             R.id.action_tag_editor -> {
-                val editor = Intent(this, ArtistTagEditorActivity::class.java)
-                editor.putExtra(AbsTagEditorActivity.EXTRA_ID, data!!.id)
-                startActivityForResult(editor, TAG_EDITOR_REQUEST)
+                NavigationUtil.goToArtistTagEditor(this, data!!)
                 return true
             }
         }

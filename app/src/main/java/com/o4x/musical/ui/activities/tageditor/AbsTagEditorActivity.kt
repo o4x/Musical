@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.o4x.musical.R
+import com.o4x.musical.ads.TapselUtils
 import com.o4x.musical.databinding.ActivityTagBinding
 import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.extensions.startImagePicker
@@ -96,6 +97,8 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
         supportActionBar?.setTitle(R.string.action_tag_editor)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        TapselUtils(this).loadStandardBanner(binding.banner)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

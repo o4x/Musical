@@ -303,9 +303,11 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
         android:background="?backgroundColor">
 
         <View
@@ -322,6 +324,12 @@
             android:textAllCaps="true"
             android:layout_marginHorizontal="16dp"/>
 
-    </FrameLayout>
+        <ir.tapsell.sdk.bannerads.TapsellBannerView
+            android:id="@+id/banner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tapsell_banner_type="banner_320x50" />
+
+    </LinearLayout>
 
 </LinearLayout>

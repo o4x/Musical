@@ -1,13 +1,11 @@
 package com.o4x.musical.ui.fragments.player
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
-import code.name.monkey.appthemehelper.extensions.colorControlNormal
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerBinding
@@ -17,19 +15,14 @@ import com.o4x.musical.helper.MusicPlayerRemote.playingQueue
 import com.o4x.musical.helper.menu.SongMenuHelper
 import com.o4x.musical.model.lyrics.AbsSynchronizedLyrics
 import com.o4x.musical.model.lyrics.Lyrics
+import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.ui.activities.PlayerActivity
-import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
-import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity
 import com.o4x.musical.ui.adapter.cover.AlbumCoverPagerAdapter
 import com.o4x.musical.ui.adapter.cover.BaseCoverPagerAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.dialogs.LyricsDialog.Companion.create
-import com.o4x.musical.ui.dialogs.SongDetailDialog
-import com.o4x.musical.ui.dialogs.SongShareDialog
 import com.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import com.o4x.musical.util.MusicUtil
-import com.o4x.musical.util.NavigationUtil
-import com.o4x.musical.prefs.PreferenceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
