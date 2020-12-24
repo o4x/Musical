@@ -15,9 +15,6 @@
 package com.o4x.musical.extensions
 
 import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
@@ -28,10 +25,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
-import com.github.dhaval2404.imagepicker.ImagePicker
-import com.google.android.material.appbar.MaterialToolbar
 import com.o4x.musical.R
-import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 
 fun AppCompatActivity.applyToolbar(toolbar: Toolbar) {
     toolbar.setBackgroundColor(surfaceColor())

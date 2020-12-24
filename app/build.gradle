@@ -212,4 +212,6 @@ dependencies {
 
 //    implementation 'com.anjlab.android.iab.v3:library:1.1.0'
     implementation "ir.cafebazaar:poolakey:1.0.0-alpha08"
+
+    implementation 'ir.tapsell.sdk:tapsell-sdk-android:4.6.2'
 }

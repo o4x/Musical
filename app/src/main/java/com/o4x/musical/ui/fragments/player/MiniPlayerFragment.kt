@@ -12,6 +12,7 @@ import code.name.monkey.appthemehelper.extensions.textColorSecondary
 import code.name.monkey.appthemehelper.util.ATHUtil.resolveColor
 import code.name.monkey.appthemehelper.util.ColorUtil.withAlpha
 import com.o4x.musical.R
+import com.o4x.musical.ads.TapselUtils
 import com.o4x.musical.databinding.FragmentMiniPlayerBinding
 import com.o4x.musical.drawables.PlayPauseDrawable
 import com.o4x.musical.helper.MusicPlayerRemote.currentSong
@@ -53,6 +54,8 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         super.onViewCreated(view, savedInstanceState)
         view.setOnTouchListener(FlingPlayBackController(serviceActivity))
         setUpMiniPlayer()
+
+        TapselUtils(requireContext()).loadStandardBanner(binding.banner)
     }
 
     private fun setUpMiniPlayer() {

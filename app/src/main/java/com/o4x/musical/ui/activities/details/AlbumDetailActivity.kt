@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.activities.details
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,8 +9,6 @@ import com.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import com.o4x.musical.helper.MusicPlayerRemote.playNext
 import com.o4x.musical.model.Album
 import com.o4x.musical.model.Song
-import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
-import com.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog
 import com.o4x.musical.ui.dialogs.DeleteSongsDialog
 import com.o4x.musical.ui.viewmodel.AlbumDetailsViewModel
@@ -101,9 +98,7 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
                 return true
             }
             R.id.action_tag_editor -> {
-                val intent = Intent(this, AlbumTagEditorActivity::class.java)
-                intent.putExtra(AbsTagEditorActivity.EXTRA_ID, data!!.id)
-                startActivityForResult(intent, TAG_EDITOR_REQUEST)
+                NavigationUtil.goToAlbumTagEditor(this, data!!)
                 return true
             }
             R.id.action_go_to_artist -> {

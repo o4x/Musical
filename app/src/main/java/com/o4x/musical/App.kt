@@ -16,8 +16,10 @@ package com.o4x.musical
 
 import androidx.multidex.MultiDexApplication
 import code.name.monkey.appthemehelper.util.VersionUtils
+import com.o4x.musical.ads.TapselUtils
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.prefs.AppPref
+import ir.tapsell.sdk.Tapsell
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -32,9 +34,10 @@ class App : MultiDexApplication() {
             modules(appModules)
         }
 
-
         if (VersionUtils.hasNougatMR())
             DynamicShortcutManager(this).initDynamicShortcuts()
+
+        Tapsell.initialize(this, "dofbirfkifktctjjeqoasigdkpdoqloqkoethclgiegjbbeislgcralndiihdkblistdic")
     }
 
     override fun onTerminate() {

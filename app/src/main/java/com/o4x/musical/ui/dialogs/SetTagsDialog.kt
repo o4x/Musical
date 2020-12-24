@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.R
+import com.o4x.musical.ads.TapselUtils
 
 class SetTagsDialog(private val on: On) : DialogFragment() {
     open class On {
@@ -19,9 +20,11 @@ class SetTagsDialog(private val on: On) : DialogFragment() {
             .message(R.string.download_tags_message)
             .neutralButton(android.R.string.cancel)
             .negativeButton(R.string.just_image) {
+                TapselUtils(requireContext()).showRewardBased()
                 on.justImage()
             }
             .positiveButton(R.string.all_tags) {
+                TapselUtils(requireContext()).showRewardBased()
                 on.allTags()
             }
     }

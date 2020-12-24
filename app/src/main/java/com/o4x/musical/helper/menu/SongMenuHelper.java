@@ -12,8 +12,6 @@ import androidx.fragment.app.FragmentActivity;
 import com.o4x.musical.R;
 import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.model.Song;
-import com.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity;
-import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity;
 import com.o4x.musical.ui.dialogs.AddToPlaylistDialog;
 import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
 import com.o4x.musical.ui.dialogs.SongDetailDialog;
@@ -52,9 +50,7 @@ public class SongMenuHelper {
                 MusicPlayerRemote.enqueue(song);
                 return true;
             case R.id.action_tag_editor:
-                Intent tagEditorIntent = new Intent(activity, SongTagEditorActivity.class);
-                tagEditorIntent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.getId());
-                activity.startActivity(tagEditorIntent);
+                NavigationUtil.goToSongTagEditor(activity, song);
                 return true;
             case R.id.action_details:
                 SongDetailDialog.create(song).show(activity.getSupportFragmentManager(), "SONG_DETAILS");
