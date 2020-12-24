@@ -1,9 +1,11 @@
 package com.o4x.musical.ads
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.o4x.musical.extensions.hide
 import com.o4x.musical.extensions.show
+import com.o4x.musical.prefs.AppPref
 import ir.tapsell.sdk.*
 import ir.tapsell.sdk.bannerads.TapsellBannerType
 import ir.tapsell.sdk.bannerads.TapsellBannerView
@@ -15,13 +17,21 @@ class TapselUtils(val context: Context) {
 
     companion object {
         private const val TAG = "TapselUtils"
+        private const val TAPSEL_KEY = "dofbirfkifktctjjeqoasigdkpdoqloqkoethclgiegjbbeislgcralndiihdkblistdic"
         private const val REWARD_BASED_ID = "5fe4eef05f5f670001a7351e"
         private const val INTERSTITIAL_VIDEO_ID = "5fe442a85f5f670001a734c7"
         private const val INTERSTITIAL_BANNER_ID = "5fe4db57ebc784000124f473"
         private const val STANDARD_BANNER_ID = "5fe4dd79ebc784000124f474"
+
+        fun initialize(app: Application) {
+            Tapsell.initialize(app, TAPSEL_KEY)
+        }
     }
 
+    private val isNotClean = !AppPref.isCleanVersion
+
     fun showRewardBased() {
+        if (isNotClean)
         Tapsell.requestAd(context,
             REWARD_BASED_ID,
             TapsellAdRequestOptions(),
@@ -48,6 +58,7 @@ class TapselUtils(val context: Context) {
     }
 
     fun showInterstitialVideo() {
+        if (isNotClean)
         Tapsell.requestAd(context,
             INTERSTITIAL_VIDEO_ID,
             TapsellAdRequestOptions(),
@@ -74,6 +85,7 @@ class TapselUtils(val context: Context) {
     }
 
     fun showInterstitialBanner() {
+        if (isNotClean)
         Tapsell.requestAd(context,
             INTERSTITIAL_BANNER_ID,
             TapsellAdRequestOptions(),
@@ -101,6 +113,7 @@ class TapselUtils(val context: Context) {
 
     fun loadStandardBanner(banner: TapsellBannerView) {
         banner.hide()
+        if (isNotClean)
         banner.loadAd(context, STANDARD_BANNER_ID, TapsellBannerType.BANNER_320x50)
         banner.setEventListener(object : TapsellBannerViewEventListener {
             override fun onRequestFilled() {

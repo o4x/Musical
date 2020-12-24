@@ -37,7 +37,7 @@ class App : MultiDexApplication() {
         if (VersionUtils.hasNougatMR())
             DynamicShortcutManager(this).initDynamicShortcuts()
 
-        Tapsell.initialize(this, "dofbirfkifktctjjeqoasigdkpdoqloqkoethclgiegjbbeislgcralndiihdkblistdic")
+        TapselUtils.initialize(this)
     }
 
     override fun onTerminate() {
