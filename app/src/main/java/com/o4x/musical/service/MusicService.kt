@@ -615,7 +615,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     fun openQueue(playingQueue: List<Song>?, startPosition: Int, startPlaying: Boolean) {
         if (playingQueue != null && playingQueue.isNotEmpty() && startPosition >= 0 && startPosition < playingQueue.size) {
             // it is important to copy the playing queue here first as we might add/remove songs later
-            originalPlayingQueue = java.util.ArrayList(playingQueue)
+            originalPlayingQueue = ArrayList(playingQueue)
             this.playingQueue = ArrayList(originalPlayingQueue)
             var position = startPosition
             if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
