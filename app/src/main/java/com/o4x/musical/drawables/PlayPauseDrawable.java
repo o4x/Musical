@@ -20,6 +20,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.o4x.musical.R;
 
 public class PlayPauseDrawable extends Drawable {
+
     private static final long PLAY_PAUSE_ANIMATION_DURATION = 250;
 
     private static final Property<PlayPauseDrawable, Float> PROGRESS =

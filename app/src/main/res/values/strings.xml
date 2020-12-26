@@ -164,6 +164,7 @@
     <string name="translate">Translate</string>
     <string name="translate_summary">Help translating Musical</string>
     <string name="home">Home</string>
+    <string name="queue">Queue</string>
     <string name="library">Library</string>
     <string name="folders">Folders</string>
     <string name="saved_playlist_to">Saved playlist to %s.</string>

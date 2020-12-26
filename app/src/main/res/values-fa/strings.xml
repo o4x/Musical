@@ -154,6 +154,7 @@
     <string name="translate">ترجمه کردن</string>
     <string name="translate_summary">به ترجمه موزیکال کمک کنید</string>
     <string name="home">خانه</string>
+    <string name="queue">صف</string>
     <string name="library">کتابخانه</string>
     <string name="folders">پوشه ها</string>
     <string name="saved_playlist_to">در لیست پخش %s ذخیره شد.</string>
@@ -182,7 +183,7 @@
     <string name="copied_device_info_to_clipboard">اطلاعات دستگاه در کلیپ بورد کپی شد.</string>
     <string name="your_account_data_is_only_used_for_authentication">داده های حساب شما فقط برای احراز هویت استفاده می شود.</string>
     <string name="you_will_be_forwarded_to_the_issue_tracker_website">شما به ایشو ترکر هدایت می شوید.</string>
-    <string name="app_shortcut_shuffle_all_short">بهم زدن</string>
+    <string name="app_shortcut_shuffle_all_short">درهم کردن</string>
     <string name="app_shortcut_top_tracks_short">برترین آهنگ ها</string>
     <string name="app_shortcut_last_added_short">آخرین موارد اضافه شده</string>
     <string name="playlist_is_empty">لیست پخش خالی است</string>
@@ -245,7 +246,7 @@
     <string name="close">بستن</string>
     <string name="error">خطا</string>
     <string name="permission_title">دسترسی به حافظه</string>
-    <string name="permission_summary">برنامه برای دسترسی به حافظه دستگاه شما برای پخش موسیقی نیاز به مجوز دارد</string>
+    <string name="permission_summary">برنامه برای پخش موسیقی نیاز به دسترسی حافظه دستگاه شما دارد</string>
     <string name="lets_go">بر تا بریم</string>
     <string name="just_another">فقط یک موزیک پلیر دیگر</string>
     <string name="pref_title_smart_playlist_limit">محدودیت لیست های پخش هوشمند</string>
@@ -260,7 +261,7 @@
     <string name="pref_header_other">سایر موارد</string>
     <string name="pref_title_delete_cached_images">حذف حافظه پنهان</string>
     <string name="pref_summary_delete_cached_images">حذف تمام تصاویر ذخیره شده</string>
-    <string name="pref_summary_cache_images">سرعت بارگذاری تصاویر را افزایش می دهد، اما کمی بیشتر از حافظه را می گیرد</string>
+    <string name="pref_summary_cache_images">سرعت بارگذاری تصاویر را افزایش می دهد، اما کمی از حافظه را می گیرد</string>
     <string name="pref_title_cache_images">حافظه پنهان تصاویر</string>
     <string name="pref_title_delete_custom_images">حذف تصاویر سفارشی</string>
     <string name="pref_summary_delete_custom_images">همه تصاویر سفارشی مانند هنرمندان ، ژانرها و لیست های پخش را حذف می کند</string>

@@ -564,7 +564,7 @@ object PreferenceUtil {
 
     fun getThemeColorRes(): Int {
         val themeColor: String =
-            sharedPreferences.getStringOrDefault(THEME_COLOR, "purple")
+            sharedPreferences.getStringOrDefault(THEME_COLOR, "default")
         return when (themeColor) {
             "red" -> if (isDarkMode) R.style.ThemeColorRed else R.style.ThemeColorRedLight
             "deep_purple" -> if (isDarkMode) R.style.ThemeColorDeepPurple else R.style.ThemeColorDeepPurpleLight
