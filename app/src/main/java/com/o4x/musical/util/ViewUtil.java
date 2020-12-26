@@ -78,15 +78,19 @@ public class ViewUtil {
         return baseSelector;
     }
 
-    public static boolean hitTest(View v, int x, int y) {
-        final int tx = (int) (v.getTranslationX() + 0.5f);
-        final int ty = (int) (v.getTranslationY() + 0.5f);
-        final int left = v.getLeft() + tx;
-        final int right = v.getRight() + tx;
-        final int top = v.getTop() + ty;
-        final int bottom = v.getBottom() + ty;
+    public static boolean hitTest(View v, View parent, int x, int y) {
+        int[] viewLocation = new int[2];
+        v.getLocationInWindow(viewLocation);
 
-        return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
+        int[] rootLocation = new int[2];
+        parent.getLocationInWindow(rootLocation);
+
+        final int vx = viewLocation[0] - rootLocation[0];
+        final int vy  = viewLocation[1] - rootLocation[1];
+        final int width = v.getWidth();
+        final int height = v.getHeight();
+
+        return (x >= vx) && (x <= vx + width) && (y >= vy) && (y <= vy + height);
     }
 
     public static void setUpFastScrollRecyclerViewColor(Context context, FastScrollRecyclerView recyclerView, int themeColor) {
