@@ -292,7 +292,9 @@
     <string name="use_song">Use song for header</string>
     <string name="reset_header_image">Reset header image</string>
     <string name="musical_clean">Musical clean</string>
-    <string name="clean_description_title">Support development, ad free</string>
-    <string name="just_ad_free">Just ad free</string>
+    <string name="musical_clean_summery">An ad-free experience</string>
+    <string name="clean_description_title">Support development</string>
+    <string name="clean_description_summery">Due to the fact that this program is offline and does not display any ads in offline mode, so if the ad bothers you, you can disconnect your Internet connection :) In fact, the purpose of the "clean" version is to support application development.</string>
+    <string name="musical">Musical</string>
 
 </resources>

@@ -141,7 +141,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                 proIcon.isVisible = false
                 proNext.isVisible = false
                 proSummary.isVisible = false
-                proTitle.text = resources.getString(R.string.app_name)
+                proTitle.text = resources.getString(R.string.musical)
                 banner.setOnClickListener {  }
             } else {
                 proIcon.isVisible = true

@@ -14,7 +14,7 @@
     <fragment
         android:id="@+id/home"
         android:name="com.o4x.musical.ui.fragments.mainactivity.home.HomeFragment"
-        android:label="@string/app_name"
+        android:label="@string/musical"
         tools:layout="@layout/fragment_home" />
 
     <fragment

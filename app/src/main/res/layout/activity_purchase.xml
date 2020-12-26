@@ -53,6 +53,24 @@
             android:text="@string/clean_description_title"
             android:textColor="@color/white" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            android:background="@drawable/rounded_rectangle_outline_2dp"
+            android:backgroundTint="?dividerColor">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/clean_description_summery"
+                android:textColor="@color/white" />
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <LinearLayout
