@@ -27,10 +27,14 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
         }
 
         private val COLORS_DARK = listOf(
-            arrayOf("#202020", "#202020"),
+            arrayOf("#000000", "#000000"),
         ).map {
             it.map { it -> Color.parseColor(it)
             }.toIntArray()
+        }
+
+        fun empty(): CharCoverDrawable {
+            return CharCoverDrawable(CoverData(0, ""))
         }
     }
 
@@ -86,12 +90,7 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
         // Render char's
         paint.color =
             ColorUtil.withAlpha(
-                if (isDarkMode) Color.WHITE else Color.BLACK,
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) 0.4f else 0.1f) // Text Color
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.OVERLAY) // Text Overlapping Pattern
-        }
-        // Because OVERLAY work from API 28
+                if (isDarkMode) Color.WHITE else Color.BLACK, .1f)
 
         paint.textSize = max(canvas.width, canvas.height) * 1.4f // Text Size
         paint.isFakeBoldText = true
