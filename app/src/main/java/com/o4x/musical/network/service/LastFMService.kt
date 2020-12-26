@@ -26,7 +26,8 @@ import retrofit2.http.Query
 
 interface LastFMService {
     companion object {
-        private const val API_KEY = "c679c8d3efa84613dc7dcb2e8d42da4c"
+//        private const val API_KEY = "c679c8d3efa84613dc7dcb2e8d42da4c"
+        private const val API_KEY = ""
         const val BASE_QUERY_PARAMETERS = "?format=json&autocorrect=1&api_key=$API_KEY"
     }
 
