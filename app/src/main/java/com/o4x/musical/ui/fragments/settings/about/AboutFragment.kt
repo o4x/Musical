@@ -10,9 +10,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import code.name.monkey.appthemehelper.extensions.backgroundColor
+import code.name.monkey.appthemehelper.extensions.surfaceColor
+import code.name.monkey.appthemehelper.extensions.textColorPrimary
 import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.prefs.PreferenceUtil.isDarkMode
 import de.psdev.licensesdialog.LicensesDialog
 
 class AboutFragment : PreferenceFragmentCompat() {
@@ -96,8 +97,10 @@ class AboutFragment : PreferenceFragmentCompat() {
 
     private fun getCurrentVersionName(context: Context): String? {
         try {
-            return context.packageManager.getPackageInfo(context.packageName,
-                0).versionName + if (App.isCleanVersion()) " Pro" else ""
+            return context.packageManager.getPackageInfo(
+                context.packageName,
+                0
+            ).versionName + if (App.isCleanVersion()) "clean" else ""
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
@@ -108,14 +111,18 @@ class AboutFragment : PreferenceFragmentCompat() {
         LicensesDialog.Builder(requireContext())
             .setNotices(R.raw.notices)
             .setTitle(R.string.licenses)
-            .setNoticesCssStyle(getString(R.string.license_dialog_style)
-                .replace("{bg-color}", if (isDarkMode) "424242" else "ffffff")
-                .replace("{text-color}", if (isDarkMode) "ffffff" else "000000")
-                .replace("{license-bg-color}",
-                    if (isDarkMode) "535353" else "eeeeee")
+            .setNoticesCssStyle(
+                getString(R.string.license_dialog_style)
+                    .replace("{bg-color}", color(backgroundColor()))
+                    .replace("{text-color}", color(textColorPrimary()))
+                    .replace("{license-bg-color}", color(surfaceColor()))
             )
             .setIncludeOwnLicense(true)
             .build()
             .show()
+    }
+
+    private fun color(intColor: Int): String {
+        return String.format("%06X", 0xFFFFFF and intColor)
     }
 }
