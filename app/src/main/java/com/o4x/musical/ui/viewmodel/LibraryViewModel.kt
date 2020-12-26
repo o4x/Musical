@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.viewmodel
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.*
 import com.o4x.musical.App
@@ -160,8 +161,8 @@ class LibraryViewModel(
         }
     }
 
-    fun search(query: String?) = viewModelScope.launch(IO) {
-        val result = repository.search(query)
+    fun search(realContext: Context, query: String?) = viewModelScope.launch(IO) {
+        val result = repository.search(realContext, query)
         searchResults.postValue(result)
     }
 

@@ -66,6 +66,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif"
             android:singleLine="true"
+            android:textDirection="locale"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
         <com.o4x.musical.views.IconImageView

@@ -75,8 +75,8 @@ class Repository(
 
     suspend fun allSongs(): List<Song> = songRepository.songs()
 
-    suspend fun search(query: String?): MutableList<Any> =
-        searchRepository.searchAll(context, query)
+    suspend fun search(realContext: Context, query: String?): MutableList<Any> =
+        searchRepository.searchAll(realContext, query)
 
     fun getPlaylistSongs(playlist: Playlist): List<Song> =
         if (playlist is AbsCustomPlaylist) {

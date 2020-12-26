@@ -21,6 +21,7 @@
         android:transitionName="@string/transition_mini_player"
         android:id="@+id/container"
         android:animateLayoutChanges="true"
+        android:layoutDirection="ltr"
         tools:ignore="UnusedAttribute">
 
         <FrameLayout

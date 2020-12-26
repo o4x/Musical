@@ -102,6 +102,7 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
         final int iconColor = ATHUtil.INSTANCE.resolveColor(activity, R.attr.iconColor);
         if (file.isDirectory()) {
             holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            holder.image.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
             holder.image.setScaleType(ImageView.ScaleType.CENTER);
             holder.image.setImageResource(R.drawable.ic_keyboard_arrow_right);
         } else {

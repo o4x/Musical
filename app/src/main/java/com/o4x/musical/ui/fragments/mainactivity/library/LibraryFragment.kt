@@ -87,6 +87,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
     private fun setUpViewPager() {
         pagerAdapter = MusicLibraryPagerAdapter(mainActivity, childFragmentManager)
         binding.pager.adapter = pagerAdapter
+        mainActivity.tabs.layoutDirection = View.LAYOUT_DIRECTION_LTR;
         mainActivity.tabs.setupWithViewPager(binding.pager)
         val primaryColor = surfaceColor()
         val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)

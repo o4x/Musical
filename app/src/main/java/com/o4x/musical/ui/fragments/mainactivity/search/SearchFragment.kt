@@ -125,7 +125,7 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
         this.query = query
         voiceSearch.isGone = query.isNotEmpty()
         clearText.isVisible = query.isNotEmpty()
-        libraryViewModel.search(query)
+        libraryViewModel.search(requireContext(), query)
     }
 
     private fun startMicSearch() {
