@@ -164,7 +164,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         val languagePreference: Preference? = findPreference(PreferenceUtil.LANGUAGE_NAME)
         languagePreference?.setOnPreferenceChangeListener { prefs, newValue ->
             setSummary(prefs, newValue)
-//            requireActivity().recreate()
             true
         }
 

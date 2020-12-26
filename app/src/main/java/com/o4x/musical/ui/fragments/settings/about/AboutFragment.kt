@@ -19,7 +19,8 @@ import de.psdev.licensesdialog.LicensesDialog
 class AboutFragment : PreferenceFragmentCompat() {
 
     companion object {
-        private const val TRANSLATE = "https://phonograph.oneskyapp.com/collaboration/project?id=26521"
+//        private const val TRANSLATE = "https://phonograph.oneskyapp.com/collaboration/project?id=26521"
+        private const val EMAIL = "apps.musical@gmail.com"
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -50,38 +51,15 @@ class AboutFragment : PreferenceFragmentCompat() {
         }
 
         val writeAnEmail = R.string.key_write_an_email.getPreference()
-        writeAnEmail.summary = "contact@musical.com"
+        writeAnEmail.summary = EMAIL
         writeAnEmail.setOnPreferenceClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("mailto:contact@musical.com")
-            intent.putExtra(Intent.EXTRA_EMAIL, "contact@musical.com")
+            intent.data = Uri.parse("mailto:$EMAIL")
+            intent.putExtra(Intent.EXTRA_EMAIL, EMAIL)
             intent.putExtra(Intent.EXTRA_SUBJECT, "Musical")
             startActivity(Intent.createChooser(intent, "E-Mail"))
             return@setOnPreferenceClickListener true
         }
-
-//        val reportBugs = R.string.key_report_bugs.getPreference()
-//        reportBugs.setOnPreferenceClickListener {
-//            findNavController().navigate(R.id.action_about_to_bug)
-//            return@setOnPreferenceClickListener true
-//        }
-
-//        val translate = R.string.key_translate.getPreference()
-//        translate.setOnPreferenceClickListener {
-//            openUrl(TRANSLATE)
-//            return@setOnPreferenceClickListener true
-//        }
-
-//        val donate = R.string.key_donate.getPreference()
-//        donate.setOnPreferenceClickListener {
-//            if (App.isProVersion()) {
-//                DonationsDialog.create().show(requireActivity().supportFragmentManager,
-//                    "DONATION_DIALOG")
-//            } else {
-//                startActivity(Intent(requireContext(), PurchaseActivity::class.java))
-//            }
-//            return@setOnPreferenceClickListener true
-//        }
     }
 
 
