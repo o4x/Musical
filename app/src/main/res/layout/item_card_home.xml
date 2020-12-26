@@ -22,7 +22,8 @@
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
 
             <com.o4x.musical.views.IconImageView
                 android:id="@+id/icon"
@@ -40,8 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="0dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="0dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 

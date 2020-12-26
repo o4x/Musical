@@ -32,10 +32,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingEnd="0dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="0dp"
-            android:paddingStart="16dp">
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp">
 
             <TextView
                 android:id="@+id/album_name"
