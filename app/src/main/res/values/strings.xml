@@ -296,5 +296,6 @@
     <string name="clean_description_title">Support development</string>
     <string name="clean_description_summery">Due to the fact that this program is offline and does not display any ads in offline mode, so if the ad bothers you, you can disconnect your Internet connection :) In fact, the purpose of the "clean" version is to support application development.</string>
     <string name="musical">Musical</string>
+    <string name="grant_access">Grant access</string>
 
 </resources>
