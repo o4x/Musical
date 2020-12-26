@@ -149,10 +149,6 @@
     <string name="version">نسخه</string>
     <string name="author">نویسنده</string>
     <string name="write_an_email">نوشتن ایمیل</string>
-    <string name="report_bugs">گزارش اشکالات</string>
-    <string name="report_bugs_summary">گزارش اشکالات یا درخواست ویژگی های جدید.</string>
-    <string name="translate">ترجمه کردن</string>
-    <string name="translate_summary">به ترجمه موزیکال کمک کنید</string>
     <string name="home">خانه</string>
     <string name="queue">صف</string>
     <string name="library">کتابخانه</string>
@@ -279,9 +275,11 @@
     <string name="save_as_preset">ذخیره به عنوان از پیش تعیین شده</string>
     <string name="use_custom_image">استفاده از هدر سفارشی</string>
     <string name="use_song">استفاده از آهنگ برای هدر</string>
-    <string name="reset_header_image">بازنشانه هدر</string>
+    <string name="reset_header_image">بازنشانی هدر</string>
     <string name="musical_clean">موزیکال ویژه</string>
-    <string name="clean_description_title">پشتیبانی از توسعه ، بدون آگهی</string>
-    <string name="just_ad_free">فقط بدون تبلغات</string>
+    <string name="musical_clean_summery">تجربه ای بدون آگهی</string>
+    <string name="clean_description_title">پشتیبانی از توسعه</string>
+    <string name="clean_description_summery">با توجه به این نکته که این برنامه آفلاین بوده و در حالت آفلاین هیچ آگهی نمایش نمی دهد پس اگر آگهی شما را آزار میدهد میتوانید اتصال اینترنت خود را قطع کنید :) در واقع هدف از نسخه "Clean" پشتیبانی از توسعه برنامه  بوده است.</string>
+    <string name="musical">موزیکال</string>
 
 </resources>

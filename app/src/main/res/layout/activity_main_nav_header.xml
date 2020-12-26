@@ -51,7 +51,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="@string/just_ad_free"
+                android:text="@string/musical_clean_summery"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintEnd_toEndOf="@id/pro_title"
                 app:layout_constraintStart_toStartOf="@id/pro_title"
