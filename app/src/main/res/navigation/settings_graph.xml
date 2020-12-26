@@ -29,14 +29,6 @@
         android:label="@string/action_about">
 
         <action
-            android:id="@+id/action_about_to_bug"
-            app:destination="@id/bug_report"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-
-        <action
             android:id="@+id/action_about_to_changes"
             app:destination="@id/change_log"
             app:enterAnim="@anim/slide_in_right"
@@ -45,12 +37,6 @@
             app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
-
-    <fragment
-        android:id="@+id/bug_report"
-        android:name="com.o4x.musical.ui.fragments.settings.bug.model.BugReportFragment"
-        android:label="@string/report_bug"
-        tools:layout="@layout/fragment_bug_report" />
 
     <fragment
         android:id="@+id/change_log"

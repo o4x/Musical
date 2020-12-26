@@ -18,19 +18,9 @@
         app:summary="@string/telegram_group_summary" />
 
     <Preference
-        app:key="@string/key_translate"
-        app:title="@string/translate"
-        app:summary="@string/translate_summary" />
-
-    <Preference
         app:key="@string/key_write_an_email"
         app:title="@string/write_an_email"
         app:summary="%s"/>
-
-    <Preference
-        app:key="@string/key_report_bugs"
-        app:title="@string/report_bugs"
-        app:summary="@string/report_bugs_summary" />
 
     <Preference
         app:key="@string/key_licenses"
