@@ -21,7 +21,7 @@ class CreatePlaylistDialog : DialogFragment() {
         return MaterialDialog(requireContext())
             .title(R.string.new_playlist_title)
             .positiveButton(R.string.create_action)
-            .negativeButton(android.R.string.cancel)
+            .negativeButton(R.string.cancel)
             .input(
                 hintRes = R.string.playlist_name_empty,
                 inputType = InputType.TYPE_CLASS_TEXT or

@@ -529,7 +529,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         override fun createDialog(context: Context): Dialog {
             return MaterialDialog(context)
                 .title(R.string.listing_files)
-                .negativeButton(android.R.string.cancel) {
+                .negativeButton(R.string.cancel) {
                     cancel(false)
                 }
         }

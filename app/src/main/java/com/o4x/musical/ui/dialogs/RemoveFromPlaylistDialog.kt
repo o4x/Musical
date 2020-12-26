@@ -35,7 +35,7 @@ class RemoveFromPlaylistDialog : DialogFragment() {
                 if (activity == null) return@positiveButton
                 PlaylistsUtil.removeFromPlaylist(requireActivity(), songs)
             }
-            .negativeButton(android.R.string.cancel)
+            .negativeButton(R.string.cancel)
     }
 
     companion object {

@@ -33,11 +33,6 @@
         app:summary="@string/report_bugs_summary" />
 
     <Preference
-        app:key="@string/key_donate"
-        app:title="@string/donate"
-        app:summary="@string/donate_summary" />
-
-    <Preference
         app:key="@string/key_licenses"
         app:title="@string/licenses" />
 

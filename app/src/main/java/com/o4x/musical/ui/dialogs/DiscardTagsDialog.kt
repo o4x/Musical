@@ -11,8 +11,8 @@ class DiscardTagsDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog(requireContext())
             .message(R.string.discard_changes)
-            .neutralButton(android.R.string.cancel)
-            .positiveButton(android.R.string.ok) {
+            .neutralButton(R.string.cancel)
+            .positiveButton(R.string.ok) {
                 activity?.finish()
             }
     }

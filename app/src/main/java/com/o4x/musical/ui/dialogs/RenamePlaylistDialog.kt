@@ -20,7 +20,7 @@ class RenamePlaylistDialog : DialogFragment() {
         return MaterialDialog(requireContext())
             .title(R.string.rename_playlist_title)
             .positiveButton(R.string.rename_action)
-            .negativeButton(android.R.string.cancel)
+            .negativeButton(R.string.cancel)
             .input(
                 hintRes = R.string.playlist_name_empty,
                 prefill = PlaylistsUtil.getNameForPlaylist(

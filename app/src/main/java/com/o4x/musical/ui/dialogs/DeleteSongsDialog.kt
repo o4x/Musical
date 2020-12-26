@@ -32,7 +32,7 @@ class DeleteSongsDialog : DialogFragment() {
                 if (activity == null) return@positiveButton
                 MusicUtil.deleteTracks(requireActivity(), songs)
             }
-            .negativeButton(android.R.string.cancel)
+            .negativeButton(R.string.cancel)
 
     }
 

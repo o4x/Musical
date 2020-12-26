@@ -114,7 +114,7 @@ internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equ
             MaterialDialog(requireContext())
                 .title(R.string.save_as_preset)
                 .positiveButton(R.string.create_action)
-                .negativeButton(android.R.string.cancel)
+                .negativeButton(R.string.cancel)
                 .input(
                     hintRes = R.string.title,
                     inputType = InputType.TYPE_CLASS_TEXT or
