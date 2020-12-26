@@ -3,15 +3,17 @@ package com.o4x.musical.ui.viewmodel
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.widget.ImageView
+import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.*
+import androidx.palette.graphics.Palette
 import code.name.monkey.appthemehelper.util.ColorUtil
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.o4x.musical.App
-import com.o4x.musical.R
+import com.o4x.musical.drawables.CharCoverDrawable
 import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.imageloader.glide.loader.GlideLoader
+import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import com.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener
 import com.o4x.musical.interfaces.MusicServiceEventListener
@@ -23,6 +25,7 @@ import com.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.max
 
 class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
     MusicServiceEventListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -43,26 +46,15 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
     }
 
     private fun fetchPosterBitmap() {
+        val listener = object : PaletteTargetListener(App.getContext()) {
+            override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
+                if (resource == null) return
+                posterBitmap.postValue(resource)
+            }
+        }
 
         val loader = GlideLoader.with(App.getContext())
-            .withListener(object : PaletteTargetListener(App.getContext()) {
-                override fun onColorReady(colors: MyPalette, resource: Bitmap?) {
-                    if (resource == null) return
-
-                    val bitmap = if (PreferenceUtil.isDarkMode ==
-                        ColorUtil.isColorDark(colors.backgroundColor)
-                    ) {
-                        CoverUtil.addGradientTo(resource)
-                    } else {
-                        CoverUtil.doubleGradient(
-                            colors.backgroundColor,
-                            colors.mightyColor
-                        )
-                    }
-
-                    posterBitmap.postValue(bitmap)
-                }
-            })
+            .withListener(listener)
 
         var finisher: GlideLoader.GlideBuilder.GlideFinisher? = null
 
@@ -80,22 +72,67 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
                         .load(song)
                 }
                 HomeHeaderPref.TYPE_DEFAULT -> {
-                    finisher = loader
-                        .load(
-                            if (PreferenceUtil.isDarkMode)
-                                R.drawable.default_dark
-                            else
-                                R.drawable.default_light
-                        )
+                    finisher = null
                 }
             }
 
             withContext(Dispatchers.Main) {
-                finisher?.into(
-                    CustomBitmapTarget(
-                        Util.getMaxScreenSize(), Util.getMaxScreenSize()
+                if (finisher == null) {
+                    listener.onResourceReady(
+                        CharCoverDrawable.empty()
+                            .toBitmap(Util.getMaxScreenSize(), Util.getMaxScreenSize())
                     )
+                } else {
+                    finisher?.into(
+                        CustomBitmapTarget(
+                            Util.getMaxScreenSize(), Util.getMaxScreenSize()
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun calculateBitmap(image: ImageView, it: Bitmap) {
+        image.post {
+            val w = image.width
+            val h = image.height
+            if (w <= 0 || h <= 0)
+                return@post
+            val m = max(w, h)
+            viewModelScope.launch(Dispatchers.Default) {
+                val paletteBuilder = Palette.from(it)
+                val colors = MyPalette(
+                    image.context,
+                    paletteBuilder.generate()
                 )
+                var bitmap = Bitmap
+                    .createBitmap(
+                        Bitmap.createScaledBitmap(it, m, m, false),
+                        (m / 2) - (w / 2),
+                        (m / 2) - (h / 2),
+                        w,
+                        h)
+                bitmap = if (PreferenceUtil.isDarkMode ==
+                    ColorUtil.isColorDark(colors.backgroundColor)
+                ) {
+                    CoverUtil.addGradientTo(bitmap)
+                } else {
+                    CoverUtil.doubleGradient(
+                        colors.backgroundColor,
+                        colors.mightyColor,
+                        w,
+                        h
+                    )
+                }
+
+                withContext(Dispatchers.Main) {
+                    GlideApp.with(image.context)
+                        .asBitmap()
+                        .load(bitmap)
+                        .transition(BitmapTransitionOptions.withCrossFade())
+                        .into(image)
+                }
             }
         }
     }

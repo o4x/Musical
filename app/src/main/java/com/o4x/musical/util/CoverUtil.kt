@@ -32,14 +32,14 @@ object CoverUtil {
     }
 
     @JvmStatic
-    fun doubleGradient(color1: Int, color2: Int): Bitmap {
+    fun doubleGradient(color1: Int, color2: Int, width: Int, height: Int): Bitmap {
         val gd = GradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
             intArrayOf(color1.withAlpha(.6f), color2.withAlpha(.6f))
         )
         gd.cornerRadius = 0f
 
-        return addGradientTo(gd.toBitmap(500, 500), fromMiddle = false)
+        return addGradientTo(gd.toBitmap(width, height), fromMiddle = false)
     }
 
 }

@@ -3,6 +3,7 @@ package com.o4x.musical.ui.fragments.mainactivity.home
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
@@ -10,8 +11,11 @@ import android.widget.FrameLayout
 import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.lifecycleScope
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import code.name.monkey.appthemehelper.extensions.textColorTertiary
+import code.name.monkey.appthemehelper.util.ColorUtil
 import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -20,24 +24,30 @@ import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentHomeBinding
 import com.o4x.musical.extensions.toPlaylistDetail
 import com.o4x.musical.helper.GridHelper
+import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.helper.homeGridSize
 import com.o4x.musical.imageloader.glide.module.GlideApp
 import com.o4x.musical.model.smartplaylist.HistoryPlaylist
 import com.o4x.musical.model.smartplaylist.LastAddedPlaylist
 import com.o4x.musical.prefs.HomeHeaderPref
+import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.ui.activities.MusicPickerActivity
 import com.o4x.musical.ui.adapter.home.HomeAdapter
 import com.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import com.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import com.o4x.musical.ui.viewmodel.HomeHeaderViewModel
 import com.o4x.musical.ui.viewmodel.ScrollPositionViewModel
+import com.o4x.musical.util.CoverUtil
 import com.o4x.musical.util.MusicUtil
+import com.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import org.koin.ext.scope
 import java.io.File
 import kotlin.math.max
 import kotlin.math.min
@@ -159,7 +169,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
 
     private fun setUpHeights() {
-        displayHeight = Resources.getSystem().displayMetrics.heightPixels
+        displayHeight = Util.getScreenHeight()
         var params: ViewGroup.LayoutParams
 
         // Set up header height
@@ -194,11 +204,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private fun setupPoster() {
         posterViewModel.getPosterBitmap().observe(viewLifecycleOwner, {
-            GlideApp.with(this)
-                .asBitmap()
-                .load(it)
-                .transition(BitmapTransitionOptions.withCrossFade())
-                .into(binding.poster)
+            posterViewModel.calculateBitmap(binding.poster, it)
         })
     }
 
