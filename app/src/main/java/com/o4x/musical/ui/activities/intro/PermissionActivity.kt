@@ -35,10 +35,9 @@ class PermissionActivity : AbsMusicServiceActivity() {
         setLightNavigationBar(true)
         setTaskDescriptionColorAuto()
 
-        setupTitle()
         update()
 
-        binding.storagePermission.setButtonClick {
+        binding.storagePermission.setOnClickListener {
             requestPermissions()
         }
 
@@ -47,17 +46,6 @@ class PermissionActivity : AbsMusicServiceActivity() {
                 finish()
             }
         }
-    }
-
-    private fun setupTitle() {
-        val hexColor = String.format("#%06X", 0xFFFFFF and accentColor())
-        val appName = HtmlCompat.fromHtml(
-            "Welcome to <b><span  style='color:$hexColor';>Musical</span></b>" +
-                    " <br/> " +
-                    "We love to see you <span  style='color:$hexColor';>SMILE</span> :)",
-            HtmlCompat.FROM_HTML_MODE_COMPACT
-        )
-        binding.appNameText.text = appName
     }
 
     override fun onRequestPermissionsResult(

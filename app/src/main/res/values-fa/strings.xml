@@ -281,5 +281,6 @@
     <string name="clean_description_title">پشتیبانی از توسعه</string>
     <string name="clean_description_summery">با توجه به این نکته که این برنامه آفلاین بوده و در حالت آفلاین هیچ آگهی نمایش نمی دهد پس اگر آگهی شما را آزار میدهد میتوانید اتصال اینترنت خود را قطع کنید :) در واقع هدف از نسخه "Clean" پشتیبانی از توسعه برنامه  بوده است.</string>
     <string name="musical">موزیکال</string>
+    <string name="grant_access">اجازه دسترسی</string>
 
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -22,10 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="32dp"
-                android:text="@string/app_name"
-                android:textAppearance="@style/TextViewHeadline6"
-                android:textColor="?android:attr/textColorPrimary"
-                app:lineHeightHint="32sp" />
+                android:text="@string/musical"
+                style="@style/TextViewHeadline5"/>
 
             <View
                 android:id="@+id/divider"
@@ -33,16 +30,36 @@
                 android:layout_height="1dp"
                 android:background="?attr/dividerHorizontal" />
 
-            <com.o4x.musical.views.PermissionItem
-                android:id="@+id/storagePermission"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:permissionColor="?colorAccent"
-                app:permissionButtonTitle="Grant access"
-                app:permissionIcon="@drawable/ic_sd_card"
-                app:permissionTitle="@string/permission_title"
-                app:permissionTitleNumber="1"
-                app:permissionTitleSubTitle="@string/permission_summary" />
+                android:padding="32dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp"
+                    android:text="@string/permission_title" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/permission_summary" />
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:id="@+id/storage_permission"
+                    android:layout_gravity="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/grant_access"
+                    android:textColor="?colorAccent"/>
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
