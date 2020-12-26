@@ -153,7 +153,7 @@ object PreferenceUtil {
         return sharedPreferences.getBoolean(REMEMBER_LAST_TAB, true)
     }
 
-    val languageCode get() = sharedPreferences.getString(LANGUAGE_NAME, "auto")
+    val languageCode get() = sharedPreferences.getString(LANGUAGE_NAME, "auto")!!
 
     @JvmStatic
     var lastPage: Int

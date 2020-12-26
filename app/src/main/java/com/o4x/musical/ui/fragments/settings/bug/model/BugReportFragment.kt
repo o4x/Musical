@@ -206,13 +206,13 @@ class BugReportFragment : Fragment() {
         var hasErrors = false
         if (optionUseAccount!!.isChecked) {
             if (TextUtils.isEmpty(inputUsername!!.text)) {
-                setError(inputLayoutUsername, R.string.bug_report_no_username)
+//                setError(inputLayoutUsername, R.string.bug_report_no_username)
                 hasErrors = true
             } else {
                 removeError(inputLayoutUsername)
             }
             if (TextUtils.isEmpty(inputPassword!!.text)) {
-                setError(inputLayoutPassword, R.string.bug_report_no_password)
+//                setError(inputLayoutPassword, R.string.bug_report_no_password)
                 hasErrors = true
             } else {
                 removeError(inputLayoutPassword)
@@ -258,7 +258,7 @@ class BugReportFragment : Fragment() {
             return MaterialDialog(context)
                 //                    .progress(true, 0)
                 //                    .progressIndeterminateStyle(true)
-                .title(R.string.bug_report_uploading)
+//                .title(R.string.bug_report_uploading)
         }
 
         @Result
@@ -298,22 +298,22 @@ class BugReportFragment : Fragment() {
                 RESULT_BAD_CREDENTIALS -> MaterialDialog(context)
                     .title(R.string.bug_report_failed)
                     .message(R.string.bug_report_failed_wrong_credentials)
-                    .positiveButton(android.R.string.ok)
+                    .positiveButton(R.string.ok)
                     .show()
                 RESULT_INVALID_TOKEN -> MaterialDialog(context)
                     .title(R.string.bug_report_failed)
                     .message(R.string.bug_report_failed_invalid_token)
-                    .positiveButton(android.R.string.ok)
+                    .positiveButton(R.string.ok)
                     .show()
                 RESULT_ISSUES_NOT_ENABLED -> MaterialDialog(context)
                     .title(R.string.bug_report_failed)
                     .message(R.string.bug_report_failed_issues_not_available)
-                    .positiveButton(android.R.string.ok)
+                    .positiveButton(R.string.ok)
                     .show()
                 else -> MaterialDialog(context)
                     .title(R.string.bug_report_failed)
                     .message(R.string.bug_report_failed_unknown)
-                    .positiveButton(android.R.string.ok) {
+                    .positiveButton(R.string.ok) {
                         tryToFinishActivity()
                     }
                     .also {

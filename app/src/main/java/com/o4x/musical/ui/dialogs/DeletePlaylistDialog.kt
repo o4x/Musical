@@ -33,7 +33,7 @@ class DeletePlaylistDialog : DialogFragment() {
                 if (activity == null) return@positiveButton
                 PlaylistsUtil.deletePlaylists(requireActivity(), playlists)
             }
-            .negativeButton(android.R.string.cancel)
+            .negativeButton(R.string.cancel)
     }
 
     companion object {

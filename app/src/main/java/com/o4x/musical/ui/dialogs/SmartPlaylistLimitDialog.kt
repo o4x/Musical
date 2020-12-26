@@ -23,7 +23,7 @@ class SmartPlaylistLimitDialog : DialogFragment() {
         return MaterialDialog(requireContext())
             .title(R.string.pref_title_smart_playlist_limit)
             .positiveButton(R.string.change)
-            .negativeButton(android.R.string.cancel)
+            .negativeButton(R.string.cancel)
             .input(
                 prefill = smartPlaylistLimit.toString(),
                 inputType = InputType.TYPE_CLASS_NUMBER

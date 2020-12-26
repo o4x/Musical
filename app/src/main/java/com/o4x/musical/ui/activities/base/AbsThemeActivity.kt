@@ -1,6 +1,8 @@
 package com.o4x.musical.ui.activities.base
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
@@ -8,7 +10,6 @@ import code.name.monkey.appthemehelper.ATH
 import code.name.monkey.appthemehelper.ATHActivity
 import code.name.monkey.appthemehelper.extensions.surfaceColor
 import code.name.monkey.appthemehelper.util.ColorUtil
-import code.name.monkey.appthemehelper.util.VersionUtils
 import com.o4x.musical.LanguageContextWrapper
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.prefs.PreferenceUtil
@@ -22,6 +23,7 @@ abstract class AbsThemeActivity : ATHActivity() {
         setTheme()
         super.onCreate(savedInstanceState)
         theme.applyStyle(PreferenceUtil.getThemeColorRes(), true)
+        PreferenceUtil.registerOnSharedPreferenceChangedListener(this)
     }
 
     open fun setTheme() {
@@ -99,12 +101,24 @@ abstract class AbsThemeActivity : ATHActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterSystemUiVisibility()
+        PreferenceUtil.unregisterOnSharedPreferenceChangedListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        super.onSharedPreferenceChanged(sharedPreferences, key)
+        if (key == PreferenceUtil.LANGUAGE_NAME) {
+            recreate()
+        }
     }
 
     override fun attachBaseContext(newBase: Context?) {
         val code = PreferenceUtil.languageCode
         if (code != "auto") {
             super.attachBaseContext(LanguageContextWrapper.wrap(newBase, Locale(code)))
-        } else super.attachBaseContext(newBase)
+        } else {
+            super.attachBaseContext(
+                LanguageContextWrapper.wrap(newBase,
+                    Locale(Resources.getSystem().configuration.locale.language)))
+        }
     }
 }

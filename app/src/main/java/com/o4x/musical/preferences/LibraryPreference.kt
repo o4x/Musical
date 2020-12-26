@@ -47,8 +47,8 @@ class LibraryPreferenceDialog : DialogFragment() {
             .neutralButton(R.string.reset_action) {
                 updateCategories(PreferenceUtil.defaultCategories)
             }
-            .negativeButton(android.R.string.cancel)
-            .positiveButton(android.R.string.ok) {
+            .negativeButton(R.string.cancel)
+            .positiveButton(R.string.ok) {
                 updateCategories(categoryAdapter.categoryInfos)
             }
             .customView(view = view, horizontalPadding = true)
