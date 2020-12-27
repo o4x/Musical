@@ -20,11 +20,11 @@ class SetTagsDialog(private val on: On) : DialogFragment() {
             .message(R.string.download_tags_message)
             .neutralButton(R.string.cancel)
             .negativeButton(R.string.just_image) {
-                TapselUtils(requireContext()).showRewardBased()
+                TapselUtils(requireContext()).showSmartInterstitial()
                 on.justImage()
             }
             .positiveButton(R.string.all_tags) {
-                TapselUtils(requireContext()).showRewardBased()
+                TapselUtils(requireContext()).showSmartInterstitial()
                 on.allTags()
             }
     }

@@ -28,7 +28,7 @@ object NavigationUtil {
         val intent = Intent(activity, ArtistDetailActivity::class.java)
         intent.putExtra(AbsDetailActivity.EXTRA_ID, artistId)
         activity.startActivity(intent)
-        TapselUtils(activity).showRandomsInterstitial()
+        TapselUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
@@ -36,7 +36,7 @@ object NavigationUtil {
         val intent = Intent(activity, AlbumDetailActivity::class.java)
         intent.putExtra(AbsDetailActivity.EXTRA_ID, albumId)
         activity.startActivity(intent)
-        TapselUtils(activity).showRandomsInterstitial()
+        TapselUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
@@ -44,7 +44,7 @@ object NavigationUtil {
         val tagEditorIntent = Intent(activity, SongTagEditorActivity::class.java)
         tagEditorIntent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.id)
         activity.startActivity(tagEditorIntent)
-        TapselUtils(activity).showRandomsInterstitial()
+        TapselUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
@@ -52,7 +52,7 @@ object NavigationUtil {
         val intent = Intent(activity, AlbumTagEditorActivity::class.java)
         intent.putExtra(AbsTagEditorActivity.EXTRA_ID, album.id)
         activity.startActivityForResult(intent, AbsDetailActivity.TAG_EDITOR_REQUEST)
-        TapselUtils(activity).showRandomsInterstitial()
+        TapselUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
@@ -60,7 +60,7 @@ object NavigationUtil {
         val editor = Intent(activity, ArtistTagEditorActivity::class.java)
         editor.putExtra(AbsTagEditorActivity.EXTRA_ID, artist.id)
         activity.startActivityForResult(editor, AbsDetailActivity.TAG_EDITOR_REQUEST)
-        TapselUtils(activity).showRandomsInterstitial()
+        TapselUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic

@@ -18,7 +18,7 @@
 
         <ListPreference
             app:key="@string/key_theme_color"
-            app:defaultValue="@string/theme_color_entry_value_purple"
+            app:defaultValue="@string/theme_color_entry_value_default"
             app:entries="@array/pref_color_theme_list_titles"
             app:entryValues="@array/pref_color_theme_list_values"
             app:summary="%s"
