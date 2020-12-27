@@ -38,6 +38,11 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
         })
     }
 
+    override fun onDestroyView() {
+        mainActivity.removeMusicServiceEventListener(viewModel)
+        super.onDestroyView()
+    }
+
     override fun onResume() {
         super.onResume()
         setToolbarTitle(data?.name)

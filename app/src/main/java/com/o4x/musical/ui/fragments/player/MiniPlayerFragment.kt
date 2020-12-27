@@ -94,6 +94,10 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         updateSongTitle()
     }
 
+    override fun onMediaStoreChanged() {
+        updateSongTitle()
+    }
+
     override fun onPlayStateChanged() {
         updatePlayPauseDrawableState(true)
     }
