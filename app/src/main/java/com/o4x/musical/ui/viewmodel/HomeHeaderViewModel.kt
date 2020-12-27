@@ -93,46 +93,42 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
         }
     }
 
-    fun calculateBitmap(image: ImageView, it: Bitmap) {
-        image.post {
-            val w = image.width
-            val h = image.height
-            if (w <= 0 || h <= 0)
-                return@post
-            val m = max(w, h)
-            viewModelScope.launch(Dispatchers.Default) {
-                val paletteBuilder = Palette.from(it)
-                val colors = MyPalette(
-                    image.context,
-                    paletteBuilder.generate()
+    fun calculateBitmap(image: ImageView, it: Bitmap, w: Int, h: Int) {
+        if (w <= 0 || h <= 0)
+            return
+        val m = max(w, h)
+        viewModelScope.launch(Dispatchers.Default) {
+            val paletteBuilder = Palette.from(it)
+            val colors = MyPalette(
+                image.context,
+                paletteBuilder.generate()
+            )
+            var bitmap = Bitmap
+                .createBitmap(
+                    Bitmap.createScaledBitmap(it, m, m, false),
+                    (m / 2) - (w / 2),
+                    (m / 2) - (h / 2),
+                    w,
+                    h)
+            bitmap = if (PreferenceUtil.isDarkMode ==
+                ColorUtil.isColorDark(colors.backgroundColor)
+            ) {
+                CoverUtil.addGradientTo(bitmap)
+            } else {
+                CoverUtil.doubleGradient(
+                    colors.backgroundColor,
+                    colors.mightyColor,
+                    w,
+                    h
                 )
-                var bitmap = Bitmap
-                    .createBitmap(
-                        Bitmap.createScaledBitmap(it, m, m, false),
-                        (m / 2) - (w / 2),
-                        (m / 2) - (h / 2),
-                        w,
-                        h)
-                bitmap = if (PreferenceUtil.isDarkMode ==
-                    ColorUtil.isColorDark(colors.backgroundColor)
-                ) {
-                    CoverUtil.addGradientTo(bitmap)
-                } else {
-                    CoverUtil.doubleGradient(
-                        colors.backgroundColor,
-                        colors.mightyColor,
-                        w,
-                        h
-                    )
-                }
+            }
 
-                withContext(Dispatchers.Main) {
-                    GlideApp.with(image.context)
-                        .asBitmap()
-                        .load(bitmap)
-                        .transition(BitmapTransitionOptions.withCrossFade())
-                        .into(image)
-                }
+            withContext(Dispatchers.Main) {
+                GlideApp.with(image.context)
+                    .asBitmap()
+                    .load(bitmap)
+                    .transition(BitmapTransitionOptions.withCrossFade())
+                    .into(image)
             }
         }
     }
