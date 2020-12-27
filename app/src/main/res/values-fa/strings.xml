@@ -148,7 +148,7 @@
     <string name="restored_previous_purchase_please_restart">خرید قبلی بازیابی شد. لطفاً برنامه را راه اندازی کنید تا از همه ویژگی ها استفاده شود.</string>
     <string name="version">نسخه</string>
     <string name="author">نویسنده</string>
-    <string name="write_an_email">نوشتن ایمیل</string>
+    <string name="email">ایمیل</string>
     <string name="home">خانه</string>
     <string name="queue">صف</string>
     <string name="library">کتابخانه</string>

@@ -26,7 +26,7 @@
     <string name="key_app_version" translatable="false">app_version</string>
     <string name="key_changelog" translatable="false">changelog</string>
     <string name="key_licenses" translatable="false">licenses</string>
-    <string name="key_write_an_email" translatable="false">write_an_email</string>
+    <string name="key_email" translatable="false">email</string>
     <string name="key_telegram" translatable="false">telegram</string>
 
 </resources>

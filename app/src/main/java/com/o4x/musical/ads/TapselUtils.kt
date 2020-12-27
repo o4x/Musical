@@ -120,10 +120,14 @@ class TapselUtils(val context: Context) {
             override fun onRequestFilled() {
                 banner.show()
             }
-
-            override fun onNoAdAvailable() {}
-            override fun onNoNetwork() {}
+            override fun onNoAdAvailable() {
+                banner.hide()
+            }
+            override fun onNoNetwork() {
+                banner.hide()
+            }
             override fun onError(message: String) {
+                banner.hide()
                 Log.e(TAG, message)
             }
             override fun onHideBannerView() {
