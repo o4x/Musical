@@ -66,10 +66,11 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
 
     // Heights //
-    private var displayHeight by Delegates.notNull<Int>()
-    private var appbarHeight by Delegates.notNull<Int>()
-    private var toolbarHeight by Delegates.notNull<Int>()
-    private var headerHeight by Delegates.notNull<Int>()
+    private var displayHeight = 0
+    private var appbarHeight = 0
+    private var toolbarHeight = 0
+    private var headerHeight = 0
+    private var posterHeight = 0
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -177,7 +178,8 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
         // Set up poster image height
         params = binding.poster.layoutParams
-        params.height = (displayHeight / 1.5f).toInt()
+        posterHeight = (displayHeight / 1.5f).toInt()
+        params.height = posterHeight
         binding.poster.layoutParams = params
 
 
@@ -202,7 +204,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private fun setupPoster() {
         posterViewModel.getPosterBitmap().observe(viewLifecycleOwner, {
-            posterViewModel.calculateBitmap(binding.poster, it)
+            posterViewModel.calculateBitmap(binding.poster, it, Util.getScreenWidth(), posterHeight)
         })
     }
 
