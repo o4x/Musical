@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.o4x.musical.extensions.hide
 import com.o4x.musical.extensions.show
+import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.prefs.AppPref
 import ir.tapsell.sdk.*
 import ir.tapsell.sdk.bannerads.TapsellBannerType
@@ -125,20 +126,18 @@ class TapselUtils(val context: Context) {
             override fun onError(message: String) {
                 Log.e(TAG, message)
             }
-            override fun onHideBannerView() {}
+            override fun onHideBannerView() {
+                banner.hide()
+            }
         })
     }
 
-    fun showRandomsInterstitial() {
-        val random = Random()
-        val numberOfMethods = 2
-
-        when (random.nextInt(numberOfMethods)) {
-            0 -> showInterstitialVideo()
-            1 -> showInterstitialBanner()
-            else -> showInterstitialBanner()
+    fun showSmartInterstitial() {
+        if (MusicPlayerRemote.isPlaying) {
+            showInterstitialBanner()
+        } else {
+            showInterstitialVideo()
         }
-
     }
 
 }
