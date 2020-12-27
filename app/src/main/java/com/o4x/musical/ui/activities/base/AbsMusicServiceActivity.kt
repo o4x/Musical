@@ -34,6 +34,7 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
         super.onCreate(savedInstanceState)
 
         addMusicServiceEventListener(libraryViewModel)
+        addMusicServiceEventListener(playerViewModel)
         PreferenceUtil.registerOnSharedPreferenceChangedListener(libraryViewModel)
 
         serviceToken = bindToService(this, object : ServiceConnection {
@@ -46,19 +47,18 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
             }
         })
         setPermissionDeniedMessage(getString(R.string.permission_external_storage_denied))
-        addMusicServiceEventListener(playerViewModel)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         PreferenceUtil.unregisterOnSharedPreferenceChangedListener(libraryViewModel)
         removeMusicServiceEventListener(libraryViewModel)
+        removeMusicServiceEventListener(playerViewModel)
         unbindFromService(serviceToken)
         if (receiverRegistered) {
             unregisterReceiver(musicStateReceiver)
             receiverRegistered = false
         }
-        removeMusicServiceEventListener(playerViewModel)
     }
 
     fun addMusicServiceEventListener(listener: MusicServiceEventListener?) {

@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +61,8 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AppPref.registerOnSharedPreferenceChangedListener(this)
+        Log.e("ssssssssssssssss", "sssssssss")
+
         if (!hasPermissions()) {
             val myIntent = Intent(
                 this,
@@ -69,6 +71,8 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
             this.startActivity(myIntent)
         }
+
+        AppPref.registerOnSharedPreferenceChangedListener(this)
 
         setDrawUnderStatusBar()
         setNavigationBarColorAuto()
