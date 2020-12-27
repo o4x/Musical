@@ -21,6 +21,7 @@ class AboutFragment : PreferenceFragmentCompat() {
     companion object {
 //        private const val TRANSLATE = "https://phonograph.oneskyapp.com/collaboration/project?id=26521"
         private const val EMAIL = "apps.musical@gmail.com"
+        private const val TELEGRAM = "https://t.me/app_musical"
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -50,14 +51,21 @@ class AboutFragment : PreferenceFragmentCompat() {
             return@setOnPreferenceClickListener true
         }
 
-        val writeAnEmail = R.string.key_write_an_email.getPreference()
-        writeAnEmail.summary = EMAIL
-        writeAnEmail.setOnPreferenceClickListener {
+        val email = R.string.key_email.getPreference()
+        email.summary = EMAIL
+        email.setOnPreferenceClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:$EMAIL")
             intent.putExtra(Intent.EXTRA_EMAIL, EMAIL)
             intent.putExtra(Intent.EXTRA_SUBJECT, "Musical")
             startActivity(Intent.createChooser(intent, "E-Mail"))
+            return@setOnPreferenceClickListener true
+        }
+
+        val telegram = R.string.key_telegram.getPreference()
+        telegram.summary = TELEGRAM
+        telegram.setOnPreferenceClickListener {
+            openUrl(TELEGRAM)
             return@setOnPreferenceClickListener true
         }
     }

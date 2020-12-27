@@ -158,7 +158,7 @@
     <string name="restored_previous_purchase_please_restart">Restored previous purchase. Please restart the app to make use of all features.</string>
     <string name="version">Version</string>
     <string name="author">Author</string>
-    <string name="write_an_email">Write an email</string>
+    <string name="email">Email</string>
     <string name="home">Home</string>
     <string name="queue">Queue</string>
     <string name="library">Library</string>
