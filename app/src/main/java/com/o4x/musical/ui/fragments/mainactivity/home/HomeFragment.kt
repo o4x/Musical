@@ -57,9 +57,7 @@ class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private val posterViewModel by sharedViewModel<HomeHeaderViewModel>()
 
-    private val scrollPositionViewModel by viewModel<ScrollPositionViewModel> {
-        parametersOf(null)
-    }
+    private val scrollPositionViewModel by viewModel<ScrollPositionViewModel>()
 
     private lateinit var recentlyAdapter: HomeAdapter
     private lateinit var newAdapter: HomeAdapter

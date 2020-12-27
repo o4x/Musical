@@ -61,7 +61,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.e("ssssssssssssssss", "sssssssss")
+
 
         if (!hasPermissions()) {
             val myIntent = Intent(
@@ -330,7 +330,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
     private fun setupNavController() {
         navController = findNavController(R.id.fragment_container)
-        
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.home -> navigation_view.setCheckedItem(R.id.nav_home)
