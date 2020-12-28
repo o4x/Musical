@@ -41,7 +41,7 @@ class AlbumCoverPagerAdapter(fm: FragmentManager, dataSet: List<Song>) :
                                 .into(it)
                         }
                     }
-                }.also { it.loadPlaceholderPalette = true })
+                })
                 .load(song)
                 .into(CustomBitmapTarget(Util.getScreenWidth(), Util.getScreenHeight()))
         }
