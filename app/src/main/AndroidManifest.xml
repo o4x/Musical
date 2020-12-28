@@ -23,11 +23,11 @@
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/Theme.Musical.Black"
-        tools:ignore="UnusedAttribute">
+        android:theme="@style/Theme.Musical.Black">
 
         <activity
-            android:name=".ui.activities.MusicPickerActivity">
+            android:name=".ui.activities.MusicPickerActivity"
+            android:launchMode="singleTop">
 
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
@@ -39,8 +39,12 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ui.activities.PlayerActivity" />
-        <activity android:name=".ui.activities.MainActivity">
+        <activity
+            android:name=".ui.activities.PlayerActivity"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
@@ -105,29 +109,47 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.details.AlbumDetailActivity" />
-        <activity android:name=".ui.activities.details.ArtistDetailActivity" />
+        <activity
+            android:name=".ui.activities.details.AlbumDetailActivity"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".ui.activities.details.ArtistDetailActivity"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.activities.tageditor.SongTagEditorActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.activities.tageditor.AlbumTagEditorActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.activities.tageditor.ArtistTagEditorActivity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".ui.activities.tageditor.onlinesearch.SongSearchActivity" />
-        <activity android:name=".ui.activities.tageditor.onlinesearch.AlbumSearchActivity" />
-        <activity android:name=".ui.activities.tageditor.onlinesearch.ArtistSearchActivity" />
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".ui.activities.tageditor.onlinesearch.SongSearchActivity"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".ui.activities.tageditor.onlinesearch.AlbumSearchActivity"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".ui.activities.tageditor.onlinesearch.ArtistSearchActivity"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.activities.SettingsActivity"
-            android:label="@string/action_settings" />
+            android:label="@string/action_settings"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".appshortcuts.AppShortcutLauncherActivity"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".ui.activities.purchase.BazarPurchaseActivity" />
-        <activity android:name=".ui.activities.intro.PermissionActivity" />
+        <activity
+            android:name=".ui.activities.purchase.BazarPurchaseActivity"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".ui.activities.intro.PermissionActivity"
+            android:launchMode="singleTop"/>
 
         <service
             android:name=".service.MusicService"
