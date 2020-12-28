@@ -3,15 +3,14 @@ package com.o4x.musical.ads
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.o4x.musical.App
 import com.o4x.musical.extensions.hide
 import com.o4x.musical.extensions.show
 import com.o4x.musical.helper.MusicPlayerRemote
-import com.o4x.musical.prefs.AppPref
 import ir.tapsell.sdk.*
 import ir.tapsell.sdk.bannerads.TapsellBannerType
 import ir.tapsell.sdk.bannerads.TapsellBannerView
 import ir.tapsell.sdk.bannerads.TapsellBannerViewEventListener
-import java.util.*
 
 
 class TapselUtils(val context: Context) {
@@ -29,7 +28,7 @@ class TapselUtils(val context: Context) {
         }
     }
 
-    private val isNotClean = !AppPref.isCleanVersion
+    private val isNotClean = !App.isCleanVersion()
 
     fun showRewardBased() {
         if (isNotClean)
@@ -114,26 +113,27 @@ class TapselUtils(val context: Context) {
 
     fun loadStandardBanner(banner: TapsellBannerView) {
         banner.hide()
-        if (isNotClean)
-        banner.loadAd(context, STANDARD_BANNER_ID, TapsellBannerType.BANNER_320x50)
-        banner.setEventListener(object : TapsellBannerViewEventListener {
-            override fun onRequestFilled() {
-                banner.show()
-            }
-            override fun onNoAdAvailable() {
-                banner.hide()
-            }
-            override fun onNoNetwork() {
-                banner.hide()
-            }
-            override fun onError(message: String) {
-                banner.hide()
-                Log.e(TAG, message)
-            }
-            override fun onHideBannerView() {
-                banner.hide()
-            }
-        })
+        if (isNotClean) {
+            banner.loadAd(context, STANDARD_BANNER_ID, TapsellBannerType.BANNER_320x50)
+            banner.setEventListener(object : TapsellBannerViewEventListener {
+                override fun onRequestFilled() {
+                    banner.show()
+                }
+                override fun onNoAdAvailable() {
+                    banner.hide()
+                }
+                override fun onNoNetwork() {
+                    banner.hide()
+                }
+                override fun onError(message: String) {
+                    banner.hide()
+                    Log.e(TAG, message)
+                }
+                override fun onHideBannerView() {
+                    banner.hide()
+                }
+            })
+        }
     }
 
     fun showSmartInterstitial() {
