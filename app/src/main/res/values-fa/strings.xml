@@ -82,10 +82,10 @@
     <string name="save_playlists_title">ذخیره به عنوان فایل ها</string>
     <string name="add_playlist_title">افزودن به لیست پخش</string>
     <string name="select_all_title">انتخاب همه</string>
-    <string name="action_shuffle_all">درهم کردن همه</string>
-    <string name="action_shuffle_album">درهم کردن آلبوم</string>
-    <string name="action_shuffle_artist">درهم کردن هنرمند</string>
-    <string name="action_shuffle_playlist">درهم کردن لیست پخش</string>
+    <string name="action_shuffle_all">پخش تصادفی آهنگ</string>
+    <string name="action_shuffle_album">پخش تصادفی آلبوم</string>
+    <string name="action_shuffle_artist">پخش تصادفی هنرمند</string>
+    <string name="action_shuffle_playlist">پخش تصادفی لیست پخش</string>
     <string name="action_clear_playing_queue">پاک کردن صف پخش</string>
     <string name="action_save_playing_queue">ذخیره کردن صف پخش</string>
     <string name="action_go_to_start_directory">رفتن به پوشه شروع</string>
@@ -179,7 +179,7 @@
     <string name="copied_device_info_to_clipboard">اطلاعات دستگاه در کلیپ بورد کپی شد.</string>
     <string name="your_account_data_is_only_used_for_authentication">داده های حساب شما فقط برای احراز هویت استفاده می شود.</string>
     <string name="you_will_be_forwarded_to_the_issue_tracker_website">شما به ایشو ترکر هدایت می شوید.</string>
-    <string name="app_shortcut_shuffle_all_short">درهم کردن</string>
+    <string name="app_shortcut_shuffle_all_short">پخش تصادفی</string>
     <string name="app_shortcut_top_tracks_short">برترین آهنگ ها</string>
     <string name="app_shortcut_last_added_short">آخرین موارد اضافه شده</string>
     <string name="playlist_is_empty">لیست پخش خالی است</string>
@@ -266,7 +266,7 @@
     <string name="no">نه</string>
     <string name="delete_success">با موفقیت حذف شد</string>
     <string name="all_songs">همه آهنگ ها</string>
-    <string name="shuffle">درهم کردن</string>
+    <string name="shuffle">پخش تصادفی</string>
     <string name="sleep_timer">تایمر خواب</string>
     <string name="start">شروع</string>
     <string name="stop">ایست</string>
