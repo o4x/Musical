@@ -52,8 +52,7 @@ class App : MultiDexApplication() {
         }
 
         fun isCleanVersion(): Boolean {
-//            return BuildConfig.DEBUG || AppPref.isCleanVersion
-            return AppPref.isCleanVersion
+            return BuildConfig.DEBUG || AppPref.isCleanVersion
         }
     }
 }
