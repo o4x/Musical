@@ -2,6 +2,9 @@
 <resources>
 
     <style name="Theme.Musical.Base.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:textColorTertiary">@color/black</item>
         <item name="backgroundColor">@color/window_color_light</item>
         <item name="colorOnBackground">@color/grey_900</item>
         <item name="colorSurface">@color/grey_100</item>
@@ -39,6 +42,7 @@
     <style name="Theme.Musical.Base" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:textColorPrimary">@color/grey_400</item>
         <item name="android:textColorSecondary">@color/grey_600</item>
+        <item name="android:textColorTertiary">@color/grey_100</item>
         <item name="backgroundColor">@color/window_color_dark</item>
         <item name="colorOnBackground">@color/grey_400</item>
         <item name="colorSurface">@color/dark_grey</item>
@@ -76,6 +80,7 @@
     <style name="Theme.Musical.Base.Black" parent="Theme.Musical.Base">
         <item name="android:textColorPrimary">@color/grey_400</item>
         <item name="android:textColorSecondary">@color/grey_600</item>
+        <item name="android:textColorTertiary">@color/grey_100</item>
         <item name="backgroundColor">@color/black</item>
         <item name="colorOnBackground">@color/grey_400</item>
         <item name="colorSurface">@color/black</item>
