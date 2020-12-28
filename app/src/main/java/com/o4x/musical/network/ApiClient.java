@@ -54,7 +54,7 @@ public class ApiClient {
     private static Interceptor createCacheControlInterceptor() {
         return chain -> {
             Request modifiedRequest = chain.request().newBuilder()
-                    .addHeader("Cache-Control", String.format(Locale.getDefault(), "max-age=%d, max-stale=%d", 31536000, 31536000))
+                    .addHeader("Cache-Control", String.format(Locale.ENGLISH, "max-age=%d, max-stale=%d", 31536000, 31536000))
                     .build();
             return chain.proceed(modifiedRequest);
         };
