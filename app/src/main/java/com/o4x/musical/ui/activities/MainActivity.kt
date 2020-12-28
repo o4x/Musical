@@ -62,7 +62,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         super.onCreate(savedInstanceState)
 
 
-
         if (!hasPermissions()) {
             val myIntent = Intent(
                 this,
