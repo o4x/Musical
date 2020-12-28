@@ -26,6 +26,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        TapselUtils.initialize(this)
+
         instance = this
 
         startKoin {
@@ -35,8 +38,6 @@ class App : Application() {
 
         if (VersionUtils.hasNougatMR())
             DynamicShortcutManager(this).initDynamicShortcuts()
-
-        TapselUtils.initialize(this)
     }
 
     override fun onTerminate() {
