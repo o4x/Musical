@@ -181,6 +181,8 @@ class PlayerViewModel : ViewModel(),
     }
 
     override fun onMediaStoreChanged() {
-        updateAll()
+        updateQueue()
+        updatePosition()
+        updateCurrentSong()
     }
 }
