@@ -14,26 +14,30 @@
  */
 package com.o4x.musical.imageloader.glide.module.artistimage
 
+import android.content.Context
 import com.bumptech.glide.Priority
+import com.bumptech.glide.integration.okhttp3.OkHttpStreamFetcher
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.data.DataFetcher
-import com.bumptech.glide.load.data.HttpUrlFetcher
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import com.o4x.musical.App
 import com.o4x.musical.model.Artist
 import com.o4x.musical.network.ApiClient
 import com.o4x.musical.network.models.DeezerArtistModel
 import com.o4x.musical.network.service.DeezerService
-import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.prefs.PreferenceUtil
-import java.io.IOException
+import com.o4x.musical.util.MusicUtil
+import okhttp3.OkHttpClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.InputStream
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ArtistImage(val artist: Artist) {
     override fun equals(other: Any?): Boolean {
@@ -50,49 +54,66 @@ class ArtistImage(val artist: Artist) {
 }
 
 class ArtistImageFetcher(
+    val context: Context,
     private val deezerService: DeezerService,
+    private val okHttp: OkHttpClient,
     val model: ArtistImage,
     val width: Int,
     val height: Int
 ) : DataFetcher<InputStream> {
 
-    private var urlFetcher: DataFetcher<InputStream>? = null
     private var isCancelled: Boolean = false
+    private var call: Call<DeezerArtistModel>? = null
+    private var streamFetcher: OkHttpStreamFetcher? = null
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in InputStream>) {
-        if (PreferenceUtil.isAllowedToDownloadMetadata(App.getContext())) {
+        if (PreferenceUtil.isAllowedToDownloadMetadata(context)) {
             val artists = model.artist.name.split(",")
-            val response = deezerService.searchDeezerArtist(artists[0]).execute()
+            call = deezerService.searchDeezerArtist(artists[0])
 
-            if (!response.isSuccessful) {
-                throw IOException("Request failed with code: " + response.code())
-            }
+            call?.enqueue(object : Callback<DeezerArtistModel> {
+                override fun onResponse(
+                    call: Call<DeezerArtistModel>,
+                    response: Response<DeezerArtistModel>
+                ) {
+                    if (response.isSuccessful) {
+                        if (isCancelled) return callback.onDataReady(null)
 
-            if (isCancelled) return callback.onDataReady(null)
-
-            try {
-                val deezerResponse = response.body()
-                val imageUrl = deezerResponse?.data?.get(0)?.let { getHighestQuality(it) }
-                // Fragile way to detect a place holder image returned from Deezer:
-                // ex: "https://e-cdns-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg"
-                // the double slash implies no artist identified
-                val placeHolder = imageUrl?.contains("/images/artist//") ?: false
-                if (!placeHolder) {
-                    loadUrl(imageUrl.toString(), priority, callback)
+                        try {
+                            val deezerResponse = response.body()
+                            val imageUrl =
+                                deezerResponse?.data?.get(0)?.let { getHighestQuality(it) }
+                            // Fragile way to detect a place holder image returned from Deezer:
+                            // ex: "https://e-cdns-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg"
+                            // the double slash implies no artist identified
+                            val placeHolder = imageUrl?.contains("/images/artist//") ?: false
+                            if (!placeHolder) {
+                                streamFetcher =
+                                    OkHttpStreamFetcher(okHttp, GlideUrl(imageUrl.toString()))
+                                streamFetcher!!.loadData(priority, callback)
+                            }
+                        } catch (e: Exception) {
+                            callback.onLoadFailed(e)
+                        }
+                    }
                 }
-            } catch (e: Exception) {
-                callback.onLoadFailed(e)
-            }
+
+                override fun onFailure(call: Call<DeezerArtistModel>, t: Throwable) {
+                    callback.onDataReady(null)
+                }
+
+            })
         } else callback.onDataReady(null)
     }
 
     override fun cleanup() {
-        urlFetcher?.cleanup()
+        streamFetcher?.cleanup()
     }
 
     override fun cancel() {
         isCancelled = true
-        urlFetcher?.cancel()
+        streamFetcher?.cancel()
+        call?.cancel()
     }
 
     override fun getDataClass(): Class<InputStream> {
@@ -113,27 +134,12 @@ class ArtistImageFetcher(
             else -> ""
         }
     }
-
-    private fun loadUrl(
-        url: String,
-        priority: Priority,
-        callback: DataFetcher.DataCallback<in InputStream>
-    ) {
-        val urlFetcher = HttpUrlFetcher(
-            GlideUrl(url),
-            TIMEOUT
-        )
-        urlFetcher.loadData(priority, callback)
-    }
-
-    companion object {
-        // we need these very low values to make sure our artist image loading calls doesn't block the image loading queue
-        private const val TIMEOUT: Int = 700
-    }
 }
 
 class ArtistImageLoader(
+    val context: Context,
     private val deezerService: DeezerService,
+    private val okHttp: OkHttpClient
 ) : ModelLoader<ArtistImage, InputStream> {
 
     override fun buildLoadData(
@@ -144,7 +150,7 @@ class ArtistImageLoader(
     ): ModelLoader.LoadData<InputStream>? {
         return ModelLoader.LoadData(
             ObjectKey(model.artist.name),
-            ArtistImageFetcher(deezerService, model, width, height)
+            ArtistImageFetcher(context, deezerService, okHttp, model, width, height)
         )
     }
 
@@ -153,13 +159,25 @@ class ArtistImageLoader(
     }
 }
 
-class ArtistImageFactory : ModelLoaderFactory<ArtistImage, InputStream> {
+class ArtistImageFactory(val context: Context)
+    : ModelLoaderFactory<ArtistImage, InputStream> {
 
-    private var deezerService: DeezerService =
-        ApiClient.getClient(App.getContext()).create(DeezerService::class.java)
+    companion object {
+        // we need these very low values to make sure our artist image loading calls doesn't block the image loading queue
+        private const val TIMEOUT: Long = 700
+    }
+
+    private val deezerService: DeezerService =
+        ApiClient.getClient(context).create(DeezerService::class.java)
+
+    private val okHttp = OkHttpClient.Builder()
+        .connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+        .readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+        .writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
+        .build()
 
     override fun build(multiFactory: MultiModelLoaderFactory): ModelLoader<ArtistImage, InputStream> {
-        return ArtistImageLoader(deezerService)
+        return ArtistImageLoader(context, deezerService, okHttp)
     }
 
     override fun teardown() {}
