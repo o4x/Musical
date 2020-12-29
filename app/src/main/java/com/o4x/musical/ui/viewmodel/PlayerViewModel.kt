@@ -122,11 +122,14 @@ class PlayerViewModel : ViewModel(),
     //////////
 
     private val progressViewUpdateHelper = MusicProgressViewUpdateHelper(this)
+    private var isConnected = false
 
     init {
+        isConnected = MusicPlayerRemote.musicService != null
+        if (isConnected) {
+            updateAll()
+        }
         progressViewUpdateHelper.start()
-
-        updateAll()
     }
 
     private fun updateAll() {
@@ -149,7 +152,9 @@ class PlayerViewModel : ViewModel(),
     ///////////////////////
 
     override fun onServiceConnected() {
-        updateAll()
+        if (!isConnected) {
+            updateAll()
+        }
     }
 
     override fun onServiceDisconnected() {}
