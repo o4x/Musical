@@ -25,10 +25,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Musical.Black">
 
-        <meta-data
-            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true" />
-
         <activity
             android:name=".ui.activities.MusicPickerActivity"
             android:launchMode="singleTop">
