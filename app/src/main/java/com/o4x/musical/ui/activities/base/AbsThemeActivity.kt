@@ -28,7 +28,7 @@ abstract class AbsThemeActivity : ATHActivity() {
 
     open fun setTheme() {
         setTheme(PreferenceUtil.getGeneralThemeRes())
-        setDefaultNightMode(nightMode)
+//        setDefaultNightMode(nightMode) With tapsel main activity call twice
         DynamicShortcutManager(this).updateDynamicShortcuts()
     }
 
