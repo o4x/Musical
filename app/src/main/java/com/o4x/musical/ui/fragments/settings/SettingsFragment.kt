@@ -59,6 +59,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         }
 
         val themeColorPref: Preference = findPreference(PreferenceUtil.THEME_COLOR)!!
+        themeColorPref.isVisible = PreferenceUtil.isDarkMode
         var lastThemeColor = themeColorPref.summary.toString()
         themeColorPref.setOnPreferenceChangeListener { _, newValue ->
             val newThemeColor = newValue.toString()

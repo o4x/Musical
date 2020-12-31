@@ -565,26 +565,29 @@ object PreferenceUtil {
     fun getThemeColorRes(): Int {
         val themeColor: String =
             sharedPreferences.getStringOrDefault(THEME_COLOR, "default")
+        if (!isDarkMode) {
+            return R.style.ThemeColorLight
+        }
         return when (themeColor) {
-            "red" -> if (isDarkMode) R.style.ThemeColorRed else R.style.ThemeColorRedLight
-            "deep_purple" -> if (isDarkMode) R.style.ThemeColorDeepPurple else R.style.ThemeColorDeepPurpleLight
-            "light_blue" -> if (isDarkMode) R.style.ThemeColorLightBlue else R.style.ThemeColorLightBlueLight
-            "green" -> if (isDarkMode) R.style.ThemeColorGreen else R.style.ThemeColorGreenLight
-            "yellow" -> if (isDarkMode) R.style.ThemeColorYellow else R.style.ThemeColorYellowLight
-            "deep_orange" -> if (isDarkMode) R.style.ThemeColorDeepOrange else R.style.ThemeColorDeepOrangeLight
-            "blue_grey" -> if (isDarkMode) R.style.ThemeColorBlueGrey else R.style.ThemeColorBlueGreyLight
-            "pink" -> if (isDarkMode) R.style.ThemeColorPink else R.style.ThemeColorPinkLight
-            "indigo" -> if (isDarkMode) R.style.ThemeColorIndigo else R.style.ThemeColorIndigoLight
-            "cyan" -> if (isDarkMode) R.style.ThemeColorCyan else R.style.ThemeColorCyanLight
-            "light_green" -> if (isDarkMode) R.style.ThemeColorLightGreen else R.style.ThemeColorLightGreenLight
-            "amber" -> if (isDarkMode) R.style.ThemeColorAmber else R.style.ThemeColorAmberLight
-            "brown" -> if (isDarkMode) R.style.ThemeColorBrown else R.style.ThemeColorBrownLight
-            "purple" -> if (isDarkMode) R.style.ThemeColorPurple else R.style.ThemeColorPurpleLight
-            "blue" -> if (isDarkMode) R.style.ThemeColorBlue else R.style.ThemeColorBlueLight
-            "teal" -> if (isDarkMode) R.style.ThemeColorTeal else R.style.ThemeColorTealLight
-            "lime" -> if (isDarkMode) R.style.ThemeColorLime else R.style.ThemeColorLimeLight
-            "orange" -> if (isDarkMode) R.style.ThemeColorOrange else R.style.ThemeColorOrangeLight
-            else -> if (isDarkMode) R.style.ThemeColorGrey else R.style.ThemeColorGreyLight
+            "red" -> R.style.ThemeColorRed
+            "deep_purple" -> R.style.ThemeColorDeepPurple
+            "light_blue" -> R.style.ThemeColorLightBlue
+            "green" -> R.style.ThemeColorGreen
+            "yellow" -> R.style.ThemeColorYellow
+            "deep_orange" -> R.style.ThemeColorDeepOrange
+            "blue_grey" -> R.style.ThemeColorBlueGrey
+            "pink" -> R.style.ThemeColorPink
+            "indigo" -> R.style.ThemeColorIndigo
+            "cyan" -> R.style.ThemeColorCyan
+            "light_green" -> R.style.ThemeColorLightGreen
+            "amber" -> R.style.ThemeColorAmber
+            "brown" -> R.style.ThemeColorBrown
+            "purple" -> R.style.ThemeColorPurple
+            "blue" -> R.style.ThemeColorBlue
+            "teal" -> R.style.ThemeColorTeal
+            "lime" -> R.style.ThemeColorLime
+            "orange" -> R.style.ThemeColorOrange
+            else -> R.style.ThemeColorGrey
         }
     }
 
