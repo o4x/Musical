@@ -18,24 +18,4 @@
         android:title="@string/action_new_playlist"
         app:showAsAction="never" />
 
-    <item
-        android:title="@string/change_wallpaper">
-        <menu>
-            <item
-                android:id="@+id/action_reset_header"
-                android:title="@string/reset_header_image"
-                app:showAsAction="never"/>
-
-            <item
-                android:id="@+id/action_use_custom"
-                android:title="@string/use_custom_image"
-                app:showAsAction="never"/>
-
-            <item
-                android:id="@+id/action_use_song"
-                android:title="@string/use_song"
-                app:showAsAction="never" />
-        </menu>
-    </item>
-
 </menu>
