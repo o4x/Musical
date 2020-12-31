@@ -733,11 +733,13 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             if (playingQueue[i].id == song.id) {
                 playingQueue.removeAt(i)
                 rePosition(i)
+                break
             }
         }
         for (i in originalPlayingQueue.indices) {
             if (originalPlayingQueue[i].id == song.id) {
                 originalPlayingQueue.removeAt(i)
+                break
             }
         }
         notifyChange(QUEUE_CHANGED)

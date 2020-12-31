@@ -86,7 +86,7 @@ class AboutFragment : PreferenceFragmentCompat() {
             return context.packageManager.getPackageInfo(
                 context.packageName,
                 0
-            ).versionName + if (App.isCleanVersion()) "clean" else ""
+            ).versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
