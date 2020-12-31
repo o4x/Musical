@@ -41,21 +41,23 @@
                     tools:ignore="UnusedAttribute"
                     tools:text="FLAT" />
 
-                <ImageButton
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:id="@+id/delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_delete"
+                    app:icon="@drawable/ic_delete"
                     app:layout_constraintEnd_toStartOf="@id/save"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
-                <ImageButton
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:id="@+id/save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:src="@drawable/ic_add_circle_outline"
+                    app:icon="@drawable/ic_add_circle_outline"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -148,19 +150,27 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <com.o4x.musical.views.AnalogController
+            <com.sdsmdg.harjot.crollerTest.Croller
                 android:id="@+id/controller_bass"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_margin="8dp"/>
+                app:indicator_width="8"
+                app:is_continuous="true"
+                app:start_offset="45" />
 
-            <com.o4x.musical.views.AnalogController
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <com.sdsmdg.harjot.crollerTest.Croller
                 android:id="@+id/controller_3D"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_margin="8dp"/>
+                app:indicator_width="8"
+                app:is_continuous="true"
+                app:start_offset="45" />
 
         </LinearLayout>
 

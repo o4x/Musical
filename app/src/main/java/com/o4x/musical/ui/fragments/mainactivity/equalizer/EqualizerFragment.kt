@@ -1,5 +1,6 @@
 package com.o4x.musical.ui.fragments.mainactivity.equalizer
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.view.*
@@ -9,25 +10,27 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import code.name.monkey.appthemehelper.extensions.accentColor
+import code.name.monkey.appthemehelper.extensions.backgroundColor
+import code.name.monkey.appthemehelper.extensions.primaryColor
+import code.name.monkey.appthemehelper.extensions.textColorPrimary
+import code.name.monkey.appthemehelper.util.ColorUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentEqualizerBinding
+import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import com.o4x.musical.ui.viewmodel.EqualizerViewModel
-import com.o4x.musical.views.AnalogController
+import com.sdsmdg.harjot.crollerTest.Croller
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.math.roundToInt
 
 internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equalizer), CoroutineScope by MainScope() {
 
     companion object {
         const val TAG = "EqualizerFragment"
-
-        private const val FACTOR = 19 / 1000f
-        private const val REV_FACTOR = 1000f / 19
     }
 
     private val presenter by viewModel<EqualizerViewModel>()
@@ -60,13 +63,19 @@ internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equ
 
         binding.controllerBass.apply {
             label = "BASS"
-            progress = (presenter.getBassStrength() * FACTOR).roundToInt()
-            invalidate()
+            min = 0
+            max = 1000
+            progress = presenter.getBassStrength()
+
+            applyColor()
         }
         binding.controller3D.apply {
             label = "3D"
-            progress = (presenter.getVirtualizerStrength() * FACTOR).roundToInt()
-            invalidate()
+            min = 0
+            max = 1000
+            progress = presenter.getVirtualizerStrength()
+
+            applyColor()
         }
 
         buildBands()
@@ -181,17 +190,11 @@ internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equ
         override fun onStopTrackingTouch(seekBar: SeekBar?) {}
     }
 
-    private val onBassKnobChangeListener = object : AnalogController.OnProgressChangedListener {
-        override fun onProgressChanged(progress: Int) {
-            presenter.setBassStrength((progress * REV_FACTOR).roundToInt())
-        }
-    }
+    private val onBassKnobChangeListener =
+        Croller.onProgressChangedListener { progress -> presenter.setBassStrength(progress) }
 
-    private val onVirtualizerKnobChangeListener = object : AnalogController.OnProgressChangedListener {
-        override fun onProgressChanged(progress: Int) {
-            presenter.setVirtualizerStrength((progress * REV_FACTOR).roundToInt())
-        }
-    }
+    private val onVirtualizerKnobChangeListener =
+        Croller.onProgressChangedListener { progress -> presenter.setVirtualizerStrength(progress) }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_equalizer, menu)
@@ -215,5 +218,19 @@ internal class EqualizerFragment : AbsMainActivityFragment(R.layout.fragment_equ
         val value = view.findViewById<TextView>(R.id.value)!!
         val seekBar = view.findViewById<VerticalSeekBar>(R.id.seek_bar)!!
         val text = view.findViewById<TextView>(R.id.text)!!
+    }
+
+    private fun Croller.applyColor() {
+        if (PreferenceUtil.isDarkMode) {
+            backCircleColor = ColorUtil.shiftColor(Color.GRAY, .3f)
+            mainCircleColor = ColorUtil.shiftColor(backCircleColor, .3f)
+        } else {
+            mainCircleColor = ColorUtil.shiftColor(backgroundColor(), .9f)
+            backCircleColor = ColorUtil.shiftColor(mainCircleColor, .9f)
+        }
+        labelColor = textColorPrimary()
+        progressPrimaryColor = accentColor()
+        indicatorColor = accentColor()
+        progressSecondaryColor = mainCircleColor
     }
 }

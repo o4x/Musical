@@ -150,6 +150,7 @@ dependencies {
     implementation 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5'
 
     implementation 'com.github.woxingxiao:BounceScrollView:1.5-androidx'
+    implementation 'com.sdsmdg.harjot:croller:1.0.7'
 
     def koin_version = "2.1.6"
     implementation "org.koin:koin-core:$koin_version"
