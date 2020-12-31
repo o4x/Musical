@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--Light-->
+
+    <style name="ThemeColorLight">
+        <item name="colorAccent">@color/grey_800</item>
+        <item name="colorPrimary">@color/grey_800</item>
+        <item name="colorPrimaryVariant">@color/grey_900</item>
+        <item name="colorSecondary">@color/grey_700</item>
+        <item name="colorSecondaryVariant">@color/grey_900</item>
+    </style>
+
     <!--GREY-->
 
     <style name="ThemeColorGrey">
@@ -9,13 +19,6 @@
         <item name="colorPrimaryVariant">@color/grey_400</item>
         <item name="colorSecondary">@color/grey_400</item>
         <item name="colorSecondaryVariant">@color/grey_500</item>
-    </style>
-    <style name="ThemeColorGreyLight">
-        <item name="colorAccent">@color/grey_600</item>
-        <item name="colorPrimary">@color/grey_600</item>
-        <item name="colorPrimaryVariant">@color/grey_800</item>
-        <item name="colorSecondary">@color/grey_800</item>
-        <item name="colorSecondaryVariant">@color/grey_900</item>
     </style>
 
     <!--RED-->
@@ -27,13 +30,6 @@
         <item name="colorSecondary">@color/red_A100</item>
         <item name="colorSecondaryVariant">@color/red_200</item>
     </style>
-    <style name="ThemeColorRedLight">
-        <item name="colorAccent">@color/red_600</item>
-        <item name="colorPrimary">@color/red_600</item>
-        <item name="colorPrimaryVariant">@color/red_800</item>
-        <item name="colorSecondary">@color/red_800</item>
-        <item name="colorSecondaryVariant">@color/red_900</item>
-    </style>
 
     <!--DEEP PURPLE-->
 
@@ -43,13 +39,6 @@
         <item name="colorPrimaryVariant">@color/deep_purple_400</item>
         <item name="colorSecondary">@color/deep_purple_A100</item>
         <item name="colorSecondaryVariant">@color/deep_purple_300</item>
-    </style>
-    <style name="ThemeColorDeepPurpleLight">
-        <item name="colorAccent">@color/deep_purple_600</item>
-        <item name="colorPrimary">@color/deep_purple_600</item>
-        <item name="colorPrimaryVariant">@color/deep_purple_800</item>
-        <item name="colorSecondary">@color/deep_purple_800</item>
-        <item name="colorSecondaryVariant">@color/deep_purple_900</item>
     </style>
 
     <!--LIGHT BLUE-->
@@ -61,13 +50,6 @@
         <item name="colorSecondary">@color/light_blue_A100</item>
         <item name="colorSecondaryVariant">@color/light_blue_300</item>
     </style>
-    <style name="ThemeColorLightBlueLight">
-        <item name="colorAccent">@color/light_blue_600</item>
-        <item name="colorPrimary">@color/light_blue_600</item>
-        <item name="colorPrimaryVariant">@color/light_blue_800</item>
-        <item name="colorSecondary">@color/light_blue_800</item>
-        <item name="colorSecondaryVariant">@color/light_blue_900</item>
-    </style>
 
     <!--GREEN-->
 
@@ -77,13 +59,6 @@
         <item name="colorPrimaryVariant">@color/green_400</item>
         <item name="colorSecondary">@color/green_A100</item>
         <item name="colorSecondaryVariant">@color/green_300</item>
-    </style>
-    <style name="ThemeColorGreenLight">
-        <item name="colorAccent">@color/green_600</item>
-        <item name="colorPrimary">@color/green_600</item>
-        <item name="colorPrimaryVariant">@color/green_800</item>
-        <item name="colorSecondary">@color/green_800</item>
-        <item name="colorSecondaryVariant">@color/green_900</item>
     </style>
 
     <!--YELLOW-->
@@ -95,13 +70,6 @@
         <item name="colorSecondary">@color/yellow_A100</item>
         <item name="colorSecondaryVariant">@color/yellow_300</item>
     </style>
-    <style name="ThemeColorYellowLight">
-        <item name="colorAccent">@color/yellow_600</item>
-        <item name="colorPrimary">@color/yellow_600</item>
-        <item name="colorPrimaryVariant">@color/yellow_800</item>
-        <item name="colorSecondary">@color/yellow_800</item>
-        <item name="colorSecondaryVariant">@color/yellow_900</item>
-    </style>
 
     <!--DEEP ORANGE-->
 
@@ -111,13 +79,6 @@
         <item name="colorPrimaryVariant">@color/deep_orange_400</item>
         <item name="colorSecondary">@color/deep_orange_A100</item>
         <item name="colorSecondaryVariant">@color/deep_orange_300</item>
-    </style>
-    <style name="ThemeColorDeepOrangeLight">
-        <item name="colorAccent">@color/deep_orange_600</item>
-        <item name="colorPrimary">@color/deep_orange_600</item>
-        <item name="colorPrimaryVariant">@color/deep_orange_800</item>
-        <item name="colorSecondary">@color/deep_orange_800</item>
-        <item name="colorSecondaryVariant">@color/deep_orange_900</item>
     </style>
 
     <!--BLUE GREY-->
@@ -129,13 +90,6 @@
         <item name="colorSecondary">@color/blue_grey_200</item>
         <item name="colorSecondaryVariant">@color/blue_grey_300</item>
     </style>
-    <style name="ThemeColorBlueGreyLight">
-        <item name="colorAccent">@color/blue_grey_600</item>
-        <item name="colorPrimary">@color/blue_grey_600</item>
-        <item name="colorPrimaryVariant">@color/blue_grey_800</item>
-        <item name="colorSecondary">@color/blue_grey_800</item>
-        <item name="colorSecondaryVariant">@color/blue_grey_900</item>
-    </style>
 
     <!--PINK-->
 
@@ -145,13 +99,6 @@
         <item name="colorPrimaryVariant">@color/pink_400</item>
         <item name="colorSecondary">@color/pink_A100</item>
         <item name="colorSecondaryVariant">@color/pink_300</item>
-    </style>
-    <style name="ThemeColorPinkLight">
-        <item name="colorAccent">@color/pink_600</item>
-        <item name="colorPrimary">@color/pink_600</item>
-        <item name="colorPrimaryVariant">@color/pink_800</item>
-        <item name="colorSecondary">@color/pink_800</item>
-        <item name="colorSecondaryVariant">@color/pink_900</item>
     </style>
 
     <!--INDIGO-->
@@ -163,13 +110,6 @@
         <item name="colorSecondary">@color/indigo_A100</item>
         <item name="colorSecondaryVariant">@color/indigo_300</item>
     </style>
-    <style name="ThemeColorIndigoLight">
-        <item name="colorAccent">@color/indigo_600</item>
-        <item name="colorPrimary">@color/indigo_600</item>
-        <item name="colorPrimaryVariant">@color/indigo_800</item>
-        <item name="colorSecondary">@color/indigo_800</item>
-        <item name="colorSecondaryVariant">@color/indigo_900</item>
-    </style>
 
     <!--CYAN-->
 
@@ -179,13 +119,6 @@
         <item name="colorPrimaryVariant">@color/cyan_400</item>
         <item name="colorSecondary">@color/cyan_A100</item>
         <item name="colorSecondaryVariant">@color/cyan_300</item>
-    </style>
-    <style name="ThemeColorCyanLight">
-        <item name="colorAccent">@color/cyan_600</item>
-        <item name="colorPrimary">@color/cyan_600</item>
-        <item name="colorPrimaryVariant">@color/cyan_800</item>
-        <item name="colorSecondary">@color/cyan_800</item>
-        <item name="colorSecondaryVariant">@color/cyan_900</item>
     </style>
 
     <!--Light GREEN-->
@@ -197,13 +130,6 @@
         <item name="colorSecondary">@color/light_green_A100</item>
         <item name="colorSecondaryVariant">@color/light_green_300</item>
     </style>
-    <style name="ThemeColorLightGreenLight">
-        <item name="colorAccent">@color/light_green_600</item>
-        <item name="colorPrimary">@color/light_green_600</item>
-        <item name="colorPrimaryVariant">@color/light_green_800</item>
-        <item name="colorSecondary">@color/light_green_800</item>
-        <item name="colorSecondaryVariant">@color/light_green_900</item>
-    </style>
 
     <!--AMBER-->
 
@@ -213,13 +139,6 @@
         <item name="colorPrimaryVariant">@color/amber_400</item>
         <item name="colorSecondary">@color/amber_A100</item>
         <item name="colorSecondaryVariant">@color/amber_300</item>
-    </style>
-    <style name="ThemeColorAmberLight">
-        <item name="colorAccent">@color/amber_600</item>
-        <item name="colorPrimary">@color/amber_600</item>
-        <item name="colorPrimaryVariant">@color/amber_800</item>
-        <item name="colorSecondary">@color/amber_800</item>
-        <item name="colorSecondaryVariant">@color/amber_900</item>
     </style>
 
     <!--BROWN-->
@@ -231,13 +150,6 @@
         <item name="colorSecondary">@color/brown_200</item>
         <item name="colorSecondaryVariant">@color/brown_300</item>
     </style>
-    <style name="ThemeColorBrownLight">
-        <item name="colorAccent">@color/brown_600</item>
-        <item name="colorPrimary">@color/brown_600</item>
-        <item name="colorPrimaryVariant">@color/brown_800</item>
-        <item name="colorSecondary">@color/brown_800</item>
-        <item name="colorSecondaryVariant">@color/brown_900</item>
-    </style>
 
     <!--PURPLE-->
 
@@ -247,13 +159,6 @@
         <item name="colorPrimaryVariant">@color/purple_400</item>
         <item name="colorSecondary">@color/purple_A100</item>
         <item name="colorSecondaryVariant">@color/purple_300</item>
-    </style>
-    <style name="ThemeColorPurpleLight">
-        <item name="colorAccent">@color/purple_600</item>
-        <item name="colorPrimary">@color/purple_600</item>
-        <item name="colorPrimaryVariant">@color/purple_800</item>
-        <item name="colorSecondary">@color/purple_800</item>
-        <item name="colorSecondaryVariant">@color/purple_900</item>
     </style>
 
 
@@ -266,14 +171,6 @@
         <item name="colorSecondary">@color/blue_A100</item>
         <item name="colorSecondaryVariant">@color/blue_300</item>
     </style>
-    <style name="ThemeColorBlueLight">
-        <item name="colorAccent">@color/blue_600</item>
-        <item name="colorPrimary">@color/blue_600</item>
-        <item name="colorPrimaryVariant">@color/blue_800</item>
-        <item name="colorSecondary">@color/blue_800</item>
-        <item name="colorSecondaryVariant">@color/blue_900</item>
-    </style>
-
 
     <!--TEAL-->
 
@@ -283,13 +180,6 @@
         <item name="colorPrimaryVariant">@color/teal_400</item>
         <item name="colorSecondary">@color/teal_A100</item>
         <item name="colorSecondaryVariant">@color/teal_300</item>
-    </style>
-    <style name="ThemeColorTealLight">
-        <item name="colorAccent">@color/teal_600</item>
-        <item name="colorPrimary">@color/teal_600</item>
-        <item name="colorPrimaryVariant">@color/teal_800</item>
-        <item name="colorSecondary">@color/teal_800</item>
-        <item name="colorSecondaryVariant">@color/teal_900</item>
     </style>
 
     <!--LIME-->
@@ -301,13 +191,6 @@
         <item name="colorSecondary">@color/lime_A100</item>
         <item name="colorSecondaryVariant">@color/lime_300</item>
     </style>
-    <style name="ThemeColorLimeLight">
-        <item name="colorAccent">@color/lime_600</item>
-        <item name="colorPrimary">@color/lime_600</item>
-        <item name="colorPrimaryVariant">@color/lime_800</item>
-        <item name="colorSecondary">@color/lime_800</item>
-        <item name="colorSecondaryVariant">@color/lime_900</item>
-    </style>
 
     <!--ORANGE-->
 
@@ -318,13 +201,5 @@
         <item name="colorSecondary">@color/orange_A100</item>
         <item name="colorSecondaryVariant">@color/orange_300</item>
     </style>
-    <style name="ThemeColorOrangeLight">
-        <item name="colorAccent">@color/orange_600</item>
-        <item name="colorPrimary">@color/orange_600</item>
-        <item name="colorPrimaryVariant">@color/orange_800</item>
-        <item name="colorSecondary">@color/orange_800</item>
-        <item name="colorSecondaryVariant">@color/orange_900</item>
-    </style>
-
 
 </resources>
