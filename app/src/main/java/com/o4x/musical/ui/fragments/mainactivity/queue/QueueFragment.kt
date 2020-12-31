@@ -44,7 +44,7 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home, menu)
+        inflater.inflate(R.menu.menu_queue, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
