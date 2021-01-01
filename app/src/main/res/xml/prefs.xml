@@ -133,7 +133,7 @@
             app:title="@string/pref_title_smart_playlist_limit" />
 
         <SeekBarPreference
-            android:max="120"
+            android:max="1200"
             app:defaultValue="30"
             app:key="@string/key_filter_song"
             app:summary="@string/pref_filter_song_summary"
