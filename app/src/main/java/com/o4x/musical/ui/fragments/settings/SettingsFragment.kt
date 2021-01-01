@@ -190,6 +190,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 findPreference<Preference>(PreferenceUtil.SMART_PLAYLIST_LIMIT)?.summary =
                     PreferenceUtil.smartPlaylistLimit.toString()
             }
+            PreferenceUtil.FILTER_SONG,
             PreferenceUtil.COLORED_FOOTER,
             PreferenceUtil.IGNORE_MEDIA -> MusicPlayerRemote.notifyMediaStoreChanged()
         }

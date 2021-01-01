@@ -90,7 +90,7 @@ object MusicPlayerRemote : KoinComponent {
 
     @JvmStatic
     fun notifyMediaStoreChanged() {
-        musicService?.sendChangeInternal(MusicService.MEDIA_STORE_CHANGED)
+        musicService?.notifyChange(MusicService.MEDIA_STORE_CHANGED)
     }
 
     @JvmStatic
