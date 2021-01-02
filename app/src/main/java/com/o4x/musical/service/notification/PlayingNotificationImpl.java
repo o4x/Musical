@@ -85,73 +85,68 @@ public class PlayingNotificationImpl extends PlayingNotification {
                 .build();
 
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
-        service.runOnNewThread(new Runnable() {
-            @Override
-            public void run() {
-                if (target != null) {
-                    Glide.with(service).clear(target);
-                }
+        if (target != null) {
+            Glide.with(service).clear(target);
+        }
 
-                target = GlideLoader.with(service)
-                        .withListener(new PaletteTargetListener(service) {
-                            @Override
-                            public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
-                                update(resource, colors.getBackgroundColor());
-                            }
+        target = GlideLoader.with(service)
+                .withListener(new PaletteTargetListener(service) {
+                    @Override
+                    public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
+                        update(resource, colors.getBackgroundColor());
+                    }
 
-                            private void update(@Nullable Bitmap bitmap, int bgColor) {
-                                if (bitmap != null) {
-                                    notificationLayout.setImageViewBitmap(R.id.image, bitmap);
-                                    notificationLayoutBig.setImageViewBitmap(R.id.image, bitmap);
-                                } else {
-                                    notificationLayout.setImageViewResource(R.id.image, R.drawable.default_album_art);
-                                    notificationLayoutBig.setImageViewResource(R.id.image, R.drawable.default_album_art);
-                                }
+                    private void update(@Nullable Bitmap bitmap, int bgColor) {
+                        if (bitmap != null) {
+                            notificationLayout.setImageViewBitmap(R.id.image, bitmap);
+                            notificationLayoutBig.setImageViewBitmap(R.id.image, bitmap);
+                        } else {
+                            notificationLayout.setImageViewResource(R.id.image, R.drawable.default_album_art);
+                            notificationLayoutBig.setImageViewResource(R.id.image, R.drawable.default_album_art);
+                        }
 
-                                if (!PreferenceUtil.isColoredNotification()) {
-                                    bgColor = Color.WHITE;
-                                }
-                                setBackgroundColor(bgColor);
-                                setNotificationContent(ColorUtil.INSTANCE.isColorLight(bgColor));
+                        if (!PreferenceUtil.isColoredNotification()) {
+                            bgColor = Color.WHITE;
+                        }
+                        setBackgroundColor(bgColor);
+                        setNotificationContent(ColorUtil.INSTANCE.isColorLight(bgColor));
 
-                                if (stopped)
-                                    return; // notification has been stopped before loading was finished
-                                updateNotifyModeAndPostNotification(notification);
-                            }
+                        if (stopped)
+                            return; // notification has been stopped before loading was finished
+                        updateNotifyModeAndPostNotification(notification);
+                    }
 
-                            private void setBackgroundColor(int color) {
-                                notificationLayout.setInt(R.id.root, "setBackgroundColor", color);
-                                notificationLayoutBig.setInt(R.id.root, "setBackgroundColor", color);
-                            }
+                    private void setBackgroundColor(int color) {
+                        notificationLayout.setInt(R.id.root, "setBackgroundColor", color);
+                        notificationLayoutBig.setInt(R.id.root, "setBackgroundColor", color);
+                    }
 
-                            private void setNotificationContent(boolean dark) {
-                                int primary = MaterialValueHelper.getPrimaryTextColor(service, dark);
-                                int secondary = MaterialValueHelper.getSecondaryTextColor(service, dark);
+                    private void setNotificationContent(boolean dark) {
+                        int primary = MaterialValueHelper.getPrimaryTextColor(service, dark);
+                        int secondary = MaterialValueHelper.getSecondaryTextColor(service, dark);
 
-                                Bitmap prev = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_previous, primary), 1.5f);
-                                Bitmap next = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_next, primary), 1.5f);
-                                Bitmap playPause = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, isPlaying ? R.drawable.ic_pause : R.drawable.ic_play_arrow, primary), 1.5f);
+                        Bitmap prev = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_previous, primary), 1.5f);
+                        Bitmap next = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_next, primary), 1.5f);
+                        Bitmap playPause = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, isPlaying ? R.drawable.ic_pause : R.drawable.ic_play_arrow, primary), 1.5f);
 
-                                notificationLayout.setTextColor(R.id.album_name, primary);
-                                notificationLayout.setTextColor(R.id.text, secondary);
-                                notificationLayout.setImageViewBitmap(R.id.action_prev, prev);
-                                notificationLayout.setImageViewBitmap(R.id.action_next, next);
-                                notificationLayout.setImageViewBitmap(R.id.action_play_pause, playPause);
+                        notificationLayout.setTextColor(R.id.album_name, primary);
+                        notificationLayout.setTextColor(R.id.text, secondary);
+                        notificationLayout.setImageViewBitmap(R.id.action_prev, prev);
+                        notificationLayout.setImageViewBitmap(R.id.action_next, next);
+                        notificationLayout.setImageViewBitmap(R.id.action_play_pause, playPause);
 
-                                notificationLayoutBig.setTextColor(R.id.album_name, primary);
-                                notificationLayoutBig.setTextColor(R.id.text, secondary);
-                                notificationLayoutBig.setTextColor(R.id.text2, secondary);
-                                notificationLayoutBig.setImageViewBitmap(R.id.action_prev, prev);
-                                notificationLayoutBig.setImageViewBitmap(R.id.action_next, next);
-                                notificationLayoutBig.setImageViewBitmap(R.id.action_play_pause, playPause);
-                            }
+                        notificationLayoutBig.setTextColor(R.id.album_name, primary);
+                        notificationLayoutBig.setTextColor(R.id.text, secondary);
+                        notificationLayoutBig.setTextColor(R.id.text2, secondary);
+                        notificationLayoutBig.setImageViewBitmap(R.id.action_prev, prev);
+                        notificationLayoutBig.setImageViewBitmap(R.id.action_next, next);
+                        notificationLayoutBig.setImageViewBitmap(R.id.action_play_pause, playPause);
+                    }
 
-                        })
-                        .load(song)
-                        .into(new CustomBitmapTarget(
-                                bigNotificationImageSize, bigNotificationImageSize));
-            }
-        });
+                })
+                .load(song)
+                .into(new CustomBitmapTarget(
+                        bigNotificationImageSize, bigNotificationImageSize));
     }
 
     private void linkButtons(final RemoteViews notificationLayout, final RemoteViews notificationLayoutBig) {
