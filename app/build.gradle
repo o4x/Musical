@@ -26,8 +26,8 @@ android {
         applicationId "com.o4x.musical"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 3
-        versionName '0.0.3 Beta'
+        versionCode 4
+        versionName '0.0.4 Beta'
 
         renderscriptTargetApi 29
         vectorDrawables.useSupportLibrary = true
