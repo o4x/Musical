@@ -55,7 +55,7 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         view.setOnTouchListener(FlingPlayBackController(serviceActivity))
         setUpMiniPlayer()
 
-        TapselUtils(requireContext()).loadStandardBanner(binding.banner)
+        TapselUtils(requireActivity()).loadStandardBanner(binding.banner)
     }
 
     private fun setUpMiniPlayer() {

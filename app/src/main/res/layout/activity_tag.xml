@@ -327,11 +327,12 @@
             android:textAllCaps="true"
             android:layout_marginHorizontal="16dp"/>
 
-        <ir.tapsell.sdk.bannerads.TapsellBannerView
+        <RelativeLayout
             android:id="@+id/banner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tapsell_banner_type="banner_320x50" />
+            android:layout_gravity="center"
+            android:gravity="center" />
 
     </LinearLayout>
 
