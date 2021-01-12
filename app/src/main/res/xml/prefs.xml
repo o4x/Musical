@@ -58,7 +58,7 @@
             app:title="@string/library_categories" />
 
         <SwitchPreferenceCompat
-            app:defaultValue="false"
+            app:defaultValue="true"
             app:key="@string/key_colored_footer"
             app:summary="@string/pref_colored_footers_summary"
             app:title="@string/pref_colored_footers" />
