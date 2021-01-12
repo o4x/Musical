@@ -13,7 +13,7 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 
-class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
+class CharCoverDrawable(private val coverData: CoverData, private val isClean: Boolean = false) : Drawable() {
 
     companion object {
         private const val TAG = "CharCoverDrawable"
@@ -34,7 +34,7 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
         }
 
         fun empty(): CharCoverDrawable {
-            return CharCoverDrawable(CoverData(0, ""))
+            return CharCoverDrawable(CoverData(0, ""), true)
         }
     }
 
@@ -47,7 +47,8 @@ class CharCoverDrawable(private val coverData: CoverData) : Drawable() {
     }
 
     override fun draw(canvas: Canvas) {
-        drawGradient(canvas, coverData.id.toInt())
+        if (!isClean)
+            drawGradient(canvas, coverData.id.toInt())
         drawChars(canvas, coverData.text)
     }
 
