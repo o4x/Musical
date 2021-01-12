@@ -177,7 +177,7 @@ object PreferenceUtil {
     @JvmStatic
     val isColoredFooter
         get() = sharedPreferences.getBoolean(
-            COLORED_FOOTER, false
+            COLORED_FOOTER, true
         )
 
     @JvmStatic
