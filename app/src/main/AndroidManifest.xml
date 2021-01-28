@@ -133,7 +133,7 @@
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ui.activities.purchase.BazarPurchaseActivity" />
+            android:name=".ui.activities.purchase.PurchaseActivity" />
         <activity
             android:name=".ui.activities.intro.PermissionActivity" />
 

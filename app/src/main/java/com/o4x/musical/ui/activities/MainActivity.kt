@@ -151,7 +151,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                 proNext.isVisible = true
                 proSummary.isVisible = true
                 proTitle.text = resources.getString(R.string.musical_clean)
-                banner.setOnClickListener { navController.navigate(R.id.buy_from_bazar) }
+                banner.setOnClickListener { navController.navigate(R.id.buy_from_google_play) }
             }
         }
     }
