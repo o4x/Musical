@@ -26,15 +26,13 @@ android {
         applicationId "com.o4x.musical"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 5
+        versionCode 6
         versionName '0.0.5 Beta'
 
         renderscriptTargetApi 29
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true
-
-        buildConfigField("String", "GOOGLE_PLAY_LICENSING_KEY", "\"${getProperty(getProperties('../public.properties'), 'GOOGLE_PLAY_LICENSE_KEY')}\"")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,7 +53,7 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            applicationIdSuffix '.debug'
+//            applicationIdSuffix '.debug'
             versionNameSuffix ' (' + defaultConfig.versionCode + ') DEBUG '
         }
     }
@@ -203,8 +201,7 @@ dependencies {
 
     implementation 'com.github.dhaval2404:imagepicker:1.7.5'
 
-//    implementation 'com.anjlab.android.iab.v3:library:1.1.0'
-    implementation "ir.cafebazaar:poolakey:1.0.0-alpha08"
+    implementation 'com.anjlab.android.iab.v3:library:1.1.0'
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:1.2.2'
     //for adMob
     implementation 'com.google.android.gms:play-services-ads:19.6.0'

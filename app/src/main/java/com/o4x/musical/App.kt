@@ -15,7 +15,10 @@
 package com.o4x.musical
 
 import android.app.Application
+import android.widget.Toast
 import code.name.monkey.appthemehelper.util.VersionUtils
+import com.anjlab.android.iab.v3.BillingProcessor
+import com.anjlab.android.iab.v3.TransactionDetails
 import com.o4x.musical.ads.TapselUtils
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.prefs.AppPref
@@ -24,9 +27,11 @@ import org.koin.core.context.startKoin
 
 class App : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
+    lateinit var billingProcessor: BillingProcessor
 
+    override fun onCreate() {
+
+        super.onCreate()
         TapselUtils.initialize(this)
 
         instance = this
@@ -38,10 +43,31 @@ class App : Application() {
 
         if (VersionUtils.hasNougatMR())
             DynamicShortcutManager(this).initDynamicShortcuts()
+
+        // automatically restores purchases
+        billingProcessor = BillingProcessor(
+            this,
+            Constants.GOOGLE_PLAY_LICENSING_KEY,
+            object : BillingProcessor.IBillingHandler {
+                override fun onProductPurchased(productId: String, details: TransactionDetails?) {}
+
+                override fun onPurchaseHistoryRestored() {
+                    Toast.makeText(
+                        this@App,
+                        R.string.restored_previous_purchase_please_restart,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onBillingError(errorCode: Int, error: Throwable?) {}
+
+                override fun onBillingInitialized() {}
+            })
     }
 
     override fun onTerminate() {
         super.onTerminate()
+        billingProcessor.release()
     }
 
     companion object {
@@ -52,7 +78,12 @@ class App : Application() {
         }
 
         fun isCleanVersion(): Boolean {
-            return BuildConfig.DEBUG || AppPref.isCleanVersion
+//            return BuildConfig.DEBUG || instance?.billingProcessor!!.isPurchased(
+//                Constants.CLEAN_VERSION_PRODUCT_ID
+//            )
+            return instance?.billingProcessor!!.isPurchased(
+                Constants.CLEAN_VERSION_PRODUCT_ID
+            )
         }
     }
 }
