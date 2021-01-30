@@ -7,14 +7,11 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
@@ -25,7 +22,6 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import com.o4x.musical.App
 import com.o4x.musical.R
-import com.o4x.musical.ads.TapselUtils
 import com.o4x.musical.databinding.*
 import com.o4x.musical.extensions.findNavController
 import com.o4x.musical.helper.MusicPlayerRemote

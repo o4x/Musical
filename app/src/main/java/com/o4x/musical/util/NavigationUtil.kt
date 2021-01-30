@@ -7,9 +7,9 @@ import android.media.audiofx.AudioEffect
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.o4x.musical.R
+import com.o4x.musical.ads.AdsUtils
 import com.o4x.musical.helper.MusicPlayerRemote.audioSessionId
 import com.o4x.musical.ui.activities.details.ArtistDetailActivity
-import com.o4x.musical.ads.TapselUtils
 import com.o4x.musical.ui.activities.details.AlbumDetailActivity
 import com.o4x.musical.model.Song
 import com.o4x.musical.ui.activities.tageditor.SongTagEditorActivity
@@ -28,7 +28,7 @@ object NavigationUtil {
         val intent = Intent(activity, ArtistDetailActivity::class.java)
         intent.putExtra(AbsDetailActivity.EXTRA_ID, artistId)
         activity.startActivity(intent)
-        TapselUtils(activity).showSmartInterstitial()
+        AdsUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
@@ -36,7 +36,7 @@ object NavigationUtil {
         val intent = Intent(activity, AlbumDetailActivity::class.java)
         intent.putExtra(AbsDetailActivity.EXTRA_ID, albumId)
         activity.startActivity(intent)
-        TapselUtils(activity).showSmartInterstitial()
+        AdsUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
@@ -44,7 +44,7 @@ object NavigationUtil {
         val tagEditorIntent = Intent(activity, SongTagEditorActivity::class.java)
         tagEditorIntent.putExtra(AbsTagEditorActivity.EXTRA_ID, song.id)
         activity.startActivity(tagEditorIntent)
-        TapselUtils(activity).showSmartInterstitial()
+        AdsUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
@@ -52,7 +52,7 @@ object NavigationUtil {
         val intent = Intent(activity, AlbumTagEditorActivity::class.java)
         intent.putExtra(AbsTagEditorActivity.EXTRA_ID, album.id)
         activity.startActivityForResult(intent, AbsDetailActivity.TAG_EDITOR_REQUEST)
-        TapselUtils(activity).showSmartInterstitial()
+        AdsUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
@@ -60,7 +60,7 @@ object NavigationUtil {
         val editor = Intent(activity, ArtistTagEditorActivity::class.java)
         editor.putExtra(AbsTagEditorActivity.EXTRA_ID, artist.id)
         activity.startActivityForResult(editor, AbsDetailActivity.TAG_EDITOR_REQUEST)
-        TapselUtils(activity).showSmartInterstitial()
+        AdsUtils(activity).showSmartInterstitial()
     }
 
     @JvmStatic
