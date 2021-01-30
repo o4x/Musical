@@ -19,16 +19,33 @@ class CharCoverDrawable(private val coverData: CoverData, private val isClean: B
         private const val TAG = "CharCoverDrawable"
 
         private val COLORS = listOf(
-
-            arrayOf("#E9E9E9", "#F6F6F6"),
+            arrayOf("#343d46", "#343d46"),
+            arrayOf("#4f5b66", "#4f5b66"),
+            arrayOf("#bf616a", "#bf616a"),
+            arrayOf("#a3be8c", "#a3be8c"),
+            arrayOf("#ebcb8b", "#ebcb8b"),
+            arrayOf("#8fa1b3", "#8fa1b3"),
+            arrayOf("#b48ead", "#b48ead"),
+            arrayOf("#96b5b4", "#96b5b4"),
+            arrayOf("#65737e", "#65737e"),
+            arrayOf("#a7adba", "#a7adba"),
         ).map {
             it.map { it -> Color.parseColor(it)
             }.toIntArray()
         }
 
         private val COLORS_DARK = listOf(
-            arrayOf("#000000", "#000000"),
-        ).map {
+            arrayOf("#343d46", "#343d46"),
+            arrayOf("#4f5b66", "#4f5b66"),
+            arrayOf("#bf616a", "#bf616a"),
+            arrayOf("#a3be8c", "#a3be8c"),
+            arrayOf("#ebcb8b", "#ebcb8b"),
+            arrayOf("#8fa1b3", "#8fa1b3"),
+            arrayOf("#b48ead", "#b48ead"),
+            arrayOf("#96b5b4", "#96b5b4"),
+            arrayOf("#65737e", "#65737e"),
+            arrayOf("#a7adba", "#a7adba"),
+            ).map {
             it.map { it -> Color.parseColor(it)
             }.toIntArray()
         }
