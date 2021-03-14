@@ -28,5 +28,6 @@
     <string name="key_licenses" translatable="false">licenses</string>
     <string name="key_email" translatable="false">email</string>
     <string name="key_telegram" translatable="false">telegram</string>
+    <string name="key_github" translatable="false">github</string>
 
 </resources>

@@ -21,6 +21,7 @@ class AboutFragment : PreferenceFragmentCompat() {
     companion object {
         private const val EMAIL = "apps.musical@gmail.com"
         private const val TELEGRAM = "https://t.me/app_musical"
+        private const val GITHUB = "https://github.com/o4x/Musical"
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -65,6 +66,12 @@ class AboutFragment : PreferenceFragmentCompat() {
         telegram.summary = TELEGRAM
         telegram.setOnPreferenceClickListener {
             openUrl(TELEGRAM)
+            return@setOnPreferenceClickListener true
+        }
+
+        val github = R.string.key_github.getPreference()
+        github.setOnPreferenceClickListener {
+            openUrl(GITHUB)
             return@setOnPreferenceClickListener true
         }
     }

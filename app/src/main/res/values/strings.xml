@@ -298,5 +298,7 @@
     <string name="musical">Musical</string>
     <string name="grant_access">Grant access</string>
     <string name="change_wallpaper">Change wallpaper</string>
+    <string name="github">Github</string>
+    <string name="github_fork">Fork on Github</string>
 
 </resources>
