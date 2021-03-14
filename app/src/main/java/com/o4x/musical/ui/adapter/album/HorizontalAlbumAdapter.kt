@@ -8,9 +8,6 @@ import com.o4x.musical.model.Album
 import com.o4x.musical.util.MusicUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 class HorizontalAlbumAdapter(
     activity: AppCompatActivity,
     dataSet: List<Album>,

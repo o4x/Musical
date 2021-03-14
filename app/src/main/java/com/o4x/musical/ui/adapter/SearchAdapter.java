@@ -23,12 +23,9 @@ import com.o4x.musical.util.NavigationUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import code.name.monkey.appthemehelper.extensions.ColorExtKt;
-import code.name.monkey.appthemehelper.util.ATHUtil;
+import com.o4x.appthemehelper.extensions.ColorExtKt;
+import com.o4x.appthemehelper.util.ATHUtil;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
     private static final int HEADER = 0;

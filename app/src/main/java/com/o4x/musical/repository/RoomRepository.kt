@@ -1,6 +1,5 @@
 package com.o4x.musical.repository
 
-import android.database.Cursor
 import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations

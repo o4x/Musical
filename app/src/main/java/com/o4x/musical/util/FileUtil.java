@@ -24,9 +24,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public final class FileUtil {
     private FileUtil() {
     }

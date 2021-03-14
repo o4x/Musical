@@ -13,9 +13,9 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import code.name.monkey.appthemehelper.extensions.accentColor
-import code.name.monkey.appthemehelper.extensions.surfaceColor
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.o4x.appthemehelper.extensions.accentColor
+import com.o4x.appthemehelper.extensions.surfaceColor
+import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R

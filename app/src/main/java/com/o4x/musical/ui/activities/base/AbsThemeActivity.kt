@@ -6,10 +6,10 @@ import android.content.res.Resources
 import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
-import code.name.monkey.appthemehelper.ATH
-import code.name.monkey.appthemehelper.ATHActivity
-import code.name.monkey.appthemehelper.extensions.surfaceColor
-import code.name.monkey.appthemehelper.util.ColorUtil
+import com.o4x.appthemehelper.ATH
+import com.o4x.appthemehelper.ATHActivity
+import com.o4x.appthemehelper.extensions.surfaceColor
+import com.o4x.appthemehelper.util.ColorUtil
 import com.o4x.musical.LanguageContextWrapper
 import com.o4x.musical.appshortcuts.DynamicShortcutManager
 import com.o4x.musical.prefs.PreferenceUtil

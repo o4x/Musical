@@ -2,9 +2,6 @@ package com.o4x.musical.service.playback;
 
 import androidx.annotation.Nullable;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public interface Playback {
 
     boolean setDataSource(String path);

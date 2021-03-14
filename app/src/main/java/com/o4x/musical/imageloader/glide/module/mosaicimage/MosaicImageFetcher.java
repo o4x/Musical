@@ -14,9 +14,6 @@ import java.io.InputStream;
 
 import static com.o4x.musical.imageloader.util.MosaicUtil.getMosaic;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class MosaicImageFetcher implements DataFetcher<InputStream> {
 
     private final MultiImage model;

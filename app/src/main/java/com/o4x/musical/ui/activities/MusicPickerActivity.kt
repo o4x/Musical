@@ -13,7 +13,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import code.name.monkey.appthemehelper.extensions.accentColor
+import com.o4x.appthemehelper.extensions.accentColor
 import com.o4x.musical.R
 import com.o4x.musical.databinding.ActivityMusicPickerBinding
 import com.o4x.musical.extensions.applyToolbar

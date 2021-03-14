@@ -10,9 +10,6 @@ import com.o4x.musical.model.Playlist
 import com.o4x.musical.util.PlaylistsUtil
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 class DeletePlaylistDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

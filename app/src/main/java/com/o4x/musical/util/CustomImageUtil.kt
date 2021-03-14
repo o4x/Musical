@@ -1,6 +1,5 @@
 package com.o4x.musical.util
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri

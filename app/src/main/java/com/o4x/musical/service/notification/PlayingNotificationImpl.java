@@ -29,8 +29,8 @@ import com.o4x.musical.prefs.PreferenceUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import code.name.monkey.appthemehelper.util.ColorUtil;
-import code.name.monkey.appthemehelper.util.MaterialValueHelper;
+import com.o4x.appthemehelper.util.ColorUtil;
+import com.o4x.appthemehelper.util.MaterialValueHelper;
 
 public class PlayingNotificationImpl extends PlayingNotification {
 

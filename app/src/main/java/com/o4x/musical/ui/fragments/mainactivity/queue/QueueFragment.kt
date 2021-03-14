@@ -3,7 +3,7 @@ package com.o4x.musical.ui.fragments.mainactivity.queue
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
-import code.name.monkey.appthemehelper.extensions.accentColor
+import com.o4x.appthemehelper.extensions.accentColor
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager

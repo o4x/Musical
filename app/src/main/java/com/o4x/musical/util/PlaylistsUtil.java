@@ -26,9 +26,6 @@ import java.util.List;
 
 import static android.provider.MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class PlaylistsUtil {
 
     public static boolean doesPlaylistExist(@NonNull final Context context, final long playlistId) {

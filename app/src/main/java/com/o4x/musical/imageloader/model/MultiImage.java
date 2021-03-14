@@ -8,9 +8,6 @@ import com.o4x.musical.model.Song;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class MultiImage {
     public final long id;
     public final String name;

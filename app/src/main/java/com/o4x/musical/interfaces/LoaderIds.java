@@ -1,8 +1,5 @@
 package com.o4x.musical.interfaces;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public interface LoaderIds {
     int ALBUM_DETAIL_ACTIVITY = 1;
     int ARTIST_DETAIL_ACTIVITY = 2;

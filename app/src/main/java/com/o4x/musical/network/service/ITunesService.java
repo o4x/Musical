@@ -8,10 +8,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
- * Created by REYANSH on 3/13/2017.
- */
-
-/**
  * for more information please check :
  * https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/
  */

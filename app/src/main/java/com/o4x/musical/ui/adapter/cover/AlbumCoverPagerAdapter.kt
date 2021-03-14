@@ -14,9 +14,6 @@ import com.o4x.musical.imageloader.glide.transformation.blur.BlurTransformation
 import com.o4x.musical.model.Song
 import com.o4x.musical.util.Util
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 class AlbumCoverPagerAdapter(fm: FragmentManager, dataSet: List<Song>) :
     BaseCoverPagerAdapter(fm, dataSet) {
 

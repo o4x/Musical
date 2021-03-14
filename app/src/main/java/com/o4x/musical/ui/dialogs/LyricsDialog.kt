@@ -6,9 +6,6 @@ import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.model.lyrics.Lyrics
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 class LyricsDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog(requireContext())

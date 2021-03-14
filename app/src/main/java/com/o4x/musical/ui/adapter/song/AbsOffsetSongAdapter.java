@@ -18,9 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * @author Eugene Cheung (arkon)
- */
 public abstract class AbsOffsetSongAdapter extends SongAdapter {
 
     protected static final int OFFSET_ITEM = 0;

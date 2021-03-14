@@ -328,15 +328,6 @@
             android:textAllCaps="true"
             android:layout_marginHorizontal="16dp"/>
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/banner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            ads:adSize="SMART_BANNER"
-            ads:adUnitId="ca-app-pub-8217710892260661/3993756143"/>
-
     </LinearLayout>
 
 </LinearLayout>

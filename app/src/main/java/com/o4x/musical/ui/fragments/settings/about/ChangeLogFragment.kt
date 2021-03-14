@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import code.name.monkey.appthemehelper.util.ATHUtil
+import com.o4x.appthemehelper.util.ATHUtil
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentWebViewBinding
 import com.o4x.musical.prefs.PreferenceUtil

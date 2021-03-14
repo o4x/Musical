@@ -65,85 +65,73 @@
         android:label="@string/settings"
         tools:layout="@layout/activity_settings"/>
 
-    <activity
-        android:id="@+id/buy_from_google_play"
-        android:name="com.o4x.musical.ui.activities.purchase.PurchaseActivity"
-        android:label="@string/musical_clean"
-        tools:layout="@layout/activity_purchase" />
-
-    <activity
-        android:id="@+id/buy_from_bazar"
-        android:name="com.o4x.musical.ui.activities.purchase.BazarPurchaseActivity"
-        android:label="@string/musical_clean"
-        tools:layout="@layout/activity_purchase" />
-
     <action
         android:id="@+id/action_to_search"
         app:destination="@id/search"
-        app:enterAnim="@anim/retro_fragment_open_enter"
-        app:exitAnim="@anim/retro_fragment_open_exit"
-        app:popEnterAnim="@anim/retro_fragment_close_enter"
-        app:popExitAnim="@anim/retro_fragment_close_exit"/>
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_queue"
         app:destination="@id/queue"
         app:popUpTo="@id/home"
-        app:enterAnim="@anim/retro_fragment_open_enter"
-        app:exitAnim="@anim/retro_fragment_open_exit"
-        app:popEnterAnim="@anim/retro_fragment_close_enter"
-        app:popExitAnim="@anim/retro_fragment_close_exit"/>
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_library"
         app:destination="@id/library"
         app:popUpTo="@id/home"
-        app:enterAnim="@anim/retro_fragment_open_enter"
-        app:exitAnim="@anim/retro_fragment_open_exit"
-        app:popEnterAnim="@anim/retro_fragment_close_enter"
-        app:popExitAnim="@anim/retro_fragment_close_exit"/>
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_folders"
         app:destination="@id/folders"
         app:popUpTo="@id/home"
-        app:enterAnim="@anim/retro_fragment_open_enter"
-        app:exitAnim="@anim/retro_fragment_open_exit"
-        app:popEnterAnim="@anim/retro_fragment_close_enter"
-        app:popExitAnim="@anim/retro_fragment_close_exit"/>
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_equalizer"
         app:destination="@id/equalizer"
         app:popUpTo="@id/home"
-        app:enterAnim="@anim/retro_fragment_open_enter"
-        app:exitAnim="@anim/retro_fragment_open_exit"
-        app:popEnterAnim="@anim/retro_fragment_close_enter"
-        app:popExitAnim="@anim/retro_fragment_close_exit"/>
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_timer"
         app:destination="@id/timer"
         app:popUpTo="@id/home"
-        app:enterAnim="@anim/retro_fragment_open_enter"
-        app:exitAnim="@anim/retro_fragment_open_exit"
-        app:popEnterAnim="@anim/retro_fragment_close_enter"
-        app:popExitAnim="@anim/retro_fragment_close_exit"/>
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit"/>
 
     <action
         android:id="@+id/action_to_playlist"
         app:destination="@id/detail_playlist"
-        app:enterAnim="@anim/retro_fragment_open_enter"
-        app:exitAnim="@anim/retro_fragment_open_exit"
-        app:popEnterAnim="@anim/retro_fragment_close_enter"
-        app:popExitAnim="@anim/retro_fragment_close_exit" />
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit" />
 
     <action
         android:id="@+id/action_to_genre"
         app:destination="@id/detail_genre"
-        app:enterAnim="@anim/retro_fragment_open_enter"
-        app:exitAnim="@anim/retro_fragment_open_exit"
-        app:popEnterAnim="@anim/retro_fragment_close_enter"
-        app:popExitAnim="@anim/retro_fragment_close_exit" />
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit" />
 
 </navigation>

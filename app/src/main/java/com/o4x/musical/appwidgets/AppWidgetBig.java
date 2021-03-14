@@ -24,7 +24,7 @@ import com.o4x.musical.util.Util;
 
 import org.jetbrains.annotations.NotNull;
 
-import code.name.monkey.appthemehelper.util.MaterialValueHelper;
+import com.o4x.appthemehelper.util.MaterialValueHelper;
 
 public class AppWidgetBig extends BaseAppWidget {
     public static final String NAME = "app_widget_big";

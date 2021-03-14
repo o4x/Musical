@@ -22,9 +22,6 @@ import androidx.annotation.Nullable;
 
 import com.o4x.musical.R;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class Util {
 
     public static int getScreenWidth() {

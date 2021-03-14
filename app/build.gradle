@@ -172,9 +172,6 @@ dependencies {
 
     implementation 'me.everything:overscroll-decor-android:1.1.0'
 
-    // debugImplementation because LeakCanary should only run in debug builds.
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
-
 
     def room_version = "2.2.6"
     implementation "androidx.room:room-runtime:$room_version"
@@ -200,8 +197,4 @@ dependencies {
     implementation 'com.blankj:utilcodex:1.30.4'
 
     implementation 'com.github.dhaval2404:imagepicker:1.7.5'
-
-    implementation 'com.anjlab.android.iab.v3:library:1.1.0'
-    //for adMob
-    implementation 'com.google.android.gms:play-services-ads:19.7.0'
 }

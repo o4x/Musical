@@ -5,15 +5,12 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import code.name.monkey.appthemehelper.extensions.accentColor
+import com.o4x.appthemehelper.extensions.accentColor
 import com.o4x.musical.R
 import com.o4x.musical.util.ViewUtil
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import kotlinx.android.synthetic.main.fragment_library_recycler_view.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : RecyclerView.LayoutManager?> :
     AbsLibraryPagerFragment(R.layout.fragment_library_recycler_view) {
 

@@ -1,17 +1,3 @@
-/*
- * Copyright (c) 2019 Hemanth Savarala.
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by
- *  the Free Software Foundation either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.o4x.musical.ui.activities;
 
 import android.graphics.Color;
@@ -32,15 +18,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-import code.name.monkey.appthemehelper.ThemeStore;
-import code.name.monkey.appthemehelper.extensions.ColorExtKt;
-import code.name.monkey.appthemehelper.util.ATHUtil;
-import code.name.monkey.appthemehelper.util.ColorUtil;
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper;
+import com.o4x.appthemehelper.ThemeStore;
+import com.o4x.appthemehelper.extensions.ColorExtKt;
+import com.o4x.appthemehelper.util.ATHUtil;
+import com.o4x.appthemehelper.util.ColorUtil;
+import com.o4x.appthemehelper.util.ToolbarContentTintHelper;
 
-/**
- * Created by hemanths on 2019-09-27.
- */
 public class LicenseActivity extends AbsBaseActivity {
 
     @Override

@@ -16,7 +16,7 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import code.name.monkey.appthemehelper.extensions.surfaceColor
+import com.o4x.appthemehelper.extensions.surfaceColor
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
@@ -28,7 +28,6 @@ import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.helper.SearchQueryHelper.getSongs
 import com.o4x.musical.interfaces.CabHolder
 import com.o4x.musical.model.Song
-import com.o4x.musical.prefs.AppPref
 import com.o4x.musical.repository.PlaylistSongsLoader
 import com.o4x.musical.service.MusicService
 import com.o4x.musical.ui.activities.base.AbsMusicPanelActivity
@@ -67,8 +66,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
             this.startActivity(myIntent)
         }
 
-        AppPref.registerOnSharedPreferenceChangedListener(this)
-
         setDrawUnderStatusBar()
         setNavigationBarColorAuto()
         setStatusBarColorAuto()
@@ -82,11 +79,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     override fun onResume() {
         super.onResume()
         checkVersion()
-    }
-
-    override fun onDestroy() {
-        AppPref.unregisterOnSharedPreferenceChangedListener(this)
-        super.onDestroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -127,16 +119,9 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         navController.navigate(R.id.action_to_search)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        super.onSharedPreferenceChanged(sharedPreferences, key)
-        if (key == AppPref.IS_CLEAN) {
-            checkVersion()
-        }
-    }
-
     private fun checkVersion() {
         navigationHeaderBinding.apply {
-            if (App.isCleanVersion()) {
+            if (false) {
                 proIcon.isVisible = false
                 proNext.isVisible = false
                 proSummary.isVisible = false
@@ -147,7 +132,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                 proNext.isVisible = true
                 proSummary.isVisible = true
                 proTitle.text = resources.getString(R.string.musical_clean)
-                banner.setOnClickListener { navController.navigate(R.id.buy_from_google_play) }
             }
         }
     }

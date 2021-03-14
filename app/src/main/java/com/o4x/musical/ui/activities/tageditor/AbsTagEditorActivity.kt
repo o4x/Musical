@@ -15,15 +15,14 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import code.name.monkey.appthemehelper.extensions.colorControlNormal
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.o4x.appthemehelper.extensions.colorControlNormal
+import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.o4x.musical.R
-import com.o4x.musical.ads.AdsUtils
 import com.o4x.musical.databinding.ActivityTagBinding
 import com.o4x.musical.extensions.applyToolbar
 import com.o4x.musical.extensions.startImagePicker
@@ -43,9 +42,7 @@ import org.koin.android.ext.android.inject
 import java.io.Serializable
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
+
 abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
     val repository by inject<Repository>()
@@ -97,8 +94,6 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
         supportActionBar?.setTitle(R.string.action_tag_editor)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        AdsUtils(this).loadStandardBanner(binding.banner)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

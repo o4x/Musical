@@ -6,9 +6,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class HeightFitSquareLayout extends FrameLayout {
 
     private boolean forceSquare = true;

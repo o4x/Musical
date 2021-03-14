@@ -1,6 +1,5 @@
 package com.o4x.musical.ui.adapter.song;
 
-import android.graphics.Typeface;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -10,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.o4x.musical.R;
-import com.o4x.musical.helper.MusicPlayerRemote;
 import com.o4x.musical.interfaces.CabHolder;
 import com.o4x.musical.model.Song;
 import com.o4x.musical.util.MusicUtil;
@@ -20,12 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import code.name.monkey.appthemehelper.ThemeStore;
-import code.name.monkey.appthemehelper.extensions.ColorExtKt;
+import com.o4x.appthemehelper.extensions.ColorExtKt;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
 
     public PlaylistSongAdapter(AppCompatActivity activity, @NonNull List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {

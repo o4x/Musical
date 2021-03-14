@@ -10,11 +10,11 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import code.name.monkey.appthemehelper.extensions.accentColor
-import code.name.monkey.appthemehelper.extensions.backgroundColor
-import code.name.monkey.appthemehelper.extensions.primaryColor
-import code.name.monkey.appthemehelper.extensions.textColorPrimary
-import code.name.monkey.appthemehelper.util.ColorUtil
+import com.o4x.appthemehelper.extensions.accentColor
+import com.o4x.appthemehelper.extensions.backgroundColor
+import com.o4x.appthemehelper.extensions.primaryColor
+import com.o4x.appthemehelper.extensions.textColorPrimary
+import com.o4x.appthemehelper.util.ColorUtil
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar

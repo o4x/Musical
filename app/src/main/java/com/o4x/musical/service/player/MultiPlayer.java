@@ -16,9 +16,6 @@ import com.o4x.musical.R;
 import com.o4x.musical.service.playback.Playback;
 import com.o4x.musical.prefs.PreferenceUtil;
 
-/**
- * @author Andrew Neal, Karim Abou Zeid (kabouzeid)
- */
 public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     public static final String TAG = MultiPlayer.class.getSimpleName();
 

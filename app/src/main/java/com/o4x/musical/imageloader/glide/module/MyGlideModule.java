@@ -19,9 +19,6 @@ import com.o4x.musical.imageloader.model.MultiImage;
 
 import java.io.InputStream;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 @GlideModule
 public class MyGlideModule extends AppGlideModule {
 

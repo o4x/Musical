@@ -25,9 +25,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
 
     protected static final int CURRENT = 1;

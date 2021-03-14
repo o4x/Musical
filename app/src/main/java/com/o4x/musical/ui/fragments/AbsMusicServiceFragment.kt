@@ -10,9 +10,7 @@ import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
 import java.lang.ClassCastException
 import java.lang.RuntimeException
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
+
 open class AbsMusicServiceFragment(@LayoutRes layout: Int) : Fragment(layout), MusicServiceEventListener {
 
     lateinit var serviceActivity: AbsMusicServiceActivity

@@ -15,9 +15,6 @@ import com.bumptech.glide.load.data.DataFetcher;
 import com.o4x.musical.imageloader.model.AudioFileCover;
 import com.o4x.musical.imageloader.util.AudioFileCoverUtils;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
     private final AudioFileCover model;
 

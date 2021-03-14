@@ -35,9 +35,9 @@ import com.o4x.musical.R;
 
 import java.util.List;
 
-import code.name.monkey.appthemehelper.extensions.ColorExtKt;
-import code.name.monkey.appthemehelper.util.ATHUtil;
-import code.name.monkey.appthemehelper.util.ColorUtil;
+import com.o4x.appthemehelper.extensions.ColorExtKt;
+import com.o4x.appthemehelper.util.ATHUtil;
+import com.o4x.appthemehelper.util.ColorUtil;
 
 import static androidx.core.graphics.ColorUtils.RGBToXYZ;
 

@@ -7,7 +7,7 @@ import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.*
 import androidx.palette.graphics.Palette
-import code.name.monkey.appthemehelper.util.ColorUtil
+import com.o4x.appthemehelper.util.ColorUtil
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.o4x.musical.App
 import com.o4x.musical.drawables.CharCoverDrawable

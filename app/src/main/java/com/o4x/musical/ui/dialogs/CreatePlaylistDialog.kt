@@ -12,9 +12,6 @@ import com.o4x.musical.model.Song
 import com.o4x.musical.util.PlaylistsUtil
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
- */
 class CreatePlaylistDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

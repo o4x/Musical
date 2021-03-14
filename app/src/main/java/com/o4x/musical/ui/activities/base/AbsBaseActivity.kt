@@ -11,8 +11,8 @@ import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
 import androidx.core.app.ActivityCompat
-import code.name.monkey.appthemehelper.ThemeStore
-import code.name.monkey.appthemehelper.extensions.accentColor
+import com.o4x.appthemehelper.ThemeStore
+import com.o4x.appthemehelper.extensions.accentColor
 import com.google.android.material.snackbar.Snackbar
 import com.o4x.musical.R
 import com.o4x.musical.ui.activities.intro.PermissionActivity
