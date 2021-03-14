@@ -23,6 +23,11 @@
         app:summary="%s"/>
 
     <Preference
+        app:key="@string/key_github"
+        app:title="@string/github"
+        app:summary="@string/github_fork" />
+
+    <Preference
         app:key="@string/key_licenses"
         app:title="@string/licenses" />
 
