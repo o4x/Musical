@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class LastFMUtil {
     public enum ImageSize {
         SMALL, MEDIUM, LARGE, EXTRALARGE, MEGA, UNKNOWN

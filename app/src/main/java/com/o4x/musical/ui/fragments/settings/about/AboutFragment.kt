@@ -9,9 +9,9 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import code.name.monkey.appthemehelper.extensions.backgroundColor
-import code.name.monkey.appthemehelper.extensions.surfaceColor
-import code.name.monkey.appthemehelper.extensions.textColorPrimary
+import com.o4x.appthemehelper.extensions.backgroundColor
+import com.o4x.appthemehelper.extensions.surfaceColor
+import com.o4x.appthemehelper.extensions.textColorPrimary
 import com.o4x.musical.App
 import com.o4x.musical.R
 import de.psdev.licensesdialog.LicensesDialog
@@ -19,7 +19,6 @@ import de.psdev.licensesdialog.LicensesDialog
 class AboutFragment : PreferenceFragmentCompat() {
 
     companion object {
-//        private const val TRANSLATE = "https://phonograph.oneskyapp.com/collaboration/project?id=26521"
         private const val EMAIL = "apps.musical@gmail.com"
         private const val TELEGRAM = "https://t.me/app_musical"
     }

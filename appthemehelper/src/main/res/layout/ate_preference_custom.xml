@@ -61,7 +61,7 @@
     </RelativeLayout>
 
     <!-- Preference should place its actual preference widget here. -->
-    <code.name.monkey.appthemehelper.common.views.ATESwitch
+    <com.o4x.appthemehelper.common.views.ATESwitch
         android:id="@+id/switchWidget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

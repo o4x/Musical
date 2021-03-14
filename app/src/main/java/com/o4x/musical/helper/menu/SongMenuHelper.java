@@ -18,9 +18,6 @@ import com.o4x.musical.ui.dialogs.SongDetailDialog;
 import com.o4x.musical.util.MusicUtil;
 import com.o4x.musical.util.NavigationUtil;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class SongMenuHelper {
     public static final int MENU_RES = R.menu.menu_item_song;
 

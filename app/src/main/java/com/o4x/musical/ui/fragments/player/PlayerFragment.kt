@@ -6,7 +6,7 @@ import android.text.TextUtils
 import android.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerBinding
 import com.o4x.musical.helper.MusicPlayerRemote

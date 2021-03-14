@@ -14,11 +14,8 @@ import com.o4x.musical.views.IconImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import code.name.monkey.appthemehelper.extensions.ColorExtKt;
+import com.o4x.appthemehelper.extensions.ColorExtKt;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
     @Nullable
     @BindView(R.id.image)

@@ -12,8 +12,8 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
-import code.name.monkey.appthemehelper.ThemeStore
-import code.name.monkey.appthemehelper.extensions.backgroundColor
+import com.o4x.appthemehelper.ThemeStore
+import com.o4x.appthemehelper.extensions.backgroundColor
 import com.o4x.musical.R
 import com.o4x.musical.helper.MusicPlayerRemote
 import com.o4x.musical.preferences.LibraryPreferenceDialog

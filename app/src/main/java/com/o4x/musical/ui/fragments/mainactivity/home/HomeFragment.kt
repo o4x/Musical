@@ -14,9 +14,9 @@ import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
-import code.name.monkey.appthemehelper.extensions.textColorTertiary
-import code.name.monkey.appthemehelper.util.ColorUtil
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.o4x.appthemehelper.extensions.textColorTertiary
+import com.o4x.appthemehelper.util.ColorUtil
+import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.o4x.musical.App

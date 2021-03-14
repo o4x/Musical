@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import code.name.monkey.appthemehelper.extensions.surfaceColor
-import code.name.monkey.appthemehelper.extensions.textColorPrimary
-import code.name.monkey.appthemehelper.extensions.textColorSecondary
+import com.o4x.appthemehelper.extensions.surfaceColor
+import com.o4x.appthemehelper.extensions.textColorPrimary
+import com.o4x.appthemehelper.extensions.textColorSecondary
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.attached.isActive
@@ -21,13 +21,6 @@ import com.o4x.musical.ui.activities.PlayerActivity
 import com.o4x.musical.ui.fragments.player.MiniPlayerFragment
 import com.o4x.musical.util.color.MediaNotificationProcessor
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- *
- *
- * Do not use [.setContentView]. Instead wrap your layout with
- * [.wrapSlidingMusicPanel] first and then return it in [.createContentView]
- */
 abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
 
     var cab: AttachedCab? = null

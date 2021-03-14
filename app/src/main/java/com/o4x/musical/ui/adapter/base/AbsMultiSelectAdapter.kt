@@ -13,9 +13,6 @@ import com.o4x.musical.interfaces.CabCallback
 import com.o4x.musical.interfaces.CabHolder
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 abstract class AbsMultiSelectAdapter<VH : RecyclerView.ViewHolder?, I>(
     context: Context,
     private val cabHolder: CabHolder?,

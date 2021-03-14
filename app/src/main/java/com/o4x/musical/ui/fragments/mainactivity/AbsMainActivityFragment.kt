@@ -8,11 +8,11 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import code.name.monkey.appthemehelper.extensions.colorControlNormal
-import code.name.monkey.appthemehelper.extensions.surfaceColor
-import code.name.monkey.appthemehelper.extensions.textColorTertiary
-import code.name.monkey.appthemehelper.util.ColorUtil
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.o4x.appthemehelper.extensions.colorControlNormal
+import com.o4x.appthemehelper.extensions.surfaceColor
+import com.o4x.appthemehelper.extensions.textColorTertiary
+import com.o4x.appthemehelper.util.ColorUtil
+import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
 import com.o4x.musical.misc.OverScrollGridLayoutManager
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
@@ -27,9 +27,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
+
 abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     AbsMusicServiceFragment(layout), MainActivityFragmentCallbacks {
 

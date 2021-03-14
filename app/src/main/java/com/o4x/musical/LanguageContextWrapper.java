@@ -8,7 +8,7 @@ import android.os.LocaleList;
 
 import java.util.Locale;
 
-import code.name.monkey.appthemehelper.util.VersionUtils;
+import com.o4x.appthemehelper.util.VersionUtils;
 
 public class LanguageContextWrapper extends ContextWrapper {
 

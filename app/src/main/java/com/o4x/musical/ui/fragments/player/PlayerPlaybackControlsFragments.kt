@@ -12,8 +12,8 @@ import android.widget.SeekBar
 import androidx.annotation.ColorInt
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.lifecycleScope
-import code.name.monkey.appthemehelper.util.ColorUtil
-import code.name.monkey.appthemehelper.util.TintHelper
+import com.o4x.appthemehelper.util.ColorUtil
+import com.o4x.appthemehelper.util.TintHelper
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentPlayerPlaybackControlsBinding
 import com.o4x.musical.drawables.PlayPauseDrawable

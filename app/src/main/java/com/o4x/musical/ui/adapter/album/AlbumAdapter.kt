@@ -14,9 +14,6 @@ import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.prefs.PreferenceUtil.albumSortOrder
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 open class AlbumAdapter(
     activity: AppCompatActivity,
     dataSet: List<Album>,

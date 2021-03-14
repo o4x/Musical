@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import butterknife.BindView
-import code.name.monkey.appthemehelper.extensions.withAlpha
+import com.o4x.appthemehelper.extensions.withAlpha
 import com.google.android.material.textview.MaterialTextView
 import com.o4x.musical.R
 import com.o4x.musical.helper.GridHelper
@@ -25,9 +25,6 @@ import com.o4x.musical.helper.MyPalette
 import com.o4x.musical.util.NavigationUtil
 import com.o4x.musical.util.color.MediaNotificationProcessor
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 class DetailsSongAdapter(
     activity: AppCompatActivity?,
     dataSet: List<Song?>?,

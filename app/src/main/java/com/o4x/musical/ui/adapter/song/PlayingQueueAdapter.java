@@ -25,12 +25,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import code.name.monkey.appthemehelper.extensions.ColorExtKt;
-import code.name.monkey.appthemehelper.util.ColorUtil;
+import com.o4x.appthemehelper.extensions.ColorExtKt;
+import com.o4x.appthemehelper.util.ColorUtil;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAdapter<PlayingQueueAdapter.ViewHolder> {
 
     protected static final int HISTORY = 0;

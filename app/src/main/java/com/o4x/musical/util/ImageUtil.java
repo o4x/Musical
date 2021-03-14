@@ -18,11 +18,8 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.io.InputStream;
 
-import code.name.monkey.appthemehelper.util.TintHelper;
+import com.o4x.appthemehelper.util.TintHelper;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class ImageUtil {
 
     public static int calculateInSampleSize(int width, int height, int reqWidth) {

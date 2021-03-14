@@ -3,8 +3,6 @@ package com.o4x.musical.prefs
 import android.content.Context
 import android.content.SharedPreferences
 import com.o4x.musical.App
-import java.text.SimpleDateFormat
-import java.util.*
 
 object HomeHeaderPref {
 

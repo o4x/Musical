@@ -11,9 +11,6 @@ import com.o4x.musical.ui.dialogs.DeleteSongsDialog;
 
 import java.util.List;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class SongsMenuHelper {
     public static boolean handleMenuClick(@NonNull FragmentActivity activity, @NonNull List<Song> songs, int menuItemId) {
         switch (menuItemId) {

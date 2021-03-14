@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.o4x.musical.R
-import com.o4x.musical.ads.AdsUtils
 
 class SetTagsDialog(private val on: On) : DialogFragment() {
     open class On {
@@ -20,11 +19,9 @@ class SetTagsDialog(private val on: On) : DialogFragment() {
             .message(R.string.download_tags_message)
             .neutralButton(R.string.cancel)
             .negativeButton(R.string.just_image) {
-                AdsUtils(requireActivity()).showSmartInterstitial()
                 on.justImage()
             }
             .positiveButton(R.string.all_tags) {
-                AdsUtils(requireActivity()).showSmartInterstitial()
                 on.allTags()
             }
     }

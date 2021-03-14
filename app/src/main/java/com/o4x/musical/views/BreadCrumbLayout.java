@@ -25,12 +25,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import code.name.monkey.appthemehelper.ThemeStore;
-import code.name.monkey.appthemehelper.extensions.ColorExtKt;
+import com.o4x.appthemehelper.ThemeStore;
+import com.o4x.appthemehelper.extensions.ColorExtKt;
 
-/**
- * @author Aidan Follestad (afollestad), modified for Musical by Karim Abou Zeid (kabouzeid)
- */
 public class BreadCrumbLayout extends HorizontalScrollView implements View.OnClickListener {
 
     @ColorInt

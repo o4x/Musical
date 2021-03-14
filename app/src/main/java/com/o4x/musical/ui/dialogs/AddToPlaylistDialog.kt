@@ -12,9 +12,6 @@ import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity
 import com.o4x.musical.util.PlaylistsUtil
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
- */
 class AddToPlaylistDialog : DialogFragment() {
 
     private val libraryViewModel by lazy {

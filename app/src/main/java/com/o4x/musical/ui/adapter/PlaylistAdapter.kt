@@ -18,9 +18,7 @@ import com.o4x.musical.ui.adapter.base.AbsAdapter
 import com.o4x.musical.ui.adapter.base.MediaEntryViewHolder
 import com.o4x.musical.util.MusicUtil
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
+
 class PlaylistAdapter(
     val mainActivity: MainActivity,
     dataSet: List<Playlist>,

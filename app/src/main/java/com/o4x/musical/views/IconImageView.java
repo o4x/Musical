@@ -8,11 +8,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.o4x.musical.R;
 
-import code.name.monkey.appthemehelper.util.ATHUtil;
+import com.o4x.appthemehelper.util.ATHUtil;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class IconImageView extends AppCompatImageView {
     public IconImageView(Context context) {
         super(context);

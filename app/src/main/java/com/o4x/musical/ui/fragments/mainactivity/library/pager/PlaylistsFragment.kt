@@ -18,9 +18,6 @@ import com.o4x.musical.prefs.PreferenceUtil.setPlaylistGridSize
 import com.o4x.musical.prefs.PreferenceUtil.setPlaylistGridSizeLand
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 class PlaylistsFragment :
     AbsLibraryPagerRecyclerViewCustomGridSizeFragment<PlaylistAdapter, GridLayoutManager>() {
 

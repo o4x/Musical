@@ -17,9 +17,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.ref.WeakReference
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventListener {
 
     private val mMusicServiceEventListeners: MutableList<MusicServiceEventListener> = ArrayList()

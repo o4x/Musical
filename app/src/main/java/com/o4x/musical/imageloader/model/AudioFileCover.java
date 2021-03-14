@@ -2,9 +2,6 @@ package com.o4x.musical.imageloader.model;
 
 import java.util.Objects;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class AudioFileCover {
 
     public final String title;

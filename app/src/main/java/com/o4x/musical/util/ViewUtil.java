@@ -30,13 +30,10 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import code.name.monkey.appthemehelper.util.ATHUtil;
-import code.name.monkey.appthemehelper.util.ColorUtil;
-import code.name.monkey.appthemehelper.util.MaterialValueHelper;
+import com.o4x.appthemehelper.util.ATHUtil;
+import com.o4x.appthemehelper.util.ColorUtil;
+import com.o4x.appthemehelper.util.MaterialValueHelper;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class ViewUtil {
 
     public final static int PHONOGRAPH_ANIM_TIME = 400;

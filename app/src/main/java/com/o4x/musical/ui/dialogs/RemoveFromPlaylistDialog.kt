@@ -11,9 +11,6 @@ import com.o4x.musical.model.PlaylistSong
 import com.o4x.musical.util.PlaylistsUtil
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 class RemoveFromPlaylistDialog : DialogFragment() {
 
     @SuppressLint("StringFormatInvalid")

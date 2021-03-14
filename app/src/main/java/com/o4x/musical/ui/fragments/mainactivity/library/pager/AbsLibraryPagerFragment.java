@@ -7,9 +7,6 @@ import com.o4x.musical.ui.fragments.AbsMusicServiceFragment;
 import com.o4x.musical.ui.fragments.mainactivity.library.LibraryFragment;
 import com.o4x.musical.ui.viewmodel.LibraryViewModel;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class AbsLibraryPagerFragment extends AbsMusicServiceFragment {
 
     public AbsLibraryPagerFragment(int layout) {

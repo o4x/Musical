@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -35,8 +34,6 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.o4x.musical.extensions.FragmentExtKt.showToast;
 
 public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR extends List<? extends Serializable>>
         extends AbsMusicServiceActivity {

@@ -10,9 +10,6 @@ import com.o4x.musical.model.Song
 import com.o4x.musical.util.MusicUtil
 import java.util.*
 
-/**
- * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
- */
 class DeleteSongsDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val songs: List<Song>? = requireArguments().getParcelableArrayList("songs")

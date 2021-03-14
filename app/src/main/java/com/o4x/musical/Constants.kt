@@ -18,8 +18,6 @@ import android.provider.BaseColumns
 import android.provider.MediaStore
 
 object Constants {
-    const val CLEAN_VERSION_PRODUCT_ID = "clean"
-    const val GOOGLE_PLAY_LICENSING_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgY4/kD68775CJojiX7E12sudUmzn9wAt47vQV41ObL41ASadpezl34KBRRVH0Pxebm53+uAWlKRrEvZxhL9LeGsEMOyfekOBhoppgOMY0V9lA1sh85cxCkuRi0FDx27XcBB/lQhrT7IFYcZD7Fl18Wj7XIdaftmA9pwUxIB9BojCZfArBsG6cj64sJd0aM54zTUAkFvtRN3kAfnw/ZH7UhdhkHVouHWmJOn9jZFbhnMuJnDE1F8BGSm5iUnqnI+HmFItx6zl5lfEtTMV112nquRD9pv3ID1BUg0VD+C+9Z+NhnOZxPVz66gsOdI46vuvACqQncu3y5AU39K3MRAC/QIDAQAB"
 
     const val IS_MUSIC =
         MediaStore.Audio.AudioColumns.IS_MUSIC + "=1" + " AND " + MediaStore.Audio.AudioColumns.TITLE + " != ''"

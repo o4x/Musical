@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import code.name.monkey.appthemehelper.extensions.accentColor
+import com.o4x.appthemehelper.extensions.accentColor
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentDetailBinding
-import com.o4x.musical.databinding.FragmentSearchBinding
 import com.o4x.musical.misc.OverScrollLinearLayoutManager
 import com.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
 import com.o4x.musical.util.ViewUtil

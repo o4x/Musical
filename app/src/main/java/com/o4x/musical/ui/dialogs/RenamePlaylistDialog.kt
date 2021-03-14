@@ -9,9 +9,6 @@ import com.afollestad.materialdialogs.input.input
 import com.o4x.musical.R
 import com.o4x.musical.util.PlaylistsUtil
 
-/**
- * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
- */
 class RenamePlaylistDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 

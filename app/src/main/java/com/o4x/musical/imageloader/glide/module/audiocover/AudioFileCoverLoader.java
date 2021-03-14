@@ -1,7 +1,5 @@
 package com.o4x.musical.imageloader.glide.module.audiocover;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -13,10 +11,6 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.o4x.musical.imageloader.model.AudioFileCover;
 
 import java.io.InputStream;
-
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 
 public class AudioFileCoverLoader implements ModelLoader<AudioFileCover, InputStream> {
 

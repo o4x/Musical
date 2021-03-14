@@ -12,10 +12,6 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory;
 import com.bumptech.glide.signature.ObjectKey;
 import com.o4x.musical.imageloader.model.MultiImage;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
-
 public class MosaicImageLoader implements ModelLoader<MultiImage, InputStream> {
 
     @Nullable

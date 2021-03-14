@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import code.name.monkey.appthemehelper.extensions.accentColor
-import code.name.monkey.appthemehelper.extensions.surfaceColor
-import code.name.monkey.appthemehelper.util.ToolbarContentTintHelper
+import com.o4x.appthemehelper.extensions.accentColor
+import com.o4x.appthemehelper.extensions.surfaceColor
+import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import com.o4x.musical.R
 import com.o4x.musical.databinding.FragmentLibraryBinding
 import com.o4x.musical.helper.MusicPlayerRemote

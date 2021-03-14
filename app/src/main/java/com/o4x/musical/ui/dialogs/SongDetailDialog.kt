@@ -22,9 +22,6 @@ import org.jaudiotagger.tag.TagException
 import java.io.File
 import java.io.IOException
 
-/**
- * @author Karim Abou Zeid (kabouzeid), Aidan Follestad (afollestad)
- */
 class SongDetailDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context: Activity? = activity

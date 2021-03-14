@@ -7,9 +7,6 @@ import com.o4x.musical.model.Song;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class ShuffleHelper {
 
     public static void makeShuffleList(@NonNull List<Song> listToShuffle, final int current) {

@@ -6,7 +6,7 @@ import android.view.MenuItem
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
-import code.name.monkey.appthemehelper.util.ColorUtil.isColorLight
+import com.o4x.appthemehelper.util.ColorUtil.isColorLight
 import com.o4x.musical.R
 import com.o4x.musical.prefs.PreferenceUtil
 import com.o4x.musical.ui.activities.base.AbsMusicServiceActivity

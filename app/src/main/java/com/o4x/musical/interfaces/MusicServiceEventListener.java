@@ -1,8 +1,5 @@
 package com.o4x.musical.interfaces;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public interface MusicServiceEventListener {
     void onServiceConnected();
 

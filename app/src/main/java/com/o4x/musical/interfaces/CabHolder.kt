@@ -4,9 +4,6 @@ import android.view.Menu
 import android.view.MenuItem
 import com.afollestad.materialcab.attached.AttachedCab
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 interface CabHolder {
     fun openCab(menuRes: Int, callback: CabCallback): AttachedCab
 }

@@ -27,9 +27,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import code.name.monkey.appthemehelper.extensions.ColorExtKt;
-import code.name.monkey.appthemehelper.util.ColorUtil;
-import code.name.monkey.appthemehelper.util.MaterialValueHelper;
+import com.o4x.appthemehelper.extensions.ColorExtKt;
+import com.o4x.appthemehelper.util.ColorUtil;
+import com.o4x.appthemehelper.util.MaterialValueHelper;
 
 public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
         extends AbsMultiSelectAdapter<VH, I> implements FastScrollRecyclerView.SectionedAdapter {
