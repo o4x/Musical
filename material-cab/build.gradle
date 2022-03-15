@@ -3,8 +3,8 @@ apply plugin: 'kotlin-android'
 
 ext.versions = [
         minSdk            : 19,
-        compileSdk        : 29,
-        buildTools        : '29.0.0',
+        compileSdk        : 30,
+        buildTools        : '30',
         publishVersion    : '2.0.1',
         publishVersionCode: 13,
 
