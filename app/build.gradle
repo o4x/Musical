@@ -26,8 +26,8 @@ android {
         applicationId "com.o4x.musical"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 8
-        versionName '0.0.5 Beta'
+        versionCode 9
+        versionName '0.0.6 Beta'
 
         renderscriptTargetApi 29
         vectorDrawables.useSupportLibrary = true
@@ -36,21 +36,21 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    signingConfigs {
-        release {
-            Properties properties = getProperties('C:\\Users\\Reza\\Documents\\Musical\\keystore.properties')
-            storeFile file(getProperty(properties, 'storeFile'))
-            keyAlias getProperty(properties, 'keyAlias')
-            storePassword getProperty(properties, 'storePassword')
-            keyPassword getProperty(properties, 'keyPassword')
-        }
-    }
+//    signingConfigs {
+//        release {
+//            Properties properties = getProperties('C:\\Users\\Reza\\Documents\\Musical\\keystore.properties')
+//            storeFile file(getProperty(properties, 'storeFile'))
+//            keyAlias getProperty(properties, 'keyAlias')
+//            storePassword getProperty(properties, 'storePassword')
+//            keyPassword getProperty(properties, 'keyPassword')
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix '.debug'
