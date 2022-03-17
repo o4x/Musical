@@ -23,10 +23,10 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.o4x.musical"
+        applicationId "github.o4x.musical"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 9
+        versionCode 11
         versionName '0.0.6 Beta'
 
         renderscriptTargetApi 29

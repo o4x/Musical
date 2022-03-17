@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.o4x.musical.views.WidthFitSquareLayout
+    <github.o4x.musical.views.WidthFitSquareLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,7 +14,7 @@
             android:layout_height="@dimen/detail_header_height"
             android:background="@drawable/gradient_top_bottom"/>
 
-    </com.o4x.musical.views.WidthFitSquareLayout>
+    </github.o4x.musical.views.WidthFitSquareLayout>
 
     <LinearLayout
         android:id="@+id/header"

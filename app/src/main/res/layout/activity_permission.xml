@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.o4x.musical.views.BaselineGridTextView
+            <github.o4x.musical.views.BaselineGridTextView
                 android:id="@+id/appNameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

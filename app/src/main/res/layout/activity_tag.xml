@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.o4x.musical.views.WidthFitSquareLayout
+            <github.o4x.musical.views.WidthFitSquareLayout
                 android:id="@+id/album_image_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -43,7 +43,7 @@
                     android:transitionName="@string/transition_album_art"
                     tools:ignore="ContentDescription" />
 
-            </com.o4x.musical.views.WidthFitSquareLayout>
+            </github.o4x.musical.views.WidthFitSquareLayout>
 
             <LinearLayout
                 android:id="@+id/editables"

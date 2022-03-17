@@ -1,0 +1,41 @@
+package github.o4x.musical.imageloader.glide.module.audiocover;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.load.Options;
+import com.bumptech.glide.load.model.ModelLoader;
+import com.bumptech.glide.load.model.ModelLoaderFactory;
+import com.bumptech.glide.load.model.MultiModelLoaderFactory;
+import com.bumptech.glide.signature.ObjectKey;
+import github.o4x.musical.imageloader.model.AudioFileCover;
+
+import java.io.InputStream;
+
+public class AudioFileCoverLoader implements ModelLoader<AudioFileCover, InputStream> {
+
+    @Nullable
+    @Override
+    public LoadData<InputStream> buildLoadData(@NonNull AudioFileCover audioFileCover, int width, int height, @NonNull Options options) {
+        return  new LoadData<>(new ObjectKey(audioFileCover), new AudioFileCoverFetcher(audioFileCover));
+    }
+
+    @Override
+    public boolean handles(@NonNull AudioFileCover audioFileCover) {
+        return true;
+    }
+
+    public static class Factory implements ModelLoaderFactory<AudioFileCover, InputStream> {
+
+        @NonNull
+        @Override
+        public ModelLoader<AudioFileCover, InputStream> build(@NonNull MultiModelLoaderFactory multiFactory) {
+            return new AudioFileCoverLoader();
+        }
+
+        @Override
+        public void teardown() {
+        }
+    }
+}
+

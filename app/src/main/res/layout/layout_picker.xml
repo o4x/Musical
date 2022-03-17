@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:layoutDirection="ltr">
 
-    <com.o4x.musical.views.timepicker.NumberPickerView
+    <github.o4x.musical.views.timepicker.NumberPickerView
         android:id="@+id/pickerHours"
         style="@style/ScrollNumberPickerStyle"
         android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_gravity="center_vertical"
         android:text="@string/scroll_hms_picker_hours_label" />
 
-    <com.o4x.musical.views.timepicker.NumberPickerView
+    <github.o4x.musical.views.timepicker.NumberPickerView
         android:id="@+id/pickerMinutes"
         style="@style/ScrollNumberPickerStyle"
         android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
         android:layout_gravity="center_vertical"
         android:text="@string/scroll_hms_picker_minutes_label" />
 
-    <com.o4x.musical.views.timepicker.NumberPickerView
+    <github.o4x.musical.views.timepicker.NumberPickerView
         android:id="@+id/pickerSeconds"
         style="@style/ScrollNumberPickerStyle"
         android:layout_width="wrap_content"
