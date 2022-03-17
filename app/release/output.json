@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.o4x.musical",
+  "applicationId": "github.o4x.musical",
   "variantName": "release",
   "elements": [
     {

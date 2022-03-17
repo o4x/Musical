@@ -49,7 +49,7 @@
             android:layout_height="@dimen/tab_height"
             app:tabMode="scrollable" />
 
-        <com.o4x.musical.views.BreadCrumbLayout
+        <github.o4x.musical.views.BreadCrumbLayout
             android:id="@+id/main_bread_crumbs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height" />

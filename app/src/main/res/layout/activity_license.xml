@@ -35,7 +35,7 @@
             android:layout_gravity="fill_vertical"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <com.o4x.musical.views.LollipopFixedWebView
+            <github.o4x.musical.views.LollipopFixedWebView
                 android:id="@+id/license"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="progressViewModel"
-            type="com.o4x.musical.ui.viewmodel.PlayerViewModel"/>
+            type="github.o4x.musical.ui.viewmodel.PlayerViewModel"/>
     </data>
 
     <LinearLayout
@@ -48,7 +48,7 @@
             android:layout_height="@dimen/mini_player_height"
             android:orientation="horizontal">
 
-            <com.o4x.musical.views.IconImageView
+            <github.o4x.musical.views.IconImageView
                 android:id="@+id/mini_player_image"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -75,7 +75,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 tools:text="@tools:sample/lorem/random" />
 
-            <com.o4x.musical.views.IconImageView
+            <github.o4x.musical.views.IconImageView
                 android:id="@+id/mini_player_play_pause_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

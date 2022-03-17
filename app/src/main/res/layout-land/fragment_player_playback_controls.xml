@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.o4x.musical.helper.MusicPlayerRemote" />
-        <import type="com.o4x.musical.helper.PlayPauseButtonOnClickHandler" />
+        <import type="github.o4x.musical.helper.MusicPlayerRemote" />
+        <import type="github.o4x.musical.helper.PlayPauseButtonOnClickHandler" />
 
         <variable
             name="playerViewModel"
-            type="com.o4x.musical.ui.viewmodel.PlayerViewModel" />
+            type="github.o4x.musical.ui.viewmodel.PlayerViewModel" />
     </data>
 
     <FrameLayout

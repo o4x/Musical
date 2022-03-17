@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainSettings"
-        android:name="com.o4x.musical.ui.fragments.settings.SettingsFragment"
+        android:name="github.o4x.musical.ui.fragments.settings.SettingsFragment"
         android:label="@string/action_settings">
 
 
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/about"
-        android:name="com.o4x.musical.ui.fragments.settings.about.AboutFragment"
+        android:name="github.o4x.musical.ui.fragments.settings.about.AboutFragment"
         android:label="@string/action_about">
 
         <action
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/change_log"
-        android:name="com.o4x.musical.ui.fragments.settings.about.ChangeLogFragment"
+        android:name="github.o4x.musical.ui.fragments.settings.about.ChangeLogFragment"
         android:label="@string/changelog"
         tools:layout="@layout/fragment_web_view" />
 

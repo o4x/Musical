@@ -85,13 +85,13 @@
             app:title="@string/pref_title_auto_download_artist_images" />
 
         <SwitchPreferenceCompat
-            app:defaultValue="false"
+            app:defaultValue="true"
             app:key="@string/key_ignore_media_store_artwork"
             app:summary="@string/pref_summary_ignore_media_store_artwork"
             app:title="@string/pref_title_ignore_media_store_artwork" />
 
         <SwitchPreferenceCompat
-            app:defaultValue="true"
+            app:defaultValue="false"
             app:key="@string/key_cache_images"
             app:summary="@string/pref_summary_cache_images"
             app:title="@string/pref_title_cache_images" />
