@@ -51,7 +51,6 @@ class GlideLoader {
                 else
                     DiskCacheStrategy.NONE
             )
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
 //            .priority(Priority.LOW)
 
         fun withListener(listener: AbsPaletteTargetListener?): GlideBuilder {
