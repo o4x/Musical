@@ -43,10 +43,6 @@
             app:summary="@string/pref_summary_gapless_playback"
             app:title="@string/pref_title_gapless_playback" />
 
-        <Preference
-            app:key="@string/key_equalizer"
-            app:title="@string/equalizer" />
-
     </PreferenceCategory>
 
     <PreferenceCategory

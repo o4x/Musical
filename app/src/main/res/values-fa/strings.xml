@@ -93,7 +93,6 @@
     <string name="always">همیشه</string>
     <string name="only_on_wifi">فقط در Wi-Fi</string>
     <string name="never">هرگز</string>
-    <string name="equalizer">اکولایزر</string>
     <string name="pref_title_general_theme">تم اصلی</string>
     <string name="pref_header_audio">صوت</string>
     <string name="pref_header_images">تصاویر</string>
@@ -104,7 +103,6 @@
     <string name="pref_title_ignore_media_store_artwork">نادیده گرفتن جلد ذخیره شده</string>
     <string name="pref_title_gapless_playback">پخش بدون شکاف</string>
     <string name="pref_title_audio_ducking">کاهش میزان صدا هنگام از دست رفتن فکوس</string>
-    <string name="no_equalizer">هیچ اکولایزری پیدا نشد.</string>
     <string name="no_audio_ID">ابتدا یک آهنگ پخش کنید ، سپس دوباره امتحان کنید.</string>
     <string name="delete_action">حذف</string>
     <string name="clear_action">پاک کردن</string>

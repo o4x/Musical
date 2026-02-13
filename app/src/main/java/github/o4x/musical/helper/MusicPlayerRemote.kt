@@ -17,9 +17,6 @@ package github.o4x.musical.helper
 import android.app.Activity
 import android.content.*
 import android.database.Cursor
-import android.media.audiofx.BassBoost
-import android.media.audiofx.Equalizer
-import android.media.audiofx.PresetReverb
 import android.net.Uri
 import android.os.Environment
 import android.os.IBinder

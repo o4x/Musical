@@ -24,7 +24,6 @@ object PreferenceUtil {
     const val THEME_COLOR = "theme_color"
     const val AUDIO_DUCKING = "audio_ducking"
     const val GAPLESS_PLAYBACK = "gapless_playback"
-    const val EQUALIZER = "equalizer"
     const val COLORED_FOOTER = "colored_footer"
     const val LIBRARY_CATEGORIES = "library_categories"
     const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"

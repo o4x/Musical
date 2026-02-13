@@ -101,22 +101,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             return@setOnPreferenceClickListener true
         }
 
-          ////////////////////
-         // AUDIO SETTINGS //
-        ////////////////////
-
-        val findPreference: Preference = findPreference(PreferenceUtil.EQUALIZER)!!
-        if (!hasEqualizer()) {
-            findPreference.isEnabled = false
-            findPreference.summary = resources.getString(R.string.no_equalizer)
-        } else {
-            findPreference.isEnabled = true
-        }
-        findPreference.setOnPreferenceClickListener {
-            NavigationUtil.openEqualizer(requireActivity())
-            true
-        }
-
           ///////////////////////////
          // NOTIFICATION SETTINGS //
         ///////////////////////////
@@ -196,14 +180,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         }
     }
 
-
-    private fun hasEqualizer(): Boolean {
-        val effects = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
-
-        val pm = requireActivity().packageManager
-        val ri = pm.resolveActivity(effects, 0)
-        return ri != null
-    }
 
     private fun setSummary(preference: Preference, value: Any?) {
         val stringValue = value.toString()
