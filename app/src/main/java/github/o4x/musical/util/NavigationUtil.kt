@@ -58,31 +58,6 @@ object NavigationUtil {
     }
 
     @JvmStatic
-    fun openEqualizer(activity: Activity) {
-        val sessionId = audioSessionId
-        if (sessionId == AudioEffect.ERROR_BAD_VALUE) {
-            Toast.makeText(
-                activity,
-                activity.resources.getString(R.string.no_audio_ID),
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            try {
-                val effects = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
-                effects.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, sessionId)
-                effects.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
-                activity.startActivityForResult(effects, 0)
-            } catch (notFound: ActivityNotFoundException) {
-                Toast.makeText(
-                    activity,
-                    activity.resources.getString(R.string.no_equalizer),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    @JvmStatic
     fun goToOpenSource(activity: Activity) {
         ActivityCompat.startActivity(activity, Intent(activity, LicenseActivity::class.java), null)
     }

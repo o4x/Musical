@@ -15,9 +15,6 @@ import android.widget.Toast
 import androidx.preference.PreferenceManager
 import github.o4x.musical.App.Companion.getContext
 import github.o4x.musical.R
-import github.o4x.musical.equalizer.equalizer.bassboost.IBassBoost
-import github.o4x.musical.equalizer.equalizer.equalizer.IEqualizer
-import github.o4x.musical.equalizer.equalizer.virtualizer.IVirtualizer
 import github.o4x.musical.appwidgets.AppWidgetBig
 import github.o4x.musical.appwidgets.AppWidgetCard
 import github.o4x.musical.appwidgets.AppWidgetClassic
@@ -196,10 +193,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         restoreState()
         mediaSession.isActive = true
         sendBroadcast(Intent("github.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_CREATED"))
-
-        equalizer.onAudioSessionIdChanged(hash, audioSessionId)
-        virtualizer.onAudioSessionIdChanged(hash, audioSessionId)
-        bassBoost.onAudioSessionIdChanged(hash, audioSessionId)
     }
 
     private fun setupMediaSession() {
@@ -317,9 +310,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         mediaStoreObserver.cancel()
         unregisterOnSharedPreferenceChangedListener(this)
         wakeLock.release()
-        equalizer.onDestroy(hash)
-        virtualizer.onDestroy(hash)
-        bassBoost.onDestroy(hash)
         sendBroadcast(Intent("github.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_DESTROYED"))
     }
 
@@ -1101,10 +1091,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     val audioSessionId: Int
         get() = playback.audioSessionId
-
-    val equalizer: IEqualizer by inject()
-    val virtualizer: IVirtualizer by inject()
-    val bassBoost: IBassBoost by inject()
 
     override fun onTrackWentToNext() {
         playerHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT)

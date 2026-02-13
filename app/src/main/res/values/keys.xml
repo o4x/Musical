@@ -6,7 +6,6 @@
     <string name="key_theme_color" translatable="false">theme_color</string>
     <string name="key_audio_ducking" translatable="false">audio_ducking</string>
     <string name="key_gapless_playback" translatable="false">gapless_playback</string>
-    <string name="key_equalizer" translatable="false">equalizer</string>
     <string name="key_colored_footer" translatable="false">colored_footer</string>
     <string name="key_library_categories" translatable="false">library_categories</string>
     <string name="key_album_art_on_lockscreen" translatable="false">album_art_on_lockscreen</string>

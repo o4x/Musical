@@ -1,7 +1,5 @@
 package github.o4x.musical
 
-import github.o4x.musical.equalizer.data.eqDataModule
-import github.o4x.musical.equalizer.equalizer.equalizerModule
 import github.o4x.musical.db.roomModule
 import github.o4x.musical.network.*
 import github.o4x.musical.repository.dataModule
@@ -20,8 +18,5 @@ val appModules = listOf(
     dataModule,
     viewModules,
     networkModule,
-    roomModule,
-
-    equalizerModule,
-    eqDataModule
+    roomModule
 )

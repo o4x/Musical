@@ -95,7 +95,6 @@
     <string name="always">Always</string>
     <string name="only_on_wifi">Only on Wi-Fi</string>
     <string name="never">Never</string>
-    <string name="equalizer">Equalizer</string>
     <string name="pref_title_general_theme">General theme</string>
     <string name="pref_header_audio">Audio</string>
     <string name="pref_header_images">Images</string>
@@ -106,7 +105,6 @@
     <string name="pref_title_ignore_media_store_artwork">Ignore Media Store covers</string>
     <string name="pref_title_gapless_playback">Gapless playback</string>
     <string name="pref_title_audio_ducking">Reduce volume on focus loss</string>
-    <string name="no_equalizer">No equalizer found.</string>
     <string name="no_audio_ID">Play a song first, then try again.</string>
     <string name="delete_action">Delete</string>
     <string name="clear_action">Clear</string>
