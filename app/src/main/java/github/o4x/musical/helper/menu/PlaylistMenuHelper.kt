@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 import java.io.IOException
 import java.util.*
 

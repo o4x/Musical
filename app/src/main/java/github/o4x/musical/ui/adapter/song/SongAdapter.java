@@ -165,10 +165,10 @@ public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
 
         protected boolean onSongMenuItemClick(MenuItem item) {
             if (image != null && image.getVisibility() == View.VISIBLE) {
-                switch (item.getItemId()) {
-                    case R.id.action_go_to_album:
-                        NavigationUtil.goToAlbum(activity, getSong().getAlbumId());
-                        return true;
+                final int itemId = item.getItemId();
+                if (itemId == R.id.action_go_to_album) {
+                    NavigationUtil.goToAlbum(activity, getSong().getAlbumId());
+                    return true;
                 }
             }
             return false;

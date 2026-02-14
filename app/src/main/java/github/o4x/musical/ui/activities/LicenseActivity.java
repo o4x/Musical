@@ -36,8 +36,8 @@ public class LicenseActivity extends AbsBaseActivity {
         setLightNavigationBar(true);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ToolbarContentTintHelper.colorBackButton(toolbar);
-        toolbar.setBackgroundColor(ATHUtil.INSTANCE.resolveColor(this, R.attr.colorSurface));
+//        ToolbarContentTintHelper.colorBackButton(toolbar);
+        toolbar.setBackgroundColor(ATHUtil.INSTANCE.resolveColor(this, com.google.android.material.R.attr.colorSurface));
         WebView webView = findViewById(R.id.license);
         try {
             StringBuilder buf = new StringBuilder();
@@ -51,7 +51,7 @@ public class LicenseActivity extends AbsBaseActivity {
 
             // Inject color values for WebView body background and links
             final boolean isDark = ATHUtil.INSTANCE.isWindowBackgroundDark(this);
-            final String backgroundColor = colorToCSS(ATHUtil.INSTANCE.resolveColor(this, R.attr.colorSurface,
+            final String backgroundColor = colorToCSS(ATHUtil.INSTANCE.resolveColor(this, com.google.android.material.R.attr.colorSurface,
                     Color.parseColor(isDark ? "#424242" : "#ffffff")));
             final String contentColor = colorToCSS(Color.parseColor(isDark ? "#ffffff" : "#000000"));
             final String changeLog = buf.toString()

@@ -3,8 +3,9 @@ package github.o4x.musical.model
 import github.o4x.musical.repository.LastAddedRepository
 import github.o4x.musical.repository.RoomRepository
 import github.o4x.musical.repository.SongRepository
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 
 abstract class AbsCustomPlaylist(
     id: Long,

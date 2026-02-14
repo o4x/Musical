@@ -3,10 +3,10 @@ apply plugin: 'com.android.library'
 android {
     namespace 'com.simplecityapps.recyclerview_fastscroll'
 
-    compileSdkVersion 31
+    compileSdkVersion 36
 
     defaultConfig {
-        minSdkVersion 11
+        minSdkVersion 14
     }
 }
 
@@ -14,7 +14,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //RecyclerView
-    implementation 'com.android.support:recyclerview-v7:25.4.0'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+    implementation 'androidx.interpolator:interpolator:1.0.0'
 }
 
 //To deploy, re-comment following line & run ./gradlew clean assembleRelease install bintrayUpload

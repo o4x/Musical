@@ -97,13 +97,12 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_tag_editor, menu);
-        ToolbarContentTintHelper.tintAllIcons(menu, colorControlNormal())
-        return super.onCreateOptionsMenu(menu);
+        menuInflater.inflate(R.menu.menu_tag_editor, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(this, binding.toolbar)
+        ToolbarContentTintHelper.tintAllIcons(binding.toolbar, colorControlNormal())
         return super.onPrepareOptionsMenu(menu)
     }
 

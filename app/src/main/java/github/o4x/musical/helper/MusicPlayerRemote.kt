@@ -28,8 +28,8 @@ import github.o4x.musical.model.Song
 import github.o4x.musical.repository.SongRepository
 import github.o4x.musical.service.MusicService
 import github.o4x.musical.prefs.PreferenceUtil
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.io.File
 import java.util.*
 

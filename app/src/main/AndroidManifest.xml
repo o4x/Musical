@@ -28,7 +28,8 @@
             android:value="ca-app-pub-8217710892260661~9779617059"/>
 
         <activity
-            android:name=".ui.activities.MusicPickerActivity">
+            android:name=".ui.activities.MusicPickerActivity"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
@@ -41,9 +42,11 @@
 
         </activity>
         <activity
-            android:name=".ui.activities.PlayerActivity" />
+            android:name=".ui.activities.PlayerActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.activities.MainActivity">
+            android:name=".ui.activities.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
@@ -109,41 +112,55 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.details.AlbumDetailActivity" />
+            android:name=".ui.activities.details.AlbumDetailActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.activities.details.ArtistDetailActivity" />
+            android:name=".ui.activities.details.ArtistDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.tageditor.SongTagEditorActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.tageditor.AlbumTagEditorActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.tageditor.ArtistTagEditorActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
         <activity
-            android:name=".ui.activities.tageditor.onlinesearch.SongSearchActivity" />
+            android:name=".ui.activities.tageditor.onlinesearch.SongSearchActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.activities.tageditor.onlinesearch.AlbumSearchActivity" />
+            android:name=".ui.activities.tageditor.onlinesearch.AlbumSearchActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.activities.tageditor.onlinesearch.ArtistSearchActivity" />
+            android:name=".ui.activities.tageditor.onlinesearch.ArtistSearchActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.SettingsActivity"
-            android:label="@string/action_settings" />
+            android:label="@string/action_settings"
+            android:exported="false" />
         <activity
             android:name=".appshortcuts.AppShortcutLauncherActivity"
             android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false" />
         <activity
-            android:name=".ui.activities.purchase.PurchaseActivity" />
+            android:name=".ui.activities.purchase.PurchaseActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.activities.intro.PermissionActivity" />
+            android:name=".ui.activities.intro.PermissionActivity"
+            android:exported="false" />
 
         <service
             android:name=".service.MusicService"
-            android:enabled="true" />
+            android:enabled="true"
+            android:exported="false"/>
 
-        <receiver android:name=".service.MediaButtonIntentReceiver">
+        <receiver android:name=".service.MediaButtonIntentReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -155,7 +172,8 @@
         <meta-data
             android:name="com.lge.support.SPLIT_WINDOW"
             android:value="true" /> <!-- Widgets -->
-        <receiver android:name=".appwidgets.BootReceiver">
+        <receiver android:name=".appwidgets.BootReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />

@@ -27,7 +27,11 @@ public class MosaicImageFetcher implements DataFetcher<InputStream> {
     @Override
     public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
         Log.d("MOSAIC", "load data for" + model.name);
-        stream = getMosaic(model.albumCovers);
+        try {
+            stream = getMosaic(model.albumCovers);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         callback.onDataReady(stream);
     }
 

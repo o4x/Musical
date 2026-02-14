@@ -87,6 +87,13 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
         return binding.root
     }
 
+    protected fun wrapSlidingMusicPanel(view: View): View {
+        val contentContainer =
+            binding.root.findViewById<ViewGroup>(R.id.content_container)
+        contentContainer.addView(view)
+        return binding.root
+    }
+
     override val snackBarContainer: View
         get() = findViewById(R.id.content_container)
 

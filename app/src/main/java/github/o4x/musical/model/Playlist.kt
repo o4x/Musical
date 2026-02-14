@@ -8,8 +8,9 @@ import github.o4x.musical.repository.Repository
 import github.o4x.musical.util.MusicUtil
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.Dispatchers.IO
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 
 @Parcelize
 open class Playlist(

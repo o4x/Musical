@@ -20,7 +20,7 @@ import java.util.Map;
 import static github.o4x.musical.imageloader.util.AudioFileCoverUtils.fallback;
 
 public class MosaicUtil {
-    static public InputStream getMosaic(final List<AlbumCover> albumCovers) {
+    static public InputStream getMosaic(final List<AlbumCover> albumCovers) throws IOException {
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import butterknife.BindView
 import com.o4x.appthemehelper.extensions.withAlpha
 import com.google.android.material.textview.MaterialTextView
 import github.o4x.musical.R
@@ -176,24 +175,15 @@ class DetailsSongAdapter(
     }
 
     inner class HeaderViewHolder(itemView: View) : SongAdapter.ViewHolder(itemView) {
-        @BindView(R.id.header)
-        lateinit var headerView: View
-        @BindView(R.id.sub_header)
-        lateinit var subHeaderView: View
-        @BindView(R.id.gradient)
-        lateinit var hGradient: View
-        @BindView(R.id.title)
-        lateinit var hTitle: MaterialTextView
-        @BindView(R.id.subtitle)
-        lateinit var hSubtitle: MaterialTextView
-        @BindView(R.id.album_recycler)
-        lateinit var hAlbumRecyclerView: RecyclerView
-        @BindView(R.id.track_count)
-        lateinit var hTrackCount: MaterialTextView
-        @BindView(R.id.left_line)
-        lateinit var hLeftLine: View
-        @BindView(R.id.right_line)
-        lateinit var hRightLine: View
+        val headerView: View = itemView.findViewById(R.id.header)
+        val subHeaderView: View = itemView.findViewById(R.id.sub_header)
+        val hGradient: View = itemView.findViewById(R.id.gradient)
+        val hTitle: MaterialTextView = itemView.findViewById(R.id.title)
+        val hSubtitle: MaterialTextView = itemView.findViewById(R.id.subtitle)
+        val hAlbumRecyclerView: RecyclerView = itemView.findViewById(R.id.album_recycler)
+        val hTrackCount: MaterialTextView = itemView.findViewById(R.id.track_count)
+        val hLeftLine: View = itemView.findViewById(R.id.left_line)
+        val hRightLine: View = itemView.findViewById(R.id.right_line)
 
         var hAlbumAdapter: HorizontalAlbumAdapter? = null
 

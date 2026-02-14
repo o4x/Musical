@@ -9,13 +9,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.color.MaterialColors
 import com.o4x.appthemehelper.extensions.surfaceColor
 import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import github.o4x.musical.R
 
 fun AppCompatActivity.applyToolbar(toolbar: Toolbar) {
     toolbar.setBackgroundColor(surfaceColor())
-    ToolbarContentTintHelper.colorBackButton(toolbar)
+    ToolbarContentTintHelper.tintAllIcons(toolbar, MaterialColors.getColor(toolbar, com.google.android.material.R.attr.colorOnSurface))
     setSupportActionBar(toolbar)
 }
 

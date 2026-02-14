@@ -169,10 +169,10 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
 
         @Override
         protected boolean onSongMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_remove_from_playing_queue:
-                    MusicPlayerRemote.removeFromQueue(getAdapterPosition());
-                    return true;
+            final int itemId = item.getItemId();
+            if (itemId == R.id.action_remove_from_playing_queue) {
+                MusicPlayerRemote.removeFromQueue(getAdapterPosition());
+                return true;
             }
             return super.onSongMenuItemClick(item);
         }

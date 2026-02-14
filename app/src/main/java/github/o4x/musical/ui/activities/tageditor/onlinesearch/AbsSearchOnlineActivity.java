@@ -11,29 +11,20 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.textfield.TextInputEditText;
-import github.o4x.musical.R;
-import github.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
-import github.o4x.musical.ui.adapter.online.SearchOnlineAdapter;
-import github.o4x.musical.util.Util;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import github.o4x.musical.R;
+import github.o4x.musical.databinding.ActivitySearchOnlineBinding;
+import github.o4x.musical.ui.activities.base.AbsMusicServiceActivity;
+import github.o4x.musical.ui.adapter.online.SearchOnlineAdapter;
+import github.o4x.musical.util.Util;
 
 public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR extends List<? extends Serializable>>
         extends AbsMusicServiceActivity {
@@ -46,21 +37,6 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     public static final String EXTRA_RESULT_COVER = "EXTRA_RESULT_COVER";
     public static final String EXTRA_SONG_NAME = "EXTRA_SONG_NAME";
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.empty)
-    TextView empty;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.results_recycler_view)
-    RecyclerView resultsRecyclerView;
-    @BindView(R.id.search_view)
-    TextInputEditText searchView;
-    @BindView(R.id.voice_search)
-    AppCompatImageView voiceSearch;
-    @BindView(R.id.clear_text)
-    AppCompatImageView clearText;
-
 
     protected A onlineSearchAdapter;
 
@@ -70,14 +46,14 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     private Handler handler;
     private Runnable runnable;
 
-    private Unbinder unbinder;
+    protected ActivitySearchOnlineBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_online);
+        binding = ActivitySearchOnlineBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setDrawUnderBar();
-        unbinder = ButterKnife.bind(this);
 
         setStatusBarColorAuto();
         setNavigationBarColorAuto();
@@ -90,7 +66,7 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
             search(savedInstanceState.getString(QUERY));
         }
 
-        searchView.addTextChangedListener(new TextWatcher() {
+        binding.searchBar.searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -104,7 +80,7 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
                 search(editable.toString());
             }
         });
-        searchView.setOnEditorActionListener((v, actionId, event) -> {
+        binding.searchBar.searchView.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 String mQuery = v.getText().toString();
                 if (!query.equals(mQuery)) {
@@ -115,14 +91,14 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
             }
             return false;
         });
-        searchView.setText(query);
-        voiceSearch.setOnClickListener(v -> startMicSearch());
-        clearText.setVisibility(View.GONE);
+        binding.searchBar.searchView.setText(query);
+        binding.searchBar.voiceSearch.setOnClickListener(v -> startMicSearch());
+        binding.searchBar.clearText.setVisibility(View.GONE);
     }
 
     @Override
     protected void onDestroy() {
-        unbinder.unbind();
+        binding = null;
         super.onDestroy();
     }
 
@@ -151,20 +127,20 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     }
 
     private void setUpToolBar() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupResultRecycler() {
-        resultsRecyclerView.setLayoutManager(new GridLayoutManager(
+        binding.resultsRecyclerView.setLayoutManager(new GridLayoutManager(
                 this,
                 getResources().getInteger(R.integer.home_grid_columns)
         ));
         onlineSearchAdapter = getAdapter();
-        resultsRecyclerView.setAdapter(onlineSearchAdapter);
-        resultsRecyclerView.setOnTouchListener((v, event) -> {
+        binding.resultsRecyclerView.setAdapter(onlineSearchAdapter);
+        binding.resultsRecyclerView.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
         });
@@ -183,8 +159,8 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
 
     private void hideSoftKeyboard() {
         Util.hideSoftKeyboard(this);
-        if (searchView != null) {
-            searchView.clearFocus();
+        if (binding.searchBar.searchView != null) {
+            binding.searchBar.searchView.clearFocus();
         }
     }
 

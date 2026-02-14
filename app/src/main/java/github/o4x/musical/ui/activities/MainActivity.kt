@@ -42,7 +42,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         val TAG: String = MainActivity::class.java.simpleName
 
         private val popupAbleFragments: Array<Int> =
-            arrayOf(R.id.search, R.id.detail_playlist, R.id.detail_genre)
+            arrayOf(R.id.search_fragment, R.id.playlist_detail_fragment, R.id.genre_detail_fragment)
     }
 
     private lateinit var binding: ActivityMainDrawerLayoutBinding
@@ -84,14 +84,11 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
     override fun createContentView(): View {
         binding = ActivityMainDrawerLayoutBinding.inflate(layoutInflater)
+        mainBinding = ActivityMainBinding.inflate(layoutInflater)
+
         val drawerContent = binding.drawerContentContainer
-
-        // Wrap the activity_main layout using the base class method
-        val slidingPanel = wrapSlidingMusicPanel(R.layout.activity_main)
+        val slidingPanel = wrapSlidingMusicPanel(mainBinding.root)
         drawerContent.addView(slidingPanel)
-
-        // Bind the inner layout (ActivityMain) to the view returned by the sliding panel wrapper
-        mainBinding = ActivityMainBinding.bind(slidingPanel)
 
         return binding.root
     }
@@ -164,7 +161,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                     R.id.nav_library -> setMusicChooser(R.id.nav_library)
                     R.id.nav_folders -> setMusicChooser(R.id.nav_folders)
                     R.id.nav_timer -> setMusicChooser(R.id.nav_timer)
-                    R.id.nav_settings -> navController.navigate(R.id.settings)
+                    R.id.nav_settings -> navController.navigate(R.id.settings_activity)
                 }
             }
         })
@@ -308,11 +305,11 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.home -> binding.navigationView.setCheckedItem(R.id.nav_home)
-                R.id.queue -> binding.navigationView.setCheckedItem(R.id.nav_queue)
-                R.id.library -> binding.navigationView.setCheckedItem(R.id.nav_library)
-                R.id.folders -> binding.navigationView.setCheckedItem(R.id.nav_folders)
-                R.id.timer -> binding.navigationView.setCheckedItem(R.id.nav_timer)
+                R.id.home_fragment -> binding.navigationView.setCheckedItem(R.id.nav_home)
+                R.id.queue_fragment -> binding.navigationView.setCheckedItem(R.id.nav_queue)
+                R.id.library_fragment -> binding.navigationView.setCheckedItem(R.id.nav_library)
+                R.id.folders_fragment -> binding.navigationView.setCheckedItem(R.id.nav_folders)
+                R.id.timer_fragment -> binding.navigationView.setCheckedItem(R.id.nav_timer)
             }
         }
     }

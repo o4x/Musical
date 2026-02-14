@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.o4x.appthemehelper.extensions.accentColor
 import com.o4x.appthemehelper.extensions.surfaceColor
-import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import github.o4x.musical.R
@@ -36,6 +35,8 @@ import github.o4x.musical.util.FileUtil
 import github.o4x.musical.prefs.PreferenceUtil.startDirectory
 import github.o4x.musical.util.ViewUtil
 import github.o4x.musical.util.scanPaths
+import com.o4x.appthemehelper.util.toolbarTitleColor
+import com.o4x.appthemehelper.util.toolbarSubtitleColor
 import github.o4x.musical.views.BreadCrumbLayout.Crumb
 import github.o4x.musical.views.BreadCrumbLayout.SelectionCallback
 import java.io.File
@@ -119,9 +120,9 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     private fun setUpAppbarColor() {
         val primaryColor = surfaceColor()
         mainActivity.bread_crumbs.setBackgroundColor(primaryColor)
-        mainActivity.bread_crumbs.setActivatedContentColor(ToolbarContentTintHelper.toolbarTitleColor(mainActivity,
+        mainActivity.bread_crumbs.setActivatedContentColor(toolbarTitleColor(mainActivity,
             primaryColor))
-        mainActivity.bread_crumbs.setDeactivatedContentColor(ToolbarContentTintHelper.toolbarSubtitleColor(
+        mainActivity.bread_crumbs.setDeactivatedContentColor(toolbarSubtitleColor(
             mainActivity, primaryColor))
     }
 
