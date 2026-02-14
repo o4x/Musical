@@ -1,9 +1,7 @@
 package github.o4x.musical.ui.activities
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -20,9 +18,10 @@ import com.o4x.appthemehelper.extensions.surfaceColor
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
-import github.o4x.musical.App
 import github.o4x.musical.R
-import github.o4x.musical.databinding.*
+import github.o4x.musical.databinding.ActivityMainBinding
+import github.o4x.musical.databinding.ActivityMainDrawerLayoutBinding
+import github.o4x.musical.databinding.ActivityMainNavHeaderBinding
 import github.o4x.musical.extensions.findNavController
 import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.helper.SearchQueryHelper.getSongs
@@ -33,9 +32,6 @@ import github.o4x.musical.service.MusicService
 import github.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import github.o4x.musical.ui.activities.intro.PermissionActivity
 import github.o4x.musical.views.BreadCrumbLayout
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main_drawer_layout.*
-import kotlinx.android.synthetic.main.search_bar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
@@ -49,6 +45,9 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
             arrayOf(R.id.search, R.id.detail_playlist, R.id.detail_genre)
     }
 
+    private lateinit var binding: ActivityMainDrawerLayoutBinding
+    private lateinit var mainBinding: ActivityMainBinding
+
     lateinit var navController: NavController
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var navigationHeaderBinding: ActivityMainNavHeaderBinding
@@ -56,13 +55,11 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         if (!hasPermissions()) {
             val myIntent = Intent(
                 this,
                 PermissionActivity::class.java
             )
-
             this.startActivity(myIntent)
         }
 
@@ -86,22 +83,26 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     }
 
     override fun createContentView(): View {
-        @SuppressLint("InflateParams") val contentView =
-            layoutInflater.inflate(R.layout.activity_main_drawer_layout, null)
-        val drawerContent = contentView.findViewById<ViewGroup>(R.id.drawer_content_container)
-        drawerContent.addView(wrapSlidingMusicPanel(R.layout.activity_main))
+        binding = ActivityMainDrawerLayoutBinding.inflate(layoutInflater)
+        val drawerContent = binding.drawerContentContainer
 
-        return contentView
+        // Wrap the activity_main layout using the base class method
+        val slidingPanel = wrapSlidingMusicPanel(R.layout.activity_main)
+        drawerContent.addView(slidingPanel)
+
+        // Bind the inner layout (ActivityMain) to the view returned by the sliding panel wrapper
+        mainBinding = ActivityMainBinding.bind(slidingPanel)
+
+        return binding.root
     }
 
     private fun setupToolbar() {
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
-        setSupportActionBar(toolbar)
+        mainBinding.mainToolbar.setNavigationIcon(R.drawable.ic_menu)
+        setSupportActionBar(mainBinding.mainToolbar)
     }
 
     fun setMusicChooser(id: Int) {
-
-        if (id == navigation_view.checkedItem?.itemId ) {
+        if (id == binding.navigationView.checkedItem?.itemId) {
             return
         }
 
@@ -125,7 +126,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                 proNext.isVisible = false
                 proSummary.isVisible = false
                 proTitle.text = resources.getString(R.string.musical)
-                banner.setOnClickListener {  }
+                banner.setOnClickListener { }
             } else {
                 proIcon.isVisible = true
                 proNext.isVisible = true
@@ -138,26 +139,25 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     private fun setUpNavigationView() {
         toggle = object : ActionBarDrawerToggle(
             this,
-            drawer_layout,
+            binding.drawerLayout,
             R.string.open,
             R.string.close
         ) {}
-        drawer_layout.addDrawerListener(toggle)
+        binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        navigation_view.setBackgroundColor(surfaceColor())
+        binding.navigationView.setBackgroundColor(surfaceColor())
         navigationHeaderBinding = ActivityMainNavHeaderBinding.inflate(layoutInflater)
-        navigation_view.addHeaderView(navigationHeaderBinding.root)
+        binding.navigationView.addHeaderView(navigationHeaderBinding.root)
 
         var lastItem: MenuItem? = null
-        drawer_layout.addDrawerListener(object : DrawerLayout.DrawerListener {
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
 
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
             override fun onDrawerStateChanged(newState: Int) {}
             override fun onDrawerOpened(drawerView: View) {}
 
             override fun onDrawerClosed(drawerView: View) {
-
                 when (lastItem?.itemId) {
                     R.id.nav_home -> setMusicChooser(R.id.nav_home)
                     R.id.nav_queue -> setMusicChooser(R.id.nav_queue)
@@ -166,14 +166,12 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                     R.id.nav_timer -> setMusicChooser(R.id.nav_timer)
                     R.id.nav_settings -> navController.navigate(R.id.settings)
                 }
-
             }
         })
 
-        navigation_view.setNavigationItemSelectedListener { menuItem: MenuItem ->
+        binding.navigationView.setNavigationItemSelectedListener { menuItem: MenuItem ->
             lastItem = menuItem
-            drawer_layout.closeDrawers()
-
+            binding.drawerLayout.closeDrawers()
             false
         }
     }
@@ -181,7 +179,7 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     fun setDrawerEnabled(enabled: Boolean) {
         val lockMode: Int =
             if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-        drawer_layout.setDrawerLockMode(lockMode)
+        binding.drawerLayout.setDrawerLockMode(lockMode)
         toggle.isDrawerIndicatorEnabled = enabled
         toggle.syncState()
     }
@@ -199,10 +197,10 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                     return false
             }
 
-            if (drawer_layout.isDrawerOpen(navigation_view)) {
-                drawer_layout.closeDrawer(navigation_view)
+            if (binding.drawerLayout.isDrawerOpen(binding.navigationView)) {
+                binding.drawerLayout.closeDrawer(binding.navigationView)
             } else {
-                drawer_layout.openDrawer(navigation_view)
+                binding.drawerLayout.openDrawer(binding.navigationView)
             }
             return true
         }
@@ -210,8 +208,8 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     }
 
     override fun handleBackPress(): Boolean {
-        if (drawer_layout.isDrawerOpen(navigation_view)) {
-            drawer_layout.closeDrawers()
+        if (binding.drawerLayout.isDrawerOpen(binding.navigationView)) {
+            binding.drawerLayout.closeDrawers()
             return true
         }
         backPressCallbacks.forEach {
@@ -260,18 +258,18 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
                         true
                     )
                     handled = true
-                }
-            } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
-                val id = parseLongFromIntent(intent, "artistId", "artist")
-                if (id >= 0L) {
-                    val position: Int = intent.getIntExtra("position", 0)
-                    val songs: List<Song> = libraryViewModel.artistById(id).songs
-                    MusicPlayerRemote.openQueue(
-                        songs,
-                        position,
-                        true
-                    )
-                    handled = true
+                } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
+                    val id = parseLongFromIntent(intent, "artistId", "artist")
+                    if (id >= 0L) {
+                        val position: Int = intent.getIntExtra("position", 0)
+                        val songs: List<Song> = libraryViewModel.artistById(id).songs
+                        MusicPlayerRemote.openQueue(
+                            songs,
+                            position,
+                            true
+                        )
+                        handled = true
+                    }
                 }
             }
             if (handled) {
@@ -310,27 +308,27 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.home -> navigation_view.setCheckedItem(R.id.nav_home)
-                R.id.queue -> navigation_view.setCheckedItem(R.id.nav_queue)
-                R.id.library -> navigation_view.setCheckedItem(R.id.nav_library)
-                R.id.folders -> navigation_view.setCheckedItem(R.id.nav_folders)
-                R.id.timer -> navigation_view.setCheckedItem(R.id.nav_timer)
+                R.id.home -> binding.navigationView.setCheckedItem(R.id.nav_home)
+                R.id.queue -> binding.navigationView.setCheckedItem(R.id.nav_queue)
+                R.id.library -> binding.navigationView.setCheckedItem(R.id.nav_library)
+                R.id.folders -> binding.navigationView.setCheckedItem(R.id.nav_folders)
+                R.id.timer -> binding.navigationView.setCheckedItem(R.id.nav_timer)
             }
         }
     }
 
     val appbar: AppBarLayout
-        get() = main_appbar
+        get() = mainBinding.mainAppbar
 
     val toolbar: MaterialToolbar
-        get() = main_toolbar
+        get() = mainBinding.mainToolbar
 
     val search: LinearLayout
-        get() = main_search
+        get() = mainBinding.toolbarTitle.mainSearch
 
     val tabs: TabLayout
-        get() = main_tabs
+        get() = mainBinding.mainTabs
 
     val bread_crumbs: BreadCrumbLayout
-        get() = main_bread_crumbs
+        get() = mainBinding.mainBreadCrumbs
 }

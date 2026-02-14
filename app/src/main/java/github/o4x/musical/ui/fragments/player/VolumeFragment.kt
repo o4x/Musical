@@ -10,14 +10,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import com.o4x.appthemehelper.extensions.accentColor
 import github.o4x.musical.R
+import github.o4x.musical.databinding.FragmentVolumeBinding // This is auto-generated from fragment_volume.xml
 import github.o4x.musical.volume.AudioVolumeObserver
 import github.o4x.musical.volume.OnAudioVolumeChangedListener
-import kotlinx.android.synthetic.main.fragment_volume.*
 
 class VolumeFragment : Fragment(), SeekBar.OnSeekBarChangeListener, OnAudioVolumeChangedListener,
     View.OnClickListener {
+
+    // 1. Setup Binding Variable
+    private var _binding: FragmentVolumeBinding? = null
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
 
     private var audioVolumeObserver: AudioVolumeObserver? = null
 
@@ -29,14 +33,18 @@ class VolumeFragment : Fragment(), SeekBar.OnSeekBarChangeListener, OnAudioVolum
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_volume, container, false)
+        // 2. Inflate layout using Binding
+        _binding = FragmentVolumeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTintable(Color.WHITE)
-        volumeDown.setOnClickListener(this)
-        volumeUp.setOnClickListener(this)
+
+        // 3. Access views via 'binding.' instead of ID directly
+        binding.volumeDown.setOnClickListener(this)
+        binding.volumeUp.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -53,28 +61,35 @@ class VolumeFragment : Fragment(), SeekBar.OnSeekBarChangeListener, OnAudioVolum
                 audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
             )
         }
-        volumeSeekBar.setOnSeekBarChangeListener(this)
+
+        binding.volumeSeekBar.setOnSeekBarChangeListener(this)
     }
 
     override fun onAudioVolumeChanged(currentVolume: Int, maxVolume: Int) {
-        if (volumeSeekBar == null) {
+        // Safety check: ensure view is bound before accessing
+        if (_binding == null) {
             return
         }
 
-        volumeSeekBar.max = maxVolume
-        volumeSeekBar.progress = currentVolume
-        volumeDown.setImageResource(if (currentVolume == 0) R.drawable.ic_volume_off else R.drawable.ic_volume_down)
+        binding.volumeSeekBar.max = maxVolume
+        binding.volumeSeekBar.progress = currentVolume
+        binding.volumeDown.setImageResource(if (currentVolume == 0) R.drawable.ic_volume_off else R.drawable.ic_volume_down)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         audioVolumeObserver?.unregister()
+        // 4. Clean up binding to prevent memory leaks
+        _binding = null
     }
 
     override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+        // Safety check
+        if (_binding == null) return
+
         val audioManager = audioManager
         audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, i, 0)
-        volumeDown?.setImageResource(if (i == 0) R.drawable.ic_volume_off else R.drawable.ic_volume_down)
+        binding.volumeDown.setImageResource(if (i == 0) R.drawable.ic_volume_off else R.drawable.ic_volume_down)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -96,25 +111,27 @@ class VolumeFragment : Fragment(), SeekBar.OnSeekBarChangeListener, OnAudioVolum
     }
 
     fun tintWhiteColor() {
+        if (_binding == null) return
         val color = Color.WHITE
-        volumeDown.setColorFilter(color, PorterDuff.Mode.SRC_IN)
-        volumeUp.setColorFilter(color, PorterDuff.Mode.SRC_IN)
-        volumeSeekBar.applyColor(color)
+        binding.volumeDown.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        binding.volumeUp.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        binding.volumeSeekBar.applyColor(color)
     }
 
     fun setTintable(color: Int) {
-        volumeSeekBar.applyColor(color)
+        if (_binding == null) return
+        binding.volumeSeekBar.applyColor(color)
     }
 
     fun setTintableColor(color: Int) {
-        volumeDown.setColorFilter(color, PorterDuff.Mode.SRC_IN)
-        volumeUp.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        if (_binding == null) return
+        binding.volumeDown.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        binding.volumeUp.setColorFilter(color, PorterDuff.Mode.SRC_IN)
         // TintHelper.setTint(volumeSeekBar, color, false)
-        volumeSeekBar.applyColor(color)
+        binding.volumeSeekBar.applyColor(color)
     }
 
     companion object {
-
         fun newInstance(): VolumeFragment {
             return VolumeFragment()
         }

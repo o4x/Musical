@@ -24,6 +24,9 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
     private var _binding: FragmentQueueBinding? = null
     private val binding get() = _binding!!
 
+    override val queueRecyclerView: RecyclerView
+        get() = binding.queueRecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
