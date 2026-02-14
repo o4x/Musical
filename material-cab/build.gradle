@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 ext.versions = [
         minSdk            : 19,
-        compileSdk        : 30,
+        compileSdk        : 31,
         buildTools        : '30',
         publishVersion    : '2.0.1',
         publishVersionCode: 13,
@@ -21,15 +21,14 @@ ext.versions = [
 ]
 
 android {
-  compileSdkVersion versions.compileSdk
-  buildToolsVersion versions.buildTools
+  namespace 'com.afollestad.materialcab'
 
-  defaultConfig {
+  compileSdkVersion versions.compileSdk
+
+    defaultConfig {
     minSdkVersion versions.minSdk
     targetSdkVersion versions.compileSdk
-    versionCode versions.publishVersionCode
-    versionName versions.publishVersion
-  }
+    }
 
   sourceSets {
     main.res.srcDirs = [

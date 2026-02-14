@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30"
+    namespace 'com.simplecityapps.recyclerview_fastscroll'
+
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 11
-        versionCode 15
-        versionName "1.0.16"
     }
 }
 

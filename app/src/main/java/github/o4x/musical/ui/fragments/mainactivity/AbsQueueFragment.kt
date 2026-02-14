@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.ui.adapter.song.PlayingQueueAdapter
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlin.math.abs
 
 abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(layout) {
+
+    protected abstract val queueRecyclerView: RecyclerView
 
     lateinit var queueAdapter: PlayingQueueAdapter
     lateinit var queueLayoutManager: LinearLayoutManager
@@ -44,7 +45,7 @@ abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragmen
     abstract fun initQueueView()
 
     private fun toPosition(position: Int) {
-        queue_recycler_view.stopScroll()
+        queueRecyclerView.stopScroll()
         if (isRestored) {
             resetToPosition(position)
         } else {

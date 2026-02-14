@@ -15,6 +15,7 @@ import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.o4x.appthemehelper.extensions.textColorTertiary
 import com.o4x.appthemehelper.util.ToolbarContentTintHelper
@@ -44,7 +45,7 @@ import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
-class   HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
+class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFragment(R.layout.fragment_home) {
 
     private val posterViewModel by sharedViewModel<HomeHeaderViewModel>()
 

@@ -7,12 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.o4x.appthemehelper.extensions.accentColor
 import github.o4x.musical.R
+import github.o4x.musical.databinding.FragmentLibraryRecyclerViewBinding
 import github.o4x.musical.util.ViewUtil
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-import kotlinx.android.synthetic.main.fragment_library_recycler_view.*
 
 abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : RecyclerView.LayoutManager?> :
     AbsLibraryPagerFragment(R.layout.fragment_library_recycler_view) {
+
+    // View Binding Reference
+    private var _binding: FragmentLibraryRecyclerViewBinding? = null
+    // This property is only valid between onViewCreated and onDestroyView.
+    private val binding get() = _binding!!
 
     protected var adapter: A? = null
         private set
@@ -20,33 +25,49 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
         private set
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Initialize View Binding
+        _binding = FragmentLibraryRecyclerViewBinding.bind(view)
+
         super.onViewCreated(view, savedInstanceState)
         initLayoutManager()
         initAdapter()
         setUpRecyclerView()
     }
 
-    private fun setUpRecyclerView() {
-        if (recycler_view is FastScrollRecyclerView) {
-            ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity,
-                recycler_view,
-                accentColor())
-        }
-        recycler_view!!.layoutManager = layoutManager
-        recycler_view!!.adapter = adapter
-        libraryFragment.setAppbarListener(recycler_view)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Clean up binding to prevent memory leaks
+        _binding = null
+    }
 
+    private fun setUpRecyclerView() {
+        // Note: ViewBinding converts snake_case IDs (recycler_view) to camelCase (recyclerView)
+        if (binding.recyclerView is FastScrollRecyclerView) {
+            ViewUtil.setUpFastScrollRecyclerViewColor(
+                serviceActivity,
+                binding.recyclerView as FastScrollRecyclerView,
+                accentColor()
+            )
+        }
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = adapter
+        libraryFragment.setAppbarListener(binding.recyclerView)
     }
 
     protected fun invalidateLayoutManager() {
         initLayoutManager()
-        recycler_view!!.layoutManager = layoutManager
+        // Check if binding is valid before accessing (in case called async)
+        if (_binding != null) {
+            binding.recyclerView.layoutManager = layoutManager
+        }
     }
 
     protected fun invalidateAdapter() {
         initAdapter()
         checkIsEmpty()
-        recycler_view!!.adapter = adapter
+        if (_binding != null) {
+            binding.recyclerView.adapter = adapter
+        }
     }
 
     private fun initAdapter() {
@@ -64,9 +85,10 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
     }
 
     private fun checkIsEmpty() {
-        if (empty != null) {
-            empty!!.setText(emptyMessage)
-            empty!!.visibility =
+        // Ensure binding is alive before accessing views
+        if (_binding != null) {
+            binding.empty.setText(emptyMessage)
+            binding.empty.visibility =
                 if (adapter == null || adapter!!.itemCount == 0) View.VISIBLE else View.GONE
         }
     }
@@ -75,8 +97,9 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
     protected open val emptyMessage: Int
         get() = R.string.empty
 
+    // Expose the RecyclerView safely via binding
     val recyclerView: RecyclerView?
-        get() = recycler_view
+        get() = _binding?.recyclerView
 
     protected abstract fun createLayoutManager(): LM
     protected abstract fun createAdapter(): A
