@@ -32,7 +32,7 @@ class MusicLibraryPagerAdapter(
                 holder.mClassName = fragment.fragmentClass.name
                 holder.title = mContext.resources
                     .getString(category.stringRes)
-                    .toUpperCase(Locale.getDefault())
+                    .uppercase(Locale.getDefault())
                 mHolderList.add(holder)
             }
         }

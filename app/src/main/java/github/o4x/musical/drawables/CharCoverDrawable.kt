@@ -116,9 +116,9 @@ class CharCoverDrawable(private val coverData: CoverData, private val isClean: B
         canvas.rotate(30f)
 
         val char0 = text.split(" ").firstOrNull()?.firstOrNull()
-            .toString().toUpperCase(Locale.ROOT)
+                .toString().uppercase(Locale.ROOT)
         val char1 = text.split(" ").lastOrNull()?.firstOrNull()
-            .toString().toUpperCase(Locale.ROOT)
+                .toString().uppercase(Locale.ROOT)
 
         val path0 = Path()
         paint.getTextPath(char0, 0, 1, canvas.width / -12f, canvas.height / 1.3f, path0)

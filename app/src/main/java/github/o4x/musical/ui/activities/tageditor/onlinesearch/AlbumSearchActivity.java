@@ -35,12 +35,12 @@ public class AlbumSearchActivity
 
     @Override
     protected void fetchBestMatches(String albumName) {
-        progressBar.setVisibility(View.VISIBLE);
-        resultsRecyclerView.setVisibility(View.INVISIBLE);
-        empty.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.resultsRecyclerView.setVisibility(View.INVISIBLE);
+        binding.empty.setVisibility(View.INVISIBLE);
 
         if (!CachingControlInterceptor.isOnline(getApplicationContext())) {
-            Toast.makeText(progressBar.getContext(), R.string.network_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(binding.progressBar.getContext(), R.string.network_error, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -51,13 +51,13 @@ public class AlbumSearchActivity
                 if (response.isSuccessful()) {
                     results = response.body().results;
                     onlineSearchAdapter.updateData(results);
-                    progressBar.setVisibility(View.INVISIBLE);
+                    binding.progressBar.setVisibility(View.INVISIBLE);
                     if (results != null && results.size() == 0) {
-                        empty.setVisibility(View.VISIBLE);
-                        resultsRecyclerView.setVisibility(View.INVISIBLE);
+                        binding.empty.setVisibility(View.VISIBLE);
+                        binding.resultsRecyclerView.setVisibility(View.INVISIBLE);
                     } else {
-                        empty.setVisibility(View.INVISIBLE);
-                        resultsRecyclerView.setVisibility(View.VISIBLE);
+                        binding.empty.setVisibility(View.INVISIBLE);
+                        binding.resultsRecyclerView.setVisibility(View.VISIBLE);
                     }
                 }
             }

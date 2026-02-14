@@ -12,49 +12,50 @@ import androidx.recyclerview.widget.RecyclerView;
 import github.o4x.musical.R;
 import github.o4x.musical.views.IconImageView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.o4x.appthemehelper.extensions.ColorExtKt;
 
 public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+
     @Nullable
-    @BindView(R.id.image)
     public ImageView image;
 
     @Nullable
-    @BindView(R.id.icon)
     public IconImageView icon;
 
     @Nullable
-    @BindView(R.id.track_number)
     public TextView imageText;
 
     @Nullable
-    @BindView(R.id.album_name)
     public TextView title;
 
     @Nullable
-    @BindView(R.id.text)
     public TextView text;
 
     @Nullable
-    @BindView(R.id.menu)
     public IconImageView menu;
 
     @Nullable
-    @BindView(R.id.drag_view)
     public View dragView;
 
     @Nullable
-    @BindView(R.id.palette_color_container)
     public View paletteColorContainer;
 
     public MediaEntryViewHolder(View itemView) {
         super(itemView);
-        ButterKnife.bind(this, itemView);
 
-        if (paletteColorContainer != null)
+        // Replaced ButterKnife.bind with findViewById
+        image = itemView.findViewById(R.id.image);
+        icon = itemView.findViewById(R.id.icon);
+        imageText = itemView.findViewById(R.id.track_number);
+        title = itemView.findViewById(R.id.album_name);
+        text = itemView.findViewById(R.id.text);
+        menu = itemView.findViewById(R.id.menu);
+        dragView = itemView.findViewById(R.id.drag_view);
+        paletteColorContainer = itemView.findViewById(R.id.palette_color_container);
+
+        if (paletteColorContainer != null) {
             paletteColorContainer.setBackgroundColor(ColorExtKt.cardColor(itemView.getContext()));
+        }
 
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
@@ -73,6 +74,6 @@ public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-
+        // Todo: Implement click logic
     }
 }

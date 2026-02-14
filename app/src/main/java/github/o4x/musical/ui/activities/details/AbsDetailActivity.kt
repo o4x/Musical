@@ -90,7 +90,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         supportActionBar?.title = null
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.post {
-            ToolbarContentTintHelper.colorizeToolbar(binding.toolbar, colors.primaryTextColor, this)
+            ToolbarContentTintHelper.tintAllIcons(binding.toolbar, colors.primaryTextColor)
             setAppbarAlpha(0f)
         }
     }
@@ -179,7 +179,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         this.colors = colors
         songAdapter?.colors = colors
 
-        ToolbarContentTintHelper.colorizeToolbar(binding.toolbar, colors.primaryTextColor, this)
+        ToolbarContentTintHelper.tintAllIcons(binding.toolbar, colors.primaryTextColor)
         setNavigationBarColor(colors.backgroundColor)
         setTaskDescriptionColor(colors.backgroundColor)
 

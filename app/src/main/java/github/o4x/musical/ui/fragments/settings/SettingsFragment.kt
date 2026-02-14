@@ -162,12 +162,12 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
             PreferenceUtil.CLASSIC_NOTIFICATION -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     findPreference<Preference>(PreferenceUtil.COLORED_NOTIFICATION)?.isEnabled =
-                        sharedPreferences.getBoolean(key, false)
+                        sharedPreferences?.getBoolean(key, false) == true
                 }
             }
             PreferenceUtil.SMART_PLAYLIST_LIMIT -> {

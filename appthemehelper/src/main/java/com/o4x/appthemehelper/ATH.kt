@@ -77,7 +77,7 @@ object ATH {
     fun setNavigationBarDividerColorAuto(activity: Activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             activity.window.navigationBarDividerColor = ColorUtil.blendColors(
-                ATHUtil.resolveColor(activity, R.attr.elevationOverlayColor),
+                ATHUtil.resolveColor(activity, com.google.android.material.R.attr.elevationOverlayColor),
                 activity.window.navigationBarColor,
                 0.9f
             )
@@ -96,7 +96,12 @@ object ATH {
             return
         }
         toolbar.setBackgroundColor(color)
-        ToolbarContentTintHelper.setToolbarContentColorBasedOnToolbarColor(activity, toolbar, color)
+        val isLight = ColorUtil.isColorLight(color)
+        val activeColor = ATHUtil.resolveColor(activity, android.R.attr.textColorPrimary)
+        val passiveColor = ATHUtil.resolveColor(activity, android.R.attr.textColorSecondary)
+        toolbar.setTitleTextColor(activeColor)
+        toolbar.setSubtitleTextColor(passiveColor)
+        ToolbarContentTintHelper.tintAllIcons(toolbar, activeColor)
     }
 
     fun setTaskDescriptionColorAuto(activity: Activity) {
@@ -124,10 +129,10 @@ object ATH {
     }
 
     fun setTint(view: View, @ColorInt color: Int) {
-        TintHelper.setTintAuto(view, color, false)
+        TintHelper.setTintAuto(view, color, false, false)
     }
 
     fun setBackgroundTint(view: View, @ColorInt color: Int) {
-        TintHelper.setTintAuto(view, color, true)
+        TintHelper.setTintAuto(view, color, true, false)
     }
 }

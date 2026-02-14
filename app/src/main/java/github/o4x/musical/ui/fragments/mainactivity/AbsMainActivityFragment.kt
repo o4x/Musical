@@ -80,8 +80,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         val color = colorControlNormal()
-        ToolbarContentTintHelper.colorizeToolbar(mainActivity.toolbar,
-            color, serviceActivity)
+        ToolbarContentTintHelper.tintAllIcons(mainActivity.toolbar, color)
         ToolbarContentTintHelper.tintAllIcons(menu, color)
         mainActivity.toggle.drawerArrowDrawable.color = color
         mainActivity.toggle.drawerArrowDrawable.alpha = 255
@@ -89,7 +88,6 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(mainActivity, mainActivity.toolbar)
         super.onPrepareOptionsMenu(menu)
     }
 

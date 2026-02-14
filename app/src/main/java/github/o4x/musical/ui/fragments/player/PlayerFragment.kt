@@ -81,8 +81,7 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        ToolbarContentTintHelper.colorizeToolbar(binding.toolbar, primaryColor, serviceActivity)
-        ToolbarContentTintHelper.tintAllIcons(menu, primaryColor)
+        ToolbarContentTintHelper.tintAllIcons(binding.toolbar, primaryColor)
         super.onPrepareOptionsMenu(menu)
     }
 

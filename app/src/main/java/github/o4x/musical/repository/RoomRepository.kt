@@ -2,7 +2,7 @@ package github.o4x.musical.repository
 
 import android.provider.MediaStore
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import github.o4x.musical.db.*
 import github.o4x.musical.model.Song
 import github.o4x.musical.prefs.PreferenceUtil
@@ -38,7 +38,7 @@ class RoomRepository(
     }
 
     fun observableHistorySongs(): LiveData<List<Song>> =
-        Transformations.map(historyDao.observableHistorySongs()) {
+        historyDao.observableHistorySongs().map {
             getSortedSongAndClearUpDatabase(it.historyToIds())
                 .take(PreferenceUtil.smartPlaylistLimit)
         }

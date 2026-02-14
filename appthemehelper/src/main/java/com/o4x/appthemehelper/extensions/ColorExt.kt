@@ -24,7 +24,7 @@ import android.widget.SeekBar
 import androidx.annotation.AttrRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.o4x.appthemehelper.R
+import com.google.android.material.R
 import com.o4x.appthemehelper.ThemeStore
 import com.o4x.appthemehelper.util.ATHUtil
 import com.o4x.appthemehelper.util.ColorUtil
@@ -42,11 +42,11 @@ fun Int.withAlpha(alpha: Float): Int {
     return ColorUtil.withAlpha(this, alpha)
 }
 
-fun Context.primaryColor() = resolveColor(R.attr.colorPrimary, Color.WHITE)
-fun Fragment.primaryColor() = resolveColor(R.attr.colorPrimary, Color.WHITE)
+fun Context.primaryColor() = resolveColor(R.attr.colorPrimaryFixed, Color.WHITE)
+fun Fragment.primaryColor() = resolveColor(R.attr.colorPrimaryFixed, Color.WHITE)
 
-fun Context.accentColor() = resolveColor(R.attr.colorAccent, Color.WHITE)
-fun Fragment.accentColor() = resolveColor(R.attr.colorAccent, Color.WHITE)
+fun Context.accentColor() = resolveColor(R.attr.colorOnTertiary, Color.WHITE)
+fun Fragment.accentColor() = resolveColor(R.attr.colorOnTertiary, Color.WHITE)
 
 fun Context.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
 fun Fragment.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
@@ -66,8 +66,8 @@ fun Fragment.textColorPrimary() = resolveColor(android.R.attr.textColorPrimary)
 fun Context.textColorTertiary() = resolveColor(android.R.attr.textColorTertiary)
 fun Fragment.textColorTertiary() = resolveColor(android.R.attr.textColorTertiary)
 
-fun Context.cardColor() = resolveColor(R.attr.cardBackgroundColor)
-fun Fragment.cardColor() = resolveColor(R.attr.cardBackgroundColor)
+fun Context.cardColor() = resolveColor(R.attr.backgroundColor)
+fun Fragment.cardColor() = resolveColor(R.attr.backgroundColor)
 
 fun Context.resolveColor(@AttrRes attr: Int, fallBackColor: Int = 0) =
     ATHUtil.resolveColor(this, attr, fallBackColor)

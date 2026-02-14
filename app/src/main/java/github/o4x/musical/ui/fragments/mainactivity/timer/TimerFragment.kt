@@ -68,7 +68,9 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
                     val nextSleepTimerElapsedTime = SystemClock.elapsedRealtime() + millis
                     PreferenceUtil.setNextSleepTimerElapsedRealtime(nextSleepTimerElapsedTime)
                     val am = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                    am[AlarmManager.ELAPSED_REALTIME_WAKEUP, nextSleepTimerElapsedTime] = pi
+                    pi?.let {
+                        am[AlarmManager.ELAPSED_REALTIME_WAKEUP, nextSleepTimerElapsedTime] = it
+                    }
 
 
                     timerUpdater = TimerUpdater(millis)

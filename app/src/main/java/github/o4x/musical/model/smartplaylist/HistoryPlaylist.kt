@@ -4,7 +4,7 @@ import github.o4x.musical.App
 import github.o4x.musical.R
 import github.o4x.musical.model.Song
 import kotlinx.android.parcel.Parcelize
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 
 @Parcelize
 class HistoryPlaylist : AbsSmartPlaylist(

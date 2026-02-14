@@ -38,7 +38,11 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
-            retriever.release();
+            try {
+                retriever.release();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         callback.onDataReady(stream);
     }

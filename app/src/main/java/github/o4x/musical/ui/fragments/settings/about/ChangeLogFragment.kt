@@ -52,7 +52,7 @@ class ChangeLogFragment : Fragment(R.layout.fragment_web_view) {
             val backgroundColor = colorToCSS(
                 ATHUtil.resolveColor(
                     requireActivity(),
-                    R.attr.backgroundColor,
+                    com.google.android.material.R.attr.backgroundColor,
                     Color.parseColor(if (PreferenceUtil.isDarkMode) "#424242" else "#ffffff")
                 )
             )

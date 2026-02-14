@@ -94,7 +94,7 @@ public class ViewUtil {
         recyclerView.setPopupBgColor(themeColor);
         recyclerView.setPopupTextColor(MaterialValueHelper.getPrimaryTextColor(context, ColorUtil.INSTANCE.isColorLight(themeColor)));
         recyclerView.setThumbColor(themeColor);
-        recyclerView.setTrackColor(ColorUtil.INSTANCE.withAlpha(ATHUtil.INSTANCE.resolveColor(context, R.attr.colorControlNormal), 0.12f));
+        recyclerView.setTrackColor(ColorUtil.INSTANCE.withAlpha(ATHUtil.INSTANCE.resolveColor(context, androidx.appcompat.R.attr.colorControlNormal), 0.12f));
     }
 
     public static float convertDpToPixel(float dp, Resources resources) {

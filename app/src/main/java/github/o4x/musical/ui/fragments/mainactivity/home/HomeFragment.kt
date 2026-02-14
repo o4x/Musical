@@ -14,11 +14,13 @@ import android.widget.FrameLayout
 import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.o4x.appthemehelper.extensions.textColorTertiary
 import com.o4x.appthemehelper.util.ToolbarContentTintHelper
+import com.o4x.appthemehelper.util.colorizeToolbar
 import github.o4x.musical.App
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentHomeBinding
@@ -37,7 +39,6 @@ import github.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -45,17 +46,15 @@ import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
-class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFragment(R.layout.fragment_home) {
+class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     private val posterViewModel by sharedViewModel<HomeHeaderViewModel>()
-
     private val scrollPositionViewModel by viewModel<ScrollPositionViewModel>()
 
     private lateinit var recentlyAdapter: HomeAdapter
     private lateinit var newAdapter: HomeAdapter
     private lateinit var recentlyLayoutManager: GridLayoutManager
     private lateinit var newLayoutManager: GridLayoutManager
-
 
     // Heights //
     private var displayHeight = 0
@@ -66,6 +65,11 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    // Fix: Override the abstract property using a getter pointing to the binding
+    // This ensures it is available whenever the binding is valid
+    override val queueRecyclerView: RecyclerView
+        get() = binding.queueRecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,7 +88,6 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
 
     override fun onResume() {
         super.onResume()
-
         showAppbar()
         if (scrollPositionViewModel.getPositionValue() < headerHeight) {
             mainActivity.toolbar.setBackgroundColor(Color.TRANSPARENT)
@@ -92,7 +95,6 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
             mainActivity.appbar.elevation = 0f
             setToolbarTitle(null)
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,8 +109,7 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
         inflater.inflate(R.menu.menu_home, menu)
         super.onCreateOptionsMenu(menu, inflater)
         val color = textColorTertiary()
-        ToolbarContentTintHelper.colorizeToolbar(mainActivity.toolbar,
-            color, serviceActivity)
+        colorizeToolbar(mainActivity.toolbar, color, serviceActivity)
         ToolbarContentTintHelper.tintAllIcons(menu, color)
         mainActivity.toggle.drawerArrowDrawable.color = color
         mainActivity.toggle.drawerArrowDrawable.alpha = 255
@@ -158,10 +159,9 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
         setupEmpty()
     }
 
-
     private fun setUpHeights() {
         displayHeight = Util.getScreenHeight()
-        var params: ViewGroup.LayoutParams
+        val params: ViewGroup.LayoutParams
 
         // Set up header height
         params = binding.header.layoutParams
@@ -169,11 +169,10 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
         binding.header.layoutParams = params
 
         // Set up poster image height
-        params = binding.poster.layoutParams
+        val posterParams = binding.poster.layoutParams
         posterHeight = (displayHeight / 1.5f).toInt()
-        params.height = posterHeight
-        binding.poster.layoutParams = params
-
+        posterParams.height = posterHeight
+        binding.poster.layoutParams = posterParams
 
         appbarHeight = appbarHeight()
         toolbarHeight = toolbarHeight()
@@ -183,26 +182,22 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
 
     private fun setupButtons() {
         binding.queueParent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
-        binding.queueShuffleButton.setOnClickListener {libraryViewModel.shuffleSongs() }
+        binding.queueShuffleButton.setOnClickListener { libraryViewModel.shuffleSongs() }
         binding.recentlyParent.setOnClickListener {
             navController.toPlaylistDetail(HistoryPlaylist())
         }
         binding.newlyParent.setOnClickListener {
             navController.toPlaylistDetail(LastAddedPlaylist())
         }
-
-
     }
 
     private fun setupPoster() {
-        posterViewModel.getPosterBitmap().observe(viewLifecycleOwner, {
+        posterViewModel.getPosterBitmap().observe(viewLifecycleOwner) {
             posterViewModel.calculateBitmap(binding.poster, it, Util.getScreenWidth(), posterHeight)
-        })
+        }
     }
 
-
     private fun setUpBounceScrollView() {
-
         var isStatusFlat = false
         var isAppbarFlat = false
 
@@ -254,9 +249,6 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
         }
 
         // zooming poster in over scroll
-
-
-        // zooming poster in over scroll
         val params = binding.poster.layoutParams
         val width = params.width
         val height = params.height
@@ -284,9 +276,9 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
         )
         binding.queueRecyclerView.adapter = queueAdapter
 
-        playerViewModel.queue.observe(viewLifecycleOwner, {
+        playerViewModel.queue.observe(viewLifecycleOwner) {
             binding.queueContainer.isVisible = it.isNotEmpty()
-        })
+        }
     }
 
     private fun setUpRecentlyView() {
@@ -301,10 +293,10 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
             false,
         )
         binding.recentlyRecyclerView.adapter = recentlyAdapter
-        libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner, {
+        libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner) {
             binding.recentlyContainer.isVisible = it.isNotEmpty()
             recentlyAdapter.swapDataSet(it)
-        })
+        }
     }
 
     private fun setUpNewView() {
@@ -320,36 +312,40 @@ class   HomeFragment(override val queueRecyclerView: RecyclerView) : AbsQueueFra
         )
         binding.newRecyclerView.adapter = newAdapter
 
-        libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner, {
+        libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner) {
             binding.newlyContainer.isVisible = it.isNotEmpty()
             newAdapter.swapDataSet(it)
-        })
+        }
     }
 
-
     private fun setupEmpty() {
-        libraryViewModel.getSongs().observe(viewLifecycleOwner, {
+        libraryViewModel.getSongs().observe(viewLifecycleOwner) {
             binding.empty.isVisible = it.isEmpty()
-        })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_CODE_SELECT_IMAGE -> if (resultCode == Activity.RESULT_OK) {
-                data?.data?.let { it ->
-                    GlobalScope.launch(Dispatchers.IO) {
+                data?.data?.let { uri ->
+                    // Fix: Use lifecycleScope instead of GlobalScope to avoid memory leaks
+                    lifecycleScope.launch(Dispatchers.IO) {
                         if (headerDir.isDirectory) {
-                            val newImage = it.toFile()
-                            headerDir.listFiles()?.let {
-                                for (image in it) {
+                            // Note: toFile() might crash on content:// URIs on newer Android versions.
+                            // If this persists, consider using ContentResolver to copy the file.
+                            try {
+                                val newImage = uri.toFile()
+                                headerDir.listFiles()?.forEach { image ->
                                     if (image != newImage) image.delete()
                                 }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
                             }
                         }
                     }
 
-                    HomeHeaderPref.customImagePath = it.toString()
+                    HomeHeaderPref.customImagePath = uri.toString()
                 }
             }
             REQUEST_CODE_SELECT_SONG -> if (resultCode == Activity.RESULT_OK) {

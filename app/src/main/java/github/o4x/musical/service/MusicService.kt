@@ -537,9 +537,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            PreferenceUtil.GAPLESS_PLAYBACK -> if (sharedPreferences.getBoolean(key, false)) {
+            PreferenceUtil.GAPLESS_PLAYBACK -> if (sharedPreferences?.getBoolean(key, false) == true) {
                 prepareNext()
             } else {
                 playback.setNextDataSource(null)
@@ -1105,7 +1105,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         wakeLock.acquire(milli)
     }
 
-      ///////////////
+    ///////////////
      // </PLAYER> //
     ///////////////
 }

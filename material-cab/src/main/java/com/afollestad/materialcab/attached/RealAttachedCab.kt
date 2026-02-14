@@ -54,10 +54,11 @@ class RealAttachedCab internal constructor(
 ) : AttachedCab {
   init {
     titleColor(literal = Color.WHITE)
-    backgroundColor(literal = attachedContext.colorAttr(R.attr.colorPrimaryDark, Color.GRAY))
+    backgroundColor(literal = attachedContext.colorAttr(com.google.android.material.R.attr.colorPrimaryDark, Color.GRAY))
   }
 
   private var isDestroying: Boolean = false
+  private val isDestroyingLock = Any()
   private val attachedContext: Activity
     get() = context ?: throw IllegalStateException("Contextual action bar is already destroyed.")
   private val attachedToolbar: Toolbar
@@ -220,7 +221,7 @@ class RealAttachedCab internal constructor(
     return context == null || toolbar == null || isDestroying
   }
 
-  fun startDestroy(): Boolean = synchronized(isDestroying) {
+  fun startDestroy(): Boolean = synchronized(isDestroyingLock) {
     if (isDestroyed()) return false
     isDestroying = true
 
