@@ -88,7 +88,7 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
                 return true
             }
             android.R.id.home -> {
-                super.onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 return true
             }
             R.id.action_tag_editor -> {

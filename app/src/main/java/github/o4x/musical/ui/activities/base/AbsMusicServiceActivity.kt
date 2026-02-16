@@ -2,8 +2,10 @@ package github.o4x.musical.ui.activities.base
 
 import android.Manifest
 import android.content.*
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import androidx.annotation.RequiresApi
 import github.o4x.musical.R
 import github.o4x.musical.helper.MusicPlayerRemote.ServiceToken
 import github.o4x.musical.helper.MusicPlayerRemote.bindToService
@@ -80,7 +82,11 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
             filter.addAction(MusicService.META_CHANGED)
             filter.addAction(MusicService.QUEUE_CHANGED)
             filter.addAction(MusicService.MEDIA_STORE_CHANGED)
-            registerReceiver(musicStateReceiver, filter)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(musicStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                registerReceiver(musicStateReceiver, filter)
+            }
             receiverRegistered = true
         }
         for (listener in mMusicServiceEventListeners) {
@@ -158,6 +164,7 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
     override fun onHasPermissionsChanged(hasPermissions: Boolean) {
         super.onHasPermissionsChanged(hasPermissions)
         val intent = Intent(MusicService.MEDIA_STORE_CHANGED)
+        intent.setPackage(packageName)
         intent.putExtra(
             "from_permissions_changed",
             true

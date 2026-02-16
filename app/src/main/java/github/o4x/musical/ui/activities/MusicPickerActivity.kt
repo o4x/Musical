@@ -8,6 +8,7 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -98,6 +99,14 @@ class MusicPickerActivity : AbsMusicServiceActivity(), TextWatcher {
         }
 
         updateSongs()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+                isEnabled = true
+            }
+        })
     }
 
     override fun afterTextChanged(newText: Editable?) {
@@ -152,7 +161,7 @@ class MusicPickerActivity : AbsMusicServiceActivity(), TextWatcher {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                super.onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 return true
             }
         }

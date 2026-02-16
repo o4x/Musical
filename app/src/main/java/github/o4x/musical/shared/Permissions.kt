@@ -3,6 +3,8 @@ package github.o4x.musical.shared
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
@@ -10,7 +12,9 @@ object Permissions {
 
     private const val READ_CODE = 100
 
-    private const val READ_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    private const val READ_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private const val READ_AUDIO = Manifest.permission.READ_MEDIA_AUDIO
 
     @JvmStatic
     fun checkWriteCode(code: Int): Boolean {
@@ -22,7 +26,7 @@ object Permissions {
         return hasPermission(
             context,
             READ_STORAGE
-        )
+        ) || hasPermission(context, READ_AUDIO)
     }
 
     @JvmStatic
