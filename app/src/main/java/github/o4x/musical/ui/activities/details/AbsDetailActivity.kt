@@ -3,6 +3,7 @@ package github.o4x.musical.ui.activities.details
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup // Added this import
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -63,9 +64,19 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     }
 
     override fun createContentView(): View? {
+        // This returns the Parent Wrapper (LinearLayout containing content + miniplayer)
         val contentView = wrapSlidingMusicPanel(R.layout.activity_detail)
-        // Bind the layout to the view returned by the sliding panel wrapper
-        binding = ActivityDetailBinding.bind(contentView)
+
+        // FIX: We must find the specific container where activity_detail was inflated
+        val container = contentView.findViewById<ViewGroup>(R.id.content_container)
+
+        // Get the specific child view (CoordinatorLayout) that corresponds to activity_detail.xml
+        // wrapSlidingMusicPanel inflated it as the child of content_container
+        val detailLayoutView = container.getChildAt(0)
+
+        // Bind the specific child view, not the parent wrapper
+        binding = ActivityDetailBinding.bind(detailLayoutView)
+
         return contentView
     }
 
