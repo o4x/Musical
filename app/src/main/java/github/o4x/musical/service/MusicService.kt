@@ -209,11 +209,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             applicationContext,
             0,
             mediaButtonIntent,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                PendingIntent.FLAG_IMMUTABLE
-            } else {
-                0
-            }
+            PendingIntent.FLAG_IMMUTABLE
         )
         mediaSession = MediaSessionCompat(
             this,
