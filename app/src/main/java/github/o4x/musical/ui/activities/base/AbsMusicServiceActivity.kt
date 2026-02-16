@@ -37,6 +37,7 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
         PreferenceUtil.registerOnSharedPreferenceChangedListener(libraryViewModel)
 
         serviceToken = bindToService(this, object : ServiceConnection {
+            @RequiresApi(Build.VERSION_CODES.TIRAMISU)
             override fun onServiceConnected(name: ComponentName, service: IBinder) {
                 this@AbsMusicServiceActivity.onServiceConnected()
             }
