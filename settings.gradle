@@ -1,8 +1,0 @@
-plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
-}
-include ':material-cab'
-include ':recyclerview-fastscroll'
-include ':appthemehelper'
-include ':app'
-rootProject.name = "Musical"
