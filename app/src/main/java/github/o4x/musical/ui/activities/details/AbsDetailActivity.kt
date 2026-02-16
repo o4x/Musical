@@ -64,17 +64,9 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     }
 
     override fun createContentView(): View? {
-        // This returns the Parent Wrapper (LinearLayout containing content + miniplayer)
         val contentView = wrapSlidingMusicPanel(R.layout.activity_detail)
-
-        // FIX: We must find the specific container where activity_detail was inflated
         val container = contentView.findViewById<ViewGroup>(R.id.content_container)
-
-        // Get the specific child view (CoordinatorLayout) that corresponds to activity_detail.xml
-        // wrapSlidingMusicPanel inflated it as the child of content_container
         val detailLayoutView = container.getChildAt(0)
-
-        // Bind the specific child view, not the parent wrapper
         binding = ActivityDetailBinding.bind(detailLayoutView)
 
         return contentView

@@ -4,7 +4,7 @@ android {
     namespace 'com.o4x.appthemehelper'
     compileSdkVersion 36
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 28
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
