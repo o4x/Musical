@@ -72,6 +72,7 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onServiceConnected() {
         if (!receiverRegistered) {
             musicStateReceiver = MusicStateReceiver(this)
@@ -82,11 +83,7 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
             filter.addAction(MusicService.META_CHANGED)
             filter.addAction(MusicService.QUEUE_CHANGED)
             filter.addAction(MusicService.MEDIA_STORE_CHANGED)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(musicStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
-            } else {
-                registerReceiver(musicStateReceiver, filter)
-            }
+            registerReceiver(musicStateReceiver, filter, Context.RECEIVER_EXPORTED)
             receiverRegistered = true
         }
         for (listener in mMusicServiceEventListeners) {
