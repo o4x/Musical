@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.ApplicationExtension
 import java.util.Properties
 
 plugins {
@@ -20,7 +21,7 @@ fun getProperties(fileName: String): Properties {
 fun getProperty(properties: Properties, name: String): String =
     properties.getProperty(name) ?: "$name missing"
 
-android {
+configure<ApplicationExtension> {
     namespace = "github.o4x.musical"
     compileSdk = 36
 
@@ -61,13 +62,8 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        jvmToolchain(21)
     }
 
     buildFeatures {
