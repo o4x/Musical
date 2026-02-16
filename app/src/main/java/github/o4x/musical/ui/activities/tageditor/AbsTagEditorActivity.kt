@@ -13,15 +13,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import com.o4x.appthemehelper.extensions.colorControlNormal
-import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.o4x.appthemehelper.extensions.colorControlNormal
+import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import github.o4x.musical.R
 import github.o4x.musical.databinding.ActivityTagBinding
 import github.o4x.musical.extensions.applyToolbar
@@ -35,8 +36,10 @@ import github.o4x.musical.ui.activities.base.AbsBaseActivity
 import github.o4x.musical.ui.activities.tageditor.onlinesearch.AbsSearchOnlineActivity
 import github.o4x.musical.ui.activities.tageditor.onlinesearch.AlbumSearchActivity
 import github.o4x.musical.ui.dialogs.DiscardTagsDialog
-import github.o4x.musical.util.*
-import github.o4x.musical.util.TagUtil.ArtworkInfo
+import github.o4x.musical.util.CustomImageUtil
+import github.o4x.musical.util.ImageUtil
+import github.o4x.musical.util.MusicUtil
+import github.o4x.musical.util.TagUtil
 import org.jaudiotagger.tag.FieldKey
 import org.koin.android.ext.android.inject
 import java.io.Serializable
@@ -94,6 +97,18 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
         supportActionBar?.setTitle(R.string.action_tag_editor)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isChanged) {
+                    DiscardTagsDialog.create().show(supportFragmentManager, "TAGS")
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                    isEnabled = true
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -110,11 +125,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         when (item.itemId) {
             R.id.save -> save()
             android.R.id.home -> {
-                if (isChanged) {
-                    DiscardTagsDialog.create().show(supportFragmentManager, "TAGS")
-                    return true
-                }
-                super.onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 return true
             }
         }
@@ -356,10 +367,10 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
         tagUtil?.writeValuesToFiles(fieldKeyValueMap,
             when {
-                deleteAlbumArt -> ArtworkInfo(id,
+                deleteAlbumArt -> TagUtil.ArtworkInfo(id,
                     null)
                 albumArtBitmap == null -> null
-                else -> ArtworkInfo(
+                else -> TagUtil.ArtworkInfo(
                     id, albumArtBitmap)
             })
 

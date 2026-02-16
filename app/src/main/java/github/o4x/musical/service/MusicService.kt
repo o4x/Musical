@@ -142,7 +142,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         val service: MusicService
             get() = this@MusicService
     }
-    
+
     var pendingQuit = false
 
     private val appWidgetBig = AppWidgetBig.getInstance()
@@ -151,9 +151,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
 
     private var playingNotification: PlayingNotification? = null
-    
+
     lateinit var mediaSession: MediaSessionCompat
-    
+
     private val wakeLock: PowerManager.WakeLock by lazy {
         (getSystemService(POWER_SERVICE) as PowerManager)
             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
@@ -185,7 +185,12 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
 
         queueSaveHandlerThread.start()
-        registerReceiver(widgetIntentReceiver, IntentFilter(APP_WIDGET_UPDATE))
+        val widgetFilter = IntentFilter(APP_WIDGET_UPDATE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(widgetIntentReceiver, widgetFilter, RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(widgetIntentReceiver, widgetFilter)
+        }
         initNotification()
 
         mediaStoreObserver.start()
@@ -201,7 +206,14 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON)
         mediaButtonIntent.component = mediaButtonReceiverComponentName
         val mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(
-            applicationContext, 0, mediaButtonIntent, 0
+            applicationContext,
+            0,
+            mediaButtonIntent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.FLAG_IMMUTABLE
+            } else {
+                0
+            }
         )
         mediaSession = MediaSessionCompat(
             this,
@@ -552,7 +564,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             }
         }
     }
-    
+
       /////////////
      // <QUEUE> //
     /////////////
@@ -759,7 +771,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
       //////////////
      // </QUEUE> //
     //////////////
-    
+
 
       //////////////
      // <PLAYER> //
@@ -881,10 +893,20 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                     } else {
                         playback.start()
                         if (!becomingNoisyReceiverRegistered) {
-                            registerReceiver(
-                                becomingNoisyReceiver,
-                                becomingNoisyReceiverIntentFilter
-                            )
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                // We use RECEIVER_EXPORTED because ACTION_AUDIO_BECOMING_NOISY
+                                // is a system broadcast sent by the Audio Service (external to the app).
+                                registerReceiver(
+                                    becomingNoisyReceiver,
+                                    becomingNoisyReceiverIntentFilter,
+                                    RECEIVER_EXPORTED
+                                )
+                            } else {
+                                registerReceiver(
+                                    becomingNoisyReceiver,
+                                    becomingNoisyReceiverIntentFilter
+                                )
+                            }
                             becomingNoisyReceiverRegistered = true
                         }
                         if (notHandledMetaChangedForCurrentTrack) {

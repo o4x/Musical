@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.annotation.ColorInt
-import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import com.o4x.appthemehelper.ATH
 import com.o4x.appthemehelper.ATHActivity
 import com.o4x.appthemehelper.extensions.surfaceColor
@@ -13,7 +12,6 @@ import com.o4x.appthemehelper.util.ColorUtil
 import github.o4x.musical.LanguageContextWrapper
 import github.o4x.musical.appshortcuts.DynamicShortcutManager
 import github.o4x.musical.prefs.PreferenceUtil
-import github.o4x.musical.prefs.PreferenceUtil.nightMode
 import github.o4x.musical.util.Util
 import java.util.*
 
@@ -69,8 +67,12 @@ abstract class AbsThemeActivity : ATHActivity() {
         setTaskDescriptionColor(surfaceColor())
     }
 
-    open fun setNavigationBarColor(color: Int) {
-        ATH.setNavigationbarColor(this, color)
+    open fun setNavigationBarColor(color: Int, force: Boolean = false) {
+        if (force) {
+            ATH.setNavigationbarColor(this, color)
+        } else {
+            ATH.setNavigationbarColor(this, surfaceColor())
+        }
     }
 
     fun setNavigationBarColorAuto() {

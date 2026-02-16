@@ -1,7 +1,9 @@
 package github.o4x.musical.repository
 
+import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+import android.os.Build
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import android.provider.MediaStore.Audio.Media
@@ -68,34 +70,52 @@ class SongRepository(private val context: Context) {
         )
     }
 
-    private fun getSongFromCursorImpl(
-        cursor: Cursor
-    ): Song {
+    private fun getSongFromCursorImpl(cursor: Cursor): Song {
         val id = cursor.getLong(AudioColumns._ID)
         val title = cursor.getString(AudioColumns.TITLE)
         val trackNumber = cursor.getInt(AudioColumns.TRACK)
         val year = cursor.getInt(AudioColumns.YEAR)
         val duration = cursor.getLong(AudioColumns.DURATION)
+
+        // IMPORTANT: In Android 10+, DATA (File Path) is deprecated and often inaccessible.
+        // It is better to generate a Content URI for the song.
+        // However, if your Song model requires a string path, keep using DATA but be aware
+        // you cannot use java.io.File(data) to read it. You must use ContentResolver.
         val data = cursor.getString(AudioColumns.DATA)
+
+        // Generate a playable URI (Recommended approach for modern Android)
+        val contentUri = ContentUris.withAppendedId(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+            else
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            id
+        )
+
         val dateModified = cursor.getLong(AudioColumns.DATE_MODIFIED)
         val albumId = cursor.getLong(AudioColumns.ALBUM_ID)
         val albumName = cursor.getStringOrNull(AudioColumns.ALBUM)
         val artistId = cursor.getLong(AudioColumns.ARTIST_ID)
         val artistName = cursor.getStringOrNull(AudioColumns.ARTIST)
         val composer = cursor.getStringOrNull(AudioColumns.COMPOSER)
-        val albumArtist = cursor.getStringOrNull("album_artist")
+
+        // "album_artist" might not exist in older API levels columns, safe check
+        val albumArtist = try {
+            cursor.getStringOrNull("album_artist")
+        } catch (e: Exception) { "" }
+
         return Song(
             id,
             title,
             trackNumber,
             year,
             duration,
-            data,
+            data, // Ideally pass contentUri.toString() here if your player supports URIs
             dateModified,
             albumId,
-            albumName ?: "",
+            albumName ?: "<unknown>",
             artistId,
-            artistName ?: "",
+            artistName ?: "<unknown>",
             composer ?: "",
             albumArtist ?: ""
         )
@@ -120,33 +140,51 @@ class SongRepository(private val context: Context) {
         selectionValues: Array<String>?,
         sortOrder: String = PreferenceUtil.songSortOrder
     ): Cursor? {
+        // 1. Handle Selection
         var selectionFinal = selection
-        var selectionValuesFinal = selectionValues
 
-        selectionFinal = if (selection != null && selection.trim { it <= ' ' } != "") {
-            "$IS_MUSIC AND $selectionFinal"
+        // In modern Android, explicitly selecting IS_MUSIC!=0 is good,
+        // but ensure we don't break logic if selection is null
+        val musicClause = "$IS_MUSIC != 0"
+
+        if (selectionFinal != null && selectionFinal.trim().isNotEmpty()) {
+            selectionFinal = "$musicClause AND $selectionFinal"
         } else {
-            IS_MUSIC
+            selectionFinal = musicClause
         }
 
+        // 2. Handle Duration Filter
+        // Use parentheses to ensure logic grouping is correct: (A AND B) AND C
+        selectionFinal = "($selectionFinal) AND ${Media.DURATION} >= ?"
 
-        selectionFinal =
-            selectionFinal + " AND " + Media.DURATION + ">= " + (PreferenceUtil.filterLength * 1000)
+        // Add duration to the selectionArgs array instead of hardcoding into string
+        // This prevents SQL injection and format errors
+        val durationFilter = (PreferenceUtil.filterLength * 1000).toString()
+        val newSelectionValues = if (selectionValues != null) {
+            selectionValues + durationFilter
+        } else {
+            arrayOf(durationFilter)
+        }
 
-        val uri = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
         } else {
             Media.EXTERNAL_CONTENT_URI
         }
+
         return try {
             context.contentResolver.query(
                 uri,
                 baseProjection,
                 selectionFinal,
-                selectionValuesFinal,
-                sortOrder,
+                newSelectionValues,
+                sortOrder
             )
         } catch (ex: SecurityException) {
+            Log.e("SongRepository", "Security Exception: Permission missing", ex)
+            return null
+        } catch (ex: Exception) {
+            Log.e("SongRepository", "Generic Error", ex)
             return null
         }
     }

@@ -78,7 +78,7 @@ abstract class AbsBaseActivity : AbsThemeActivity() {
         }
     }
 
-    protected fun hasPermissions(): Boolean {
+    protected open fun hasPermissions(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             for (permission in permissions) {
                 if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {

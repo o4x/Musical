@@ -4,14 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
-import com.o4x.appthemehelper.extensions.surfaceColor
-import com.o4x.appthemehelper.extensions.textColorPrimary
-import com.o4x.appthemehelper.extensions.textColorSecondary
 import com.afollestad.materialcab.attached.AttachedCab
 import com.afollestad.materialcab.attached.destroy
 import com.afollestad.materialcab.attached.isActive
 import com.afollestad.materialcab.createCab
+import com.o4x.appthemehelper.extensions.surfaceColor
+import com.o4x.appthemehelper.extensions.textColorPrimary
+import com.o4x.appthemehelper.extensions.textColorSecondary
 import github.o4x.musical.R
 import github.o4x.musical.databinding.MusicPanelLayoutBinding
 import github.o4x.musical.interfaces.CabCallback
@@ -39,8 +40,18 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
             val myIntent = Intent(this@AbsMusicPanelActivity, PlayerActivity::class.java)
             this@AbsMusicPanelActivity.startActivity(myIntent)
         }
-        playerViewModel.queue.observe(this, {
+        playerViewModel.queue.observe(this) {
             hideBottomBar(it.isEmpty())
+        }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!handleBackPress()) {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                    isEnabled = true
+                }
+            }
         })
     }
 
@@ -87,6 +98,8 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
         return binding.root
     }
 
+
+
     protected fun wrapSlidingMusicPanel(view: View): View {
         val contentContainer =
             binding.root.findViewById<ViewGroup>(R.id.content_container)
@@ -96,10 +109,6 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
 
     override val snackBarContainer: View
         get() = findViewById(R.id.content_container)
-
-    override fun onBackPressed() {
-        if (!handleBackPress()) super.onBackPressed()
-    }
 
     open fun handleBackPress(): Boolean {
         if (cab != null && cab!!.isActive()) {
