@@ -2,7 +2,6 @@ package github.o4x.musical.ui.fragments.mainactivity
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.o4x.appthemehelper.extensions.colorControlNormal
 import com.o4x.appthemehelper.extensions.surfaceColor
-import com.o4x.appthemehelper.extensions.textColorTertiary
 import com.o4x.appthemehelper.util.ColorUtil
 import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import github.o4x.musical.R
@@ -25,8 +23,6 @@ import github.o4x.musical.util.Util
 import github.o4x.musical.util.ViewUtil
 import kotlin.math.max
 import kotlin.math.min
-
-
 
 abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     AbsMusicServiceFragment(layout), MainActivityFragmentCallbacks {
@@ -52,6 +48,9 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
         super.onResume()
         mainActivity.backPressCallbacks.add(this)
         setToolbarTitle(navController.currentDestination?.label.toString())
+
+        mainActivity.appbar.bringToFront()
+
         mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
     }
 
@@ -117,11 +116,16 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
         }
     }
 
-
     fun showAppbar() {
+        mainActivity.appbar.bringToFront()
         mainActivity.appbar.setExpanded(true, true)
+
         val from = mainActivity.appbar.y.toInt()
         val to = 0
+
+        // Optimization: If already at 0, don't restart animation (prevents flickering)
+        if (from == to) return
+
         appbarAnimation?.cancel()
         appbarAnimation = ValueAnimator.ofInt(from, to)
         appbarAnimation?.duration =
@@ -152,13 +156,13 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
                     val changes = max(-toolbarHeight.toFloat(),
                         mainActivity.appbar.y - (dy))
                     if (withAppBar)
-                    mainActivity.appbar.y = changes
+                        mainActivity.appbar.y = changes
                     recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0)
                 }
                 dy < 0 -> { // Scrolling down
                     val changes = min(0f, mainActivity.appbar.y - (dy))
                     if (withAppBar)
-                    mainActivity.appbar.y = changes
+                        mainActivity.appbar.y = changes
                     recyclerView.setPadding(0, (changes + appbarHeight).toInt(), 0, 0)
                 }
             }
