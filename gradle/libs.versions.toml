@@ -1,6 +1,5 @@
 
 [versions]
-activityCompose = "1.8.2"
 advrecyclerview = "1.0.0"
 androidGradlePlugin = "9.0.1"
 annotation = "1.9.1"
@@ -47,7 +46,6 @@ advrecyclerview = { module = "com.h6ah4i.android.widget.advrecyclerview:advrecyc
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
-androidx-compose-activity-compose = { module = "androidx.compose.activity:activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
