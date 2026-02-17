@@ -1,11 +1,13 @@
 
 [versions]
+activityCompose = "1.8.2"
 advrecyclerview = "1.0.0"
 androidGradlePlugin = "9.0.1"
 annotation = "1.9.1"
 appcompat = "1.7.1"
 bouncescrollview = "1.5-androidx"
 cardview = "1.0.0"
+composeBom = "2026.02.00"
 constraintlayout = "2.2.1"
 coreKtx = "1.17.0"
 coroutinesVersion = "1.10.2"
@@ -16,11 +18,12 @@ gridlayout = "1.1.0"
 gson = "2.13.2"
 imagepicker = "2.1"
 koinVersion = "3.5.6"
-kotlin = "2.2.10"
+kotlin = "2.3.10"
 legacySupportCoreUi = "1.0.0"
 library = "1.6.1"
 licensesdialog = "2.2.0"
 lifecycleVersion = "2.10.0"
+lifecycleViewmodelCompose = "2.10.0"
 loggingInterceptor = "4.12.0"
 material = "1.13.0"
 materialDialogVersion = "3.3.0"
@@ -44,6 +47,14 @@ advrecyclerview = { module = "com.h6ah4i.android.widget.advrecyclerview:advrecyc
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+androidx-compose-activity-compose = { module = "androidx.compose.activity:activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
@@ -52,6 +63,7 @@ androidx-legacy-support-core-ui = { module = "androidx.legacy:legacy-support-cor
 androidx-lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycleVersion" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleVersion" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycleVersion" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
 androidx-media = { module = "androidx.media:media", version.ref = "media" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navVersion" }
@@ -99,5 +111,6 @@ verticalseekbar = { module = "com.h6ah4i.android.widget.verticalseekbar:vertical
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin"}
 navigation-safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 foojay-resolver = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojay" }
