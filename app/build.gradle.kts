@@ -4,6 +4,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     id("kotlin-parcelize")
     id("kotlin-kapt")
     alias(libs.plugins.navigation.safeArgs)
@@ -62,6 +63,10 @@ configure<ApplicationExtension> {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
     kotlin {
         jvmToolchain(21)
     }
@@ -70,6 +75,7 @@ configure<ApplicationExtension> {
         viewBinding = true
         dataBinding = true
         buildConfig = true
+        compose = true
     }
 
     lint {
@@ -84,6 +90,16 @@ dependencies {
     implementation(project(":recyclerview-fastscroll"))
     implementation(project(":material-cab"))
     implementation(files("libs/jaudiotagger-2.2.4-SNAPSHOT.jar"))
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.appcompat)
