@@ -20,12 +20,13 @@ import github.o4x.musical.interfaces.CabHolder
 import github.o4x.musical.prefs.PreferenceUtil
 import github.o4x.musical.ui.activities.PlayerActivity
 import github.o4x.musical.ui.fragments.player.MiniPlayerFragment
+import github.o4x.musical.util.Util
 import github.o4x.musical.util.color.MediaNotificationProcessor
 
 abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
 
     var cab: AttachedCab? = null
-    private lateinit var miniPlayerFragment: MiniPlayerFragment
+    lateinit var miniPlayerFragment: MiniPlayerFragment
 
     private val binding by lazy { MusicPanelLayoutBinding.inflate(layoutInflater) }
 
