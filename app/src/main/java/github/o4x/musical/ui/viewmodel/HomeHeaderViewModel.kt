@@ -10,6 +10,7 @@ import androidx.palette.graphics.Palette
 import com.o4x.appthemehelper.util.ColorUtil
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import github.o4x.musical.App
+import github.o4x.musical.R
 import github.o4x.musical.drawables.CharCoverDrawable
 import github.o4x.musical.helper.MyPalette
 import github.o4x.musical.imageloader.glide.loader.GlideLoader
@@ -72,7 +73,7 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
                         .load(song)
                 }
                 HomeHeaderPref.TYPE_DEFAULT -> {
-                    finisher = null
+                    finisher = loader.load(R.drawable.unsplash)
                 }
             }
 
