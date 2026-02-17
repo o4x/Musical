@@ -150,9 +150,6 @@
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="false" />
-        <activity
-            android:name=".ui.activities.intro.PermissionActivity"
-            android:exported="false" />
 
         <!-- UPDATED SERVICE: foregroundServiceType is mandatory for Android 14+ -->
         <service
