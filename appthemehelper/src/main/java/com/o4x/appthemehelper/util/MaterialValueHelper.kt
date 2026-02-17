@@ -14,7 +14,7 @@ object MaterialValueHelper {
     @ColorInt
     fun getPrimaryTextColor(context: Context?, dark: Boolean): Int {
         return if (dark) {
-            ContextCompat.getColor(context!!, R.color.design_default_color_on_primary)
+            ContextCompat.getColor(context!!, R.color.design_default_color_on_secondary)
         } else ContextCompat.getColor(context!!, R.color.design_default_color_on_primary)
     }
 
@@ -24,7 +24,7 @@ object MaterialValueHelper {
     fun getSecondaryTextColor(context: Context?, dark: Boolean): Int {
         return if (dark) {
             ContextCompat.getColor(context!!, R.color.design_default_color_on_secondary)
-        } else ContextCompat.getColor(context!!, R.color.design_default_color_on_secondary)
+        } else ContextCompat.getColor(context!!, R.color.design_default_color_on_primary)
     }
 
     @SuppressLint("PrivateResource")
