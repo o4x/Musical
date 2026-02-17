@@ -60,3 +60,21 @@
 -keepnames class * extends android.os.Parcelable
 -keepnames class * extends java.io.Serializable
 -keep class github.o4x.musical.model.** {*;}
+
+# Koin Rules
+-keep class org.koin.** { *; }
+-keep interface org.koin.** { *; }
+
+# Keep all ViewModels and their constructors
+-keep class * extends androidx.lifecycle.ViewModel {
+    <init>(...);
+}
+
+# Keep the constructor of any class used in Koin modules
+# Replace 'github.o4x.musical' with your actual package name if different
+-keep class github.o4x.musical.** {
+    <init>(...);
+}
+
+# If you use Kotlin specific reflection
+-keep class kotlin.reflect.** { *; }

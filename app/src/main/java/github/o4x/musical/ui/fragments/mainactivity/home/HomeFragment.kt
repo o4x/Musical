@@ -40,7 +40,7 @@ import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import kotlin.math.max
@@ -48,7 +48,7 @@ import kotlin.math.min
 
 class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
-    private val posterViewModel by sharedViewModel<HomeHeaderViewModel>()
+    private val posterViewModel by activityViewModel<HomeHeaderViewModel>()
     private val scrollPositionViewModel by viewModel<ScrollPositionViewModel>()
 
     private lateinit var recentlyAdapter: HomeAdapter
