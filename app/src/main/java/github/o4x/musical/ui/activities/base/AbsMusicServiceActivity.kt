@@ -1,6 +1,5 @@
 package github.o4x.musical.ui.activities.base
 
-import android.Manifest
 import android.content.*
 import android.os.Build
 import android.os.Bundle
@@ -168,12 +167,5 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
             true
         ) // just in case we need to know this at some point
         sendBroadcast(intent)
-    }
-
-    override fun getPermissionsToRequest(): Array<String> {
-        return arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
     }
 }

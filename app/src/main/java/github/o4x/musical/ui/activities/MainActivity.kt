@@ -30,7 +30,6 @@ import github.o4x.musical.model.Song
 import github.o4x.musical.repository.PlaylistSongsLoader
 import github.o4x.musical.service.MusicService
 import github.o4x.musical.ui.activities.base.AbsMusicPanelActivity
-import github.o4x.musical.ui.activities.intro.PermissionActivity
 import github.o4x.musical.views.BreadCrumbLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,14 +53,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (!hasPermissions()) {
-            val myIntent = Intent(
-                this,
-                PermissionActivity::class.java
-            )
-            this.startActivity(myIntent)
-        }
 
         setDrawUnderStatusBar()
         setNavigationBarColorAuto()
