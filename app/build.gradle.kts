@@ -149,7 +149,9 @@ dependencies {
     implementation(libs.org.eclipse.egit.github.core)
     implementation(libs.bouncescrollview)
 
-    implementation(libs.koin.android)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation("io.insert-koin:koin-android:4.1.1")
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
