@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.ui.adapter.song.PlayingQueueAdapter
+import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import kotlin.math.abs
 
-abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(layout) {
+abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMusicServiceFragment(layout) {
 
     protected abstract val queueRecyclerView: RecyclerView
 

@@ -28,7 +28,6 @@ import github.o4x.musical.misc.OverScrollLinearLayoutManager
 import github.o4x.musical.misc.WrappedAsyncTaskLoader
 import github.o4x.musical.model.Song
 import github.o4x.musical.ui.adapter.SongFileAdapter
-import github.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import github.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ArrayListPathsAsyncTask.OnPathsListedCallback
 import github.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ListSongsAsyncTask.OnSongsListedCallback
 import github.o4x.musical.util.FileUtil
@@ -37,6 +36,7 @@ import github.o4x.musical.util.ViewUtil
 import github.o4x.musical.util.scanPaths
 import com.o4x.appthemehelper.util.toolbarTitleColor
 import com.o4x.appthemehelper.util.toolbarSubtitleColor
+import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import github.o4x.musical.views.BreadCrumbLayout.Crumb
 import github.o4x.musical.views.BreadCrumbLayout.SelectionCallback
 import java.io.File
@@ -44,7 +44,7 @@ import java.io.FileFilter
 import java.lang.ref.WeakReference
 import java.util.*
 
-class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), SelectionCallback,
+class FoldersFragment : AbsMusicServiceFragment(R.layout.fragment_folder), SelectionCallback,
     SongFileAdapter.Callbacks, LoaderManager.LoaderCallbacks<List<File>> {
 
     private lateinit var adapter: SongFileAdapter
@@ -70,28 +70,28 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     fun setCrumb(crumb: Crumb?, addToHistory: Boolean) {
         if (crumb == null) return
         saveScrollPosition()
-        mainActivity.bread_crumbs.setActiveOrAdd(crumb, false)
-        if (addToHistory) {
-            mainActivity.bread_crumbs.addHistory(crumb)
-        }
+//        mainActivity.bread_crumbs.setActiveOrAdd(crumb, false)
+//        if (addToHistory) {
+//            mainActivity.bread_crumbs.addHistory(crumb)
+//        }
         loaderManager.restartLoader(LOADER_ID, null, this)
     }
 
     private fun saveScrollPosition() {
-        val crumb = activeCrumb
-        if (crumb != null) {
-            crumb.scrollPosition =
-                (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstVisibleItemPosition()
-        }
+//        val crumb = activeCrumb
+//        if (crumb != null) {
+//            crumb.scrollPosition =
+//                (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstVisibleItemPosition()
+//        }
     }
 
-    private val activeCrumb: Crumb?
-        private get() = if (mainActivity.bread_crumbs.size() > 0) mainActivity.bread_crumbs.getCrumb(
-            mainActivity.bread_crumbs.activeIndex) else null
+//    private val activeCrumb: Crumb?
+//        private get() = if (mainActivity.bread_crumbs.size() > 0) mainActivity.bread_crumbs.getCrumb(
+//            mainActivity.bread_crumbs.activeIndex) else null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(CRUMBS, mainActivity.bread_crumbs.stateWrapper)
+//        outState.putParcelable(CRUMBS, mainActivity.bread_crumbs.stateWrapper)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -99,7 +99,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         if (savedInstanceState == null) {
             setCrumb(Crumb(FileUtil.safeGetCanonicalFile(startDirectory)), true)
         } else {
-            mainActivity.bread_crumbs.restoreFromStateWrapper(savedInstanceState.getParcelable(CRUMBS))
+//            mainActivity.bread_crumbs.restoreFromStateWrapper(savedInstanceState.getParcelable(CRUMBS))
             loaderManager.initLoader(LOADER_ID, null, this)
         }
     }
@@ -112,28 +112,24 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         setUpAdapter()
     }
 
-    override fun onReloadSubToolbar() {
-        super.onReloadSubToolbar()
-        mainActivity.bread_crumbs.visibility = View.VISIBLE
-    }
 
     private fun setUpAppbarColor() {
         val primaryColor = surfaceColor()
-        mainActivity.bread_crumbs.setBackgroundColor(primaryColor)
-        mainActivity.bread_crumbs.setActivatedContentColor(toolbarTitleColor(mainActivity,
-            primaryColor))
-        mainActivity.bread_crumbs.setDeactivatedContentColor(toolbarSubtitleColor(
-            mainActivity, primaryColor))
+//        mainActivity.bread_crumbs.setBackgroundColor(primaryColor)
+//        mainActivity.bread_crumbs.setActivatedContentColor(toolbarTitleColor(mainActivity,
+//            primaryColor))
+//        mainActivity.bread_crumbs.setDeactivatedContentColor(toolbarSubtitleColor(
+//            mainActivity, primaryColor))
     }
 
     private fun setUpBreadCrumbs() {
-        mainActivity.bread_crumbs.setCallback(this)
+//        mainActivity.bread_crumbs.setCallback(this)
     }
 
     private fun setUpRecyclerView() {
         ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity, binding.recyclerView, accentColor())
         binding.recyclerView.layoutManager = OverScrollLinearLayoutManager(requireContext())
-        binding.recyclerView.addAppbarListener()
+//        binding.recyclerView.addAppbarListener()
     }
 
     val observer = object : AdapterDataObserver() {
@@ -155,13 +151,6 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         saveScrollPosition()
     }
 
-    override fun handleBackPress(): Boolean {
-        if (mainActivity.bread_crumbs.popHistory()) {
-            setCrumb(mainActivity.bread_crumbs.lastHistory(), false)
-            return true
-        }
-        return super.handleBackPress()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_folders, menu)
@@ -345,12 +334,12 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     private fun updateAdapter(files: List<File>) {
         if (_binding == null) return
         adapter.swapDataSet(files)
-        val crumb = activeCrumb
-        if (crumb != null) {
-            (binding.recyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                crumb.scrollPosition,
-                0)
-        }
+//        val crumb = activeCrumb
+//        if (crumb != null) {
+//            (binding.recyclerView.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+//                crumb.scrollPosition,
+//                0)
+//        }
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<File>> {
@@ -372,10 +361,10 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
             val foldersFragment = fragmentWeakReference.get()
             var directory: File? = null
             if (foldersFragment != null) {
-                val crumb = foldersFragment.activeCrumb
-                if (crumb != null) {
-                    directory = crumb.file
-                }
+//                val crumb = foldersFragment.activeCrumb
+//                if (crumb != null) {
+//                    directory = crumb.file
+//                }
             }
             return if (directory != null) {
                 val files = FileUtil.listFiles(directory, AUDIO_FILE_FILTER)

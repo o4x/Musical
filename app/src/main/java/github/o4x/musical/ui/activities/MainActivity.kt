@@ -45,7 +45,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
         setLightNavigationBar(true)
 
         setupNavController()
-        setupToolbar()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -55,11 +54,6 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     override fun createContentView(): View {
         binding = ActivityMainBinding.inflate(layoutInflater)
         return wrapSlidingMusicPanel(binding.root)
-    }
-
-    private fun setupToolbar() {
-        binding.mainToolbar.setNavigationIcon(R.drawable.ic_menu)
-        setSupportActionBar(binding.mainToolbar)
     }
 
     fun openSearch() {
@@ -166,19 +160,4 @@ class MainActivity : AbsMusicPanelActivity(), CabHolder {
     private fun setupNavController() {
         navController = findNavController(R.id.fragment_container)
     }
-
-    val appbar: AppBarLayout
-        get() = binding.mainAppbar
-
-    val toolbar: MaterialToolbar
-        get() = binding.mainToolbar
-
-    val search: LinearLayout
-        get() = binding.toolbarTitle.mainSearch
-
-    val tabs: TabLayout
-        get() = binding.mainTabs
-
-    val bread_crumbs: BreadCrumbLayout
-        get() = binding.mainBreadCrumbs
 }

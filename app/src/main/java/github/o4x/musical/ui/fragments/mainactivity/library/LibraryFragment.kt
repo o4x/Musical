@@ -13,7 +13,6 @@ import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.helper.SortOrder
 import github.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
 import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
-import github.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import github.o4x.musical.ui.fragments.mainactivity.library.pager.*
 import github.o4x.musical.prefs.PreferenceUtil
 import github.o4x.musical.prefs.PreferenceUtil.lastPage
@@ -21,9 +20,10 @@ import github.o4x.musical.prefs.PreferenceUtil.libraryCategory
 import github.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
 import github.o4x.musical.prefs.PreferenceUtil.rememberLastTab
 import github.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
+import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import github.o4x.musical.util.Util
 
-class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPageChangeListener,
+class LibraryFragment : AbsMusicServiceFragment(R.layout.fragment_library), OnPageChangeListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var pagerAdapter: MusicLibraryPagerAdapter
@@ -64,11 +64,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
 //        })
     }
 
-    override fun onReloadSubToolbar() {
-        super.onReloadSubToolbar()
-        mainActivity.tabs.visibility = View.VISIBLE
-    }
-
     override fun onSharedPreferenceChanged(preferences: SharedPreferences, key: String?) {
         if (PreferenceUtil.LIBRARY_CATEGORIES == key) {
             val current = currentFragment
@@ -86,26 +81,19 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
     private fun setUpViewPager() {
         pagerAdapter = MusicLibraryPagerAdapter(mainActivity, childFragmentManager)
         binding.pager.adapter = pagerAdapter
-        mainActivity.tabs.layoutDirection = View.LAYOUT_DIRECTION_LTR;
-        mainActivity.tabs.setupWithViewPager(binding.pager)
-        val primaryColor = surfaceColor()
-//        val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
-//        val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
-        mainActivity.tabs.setBackgroundColor(primaryColor)
-//        mainActivity.tabs.setTabTextColors(normalColor, selectedColor)
-        mainActivity.tabs.setSelectedTabIndicatorColor(accentColor())
+
         updateTabVisibility()
         if (rememberLastTab()) {
             binding.pager.currentItem = lastPage
-            mainActivity.tabs.setScrollPosition(lastPage,0f,true)
+//            mainActivity.tabs.setScrollPosition(lastPage,0f,true)
         }
         binding.pager.addOnPageChangeListener(this)
     }
 
     private fun updateTabVisibility() {
         // hide the tab bar when only a single tab is visible
-        mainActivity.tabs.visibility =
-            if (pagerAdapter.count == 1) View.GONE else View.VISIBLE
+//        mainActivity.tabs.visibility =
+//            if (pagerAdapter.count == 1) View.GONE else View.VISIBLE
     }
 
     private val currentFragment: Fragment?
@@ -370,6 +358,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
     }
 
     override fun onPageScrollStateChanged(state: Int) {
-        showAppbar()
+//        showAppbar()
     }
 }

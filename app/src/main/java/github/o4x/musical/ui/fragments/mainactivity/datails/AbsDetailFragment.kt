@@ -51,7 +51,6 @@ open class AbsDetailFragment<T, A: RecyclerView.Adapter<*>> : AbsPopupFragment(R
             accentColor()
         )
         binding.recyclerView.layoutManager = OverScrollLinearLayoutManager(requireContext())
-        binding.recyclerView.addAppbarListener()
     }
 
     fun checkIsEmpty() {

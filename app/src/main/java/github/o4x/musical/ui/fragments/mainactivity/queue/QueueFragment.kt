@@ -71,7 +71,6 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
 
     private fun setUpViews() {
         binding.queueRecyclerView.apply {
-            addAppbarListener()
             ViewUtil.setUpFastScrollRecyclerViewColor(
                 requireContext(),
                 this,

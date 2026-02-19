@@ -14,11 +14,11 @@ import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentTimerBinding
 import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.service.MusicService
-import github.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import github.o4x.musical.prefs.PreferenceUtil
+import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import github.o4x.musical.views.timepicker.HmsPicker
 
-class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
+class TimerFragment: AbsMusicServiceFragment(R.layout.fragment_timer) {
 
     private var timerUpdater: TimerUpdater? = null
         set(value) {
@@ -50,7 +50,6 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setAppbarPadding(binding.root)
 
 
         binding.btn.setOnClickListener {

@@ -59,11 +59,11 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val search = mainActivity.search
-        search.visibility = View.VISIBLE
-        searchView = search.findViewById(R.id.search_view)
-        voiceSearch = search.findViewById(R.id.voice_search)
-        clearText = search.findViewById(R.id.clear_text)
+//        val search = mainActivity.search
+//        search.visibility = View.VISIBLE
+//        searchView = search.findViewById(R.id.search_view)
+//        voiceSearch = search.findViewById(R.id.voice_search)
+//        clearText = search.findViewById(R.id.clear_text)
 
 
         setupRecyclerView()
@@ -105,7 +105,6 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
         binding.recyclerView.apply {
             layoutManager = OverScrollLinearLayoutManager(requireContext())
             adapter = searchAdapter
-            addAppbarListener()
         }
     }
 

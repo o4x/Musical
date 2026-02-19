@@ -51,7 +51,6 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
         }
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
-        libraryFragment.setAppbarListener(binding.recyclerView)
     }
 
     protected fun invalidateLayoutManager() {

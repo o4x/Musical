@@ -43,11 +43,6 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
         super.onDestroyView()
     }
 
-    override fun onResume() {
-        super.onResume()
-        setToolbarTitle(data?.name)
-    }
-
     override fun setUpRecyclerView() {
         super.setUpRecyclerView()
         adapter = SongAdapter(mainActivity, ArrayList(), R.layout.item_list, mainActivity)

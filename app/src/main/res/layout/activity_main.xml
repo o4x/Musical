@@ -5,48 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/main_appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:elevation="0dp"
-        android:background="@color/transparent">
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:id="@+id/main_appbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        app:elevation="0dp"-->
+<!--        android:background="@color/transparent">-->
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+<!--        <FrameLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/main_toolbar"
-                style="@style/Toolbar"
-                android:background="@color/transparent" >
+<!--            <com.google.android.material.appbar.MaterialToolbar-->
+<!--                android:id="@+id/main_toolbar"-->
+<!--                style="@style/Toolbar"-->
+<!--                android:background="@color/transparent" >-->
 
-                <include
-                    android:id="@+id/toolbar_title"
-                    layout="@layout/search_bar" />
+<!--                <include-->
+<!--                    android:id="@+id/toolbar_title"-->
+<!--                    layout="@layout/search_bar" />-->
 
-            </com.google.android.material.appbar.MaterialToolbar>
+<!--            </com.google.android.material.appbar.MaterialToolbar>-->
 
-            <FrameLayout
-                android:id="@+id/cab_stub"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <FrameLayout-->
+<!--                android:id="@+id/cab_stub"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-        </FrameLayout>
+<!--        </FrameLayout>-->
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/main_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_height"
-            app:tabMode="scrollable" />
+<!--        <com.google.android.material.tabs.TabLayout-->
+<!--            android:id="@+id/main_tabs"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/tab_height"-->
+<!--            app:tabMode="scrollable" />-->
 
-        <github.o4x.musical.views.BreadCrumbLayout
-            android:id="@+id/main_bread_crumbs"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_height" />
+<!--        <github.o4x.musical.views.BreadCrumbLayout-->
+<!--            android:id="@+id/main_bread_crumbs"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/tab_height" />-->
 
-    </com.google.android.material.appbar.AppBarLayout>
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import github.o4x.musical.interfaces.MusicServiceEventListener
+import github.o4x.musical.ui.activities.MainActivity
 import github.o4x.musical.ui.activities.base.AbsMusicServiceActivity
 import java.lang.ClassCastException
 import java.lang.RuntimeException
@@ -13,6 +14,9 @@ import java.lang.RuntimeException
 
 open class AbsMusicServiceFragment(@LayoutRes layout: Int) : Fragment(layout), MusicServiceEventListener {
 
+    val mainActivity: MainActivity by lazy { requireActivity() as MainActivity }
+    open val libraryViewModel by lazy { mainActivity.libraryViewModel }
+    val navController by lazy { mainActivity.navController }
     lateinit var serviceActivity: AbsMusicServiceActivity
     val playerViewModel by lazy { serviceActivity.playerViewModel }
 

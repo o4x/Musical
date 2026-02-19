@@ -86,16 +86,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         _binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-        showAppbar()
-        if (scrollPositionViewModel.getPositionValue() < headerHeight) {
-            mainActivity.toolbar.setBackgroundColor(Color.TRANSPARENT)
-            mainActivity.window.statusBarColor = Color.TRANSPARENT
-            mainActivity.appbar.elevation = 0f
-            setToolbarTitle(null)
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -103,16 +93,11 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         setUpViews()
     }
 
-    override fun showStatusBar() {}
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_home, menu)
         super.onCreateOptionsMenu(menu, inflater)
         val color = textColorTertiary()
-        colorizeToolbar(mainActivity.toolbar, color, serviceActivity)
         ToolbarContentTintHelper.tintAllIcons(menu, color)
-//        mainActivity.toggle.drawerArrowDrawable.color = color
-//        mainActivity.toggle.drawerArrowDrawable.alpha = 255
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -153,7 +138,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         setUpHeights()
         setupButtons()
         setupPoster()
-        setUpBounceScrollView()
         setUpRecentlyView()
         setUpNewView()
         setupEmpty()
@@ -174,8 +158,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         posterParams.height = posterHeight
         binding.poster.layoutParams = posterParams
 
-        appbarHeight = appbarHeight()
-        toolbarHeight = toolbarHeight()
         // get real header height
         headerHeight = binding.header.layoutParams.height - appbarHeight
     }
@@ -197,71 +179,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         }
     }
 
-    private fun setUpBounceScrollView() {
-        var isStatusFlat = false
-        var isAppbarFlat = false
 
-        binding.nestedScrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
-
-            scrollPositionViewModel.setPosition(scrollY)
-
-            // Scroll poster
-            binding.poster.y =
-                ((-scrollY / (displayHeight * 2 / binding.poster.layoutParams.height.toFloat())).toInt())
-                    .toFloat()
-
-            // Scroll appbar
-            if (scrollY > headerHeight + toolbarHeight && !isAppbarFlat) {
-                setToolbarTitle(navController.currentDestination?.label.toString())
-                toolbarColorVisible(true)
-                mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
-                isAppbarFlat = true
-            }
-            if (scrollY > headerHeight) { // outside header
-                if (!isStatusFlat) {
-                    statusBarColorVisible(true)
-                    isStatusFlat = true
-                }
-                if (oldScrollY != 0) {
-                    if (scrollY > oldScrollY) { // Scrolling up
-                        mainActivity.appbar.y =
-                            max(
-                                -toolbarHeight.toFloat(),
-                                mainActivity.appbar.y + (oldScrollY - scrollY)
-                            )
-                    } else { // Scrolling down
-                        mainActivity.appbar.y = min(
-                            0f, mainActivity.appbar.y + (oldScrollY - scrollY)
-                        )
-                    }
-                }
-            } else { // inside header
-                if (isStatusFlat) {
-                    setToolbarTitle(null)
-                    toolbarColorVisible(false)
-                    statusBarColorVisible(false)
-                    mainActivity.appbar.elevation = 0f
-                    isStatusFlat = false
-                    isAppbarFlat = false
-                }
-                mainActivity.appbar.y = 0f
-            }
-        }
-
-        // zooming poster in over scroll
-        val params = binding.poster.layoutParams
-        val width = params.width
-        val height = params.height
-        binding.nestedScrollView.setOnOverScrollListener { _: Boolean, overScrolledDistance: Int ->
-            val scale = 1 + overScrolledDistance / displayHeight.toFloat()
-            val mParams: ViewGroup.LayoutParams =
-                FrameLayout.LayoutParams(
-                    width,
-                    (height * scale).toInt()
-                )
-            binding.poster.layoutParams = mParams
-        }
-    }
 
     override fun initQueueView() {
         queueLayoutManager = GridHelper.linearLayoutManager(requireContext())
