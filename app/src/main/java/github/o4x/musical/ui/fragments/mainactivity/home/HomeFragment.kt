@@ -111,8 +111,8 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         val color = textColorTertiary()
         colorizeToolbar(mainActivity.toolbar, color, serviceActivity)
         ToolbarContentTintHelper.tintAllIcons(menu, color)
-        mainActivity.toggle.drawerArrowDrawable.color = color
-        mainActivity.toggle.drawerArrowDrawable.alpha = 255
+//        mainActivity.toggle.drawerArrowDrawable.color = color
+//        mainActivity.toggle.drawerArrowDrawable.alpha = 255
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -181,7 +181,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     private fun setupButtons() {
-        binding.queueParent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
+//        binding.queueParent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
         binding.queueShuffleButton.setOnClickListener { libraryViewModel.shuffleSongs() }
         binding.recentlyParent.setOnClickListener {
             navController.toPlaylistDetail(HistoryPlaylist())

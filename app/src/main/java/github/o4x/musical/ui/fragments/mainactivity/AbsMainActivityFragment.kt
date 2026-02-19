@@ -81,8 +81,8 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
         val color = colorControlNormal()
         ToolbarContentTintHelper.tintAllIcons(mainActivity.toolbar, color)
         ToolbarContentTintHelper.tintAllIcons(menu, color)
-        mainActivity.toggle.drawerArrowDrawable.color = color
-        mainActivity.toggle.drawerArrowDrawable.alpha = 255
+//        mainActivity.toggle.drawerArrowDrawable.color = color
+//        mainActivity.toggle.drawerArrowDrawable.alpha = 255
         super.onCreateOptionsMenu(menu, inflater)
     }
 

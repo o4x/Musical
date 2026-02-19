@@ -14,12 +14,12 @@ open class AbsPopupFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(la
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainActivity.setDrawerEnabled(false)
+//        mainActivity.setDrawerEnabled(false)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mainActivity.setDrawerEnabled(true)
+//        mainActivity.setDrawerEnabled(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
