@@ -12,15 +12,6 @@ open class AbsPopupFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(la
         setHasOptionsMenu(true)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mainActivity.setDrawerEnabled(false)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mainActivity.setDrawerEnabled(true)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {

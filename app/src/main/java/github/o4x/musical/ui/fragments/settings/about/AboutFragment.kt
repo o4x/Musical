@@ -9,12 +9,8 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.o4x.appthemehelper.extensions.backgroundColor
-import com.o4x.appthemehelper.extensions.surfaceColor
-import com.o4x.appthemehelper.extensions.textColorPrimary
-import github.o4x.musical.App
 import github.o4x.musical.R
-import de.psdev.licensesdialog.LicensesDialog
+import github.o4x.musical.util.backgroundColor
 
 class AboutFragment : PreferenceFragmentCompat() {
 
@@ -42,12 +38,6 @@ class AboutFragment : PreferenceFragmentCompat() {
         val changelog = R.string.key_changelog.getPreference()
         changelog.setOnPreferenceClickListener {
             findNavController().navigate(R.id.action_about_to_changes)
-            return@setOnPreferenceClickListener true
-        }
-
-        val licenses = R.string.key_licenses.getPreference()
-        licenses.setOnPreferenceClickListener {
-            showLicenseDialog()
             return@setOnPreferenceClickListener true
         }
 
@@ -97,21 +87,6 @@ class AboutFragment : PreferenceFragmentCompat() {
             e.printStackTrace()
         }
         return "Unkown"
-    }
-
-    private fun showLicenseDialog() {
-        LicensesDialog.Builder(requireContext())
-            .setNotices(R.raw.notices)
-            .setTitle(R.string.licenses)
-            .setNoticesCssStyle(
-                getString(R.string.license_dialog_style)
-                    .replace("{bg-color}", color(backgroundColor()))
-                    .replace("{text-color}", color(textColorPrimary()))
-                    .replace("{license-bg-color}", color(surfaceColor()))
-            )
-            .setIncludeOwnLicense(true)
-            .build()
-            .show()
     }
 
     private fun color(intColor: Int): String {

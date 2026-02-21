@@ -50,7 +50,6 @@ class TimerFragment: AbsMainActivityFragment(R.layout.fragment_timer) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setAppbarPadding(binding.root)
 
 
         binding.btn.setOnClickListener {

@@ -14,13 +14,12 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemState;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
-import com.o4x.appthemehelper.extensions.ColorExtKt;
-import com.o4x.appthemehelper.util.ColorUtil;
 import github.o4x.musical.R;
-import github.o4x.musical.interfaces.CabHolder;
 import github.o4x.musical.model.PlaylistSong;
 import github.o4x.musical.model.Song;
 import github.o4x.musical.ui.dialogs.RemoveFromPlaylistDialog;
+import github.o4x.musical.util.ColorExtKt;
+import github.o4x.musical.util.ColorUtil;
 import github.o4x.musical.util.ViewUtil;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -36,9 +35,8 @@ public class OrderablePlaylistSongAdapter
       @NonNull AppCompatActivity activity,
       @NonNull List<PlaylistSong> dataSet,
       @LayoutRes int itemLayoutRes,
-      @Nullable CabHolder cabHolder,
       @Nullable OnMoveItemListener onMoveItemListener) {
-    super(activity, (List<Song>) (List) dataSet, itemLayoutRes, cabHolder);
+    super(activity, (List<Song>) (List) dataSet, itemLayoutRes);
     setMultiSelectMenuRes(R.menu.menu_playlists_songs_selection);
     this.onMoveItemListener = onMoveItemListener;
   }

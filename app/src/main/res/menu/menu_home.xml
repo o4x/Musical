@@ -38,4 +38,21 @@
         </menu>
     </item>
 
+    <item
+        android:id="@+id/nav_queue"
+        android:title="@string/queue" />
+    <item
+        android:id="@+id/nav_library"
+        android:title="@string/library" />
+    <item
+        android:id="@+id/nav_folders"
+        android:title="@string/folders" />
+    <item
+        android:id="@+id/nav_timer"
+        android:title="@string/sleep_timer" />
+
+    <item
+        android:id="@+id/nav_settings"
+        android:title="@string/action_settings" />
+
 </menu>

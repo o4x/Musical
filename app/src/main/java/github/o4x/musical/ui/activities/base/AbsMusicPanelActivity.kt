@@ -6,26 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
-import com.afollestad.materialcab.attached.AttachedCab
-import com.afollestad.materialcab.attached.destroy
-import com.afollestad.materialcab.attached.isActive
-import com.afollestad.materialcab.createCab
-import com.o4x.appthemehelper.extensions.surfaceColor
-import com.o4x.appthemehelper.extensions.textColorPrimary
-import com.o4x.appthemehelper.extensions.textColorSecondary
 import github.o4x.musical.R
 import github.o4x.musical.databinding.MusicPanelLayoutBinding
-import github.o4x.musical.interfaces.CabCallback
-import github.o4x.musical.interfaces.CabHolder
-import github.o4x.musical.prefs.PreferenceUtil
 import github.o4x.musical.ui.activities.PlayerActivity
 import github.o4x.musical.ui.fragments.player.MiniPlayerFragment
-import github.o4x.musical.util.Util
 import github.o4x.musical.util.color.MediaNotificationProcessor
 
-abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
+abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
-    var cab: AttachedCab? = null
     lateinit var miniPlayerFragment: MiniPlayerFragment
 
     private val binding by lazy { MusicPanelLayoutBinding.inflate(layoutInflater) }
@@ -44,45 +32,9 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
         playerViewModel.queue.observe(this) {
             hideBottomBar(it.isEmpty())
         }
-
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (!handleBackPress()) {
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
-                    isEnabled = true
-                }
-            }
-        })
     }
 
     protected abstract fun createContentView(): View?
-
-    override fun openCab(menuRes: Int, callback: CabCallback): AttachedCab {
-        if (cab != null && cab!!.isActive()) cab!!.destroy()
-
-        cab = createCab(R.id.cab_stub) {
-            closeDrawable(R.drawable.ic_close)
-            backgroundColor(literal = surfaceColor())
-            titleColor(literal = textColorPrimary())
-            subtitleColor(literal = textColorSecondary())
-            popupTheme(PreferenceUtil.getGeneralThemeRes())
-            menu(menuRes)
-            menuIconColor(literal = textColorPrimary())
-
-            onCreate { cab, menu ->
-                callback.onCreate(cab, menu)
-            }
-            onSelection { item ->
-                return@onSelection callback.onSelection(item)
-            }
-            onDestroy { cab ->
-                return@onDestroy callback.onDestroy(cab)
-            }
-        }
-
-        return cab!!
-    }
 
     private fun hideBottomBar(hide: Boolean) {
         if (hide) {
@@ -110,14 +62,6 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity(), CabHolder {
 
     override val snackBarContainer: View
         get() = findViewById(R.id.content_container)
-
-    open fun handleBackPress(): Boolean {
-        if (cab != null && cab!!.isActive()) {
-            cab!!.destroy()
-            return true
-        }
-        return false
-    }
 
     fun setMiniPlayerColor(colors: MediaNotificationProcessor) {
         miniPlayerFragment.setColor(colors)

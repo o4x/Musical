@@ -1,21 +1,14 @@
 package github.o4x.musical.service.notification;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.media.app.NotificationCompat.MediaStyle;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import github.o4x.musical.R;
 import github.o4x.musical.helper.MyPalette;
 import github.o4x.musical.imageloader.glide.loader.GlideLoader;
@@ -24,17 +17,14 @@ import github.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListene
 import github.o4x.musical.model.Song;
 import github.o4x.musical.service.MusicService;
 import github.o4x.musical.ui.activities.MainActivity;
-import github.o4x.musical.util.ImageUtil;
-import github.o4x.musical.prefs.PreferenceUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.o4x.appthemehelper.util.ColorUtil;
-import com.o4x.appthemehelper.util.MaterialValueHelper;
+import static github.o4x.musical.service.MusicService.ACTION_REWIND;
+import static github.o4x.musical.service.MusicService.ACTION_SKIP;
+import static github.o4x.musical.service.MusicService.ACTION_TOGGLE_PAUSE;
 
 public class PlayingNotificationImpl extends PlayingNotification {
-
-    private Target<Bitmap> target;
 
     @Override
     public synchronized void update() {
@@ -45,135 +35,67 @@ public class PlayingNotificationImpl extends PlayingNotification {
 
         final boolean isPlaying = service.isPlaying();
 
-        final RemoteViews notificationLayout = new RemoteViews(service.getPackageName(), R.layout.notification);
-        final RemoteViews notificationLayoutBig = new RemoteViews(service.getPackageName(), R.layout.notification_big);
-
-        if (TextUtils.isEmpty(song.getTitle()) && TextUtils.isEmpty(song.getArtistName())) {
-            notificationLayout.setViewVisibility(R.id.media_titles, View.INVISIBLE);
-        } else {
-            notificationLayout.setViewVisibility(R.id.media_titles, View.VISIBLE);
-            notificationLayout.setTextViewText(R.id.album_name, song.getTitle());
-            notificationLayout.setTextViewText(R.id.text, song.getArtistName());
-        }
-
-        if (TextUtils.isEmpty(song.getTitle()) && TextUtils.isEmpty(song.getArtistName()) && TextUtils.isEmpty(song.getAlbumName())) {
-            notificationLayoutBig.setViewVisibility(R.id.media_titles, View.INVISIBLE);
-        } else {
-            notificationLayoutBig.setViewVisibility(R.id.media_titles, View.VISIBLE);
-            notificationLayoutBig.setTextViewText(R.id.album_name, song.getTitle());
-            notificationLayoutBig.setTextViewText(R.id.text, song.getArtistName());
-            notificationLayoutBig.setTextViewText(R.id.text2, song.getAlbumName());
-        }
-
-        linkButtons(notificationLayout, notificationLayoutBig);
+        final int playButtonResId = isPlaying
+                ? R.drawable.ic_pause : R.drawable.ic_play_arrow;
 
         Intent action = new Intent(service, MainActivity.class);
         action.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         final PendingIntent clickIntent = PendingIntent.getActivity(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
-        final PendingIntent deleteIntent = buildPendingIntent(service, MusicService.ACTION_QUIT, null);
 
-        final Notification notification = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentIntent(clickIntent)
-                .setDeleteIntent(deleteIntent)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setContent(notificationLayout)
-                .setCustomBigContentView(notificationLayoutBig)
-                .setOngoing(isPlaying)
-                .build();
+        final ComponentName serviceName = new ComponentName(service, MusicService.class);
+        Intent intent = new Intent(MusicService.ACTION_QUIT);
+        intent.setComponent(serviceName);
+        final PendingIntent deleteIntent = PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
-        if (target != null) {
-            Glide.with(service).clear(target);
-        }
-
-        target = GlideLoader.with(service)
+        GlideLoader.with(service)
                 .withListener(new PaletteTargetListener(service) {
                     @Override
                     public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
                         update(resource, colors.getBackgroundColor());
                     }
 
-                    private void update(@Nullable Bitmap bitmap, int bgColor) {
-                        if (bitmap != null) {
-                            notificationLayout.setImageViewBitmap(R.id.image, bitmap);
-                            notificationLayoutBig.setImageViewBitmap(R.id.image, bitmap);
-                        } else {
-                            notificationLayout.setImageViewResource(R.id.image, R.drawable.default_album_art);
-                            notificationLayoutBig.setImageViewResource(R.id.image, R.drawable.default_album_art);
-                        }
+                    void update(Bitmap bitmap, int color) {
+                        NotificationCompat.Action playPauseAction = new NotificationCompat.Action(playButtonResId,
+                                service.getString(R.string.action_play_pause),
+                                retrievePlaybackAction(ACTION_TOGGLE_PAUSE));
+                        NotificationCompat.Action previousAction = new NotificationCompat.Action(R.drawable.ic_skip_previous,
+                                service.getString(R.string.action_previous),
+                                retrievePlaybackAction(ACTION_REWIND));
+                        NotificationCompat.Action nextAction = new NotificationCompat.Action(R.drawable.ic_skip_next,
+                                service.getString(R.string.action_next),
+                                retrievePlaybackAction(ACTION_SKIP));
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(service, NOTIFICATION_CHANNEL_ID)
+                                .setSmallIcon(R.drawable.ic_notification)
+                                .setSubText(song.getAlbumName())
+                                .setLargeIcon(bitmap)
+                                .setContentIntent(clickIntent)
+                                .setDeleteIntent(deleteIntent)
+                                .setContentTitle(song.getTitle())
+                                .setContentText(song.getArtistName())
+                                .setOngoing(isPlaying)
+                                .setShowWhen(false)
+                                .addAction(previousAction)
+                                .addAction(playPauseAction)
+                                .addAction(nextAction);
 
-                        if (!PreferenceUtil.isColoredNotification()) {
-                            bgColor = Color.WHITE;
-                        }
-                        setBackgroundColor(bgColor);
-                        setNotificationContent(ColorUtil.INSTANCE.isColorLight(bgColor));
+                        builder.setStyle(new MediaStyle().setMediaSession(service.getMediaSession().getSessionToken()).setShowActionsInCompactView(0, 1, 2))
+                                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
                         if (stopped)
                             return; // notification has been stopped before loading was finished
-                        updateNotifyModeAndPostNotification(notification);
+                        updateNotifyModeAndPostNotification(builder.build());
                     }
-
-                    private void setBackgroundColor(int color) {
-                        notificationLayout.setInt(R.id.root, "setBackgroundColor", color);
-                        notificationLayoutBig.setInt(R.id.root, "setBackgroundColor", color);
-                    }
-
-                    private void setNotificationContent(boolean dark) {
-                        int primary = MaterialValueHelper.getPrimaryTextColor(service, dark);
-                        int secondary = MaterialValueHelper.getSecondaryTextColor(service, dark);
-
-                        Bitmap prev = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_previous, primary), 1.5f);
-                        Bitmap next = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_next, primary), 1.5f);
-                        Bitmap playPause = ImageUtil.createBitmap(ImageUtil.getTintedVectorDrawable(service, isPlaying ? R.drawable.ic_pause : R.drawable.ic_play_arrow, primary), 1.5f);
-
-                        notificationLayout.setTextColor(R.id.album_name, primary);
-                        notificationLayout.setTextColor(R.id.text, secondary);
-                        notificationLayout.setImageViewBitmap(R.id.action_prev, prev);
-                        notificationLayout.setImageViewBitmap(R.id.action_next, next);
-                        notificationLayout.setImageViewBitmap(R.id.action_play_pause, playPause);
-
-                        notificationLayoutBig.setTextColor(R.id.album_name, primary);
-                        notificationLayoutBig.setTextColor(R.id.text, secondary);
-                        notificationLayoutBig.setTextColor(R.id.text2, secondary);
-                        notificationLayoutBig.setImageViewBitmap(R.id.action_prev, prev);
-                        notificationLayoutBig.setImageViewBitmap(R.id.action_next, next);
-                        notificationLayoutBig.setImageViewBitmap(R.id.action_play_pause, playPause);
-                    }
-
                 })
                 .load(song)
                 .into(new CustomBitmapTarget(
                         bigNotificationImageSize, bigNotificationImageSize));
     }
 
-    private void linkButtons(final RemoteViews notificationLayout, final RemoteViews notificationLayoutBig) {
-        PendingIntent pendingIntent;
-
+    private PendingIntent retrievePlaybackAction(final String action) {
         final ComponentName serviceName = new ComponentName(service, MusicService.class);
-
-        // Previous track
-        pendingIntent = buildPendingIntent(service, MusicService.ACTION_REWIND, serviceName);
-        notificationLayout.setOnClickPendingIntent(R.id.action_prev, pendingIntent);
-        notificationLayoutBig.setOnClickPendingIntent(R.id.action_prev, pendingIntent);
-
-        // Play and pause
-        pendingIntent = buildPendingIntent(service, MusicService.ACTION_TOGGLE_PAUSE, serviceName);
-        notificationLayout.setOnClickPendingIntent(R.id.action_play_pause, pendingIntent);
-        notificationLayoutBig.setOnClickPendingIntent(R.id.action_play_pause, pendingIntent);
-
-        // Next track
-        pendingIntent = buildPendingIntent(service, MusicService.ACTION_SKIP, serviceName);
-        notificationLayout.setOnClickPendingIntent(R.id.action_next, pendingIntent);
-        notificationLayoutBig.setOnClickPendingIntent(R.id.action_next, pendingIntent);
-    }
-
-    private PendingIntent buildPendingIntent(Context context, final String action, final ComponentName serviceName) {
         Intent intent = new Intent(action);
         intent.setComponent(serviceName);
-        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        return PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_IMMUTABLE);
     }
-
 }

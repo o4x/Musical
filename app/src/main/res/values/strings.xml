@@ -95,13 +95,12 @@
     <string name="always">Always</string>
     <string name="only_on_wifi">Only on Wi-Fi</string>
     <string name="never">Never</string>
-    <string name="pref_title_general_theme">General theme</string>
+    <string name="pref_title_dark_mode">Dark Mode</string>
     <string name="pref_header_audio">Audio</string>
     <string name="pref_header_images">Images</string>
     <string name="pref_header_notification">Notification</string>
     <string name="pref_title_album_art_on_lockscreen">Show album cover</string>
     <string name="pref_title_colored_notification">Colored notification</string>
-    <string name="pref_title_classic_notification">Classic notification design</string>
     <string name="pref_title_ignore_media_store_artwork">Ignore Media Store covers</string>
     <string name="pref_title_gapless_playback">Gapless playback</string>
     <string name="pref_title_audio_ducking">Reduce volume on focus loss</string>
@@ -124,7 +123,6 @@
     <string name="playlist_name_empty">Playlist name</string>
     <string name="song">Song</string>
     <string name="pref_summary_album_art_on_lockscreen">Uses the current songs album cover as lockscreen wallpaper.</string>
-    <string name="pref_summary_classic_notification">Use the classic notification design.</string>
     <string name="pref_summary_colored_notification">Colors the notification in the album cover\u2019s vibrant color.</string>
     <string name="pref_summary_gapless_playback">Can cause playback issues on some devices.</string>
     <string name="pref_summary_audio_ducking">Notifications, navigation etc.</string>
@@ -298,5 +296,6 @@
     <string name="change_wallpaper">Change wallpaper</string>
     <string name="github">Github</string>
     <string name="github_fork">Fork on Github</string>
+    <string name="app_name">Musical</string>
 
 </resources>

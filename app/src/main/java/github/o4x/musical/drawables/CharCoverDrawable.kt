@@ -3,12 +3,11 @@ package github.o4x.musical.drawables
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.os.Build
-import com.o4x.appthemehelper.util.ColorUtil
 import github.o4x.musical.imageloader.model.AudioFileCover
 import github.o4x.musical.imageloader.model.MultiImage
 import github.o4x.musical.model.Song
 import github.o4x.musical.prefs.PreferenceUtil.isDarkMode
+import github.o4x.musical.util.ColorUtil
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max

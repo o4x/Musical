@@ -18,15 +18,13 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import github.o4x.musical.R;
+import github.o4x.musical.util.ColorExtKt;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import com.o4x.appthemehelper.ThemeStore;
-import com.o4x.appthemehelper.extensions.ColorExtKt;
 
 public class BreadCrumbLayout extends HorizontalScrollView implements View.OnClickListener {
 

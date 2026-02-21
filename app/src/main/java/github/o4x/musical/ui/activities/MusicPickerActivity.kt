@@ -14,10 +14,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.o4x.appthemehelper.extensions.accentColor
 import github.o4x.musical.R
 import github.o4x.musical.databinding.ActivityMusicPickerBinding
-import github.o4x.musical.extensions.applyToolbar
 import github.o4x.musical.extensions.showToast
 import github.o4x.musical.repository.SongRepository
 import github.o4x.musical.ui.activities.base.AbsMusicServiceActivity
@@ -26,6 +24,7 @@ import github.o4x.musical.ui.fragments.mainactivity.search.SearchFragment
 import github.o4x.musical.ui.fragments.mainactivity.search.clearText
 import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.util.ViewUtil
+import github.o4x.musical.util.accentColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -49,15 +48,11 @@ class MusicPickerActivity : AbsMusicServiceActivity(), TextWatcher {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-        applyToolbar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setNavigationBarColorAuto()
-        setNavigationBarDividerColorAuto()
-        setStatusBarColorAuto()
-
         selectSongAdapter =
-            SelectSongAdapter(this, emptyList(), R.layout.item_list, null) {
+            SelectSongAdapter(this, emptyList(), R.layout.item_list) {
                 val returnIntent = Intent()
                 returnIntent.data = MusicUtil.getFileUriFromSong(it.id)
                 setResult(Activity.RESULT_OK, returnIntent)

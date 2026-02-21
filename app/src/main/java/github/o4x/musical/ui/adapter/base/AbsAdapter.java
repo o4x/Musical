@@ -18,18 +18,18 @@ import github.o4x.musical.helper.MyPalette;
 import github.o4x.musical.helper.menu.SongsMenuHelper;
 import github.o4x.musical.imageloader.glide.loader.GlideLoader;
 import github.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener;
-import github.o4x.musical.interfaces.CabHolder;
 import github.o4x.musical.model.Song;
 import github.o4x.musical.prefs.PreferenceUtil;
+import github.o4x.musical.util.ColorExtKt;
+import github.o4x.musical.util.ColorUtil;
+import github.o4x.musical.util.MaterialValueHelper;
+
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import com.o4x.appthemehelper.extensions.ColorExtKt;
-import com.o4x.appthemehelper.util.ColorUtil;
-import com.o4x.appthemehelper.util.MaterialValueHelper;
 
 public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
         extends AbsMultiSelectAdapter<VH, I> implements FastScrollRecyclerView.SectionedAdapter {
@@ -39,15 +39,15 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     protected List<I> dataSet;
     protected int itemLayoutRes;
 
-    public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder, @MenuRes int menu) {
-        super(activity, cabHolder, menu);
+    public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes, @MenuRes int menu) {
+        super(activity, menu);
         this.activity = activity;
         this.dataSet = dataSet;
         this.itemLayoutRes = itemLayoutRes;
     }
 
-    public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
-        super(activity, cabHolder, R.menu.menu_media_selection);
+    public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes) {
+        super(activity, R.menu.menu_media_selection);
         this.activity = activity;
         this.dataSet = dataSet;
         this.itemLayoutRes = itemLayoutRes;
@@ -80,9 +80,6 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         final I data = dataSet.get(position);
-
-        boolean isChecked = isChecked(data);
-        holder.itemView.setActivated(isChecked);
         loadImage(data, holder);
     }
 

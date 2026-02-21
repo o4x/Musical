@@ -2,7 +2,6 @@ package github.o4x.musical.service
 
 import android.app.PendingIntent
 import android.app.Service
-import android.appwidget.AppWidgetManager
 import android.content.*
 import android.graphics.Bitmap
 import android.media.AudioManager
@@ -15,9 +14,6 @@ import android.widget.Toast
 import androidx.preference.PreferenceManager
 import github.o4x.musical.App.Companion.getContext
 import github.o4x.musical.R
-import github.o4x.musical.appwidgets.AppWidgetBig
-import github.o4x.musical.appwidgets.AppWidgetCard
-import github.o4x.musical.appwidgets.AppWidgetClassic
 import github.o4x.musical.helper.CountDownTimerPausable
 import github.o4x.musical.helper.ShuffleHelper
 import github.o4x.musical.imageloader.glide.loader.GlideLoader.Companion.with
@@ -29,14 +25,12 @@ import github.o4x.musical.service.misc.QueueSaveHandler
 import github.o4x.musical.service.misc.ThrottledSeekHandler
 import github.o4x.musical.service.notification.PlayingNotification
 import github.o4x.musical.service.notification.PlayingNotificationImpl
-import github.o4x.musical.service.notification.PlayingNotificationImpl24
 import github.o4x.musical.service.playback.Playback
 import github.o4x.musical.service.playback.PlaybackHandler
 import github.o4x.musical.service.player.MultiPlayer
 import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.prefs.PreferenceUtil
 import github.o4x.musical.prefs.PreferenceUtil.albumArtOnLockscreen
-import github.o4x.musical.prefs.PreferenceUtil.isClassicNotification
 import github.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
 import github.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
 import github.o4x.musical.repository.RoomRepository
@@ -145,10 +139,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     var pendingQuit = false
 
-    private val appWidgetBig = AppWidgetBig.getInstance()
-    private val appWidgetClassic = AppWidgetClassic.getInstance()
-    private val appWidgetCard = AppWidgetCard.getInstance()
-
 
     private var playingNotification: PlayingNotification? = null
 
@@ -185,12 +175,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
 
         queueSaveHandlerThread.start()
-        val widgetFilter = IntentFilter(APP_WIDGET_UPDATE)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(widgetIntentReceiver, widgetFilter, RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(widgetIntentReceiver, widgetFilter)
-        }
         initNotification()
 
         mediaStoreObserver.start()
@@ -307,7 +291,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     override fun onDestroy() {
-        unregisterReceiver(widgetIntentReceiver)
         if (becomingNoisyReceiverRegistered) {
             unregisterReceiver(becomingNoisyReceiver)
             becomingNoisyReceiverRegistered = false
@@ -359,12 +342,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     private fun initNotification() {
-        playingNotification =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isClassicNotification) {
-                PlayingNotificationImpl24()
-            } else {
-                PlayingNotificationImpl()
-            }
+        playingNotification = PlayingNotificationImpl()
         playingNotification?.init(this)
     }
 
@@ -462,9 +440,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     fun sendChangeInternal(what: String?) {
         sendBroadcast(Intent(what))
-        appWidgetBig.notifyChange(this, what)
-        appWidgetClassic.notifyChange(this, what)
-        appWidgetCard.notifyChange(this, what)
     }
 
     private fun handleChangeInternal(what: String) {
@@ -527,23 +502,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         }
     }
 
-    private val widgetIntentReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val command = intent.getStringExtra(EXTRA_APP_WIDGET_NAME)
-            val ids = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
-            when (command) {
-                AppWidgetClassic.NAME -> {
-                    appWidgetClassic.performUpdate(this@MusicService, ids)
-                }
-                AppWidgetBig.NAME -> {
-                    appWidgetBig.performUpdate(this@MusicService, ids)
-                }
-                AppWidgetCard.NAME -> {
-                    appWidgetCard.performUpdate(this@MusicService, ids)
-                }
-            }
-        }
-    }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
@@ -554,10 +512,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             }
             PreferenceUtil.ALBUM_ART_ON_LOCKSCREEN -> updateMediaSessionMetaData()
             PreferenceUtil.COLORED_NOTIFICATION -> updateNotification()
-            PreferenceUtil.CLASSIC_NOTIFICATION -> {
-                initNotification()
-                updateNotification()
-            }
         }
     }
 

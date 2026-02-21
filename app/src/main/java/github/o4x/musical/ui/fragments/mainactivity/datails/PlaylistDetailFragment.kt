@@ -57,7 +57,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
     override fun setUpRecyclerView() {
         super.setUpRecyclerView()
         if (data is AbsCustomPlaylist) {
-            adapter = PlaylistSongAdapter(mainActivity, ArrayList(), R.layout.item_list, mainActivity)
+            adapter = PlaylistSongAdapter(mainActivity, ArrayList(), R.layout.item_list)
             binding.recyclerView.adapter = adapter
         } else {
             recyclerViewDragDropManager = RecyclerViewDragDropManager()
@@ -65,8 +65,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
             adapter = OrderablePlaylistSongAdapter(
                 mainActivity,
                 ArrayList(),
-                R.layout.item_list,
-                mainActivity
+                R.layout.item_list
             ) { fromPosition: Int, toPosition: Int ->
                 if (PlaylistsUtil.moveItem(
                         requireContext(),

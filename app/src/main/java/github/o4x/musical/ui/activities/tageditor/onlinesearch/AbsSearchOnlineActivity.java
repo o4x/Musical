@@ -53,12 +53,6 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
         super.onCreate(savedInstanceState);
         binding = ActivitySearchOnlineBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setDrawUnderBar();
-
-        setStatusBarColorAuto();
-        setNavigationBarColorAuto();
-        setTaskDescriptionColorAuto();
-        setNavigationBarDividerColorAuto();
 
         setup();
         getExtra();

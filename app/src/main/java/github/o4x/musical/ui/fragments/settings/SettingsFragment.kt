@@ -1,26 +1,20 @@
 package github.o4x.musical.ui.fragments.settings
 
-import android.content.Intent
 import android.content.SharedPreferences
-import android.media.audiofx.AudioEffect
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
-import com.o4x.appthemehelper.ThemeStore
-import com.o4x.appthemehelper.extensions.backgroundColor
 import github.o4x.musical.R
 import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.preferences.LibraryPreferenceDialog
 import github.o4x.musical.ui.dialogs.DeleteCachedDialog
 import github.o4x.musical.ui.dialogs.DeleteCustomImagesDialog
 import github.o4x.musical.ui.dialogs.SmartPlaylistLimitDialog
-import github.o4x.musical.util.NavigationUtil
 import github.o4x.musical.prefs.PreferenceUtil
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -28,8 +22,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         PreferenceUtil.registerOnSharedPreferenceChangedListener(this)
-
-        listView.setBackgroundColor(backgroundColor())
         invalidateSettings()
     }
 
@@ -47,28 +39,16 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
           ////////////////////
          // THEME SETTINGS //
         ////////////////////
-        val generalTheme: Preference? = findPreference(PreferenceUtil.GENERAL_THEME)
-        var lastTheme = generalTheme?.summary.toString()
-        generalTheme?.setOnPreferenceChangeListener { _, newValue ->
-            val newTheme = newValue.toString()
-            if (lastTheme != newTheme) {
-                lastTheme = newTheme
-                ThemeStore.markChanged(requireContext())
-            }
-            true
-        }
-
-        val themeColorPref: Preference = findPreference(PreferenceUtil.THEME_COLOR)!!
-        themeColorPref.isVisible = PreferenceUtil.isDarkMode
-        var lastThemeColor = themeColorPref.summary.toString()
-        themeColorPref.setOnPreferenceChangeListener { _, newValue ->
-            val newThemeColor = newValue.toString()
-            if (lastThemeColor != newThemeColor) {
-                lastThemeColor = newThemeColor
-                ThemeStore.markChanged(requireContext())
-            }
-            true
-        }
+//        val darkMode: Preference? = findPreference(PreferenceUtil.DARK_MODE)
+//        var lastTheme = darkMode?.summary.toString()
+//        darkMode?.setOnPreferenceChangeListener { _, newValue ->
+//            val newTheme = newValue.toString()
+//            if (lastTheme != newTheme) {
+//                lastTheme = newTheme
+//                ThemeStore.markChanged(requireContext())
+//            }
+//            true
+//        }
 
           ////////////////////////
          // INTERFACE SETTINGS //
@@ -105,35 +85,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
          // NOTIFICATION SETTINGS //
         ///////////////////////////
 
-        val classicNotification: TwoStatePreference? = findPreference(PreferenceUtil.CLASSIC_NOTIFICATION)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            classicNotification?.isVisible = false
-        } else {
-            classicNotification?.apply {
-                isChecked = PreferenceUtil.isClassicNotification
-                setOnPreferenceChangeListener { _, newValue ->
-                    // Save preference
-                    PreferenceUtil.isClassicNotification = newValue as Boolean
-                    invalidateSettings()
-                    true
-                }
-            }
-        }
-
         val coloredNotification: TwoStatePreference? = findPreference(PreferenceUtil.COLORED_NOTIFICATION)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            coloredNotification?.isEnabled = PreferenceUtil.isClassicNotification
-        } else {
-            coloredNotification?.apply {
-                isChecked = PreferenceUtil.isColoredNotification
-                setOnPreferenceChangeListener { _, newValue ->
-                    PreferenceUtil.isColoredNotification = newValue as Boolean
-                    true
-                }
-            }
-        }
 
-          ///////////////////////
+        ///////////////////////
          // ADVANCED SETTINGS //
         ///////////////////////
 
@@ -164,17 +118,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            PreferenceUtil.CLASSIC_NOTIFICATION -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    findPreference<Preference>(PreferenceUtil.COLORED_NOTIFICATION)?.isEnabled =
-                        sharedPreferences?.getBoolean(key, false) == true
-                }
-            }
             PreferenceUtil.SMART_PLAYLIST_LIMIT -> {
                 findPreference<Preference>(PreferenceUtil.SMART_PLAYLIST_LIMIT)?.summary =
                     PreferenceUtil.smartPlaylistLimit.toString()
             }
-            PreferenceUtil.FILTER_SONG,
             PreferenceUtil.COLORED_FOOTER,
             PreferenceUtil.IGNORE_MEDIA -> MusicPlayerRemote.notifyMediaStoreChanged()
         }

@@ -6,7 +6,6 @@ import android.text.TextUtils
 import android.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
-import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentPlayerBinding
 import github.o4x.musical.helper.MusicPlayerRemote
@@ -78,11 +77,6 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_player, menu)
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        ToolbarContentTintHelper.tintAllIcons(binding.toolbar, primaryColor)
-        super.onPrepareOptionsMenu(menu)
     }
 
     private fun setupPagers() {

@@ -43,8 +43,7 @@ public class GenresFragment extends AbsLibraryPagerRecyclerViewCustomGridSizeFra
         return new GenreAdapter(
                 getLibraryFragment().getMainActivity(),
                 dataSet,
-                itemLayoutRes,
-                getLibraryFragment().getMainActivity());
+                itemLayoutRes);
     }
 
     @Override

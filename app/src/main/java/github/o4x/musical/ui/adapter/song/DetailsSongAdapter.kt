@@ -10,28 +10,25 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import com.o4x.appthemehelper.extensions.withAlpha
 import com.google.android.material.textview.MaterialTextView
 import github.o4x.musical.R
 import github.o4x.musical.helper.GridHelper
-import github.o4x.musical.interfaces.CabHolder
 import github.o4x.musical.model.Album
 import github.o4x.musical.model.Artist
 import github.o4x.musical.model.Song
 import github.o4x.musical.ui.adapter.album.HorizontalAlbumAdapter
 import github.o4x.musical.util.MusicUtil
-import github.o4x.musical.helper.MyPalette
 import github.o4x.musical.util.NavigationUtil
 import github.o4x.musical.util.color.MediaNotificationProcessor
+import github.o4x.musical.util.withAlpha
 
 class DetailsSongAdapter(
     activity: AppCompatActivity?,
     dataSet: List<Song?>?,
     @LayoutRes itemLayoutRes: Int,
-    val cabHolder: CabHolder?,
     data: Any,
     colors: MediaNotificationProcessor
-) : SongAdapter(activity, dataSet, itemLayoutRes, cabHolder) {
+) : SongAdapter(activity, dataSet, itemLayoutRes) {
 
     companion object {
         private const val HEADER = 0
@@ -189,7 +186,7 @@ class DetailsSongAdapter(
 
         init {
             hAlbumRecyclerView.layoutManager = GridHelper.linearLayoutManager(activity)
-            hAlbumAdapter = HorizontalAlbumAdapter(activity, ArrayList(), cabHolder, colors!!)
+            hAlbumAdapter = HorizontalAlbumAdapter(activity, ArrayList(), colors!!)
             hAlbumRecyclerView.adapter = hAlbumAdapter
             hAlbumAdapter!!.registerAdapterDataObserver(object : AdapterDataObserver() {
                 override fun onChanged() {

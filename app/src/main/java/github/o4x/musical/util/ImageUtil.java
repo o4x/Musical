@@ -18,7 +18,6 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.io.InputStream;
 
-import com.o4x.appthemehelper.util.TintHelper;
 
 public class ImageUtil {
 
@@ -90,14 +89,6 @@ public class ImageUtil {
             return res.getDrawable(resId, theme);
         }
         return VectorDrawableCompat.create(res, resId, theme);
-    }
-
-    public static Drawable getTintedVectorDrawable(@NonNull Resources res, @DrawableRes int resId, @Nullable Resources.Theme theme, @ColorInt int color) {
-        return TintHelper.createTintedDrawable(getVectorDrawable(res, resId, theme), color);
-    }
-
-    public static Drawable getTintedVectorDrawable(@NonNull Context context, @DrawableRes int id, @ColorInt int color) {
-        return TintHelper.createTintedDrawable(getVectorDrawable(context.getResources(), id, context.getTheme()), color);
     }
 
     public static Drawable getVectorDrawable(@NonNull Context context, @DrawableRes int id) {

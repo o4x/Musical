@@ -50,7 +50,7 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
 
     override fun setUpRecyclerView() {
         super.setUpRecyclerView()
-        adapter = SongAdapter(mainActivity, ArrayList(), R.layout.item_list, mainActivity)
+        adapter = SongAdapter(mainActivity, ArrayList(), R.layout.item_list, false)
         binding.recyclerView.adapter = adapter
         adapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {

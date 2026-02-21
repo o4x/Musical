@@ -20,8 +20,7 @@ import java.io.File
 
 object PreferenceUtil {
 
-    const val GENERAL_THEME = "general_theme"
-    const val THEME_COLOR = "theme_color"
+    const val DARK_MODE = "dark_mode"
     const val AUDIO_DUCKING = "audio_ducking"
     const val GAPLESS_PLAYBACK = "gapless_playback"
     const val COLORED_FOOTER = "colored_footer"
@@ -32,9 +31,7 @@ object PreferenceUtil {
     const val CACHE_IMAGES = "cache_images"
     const val DELETE_CACHED_IMAGES = "delete_cached_images"
     const val DELETE_CUSTOM_IMAGES = "delete_custom_images"
-    const val CLASSIC_NOTIFICATION = "classic_notification"
     const val COLORED_NOTIFICATION = "colored_notification"
-    const val FILTER_SONG = "filter_song"
     const val SMART_PLAYLIST_LIMIT = "smart_playlist_limit"
     const val LANGUAGE_NAME = "language_name"
     const val ABOUT = "about"
@@ -86,17 +83,6 @@ object PreferenceUtil {
             }
             "never" -> false
             else -> false
-        }
-    }
-
-    @JvmStatic
-    @StyleRes
-    fun themeResFromPrefValue(themePrefValue: String?): Int {
-        return when (themePrefValue) {
-            "dark" -> R.style.Theme_Musical
-            "black" -> R.style.Theme_Musical_Black
-            "light" -> R.style.Theme_Musical_Light
-            else -> R.style.Theme_Musical
         }
     }
 
@@ -162,11 +148,6 @@ object PreferenceUtil {
             editor.putInt(LAST_PAGE, value)
             editor.apply()
         }
-
-    @JvmStatic
-    var isClassicNotification
-        get() = sharedPreferences.getBoolean(CLASSIC_NOTIFICATION, false)
-        set(value) = sharedPreferences.edit { putBoolean(CLASSIC_NOTIFICATION, value) }
 
     @JvmStatic
     var smartPlaylistLimit
@@ -315,8 +296,6 @@ object PreferenceUtil {
         editor.putLong(NEXT_SLEEP_TIMER_ELAPSED_REALTIME, value)
         editor.apply()
     }
-
-    val filterLength get() = sharedPreferences.getInt(FILTER_SONG, 20)
 
     @JvmStatic
     var sleepTimerFinishMusic: Boolean
@@ -549,58 +528,16 @@ object PreferenceUtil {
         }
 
 
-
-    fun getGeneralThemeRes(): Int {
-        val themeMode: String =
-            sharedPreferences.getStringOrDefault(GENERAL_THEME, "auto")
-        return when (themeMode) {
-            "light" -> R.style.Theme_Musical_Light
-            "dark" -> R.style.Theme_Musical_Base
-            "black" -> R.style.Theme_Musical_Black
-            else -> R.style.Theme_Musical_Black
+    val isDarkMode: Boolean
+        get() {
+            return sharedPreferences.getBoolean(DARK_MODE, true)
         }
-    }
 
-    fun getThemeColorRes(): Int {
-        val themeColor: String =
-            sharedPreferences.getStringOrDefault(THEME_COLOR, "default")
-        if (!isDarkMode) {
-            return R.style.ThemeColorLight
-        }
-        return when (themeColor) {
-            "red" -> R.style.ThemeColorRed
-            "deep_purple" -> R.style.ThemeColorDeepPurple
-            "light_blue" -> R.style.ThemeColorLightBlue
-            "green" -> R.style.ThemeColorGreen
-            "yellow" -> R.style.ThemeColorYellow
-            "deep_orange" -> R.style.ThemeColorDeepOrange
-            "blue_grey" -> R.style.ThemeColorBlueGrey
-            "pink" -> R.style.ThemeColorPink
-            "indigo" -> R.style.ThemeColorIndigo
-            "cyan" -> R.style.ThemeColorCyan
-            "light_green" -> R.style.ThemeColorLightGreen
-            "amber" -> R.style.ThemeColorAmber
-            "brown" -> R.style.ThemeColorBrown
-            "purple" -> R.style.ThemeColorPurple
-            "blue" -> R.style.ThemeColorBlue
-            "teal" -> R.style.ThemeColorTeal
-            "lime" -> R.style.ThemeColorLime
-            "orange" -> R.style.ThemeColorOrange
-            else -> R.style.ThemeColorGrey
-        }
-    }
 
-    val nightMode: Int
+
+    val isNightMode: Int
         get() {
             return if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES
             else AppCompatDelegate.MODE_NIGHT_NO
-        }
-
-    val isDarkMode: Boolean
-        get() {
-            if (getGeneralThemeRes() == R.style.Theme_Musical_Light) {
-                return false
-            }
-            return true;
         }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    android:foreground="?rectSelectorStrong"
+    android:foreground="@drawable/rect_selector_strong"
     android:id="@+id/palette_color_container">
 
     <LinearLayout

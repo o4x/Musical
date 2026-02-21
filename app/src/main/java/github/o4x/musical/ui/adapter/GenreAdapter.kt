@@ -4,7 +4,6 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import github.o4x.musical.extensions.toGenreDetail
 import github.o4x.musical.helper.SortOrder
-import github.o4x.musical.interfaces.CabHolder
 import github.o4x.musical.model.Genre
 import github.o4x.musical.model.Song
 import github.o4x.musical.ui.activities.MainActivity
@@ -17,9 +16,8 @@ import java.util.*
 class GenreAdapter(
     val mainActivity: MainActivity,
     dataSet: List<Genre?>?,
-    @LayoutRes itemLayoutRes: Int,
-    cabHolder: CabHolder?
-) : AbsAdapter<GenreAdapter.ViewHolder, Genre>(mainActivity, dataSet, itemLayoutRes, cabHolder) {
+    @LayoutRes itemLayoutRes: Int
+) : AbsAdapter<GenreAdapter.ViewHolder, Genre>(mainActivity, dataSet, itemLayoutRes) {
 
     override fun getItemId(position: Int): Long {
         return dataSet[position].id
@@ -70,17 +68,8 @@ class GenreAdapter(
 
     inner class ViewHolder(itemView: View) : MediaEntryViewHolder(itemView) {
         override fun onClick(view: View) {
-            if (isInQuickSelectMode) {
-                toggleChecked(adapterPosition)
-            } else {
-                val genre = dataSet[adapterPosition]!!
-                mainActivity.navController.toGenreDetail(genre)
-            }
-        }
-
-        override fun onLongClick(view: View): Boolean {
-            toggleChecked(adapterPosition)
-            return true
+            val genre = dataSet[adapterPosition]!!
+            mainActivity.navController.toGenreDetail(genre)
         }
 
         init {

@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import github.o4x.musical.extensions.findNavController
 import github.o4x.musical.R
 import github.o4x.musical.databinding.ActivitySettingsBinding
-import github.o4x.musical.extensions.applyToolbar
 import github.o4x.musical.ui.activities.base.AbsBaseActivity
 
 
@@ -21,16 +20,11 @@ class SettingsActivity : AbsBaseActivity() {
 
         setContentView(binding.root)
         navController = findNavController(R.id.contentFrame)
-
-        setStatusBarColorAuto()
-        setNavigationBarColorAuto()
-        setNavigationBarDividerColorAuto()
-        setLightNavigationBar(true)
         setupToolbar()
     }
 
     private fun setupToolbar() {
-        applyToolbar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
         navController.addOnDestinationChangedListener { _, _, _ ->
             binding.toolbar.title = navController.currentDestination?.label
         }
@@ -47,11 +41,5 @@ class SettingsActivity : AbsBaseActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun updateTheme() {
-        startActivity(intent)
-        finish()
-        overridePendingTransition(0, 0)
     }
 }

@@ -32,12 +32,10 @@ import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 
 import github.o4x.musical.R;
+import github.o4x.musical.util.ColorExtKt;
+import github.o4x.musical.util.ColorUtil;
 
 import java.util.List;
-
-import com.o4x.appthemehelper.extensions.ColorExtKt;
-import com.o4x.appthemehelper.util.ATHUtil;
-import com.o4x.appthemehelper.util.ColorUtil;
 
 import static androidx.core.graphics.ColorUtils.RGBToXYZ;
 

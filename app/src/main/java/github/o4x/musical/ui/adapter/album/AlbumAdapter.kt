@@ -4,7 +4,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import github.o4x.musical.R
 import github.o4x.musical.helper.SortOrder
-import github.o4x.musical.interfaces.CabHolder
 import github.o4x.musical.model.Album
 import github.o4x.musical.model.Song
 import github.o4x.musical.ui.adapter.base.AbsAdapter
@@ -18,9 +17,8 @@ open class AlbumAdapter(
     activity: AppCompatActivity,
     dataSet: List<Album>,
     itemLayoutRes: Int,
-    cabHolder: CabHolder?
 ) : AbsAdapter<AlbumAdapter.ViewHolder, Album>(
-    activity, dataSet, itemLayoutRes, cabHolder
+    activity, dataSet, itemLayoutRes
 ) {
 
     override fun createViewHolder(view: View, viewType: Int): ViewHolder {
@@ -89,16 +87,7 @@ open class AlbumAdapter(
 
     inner class ViewHolder(itemView: View) : MediaEntryViewHolder(itemView) {
         override fun onClick(v: View) {
-            if (isInQuickSelectMode) {
-                toggleChecked(adapterPosition)
-            } else {
-                NavigationUtil.goToAlbum(activity, dataSet[adapterPosition].id)
-            }
-        }
-
-        override fun onLongClick(view: View): Boolean {
-            toggleChecked(adapterPosition)
-            return true
+            NavigationUtil.goToAlbum(activity, dataSet[adapterPosition].id)
         }
 
         init {

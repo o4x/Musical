@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import github.o4x.musical.R;
 import github.o4x.musical.imageloader.glide.loader.GlideLoader;
 import github.o4x.musical.imageloader.model.AudioFileCover;
-import github.o4x.musical.interfaces.CabHolder;
 import github.o4x.musical.ui.adapter.base.AbsMultiSelectAdapter;
 import github.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
@@ -24,7 +23,6 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import com.o4x.appthemehelper.util.ATHUtil;
 
 public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewHolder, File> implements FastScrollRecyclerView.SectionedAdapter {
 
@@ -37,8 +35,8 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
     @Nullable
     private final Callbacks callbacks;
 
-    public SongFileAdapter(@NonNull AppCompatActivity activity, @NonNull List<File> songFiles, @LayoutRes int itemLayoutRes, @Nullable Callbacks callback, @Nullable CabHolder cabHolder) {
-        super(activity, cabHolder, R.menu.menu_media_selection);
+    public SongFileAdapter(@NonNull AppCompatActivity activity, @NonNull List<File> songFiles, @LayoutRes int itemLayoutRes, @Nullable Callbacks callback) {
+        super(activity, R.menu.menu_media_selection);
         this.activity = activity;
         this.dataSet = songFiles;
         this.itemLayoutRes = itemLayoutRes;
@@ -71,8 +69,6 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
     public void onBindViewHolder(@NonNull ViewHolder holder, int index) {
         final File file = dataSet.get(index);
 
-        holder.itemView.setActivated(isChecked(file));
-
         if (holder.title != null) {
             holder.title.setText(getFileTitle(file));
         }
@@ -99,9 +95,9 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
 
     @SuppressWarnings("ConstantConditions")
     protected void loadFileImage(File file, final ViewHolder holder) {
-        final int iconColor = ATHUtil.INSTANCE.resolveColor(activity, R.attr.iconColor);
+//        final int iconColor = ATHUtil.INSTANCE.resolveColor(activity, R.attr.iconColor);
         if (file.isDirectory()) {
-            holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+//            holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
             holder.image.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
             holder.image.setScaleType(ImageView.ScaleType.CENTER);
             holder.image.setImageResource(R.drawable.ic_keyboard_arrow_right);
@@ -163,21 +159,7 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            if (isPositionInRange(position)) {
-                if (isInQuickSelectMode()) {
-                    toggleChecked(position);
-                } else {
-                    if (callbacks != null) {
-                        callbacks.onFileSelected(dataSet.get(position));
-                    }
-                }
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            int position = getAdapterPosition();
-            return isPositionInRange(position) && toggleChecked(position);
+            callbacks.onFileSelected(dataSet.get(position));
         }
 
         private boolean isPositionInRange(int position) {

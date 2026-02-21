@@ -7,7 +7,6 @@ import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.*
 import androidx.palette.graphics.Palette
-import com.o4x.appthemehelper.util.ColorUtil
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import github.o4x.musical.App
 import github.o4x.musical.R
@@ -21,6 +20,7 @@ import github.o4x.musical.interfaces.MusicServiceEventListener
 import github.o4x.musical.prefs.HomeHeaderPref
 import github.o4x.musical.prefs.PreferenceUtil
 import github.o4x.musical.repository.SongRepository
+import github.o4x.musical.util.ColorUtil
 import github.o4x.musical.util.CoverUtil
 import github.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers
@@ -154,7 +154,7 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            PreferenceUtil.GENERAL_THEME,
+            PreferenceUtil.DARK_MODE,
             HomeHeaderPref.CHANGE -> {
                 fetchPosterBitmap()
             }

@@ -8,10 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.o4x.appthemehelper.util.ATHUtil
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentWebViewBinding
 import github.o4x.musical.prefs.PreferenceUtil
+import github.o4x.musical.util.resolveColor
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -50,8 +50,7 @@ class ChangeLogFragment : Fragment(R.layout.fragment_web_view) {
 
             // Inject color values for WebView body background and links
             val backgroundColor = colorToCSS(
-                ATHUtil.resolveColor(
-                    requireActivity(),
+                resolveColor(
                     com.google.android.material.R.attr.backgroundColor,
                     Color.parseColor(if (PreferenceUtil.isDarkMode) "#424242" else "#ffffff")
                 )

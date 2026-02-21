@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.o4x.appthemehelper.extensions.accentColor
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentDetailBinding
 import github.o4x.musical.misc.OverScrollLinearLayoutManager
 import github.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
 import github.o4x.musical.util.ViewUtil
+import github.o4x.musical.util.accentColor
 
 open class AbsDetailFragment<T, A: RecyclerView.Adapter<*>> : AbsPopupFragment(R.layout.fragment_detail) {
 
@@ -51,7 +51,6 @@ open class AbsDetailFragment<T, A: RecyclerView.Adapter<*>> : AbsPopupFragment(R
             accentColor()
         )
         binding.recyclerView.layoutManager = OverScrollLinearLayoutManager(requireContext())
-        binding.recyclerView.addAppbarListener()
     }
 
     fun checkIsEmpty() {
@@ -68,5 +67,9 @@ open class AbsDetailFragment<T, A: RecyclerView.Adapter<*>> : AbsPopupFragment(R
         adapter = null
         _binding = null
         super.onDestroyView()
+    }
+
+    fun setToolbarTitle(title: String?) {
+        binding.toolbar.title = title
     }
 }

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.mainactivity.home.HomeFragment">
 
     <FrameLayout
-        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,6 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="centerCrop" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.xw.repo.widget.BounceScrollView
             android:id="@+id/nested_scroll_view"
@@ -27,16 +33,16 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:animateLayoutChanges="true">
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
 
                 <View
                     android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground"/>
+                    android:focusable="true" />
 
                 <LinearLayout
                     android:id="@+id/queue_container"
@@ -50,36 +56,36 @@
                         android:id="@+id/queue_parent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="true"
+                        android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
-                        android:background="?android:attr/selectableItemBackground">
+                        android:focusable="true">
 
                         <TextView
                             android:id="@+id/queue_playing_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start|center_vertical"
                             android:layout_margin="16dp"
                             android:fontFamily="sans-serif-medium"
                             android:singleLine="true"
                             android:text="@string/playing_queue"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="?android:textColorTertiary"
-                            android:layout_gravity="start|center_vertical" />
+                            android:textColor="?android:textColorTertiary" />
 
                         <com.google.android.material.button.MaterialButton
-                            style="@style/Widget.AppCompat.Button.Borderless"
                             android:id="@+id/queue_shuffle_button"
+                            style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end|center_vertical"
+                            android:fontFamily="sans-serif-medium"
                             android:text="@string/shuffle"
                             android:textAllCaps="true"
-                            android:fontFamily="sans-serif-medium"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                             android:textColor="?android:textColorTertiary"
-                            android:layout_gravity="end|center_vertical"
                             app:icon="@drawable/ic_shuffle"
-                            app:iconTint="?android:textColorTertiary"
-                            app:iconSize="18dp" />
+                            app:iconSize="18dp"
+                            app:iconTint="?android:textColorTertiary" />
 
                     </FrameLayout>
 
@@ -87,10 +93,10 @@
                         android:id="@+id/queue_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="4dp"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
-                        android:overScrollMode="always" />
+                        android:overScrollMode="always"
+                        android:paddingVertical="4dp" />
 
                 </LinearLayout>
 
@@ -106,20 +112,20 @@
                         android:id="@+id/recently_parent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="true"
+                        android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
-                        android:background="?android:attr/selectableItemBackground" >
+                        android:focusable="true">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
                             android:layout_centerInParent="true"
-                            android:text="@string/recently_played"
-                            android:textColor="?android:textColorTertiary"
+                            android:layout_margin="16dp"
                             android:fontFamily="sans-serif-medium"
                             android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            android:text="@string/recently_played"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?android:textColorTertiary" />
 
                     </RelativeLayout>
 
@@ -127,10 +133,10 @@
                         android:id="@+id/recently_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="4dp"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
-                        android:overScrollMode="never"/>
+                        android:overScrollMode="never"
+                        android:paddingVertical="4dp" />
 
                 </LinearLayout>
 
@@ -146,20 +152,20 @@
                         android:id="@+id/newly_parent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="true"
+                        android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
-                        android:background="?android:attr/selectableItemBackground">
+                        android:focusable="true">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="16dp"
                             android:layout_centerInParent="true"
-                            android:text="@string/recently_added"
-                            android:textColor="?android:textColorTertiary"
+                            android:layout_margin="16dp"
                             android:fontFamily="sans-serif-medium"
                             android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            android:text="@string/recently_added"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?android:textColorTertiary" />
 
                     </RelativeLayout>
 
@@ -167,10 +173,10 @@
                         android:id="@+id/new_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="4dp"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false"
-                        android:overScrollMode="never" />
+                        android:overScrollMode="never"
+                        android:paddingVertical="4dp" />
 
                 </LinearLayout>
 
@@ -189,5 +195,19 @@
             android:textSize="@dimen/empty_text_size" />
 
     </FrameLayout>
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            style="@style/Toolbar" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

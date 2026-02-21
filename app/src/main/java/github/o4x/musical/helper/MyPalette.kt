@@ -2,10 +2,10 @@ package github.o4x.musical.helper
 
 import android.content.Context
 import androidx.palette.graphics.Palette
-import com.o4x.appthemehelper.extensions.cardColor
-import com.o4x.appthemehelper.extensions.surfaceColor
-import com.o4x.appthemehelper.extensions.textColorPrimary
-import com.o4x.appthemehelper.extensions.textColorSecondary
+import github.o4x.musical.util.cardColor
+import github.o4x.musical.util.surfaceColor
+import github.o4x.musical.util.textColorPrimary
+import github.o4x.musical.util.textColorSecondary
 
 class MyPalette(context: Context, palette: Palette?) {
 

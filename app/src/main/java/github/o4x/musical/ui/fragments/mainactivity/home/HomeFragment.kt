@@ -12,15 +12,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.net.toFile
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.o4x.appthemehelper.extensions.textColorTertiary
-import com.o4x.appthemehelper.util.ToolbarContentTintHelper
-import com.o4x.appthemehelper.util.colorizeToolbar
 import github.o4x.musical.App
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentHomeBinding
@@ -46,7 +46,7 @@ import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
-class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
+class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
     private val posterViewModel by activityViewModel<HomeHeaderViewModel>()
     private val scrollPositionViewModel by viewModel<ScrollPositionViewModel>()
@@ -58,8 +58,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
 
     // Heights //
     private var displayHeight = 0
-    private var appbarHeight = 0
-    private var toolbarHeight = 0
     private var headerHeight = 0
     private var posterHeight = 0
 
@@ -86,67 +84,46 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         _binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-        showAppbar()
-        if (scrollPositionViewModel.getPositionValue() < headerHeight) {
-            mainActivity.toolbar.setBackgroundColor(Color.TRANSPARENT)
-            mainActivity.window.statusBarColor = Color.TRANSPARENT
-            mainActivity.appbar.elevation = 0f
-            setToolbarTitle(null)
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainActivity.setSupportActionBar(binding.toolbar)
+        binding.toolbar.title = getString(R.string.app_name)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         mainActivity.addMusicServiceEventListener(posterViewModel)
         setUpViews()
     }
 
-    override fun showStatusBar() {}
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-        val color = textColorTertiary()
-        colorizeToolbar(mainActivity.toolbar, color, serviceActivity)
-        ToolbarContentTintHelper.tintAllIcons(menu, color)
-        mainActivity.toggle.drawerArrowDrawable.color = color
-        mainActivity.toggle.drawerArrowDrawable.alpha = 255
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_home, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_shuffle_all -> {
-                libraryViewModel.shuffleSongs()
-                return true
-            }
-            R.id.action_new_playlist -> {
-                CreatePlaylistDialog.create().show(childFragmentManager, "CREATE_PLAYLIST")
-                return true
-            }
-            R.id.action_search -> {
-                mainActivity.openSearch()
-                return true
-            }
-            R.id.action_reset_header -> {
-                HomeHeaderPref.setDefault()
-                return true
-            }
-            R.id.action_use_custom -> {
-                startHomeHeaderImagePicker()
-                return true
-            }
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.action_shuffle_all -> libraryViewModel.shuffleSongs()
+            R.id.action_new_playlist -> CreatePlaylistDialog.create().show(childFragmentManager, "CREATE_PLAYLIST")
+            R.id.action_search -> mainActivity.openSearch()
+            R.id.action_reset_header -> HomeHeaderPref.setDefault()
+            R.id.action_use_custom -> startHomeHeaderImagePicker()
             R.id.action_use_song -> {
                 val myIntent = Intent(
                     requireContext(),
                     MusicPickerActivity::class.java
                 )
                 startActivityForResult(myIntent, REQUEST_CODE_SELECT_SONG)
-                return true
             }
+            R.id.nav_queue -> navController.navigate(R.id.action_to_queue)
+            R.id.nav_library -> navController.navigate(R.id.action_to_library)
+            R.id.nav_folders -> navController.navigate(R.id.action_to_folders)
+            R.id.nav_timer -> navController.navigate(R.id.action_to_timer)
+            R.id.nav_settings -> navController.navigate(R.id.settings_activity)
+
+            else -> return false
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     private fun setUpViews() {
@@ -174,14 +151,13 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
         posterParams.height = posterHeight
         binding.poster.layoutParams = posterParams
 
-        appbarHeight = appbarHeight()
-        toolbarHeight = toolbarHeight()
+
         // get real header height
-        headerHeight = binding.header.layoutParams.height - appbarHeight
+        headerHeight = binding.header.layoutParams.height
     }
 
     private fun setupButtons() {
-        binding.queueParent.setOnClickListener { mainActivity.setMusicChooser(R.id.nav_queue) }
+        binding.queueParent.setOnClickListener { navController.navigate(R.id.action_quit) }
         binding.queueShuffleButton.setOnClickListener { libraryViewModel.shuffleSongs() }
         binding.recentlyParent.setOnClickListener {
             navController.toPlaylistDetail(HistoryPlaylist())
@@ -198,9 +174,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
     }
 
     private fun setUpBounceScrollView() {
-        var isStatusFlat = false
-        var isAppbarFlat = false
-
         binding.nestedScrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
             scrollPositionViewModel.setPosition(scrollY)
@@ -209,43 +182,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home) {
             binding.poster.y =
                 ((-scrollY / (displayHeight * 2 / binding.poster.layoutParams.height.toFloat())).toInt())
                     .toFloat()
-
-            // Scroll appbar
-            if (scrollY > headerHeight + toolbarHeight && !isAppbarFlat) {
-                setToolbarTitle(navController.currentDestination?.label.toString())
-                toolbarColorVisible(true)
-                mainActivity.appbar.elevation = resources.getDimension(R.dimen.appbar_elevation)
-                isAppbarFlat = true
-            }
-            if (scrollY > headerHeight) { // outside header
-                if (!isStatusFlat) {
-                    statusBarColorVisible(true)
-                    isStatusFlat = true
-                }
-                if (oldScrollY != 0) {
-                    if (scrollY > oldScrollY) { // Scrolling up
-                        mainActivity.appbar.y =
-                            max(
-                                -toolbarHeight.toFloat(),
-                                mainActivity.appbar.y + (oldScrollY - scrollY)
-                            )
-                    } else { // Scrolling down
-                        mainActivity.appbar.y = min(
-                            0f, mainActivity.appbar.y + (oldScrollY - scrollY)
-                        )
-                    }
-                }
-            } else { // inside header
-                if (isStatusFlat) {
-                    setToolbarTitle(null)
-                    toolbarColorVisible(false)
-                    statusBarColorVisible(false)
-                    mainActivity.appbar.elevation = 0f
-                    isStatusFlat = false
-                    isAppbarFlat = false
-                }
-                mainActivity.appbar.y = 0f
-            }
         }
 
         // zooming poster in over scroll

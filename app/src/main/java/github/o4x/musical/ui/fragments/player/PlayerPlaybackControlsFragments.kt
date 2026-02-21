@@ -12,8 +12,6 @@ import android.widget.SeekBar
 import androidx.annotation.ColorInt
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.lifecycleScope
-import com.o4x.appthemehelper.util.ColorUtil
-import com.o4x.appthemehelper.util.TintHelper
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentPlayerPlaybackControlsBinding
 import github.o4x.musical.drawables.PlayPauseDrawable
@@ -23,7 +21,9 @@ import github.o4x.musical.model.Song
 import github.o4x.musical.service.MusicService
 import github.o4x.musical.ui.dialogs.AddToPlaylistDialog
 import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
+import github.o4x.musical.util.ColorUtil
 import github.o4x.musical.util.MusicUtil
+import github.o4x.musical.util.TintHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

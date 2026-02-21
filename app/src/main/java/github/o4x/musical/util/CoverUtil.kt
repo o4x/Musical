@@ -3,7 +3,6 @@ package github.o4x.musical.util
 import android.graphics.*
 import android.graphics.drawable.GradientDrawable
 import androidx.core.graphics.drawable.toBitmap
-import com.o4x.appthemehelper.extensions.withAlpha
 
 
 object CoverUtil {

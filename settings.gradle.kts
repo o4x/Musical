@@ -23,7 +23,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Musical"
 
-include(":material-cab")
 include(":recyclerview-fastscroll")
-include(":appthemehelper")
 include(":app")

@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import github.o4x.musical.R;
 import github.o4x.musical.helper.MusicPlayerRemote;
-import github.o4x.musical.interfaces.CabHolder;
 import github.o4x.musical.model.Song;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,12 +22,12 @@ public abstract class AbsOffsetSongAdapter extends SongAdapter {
     protected static final int OFFSET_ITEM = 0;
     protected static final int SONG = 1;
 
-    public AbsOffsetSongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
-        super(activity, dataSet, itemLayoutRes, cabHolder);
+    public AbsOffsetSongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes) {
+        super(activity, dataSet, itemLayoutRes);
     }
 
-    public AbsOffsetSongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder, boolean showSectionName) {
-        super(activity, dataSet, itemLayoutRes, cabHolder, showSectionName);
+    public AbsOffsetSongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, boolean showSectionName) {
+        super(activity, dataSet, itemLayoutRes, showSectionName);
     }
 
     @NonNull
@@ -95,18 +94,7 @@ public abstract class AbsOffsetSongAdapter extends SongAdapter {
 
         @Override
         public void onClick(View v) {
-            if (isInQuickSelectMode() && getItemViewType() != OFFSET_ITEM) {
-                toggleChecked(getAdapterPosition());
-            } else {
-                MusicPlayerRemote.openQueue(dataSet, getAdapterPosition() - 1, true);
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            if (getItemViewType() == OFFSET_ITEM) return false;
-            toggleChecked(getAdapterPosition());
-            return true;
+            MusicPlayerRemote.openQueue(dataSet, getAdapterPosition() - 1, true);
         }
     }
 }

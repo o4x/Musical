@@ -1,14 +1,9 @@
 package github.o4x.musical.views;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatImageView;
-
-import github.o4x.musical.R;
-
-import com.o4x.appthemehelper.util.ATHUtil;
 
 public class IconImageView extends AppCompatImageView {
     public IconImageView(Context context) {
@@ -28,6 +23,6 @@ public class IconImageView extends AppCompatImageView {
 
     private void init(Context context) {
         if (context == null) return;
-        setColorFilter(ATHUtil.INSTANCE.resolveColor(context, R.attr.iconColor), PorterDuff.Mode.SRC_IN);
+//        setColorFilter(ATHUtil.INSTANCE.resolveColor(context, R.attr.iconColor), PorterDuff.Mode.SRC_IN);
     }
 }
