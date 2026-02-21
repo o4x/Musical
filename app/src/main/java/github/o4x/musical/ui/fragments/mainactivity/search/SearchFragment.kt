@@ -23,6 +23,8 @@ import github.o4x.musical.extensions.showToast
 import github.o4x.musical.misc.OverScrollLinearLayoutManager
 import github.o4x.musical.ui.adapter.SearchAdapter
 import github.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
+import github.o4x.musical.util.ViewInsetsUtils.applyAppBarPadding
+import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -59,8 +61,15 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mainActivity.setSupportActionBar(binding.toolbar)
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+        binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.recyclerView.applyAppBarPadding()
+
         val search = binding.toolbarTitle.mainSearch
-        search.visibility = View.VISIBLE
         searchView = search.findViewById(R.id.search_view)
         voiceSearch = search.findViewById(R.id.voice_search)
         clearText = search.findViewById(R.id.clear_text)
