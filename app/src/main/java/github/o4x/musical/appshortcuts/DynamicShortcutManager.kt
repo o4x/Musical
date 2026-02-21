@@ -11,7 +11,6 @@ import github.o4x.musical.appshortcuts.shortcuttype.LastAddedShortcutType
 import github.o4x.musical.appshortcuts.shortcuttype.ShuffleAllShortcutType
 import github.o4x.musical.appshortcuts.shortcuttype.TopTracksShortcutType
 
-@TargetApi(Build.VERSION_CODES.N_MR1)
 class DynamicShortcutManager(private val context: Context) {
     private val shortcutManager: ShortcutManager =
         this.context.getSystemService(ShortcutManager::class.java)

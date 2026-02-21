@@ -3,7 +3,6 @@ package github.o4x.musical.ui.adapter.album
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import github.o4x.musical.R
-import github.o4x.musical.interfaces.CabHolder
 import github.o4x.musical.model.Album
 import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.util.color.MediaNotificationProcessor
@@ -11,9 +10,8 @@ import github.o4x.musical.util.color.MediaNotificationProcessor
 class HorizontalAlbumAdapter(
     activity: AppCompatActivity,
     dataSet: List<Album>,
-    cabHolder: CabHolder?,
     colors: MediaNotificationProcessor
-) : AlbumAdapter(activity, dataSet, R.layout.item_card_home, cabHolder) {
+) : AlbumAdapter(activity, dataSet, R.layout.item_card_home) {
 
     var colors: MediaNotificationProcessor? = null
         set(value) {

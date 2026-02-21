@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import github.o4x.musical.R;
 import github.o4x.musical.helper.SortOrder;
-import github.o4x.musical.interfaces.CabHolder;
 import github.o4x.musical.model.Artist;
 import github.o4x.musical.model.Song;
 import github.o4x.musical.ui.adapter.base.AbsAdapter;
@@ -25,8 +24,8 @@ import java.util.List;
 
 public class ArtistAdapter extends AbsAdapter<ArtistAdapter.ViewHolder, Artist> {
 
-    public ArtistAdapter(@NonNull AppCompatActivity activity, List<Artist> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
-        super(activity, dataSet, itemLayoutRes, cabHolder);
+    public ArtistAdapter(@NonNull AppCompatActivity activity, List<Artist> dataSet, @LayoutRes int itemLayoutRes) {
+        super(activity, dataSet, itemLayoutRes);
         setHasStableIds(true);
     }
 
@@ -104,17 +103,7 @@ public class ArtistAdapter extends AbsAdapter<ArtistAdapter.ViewHolder, Artist> 
 
         @Override
         public void onClick(View v) {
-            if (isInQuickSelectMode()) {
-                toggleChecked(getAdapterPosition());
-            } else {
-                NavigationUtil.goToArtist(activity, dataSet.get(getAdapterPosition()).getId());
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            toggleChecked(getAdapterPosition());
-            return true;
+            NavigationUtil.goToArtist(activity, dataSet.get(getAdapterPosition()).getId());
         }
     }
 }

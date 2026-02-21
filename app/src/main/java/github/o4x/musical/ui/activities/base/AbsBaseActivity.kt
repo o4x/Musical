@@ -10,19 +10,19 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.o4x.appthemehelper.extensions.accentColor
 import com.google.android.material.snackbar.Snackbar
 import github.o4x.musical.R
+import github.o4x.musical.util.accentColor
 
-abstract class AbsBaseActivity : AbsThemeActivity() {
+abstract class AbsBaseActivity : AppCompatActivity() {
 
     private var hadPermissions: Boolean = false
     private lateinit var permissions: Array<String>
     private var permissionDeniedMessage: String? = null
 
-    // 1. Define Permissions
     open fun getPermissionsToRequest(): Array<String> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // Android 13+ requires READ_MEDIA_AUDIO

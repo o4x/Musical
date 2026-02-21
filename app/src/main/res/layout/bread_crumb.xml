@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?rectSelector"
+    android:background="@drawable/rect_selector"
     android:gravity="center_vertical|start"
     android:minHeight="@dimen/tab_height"
     android:orientation="horizontal"

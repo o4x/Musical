@@ -140,7 +140,6 @@ class SongRepository(private val context: Context) {
         selectionValues: Array<String>?,
         sortOrder: String = PreferenceUtil.songSortOrder
     ): Cursor? {
-        // 1. Handle Selection
         var selectionFinal = selection
 
         // In modern Android, explicitly selecting IS_MUSIC!=0 is good,
@@ -151,19 +150,6 @@ class SongRepository(private val context: Context) {
             selectionFinal = "$musicClause AND $selectionFinal"
         } else {
             selectionFinal = musicClause
-        }
-
-        // 2. Handle Duration Filter
-        // Use parentheses to ensure logic grouping is correct: (A AND B) AND C
-        selectionFinal = "($selectionFinal) AND ${Media.DURATION} >= ?"
-
-        // Add duration to the selectionArgs array instead of hardcoding into string
-        // This prevents SQL injection and format errors
-        val durationFilter = (PreferenceUtil.filterLength * 1000).toString()
-        val newSelectionValues = if (selectionValues != null) {
-            selectionValues + durationFilter
-        } else {
-            arrayOf(durationFilter)
         }
 
         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -177,7 +163,7 @@ class SongRepository(private val context: Context) {
                 uri,
                 baseProjection,
                 selectionFinal,
-                newSelectionValues,
+                selectionValues,
                 sortOrder
             )
         } catch (ex: SecurityException) {

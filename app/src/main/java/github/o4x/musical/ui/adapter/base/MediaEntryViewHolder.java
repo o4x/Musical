@@ -10,9 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import github.o4x.musical.R;
+import github.o4x.musical.util.ColorExtKt;
 import github.o4x.musical.views.IconImageView;
 
-import com.o4x.appthemehelper.extensions.ColorExtKt;
 
 public class MediaEntryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 

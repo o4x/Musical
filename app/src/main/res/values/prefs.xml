@@ -4,52 +4,6 @@
     <!-- general theme's -->
     <string name="light_theme_name">Light</string>
     <string name="dark_theme_name">Dark</string>
-    <string name="black_theme_name">Black (AMOLED)</string>
-
-    <string name="theme_entry_value_light" translatable="false">light</string>
-    <string name="theme_entry_value_dark" translatable="false">dark</string>
-    <string name="theme_entry_value_black" translatable="false">black</string>
-
-    <!-- color theme -->
-    <string name="default_color">Default</string>
-    <string name="red">Red</string>
-    <string name="deep_purple">Deep purple</string>
-    <string name="light_blue">Light blue</string>
-    <string name="green">Green</string>
-    <string name="yellow">Yellow</string>
-    <string name="deep_orange">Deep orange</string>
-    <string name="blue_grey">Blue grey</string>
-    <string name="pink">Pink</string>
-    <string name="indigo">Indigo</string>
-    <string name="cyan">Cyan</string>
-    <string name="light_green">Light green</string>
-    <string name="amber">Amber</string>
-    <string name="brown">Brown</string>
-    <string name="purple">Purple</string>
-    <string name="blue">Blue</string>
-    <string name="teal">Teal</string>
-    <string name="lime">Lime</string>
-    <string name="orange">Orange</string>
-
-    <string name="theme_color_entry_value_default" translatable="false">default</string>
-    <string name="theme_color_entry_value_red" translatable="false">red</string>
-    <string name="theme_color_entry_value_deep_purple" translatable="false">deep_purple</string>
-    <string name="theme_color_entry_value_light_blue" translatable="false">light_blue</string>
-    <string name="theme_color_entry_value_green" translatable="false">green</string>
-    <string name="theme_color_entry_value_yellow" translatable="false">yellow</string>
-    <string name="theme_color_entry_value_deep_orange" translatable="false">deep_orange</string>
-    <string name="theme_color_entry_value_blue_grey" translatable="false">blue_grey</string>
-    <string name="theme_color_entry_value_pink" translatable="false">pink</string>
-    <string name="theme_color_entry_value_indigo" translatable="false">indigo</string>
-    <string name="theme_color_entry_value_cyan" translatable="false">cyan</string>
-    <string name="theme_color_entry_value_light_green" translatable="false">light_green</string>
-    <string name="theme_color_entry_value_amber" translatable="false">amber</string>
-    <string name="theme_color_entry_value_brown" translatable="false">brown</string>
-    <string name="theme_color_entry_value_purple" translatable="false">purple</string>
-    <string name="theme_color_entry_value_blue" translatable="false">blue</string>
-    <string name="theme_color_entry_value_teal" translatable="false">teal</string>
-    <string name="theme_color_entry_value_lime" translatable="false">lime</string>
-    <string name="theme_color_entry_value_orange" translatable="false">orange</string>
 
     <!-- Download images -->
     <string name="auto_download_images_entry_value_always" translatable="false">always</string>

@@ -34,8 +34,6 @@ import github.o4x.musical.prefs.PreferenceUtil;
 
 import java.text.DecimalFormat;
 
-import com.o4x.appthemehelper.util.TintHelper;
-
 public class RetroUtil {
 
     private static final int[] TEMP_ARRAY = new int[1];

@@ -21,11 +21,8 @@ import com.afollestad.materialdialogs.list.listItems
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.o4x.appthemehelper.extensions.colorControlNormal
-import com.o4x.appthemehelper.util.ToolbarContentTintHelper
 import github.o4x.musical.R
 import github.o4x.musical.databinding.ActivityTagBinding
-import github.o4x.musical.extensions.applyToolbar
 import github.o4x.musical.extensions.startImagePicker
 import github.o4x.musical.imageloader.glide.loader.GlideLoader
 import github.o4x.musical.imageloader.glide.module.GlideApp
@@ -89,11 +86,8 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         headerVariableSpace = resources.getDimensionPixelSize(R.dimen.tagEditorHeaderVariableSpace)
 
         setupViews()
-        setStatusBarColorAuto()
-        setNavigationBarColorAuto()
-        setNavigationBarDividerColorAuto()
 
-        applyToolbar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
 
         supportActionBar?.setTitle(R.string.action_tag_editor)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -114,11 +108,6 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_tag_editor, menu)
         return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        ToolbarContentTintHelper.tintAllIcons(binding.toolbar, colorControlNormal())
-        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

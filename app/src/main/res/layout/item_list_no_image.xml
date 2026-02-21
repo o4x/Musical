@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:foreground="?attr/rectSelector"
+    android:foreground="@drawable/rect_selector"
     tools:ignore="UnusedAttribute">
 
     <github.o4x.musical.views.IconImageView
@@ -14,7 +14,7 @@
         android:layout_gravity="center_vertical|start"
         android:layout_marginLeft="-8dp"
         android:layout_marginStart="-8dp"
-        android:tint="?attr/iconColor"
+
         android:tintMode="src_in"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_drag_vertical"

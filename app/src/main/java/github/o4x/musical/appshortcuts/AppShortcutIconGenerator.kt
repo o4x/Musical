@@ -6,15 +6,11 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.graphics.drawable.LayerDrawable
-import android.os.Build
 import android.util.TypedValue
-import androidx.annotation.RequiresApi
-import com.o4x.appthemehelper.extensions.accentColor
-import com.o4x.appthemehelper.extensions.primaryColor
 import github.o4x.musical.R
 import github.o4x.musical.util.RetroUtil
+import github.o4x.musical.util.primaryColor
 
-@RequiresApi(Build.VERSION_CODES.N_MR1)
 object AppShortcutIconGenerator {
     fun generateThemedIcon(context: Context, iconId: Int): Icon {
         return generateDefaultThemedIcon(context, iconId)

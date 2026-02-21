@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.o4x.appthemehelper.extensions.accentColor
-import com.o4x.appthemehelper.extensions.surfaceColor
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentLibraryBinding
 import github.o4x.musical.helper.MusicPlayerRemote
@@ -22,6 +20,8 @@ import github.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChanged
 import github.o4x.musical.prefs.PreferenceUtil.rememberLastTab
 import github.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
 import github.o4x.musical.util.Util
+import github.o4x.musical.util.accentColor
+import github.o4x.musical.util.surfaceColor
 
 class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPageChangeListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -64,10 +64,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
 //        })
     }
 
-    override fun onReloadSubToolbar() {
-        super.onReloadSubToolbar()
-        mainActivity.tabs.visibility = View.VISIBLE
-    }
 
     override fun onSharedPreferenceChanged(preferences: SharedPreferences, key: String?) {
         if (PreferenceUtil.LIBRARY_CATEGORIES == key) {
@@ -86,25 +82,25 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
     private fun setUpViewPager() {
         pagerAdapter = MusicLibraryPagerAdapter(mainActivity, childFragmentManager)
         binding.pager.adapter = pagerAdapter
-        mainActivity.tabs.layoutDirection = View.LAYOUT_DIRECTION_LTR;
-        mainActivity.tabs.setupWithViewPager(binding.pager)
+        binding.tabs.layoutDirection = View.LAYOUT_DIRECTION_LTR;
+        binding.tabs.setupWithViewPager(binding.pager)
         val primaryColor = surfaceColor()
 //        val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
 //        val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
-        mainActivity.tabs.setBackgroundColor(primaryColor)
+        binding.tabs.setBackgroundColor(primaryColor)
 //        mainActivity.tabs.setTabTextColors(normalColor, selectedColor)
-        mainActivity.tabs.setSelectedTabIndicatorColor(accentColor())
+        binding.tabs.setSelectedTabIndicatorColor(accentColor())
         updateTabVisibility()
         if (rememberLastTab()) {
             binding.pager.currentItem = lastPage
-            mainActivity.tabs.setScrollPosition(lastPage,0f,true)
+            binding.tabs.setScrollPosition(lastPage,0f,true)
         }
         binding.pager.addOnPageChangeListener(this)
     }
 
     private fun updateTabVisibility() {
         // hide the tab bar when only a single tab is visible
-        mainActivity.tabs.visibility =
+        binding.tabs.visibility =
             if (pagerAdapter.count == 1) View.GONE else View.VISIBLE
     }
 
@@ -370,6 +366,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
     }
 
     override fun onPageScrollStateChanged(state: Int) {
-        showAppbar()
+//        showAppbar()
     }
 }

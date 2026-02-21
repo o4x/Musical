@@ -3,16 +3,14 @@ package github.o4x.musical.ui.adapter.song
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import github.o4x.musical.interfaces.CabHolder
 import github.o4x.musical.model.Song
 
 class SelectSongAdapter(
     activity: AppCompatActivity?,
     dataSet: List<Song?>?,
     @LayoutRes itemLayoutRes: Int,
-    val cabHolder: CabHolder?,
     val onClick: (song: Song) -> Unit
-) : SongAdapter(activity, dataSet, itemLayoutRes, cabHolder) {
+) : SongAdapter(activity, dataSet, itemLayoutRes) {
 
     override fun createViewHolder(view: View, viewType: Int): SongAdapter.ViewHolder {
         return ViewHolder(view)

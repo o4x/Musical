@@ -7,10 +7,6 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.ColorInt
-import com.o4x.appthemehelper.extensions.accentColor
-import com.o4x.appthemehelper.extensions.textColorSecondary
-import com.o4x.appthemehelper.util.ATHUtil.resolveColor
-import com.o4x.appthemehelper.util.ColorUtil.withAlpha
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentMiniPlayerBinding
 import github.o4x.musical.drawables.PlayPauseDrawable
@@ -20,6 +16,8 @@ import github.o4x.musical.helper.MusicPlayerRemote.playNextSong
 import github.o4x.musical.helper.MusicPlayerRemote.playPreviousSong
 import github.o4x.musical.helper.PlayPauseButtonOnClickHandler
 import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
+import github.o4x.musical.util.ColorUtil.withAlpha
+import github.o4x.musical.util.accentColor
 import github.o4x.musical.util.color.MediaNotificationProcessor
 import kotlin.math.abs
 
@@ -65,13 +63,6 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
     private fun setUpPlayPauseButton() {
         miniPlayerPlayPauseDrawable = PlayPauseDrawable(requireActivity())
         binding.miniPlayerPlayPauseButton.setImageDrawable(miniPlayerPlayPauseDrawable)
-        binding.miniPlayerPlayPauseButton.setColorFilter(
-            resolveColor(
-                requireActivity(),
-                R.attr.iconColor,
-                requireActivity().textColorSecondary()
-            ), PorterDuff.Mode.SRC_IN
-        )
         binding.miniPlayerPlayPauseButton.setOnClickListener(PlayPauseButtonOnClickHandler())
     }
 

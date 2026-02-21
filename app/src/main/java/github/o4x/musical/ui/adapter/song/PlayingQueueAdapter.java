@@ -7,7 +7,6 @@ import android.view.View;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
@@ -17,16 +16,15 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.annotation.DraggableItemStateFlags;
 import github.o4x.musical.R;
 import github.o4x.musical.helper.MusicPlayerRemote;
-import github.o4x.musical.interfaces.CabHolder;
 import github.o4x.musical.model.Song;
+import github.o4x.musical.util.ColorExtKt;
+import github.o4x.musical.util.ColorUtil;
 import github.o4x.musical.util.ViewUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import com.o4x.appthemehelper.extensions.ColorExtKt;
-import com.o4x.appthemehelper.util.ColorUtil;
 
 public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAdapter<PlayingQueueAdapter.ViewHolder> {
 
@@ -36,8 +34,8 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
 
     protected int current;
 
-    public PlayingQueueAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
-        super(activity, dataSet, itemLayoutRes, cabHolder);
+    public PlayingQueueAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes) {
+        super(activity, dataSet, itemLayoutRes);
         this.current = current;
     }
 

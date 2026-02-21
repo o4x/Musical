@@ -1,33 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragments.mainactivity.folders.FoldersFragment"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragments.mainactivity.folders.FoldersFragment">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-            android:id="@+id/recycler_view"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none" />
-
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/empty"
-            android:textColor="?android:textColorSecondary"
-            android:textSize="@dimen/empty_text_size" />
+            app:elevation="0dp"
+            android:background="@color/transparent">
 
-    </FrameLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar"
+                android:background="@color/transparent"
+                app:layout_scrollFlags="scroll|enterAlways|snap">
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <github.o4x.musical.views.BreadCrumbLayout
+                android:id="@+id/bread_crumbs"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tab_height" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:scrollbars="none" />
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/empty"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="@dimen/empty_text_size" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

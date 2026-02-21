@@ -36,32 +36,11 @@ public class Util {
         return Math.max(Util.getScreenHeight(), Util.getScreenWidth());
     }
 
-    public static int getStatusBarHeight(@NonNull Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
-
     public static Point getScreenSize(@NonNull Context c) {
         Display display = ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         return size;
-    }
-
-    public static void setAllowDrawUnderBar(@NonNull Window window) {
-        window.getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        );
-    }
-
-    public static void setAllowDrawUnderStatusBar(@NonNull Window window) {
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
     public static void hideSoftKeyboard(@Nullable Activity activity) {

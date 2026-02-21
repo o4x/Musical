@@ -17,14 +17,11 @@ class PlayerActivity : AbsMusicServiceActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_player)
-        setDrawUnderBar()
 
         playerFragment = PlayerFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.player_fragment_container, playerFragment).commit()
         supportFragmentManager.executePendingTransactions()
-        setLightStatusBar(false)
-        setNavigationBarColor(Color.TRANSPARENT, force = true)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -33,10 +30,6 @@ class PlayerActivity : AbsMusicServiceActivity() {
                 isEnabled = true
             }
         })
-    }
-
-    override fun setTheme() {
-        setTheme(R.style.Theme_Musical_Black)
     }
 
     override fun onStart() {

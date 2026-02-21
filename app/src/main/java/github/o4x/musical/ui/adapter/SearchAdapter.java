@@ -17,14 +17,12 @@ import github.o4x.musical.model.Album;
 import github.o4x.musical.model.Artist;
 import github.o4x.musical.model.Song;
 import github.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
+import github.o4x.musical.util.ColorExtKt;
 import github.o4x.musical.util.MusicUtil;
 import github.o4x.musical.util.NavigationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.o4x.appthemehelper.extensions.ColorExtKt;
-import com.o4x.appthemehelper.util.ATHUtil;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
@@ -102,9 +100,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
             if (itemViewType == HEADER) {
                 itemView.setBackgroundColor(ColorExtKt.cardColor(activity));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    itemView.setElevation(activity.getResources().getDimensionPixelSize(R.dimen.card_elevation));
-                }
+                itemView.setElevation(activity.getResources().getDimensionPixelSize(R.dimen.card_elevation));
             }
 
             if (menu != null) {

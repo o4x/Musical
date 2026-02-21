@@ -5,7 +5,12 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import android.text.Html
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -13,8 +18,6 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import com.o4x.appthemehelper.extensions.accentColor
-import com.o4x.appthemehelper.extensions.surfaceColor
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import github.o4x.musical.R
@@ -27,16 +30,17 @@ import github.o4x.musical.misc.DialogAsyncTask
 import github.o4x.musical.misc.OverScrollLinearLayoutManager
 import github.o4x.musical.misc.WrappedAsyncTaskLoader
 import github.o4x.musical.model.Song
+import github.o4x.musical.prefs.PreferenceUtil.startDirectory
 import github.o4x.musical.ui.adapter.SongFileAdapter
 import github.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
-import github.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ArrayListPathsAsyncTask.OnPathsListedCallback
 import github.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ListSongsAsyncTask.OnSongsListedCallback
 import github.o4x.musical.util.FileUtil
-import github.o4x.musical.prefs.PreferenceUtil.startDirectory
 import github.o4x.musical.util.ViewUtil
+import github.o4x.musical.util.accentColor
 import github.o4x.musical.util.scanPaths
-import com.o4x.appthemehelper.util.toolbarTitleColor
-import com.o4x.appthemehelper.util.toolbarSubtitleColor
+import github.o4x.musical.util.surfaceColor
+import github.o4x.musical.util.textColorPrimary
+import github.o4x.musical.util.withAlpha
 import github.o4x.musical.views.BreadCrumbLayout.Crumb
 import github.o4x.musical.views.BreadCrumbLayout.SelectionCallback
 import java.io.File
@@ -70,9 +74,9 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     fun setCrumb(crumb: Crumb?, addToHistory: Boolean) {
         if (crumb == null) return
         saveScrollPosition()
-        mainActivity.bread_crumbs.setActiveOrAdd(crumb, false)
+        binding.breadCrumbs.setActiveOrAdd(crumb, false)
         if (addToHistory) {
-            mainActivity.bread_crumbs.addHistory(crumb)
+            binding.breadCrumbs.addHistory(crumb)
         }
         loaderManager.restartLoader(LOADER_ID, null, this)
     }
@@ -86,12 +90,12 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private val activeCrumb: Crumb?
-        private get() = if (mainActivity.bread_crumbs.size() > 0) mainActivity.bread_crumbs.getCrumb(
-            mainActivity.bread_crumbs.activeIndex) else null
+        private get() = if (binding.breadCrumbs.size() > 0) binding.breadCrumbs.getCrumb(
+            binding.breadCrumbs.activeIndex) else null
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(CRUMBS, mainActivity.bread_crumbs.stateWrapper)
+        outState.putParcelable(CRUMBS, binding.breadCrumbs.stateWrapper)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -99,7 +103,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         if (savedInstanceState == null) {
             setCrumb(Crumb(FileUtil.safeGetCanonicalFile(startDirectory)), true)
         } else {
-            mainActivity.bread_crumbs.restoreFromStateWrapper(savedInstanceState.getParcelable(CRUMBS))
+            binding.breadCrumbs.restoreFromStateWrapper(savedInstanceState.getParcelable(CRUMBS))
             loaderManager.initLoader(LOADER_ID, null, this)
         }
     }
@@ -112,28 +116,21 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         setUpAdapter()
     }
 
-    override fun onReloadSubToolbar() {
-        super.onReloadSubToolbar()
-        mainActivity.bread_crumbs.visibility = View.VISIBLE
-    }
-
     private fun setUpAppbarColor() {
         val primaryColor = surfaceColor()
-        mainActivity.bread_crumbs.setBackgroundColor(primaryColor)
-        mainActivity.bread_crumbs.setActivatedContentColor(toolbarTitleColor(mainActivity,
-            primaryColor))
-        mainActivity.bread_crumbs.setDeactivatedContentColor(toolbarSubtitleColor(
-            mainActivity, primaryColor))
+        val textColor = textColorPrimary()
+        binding.breadCrumbs.setBackgroundColor(primaryColor)
+        binding.breadCrumbs.setActivatedContentColor(textColor)
+        binding.breadCrumbs.setDeactivatedContentColor(textColor.withAlpha(.75f))
     }
 
     private fun setUpBreadCrumbs() {
-        mainActivity.bread_crumbs.setCallback(this)
+        binding.breadCrumbs.setCallback(this)
     }
 
     private fun setUpRecyclerView() {
         ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity, binding.recyclerView, accentColor())
         binding.recyclerView.layoutManager = OverScrollLinearLayoutManager(requireContext())
-        binding.recyclerView.addAppbarListener()
     }
 
     val observer = object : AdapterDataObserver() {
@@ -144,7 +141,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private fun setUpAdapter() {
-        adapter = SongFileAdapter(mainActivity, LinkedList(), R.layout.item_list, this, mainActivity)
+        adapter = SongFileAdapter(mainActivity, LinkedList(), R.layout.item_list, this)
         adapter.registerAdapterDataObserver(observer)
         binding.recyclerView.adapter = adapter
         checkIsEmpty()
@@ -156,8 +153,8 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     override fun handleBackPress(): Boolean {
-        if (mainActivity.bread_crumbs.popHistory()) {
-            setCrumb(mainActivity.bread_crumbs.lastHistory(), false)
+        if (binding.breadCrumbs.popHistory()) {
+            setCrumb(binding.breadCrumbs.lastHistory(), false)
             return true
         }
         return super.handleBackPress()
@@ -209,7 +206,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                         if (startIndex > -1) {
                             MusicPlayerRemote.openQueue(songs as List<Song>, startIndex, true)
                         } else {
-                            Snackbar.make(binding.coordinatorLayout,
+                            Snackbar.make(binding.container,
                                 Html.fromHtml(String.format(getString(R.string.not_listed_in_media_store),
                                     canonicalFile.name)),
                                 Snackbar.LENGTH_LONG)
@@ -236,7 +233,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                         SongsMenuHelper.handleMenuClick(mainActivity, songs, itemId)
                     }
                     if (songs.size != files.size) {
-                        Snackbar.make(binding.coordinatorLayout!!,
+                        Snackbar.make(binding.container!!,
                             R.string.some_files_are_not_listed_in_the_media_store,
                             Snackbar.LENGTH_LONG)
                             .setAction(R.string.action_scan) { v: View? ->
@@ -314,7 +311,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                                             songs[0]!!,
                                             itemId)
                                     } else {
-                                        Snackbar.make(binding.coordinatorLayout,
+                                        Snackbar.make(binding.container,
                                             Html.fromHtml(String.format(getString(R.string.not_listed_in_media_store),
                                                 file.name)),
                                             Snackbar.LENGTH_LONG)

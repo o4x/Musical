@@ -9,7 +9,6 @@ import github.o4x.musical.R
 import github.o4x.musical.extensions.toPlaylistDetail
 import github.o4x.musical.helper.menu.PlaylistMenuHelper.handleMenuClick
 import github.o4x.musical.helper.menu.PlaylistMenuHelper.handleMultipleItemAction
-import github.o4x.musical.interfaces.CabHolder
 import github.o4x.musical.model.Playlist
 import github.o4x.musical.model.Song
 import github.o4x.musical.model.smartplaylist.AbsSmartPlaylist
@@ -23,9 +22,8 @@ class PlaylistAdapter(
     val mainActivity: MainActivity,
     dataSet: List<Playlist>,
     @param:LayoutRes var itemLayoutRes: Int,
-    cabHolder: CabHolder?
 ) : AbsAdapter<PlaylistAdapter.ViewHolder, Playlist>(
-    mainActivity, dataSet, itemLayoutRes, cabHolder, R.menu.menu_playlists_selection
+    mainActivity, dataSet, itemLayoutRes, R.menu.menu_playlists_selection
 ) {
 
     companion object {
@@ -85,21 +83,11 @@ class PlaylistAdapter(
 
     inner class ViewHolder(itemView: View) : MediaEntryViewHolder(itemView) {
         override fun onClick(view: View) {
-            if (isInQuickSelectMode) {
-                toggleChecked(adapterPosition)
-            } else {
-                val playlist = dataSet[adapterPosition]
-                mainActivity.navController.toPlaylistDetail(playlist)
-            }
-        }
-
-        override fun onLongClick(view: View): Boolean {
-            toggleChecked(adapterPosition)
-            return true
+            val playlist = dataSet[adapterPosition]
+            mainActivity.navController.toPlaylistDetail(playlist)
         }
 
         init {
-
             if (menu != null) {
                 menu!!.setOnClickListener { view: View? ->
                     val playlist = dataSet[adapterPosition]

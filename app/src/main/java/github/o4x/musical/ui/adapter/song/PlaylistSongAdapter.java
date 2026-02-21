@@ -5,12 +5,11 @@ import android.view.View;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import github.o4x.musical.R;
-import github.o4x.musical.interfaces.CabHolder;
 import github.o4x.musical.model.Song;
+import github.o4x.musical.util.ColorExtKt;
 import github.o4x.musical.util.MusicUtil;
 import github.o4x.musical.util.NavigationUtil;
 
@@ -18,12 +17,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import com.o4x.appthemehelper.extensions.ColorExtKt;
-
 public class PlaylistSongAdapter extends AbsOffsetSongAdapter {
 
-    public PlaylistSongAdapter(AppCompatActivity activity, @NonNull List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
-        super(activity, dataSet, itemLayoutRes, cabHolder, false);
+    public PlaylistSongAdapter(AppCompatActivity activity, @NonNull List<Song> dataSet, @LayoutRes int itemLayoutRes) {
+        super(activity, dataSet, itemLayoutRes, false);
         setMultiSelectMenuRes(R.menu.menu_cannot_delete_single_songs_playlist_songs_selection);
     }
 

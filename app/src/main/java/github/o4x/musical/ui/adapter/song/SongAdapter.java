@@ -13,7 +13,6 @@ import github.o4x.musical.R;
 import github.o4x.musical.helper.MusicPlayerRemote;
 import github.o4x.musical.helper.SortOrder;
 import github.o4x.musical.helper.menu.SongMenuHelper;
-import github.o4x.musical.interfaces.CabHolder;
 import github.o4x.musical.model.Song;
 import github.o4x.musical.ui.adapter.base.AbsAdapter;
 import github.o4x.musical.ui.adapter.base.MediaEntryViewHolder;
@@ -30,12 +29,12 @@ public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
     protected static final int CURRENT = 1;
     public boolean boldCurrent = false;
 
-    public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder) {
-        this(activity, dataSet, itemLayoutRes, cabHolder, true);
+    public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes) {
+        this(activity, dataSet, itemLayoutRes, true);
     }
 
-    public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, @Nullable CabHolder cabHolder, boolean showSectionName) {
-        super(activity, dataSet, itemLayoutRes, cabHolder);
+    public SongAdapter(AppCompatActivity activity, List<Song> dataSet, @LayoutRes int itemLayoutRes, boolean showSectionName) {
+        super(activity, dataSet, itemLayoutRes);
         setHasStableIds(true);
     }
 
@@ -176,16 +175,7 @@ public class SongAdapter extends AbsAdapter<SongAdapter.ViewHolder, Song> {
 
         @Override
         public void onClick(View v) {
-            if (isInQuickSelectMode()) {
-                toggleChecked(getAdapterPosition());
-            } else {
-                MusicPlayerRemote.openQueue(dataSet, getRealPosition(), true);
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            return toggleChecked(getAdapterPosition());
+            MusicPlayerRemote.openQueue(dataSet, getRealPosition(), true);
         }
     }
 }

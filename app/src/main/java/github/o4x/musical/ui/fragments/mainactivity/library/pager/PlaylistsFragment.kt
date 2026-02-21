@@ -43,8 +43,7 @@ class PlaylistsFragment :
         return PlaylistAdapter(
             libraryFragment.mainActivity,
             dataSet,
-            itemLayoutRes,
-            libraryFragment.mainActivity
+            itemLayoutRes
         )
     }
 

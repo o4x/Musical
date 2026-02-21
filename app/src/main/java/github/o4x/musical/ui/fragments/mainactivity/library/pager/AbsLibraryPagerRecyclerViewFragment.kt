@@ -5,11 +5,11 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import com.o4x.appthemehelper.extensions.accentColor
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentLibraryRecyclerViewBinding
 import github.o4x.musical.util.ViewUtil
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+import github.o4x.musical.util.accentColor
 
 abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, LM : RecyclerView.LayoutManager?> :
     AbsLibraryPagerFragment(R.layout.fragment_library_recycler_view) {
@@ -51,7 +51,6 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
         }
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
-        libraryFragment.setAppbarListener(binding.recyclerView)
     }
 
     protected fun invalidateLayoutManager() {

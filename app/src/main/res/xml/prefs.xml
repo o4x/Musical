@@ -1,30 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <PreferenceCategory
         app:title="@string/pref_header_general">
 
 
-        <ListPreference
-            app:defaultValue="@string/theme_entry_value_black"
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
             app:entries="@array/pref_general_theme_list_titles"
-            app:entryValues="@array/pref_general_theme_list_values"
-            app:negativeButtonText=""
-            app:positiveButtonText=""
-            app:key="@string/key_general_theme"
-            app:summary="%s"
-            app:title="@string/pref_title_general_theme" />
-
-        <ListPreference
-            app:key="@string/key_theme_color"
-            app:defaultValue="@string/theme_color_entry_value_default"
-            app:entries="@array/pref_color_theme_list_titles"
-            app:entryValues="@array/pref_color_theme_list_values"
-            app:summary="%s"
-            app:title="@string/theme_color"
-            app:negativeButtonText=""
-            app:positiveButtonText=""/>
+            app:key="@string/key_dark_mode"
+            app:title="@string/pref_title_dark_mode" />
 
     </PreferenceCategory>
 
@@ -108,12 +95,6 @@
         app:title="@string/pref_header_notification">
 
         <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/key_classic_notification"
-            app:summary="@string/pref_summary_classic_notification"
-            app:title="@string/pref_title_classic_notification" />
-
-        <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="@string/key_colored_notification"
             app:summary="@string/pref_summary_colored_notification"
@@ -127,14 +108,6 @@
         <Preference
             app:key="@string/key_smart_playlist_limit"
             app:title="@string/pref_title_smart_playlist_limit" />
-
-        <SeekBarPreference
-            android:max="1200"
-            app:defaultValue="30"
-            app:key="@string/key_filter_song"
-            app:summary="@string/pref_filter_song_summary"
-            app:title="@string/pref_filter_song_title"
-            app:showSeekBarValue="true" />
 
     </PreferenceCategory>
 

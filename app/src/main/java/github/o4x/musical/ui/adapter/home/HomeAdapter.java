@@ -24,7 +24,7 @@ public class HomeAdapter extends PlayingQueueAdapter {
     private final boolean isQueue;
 
     public HomeAdapter(AppCompatActivity activity, List<Song> dataSet, int current, @LayoutRes int itemLayoutRes, @Nullable Integer limit, boolean isQueue) {
-        super(activity, dataSet, current, itemLayoutRes, null);
+        super(activity, dataSet, current, itemLayoutRes);
         this.limit = limit;
         this.isQueue = isQueue;
     }

@@ -3,7 +3,6 @@ package github.o4x.musical.ui.fragments.mainactivity.queue
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
-import com.o4x.appthemehelper.extensions.accentColor
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
@@ -15,6 +14,7 @@ import github.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import github.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import github.o4x.musical.util.ViewUtil
+import github.o4x.musical.util.accentColor
 
 class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
 
@@ -71,7 +71,6 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
 
     private fun setUpViews() {
         binding.queueRecyclerView.apply {
-            addAppbarListener()
             ViewUtil.setUpFastScrollRecyclerViewColor(
                 requireContext(),
                 this,
@@ -87,8 +86,7 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue) {
             mainActivity,
             MusicPlayerRemote.playingQueue,
             MusicPlayerRemote.position,
-            R.layout.item_list,
-            null)
+            R.layout.item_list)
         wrappedAdapter = recyclerViewDragDropManager.createWrappedAdapter(queueAdapter)
         queueLayoutManager = OverScrollLinearLayoutManager(requireContext())
         binding.queueRecyclerView.layoutManager = queueLayoutManager

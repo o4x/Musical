@@ -1,13 +1,8 @@
 package github.o4x.musical.util
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.media.audiofx.AudioEffect
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import github.o4x.musical.R
-import github.o4x.musical.helper.MusicPlayerRemote.audioSessionId
 import github.o4x.musical.ui.activities.details.ArtistDetailActivity
 import github.o4x.musical.ui.activities.details.AlbumDetailActivity
 import github.o4x.musical.model.Song
@@ -15,7 +10,6 @@ import github.o4x.musical.ui.activities.tageditor.SongTagEditorActivity
 import github.o4x.musical.ui.activities.tageditor.AbsTagEditorActivity
 import github.o4x.musical.model.Album
 import github.o4x.musical.model.Artist
-import github.o4x.musical.ui.activities.LicenseActivity
 import github.o4x.musical.ui.activities.details.AbsDetailActivity
 import github.o4x.musical.ui.activities.tageditor.AlbumTagEditorActivity
 import github.o4x.musical.ui.activities.tageditor.ArtistTagEditorActivity
@@ -55,10 +49,5 @@ object NavigationUtil {
         val editor = Intent(activity, ArtistTagEditorActivity::class.java)
         editor.putExtra(AbsTagEditorActivity.EXTRA_ID, artist.id)
         activity.startActivityForResult(editor, AbsDetailActivity.TAG_EDITOR_REQUEST)
-    }
-
-    @JvmStatic
-    fun goToOpenSource(activity: Activity) {
-        ActivityCompat.startActivity(activity, Intent(activity, LicenseActivity::class.java), null)
     }
 }

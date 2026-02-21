@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Same names, different hex codes -->
+    <color name="md_theme_primary">#D0BCFF</color> <!-- Lighter/Desaturated for dark mode -->
+    <color name="md_theme_onPrimary">#381E72</color>
+    <color name="md_theme_secondary">#CCC2DC</color>
+    <color name="md_theme_onSecondary">#332D41</color>
+
+    <!-- Backgrounds -->
+    <color name="page_background">#121212</color> <!-- Dark Grey -->
+    <color name="primary_text">#E6E1E5</color> <!-- Off-white -->
+    <color name="card_background">#252525</color>
+</resources>
+

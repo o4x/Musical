@@ -91,9 +91,7 @@ configurations.all {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(project(":appthemehelper"))
     implementation(project(":recyclerview-fastscroll"))
-    implementation(project(":material-cab"))
     implementation(files("libs/jaudiotagger-2.2.4-SNAPSHOT.jar"))
 
     implementation(platform(libs.androidx.compose.bom))
