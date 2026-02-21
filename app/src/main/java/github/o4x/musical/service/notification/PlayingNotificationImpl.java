@@ -33,11 +33,6 @@ public class PlayingNotificationImpl extends PlayingNotification {
 
         final Song song = service.getCurrentSong();
 
-        final boolean isPlaying = service.isPlaying();
-
-        final int playButtonResId = isPlaying
-                ? R.drawable.ic_pause : R.drawable.ic_play_arrow;
-
         Intent action = new Intent(service, MainActivity.class);
         action.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         final PendingIntent clickIntent = PendingIntent.getActivity(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
@@ -56,6 +51,9 @@ public class PlayingNotificationImpl extends PlayingNotification {
                     }
 
                     void update(Bitmap bitmap, int color) {
+                        final boolean isPlaying = service.isPlaying();
+                        final int playButtonResId = isPlaying
+                                ? R.drawable.ic_pause : R.drawable.ic_play_arrow;
                         NotificationCompat.Action playPauseAction = new NotificationCompat.Action(playButtonResId,
                                 service.getString(R.string.action_play_pause),
                                 retrievePlaybackAction(ACTION_TOGGLE_PAUSE));
