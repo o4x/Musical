@@ -1,5 +1,7 @@
 package github.o4x.musical.util
 
+import android.content.Context
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
@@ -91,6 +93,65 @@ object ViewInsetsUtils {
 
             view.updatePadding(bottom = initialPaddingBottom + bottomOverlap)
             windowInsets
+        }
+    }
+
+    /**
+     * Applies the height of the AppBar (ActionBar/Toolbar) as PADDING to the top of the view.
+     *
+     * @param includeStatusBar If true, adds the status bar inset as well. Use true when your
+     * AppBar is transparent/overlaying and shifts down due to edge-to-edge.
+     */
+    fun View.applyAppBarPadding(includeStatusBar: Boolean = true) {
+        val initialPaddingTop = this.paddingTop
+        val actionBarSize = context.getActionBarSize()
+
+        if (includeStatusBar) {
+            ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                view.updatePadding(top = initialPaddingTop + actionBarSize + insets.top)
+                windowInsets
+            }
+        } else {
+            this.updatePadding(top = initialPaddingTop + actionBarSize)
+        }
+    }
+
+    /**
+     * Applies the height of the AppBar (ActionBar/Toolbar) as MARGIN to the top of the view.
+     *
+     * @param includeStatusBar If true, adds the status bar inset as well.
+     */
+    fun View.applyAppBarMargin(includeStatusBar: Boolean = true) {
+        val layoutParams = this.layoutParams as? ViewGroup.MarginLayoutParams ?: return
+        val initialMarginTop = layoutParams.topMargin
+        val actionBarSize = context.getActionBarSize()
+
+        if (includeStatusBar) {
+            ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    topMargin = initialMarginTop + actionBarSize + insets.top
+                }
+                windowInsets
+            }
+        } else {
+            this.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = initialMarginTop + actionBarSize
+            }
+        }
+    }
+
+    /**
+     * Helper function to extract the standard actionBarSize from the current context theme.
+     */
+    private fun Context.getActionBarSize(): Int {
+        val typedValue = TypedValue()
+        return if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
+            TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
+        } else {
+            // Fallback to 0 if the theme doesn't define actionBarSize
+            0
         }
     }
 }
