@@ -6,7 +6,7 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?backgroundColor"
+    android:background="@color/page_background"
     tools:context=".ui.fragments.mainactivity.queue.QueueFragment">
 
     <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView

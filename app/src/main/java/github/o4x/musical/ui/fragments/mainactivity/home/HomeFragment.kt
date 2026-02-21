@@ -159,7 +159,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
     }
 
     private fun setupButtons() {
-        binding.queueParent.setOnClickListener { navController.navigate(R.id.action_quit) }
+        binding.queueParent.setOnClickListener { navController.navigate(R.id.action_to_queue) }
         binding.queueShuffleButton.setOnClickListener { libraryViewModel.shuffleSongs() }
         binding.recentlyParent.setOnClickListener {
             navController.toPlaylistDetail(HistoryPlaylist())
