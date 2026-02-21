@@ -28,9 +28,7 @@ public abstract class PlayingNotification {
     public synchronized void init(MusicService service) {
         this.service = service;
         notificationManager = (NotificationManager) service.getSystemService(NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel();
-        }
+        createNotificationChannel();
     }
 
     public abstract void update();
@@ -61,14 +59,13 @@ public abstract class PlayingNotification {
 
         if (newNotifyMode == NOTIFY_MODE_FOREGROUND) {
             service.startForeground(NOTIFICATION_ID, notification);
-        } else if (newNotifyMode == NOTIFY_MODE_BACKGROUND) {
+        } else {
             notificationManager.notify(NOTIFICATION_ID, notification);
         }
 
         notifyMode = newNotifyMode;
     }
 
-    @RequiresApi(26)
     private void createNotificationChannel() {
         NotificationChannel notificationChannel = notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID);
         if (notificationChannel == null) {

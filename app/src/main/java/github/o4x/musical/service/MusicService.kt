@@ -4,6 +4,8 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.*
 import android.graphics.Bitmap
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.audiofx.AudioEffect
 import android.os.*
@@ -11,6 +13,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import github.o4x.musical.App.Companion.getContext
 import github.o4x.musical.R
@@ -20,6 +23,11 @@ import github.o4x.musical.imageloader.glide.loader.GlideLoader.Companion.with
 import github.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import github.o4x.musical.model.Playlist
 import github.o4x.musical.model.Song
+import github.o4x.musical.prefs.PreferenceUtil
+import github.o4x.musical.prefs.PreferenceUtil.albumArtOnLockscreen
+import github.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
+import github.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
+import github.o4x.musical.repository.RoomRepository
 import github.o4x.musical.service.misc.MediaStoreObserver
 import github.o4x.musical.service.misc.QueueSaveHandler
 import github.o4x.musical.service.misc.ThrottledSeekHandler
@@ -29,48 +37,39 @@ import github.o4x.musical.service.playback.Playback
 import github.o4x.musical.service.playback.PlaybackHandler
 import github.o4x.musical.service.player.MultiPlayer
 import github.o4x.musical.util.MusicUtil
-import github.o4x.musical.prefs.PreferenceUtil
-import github.o4x.musical.prefs.PreferenceUtil.albumArtOnLockscreen
-import github.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
-import github.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
-import github.o4x.musical.repository.RoomRepository
 import github.o4x.musical.util.Util
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
-import java.util.*
+import kotlin.random.Random
 
 /**
- * @author Karim Abou Zeid (kabouzeid), Andrew Neal
+ * @author Karim Abou Zeid (kabouzeid), Andrew Neal, improved by AI
  */
 class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListener, Playback.PlaybackCallbacks {
 
     companion object {
-
-        const val PHONOGRAPH_PACKAGE_NAME = "github.o4x.musical"
+        const val MUSICAL_PACKAGE_NAME = "github.o4x.musical"
         const val MUSIC_PACKAGE_NAME = "com.android.music"
 
-        const val ACTION_TOGGLE_PAUSE = PHONOGRAPH_PACKAGE_NAME + ".togglepause"
-        const val ACTION_PLAY = PHONOGRAPH_PACKAGE_NAME + ".play"
-        const val ACTION_PLAY_PLAYLIST = PHONOGRAPH_PACKAGE_NAME + ".play.playlist"
-        const val ACTION_PAUSE = PHONOGRAPH_PACKAGE_NAME + ".pause"
-        const val ACTION_STOP = PHONOGRAPH_PACKAGE_NAME + ".stop"
-        const val ACTION_SKIP = PHONOGRAPH_PACKAGE_NAME + ".skip"
-        const val ACTION_REWIND = PHONOGRAPH_PACKAGE_NAME + ".rewind"
-        const val ACTION_QUIT = PHONOGRAPH_PACKAGE_NAME + ".quitservice"
-        const val ACTION_PENDING_QUIT = PHONOGRAPH_PACKAGE_NAME + ".pendingquitservice"
+        const val ACTION_TOGGLE_PAUSE = "$MUSICAL_PACKAGE_NAME.togglepause"
+        const val ACTION_PLAY = "$MUSICAL_PACKAGE_NAME.play"
+        const val ACTION_PLAY_PLAYLIST = "$MUSICAL_PACKAGE_NAME.play.playlist"
+        const val ACTION_PAUSE = "$MUSICAL_PACKAGE_NAME.pause"
+        const val ACTION_STOP = "$MUSICAL_PACKAGE_NAME.stop"
+        const val ACTION_SKIP = "$MUSICAL_PACKAGE_NAME.skip"
+        const val ACTION_REWIND = "$MUSICAL_PACKAGE_NAME.rewind"
+        const val ACTION_QUIT = "$MUSICAL_PACKAGE_NAME.quitservice"
+        const val ACTION_PENDING_QUIT = "$MUSICAL_PACKAGE_NAME.pendingquitservice"
 
-        const val INTENT_EXTRA_PLAYLIST = PHONOGRAPH_PACKAGE_NAME + "intentextra.playlist"
-        const val INTENT_EXTRA_SHUFFLE_MODE = PHONOGRAPH_PACKAGE_NAME + ".intentextra.shufflemode"
+        const val INTENT_EXTRA_PLAYLIST = "$MUSICAL_PACKAGE_NAME.intentextra.playlist"
+        const val INTENT_EXTRA_SHUFFLE_MODE = "$MUSICAL_PACKAGE_NAME.intentextra.shufflemode"
 
-        const val APP_WIDGET_UPDATE = PHONOGRAPH_PACKAGE_NAME + ".appwidgetupdate"
-        const val EXTRA_APP_WIDGET_NAME = PHONOGRAPH_PACKAGE_NAME + "app_widget_name"
-
-        // do not change these three strings as it will break support with other apps (e.g. last.fm scrobbling)
-        const val META_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".metachanged"
-        const val QUEUE_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".queuechanged"
-        const val PLAY_STATE_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".playstatechanged"
-        const val REPEAT_MODE_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".repeatmodechanged"
-        const val SHUFFLE_MODE_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".shufflemodechanged"
-        const val MEDIA_STORE_CHANGED = PHONOGRAPH_PACKAGE_NAME + ".mediastorechanged"
+        const val META_CHANGED = "$MUSICAL_PACKAGE_NAME.metachanged"
+        const val QUEUE_CHANGED = "$MUSICAL_PACKAGE_NAME.queuechanged"
+        const val PLAY_STATE_CHANGED = "$MUSICAL_PACKAGE_NAME.playstatechanged"
+        const val REPEAT_MODE_CHANGED = "$MUSICAL_PACKAGE_NAME.repeatmodechanged"
+        const val SHUFFLE_MODE_CHANGED = "$MUSICAL_PACKAGE_NAME.shufflemodechanged"
+        const val MEDIA_STORE_CHANGED = "$MUSICAL_PACKAGE_NAME.mediastorechanged"
 
         const val SAVED_POSITION = "POSITION"
         const val SAVED_POSITION_IN_TRACK = "POSITION_IN_TRACK"
@@ -84,39 +83,20 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         const val PREPARE_NEXT = 4
         const val SET_POSITION = 5
         const val FOCUS_CHANGE = 6
-
-        // SHUFFLE MODE //
         const val DUCK = 7
         const val UNDUCK = 8
+        const val RESTORE_QUEUES = 9
+        const val SAVE_QUEUES = 0
 
-        // SHUFFLE MODE //
         const val SHUFFLE_MODE_NONE = 0
         const val SHUFFLE_MODE_SHUFFLE = 1
 
-        // REPEAT MODE //
         const val REPEAT_MODE_NONE = 0
         const val REPEAT_MODE_ALL = 1
         const val REPEAT_MODE_THIS = 2
 
-        // QUEUES ACTIONS //
-        const val SAVE_QUEUES = 0
-        const val RESTORE_QUEUES = 9
-
         private fun getTrackUri(song: Song): String {
             return MusicUtil.getFileUriFromSong(song.id).toString()
-        }
-
-        private fun copy(bitmap: Bitmap): Bitmap? {
-            var config = bitmap.config
-            if (config == null) {
-                config = Bitmap.Config.RGB_565
-            }
-            return try {
-                bitmap.copy(config, false)
-            } catch (e: OutOfMemoryError) {
-                e.printStackTrace()
-                null
-            }
         }
 
         private const val MEDIA_SESSION_ACTIONS = (PlaybackStateCompat.ACTION_PLAY
@@ -129,42 +109,38 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     private val roomRepository by inject<RoomRepository>()
-    private val hash by lazy { hashCode() }
+    private val serviceJob = SupervisorJob()
+    private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     private val musicBind: IBinder = MusicBinder()
     inner class MusicBinder : Binder() {
-        val service: MusicService
-            get() = this@MusicService
+        val service: MusicService get() = this@MusicService
     }
 
     var pendingQuit = false
 
-
     private var playingNotification: PlayingNotification? = null
-
     lateinit var mediaSession: MediaSessionCompat
 
     private val wakeLock: PowerManager.WakeLock by lazy {
         (getSystemService(POWER_SERVICE) as PowerManager)
-            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, javaClass.name)
+            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Musical::PlaybackWakeLock")
     }
-    private var countDownTimerPausable: CountDownTimerPausable? = null
 
+    private var countDownTimerPausable: CountDownTimerPausable? = null
     private var becomingNoisyReceiverRegistered = false
-    private val becomingNoisyReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+    private val becomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
                 pause()
             }
         }
     }
-    private val mediaStoreObserver by lazy {
-        MediaStoreObserver(this, playerHandler)
-    }
 
-    private val uiThreadHandler by lazy {
-        Handler(Looper.getMainLooper())
-    }
+    private val mediaStoreObserver by lazy { MediaStoreObserver(this, playerHandler) }
+    private val uiThreadHandler by lazy { Handler(Looper.getMainLooper()) }
+    private var audioFocusRequest: AudioFocusRequest? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -173,7 +149,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         playback.setCallbacks(this)
         setupMediaSession()
 
-
         queueSaveHandlerThread.start()
         initNotification()
 
@@ -181,12 +156,11 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         registerOnSharedPreferenceChangedListener(this)
         restoreState()
         mediaSession.isActive = true
-        sendBroadcast(Intent("github.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_CREATED"))
+        sendBroadcast(Intent("github.o4x.musical.MUSICAL_MUSIC_SERVICE_CREATED"))
     }
 
     private fun setupMediaSession() {
-        val mediaButtonReceiverComponentName =
-            ComponentName(applicationContext, MediaButtonIntentReceiver::class.java)
+        val mediaButtonReceiverComponentName = ComponentName(applicationContext, MediaButtonIntentReceiver::class.java)
         val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON)
         mediaButtonIntent.component = mediaButtonReceiverComponentName
         val mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(
@@ -200,91 +174,48 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             "Musical",
             mediaButtonReceiverComponentName,
             mediaButtonReceiverPendingIntent
-        )
-        mediaSession.setCallback(object : MediaSessionCompat.Callback() {
-            override fun onPlay() {
-                play()
-            }
-
-            override fun onPause() {
-                pause()
-            }
-
-            override fun onSkipToNext() {
-                nextSong(true)
-            }
-
-            override fun onSkipToPrevious() {
-                back(true)
-            }
-
-            override fun onStop() {
-                quit()
-            }
-
-            override fun onSeekTo(pos: Long) {
-                seek(pos.toInt())
-            }
-
-            override fun onMediaButtonEvent(mediaButtonEvent: Intent): Boolean {
-                return MediaButtonIntentReceiver.handleIntent(this@MusicService, mediaButtonEvent)
-            }
-        })
-        mediaSession.setMediaButtonReceiver(mediaButtonReceiverPendingIntent)
+        ).apply {
+            setCallback(object : MediaSessionCompat.Callback() {
+                override fun onPlay() = play()
+                override fun onPause() = pause()
+                override fun onSkipToNext() = nextSong(true)
+                override fun onSkipToPrevious() = back(true)
+                override fun onStop() = quit()
+                override fun onSeekTo(pos: Long) { seek(pos.toInt()) }
+                override fun onMediaButtonEvent(mediaButtonEvent: Intent): Boolean {
+                    return MediaButtonIntentReceiver.handleIntent(this@MusicService, mediaButtonEvent)
+                }
+            })
+            setMediaButtonReceiver(mediaButtonReceiverPendingIntent)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent != null) {
-            if (intent.action != null) {
-                restoreQueuesAndPositionIfNecessary()
-                when (intent.action) {
-                    ACTION_TOGGLE_PAUSE -> if (isPlaying) {
-                        pause()
+        if (intent?.action != null) {
+            restoreQueuesAndPositionIfNecessary()
+            when (intent.action) {
+                ACTION_TOGGLE_PAUSE -> if (isPlaying) pause() else play()
+                ACTION_PAUSE -> pause()
+                ACTION_PLAY -> play()
+                ACTION_PLAY_PLAYLIST -> {
+                    val playlist: Playlist? = intent.getParcelableExtra(INTENT_EXTRA_PLAYLIST)
+                    val shuffleMode = intent.getIntExtra(INTENT_EXTRA_SHUFFLE_MODE, getShuffleMode())
+                    if (playlist != null && playlist.songs().isNotEmpty()) {
+                        val playlistSongs = playlist.songs()
+                        val startPos = if (shuffleMode == SHUFFLE_MODE_SHUFFLE) Random.nextInt(playlistSongs.size) else 0
+                        openQueue(playlistSongs, startPos, true)
+                        if (shuffleMode == SHUFFLE_MODE_SHUFFLE) setShuffleMode(shuffleMode)
                     } else {
-                        play()
+                        Toast.makeText(applicationContext, R.string.playlist_is_empty, Toast.LENGTH_LONG).show()
                     }
-                    ACTION_PAUSE -> pause()
-                    ACTION_PLAY -> play()
-                    ACTION_PLAY_PLAYLIST -> {
-                        val playlist: Playlist? = intent.getParcelableExtra(INTENT_EXTRA_PLAYLIST)
-                        val shuffleMode =
-                            intent.getIntExtra(INTENT_EXTRA_SHUFFLE_MODE, getShuffleMode())
-                        if (playlist != null) {
-                            val playlistSongs = playlist.songs()
-                            if (playlistSongs.isNotEmpty()) {
-                                if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
-                                    var startPosition = 0
-                                    if (playlistSongs.isNotEmpty()) {
-                                        startPosition = Random().nextInt(playlistSongs.size)
-                                    }
-                                    openQueue(playlistSongs, startPosition, true)
-                                    setShuffleMode(shuffleMode)
-                                } else {
-                                    openQueue(playlistSongs, 0, true)
-                                }
-                            } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    R.string.playlist_is_empty,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                R.string.playlist_is_empty,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                    ACTION_REWIND -> back(true)
-                    ACTION_SKIP -> nextSong(true)
-                    ACTION_STOP, ACTION_QUIT -> {
-                        pendingQuit = false
-                        quit()
-                    }
-                    ACTION_PENDING_QUIT -> pendingQuit = true
                 }
+                ACTION_REWIND -> back(true)
+                ACTION_SKIP -> nextSong(true)
+                ACTION_STOP, ACTION_QUIT -> {
+                    pendingQuit = false
+                    quit()
+                }
+                ACTION_PENDING_QUIT -> pendingQuit = true
             }
         }
         return START_NOT_STICKY
@@ -301,12 +232,11 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         mediaStoreObserver.cancel()
         unregisterOnSharedPreferenceChangedListener(this)
         wakeLock.release()
-        sendBroadcast(Intent("github.o4x.musical.PHONOGRAPH_MUSIC_SERVICE_DESTROYED"))
+        serviceJob.cancel()
+        sendBroadcast(Intent("github.o4x.musical.MUSICAL_MUSIC_SERVICE_DESTROYED"))
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return musicBind
-    }
+    override fun onBind(intent: Intent): IBinder = musicBind
 
     private fun restoreState() {
         restorePlayerState()
@@ -318,9 +248,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     fun quit() {
         pause()
-        playingNotification!!.stop()
+        playingNotification?.stop()
         closeAudioEffectSession()
-        audioManager.abandonAudioFocus(audioFocusListener)
+        abandonAudioFocus()
         stopSelf()
     }
 
@@ -330,20 +260,19 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         queueSaveHandler.removeCallbacksAndMessages(null)
         queueSaveHandlerThread.quitSafely()
         playback.release()
-//        playback = null
         mediaSession.release()
     }
 
     private fun closeAudioEffectSession() {
-        val audioEffectsIntent = Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION)
-        audioEffectsIntent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, playback.audioSessionId)
-        audioEffectsIntent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, packageName)
+        val audioEffectsIntent = Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION).apply {
+            putExtra(AudioEffect.EXTRA_AUDIO_SESSION, playback.audioSessionId)
+            putExtra(AudioEffect.EXTRA_PACKAGE_NAME, packageName)
+        }
         sendBroadcast(audioEffectsIntent)
     }
 
     private fun initNotification() {
-        playingNotification = PlayingNotificationImpl()
-        playingNotification?.init(this)
+        playingNotification = PlayingNotificationImpl().apply { init(this@MusicService) }
     }
 
     private fun updateNotification() {
@@ -377,28 +306,23 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, song.albumName)
             .putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.title)
             .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, song.duration)
-            .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, position + 1.toLong())
+            .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, position + 1L)
             .putLong(MediaMetadataCompat.METADATA_KEY_YEAR, song.year.toLong())
             .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, null)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            metaData.putLong(
-                MediaMetadataCompat.METADATA_KEY_NUM_TRACKS,
-                playingQueue.size.toLong()
-            )
+            metaData.putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, playingQueue.size.toLong())
         }
+
         if (albumArtOnLockscreen()) {
-            runOnNewThread {
-                with(getContext())
-                    .load(song).into(object : CustomBitmapTarget(
-                        Util.getScreenWidth(),
-                        Util.getScreenHeight()
-                    ) {
-                        override fun setResource(resource: Bitmap) {
-                            super.setResource(resource)
-                            metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource)
-                            mediaSession.setMetadata(metaData.build())
-                        }
-                    })
+            serviceScope.launch(Dispatchers.IO) {
+                with(getContext()).load(song).into(object : CustomBitmapTarget(Util.getScreenWidth(), Util.getScreenHeight()) {
+                    override fun setResource(resource: Bitmap) {
+                        super.setResource(resource)
+                        metaData.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, resource)
+                        mediaSession.setMetadata(metaData.build())
+                    }
+                })
             }
         } else {
             mediaSession.setMetadata(metaData.build())
@@ -409,8 +333,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         uiThreadHandler.post(runnable)
     }
 
+    // Modernized to use Coroutines instead of hard Thread spawning
     fun runOnNewThread(runnable: Runnable) {
-        Thread(runnable).start()
+        serviceScope.launch(Dispatchers.IO) { runnable.run() }
     }
 
     fun notifyChange(what: String) {
@@ -423,19 +348,20 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         sendChangeInternal(what)
     }
 
-    // to let other apps know whats playing. i.E. last.fm (scrobbling) or musixmatch
     fun sendPublicIntent(what: String) {
-        val intent = Intent(what.replace(PHONOGRAPH_PACKAGE_NAME, MUSIC_PACKAGE_NAME))
-        val song = currentSong
-        intent.putExtra("id", song.id)
-        intent.putExtra("artist", song.artistName)
-        intent.putExtra("album", song.albumName)
-        intent.putExtra("track", song.title)
-        intent.putExtra("duration", song.duration)
-        intent.putExtra("position", songProgressMillis.toLong())
-        intent.putExtra("playing", isPlaying)
-        intent.putExtra("scrobbling_source", PHONOGRAPH_PACKAGE_NAME)
-        sendStickyBroadcast(intent)
+        val intent = Intent(what.replace(MUSICAL_PACKAGE_NAME, MUSIC_PACKAGE_NAME)).apply {
+            val song = currentSong
+            putExtra("id", song.id)
+            putExtra("artist", song.artistName)
+            putExtra("album", song.albumName)
+            putExtra("track", song.title)
+            putExtra("duration", song.duration)
+            putExtra("position", songProgressMillis.toLong())
+            putExtra("playing", isPlaying)
+            putExtra("scrobbling_source", MUSICAL_PACKAGE_NAME)
+        }
+        // Replaced deprecated sendStickyBroadcast with standard broadcast
+        sendBroadcast(intent)
     }
 
     fun sendChangeInternal(what: String?) {
@@ -447,15 +373,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             PLAY_STATE_CHANGED -> {
                 updateNotification()
                 updateMediaSessionPlaybackState()
-                if (!isPlaying && songProgressMillis > 0) {
-                    savePositionInTrack()
-                }
-                if (countDownTimerPausable != null) {
-                    if (isPlaying) {
-                        countDownTimerPausable!!.start()
-                    } else {
-                        countDownTimerPausable!!.pause()
-                    }
+                if (!isPlaying && songProgressMillis > 0) savePositionInTrack()
+
+                countDownTimerPausable?.let {
+                    if (isPlaying) it.start() else it.pause()
                 }
             }
             META_CHANGED -> {
@@ -463,30 +384,24 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 updateMediaSessionMetaData()
                 savePosition()
                 savePositionInTrack()
-                val currentSong = currentSong
-                val r = Runnable {
-                    roomRepository.addPlayCount(currentSong)
-                    sendChangeInternal(META_CHANGED)
-                }
-                if (countDownTimerPausable != null) countDownTimerPausable!!.cancel()
-                countDownTimerPausable = object : CountDownTimerPausable(
-                    currentSong.duration / 8, 1000
-                ) {
+                val currentSongObj = currentSong
+
+                countDownTimerPausable?.cancel()
+                countDownTimerPausable = object : CountDownTimerPausable(currentSongObj.duration / 8, 1000) {
                     override fun onTick(millisUntilFinished: Long) {}
                     override fun onFinish() {
-                        r.run()
+                        serviceScope.launch(Dispatchers.IO) {
+                            roomRepository.addPlayCount(currentSongObj)
+                            sendChangeInternal(META_CHANGED)
+                        }
                     }
                 }
                 countDownTimerPausable?.start()
             }
             QUEUE_CHANGED -> {
-                updateMediaSessionMetaData() // because playing queue size might have changed
+                updateMediaSessionMetaData()
                 saveState()
-                if (playingQueue.size > 0) {
-                    prepareNext()
-                } else {
-                    playingNotification!!.stop()
-                }
+                if (playingQueue.isNotEmpty()) prepareNext() else playingNotification?.stop()
             }
             MEDIA_STORE_CHANGED -> {
                 playingQueue = roomRepository.savedPlayingQueue().toMutableList()
@@ -497,30 +412,25 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun releaseWakeLock() {
-        if (wakeLock.isHeld) {
-            wakeLock.release()
-        }
+        if (wakeLock.isHeld) wakeLock.release()
     }
-
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            PreferenceUtil.GAPLESS_PLAYBACK -> if (sharedPreferences?.getBoolean(key, false) == true) {
-                prepareNext()
-            } else {
-                playback.setNextDataSource(null)
+            PreferenceUtil.GAPLESS_PLAYBACK -> {
+                if (sharedPreferences?.getBoolean(key, false) == true) prepareNext()
+                else playback.setNextDataSource(null)
             }
             PreferenceUtil.ALBUM_ART_ON_LOCKSCREEN -> updateMediaSessionMetaData()
             PreferenceUtil.COLORED_NOTIFICATION -> updateNotification()
         }
     }
 
-      /////////////
-     // <QUEUE> //
+    /////////////
+    // <QUEUE> //
     /////////////
 
-    @JvmField
-    var position = -1
+    @JvmField var position = -1
     var nextPosition = -1
 
     var playingQueue = mutableListOf<Song>()
@@ -529,29 +439,21 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     private var queuesRestored = false
     private var notHandledMetaChangedForCurrentTrack = false
 
-    private val queueSaveHandler: QueueSaveHandler by lazy {
-        QueueSaveHandler(this, queueSaveHandlerThread.looper)
-    }
-    // queue saving needs to run on a separate thread so that it doesn't block the playback handler events
-    private val queueSaveHandlerThread: HandlerThread by lazy {
-        HandlerThread("QueueSaveHandler", Process.THREAD_PRIORITY_BACKGROUND)
-    }
+    private val queueSaveHandler: QueueSaveHandler by lazy { QueueSaveHandler(this, queueSaveHandlerThread.looper) }
+    private val queueSaveHandlerThread: HandlerThread by lazy { HandlerThread("QueueSaveHandler", Process.THREAD_PRIORITY_BACKGROUND) }
 
     @Synchronized
     fun restoreQueuesAndPositionIfNecessary() {
         if (!queuesRestored && playingQueue.isEmpty()) {
             val restoredQueue = roomRepository.savedPlayingQueue().toMutableList()
             val restoredOriginalQueue = roomRepository.savedOriginalPlayingQueue().toMutableList()
-            val restoredPosition = PreferenceManager.getDefaultSharedPreferences(this).getInt(
-                SAVED_POSITION, -1
-            )
-            val restoredPositionInTrack =
-                PreferenceManager.getDefaultSharedPreferences(this).getInt(
-                    SAVED_POSITION_IN_TRACK, -1
-                )
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            val restoredPosition = prefs.getInt(SAVED_POSITION, -1)
+            val restoredPositionInTrack = prefs.getInt(SAVED_POSITION_IN_TRACK, -1)
+
             if (restoredQueue.isNotEmpty() && restoredQueue.size == restoredOriginalQueue.size && restoredPosition != -1) {
-                originalPlayingQueue = restoredOriginalQueue.toMutableList()
-                playingQueue = restoredQueue.toMutableList()
+                originalPlayingQueue = restoredOriginalQueue
+                playingQueue = restoredQueue
                 position = restoredPosition
                 openCurrent()
                 prepareNext()
@@ -564,21 +466,17 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         queuesRestored = true
     }
 
-    fun openQueue(playingQueue: List<Song>?, startPosition: Int, startPlaying: Boolean) {
-        if (playingQueue != null && playingQueue.isNotEmpty() && startPosition >= 0 && startPosition < playingQueue.size) {
-            // it is important to copy the playing queue here first as we might add/remove songs later
-            originalPlayingQueue = ArrayList(playingQueue)
-            this.playingQueue = ArrayList(originalPlayingQueue)
-            var position = startPosition
+    fun openQueue(newPlayingQueue: List<Song>?, startPosition: Int, startPlaying: Boolean) {
+        if (!newPlayingQueue.isNullOrEmpty() && startPosition in newPlayingQueue.indices) {
+            originalPlayingQueue = newPlayingQueue.toMutableList()
+            playingQueue = originalPlayingQueue.toMutableList()
+            var currentPos = startPosition
+
             if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
-                ShuffleHelper.makeShuffleList(this.playingQueue, startPosition)
-                position = 0
+                ShuffleHelper.makeShuffleList(playingQueue, startPosition)
+                currentPos = 0
             }
-            if (startPlaying) {
-                playSongAt(position)
-            } else {
-                setPosition(position)
-            }
+            if (startPlaying) playSongAt(currentPos) else setPosition(currentPos)
             notifyChange(QUEUE_CHANGED)
         }
     }
@@ -595,13 +493,11 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     private fun savePosition() {
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
-            .putInt(SAVED_POSITION, position).apply()
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(SAVED_POSITION, position).apply()
     }
 
     fun savePositionInTrack() {
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
-            .putInt(SAVED_POSITION_IN_TRACK, songProgressMillis).apply()
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(SAVED_POSITION_IN_TRACK, songProgressMillis).apply()
     }
 
     private fun saveQueues() {
@@ -610,16 +506,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     private fun rePosition(deletedPosition: Int) {
-        val currentPosition = position
-        if (deletedPosition < currentPosition) {
-            position = currentPosition - 1
-        } else if (deletedPosition == currentPosition) {
-            if (playingQueue.size > deletedPosition) {
-                setPosition(position)
-            } else {
-                setPosition(position - 1)
-            }
-        }
+        if (deletedPosition < position) position--
+        else if (deletedPosition == position) setPosition(if (playingQueue.size > deletedPosition) position else position - 1)
     }
 
     fun addSong(position: Int, song: Song) {
@@ -649,22 +537,16 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     fun moveSong(from: Int, to: Int) {
         if (from == to) return
         val currentPosition = position
-        val songToMove: Song = playingQueue.removeAt(from)
-        playingQueue.add(to, songToMove)
+        playingQueue.add(to, playingQueue.removeAt(from))
+
         if (getShuffleMode() == SHUFFLE_MODE_NONE) {
-            val tmpSong: Song = originalPlayingQueue.removeAt(from)
-            originalPlayingQueue.add(to, tmpSong)
+            originalPlayingQueue.add(to, originalPlayingQueue.removeAt(from))
         }
+
         when {
-            currentPosition in to until from -> {
-                position = currentPosition + 1
-            }
-            currentPosition in (from + 1)..to -> {
-                position = currentPosition - 1
-            }
-            from == currentPosition -> {
-                position = to
-            }
+            currentPosition in to until from -> position++
+            currentPosition in (from + 1)..to -> position--
+            from == currentPosition -> position = to
         }
         notifyChange(QUEUE_CHANGED)
     }
@@ -681,19 +563,12 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun removeSong(song: Song) {
-        for (i in playingQueue.indices) {
-            if (playingQueue[i].id == song.id) {
-                playingQueue.removeAt(i)
-                rePosition(i)
-                break
-            }
+        val playIndex = playingQueue.indexOfFirst { it.id == song.id }
+        if (playIndex != -1) {
+            playingQueue.removeAt(playIndex)
+            rePosition(playIndex)
         }
-        for (i in originalPlayingQueue.indices) {
-            if (originalPlayingQueue[i].id == song.id) {
-                originalPlayingQueue.removeAt(i)
-                break
-            }
-        }
+        originalPlayingQueue.removeAll { it.id == song.id }
         notifyChange(QUEUE_CHANGED)
     }
 
@@ -705,129 +580,102 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun getQueueDurationMillis(position: Int): Long {
-        var duration: Long = 0
-        for (i in position + 1 until playingQueue.size) duration += playingQueue[i].duration
-        return duration
+        return playingQueue.drop(position + 1).sumOf { it.duration }
     }
 
     private fun getSongAt(position: Int): Song {
-        return if (position >= 0 && position < playingQueue.size) {
-            playingQueue[position]
+        return if (position in playingQueue.indices) playingQueue[position] else Song.emptySong
+    }
+
+    //////////////
+    // <PLAYER> //
+    //////////////
+
+    val playback: Playback by lazy { MultiPlayer(this) }
+
+    @JvmField var shuffleMode = 0
+    @JvmField var repeatMode = 0
+    var pausedByTransientLossOfFocus = false
+
+    val songProgressMillis: Int get() = playback.position()
+    val songDurationMillis: Int get() = playback.duration()
+
+    private val becomingNoisyReceiverIntentFilter = IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+
+    private val musicPlayerHandlerThread: HandlerThread by lazy { HandlerThread("PlaybackHandler") }
+    private val playerHandler: PlaybackHandler by lazy { PlaybackHandler(this, musicPlayerHandlerThread.looper) }
+    private val throttledSeekHandler: ThrottledSeekHandler by lazy { ThrottledSeekHandler(this, playerHandler) }
+
+    private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+        playerHandler.obtainMessage(FOCUS_CHANGE, focusChange, 0).sendToTarget()
+    }
+
+    private val audioManager: AudioManager by lazy { getSystemService(Service.AUDIO_SERVICE) as AudioManager }
+
+    // Modernized Audio Focus Request
+    fun requestFocus(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+
+            audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(audioAttributes)
+                .setAcceptsDelayedFocusGain(true)
+                .setOnAudioFocusChangeListener(audioFocusListener)
+                .build()
+
+            audioManager.requestAudioFocus(audioFocusRequest!!) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
         } else {
-            Song.emptySong
+            @Suppress("DEPRECATION")
+            audioManager.requestAudioFocus(audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
         }
     }
 
-      //////////////
-     // </QUEUE> //
-    //////////////
-
-
-      //////////////
-     // <PLAYER> //
-    //////////////
-
-    val playback: Playback by lazy {
-        MultiPlayer(this)
-    }
-
-    @JvmField
-    var shuffleMode = 0
-    @JvmField
-    var repeatMode = 0
-    var pausedByTransientLossOfFocus = false
-
-    val songProgressMillis: Int
-        get() = playback.position()
-    val songDurationMillis: Int
-        get() = playback.duration()
-
-    private val becomingNoisyReceiverIntentFilter =
-        IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
-
-    private val musicPlayerHandlerThread: HandlerThread by lazy {
-        HandlerThread("PlaybackHandler")
-    }
-    private val playerHandler: PlaybackHandler by lazy {
-        PlaybackHandler(this, musicPlayerHandlerThread.looper)
-    }
-    private val throttledSeekHandler: ThrottledSeekHandler by lazy {
-        ThrottledSeekHandler(this, playerHandler)
-    }
-    private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        playerHandler.obtainMessage(
-            FOCUS_CHANGE, focusChange, 0
-        ).sendToTarget()
-    }
-
-    private val audioManager: AudioManager by lazy {
-        getSystemService(Service.AUDIO_SERVICE) as AudioManager
-    }
-
-    fun requestFocus(): Boolean {
-        return audioManager.requestAudioFocus(
-            audioFocusListener,
-            AudioManager.STREAM_MUSIC,
-            AudioManager.AUDIOFOCUS_GAIN
-        ) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+    private fun abandonAudioFocus() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioFocusRequest?.let { audioManager.abandonAudioFocusRequest(it) }
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager.abandonAudioFocus(audioFocusListener)
+        }
     }
 
     fun restorePlayerState() {
-        shuffleMode =
-            PreferenceManager.getDefaultSharedPreferences(this)
-                .getInt(SAVED_SHUFFLE_MODE, 0)
-        repeatMode =
-            PreferenceManager.getDefaultSharedPreferences(this)
-                .getInt(SAVED_REPEAT_MODE, 0)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        shuffleMode = prefs.getInt(SAVED_SHUFFLE_MODE, 0)
+        repeatMode = prefs.getInt(SAVED_REPEAT_MODE, 0)
     }
 
-
     fun setRepeatMode(repeatMode: Int) {
-        when (repeatMode) {
-            REPEAT_MODE_NONE, REPEAT_MODE_ALL, REPEAT_MODE_THIS -> {
-                this.repeatMode = repeatMode
-                PreferenceManager.getDefaultSharedPreferences(this).edit()
-                    .putInt(SAVED_REPEAT_MODE, repeatMode)
-                    .apply()
-                prepareNext()
-                handleAndSendChangeInternal(REPEAT_MODE_CHANGED)
-            }
+        if (repeatMode in REPEAT_MODE_NONE..REPEAT_MODE_THIS) {
+            this.repeatMode = repeatMode
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(SAVED_REPEAT_MODE, repeatMode).apply()
+            prepareNext()
+            handleAndSendChangeInternal(REPEAT_MODE_CHANGED)
         }
     }
 
     fun toggleShuffle() {
-        if (getShuffleMode() == SHUFFLE_MODE_NONE) {
-            setShuffleMode(SHUFFLE_MODE_SHUFFLE)
-        } else {
-            setShuffleMode(SHUFFLE_MODE_NONE)
-        }
+        setShuffleMode(if (getShuffleMode() == SHUFFLE_MODE_NONE) SHUFFLE_MODE_SHUFFLE else SHUFFLE_MODE_NONE)
     }
 
-    private fun getShuffleMode(): Int {
-        return shuffleMode
-    }
+    private fun getShuffleMode(): Int = shuffleMode
 
     private fun setShuffleMode(shuffleMode: Int) {
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
-            .putInt(SAVED_SHUFFLE_MODE, shuffleMode)
-            .apply()
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(SAVED_SHUFFLE_MODE, shuffleMode).apply()
+        this.shuffleMode = shuffleMode
+
         when (shuffleMode) {
             SHUFFLE_MODE_SHUFFLE -> {
-                this.shuffleMode = shuffleMode
                 ShuffleHelper.makeShuffleList(playingQueue, position)
                 position = 0
             }
             SHUFFLE_MODE_NONE -> {
-                this.shuffleMode = shuffleMode
                 val currentSongId = currentSong.id
-                playingQueue = ArrayList(originalPlayingQueue)
-                var newPosition = 0
-                for (song in playingQueue) {
-                    if (song.id == currentSongId) {
-                        newPosition = playingQueue.indexOf(song)
-                    }
-                }
-                position = newPosition
+                playingQueue = originalPlayingQueue.toMutableList()
+                position = playingQueue.indexOfFirst { it.id == currentSongId }.coerceAtLeast(0)
             }
         }
         handleAndSendChangeInternal(SHUFFLE_MODE_CHANGED)
@@ -844,18 +692,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                         playback.start()
                         if (!becomingNoisyReceiverRegistered) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                // We use RECEIVER_EXPORTED because ACTION_AUDIO_BECOMING_NOISY
-                                // is a system broadcast sent by the Audio Service (external to the app).
-                                registerReceiver(
-                                    becomingNoisyReceiver,
-                                    becomingNoisyReceiverIntentFilter,
-                                    RECEIVER_EXPORTED
-                                )
+                                // Important: ACTION_AUDIO_BECOMING_NOISY is a system broadcast, so we use RECEIVER_NOT_EXPORTED for security on modern Android.
+                                ContextCompat.registerReceiver(this, becomingNoisyReceiver, becomingNoisyReceiverIntentFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
                             } else {
-                                registerReceiver(
-                                    becomingNoisyReceiver,
-                                    becomingNoisyReceiverIntentFilter
-                                )
+                                registerReceiver(becomingNoisyReceiver, becomingNoisyReceiverIntentFilter)
                             }
                             becomingNoisyReceiverRegistered = true
                         }
@@ -865,17 +705,12 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                         }
                         notifyChange(PLAY_STATE_CHANGED)
 
-                        // fixes a bug where the volume would stay ducked because the AudioManager.AUDIOFOCUS_GAIN event is not sent
                         playerHandler.removeMessages(DUCK)
                         playerHandler.sendEmptyMessage(UNDUCK)
                     }
                 }
             } else {
-                Toast.makeText(
-                    this,
-                    resources.getString(R.string.audio_focus_denied),
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, resources.getString(R.string.audio_focus_denied), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -891,57 +726,31 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     private fun getPreviousPosition(force: Boolean): Int {
         var newPosition = position - 1
         when (repeatMode) {
-            REPEAT_MODE_ALL -> if (newPosition < 0) {
-                newPosition = playingQueue.size - 1
-            }
-            REPEAT_MODE_THIS -> if (force) {
-                if (newPosition < 0) {
-                    newPosition = playingQueue.size - 1
-                }
-            } else {
-                newPosition = position
-            }
-            REPEAT_MODE_NONE -> if (newPosition < 0) {
-                newPosition = 0
-            }
-            else -> if (newPosition < 0) {
-                newPosition = 0
-            }
+            REPEAT_MODE_ALL -> if (newPosition < 0) newPosition = playingQueue.size - 1
+            REPEAT_MODE_THIS -> if (force && newPosition < 0) newPosition = playingQueue.size - 1 else if (!force) newPosition = position
+            else -> if (newPosition < 0) newPosition = 0
         }
         return newPosition
     }
 
     fun setPosition(position: Int) {
-        // handle this on the handlers thread to avoid blocking the ui thread
         playerHandler.removeMessages(SET_POSITION)
         playerHandler.obtainMessage(SET_POSITION, position, 0).sendToTarget()
     }
 
     fun playSongs(songs: List<Song>, shuffleMode: Int) {
         if (songs.isNotEmpty()) {
-            if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
-                var startPosition = 0
-                if (songs.isNotEmpty()) {
-                    startPosition = Random().nextInt(songs.size)
-                }
-                openQueue(songs, startPosition, false)
-                setShuffleMode(shuffleMode)
-            } else {
-                openQueue(songs, 0, false)
-            }
+            val startPos = if (shuffleMode == SHUFFLE_MODE_SHUFFLE) Random.nextInt(songs.size) else 0
+            openQueue(songs, startPos, false)
+            if (shuffleMode == SHUFFLE_MODE_SHUFFLE) setShuffleMode(shuffleMode)
             play()
         } else {
             Toast.makeText(applicationContext, R.string.playlist_is_empty, Toast.LENGTH_LONG).show()
         }
     }
 
-    fun nextSong(force: Boolean) {
-        setPosition(getNextPosition(force))
-    }
-
-    fun playNextSong(force: Boolean) {
-        playSongAt(getNextPosition(force))
-    }
+    fun nextSong(force: Boolean) = setPosition(getNextPosition(force))
+    fun playNextSong(force: Boolean) = playSongAt(getNextPosition(force))
 
     private fun openCurrent(): Boolean {
         synchronized(this) {
@@ -954,41 +763,23 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun playSongAt(position: Int) {
-        // handle this on the handlers thread to avoid blocking the ui thread
         playerHandler.removeMessages(PLAY_SONG)
         playerHandler.obtainMessage(PLAY_SONG, position, 0).sendToTarget()
     }
 
     fun playSongAtImpl(position: Int) {
-        if (openTrackAndPrepareNextAt(position)) {
-            play()
-        } else {
-            Toast.makeText(this, resources.getString(R.string.unplayable_file), Toast.LENGTH_SHORT)
-                .show()
-        }
+        if (openTrackAndPrepareNextAt(position)) play()
+        else Toast.makeText(this, resources.getString(R.string.unplayable_file), Toast.LENGTH_SHORT).show()
     }
 
     private fun getNextPosition(force: Boolean): Int {
-        var position = position + 1
+        var pos = position + 1
         when (repeatMode) {
-            REPEAT_MODE_ALL -> if (isLastTrack) {
-                position = 0
-            }
-            REPEAT_MODE_THIS -> if (force) {
-                if (isLastTrack) {
-                    position = 0
-                }
-            } else {
-                position -= 1
-            }
-            REPEAT_MODE_NONE -> if (isLastTrack) {
-                position -= 1
-            }
-            else -> if (isLastTrack) {
-                position -= 1
-            }
+            REPEAT_MODE_ALL -> if (isLastTrack) pos = 0
+            REPEAT_MODE_THIS -> if (force && isLastTrack) pos = 0 else if (!force) pos -= 1
+            else -> if (isLastTrack) pos -= 1
         }
-        return position
+        return pos
     }
 
     fun openTrackAndPrepareNextAt(position: Int): Boolean {
@@ -1005,9 +796,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     fun prepareNextImpl(): Boolean {
         synchronized(this) {
             return try {
-                val nextPosition = getNextPosition(false)
-                playback.setNextDataSource(getTrackUri(getSongAt(nextPosition)))
-                this.nextPosition = nextPosition
+                val nextPos = getNextPosition(false)
+                playback.setNextDataSource(getTrackUri(getSongAt(nextPos)))
+                this.nextPosition = nextPos
                 true
             } catch (e: Exception) {
                 false
@@ -1020,9 +811,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         playerHandler.obtainMessage(PREPARE_NEXT).sendToTarget()
     }
 
-    fun previousSong(force: Boolean) {
-        setPosition(getPreviousPosition(force))
-    }
+    fun previousSong(force: Boolean) = setPosition(getPreviousPosition(force))
 
     fun seek(millis: Int): Int {
         synchronized(this) {
@@ -1037,32 +826,21 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun back(force: Boolean) {
-        if (songProgressMillis > 5000) {
-            seek(0)
-        } else {
-            previousSong(force)
-        }
+        if (songProgressMillis > 5000) seek(0) else previousSong(force)
     }
 
     fun cycleRepeatMode() {
-        when (repeatMode) {
-            REPEAT_MODE_NONE -> setRepeatMode(REPEAT_MODE_ALL)
-            REPEAT_MODE_ALL -> setRepeatMode(REPEAT_MODE_THIS)
-            else -> setRepeatMode(REPEAT_MODE_NONE)
-        }
+        setRepeatMode(when (repeatMode) {
+            REPEAT_MODE_NONE -> REPEAT_MODE_ALL
+            REPEAT_MODE_ALL -> REPEAT_MODE_THIS
+            else -> REPEAT_MODE_NONE
+        })
     }
 
-    val isPlaying: Boolean
-        get() = playback.isPlaying
-
-    val isLastTrack: Boolean
-        get() = position == playingQueue.size - 1
-
-    val currentSong: Song
-        get() = getSongAt(position)
-
-    val audioSessionId: Int
-        get() = playback.audioSessionId
+    val isPlaying: Boolean get() = playback.isPlaying
+    val isLastTrack: Boolean get() = position == playingQueue.size - 1
+    val currentSong: Song get() = getSongAt(position)
+    val audioSessionId: Int get() = playback.audioSessionId
 
     override fun onTrackWentToNext() {
         playerHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT)
@@ -1076,8 +854,4 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     private fun acquireWakeLock(milli: Long) {
         wakeLock.acquire(milli)
     }
-
-    ///////////////
-     // </PLAYER> //
-    ///////////////
 }
