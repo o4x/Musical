@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
 import github.o4x.musical.R
 import github.o4x.musical.databinding.MusicPanelLayoutBinding
@@ -20,7 +19,6 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(createContentView())
 
         miniPlayerFragment =

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -51,6 +52,9 @@ abstract class AbsBaseActivity : AppCompatActivity() {
         get() = window.decorView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Enable Edge-to-Edge (makes status bar and nav bar transparent)
+        enableEdgeToEdge()
+
         super.onCreate(savedInstanceState)
         volumeControlStream = AudioManager.STREAM_MUSIC
 

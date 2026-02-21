@@ -47,7 +47,7 @@
     <color name="darkColorSurface">#202124</color>
 
     <color name="transparent">#00000000</color>
-    <color name="translucent">#30000000</color>
+    <color name="translucent">#AD000000</color>
     <color name="light_translucent">#10000000</color>
     <color name="semi_transparent">#80000000</color>
 

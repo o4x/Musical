@@ -17,6 +17,7 @@ import github.o4x.musical.helper.MusicPlayerRemote.playPreviousSong
 import github.o4x.musical.helper.PlayPauseButtonOnClickHandler
 import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import github.o4x.musical.util.ColorUtil.withAlpha
+import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.accentColor
 import github.o4x.musical.util.color.MediaNotificationProcessor
 import kotlin.math.abs
@@ -34,6 +35,7 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMiniPlayerBinding.inflate(inflater, container, false)
+        binding.container.applySystemBarsPadding(applyBottom = true)
         binding.progressViewModel = serviceActivity.playerViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root

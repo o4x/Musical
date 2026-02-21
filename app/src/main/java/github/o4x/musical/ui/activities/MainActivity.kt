@@ -5,12 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.LinearLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.tabs.TabLayout
 import github.o4x.musical.R
 import github.o4x.musical.databinding.ActivityMainBinding
 import github.o4x.musical.extensions.findNavController
@@ -20,7 +16,6 @@ import github.o4x.musical.model.Song
 import github.o4x.musical.repository.PlaylistSongsLoader
 import github.o4x.musical.service.MusicService
 import github.o4x.musical.ui.activities.base.AbsMusicPanelActivity
-import github.o4x.musical.views.BreadCrumbLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
