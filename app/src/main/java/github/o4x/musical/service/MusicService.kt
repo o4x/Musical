@@ -422,7 +422,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 else playback.setNextDataSource(null)
             }
             PreferenceUtil.ALBUM_ART_ON_LOCKSCREEN -> updateMediaSessionMetaData()
-            PreferenceUtil.COLORED_NOTIFICATION -> updateNotification()
         }
     }
 

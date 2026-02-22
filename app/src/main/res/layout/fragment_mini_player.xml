@@ -14,14 +14,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="?attr/colorSurface"
+        android:background="@color/page_background"
         android:clickable="true"
         android:focusable="true"
         android:transitionName="@string/transition_mini_player"
         android:id="@+id/container"
         android:animateLayoutChanges="true"
-        android:layoutDirection="ltr"
-        tools:ignore="UnusedAttribute">
+        android:layoutDirection="ltr">
 
         <FrameLayout
             android:id="@+id/progress_bar_container"

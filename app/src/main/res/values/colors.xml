@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Light Theme Text -->
     <color name="onDark">@color/white</color>
     <color name="onLight">@color/black</color>
 
-
-    <!-- Semantic Names (Describing the ROLE, not the color) -->
+    <!-- Semantic Brand Colors -->
     <color name="md_theme_primary">#6750A4</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="md_theme_secondary">#625B71</color>
     <color name="md_theme_onSecondary">#FFFFFF</color>
 
-    <!-- Backgrounds -->
-    <color name="page_background">#FFFFFF</color>
-    <color name="primary_text">#1C1B1F</color> <!-- Almost black -->
-    <color name="card_background">#F3F3FA</color>
+    <!-- Light Theme Backgrounds & Surfaces -->
+    <color name="page_background">#FFFFFF</color> <!-- Pure white for a clean look -->
+    <color name="card_background">#F3F3FA</color> <!-- Subtle cool/purple tint for cards -->
+    <color name="primary_text">#1C1B1F</color> <!-- Almost black for high readability -->
+
 
     <!--Material colors-->
 

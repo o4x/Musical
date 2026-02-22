@@ -38,6 +38,7 @@ import github.o4x.musical.ui.viewmodel.HomeHeaderViewModel
 import github.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.util.Util
+import github.o4x.musical.util.ViewInsetsUtils.applyAppBarPadding
 import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -92,6 +93,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
         mainActivity.setSupportActionBar(binding.toolbar)
         binding.toolbar.title = getString(R.string.app_name)
         binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.nestedScrollView.applyAppBarPadding()
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
@@ -144,7 +146,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
         // Set up header height
         params = binding.header.layoutParams
-        params.height = (displayHeight / 2.5).toInt()
+        params.height = (displayHeight / 3)
         binding.header.layoutParams = params
 
         // Set up poster image height

@@ -26,8 +26,6 @@ class AboutFragment : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        listView.setBackgroundColor(backgroundColor())
         setUpViews()
     }
 

@@ -92,17 +92,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:title="@string/pref_header_notification">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="@string/key_colored_notification"
-            app:summary="@string/pref_summary_colored_notification"
-            app:title="@string/pref_title_colored_notification" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         app:title="@string/pref_header_advanced">
 
         <Preference
