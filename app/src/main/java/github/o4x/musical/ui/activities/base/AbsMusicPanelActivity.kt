@@ -10,6 +10,7 @@ import github.o4x.musical.R
 import github.o4x.musical.databinding.MusicPanelLayoutBinding
 import github.o4x.musical.ui.activities.PlayerActivity
 import github.o4x.musical.ui.fragments.player.MiniPlayerFragment
+import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.color.MediaNotificationProcessor
 
 abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
@@ -31,6 +32,8 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
         playerViewModel.queue.observe(this) {
             hideBottomBar(it.isEmpty())
         }
+
+        binding.container.applySystemBarsPadding(applyBottom = true)
     }
 
     protected abstract fun createContentView(): View?
