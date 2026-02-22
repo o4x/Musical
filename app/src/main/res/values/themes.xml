@@ -22,6 +22,7 @@
 
         <!-- Window background -->
         <item name="android:windowBackground">@color/page_background</item>
+        <item name="backgroundColor">@color/page_background</item>
 
         <!-- Ensures edge-to-edge layouts work nicely with transparent bars -->
         <item name="android:windowLightStatusBar">true</item>
