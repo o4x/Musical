@@ -107,8 +107,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.action_shuffle_all -> libraryViewModel.shuffleSongs()
-            R.id.action_new_playlist -> CreatePlaylistDialog.create().show(childFragmentManager, "CREATE_PLAYLIST")
             R.id.action_search -> mainActivity.openSearch()
             R.id.action_reset_header -> HomeHeaderPref.setDefault()
             R.id.action_use_custom -> startHomeHeaderImagePicker()
@@ -119,6 +117,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
                 )
                 startActivityForResult(myIntent, REQUEST_CODE_SELECT_SONG)
             }
+            R.id.action_new_playlist -> CreatePlaylistDialog.create().show(childFragmentManager, "CREATE_PLAYLIST")
             R.id.nav_queue -> navController.navigate(R.id.action_to_queue)
             R.id.nav_library -> navController.navigate(R.id.action_to_library)
             R.id.nav_folders -> navController.navigate(R.id.action_to_folders)

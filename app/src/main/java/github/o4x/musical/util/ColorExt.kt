@@ -19,8 +19,8 @@ fun Int.withAlpha(alpha: Float): Int {
 fun Context.primaryColor() = resolveColor(R.attr.colorPrimaryFixed, Color.WHITE)
 fun Fragment.primaryColor() = resolveColor(R.attr.colorPrimaryFixed, Color.WHITE)
 
-fun Context.accentColor() = resolveColor(R.attr.colorOnTertiary, Color.WHITE)
-fun Fragment.accentColor() = resolveColor(R.attr.colorOnTertiary, Color.WHITE)
+fun Context.accentColor() = resolveColor(R.attr.colorSecondary, Color.WHITE)
+fun Fragment.accentColor() = resolveColor(R.attr.colorSecondary, Color.WHITE)
 
 fun Context.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
 fun Fragment.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)

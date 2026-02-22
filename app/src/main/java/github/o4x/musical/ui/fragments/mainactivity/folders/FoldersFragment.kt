@@ -2,6 +2,7 @@ package github.o4x.musical.ui.fragments.mainactivity.folders
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.text.Html
@@ -14,6 +15,9 @@ import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,11 +34,17 @@ import github.o4x.musical.misc.DialogAsyncTask
 import github.o4x.musical.misc.OverScrollLinearLayoutManager
 import github.o4x.musical.misc.WrappedAsyncTaskLoader
 import github.o4x.musical.model.Song
+import github.o4x.musical.prefs.HomeHeaderPref
 import github.o4x.musical.prefs.PreferenceUtil.startDirectory
+import github.o4x.musical.ui.activities.MusicPickerActivity
 import github.o4x.musical.ui.adapter.SongFileAdapter
+import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import github.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import github.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ListSongsAsyncTask.OnSongsListedCallback
+import github.o4x.musical.ui.fragments.mainactivity.home.HomeFragment.Companion.REQUEST_CODE_SELECT_SONG
 import github.o4x.musical.util.FileUtil
+import github.o4x.musical.util.ViewInsetsUtils.applyAppBarPadding
+import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.ViewUtil
 import github.o4x.musical.util.accentColor
 import github.o4x.musical.util.scanPaths
@@ -49,7 +59,7 @@ import java.lang.ref.WeakReference
 import java.util.*
 
 class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), SelectionCallback,
-    SongFileAdapter.Callbacks, LoaderManager.LoaderCallbacks<List<File>> {
+    SongFileAdapter.Callbacks, LoaderManager.LoaderCallbacks<List<File>>, MenuProvider {
 
     private lateinit var adapter: SongFileAdapter
 
@@ -100,6 +110,10 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         if (savedInstanceState == null) {
             setCrumb(Crumb(FileUtil.safeGetCanonicalFile(startDirectory)), true)
         } else {
@@ -110,6 +124,14 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainActivity.setSupportActionBar(binding.toolbar)
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+        binding.container.applySystemBarsPadding(applyTop = true)
+
         setUpAppbarColor()
         setUpBreadCrumbs()
         setUpRecyclerView()
@@ -160,17 +182,16 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         return super.handleBackPress()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_folders, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_folders, menu)
     }
 
     override fun onCrumbSelection(crumb: Crumb, index: Int) {
         setCrumb(crumb, true)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
             R.id.action_search -> {
                 mainActivity.openSearch()
                 return true
@@ -180,7 +201,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
                 return true
             }
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     override fun onFileSelected(file: File) {

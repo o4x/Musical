@@ -102,9 +102,9 @@ object ViewInsetsUtils {
      * @param includeStatusBar If true, adds the status bar inset as well. Use true when your
      * AppBar is transparent/overlaying and shifts down due to edge-to-edge.
      */
-    fun View.applyAppBarPadding(includeStatusBar: Boolean = true) {
+    fun View.applyAppBarPadding(includeStatusBar: Boolean = true, extra: Int = 0) {
         val initialPaddingTop = this.paddingTop
-        val actionBarSize = context.getActionBarSize()
+        val actionBarSize = context.getActionBarSize() + extra
 
         if (includeStatusBar) {
             ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
