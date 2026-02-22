@@ -9,14 +9,20 @@
         <item name="colorSecondary">@color/md_theme_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
 
-        <!-- Status bar color. -->
+        <!-- Background & Surface Colors (Crucial for AMOLED & Light/Dark switching) -->
+        <item name="android:colorBackground">@color/page_background</item>
+        <item name="colorSurface">@color/card_background</item>
+        <item name="colorOnBackground">@color/primary_text</item>
+        <item name="colorOnSurface">@color/primary_text</item>
+
+        <!-- Status & Navigation bar color -->
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:navigationBarColor">@color/transparent</item>
 
-        <!-- Set a solid color background -->
+        <!-- Window background -->
         <item name="android:windowBackground">@color/page_background</item>
-        <!-- Optional: Ensure list item backgrounds are transparent so the window background shows through -->
-        <item name="android:colorBackground">@color/transparent</item>
-    </style>
 
+        <!-- Ensures edge-to-edge layouts work nicely with transparent bars -->
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>

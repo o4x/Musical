@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import github.o4x.musical.R
 import github.o4x.musical.databinding.MusicPanelLayoutBinding
@@ -63,5 +64,9 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
     fun setMiniPlayerColor(colors: MediaNotificationProcessor) {
         miniPlayerFragment.setColor(colors)
+    }
+
+    fun setMiniPlayerProgressColor(@ColorInt color: Int) {
+        miniPlayerFragment.setProgressColor(color)
     }
 }

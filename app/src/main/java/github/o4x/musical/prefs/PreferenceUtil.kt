@@ -31,7 +31,6 @@ object PreferenceUtil {
     const val CACHE_IMAGES = "cache_images"
     const val DELETE_CACHED_IMAGES = "delete_cached_images"
     const val DELETE_CUSTOM_IMAGES = "delete_custom_images"
-    const val COLORED_NOTIFICATION = "colored_notification"
     const val SMART_PLAYLIST_LIMIT = "smart_playlist_limit"
     const val LANGUAGE_NAME = "language_name"
     const val ABOUT = "about"
@@ -159,15 +158,6 @@ object PreferenceUtil {
         get() = sharedPreferences.getBoolean(
             COLORED_FOOTER, true
         )
-
-    @JvmStatic
-    var isColoredNotification
-        get() = sharedPreferences.getBoolean(
-            COLORED_NOTIFICATION, true
-        )
-        set(value) = sharedPreferences.edit {
-            putBoolean(COLORED_NOTIFICATION, value)
-        }
 
     @JvmStatic
     fun gaplessPlayback(): Boolean {

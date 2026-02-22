@@ -81,12 +81,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             return@setOnPreferenceClickListener true
         }
 
-          ///////////////////////////
-         // NOTIFICATION SETTINGS //
-        ///////////////////////////
-
-        val coloredNotification: TwoStatePreference? = findPreference(PreferenceUtil.COLORED_NOTIFICATION)
-
         ///////////////////////
          // ADVANCED SETTINGS //
         ///////////////////////

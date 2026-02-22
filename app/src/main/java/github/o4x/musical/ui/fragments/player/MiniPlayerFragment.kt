@@ -57,7 +57,7 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         setProgressColor(this.accentColor())
     }
 
-    private fun setProgressColor(@ColorInt color: Int) {
+    fun setProgressColor(@ColorInt color: Int) {
         binding.progressBarContainer.setBackgroundColor(withAlpha(color, .3f))
         binding.progressBar.supportProgressTintList = ColorStateList.valueOf(color)
     }

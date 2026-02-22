@@ -6,6 +6,7 @@ import androidx.annotation.LayoutRes
 import github.o4x.musical.ui.activities.MainActivity
 import github.o4x.musical.ui.activities.MainActivity.MainActivityFragmentCallbacks
 import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
+import github.o4x.musical.util.primaryColor
 
 abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
     AbsMusicServiceFragment(layout), MainActivityFragmentCallbacks {
@@ -17,6 +18,7 @@ abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainActivity.setMiniPlayerProgressColor(primaryColor())
     }
 
     override fun onResume() {

@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Same names, different hex codes -->
-    <color name="md_theme_primary">#D0BCFF</color> <!-- Lighter/Desaturated for dark mode -->
+    <!-- Semantic Brand Colors (Desaturated for Dark Mode) -->
+    <color name="md_theme_primary">#D0BCFF</color>
     <color name="md_theme_onPrimary">#381E72</color>
     <color name="md_theme_secondary">#CCC2DC</color>
     <color name="md_theme_onSecondary">#332D41</color>
 
-    <!-- Backgrounds -->
-    <color name="page_background">#121212</color> <!-- Dark Grey -->
-    <color name="primary_text">#E6E1E5</color> <!-- Off-white -->
-    <color name="card_background">#252525</color>
-
+    <!-- AMOLED Dark Theme Backgrounds & Surfaces -->
+    <color name="page_background">#000000</color> <!-- PURE BLACK FOR AMOLED -->
+    <color name="card_background">#121212</color> <!-- Very dark gray to separate cards from the black void -->
+    <color name="primary_text">#E6E1E5</color> <!-- Off-white text to prevent eye strain -->
 
     <color name="translucent">#AD000000</color>
-
 </resources>
+
 

@@ -29,6 +29,7 @@
         <item name="android:layout_height">?android:attr/actionBarSize</item>
         <item name="titleTextColor">?android:attr/textColorPrimary</item>
         <item name="iconTint">?android:attr/textColorPrimary</item>
+        <item name="navigationIconTint">?android:attr/textColorPrimary</item>
     </style>
 
 
