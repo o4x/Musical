@@ -35,7 +35,6 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMiniPlayerBinding.inflate(inflater, container, false)
-        binding.container.applySystemBarsPadding(applyBottom = true)
         binding.progressViewModel = serviceActivity.playerViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root

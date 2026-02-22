@@ -21,8 +21,8 @@ object ViewInsetsUtils {
     fun View.applySystemBarsPadding(
         applyTop: Boolean = false,
         applyBottom: Boolean = false,
-        applyLeft: Boolean = false,
-        applyRight: Boolean = false
+        applyLeft: Boolean = true,
+        applyRight: Boolean = true
     ) {
         // Capture initial padding to prevent infinite growth if listener fires multiple times
         val initialPaddingTop = this.paddingTop
@@ -53,8 +53,8 @@ object ViewInsetsUtils {
     fun View.applySystemBarsMargin(
         applyTop: Boolean = false,
         applyBottom: Boolean = false,
-        applyLeft: Boolean = false,
-        applyRight: Boolean = false
+        applyLeft: Boolean = true,
+        applyRight: Boolean = true
     ) {
         val layoutParams = this.layoutParams as? ViewGroup.MarginLayoutParams ?: return
 
