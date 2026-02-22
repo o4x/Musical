@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:padding="2dp"
         android:orientation="horizontal"
-        tools:ignore="UselessParent">
+        android:background="@color/card_background">
 
         <github.o4x.musical.views.IconImageView
             android:id="@+id/drag_view"

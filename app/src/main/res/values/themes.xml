@@ -10,7 +10,8 @@
         <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
 
         <!-- Set a solid color background -->
         <item name="android:windowBackground">@color/page_background</item>
