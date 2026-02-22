@@ -41,6 +41,7 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
     }
 
     var lyrics: Lyrics? = null
+    private var lyricsJob: kotlinx.coroutines.Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,9 +106,13 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
                 (binding.frontAlbumArtPager.adapter as BaseCoverPagerAdapter).swapData(it)
             }
         })
-        playerViewModel.position.observe(viewLifecycleOwner, {
-            binding.frontAlbumArtPager.setCurrentItem(it, true)
-            binding.backAlbumArtPager.setCurrentItem(it, true)
+        playerViewModel.position.observe(viewLifecycleOwner, { newPosition ->
+            if (binding.frontAlbumArtPager.currentItem != newPosition) {
+                binding.frontAlbumArtPager.setCurrentItem(newPosition, true)
+            }
+            if (binding.backAlbumArtPager.currentItem != newPosition) {
+                binding.backAlbumArtPager.setCurrentItem(newPosition, true)
+            }
         })
         playerViewModel.progress.observe(viewLifecycleOwner, {
             updateLyricsProgress(it)
@@ -116,7 +121,8 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
 
     private fun updateLyrics() {
         val song = currentSong
-        lifecycleScope.launch(Dispatchers.IO) {
+        lyricsJob?.cancel()
+        lyricsJob = lifecycleScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
                 lyrics = null
                 swapLyrics(null)
@@ -129,9 +135,9 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
 
             withContext(Dispatchers.Main) {
                 swapLyrics(lyrics)
-
-                binding.toolbar.menu.findItem(R.id.action_lyrics)
-                    .isVisible = lyrics != null
+                if (_binding != null) {
+                    binding.toolbar.menu.findItem(R.id.action_lyrics)?.isVisible = lyrics != null
+                }
             }
         }
     }
@@ -246,14 +252,17 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
     class ParallaxPageTransformer : ViewPager.PageTransformer {
         override fun transformPage(view: View, position: Float) {
             val pageWidth = view.width
-            val pageHeight = view.height
-
-            if (position <= 1) { // [-1,1]
-                view.findViewById<View>(R.id.player_image)
-                    .translationX = -position * pageWidth / 2
+            if (position in -1.0f..1.0f) {
+                var playerImage = view.getTag(R.id.player_image) as? View
+                if (playerImage == null) {
+                    playerImage = view.findViewById(R.id.player_image)
+                    view.setTag(R.id.player_image, playerImage)
+                }
+                playerImage?.translationX = -position * pageWidth / 2f
             }
         }
     }
+
 
     companion object {
         const val VISIBILITY_ANIM_DURATION = 300

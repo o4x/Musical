@@ -32,14 +32,23 @@ class AlbumCoverPagerAdapter(fm: FragmentManager, dataSet: List<Song>) :
                         _binding?.playerImage?.let {
                             GlideApp.with(App.getContext())
                                 .asBitmap()
-                                .transition(BitmapTransitionOptions.withCrossFade())
-                                .transform(BlurTransformation(100, 1))
+                                .transition(BitmapTransitionOptions.withCrossFade(300)) // Added ms duration for smoother transition
+                                // Shrink the massive Bitmap before blurring it
+                                // 300x300 is plenty of detail for a blurred background
+                                .override(300, 300)
+
+                                // Optimize the blur calculation
+                                // 25 is the max hardware-accelerated radius in Android
+                                // 4 is the sampling rate (downscales the image 4x during calculation)
+                                .transform(BlurTransformation(25, 4))
+
                                 .load(resource)
                                 .into(it)
                         }
                     }
                 })
                 .load(song)
+                // We leave this at full screen size so the Front Pager can reuse this cached Bitmap instantly
                 .into(CustomBitmapTarget(Util.getScreenWidth(), Util.getScreenHeight()))
         }
 
