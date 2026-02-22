@@ -9,15 +9,6 @@
         app:iconTint="?android:attr/textColorPrimary"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_shuffle_all"
-        android:title="@string/action_shuffle_all"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_new_playlist"
-        android:title="@string/action_new_playlist"
-        app:showAsAction="never" />
 
     <item
         android:title="@string/change_wallpaper">
@@ -38,6 +29,12 @@
                 app:showAsAction="never" />
         </menu>
     </item>
+
+    <item
+        android:id="@+id/action_new_playlist"
+        android:title="@string/action_new_playlist"
+        app:showAsAction="never" />
+
 
     <item
         android:id="@+id/nav_queue"

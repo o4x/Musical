@@ -1,14 +1,19 @@
 package github.o4x.musical.ui.fragments.mainactivity.library
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentLibraryBinding
 import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.helper.SortOrder
+import github.o4x.musical.prefs.HomeHeaderPref
 import github.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
 import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import github.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
@@ -19,12 +24,15 @@ import github.o4x.musical.prefs.PreferenceUtil.libraryCategory
 import github.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
 import github.o4x.musical.prefs.PreferenceUtil.rememberLastTab
 import github.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
+import github.o4x.musical.ui.activities.MusicPickerActivity
+import github.o4x.musical.ui.fragments.mainactivity.home.HomeFragment.Companion.REQUEST_CODE_SELECT_SONG
 import github.o4x.musical.util.Util
+import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.accentColor
 import github.o4x.musical.util.surfaceColor
 
 class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPageChangeListener,
-    SharedPreferences.OnSharedPreferenceChangeListener {
+    SharedPreferences.OnSharedPreferenceChangeListener, MenuProvider {
 
     private lateinit var pagerAdapter: MusicLibraryPagerAdapter
 
@@ -52,16 +60,19 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainActivity.setSupportActionBar(binding.toolbar)
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+        binding.container.applySystemBarsPadding(applyTop = true)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+
         setUpViewPager()
-
-
-//        val m = TestAdapter(mainActivity, mutableListOf(), R.layout.item_grid)
-//
-//        list_view.adapter = m
-//
-//        libraryViewModel.getSongs().observe(viewLifecycleOwner, {
-//            m.swapData(it)
-//        })
     }
 
 
@@ -110,8 +121,8 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
     private val isPlaylistPage: Boolean
         get() = currentFragment is PlaylistsFragment
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_main, menu)
         if (isPlaylistPage) {
             menu.add(0, R.id.action_new_playlist, 0, R.string.new_playlist_title)
         }
@@ -135,21 +146,20 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
         if (currentFragment is PlaylistsFragment) {
             menu.removeItem(R.id.action_sort_order)
         }
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         val currentFragment = currentFragment
         if (currentFragment is AbsLibraryPagerRecyclerViewCustomGridSizeFragment<*, *>) {
             val absLibraryRecyclerViewCustomGridSizeFragment = currentFragment
-            if (handleGridSizeMenuItem(absLibraryRecyclerViewCustomGridSizeFragment, item)) {
+            if (handleGridSizeMenuItem(absLibraryRecyclerViewCustomGridSizeFragment, menuItem)) {
                 return true
             }
-            if (handleSortOrderMenuItem(absLibraryRecyclerViewCustomGridSizeFragment, item)) {
+            if (handleSortOrderMenuItem(absLibraryRecyclerViewCustomGridSizeFragment, menuItem)) {
                 return true
             }
         }
-        when (item.itemId) {
+        when (menuItem.itemId) {
             R.id.action_shuffle_all -> {
                 libraryViewModel.getSongs().value?.let {
                     MusicPlayerRemote.openAndShuffleQueue(it, true)
@@ -165,7 +175,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
                 return true
             }
         }
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     private fun setUpGridSizeMenu(

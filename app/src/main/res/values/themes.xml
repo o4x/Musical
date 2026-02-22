@@ -8,6 +8,7 @@
         <!-- Secondary brand color -->
         <item name="colorSecondary">@color/md_theme_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+        <item name="colorAccent">@color/md_theme_secondary</item>
 
         <!-- Background & Surface Colors (Crucial for AMOLED & Light/Dark switching) -->
         <item name="android:colorBackground">@color/page_background</item>

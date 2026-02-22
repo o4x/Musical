@@ -7,6 +7,9 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator
@@ -15,6 +18,7 @@ import github.o4x.musical.R
 import github.o4x.musical.extensions.showToast
 import github.o4x.musical.extensions.startImagePicker
 import github.o4x.musical.helper.MusicPlayerRemote
+import github.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import github.o4x.musical.helper.menu.PlaylistMenuHelper
 import github.o4x.musical.model.AbsCustomPlaylist
 import github.o4x.musical.model.Playlist
@@ -27,7 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>() {
+class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(), MenuProvider {
 
     private val viewModel by viewModel<PlaylistDetailsViewModel> {
         parametersOf(requireArguments().getParcelable(EXTRA))
@@ -38,6 +42,10 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         mainActivity.addMusicServiceEventListener(viewModel)
 
         setUpRecyclerView()
@@ -93,16 +101,12 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
         adapter?.boldCurrent = true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(
-            if (data is AbsCustomPlaylist) R.menu.menu_smart_playlist_detail else R.menu.menu_playlist_detail,
-            menu
-        )
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(if (data is AbsCustomPlaylist) R.menu.menu_smart_playlist_detail else R.menu.menu_playlist_detail, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
             R.id.action_shuffle_playlist -> {
                 MusicPlayerRemote.openAndShuffleQueue(adapter!!.dataSet, true)
                 return true
@@ -117,7 +121,7 @@ class PlaylistDetailFragment : AbsDetailFragment<Playlist, PlaylistSongAdapter>(
                 return true
             }
         }
-        return PlaylistMenuHelper.handleMenuClick(mainActivity, data!!, item)
+        return PlaylistMenuHelper.handleMenuClick(mainActivity, data!!, menuItem)
     }
 
     override fun onMediaStoreChanged() {

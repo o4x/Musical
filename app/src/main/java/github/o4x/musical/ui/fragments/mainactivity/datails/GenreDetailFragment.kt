@@ -7,20 +7,27 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import github.o4x.musical.R
 import github.o4x.musical.extensions.showToast
 import github.o4x.musical.extensions.startImagePicker
 import github.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import github.o4x.musical.model.Genre
+import github.o4x.musical.prefs.HomeHeaderPref
+import github.o4x.musical.ui.activities.MusicPickerActivity
 import github.o4x.musical.ui.adapter.song.SongAdapter
+import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
+import github.o4x.musical.ui.fragments.mainactivity.home.HomeFragment.Companion.REQUEST_CODE_SELECT_SONG
 import github.o4x.musical.ui.viewmodel.GenreDetailsViewModel
 import github.o4x.musical.util.CustomImageUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
+class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>(), MenuProvider {
 
     private val viewModel: GenreDetailsViewModel by viewModel {
         parametersOf(requireArguments().getParcelable(EXTRA))
@@ -28,6 +35,10 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         mainActivity.addMusicServiceEventListener(viewModel)
 
         viewModel.getSongs().observe(viewLifecycleOwner, {
@@ -61,28 +72,21 @@ class GenreDetailFragment : AbsDetailFragment<Genre, SongAdapter>() {
         adapter?.boldCurrent = true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_genre_detail, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_genre_detail, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_shuffle_genre -> {
-                openAndShuffleQueue(adapter!!.dataSet, true)
-                return true
-            }
-            R.id.action_set_image -> {
-                startImagePicker(REQUEST_CODE_SELECT_IMAGE)
-                return true
-            }
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.action_shuffle_genre -> openAndShuffleQueue(adapter!!.dataSet, true)
+            R.id.action_set_image -> startImagePicker(REQUEST_CODE_SELECT_IMAGE)
             R.id.action_reset_image -> {
                 showToast(resources.getString(R.string.updating))
                 CustomImageUtil(data!!).resetCustomImage()
-                return true
             }
+            else -> return false
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

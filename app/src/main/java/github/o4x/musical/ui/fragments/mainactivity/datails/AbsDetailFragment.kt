@@ -10,6 +10,8 @@ import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentDetailBinding
 import github.o4x.musical.misc.OverScrollLinearLayoutManager
 import github.o4x.musical.ui.fragments.mainactivity.AbsPopupFragment
+import github.o4x.musical.util.ViewInsetsUtils.applyAppBarPadding
+import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.ViewUtil
 import github.o4x.musical.util.accentColor
 
@@ -39,6 +41,16 @@ open class AbsDetailFragment<T, A: RecyclerView.Adapter<*>> : AbsPopupFragment(R
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainActivity.setSupportActionBar(binding.toolbar)
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+        binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.recyclerView.applyAppBarPadding()
+
+
         data = requireArguments().getParcelable(EXTRA)
 
         setUpRecyclerView()
