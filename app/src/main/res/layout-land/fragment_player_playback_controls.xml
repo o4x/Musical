@@ -33,6 +33,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/titleContainer"
+                app:tint="?android:attr/textColorPrimary"
                 app:srcCompat="@drawable/ic_add_circle_outline" />
 
             <LinearLayout
@@ -54,7 +55,7 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:singleLine="true"
                     android:textAppearance="@style/TextViewHeadline6"
-                    android:textColor="@color/white"
+                    android:textColor="?colorOnBackground"
                     android:textStyle="bold"
                     android:text="@{playerViewModel.currentSong.title}"
                     tools:text="@tools:sample/lorem/random" />
@@ -68,7 +69,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:paddingTop="6dp"
-                    android:textColor="@color/white"
+                    android:textColor="?colorOnBackground"
                     android:text="@{playerViewModel.currentSong.artistName}"
                     app:layout_constraintBottom_toTopOf="@+id/player_progress_slider"
                     app:layout_constraintEnd_toStartOf="@+id/playerMenu"
@@ -88,6 +89,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/titleContainer"
+                app:tint="?android:attr/textColorPrimary"
                 app:srcCompat="@drawable/ic_star_border" />
 
 
@@ -100,7 +102,7 @@
                 android:gravity="center"
                 android:minWidth="40dp"
                 android:singleLine="true"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textColor="?colorOnBackground"
                 android:textSize="12sp"
                 android:text="@{playerViewModel.progressText}"
                 app:layout_constraintBottom_toBottomOf="@+id/player_progress_slider"
@@ -133,7 +135,7 @@
                 android:gravity="center"
                 android:minWidth="40dp"
                 android:singleLine="true"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textColor="?colorOnBackground"
                 android:textSize="12sp"
                 android:text="@{playerViewModel.totalText}"
                 app:layout_constraintBottom_toBottomOf="@+id/player_progress_slider"
@@ -157,8 +159,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/player_prev_button"
                 app:srcCompat="@drawable/ic_repeat"
+                app:tint="?android:attr/textColorPrimary"
                 tools:ignore="MissingPrefix"
-                tools:tint="@color/black"
                 repeatMode="@{playerViewModel.repeatMode}"/>
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -175,8 +177,8 @@
                 app:layout_constraintStart_toEndOf="@+id/player_repeat_button"
                 app:layout_constraintTop_toTopOf="@+id/player_play_pause_button"
                 app:srcCompat="@drawable/ic_skip_previous"
-                tools:ignore="MissingPrefix"
-                tools:tint="@color/black" />
+                app:tint="?android:attr/textColorPrimary"
+                tools:ignore="MissingPrefix" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/player_play_pause_button"
@@ -186,12 +188,13 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:onClick="@{() -> PlayPauseButtonOnClickHandler.playPause()}"
                 app:fabCustomSize="64dp"
+                app:tint="@color/page_background"
+                app:backgroundTint="?colorOnBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/player_next_button"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/player_prev_button"
                 app:srcCompat="@drawable/ic_pause"
-                tools:tint="@color/black"
                 tools:ignore="ContentDescription" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -208,8 +211,8 @@
                 app:layout_constraintStart_toEndOf="@+id/player_play_pause_button"
                 app:layout_constraintTop_toTopOf="@+id/player_play_pause_button"
                 app:srcCompat="@drawable/ic_skip_next"
-                tools:ignore="MissingPrefix"
-                tools:tint="@color/black" />
+                app:tint="?android:attr/textColorPrimary"
+                tools:ignore="MissingPrefix" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/player_shuffle_button"
@@ -225,8 +228,8 @@
                 app:layout_constraintStart_toEndOf="@+id/player_next_button"
                 app:layout_constraintTop_toTopOf="@+id/player_next_button"
                 app:srcCompat="@drawable/ic_shuffle"
+                app:tint="?android:attr/textColorPrimary"
                 tools:ignore="MissingPrefix"
-                tools:tint="@color/black"
                 shuffleMode="@{playerViewModel.shuffleMode}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

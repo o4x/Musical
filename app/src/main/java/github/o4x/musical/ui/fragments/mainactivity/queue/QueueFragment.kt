@@ -75,7 +75,6 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue), MenuProvider {
         when (menuItem.itemId) {
             R.id.action_shuffle_all -> libraryViewModel.shuffleSongs()
             R.id.action_new_playlist -> CreatePlaylistDialog.create().show(childFragmentManager, "CREATE_PLAYLIST")
-            R.id.action_search -> mainActivity.openSearch()
         }
         return true
     }

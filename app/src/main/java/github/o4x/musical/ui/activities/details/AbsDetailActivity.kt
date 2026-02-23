@@ -18,6 +18,8 @@ import github.o4x.musical.ui.adapter.song.DetailsSongAdapter
 import github.o4x.musical.ui.viewmodel.ScrollPositionViewModel
 import github.o4x.musical.util.ColorUtil.withAlpha
 import github.o4x.musical.util.Util
+import github.o4x.musical.util.ViewInsetsUtils.applyAppBarPadding
+import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.ViewUtil
 import github.o4x.musical.util.color.MediaNotificationProcessor
 import github.o4x.musical.util.withAlpha
@@ -48,6 +50,9 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setSupportActionBar(binding.toolbar)
+        binding.appbar.applySystemBarsPadding(applyTop = true)
 
         setupImage()
         initObserver()

@@ -192,10 +192,6 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.action_search -> {
-                mainActivity.openSearch()
-                return true
-            }
             R.id.action_go_to_start_directory -> {
                 setCrumb(Crumb(FileUtil.safeGetCanonicalFile(startDirectory)), true)
                 return true
