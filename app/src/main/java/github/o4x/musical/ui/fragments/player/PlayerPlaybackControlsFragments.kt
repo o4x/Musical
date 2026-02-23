@@ -1,5 +1,6 @@
 package github.o4x.musical.ui.fragments.player
 
+import android.R.attr.textColorPrimary
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -24,6 +25,8 @@ import github.o4x.musical.ui.fragments.AbsMusicServiceFragment
 import github.o4x.musical.util.ColorUtil
 import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.util.TintHelper
+import github.o4x.musical.util.backgroundColor
+import github.o4x.musical.util.textColorPrimary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -109,6 +112,9 @@ open class PlayerPlaybackControlsFragments :
 
 
     private fun setColor() {
+        val backgroundColor = backgroundColor()
+        val primaryColor = textColorPrimary()
+        val secondaryColor = ColorUtil.withAlpha(primaryColor, 0.6f)
         val tintList = ColorStateList.valueOf(primaryColor)
 
         binding.playerAdd.imageTintList = tintList
@@ -163,10 +169,6 @@ open class PlayerPlaybackControlsFragments :
     }
 }
 
-private const val backgroundColor = Color.BLACK
-private const val primaryColor = Color.WHITE
-private val secondaryColor = ColorUtil.withAlpha(primaryColor, 0.6f)
-private val disabledPrimaryColor = ColorUtil.withAlpha(primaryColor, 0.3f)
 
 @BindingAdapter("repeatMode")
 fun setRepeatMode(view: ImageView, mode: Int) {
@@ -188,6 +190,8 @@ fun setShuffleMode(view: ImageView, mode: Int) {
 }
 
 private fun ImageView.setColorMode(enable: Boolean) {
+    val primaryColor = context.textColorPrimary()
+    val disabledPrimaryColor = ColorUtil.withAlpha(primaryColor, 0.3f)
     setColorFilter(
         if (enable)
             primaryColor

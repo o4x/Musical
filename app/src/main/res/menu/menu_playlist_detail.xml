@@ -5,6 +5,7 @@
         android:id="@+id/action_shuffle_playlist"
         android:icon="@drawable/ic_shuffle"
         android:title="@string/action_shuffle_playlist"
+        app:iconTint="?android:attr/textColorPrimary"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_play"

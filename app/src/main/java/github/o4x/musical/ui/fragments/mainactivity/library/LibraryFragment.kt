@@ -1,6 +1,5 @@
 package github.o4x.musical.ui.fragments.mainactivity.library
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
@@ -13,7 +12,6 @@ import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentLibraryBinding
 import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.helper.SortOrder
-import github.o4x.musical.prefs.HomeHeaderPref
 import github.o4x.musical.ui.adapter.MusicLibraryPagerAdapter
 import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import github.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
@@ -24,8 +22,6 @@ import github.o4x.musical.prefs.PreferenceUtil.libraryCategory
 import github.o4x.musical.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
 import github.o4x.musical.prefs.PreferenceUtil.rememberLastTab
 import github.o4x.musical.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
-import github.o4x.musical.ui.activities.MusicPickerActivity
-import github.o4x.musical.ui.fragments.mainactivity.home.HomeFragment.Companion.REQUEST_CODE_SELECT_SONG
 import github.o4x.musical.util.Util
 import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.accentColor
@@ -122,7 +118,7 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
         get() = currentFragment is PlaylistsFragment
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_library, menu)
         if (isPlaylistPage) {
             menu.add(0, R.id.action_new_playlist, 0, R.string.new_playlist_title)
         }
@@ -168,10 +164,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
             }
             R.id.action_new_playlist -> {
                 CreatePlaylistDialog.create().show(childFragmentManager, "CREATE_PLAYLIST")
-                return true
-            }
-            R.id.action_search -> {
-                mainActivity.openSearch()
                 return true
             }
         }

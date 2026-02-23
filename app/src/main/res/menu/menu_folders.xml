@@ -3,15 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:title="@string/action_search"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/action_go_to_start_directory"
         android:icon="@drawable/ic_bookmark_music"
         android:title="@string/action_go_to_start_directory"
+        app:iconTint="?android:attr/textColorPrimary"
         app:showAsAction="ifRoom" />
 
 </menu>

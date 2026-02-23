@@ -5,6 +5,7 @@
         android:id="@+id/action_shuffle_genre"
         android:icon="@drawable/ic_shuffle"
         android:title="@string/action_shuffle_all"
+        app:iconTint="?android:attr/textColorPrimary"
         app:showAsAction="ifRoom" />
 
     <item

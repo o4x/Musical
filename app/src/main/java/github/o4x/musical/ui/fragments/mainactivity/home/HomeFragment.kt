@@ -91,7 +91,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
         super.onViewCreated(view, savedInstanceState)
 
         mainActivity.setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = getString(R.string.app_name)
         binding.appbar.applySystemBarsPadding(applyTop = true)
         binding.nestedScrollView.applyAppBarPadding()
         val menuHost: MenuHost = requireActivity()

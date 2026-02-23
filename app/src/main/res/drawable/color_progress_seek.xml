@@ -13,7 +13,7 @@
         <clip>
             <shape>
                 <corners android:radius="8dip" />
-                <solid android:color="?attr/colorControlNormal" />
+                <solid android:color="?colorOnBackground" />
             </shape>
         </clip>
     </item>

@@ -23,6 +23,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             style="@style/Toolbar"
+            app:title="@string/library"
             app:layout_scrollFlags="scroll|enterAlways|snap">
 
         </com.google.android.material.appbar.MaterialToolbar>

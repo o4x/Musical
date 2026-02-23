@@ -210,7 +210,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             style="@style/Toolbar"
-            android:background="@color/transparent"/>
+            android:background="@color/transparent"
+            app:title="@string/app_name"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
