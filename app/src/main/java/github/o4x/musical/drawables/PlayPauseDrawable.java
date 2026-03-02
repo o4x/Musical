@@ -13,6 +13,8 @@ import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import android.util.Property;
 import android.view.animation.DecelerateInterpolator;
@@ -52,11 +54,11 @@ public class PlayPauseDrawable extends Drawable {
 
     private Animator animator;
 
-    public PlayPauseDrawable(@NonNull Context context) {
+    public PlayPauseDrawable(@NonNull Context context, @ColorInt int color) {
         final Resources res = context.getResources();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
+        paint.setColor(color);
         pauseBarWidth = res.getDimensionPixelSize(R.dimen.pause_bar_width);
         pauseBarHeight = res.getDimensionPixelSize(R.dimen.pause_bar_height);
         pauseBarDistance = res.getDimensionPixelSize(R.dimen.pause_bar_distance);

@@ -79,7 +79,7 @@ open class PlayerPlaybackControlsFragments :
 
     private fun setUpPlayPauseButton() {
         playPauseDrawable =
-            PlayPauseDrawable(requireActivity())
+            PlayPauseDrawable(requireActivity(), Color.WHITE)
         binding.playerPlayPauseButton.setImageDrawable(playPauseDrawable)
         binding.playerPlayPauseButton.setOnClickListener(PlayPauseButtonOnClickHandler())
     }

@@ -20,6 +20,7 @@ import github.o4x.musical.util.ColorUtil.withAlpha
 import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.accentColor
 import github.o4x.musical.util.color.MediaNotificationProcessor
+import github.o4x.musical.util.colorOnBackground
 import kotlin.math.abs
 
 open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_player) {
@@ -62,7 +63,7 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
     }
 
     private fun setUpPlayPauseButton() {
-        miniPlayerPlayPauseDrawable = PlayPauseDrawable(requireActivity())
+        miniPlayerPlayPauseDrawable = PlayPauseDrawable(requireActivity(), colorOnBackground())
         binding.miniPlayerPlayPauseButton.setImageDrawable(miniPlayerPlayPauseDrawable)
         binding.miniPlayerPlayPauseButton.setOnClickListener(PlayPauseButtonOnClickHandler())
     }
