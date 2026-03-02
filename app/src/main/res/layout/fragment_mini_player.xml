@@ -74,7 +74,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 tools:text="@tools:sample/lorem/random" />
 
-            <github.o4x.musical.views.IconImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/mini_player_play_pause_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

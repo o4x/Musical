@@ -28,6 +28,9 @@ fun Fragment.surfaceColor() = resolveColor(R.attr.colorSurface, Color.WHITE)
 fun Context.backgroundColor() = resolveColor(R.attr.backgroundColor, Color.WHITE)
 fun Fragment.backgroundColor() = resolveColor(R.attr.backgroundColor, Color.WHITE)
 
+fun Context.colorOnBackground() = resolveColor(R.attr.colorOnBackground, Color.WHITE)
+fun Fragment.colorOnBackground() = resolveColor(R.attr.colorOnBackground, Color.WHITE)
+
 fun Context.textColorSecondary() = resolveColor(android.R.attr.textColorSecondary)
 fun Fragment.textColorSecondary() = resolveColor(android.R.attr.textColorSecondary)
 
