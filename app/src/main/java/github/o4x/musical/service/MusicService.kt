@@ -333,7 +333,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         uiThreadHandler.post(runnable)
     }
 
-    // Modernized to use Coroutines instead of hard Thread spawning
     fun runOnNewThread(runnable: Runnable) {
         serviceScope.launch(Dispatchers.IO) { runnable.run() }
     }
@@ -360,7 +359,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             putExtra("playing", isPlaying)
             putExtra("scrobbling_source", MUSICAL_PACKAGE_NAME)
         }
-        // Replaced deprecated sendStickyBroadcast with standard broadcast
         sendBroadcast(intent)
     }
 
@@ -382,6 +380,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             META_CHANGED -> {
                 updateNotification()
                 updateMediaSessionMetaData()
+                updateMediaSessionPlaybackState()
                 savePosition()
                 savePositionInTrack()
                 val currentSongObj = currentSong
@@ -611,7 +610,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     private val audioManager: AudioManager by lazy { getSystemService(Service.AUDIO_SERVICE) as AudioManager }
 
-    // Modernized Audio Focus Request
     fun requestFocus(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val audioAttributes = AudioAttributes.Builder()
@@ -691,7 +689,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                         playback.start()
                         if (!becomingNoisyReceiverRegistered) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                // Important: ACTION_AUDIO_BECOMING_NOISY is a system broadcast, so we use RECEIVER_NOT_EXPORTED for security on modern Android.
                                 ContextCompat.registerReceiver(this, becomingNoisyReceiver, becomingNoisyReceiverIntentFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
                             } else {
                                 registerReceiver(becomingNoisyReceiver, becomingNoisyReceiverIntentFilter)

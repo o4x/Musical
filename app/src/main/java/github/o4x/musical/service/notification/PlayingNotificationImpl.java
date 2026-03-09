@@ -35,12 +35,12 @@ public class PlayingNotificationImpl extends PlayingNotification {
 
         Intent action = new Intent(service, MainActivity.class);
         action.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        final PendingIntent clickIntent = PendingIntent.getActivity(service, 0, action, PendingIntent.FLAG_IMMUTABLE);
+        final PendingIntent clickIntent = PendingIntent.getActivity(service, 0, action, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         final ComponentName serviceName = new ComponentName(service, MusicService.class);
         Intent intent = new Intent(MusicService.ACTION_QUIT);
         intent.setComponent(serviceName);
-        final PendingIntent deleteIntent = PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        final PendingIntent deleteIntent = PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
         GlideLoader.with(service)
@@ -94,6 +94,6 @@ public class PlayingNotificationImpl extends PlayingNotification {
         final ComponentName serviceName = new ComponentName(service, MusicService.class);
         Intent intent = new Intent(action);
         intent.setComponent(serviceName);
-        return PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        return PendingIntent.getService(service, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 }
