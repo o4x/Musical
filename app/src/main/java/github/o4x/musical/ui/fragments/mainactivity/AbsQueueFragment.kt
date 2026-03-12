@@ -24,17 +24,24 @@ abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragmen
         super.onViewCreated(view, savedInstanceState)
         initQueueView()
 
-        playerViewModel.queue.observe(viewLifecycleOwner, {
+        playerViewModel.queue.observe(viewLifecycleOwner) {
             queueAdapter.swapDataSet(it, MusicPlayerRemote.position)
             isRestored = false
-        })
-        playerViewModel.position.observe(viewLifecycleOwner, {
+        }
+
+        playerViewModel.position.observe(viewLifecycleOwner) {
             queueAdapter.setCurrent(it)
             toPosition(it)
-        })
-        playerViewModel.isPlaying.observe(viewLifecycleOwner, {
-            queueAdapter.notifyDataSetChanged()
-        })
+        }
+
+        playerViewModel.isPlaying.observe(viewLifecycleOwner) {
+            val currentPosition = playerViewModel.position.value ?: -1
+            if (currentPosition != -1) {
+                queueAdapter.notifyItemChanged(currentPosition)
+            } else {
+                queueAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onStop() {

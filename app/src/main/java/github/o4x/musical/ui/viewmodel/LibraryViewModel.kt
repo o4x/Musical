@@ -20,6 +20,9 @@ class LibraryViewModel(
 
     private val paletteColor = MutableLiveData<Int>()
 
+    private val _isLoading = MutableLiveData<Boolean>(true)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     private val albums = MutableLiveData<List<Album>>()
     private val songs = MutableLiveData<List<Song>>()
     private val artists = MutableLiveData<List<Artist>>()
@@ -52,12 +55,16 @@ class LibraryViewModel(
             fetchLegacyPlaylist()
             fetchRecentlyPlayed()
             fetchRecentlyAdded()
+        } else {
+            _isLoading.postValue(false)
         }
     }
 
     private fun fetchSongs() {
         viewModelScope.launch(IO) {
+            _isLoading.postValue(true)
             songs.postValue(repository.allSongs())
+            _isLoading.postValue(false)
         }
     }
 
@@ -122,38 +129,20 @@ class LibraryViewModel(
     }
 
     override fun onMediaStoreChanged() {
-        println("onMediaStoreChanged")
         loadLibraryContent()
     }
 
-    override fun onServiceConnected() {
-        println("onServiceConnected")
-    }
-
-    override fun onServiceDisconnected() {
-        println("onServiceDisconnected")
-    }
-
-    override fun onQueueChanged() {
-        println("onQueueChanged")
-    }
+    override fun onServiceConnected() {}
+    override fun onServiceDisconnected() {}
+    override fun onQueueChanged() {}
 
     override fun onPlayingMetaChanged() {
-        println("onPlayingMetaChanged")
         fetchRecentlyPlayed()
     }
 
-    override fun onPlayStateChanged() {
-        println("onPlayStateChanged")
-    }
-
-    override fun onRepeatModeChanged() {
-        println("onRepeatModeChanged")
-    }
-
-    override fun onShuffleModeChanged() {
-        println("onShuffleModeChanged")
-    }
+    override fun onPlayStateChanged() {}
+    override fun onRepeatModeChanged() {}
+    override fun onShuffleModeChanged() {}
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
@@ -177,19 +166,20 @@ class LibraryViewModel(
     suspend fun albumById(id: Long) = repository.albumById(id)
     suspend fun artistById(id: Long) = repository.artistByIdAsync(id)
 
-    fun recentSongs(): LiveData<List<Song>> = liveData {
+    // Critical Performance Fix: Added IO dispatcher to prevent Main Thread blocking
+    fun recentSongs(): LiveData<List<Song>> = liveData(IO) {
         emit(repository.recentSongs())
     }
 
-    fun playCountSongs(): LiveData<List<Song>> = liveData {
+    fun playCountSongs(): LiveData<List<Song>> = liveData(IO) {
         emit(repository.playCountSongs())
     }
 
-    fun artist(artistId: Long): LiveData<Artist> = liveData {
+    fun artist(artistId: Long): LiveData<Artist> = liveData(IO) {
         emit(repository.artistByIdAsync(artistId))
     }
 
-    fun playlist(playListId: Long): LiveData<Playlist> = liveData {
+    fun playlist(playListId: Long): LiveData<Playlist> = liveData(IO) {
         emit(repository.playlist(playListId))
     }
 
@@ -203,9 +193,5 @@ class LibraryViewModel(
 }
 
 enum class ReloadType {
-    Songs,
-    Albums,
-    Artists,
-    Playlists,
-    Genres,
+    Songs, Albums, Artists, Playlists, Genres,
 }

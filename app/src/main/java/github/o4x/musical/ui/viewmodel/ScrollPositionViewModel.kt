@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModel
 class ScrollPositionViewModel : ViewModel() {
 
     private val position: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>().also {
-            it.value = 0
-        }
+        MutableLiveData<Int>().also { it.value = 0 }
     }
 
     fun getPosition(): LiveData<Int> {
