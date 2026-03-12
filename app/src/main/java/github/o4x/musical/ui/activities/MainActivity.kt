@@ -18,6 +18,7 @@ import github.o4x.musical.service.MusicService
 import github.o4x.musical.ui.activities.base.AbsMusicPanelActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.get
 
 class MainActivity : AbsMusicPanelActivity() {
@@ -27,7 +28,6 @@ class MainActivity : AbsMusicPanelActivity() {
     }
 
     private lateinit var mainBinding: ActivityMainBinding
-
     lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,8 +41,7 @@ class MainActivity : AbsMusicPanelActivity() {
 
     override fun createContentView(): View {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
-        val slidingPanel = wrapSlidingMusicPanel(mainBinding.root)
-        return slidingPanel
+        return wrapSlidingMusicPanel(mainBinding.root)
     }
 
     fun openSearch() {
@@ -59,9 +58,8 @@ class MainActivity : AbsMusicPanelActivity() {
             val uri: Uri? = intent.data
             val mimeType: String? = intent.type
             var handled = false
-            if (intent.action != null &&
-                intent.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH
-            ) {
+
+            if (intent.action != null && intent.action == MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH) {
                 val songs: List<Song> = getSongs(intent.extras!!)
                 if (MusicPlayerRemote.shuffleMode == MusicService.SHUFFLE_MODE_SHUFFLE) {
                     MusicPlayerRemote.openAndShuffleQueue(songs, true)
@@ -70,6 +68,7 @@ class MainActivity : AbsMusicPanelActivity() {
                 }
                 handled = true
             }
+
             if (uri != null && uri.toString().isNotEmpty()) {
                 MusicPlayerRemote.playFromUri(uri)
                 handled = true
@@ -86,36 +85,29 @@ class MainActivity : AbsMusicPanelActivity() {
                 if (id >= 0L) {
                     val position: Int = intent.getIntExtra("position", 0)
                     val songs = libraryViewModel.albumById(id).songs
-                    MusicPlayerRemote.openQueue(
-                        songs,
-                        position,
-                        true
-                    )
+                    MusicPlayerRemote.openQueue(songs, position, true)
                     handled = true
                 } else if (MediaStore.Audio.Artists.CONTENT_TYPE == mimeType) {
                     val id = parseLongFromIntent(intent, "artistId", "artist")
                     if (id >= 0L) {
                         val position: Int = intent.getIntExtra("position", 0)
                         val songs: List<Song> = libraryViewModel.artistById(id).songs
-                        MusicPlayerRemote.openQueue(
-                            songs,
-                            position,
-                            true
-                        )
+                        MusicPlayerRemote.openQueue(songs, position, true)
                         handled = true
                     }
                 }
             }
+
             if (handled) {
-                setIntent(Intent())
+                withContext(Dispatchers.Main) {
+                    setIntent(Intent())
+                }
             }
         }
-
     }
 
     private fun parseLongFromIntent(
-        intent: Intent, longKey: String,
-        stringKey: String
+        intent: Intent, longKey: String, stringKey: String
     ): Long {
         var id = intent.getLongExtra(longKey, -1)
         if (id < 0) {

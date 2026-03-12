@@ -2,7 +2,6 @@ package github.o4x.musical.ui.fragments.mainactivity.home
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -45,8 +44,6 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
 
 class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
@@ -66,8 +63,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    // Fix: Override the abstract property using a getter pointing to the binding
-    // This ensures it is available whenever the binding is valid
     override val queueRecyclerView: RecyclerView
         get() = binding.queueRecyclerView
 
@@ -85,7 +80,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
         mainActivity.removeMusicServiceEventListener(posterViewModel)
         _binding = null
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -122,7 +116,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
             R.id.nav_folders -> navController.navigate(R.id.action_to_folders)
             R.id.nav_timer -> navController.navigate(R.id.action_to_timer)
             R.id.nav_settings -> navController.navigate(R.id.settings_activity)
-
             else -> return false
         }
         return true
@@ -140,21 +133,15 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
     private fun setUpHeights() {
         displayHeight = Util.getScreenHeight()
-        val params: ViewGroup.LayoutParams
-
-        // Set up header height
-        params = binding.header.layoutParams
+        val params: ViewGroup.LayoutParams = binding.header.layoutParams
         params.height = (displayHeight / 3)
         binding.header.layoutParams = params
 
-        // Set up poster image height
         val posterParams = binding.poster.layoutParams
         posterHeight = (displayHeight / 1.5f).toInt()
         posterParams.height = posterHeight
         binding.poster.layoutParams = posterParams
 
-
-        // get real header height
         headerHeight = binding.header.layoutParams.height
     }
 
@@ -176,34 +163,28 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
     }
 
     private fun setUpBounceScrollView() {
-        binding.nestedScrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
-
+        binding.nestedScrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             scrollPositionViewModel.setPosition(scrollY)
-
-            // Scroll poster
-            binding.poster.y =
-                ((-scrollY / (displayHeight * 2 / binding.poster.layoutParams.height.toFloat())).toInt())
-                    .toFloat()
+            binding.poster.y = ((-scrollY / (displayHeight * 2 / binding.poster.layoutParams.height.toFloat())).toInt()).toFloat()
         }
 
-        // zooming poster in over scroll
         val params = binding.poster.layoutParams
         val width = params.width
         val height = params.height
         binding.nestedScrollView.setOnOverScrollListener { _: Boolean, overScrolledDistance: Int ->
             val scale = 1 + overScrolledDistance / displayHeight.toFloat()
-            val mParams: ViewGroup.LayoutParams =
-                FrameLayout.LayoutParams(
-                    width,
-                    (height * scale).toInt()
-                )
+            val mParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(width, (height * scale).toInt())
             binding.poster.layoutParams = mParams
         }
     }
 
     override fun initQueueView() {
         queueLayoutManager = GridHelper.linearLayoutManager(requireContext())
-        binding.queueRecyclerView.layoutManager = queueLayoutManager
+        binding.queueRecyclerView.apply {
+            layoutManager = queueLayoutManager
+            setHasFixedSize(true)
+            setItemViewCacheSize(10) // Cache performance
+        }
         queueAdapter = HomeAdapter(
             mainActivity,
             ArrayList(),
@@ -221,7 +202,10 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
     private fun setUpRecentlyView() {
         recentlyLayoutManager = GridHelper.gridLayoutManager(requireContext())
-        binding.recentlyRecyclerView.layoutManager = recentlyLayoutManager
+        binding.recentlyRecyclerView.apply {
+            layoutManager = recentlyLayoutManager
+            setHasFixedSize(true)
+        }
         recentlyAdapter = HomeAdapter(
             mainActivity,
             ArrayList(),
@@ -239,7 +223,10 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
     private fun setUpNewView() {
         newLayoutManager = GridHelper.gridLayoutManager(requireContext())
-        binding.newRecyclerView.layoutManager = newLayoutManager
+        binding.newRecyclerView.apply {
+            layoutManager = newLayoutManager
+            setHasFixedSize(true)
+        }
         newAdapter = HomeAdapter(
             mainActivity,
             ArrayList(),
@@ -257,8 +244,18 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
     }
 
     private fun setupEmpty() {
-        libraryViewModel.getSongs().observe(viewLifecycleOwner) {
-            binding.empty.isVisible = it.isEmpty()
+        binding.empty.isVisible = false
+
+        libraryViewModel.isLoading.observe(viewLifecycleOwner) { isNowLoading ->
+            if (!isNowLoading) {
+                binding.empty.isVisible = libraryViewModel.getSongs().value?.isEmpty() == true
+            }
+        }
+
+        libraryViewModel.getSongs().observe(viewLifecycleOwner) { songs ->
+            if (libraryViewModel.isLoading.value == false) {
+                binding.empty.isVisible = songs.isEmpty()
+            }
         }
     }
 
@@ -267,11 +264,8 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
         when (requestCode) {
             REQUEST_CODE_SELECT_IMAGE -> if (resultCode == Activity.RESULT_OK) {
                 data?.data?.let { uri ->
-                    // Fix: Use lifecycleScope instead of GlobalScope to avoid memory leaks
                     lifecycleScope.launch(Dispatchers.IO) {
                         if (headerDir.isDirectory) {
-                            // Note: toFile() might crash on content:// URIs on newer Android versions.
-                            // If this persists, consider using ContentResolver to copy the file.
                             try {
                                 val newImage = uri.toFile()
                                 headerDir.listFiles()?.forEach { image ->
@@ -282,7 +276,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
                             }
                         }
                     }
-
                     HomeHeaderPref.customImagePath = uri.toString()
                 }
             }
