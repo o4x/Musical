@@ -1,7 +1,7 @@
 
 [versions]
 advrecyclerview = "1.0.0"
-androidGradlePlugin = "9.0.1"
+androidGradlePlugin = "9.2.1"
 annotation = "1.9.1"
 appcompat = "1.7.1"
 bouncescrollview = "1.5-androidx"
