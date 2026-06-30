@@ -7,9 +7,15 @@
     <color name="md_theme_onSecondary">#332D41</color>
 
     <!-- AMOLED Dark Theme Backgrounds & Surfaces -->
-    <color name="page_background">#000000</color> <!-- PURE BLACK FOR AMOLED -->
-    <color name="card_background">#121212</color> <!-- Very dark gray to separate cards from the black void -->
-    <color name="primary_text">#E6E1E5</color> <!-- Off-white text to prevent eye strain -->
+    <color name="page_background">#000000</color>
+    <color name="card_background">#121212</color>
+    <color name="primary_text">#E6E1E5</color>
+
+    <!-- M3 surface containers (dialogs, popups, bottom sheets) -->
+    <color name="surface_container_low">@color/page_background</color>
+    <color name="surface_container">@color/card_background</color>
+    <color name="surface_container_high">#1E1E1E</color>
+    <color name="surface_container_highest">#252525</color>
 
     <color name="translucent">#AD000000</color>
 </resources>

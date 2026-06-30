@@ -16,6 +16,12 @@
         <item name="colorOnBackground">@color/primary_text</item>
         <item name="colorOnSurface">@color/primary_text</item>
 
+        <!-- M3 surface container tokens — used by dialogs, popups, bottom sheets, menus -->
+        <item name="colorSurfaceContainerLow">@color/surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/surface_container_highest</item>
+
         <!-- Status & Navigation bar color -->
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:navigationBarColor">@color/transparent</item>
@@ -24,7 +30,10 @@
         <item name="android:windowBackground">@color/page_background</item>
         <item name="backgroundColor">@color/page_background</item>
 
-        <!-- Ensures edge-to-edge layouts work nicely with transparent bars -->
-        <item name="android:windowLightStatusBar">true</item>
+        <!-- Wire dialogs into the app theme so they use app colors instead of M3 defaults -->
+        <item name="materialAlertDialogTheme">@style/MaterialAlertDialogTheme</item>
+
+        <!-- Preferences screen -->
+        <item name="preferenceTheme">@style/DefaultPreferenceTheme</item>
     </style>
 </resources>
