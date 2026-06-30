@@ -2,6 +2,7 @@
 <resources>
 
     <style name="DefaultPreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="colorAccent">?attr/colorPrimary</item>
         <item name="checkBoxPreferenceStyle">@style/Preference.CheckBoxPreference.Material.App</item>
         <item name="dialogPreferenceStyle">@style/Preference.DialogPreference.Material.App</item>
         <item name="dropdownPreferenceStyle">@style/Preference.DropDown.Material.App</item>

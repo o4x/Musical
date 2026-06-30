@@ -183,15 +183,15 @@
         </item>
     </style>
 
-    <style name="AppTextAppearance.MaterialAlertDialog.Button" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="AppTextAppearance.MaterialAlertDialog.Button" parent="Widget.Material3.Button.TextButton">
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="AppTextAppearance.MaterialAlertDialog.Body" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+    <style name="AppTextAppearance.MaterialAlertDialog.Body" parent="MaterialAlertDialog.Material3.Body.Text">
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="AppTextAppearance.MaterialAlertDialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+    <style name="AppTextAppearance.MaterialAlertDialog.Title" parent="MaterialAlertDialog.Material3.Title.Text">
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
