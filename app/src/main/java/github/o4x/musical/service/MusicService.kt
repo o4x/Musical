@@ -200,11 +200,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 ACTION_PLAY_PLAYLIST -> {
                     val playlist: Playlist? = intent.getParcelableExtra(INTENT_EXTRA_PLAYLIST)
                     val shuffleMode = intent.getIntExtra(INTENT_EXTRA_SHUFFLE_MODE, getShuffleMode())
-                    if (playlist != null && playlist.songs().isNotEmpty()) {
-                        val playlistSongs = playlist.songs()
-                        val startPos = if (shuffleMode == SHUFFLE_MODE_SHUFFLE) Random.nextInt(playlistSongs.size) else 0
-                        openQueue(playlistSongs, startPos, true)
-                        if (shuffleMode == SHUFFLE_MODE_SHUFFLE) setShuffleMode(shuffleMode)
+                    val songs = playlist?.songs()
+                    if (!songs.isNullOrEmpty()) {
+                        playSongs(songs, shuffleMode)
                     } else {
                         Toast.makeText(applicationContext, R.string.playlist_is_empty, Toast.LENGTH_LONG).show()
                     }
@@ -660,7 +658,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     private fun getShuffleMode(): Int = shuffleMode
 
-    private fun setShuffleMode(shuffleMode: Int) {
+    fun setShuffleMode(shuffleMode: Int) {
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(SAVED_SHUFFLE_MODE, shuffleMode).apply()
         this.shuffleMode = shuffleMode
 
@@ -734,12 +732,20 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         playerHandler.obtainMessage(SET_POSITION, position, 0).sendToTarget()
     }
 
-    fun playSongs(songs: List<Song>, shuffleMode: Int) {
+    fun playSongs(songs: List<Song>, shuffleMode: Int, startPlaying: Boolean = true) {
         if (songs.isNotEmpty()) {
-            val startPos = if (shuffleMode == SHUFFLE_MODE_SHUFFLE) Random.nextInt(songs.size) else 0
-            openQueue(songs, startPos, false)
-            if (shuffleMode == SHUFFLE_MODE_SHUFFLE) setShuffleMode(shuffleMode)
-            play()
+            originalPlayingQueue = songs.toMutableList()
+            playingQueue = songs.toMutableList()
+            if (shuffleMode == SHUFFLE_MODE_SHUFFLE) {
+                ShuffleHelper.makeShuffleList(playingQueue, Random.nextInt(songs.size))
+            }
+            position = 0
+            this.shuffleMode = shuffleMode
+            PreferenceManager.getDefaultSharedPreferences(this).edit()
+                .putInt(SAVED_SHUFFLE_MODE, shuffleMode).apply()
+            notifyChange(QUEUE_CHANGED)
+            handleAndSendChangeInternal(SHUFFLE_MODE_CHANGED)
+            if (startPlaying) playSongAt(0) else setPosition(0)
         } else {
             Toast.makeText(applicationContext, R.string.playlist_is_empty, Toast.LENGTH_LONG).show()
         }
