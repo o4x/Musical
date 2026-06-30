@@ -238,9 +238,9 @@ object MusicPlayerRemote : KoinComponent {
                 startPlaying
             ) && musicService != null
         ) {
+            if (musicService!!.shuffleMode == MusicService.SHUFFLE_MODE_SHUFFLE)
+                musicService!!.setShuffleMode(MusicService.SHUFFLE_MODE_NONE)
             musicService?.openQueue(queue, startPosition, startPlaying)
-            if (PreferenceUtil.isShuffleModeOn)
-                setShuffleMode(MusicService.SHUFFLE_MODE_NONE)
         }
     }
 
@@ -249,18 +249,7 @@ object MusicPlayerRemote : KoinComponent {
      */
     @JvmStatic
     fun openAndShuffleQueue(queue: List<Song>, startPlaying: Boolean) {
-        val startPosition = 0
-        val queue = queue.shuffled()
-
-        if (!tryToHandleOpenPlayingQueue(
-                queue,
-                startPosition,
-                startPlaying
-            ) && musicService != null
-        ) {
-            openQueue(queue, startPosition, startPlaying)
-            setShuffleMode(MusicService.SHUFFLE_MODE_SHUFFLE)
-        }
+        musicService?.playSongs(queue, MusicService.SHUFFLE_MODE_SHUFFLE, startPlaying)
     }
 
     @JvmStatic
@@ -315,7 +304,7 @@ object MusicPlayerRemote : KoinComponent {
     @JvmStatic
     fun setShuffleMode(shuffleMode: Int): Boolean {
         if (musicService != null) {
-            musicService!!.shuffleMode = shuffleMode
+            musicService!!.setShuffleMode(shuffleMode)
             return true
         }
         return false
