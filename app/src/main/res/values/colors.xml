@@ -19,7 +19,7 @@
     <!-- M3 surface containers (dialogs, popups, bottom sheets) -->
     <color name="surface_container_low">@color/page_background</color>
     <color name="surface_container">@color/card_background</color>
-    <color name="surface_container_high">@color/card_background</color>
+    <color name="surface_container_high">#EEEEF7</color>
     <color name="surface_container_highest">#EAEAF4</color>
 
 
