@@ -12,9 +12,15 @@
     <color name="md_theme_onSecondary">#FFFFFF</color>
 
     <!-- Light Theme Backgrounds & Surfaces -->
-    <color name="page_background">#FFFFFF</color> <!-- Pure white for a clean look -->
-    <color name="card_background">#F3F3FA</color> <!-- Subtle cool/purple tint for cards -->
-    <color name="primary_text">#1C1B1F</color> <!-- Almost black for high readability -->
+    <color name="page_background">#FFFFFF</color>
+    <color name="card_background">#F3F3FA</color>
+    <color name="primary_text">#1C1B1F</color>
+
+    <!-- M3 surface containers (dialogs, popups, bottom sheets) -->
+    <color name="surface_container_low">@color/page_background</color>
+    <color name="surface_container">@color/card_background</color>
+    <color name="surface_container_high">@color/card_background</color>
+    <color name="surface_container_highest">#EAEAF4</color>
 
 
     <!--Material colors-->
