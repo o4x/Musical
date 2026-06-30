@@ -15,38 +15,42 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    background = BackgroundBlack,
-    surface = BackgroundBlack
+    primary = PrimaryDark,
+    onPrimary = OnPrimaryDark,
+    secondary = SecondaryDark,
+    onSecondary = OnSecondaryDark,
+    background = BackgroundDark,
+    surface = SurfaceDark,
+    surfaceContainer = SurfaceContainerDark,
+    surfaceContainerHigh = SurfaceContainerHighDark,
+    surfaceContainerHighest = SurfaceContainerHighestDark,
+    onBackground = OnBackgroundDark,
+    onSurface = OnSurfaceDark,
+    error = ErrorColor,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    background = BackgroundWhite,
-    surface = BackgroundWhite
-
-    /* Other default colors to override
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = PrimaryLight,
+    onPrimary = OnPrimaryLight,
+    secondary = SecondaryLight,
+    onSecondary = OnSecondaryLight,
+    background = BackgroundLight,
+    surface = SurfaceLight,
+    surfaceContainer = SurfaceContainerLight,
+    surfaceContainerHigh = SurfaceContainerHighLight,
+    surfaceContainerHighest = SurfaceContainerHighestLight,
+    onBackground = OnBackgroundLight,
+    onSurface = OnSurfaceLight,
+    error = ErrorColor,
 )
 
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        // logic for Dynamic Colors (Android 12+)
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -55,7 +59,6 @@ fun AppTheme(
         else -> LightColorScheme
     }
 
-    // logic to color the Status Bar (top bar with battery/time)
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -64,7 +67,6 @@ fun AppTheme(
         }
     }
 
-    // Apply the Theme
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
