@@ -9,7 +9,6 @@ import github.o4x.musical.model.Song
 import github.o4x.musical.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PlaylistDetailsViewModel(
     private val realRepository: Repository,
@@ -22,9 +21,9 @@ class PlaylistDetailsViewModel(
         loadSongs(playlist)
     }
 
-    private fun loadSongs(playlist: Playlist) = viewModelScope.launch {
+    private fun loadSongs(playlist: Playlist) = viewModelScope.launch(Dispatchers.IO) {
         val songs = realRepository.getPlaylistSongs(playlist)
-        withContext(Dispatchers.Main) { playListSongs.postValue(songs) }
+        playListSongs.postValue(songs)
     }
 
     override fun onMediaStoreChanged() {

@@ -45,12 +45,13 @@ class AlbumRepository(private val songRepository: SongRepository) {
     fun splitIntoAlbums(
         songs: List<Song>
     ): List<Album> {
+        val sortOrder = PreferenceUtil.albumSongSortOrder
         return songs.groupBy { it.albumId }
-            .map { sortAlbumSongs(Album(it.key, it.value)) }
+            .map { sortAlbumSongs(Album(it.key, it.value), sortOrder) }
     }
 
-    private fun sortAlbumSongs(album: Album): Album {
-        val songs = when (PreferenceUtil.albumSongSortOrder) {
+    private fun sortAlbumSongs(album: Album, sortOrder: String? = PreferenceUtil.albumSongSortOrder): Album {
+        val songs = when (sortOrder) {
             SortOrder.AlbumSongSortOrder.SONG_TRACK_LIST -> album.songs.sortedWith { o1, o2 ->
                 o1.trackNumber.compareTo(o2.trackNumber)
             }
@@ -63,7 +64,7 @@ class AlbumRepository(private val songRepository: SongRepository) {
             SortOrder.AlbumSongSortOrder.SONG_DURATION -> album.songs.sortedWith { o1, o2 ->
                 o1.duration.compareTo(o2.duration)
             }
-            else -> throw IllegalArgumentException("invalid ${PreferenceUtil.albumSongSortOrder}")
+            else -> throw IllegalArgumentException("invalid $sortOrder")
         }
         return album.copy(songs = songs)
     }

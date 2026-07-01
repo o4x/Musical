@@ -14,8 +14,9 @@ import github.o4x.musical.App.Companion.getContext
 import github.o4x.musical.model.Artist
 import github.o4x.musical.model.Genre
 import github.o4x.musical.model.Playlist
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
@@ -71,7 +72,7 @@ class CustomImageUtil {
 
     fun setCustomImage(bitmap: Bitmap?) {
         if (bitmap == null) return
-        GlobalScope.launch(Dispatchers.Default) {
+        utilScope.launch {
             val file = file
             var succesful = false
             try {
@@ -92,7 +93,7 @@ class CustomImageUtil {
 
 
     fun resetCustomImage() {
-        GlobalScope.launch {
+        utilScope.launch {
             notifyChange()
             val file = file
             if (file.exists()) {
@@ -145,11 +146,11 @@ class CustomImageUtil {
 
     companion object {
         private const val FOLDER_NAME = "/images/"
+        private val utilScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
         fun deleteAll() {
             val dir = File(getContext().filesDir, FOLDER_NAME)
             FileUtils.delete(dir)
         }
-
     }
 }

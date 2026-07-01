@@ -12,6 +12,9 @@ import github.o4x.musical.prefs.PreferenceUtil
 import github.o4x.musical.repository.Repository
 import github.o4x.musical.shared.Permissions
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -49,13 +52,17 @@ class LibraryViewModel(
 
     private fun loadLibraryContent() = viewModelScope.launch(IO) {
         if (Permissions.canReadStorage(App.getContext())) {
+            // Home page data first: two small queries in parallel, no competition with heavy loads
+            coroutineScope {
+                launch { recentlyPlayed.postValue(repository.historySong()) }
+                launch { recentlyAdded.postValue(repository.recentSongs()) }
+            }
+            // Heavy library queries start only after home content is already visible
             fetchSongs()
             fetchAlbums()
             fetchArtists()
             fetchGenres()
             fetchLegacyPlaylist()
-            fetchRecentlyPlayed()
-            fetchRecentlyAdded()
         } else {
             _isLoading.postValue(false)
         }
@@ -154,9 +161,15 @@ class LibraryViewModel(
         }
     }
 
-    fun search(realContext: Context, query: String?) = viewModelScope.launch(IO) {
-        val result = repository.search(realContext, query)
-        searchResults.postValue(result)
+    private var searchJob: Job? = null
+
+    fun search(realContext: Context, query: String?) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch(IO) {
+            delay(300)
+            val result = repository.search(realContext, query)
+            searchResults.postValue(result)
+        }
     }
 
     fun shuffleSongs() = viewModelScope.launch(IO) {

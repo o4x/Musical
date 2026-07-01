@@ -35,19 +35,19 @@ class ArtistDetailActivity : AbsDetailActivity<Artist>() {
     }
 
     override fun initObserver() {
-        setArtist(
-            detailsViewModel.loadArtistSync()
-        )
-        detailsViewModel.getArtist().observe(this, {
+        detailsViewModel.getArtist().observe(this) {
             setArtist(it)
-        })
+        }
+    }
+
+    override fun refreshData() {
+        detailsViewModel.fetchArtist()
     }
 
     private fun setArtist(artist: Artist) {
         this.data = artist
-
+        if (songAdapter == null) setupSongsRecycler()
         loadImage()
-
         songAdapter?.swapDataSet(artist.songs)
         songAdapter?.data = artist
     }

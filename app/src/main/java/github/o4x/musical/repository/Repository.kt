@@ -104,15 +104,15 @@ class Repository(
 
     fun recentSongs(): List<Song> = lastAddedRepository.recentSongs()
 
-    fun topPlayedSongs(): List<Song> = roomRepository.playCountSongs()
+    suspend fun topPlayedSongs(): List<Song> = roomRepository.playCountSongs()
 
-    fun playCountSongs(): List<Song> =
+    suspend fun playCountSongs(): List<Song> =
         roomRepository.playCountSongs()
 
     fun observableHistorySongs(): LiveData<List<Song>> =
         roomRepository.observableHistorySongs()
 
-    fun historySong(): List<Song> =
+    suspend fun historySong(): List<Song> =
         roomRepository.historySongs()
 
     fun songsFlow(): Flow<Result<List<Song>>> = flow {

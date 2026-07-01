@@ -36,19 +36,19 @@ class AlbumDetailActivity : AbsDetailActivity<Album>() {
     }
 
     override fun initObserver() {
-        setAlbum(
-            detailsViewModel.loadAlbumSync()
-        )
-        detailsViewModel.getAlbum().observe(this, {
+        detailsViewModel.getAlbum().observe(this) {
             setAlbum(it)
-        })
+        }
+    }
+
+    override fun refreshData() {
+        detailsViewModel.fetchAlbum()
     }
 
     private fun setAlbum(album: Album) {
         this.data = album
-
+        if (songAdapter == null) setupSongsRecycler()
         loadImage()
-
         songAdapter?.swapDataSet(album.songs)
         songAdapter?.data = album
     }

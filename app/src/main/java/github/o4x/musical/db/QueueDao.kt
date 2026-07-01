@@ -24,17 +24,17 @@ interface QueueDao {
     fun getQueueSongs(): LiveData<List<QueueEntity>>
 
     @Query("SELECT * FROM QueueEntity")
-    fun getQueueSongsSync(): List<QueueEntity>
+    suspend fun getQueueSongsSync(): List<QueueEntity>
 
     @Query("DELETE from QueueEntity")
-    fun clearQueueSongs()
+    suspend fun clearQueueSongs()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllSongs(songs: List<QueueEntity>)
+    suspend fun insertAllSongs(songs: List<QueueEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSong(song: QueueEntity)
+    suspend fun insertSong(song: QueueEntity)
 
     @Delete
-    fun delete(song: QueueEntity)
+    suspend fun delete(song: QueueEntity)
 }

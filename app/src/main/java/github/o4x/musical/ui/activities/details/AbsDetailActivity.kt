@@ -72,10 +72,12 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == TAG_EDITOR_REQUEST) {
-            initObserver()
+            refreshData()
             setResult(RESULT_OK)
         }
     }
+
+    protected open fun refreshData() {}
 
     private fun setupImage() {
         imageHeight = Util.getScreenWidth()
@@ -95,11 +97,10 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     }
 
     open fun setupViews() {
-        setupSongsRecycler()
         setupScrollView()
     }
 
-    private fun setupSongsRecycler() {
+    protected fun setupSongsRecycler() {
         songAdapter = DetailsSongAdapter(
             this, getSongs(), R.layout.item_list, data!!, colors
         )

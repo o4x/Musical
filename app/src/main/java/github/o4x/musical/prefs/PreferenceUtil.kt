@@ -107,27 +107,26 @@ object PreferenceUtil {
         CategoryInfo(CategoryInfo.Category.PLAYLISTS, true)
     )
 
+    private val gson = Gson()
+    private val libraryCategoryType = object : TypeToken<List<CategoryInfo>>() {}.type
+
     @JvmStatic
     var libraryCategory: List<CategoryInfo>
         get() {
-            val gson = Gson()
-            val collectionType = object : TypeToken<List<CategoryInfo>>() {}.type
-
             val data = sharedPreferences.getStringOrDefault(
                 LIBRARY_CATEGORIES,
-                gson.toJson(defaultCategories, collectionType)
+                gson.toJson(defaultCategories, libraryCategoryType)
             )
             return try {
-                Gson().fromJson(data, collectionType)
+                gson.fromJson(data, libraryCategoryType)
             } catch (e: JsonSyntaxException) {
                 e.printStackTrace()
                 return defaultCategories
             }
         }
         set(value) {
-            val collectionType = object : TypeToken<List<CategoryInfo?>?>() {}.type
             sharedPreferences.edit {
-                putString(LIBRARY_CATEGORIES, Gson().toJson(value, collectionType))
+                putString(LIBRARY_CATEGORIES, gson.toJson(value, libraryCategoryType))
             }
         }
 
@@ -252,7 +251,7 @@ object PreferenceUtil {
         )
         set(sortOrder) {
             val editor = sharedPreferences.edit()
-            editor.putString(GENRE_SORT_ORDER, sortOrder)
+            editor.putString(PLAYLIST_SORT_ORDER, sortOrder)
             editor.apply()
         }
 

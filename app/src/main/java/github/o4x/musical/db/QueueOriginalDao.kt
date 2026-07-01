@@ -5,17 +5,17 @@ import androidx.room.*
 @Dao
 interface QueueOriginalDao {
     @Query("SELECT * FROM QueueOriginalEntity")
-    fun getQueueSongsSync(): List<QueueOriginalEntity>
+    suspend fun getQueueSongsSync(): List<QueueOriginalEntity>
 
     @Query("DELETE from QueueOriginalEntity")
-    fun clearQueueSongs()
+    suspend fun clearQueueSongs()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllSongs(songs: List<QueueOriginalEntity>)
+    suspend fun insertAllSongs(songs: List<QueueOriginalEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSong(song: QueueOriginalEntity)
+    suspend fun insertSong(song: QueueOriginalEntity)
 
     @Delete
-    fun delete(song: QueueOriginalEntity)
+    suspend fun delete(song: QueueOriginalEntity)
 }

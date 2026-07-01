@@ -4,6 +4,7 @@ import github.o4x.musical.App
 import github.o4x.musical.R
 import github.o4x.musical.model.Song
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.runBlocking
 
 @Parcelize
 class TopTracksPlaylist : AbsSmartPlaylist(
@@ -11,6 +12,6 @@ class TopTracksPlaylist : AbsSmartPlaylist(
     iconRes = R.drawable.ic_trending_up
 ) {
     override fun songs(): List<Song> {
-        return roomRepository.playCountSongs()
+        return runBlocking { roomRepository.playCountSongs() }
     }
 }

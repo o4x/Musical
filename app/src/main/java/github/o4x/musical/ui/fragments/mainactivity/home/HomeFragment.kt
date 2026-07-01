@@ -185,7 +185,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
         binding.queueRecyclerView.apply {
             layoutManager = queueLayoutManager
             setHasFixedSize(true)
-            setItemViewCacheSize(10) // Cache performance
+            setItemViewCacheSize(10)
         }
         queueAdapter = HomeAdapter(
             mainActivity,
@@ -225,8 +225,8 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
             setRecycledViewPool(sharedViewPool)
         }
         libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner) {
-            binding.recentlyContainer.isVisible = it.isNotEmpty()
             recentlyAdapter.swapDataSet(it)
+            binding.recentlyContainer.isVisible = it.isNotEmpty()
         }
     }
 
@@ -251,8 +251,8 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
         }
 
         libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner) {
-            binding.newlyContainer.isVisible = it.isNotEmpty()
             newAdapter.swapDataSet(it)
+            binding.newlyContainer.isVisible = it.isNotEmpty()
         }
     }
 
