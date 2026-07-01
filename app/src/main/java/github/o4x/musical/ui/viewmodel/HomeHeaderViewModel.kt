@@ -26,7 +26,6 @@ import github.o4x.musical.util.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.max
 
 class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
     MusicServiceEventListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -97,20 +96,13 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
     fun calculateBitmap(image: ImageView, it: Bitmap, w: Int, h: Int) {
         if (w <= 0 || h <= 0)
             return
-        val m = max(w, h)
         viewModelScope.launch(Dispatchers.Default) {
             val paletteBuilder = Palette.from(it)
             val colors = MyPalette(
                 image.context,
                 paletteBuilder.generate()
             )
-            var bitmap = Bitmap
-                .createBitmap(
-                    Bitmap.createScaledBitmap(it, m, m, false),
-                    (m / 2) - (w / 2),
-                    (m / 2) - (h / 2),
-                    w,
-                    h)
+            var bitmap = Bitmap.createScaledBitmap(it, w, h, true)
             bitmap = if (PreferenceUtil.isDarkMode ==
                 ColorUtil.isColorDark(colors.backgroundColor)
             ) {

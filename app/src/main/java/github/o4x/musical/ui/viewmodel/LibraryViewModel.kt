@@ -13,6 +13,7 @@ import github.o4x.musical.repository.Repository
 import github.o4x.musical.shared.Permissions
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LibraryViewModel(
     private val repository: Repository
@@ -63,8 +64,11 @@ class LibraryViewModel(
     private fun fetchSongs() {
         viewModelScope.launch(IO) {
             _isLoading.postValue(true)
-            songs.postValue(repository.allSongs())
-            _isLoading.postValue(false)
+            val result = repository.allSongs()
+            withContext(kotlinx.coroutines.Dispatchers.Main) {
+                songs.value = result
+                _isLoading.value = false
+            }
         }
     }
 

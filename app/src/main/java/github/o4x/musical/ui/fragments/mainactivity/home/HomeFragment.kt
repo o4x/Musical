@@ -55,6 +55,8 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
     private lateinit var recentlyLayoutManager: GridLayoutManager
     private lateinit var newLayoutManager: GridLayoutManager
 
+    private val sharedViewPool = RecyclerView.RecycledViewPool()
+
     // Heights //
     private var displayHeight = 0
     private var headerHeight = 0
@@ -193,7 +195,10 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
             null,
             true
         )
-        binding.queueRecyclerView.adapter = queueAdapter
+        binding.queueRecyclerView.apply {
+            adapter = queueAdapter
+            setRecycledViewPool(sharedViewPool)
+        }
 
         playerViewModel.queue.observe(viewLifecycleOwner) {
             binding.queueContainer.isVisible = it.isNotEmpty()
@@ -214,7 +219,11 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
             requireContext().homeGridSize() * 2,
             false,
         )
-        binding.recentlyRecyclerView.adapter = recentlyAdapter
+        binding.recentlyRecyclerView.apply {
+            adapter = recentlyAdapter
+            setItemViewCacheSize(5)
+            setRecycledViewPool(sharedViewPool)
+        }
         libraryViewModel.getRecentlyPlayed().observe(viewLifecycleOwner) {
             binding.recentlyContainer.isVisible = it.isNotEmpty()
             recentlyAdapter.swapDataSet(it)
@@ -235,7 +244,11 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
             requireContext().homeGridSize() * 3,
             false,
         )
-        binding.newRecyclerView.adapter = newAdapter
+        binding.newRecyclerView.apply {
+            adapter = newAdapter
+            setItemViewCacheSize(5)
+            setRecycledViewPool(sharedViewPool)
+        }
 
         libraryViewModel.getRecentlyAdded().observe(viewLifecycleOwner) {
             binding.newlyContainer.isVisible = it.isNotEmpty()
