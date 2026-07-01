@@ -81,11 +81,17 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
     public void swapDataSet(List<Song> dataSet, int position) {
         this.dataSet = dataSet;
         current = position;
+        if (recyclerView != null && recyclerView.getItemAnimator() != null) {
+            recyclerView.getItemAnimator().endAnimations();
+        }
         notifyDataSetChanged();
     }
 
     public void setCurrent(int current) {
         this.current = current;
+        if (recyclerView != null && recyclerView.getItemAnimator() != null) {
+            recyclerView.getItemAnimator().endAnimations();
+        }
         notifyDataSetChanged();
     }
 

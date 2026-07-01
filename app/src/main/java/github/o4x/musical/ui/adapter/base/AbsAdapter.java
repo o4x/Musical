@@ -40,7 +40,7 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     protected List<I> dataSet;
     protected int itemLayoutRes;
     @Nullable
-    private RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
 
     public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes, @MenuRes int menu) {
         super(activity, menu);
