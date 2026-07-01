@@ -35,7 +35,7 @@ class App : Application(), OnSharedPreferenceChangeListener {
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == PreferenceUtil.LANGUAGE_NAME || key == PreferenceUtil.DARK_MODE ) {
+        if (key == PreferenceUtil.DARK_MODE) {
             AppCompatDelegate.setDefaultNightMode(isNightMode)
         }
     }

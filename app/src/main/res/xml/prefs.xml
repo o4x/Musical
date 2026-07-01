@@ -103,16 +103,6 @@
     <PreferenceCategory
         app:title="@string/pref_header_other">
 
-        <ListPreference
-            app:defaultValue="auto"
-            app:entries="@array/pref_language_names"
-            app:entryValues="@array/pref_language_codes"
-            app:key="@string/key_language_name"
-            app:negativeButtonText=""
-            app:positiveButtonText=""
-            android:summary="%s"
-            app:title="@string/pref_language_name" />
-
         <Preference
             app:key="@string/key_about"
             app:title="@string/action_about"
