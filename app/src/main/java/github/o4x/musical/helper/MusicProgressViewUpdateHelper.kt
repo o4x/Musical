@@ -15,11 +15,13 @@
 package github.o4x.musical.helper
 
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
+import java.lang.ref.WeakReference
 
 class MusicProgressViewUpdateHelper : Handler {
 
-    private var callback: Callback? = null
+    private var callback: WeakReference<Callback>? = null
     private var intervalPlaying: Int = 0
     private var intervalPaused: Int = 0
 
@@ -31,14 +33,14 @@ class MusicProgressViewUpdateHelper : Handler {
         removeMessages(CMD_REFRESH_PROGRESS_VIEWS)
     }
 
-    constructor(callback: Callback) {
-        this.callback = callback
+    constructor(callback: Callback) : super(Looper.getMainLooper()) {
+        this.callback = WeakReference(callback)
         this.intervalPlaying = UPDATE_INTERVAL_PLAYING
         this.intervalPaused = UPDATE_INTERVAL_PAUSED
     }
 
-    constructor(callback: Callback, intervalPlaying: Int, intervalPaused: Int) {
-        this.callback = callback
+    constructor(callback: Callback, intervalPlaying: Int, intervalPaused: Int) : super(Looper.getMainLooper()) {
+        this.callback = WeakReference(callback)
         this.intervalPlaying = intervalPlaying
         this.intervalPaused = intervalPaused
     }
@@ -51,10 +53,11 @@ class MusicProgressViewUpdateHelper : Handler {
     }
 
     private fun refreshProgressViews(): Int {
+        val cb = callback?.get() ?: return intervalPaused
         val progressMillis = MusicPlayerRemote.songProgressMillis
         val totalMillis = MusicPlayerRemote.songDurationMillis
         if (totalMillis > 0)
-            callback?.onUpdateProgressViews(progressMillis, totalMillis)
+            cb.onUpdateProgressViews(progressMillis, totalMillis)
 
         if (!MusicPlayerRemote.isPlaying) {
             return intervalPaused

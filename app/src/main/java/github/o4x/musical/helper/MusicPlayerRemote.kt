@@ -31,6 +31,7 @@ import github.o4x.musical.prefs.PreferenceUtil
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.File
+import java.lang.ref.WeakReference
 import java.util.*
 
 object MusicPlayerRemote : KoinComponent {
@@ -38,8 +39,12 @@ object MusicPlayerRemote : KoinComponent {
 
     private val mConnectionMap = WeakHashMap<Context, ServiceBinder>()
 
+    private var musicServiceRef: WeakReference<MusicService>? = null
+
     @JvmStatic
-    var musicService: MusicService? = null
+    var musicService: MusicService?
+        get() = musicServiceRef?.get()
+        set(value) { musicServiceRef = value?.let { WeakReference(it) } }
 
     private val songRepository by inject<SongRepository>()
 
