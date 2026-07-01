@@ -4,7 +4,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import androidx.annotation.LayoutRes
-import androidx.lifecycle.LifecycleOwner
 import github.o4x.musical.R
 import github.o4x.musical.extensions.toPlaylistDetail
 import github.o4x.musical.helper.menu.PlaylistMenuHelper.handleMenuClick
@@ -16,6 +15,11 @@ import github.o4x.musical.ui.activities.MainActivity
 import github.o4x.musical.ui.adapter.base.AbsAdapter
 import github.o4x.musical.ui.adapter.base.MediaEntryViewHolder
 import github.o4x.musical.util.MusicUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PlaylistAdapter(
@@ -45,13 +49,22 @@ class PlaylistAdapter(
 
         holder.title?.text = playlist.name
 
-        playlist.getSongsLive().observe(holder.itemView.context as LifecycleOwner, {
-            holder.text?.text = MusicUtil.getSongCountString(activity, it.size)
-            getImageLoader(holder).load(playlist, it).into(holder.image)
-        })
-
+        holder.loadJob?.cancel()
+        holder.loadJob = CoroutineScope(Dispatchers.IO).launch {
+            val songs = playlist.songs()
+            withContext(Dispatchers.Main) {
+                holder.text?.text = MusicUtil.getSongCountString(activity, songs.size)
+                getImageLoader(holder).load(playlist, songs).into(holder.image)
+            }
+        }
 
 //        holder.image?.setImageResource(getIconRes(playlist))
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        holder.loadJob?.cancel()
+        holder.loadJob = null
     }
 
     private fun getIconRes(playlist: Playlist): Int {
@@ -82,6 +95,7 @@ class PlaylistAdapter(
     }
 
     inner class ViewHolder(itemView: View) : MediaEntryViewHolder(itemView) {
+        var loadJob: Job? = null
         override fun onClick(view: View) {
             val playlist = dataSet[adapterPosition]
             mainActivity.navController.toPlaylistDetail(playlist)
