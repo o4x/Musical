@@ -94,12 +94,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             return@setOnPreferenceClickListener true
         }
 
-        val languagePreference: Preference? = findPreference(PreferenceUtil.LANGUAGE_NAME)
-        languagePreference?.setOnPreferenceChangeListener { prefs, newValue ->
-            setSummary(prefs, newValue)
-            true
-        }
-
         val aboutPreference: Preference? = findPreference(PreferenceUtil.ABOUT)
         aboutPreference?.setOnPreferenceClickListener {
             try {

@@ -39,6 +39,8 @@ configure<ApplicationExtension> {
 
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        resourceConfigurations += "en"
     }
 
     buildTypes {

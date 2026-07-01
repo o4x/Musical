@@ -20,16 +20,5 @@
         <item>@string/auto_download_images_entry_value_never</item>
     </array>
 
-    <string-array name="pref_language_names">
-        <item>System default</item>
-        <item>English</item>
-        <item>Persian</item>
-    </string-array>
-
-    <string-array name="pref_language_codes">
-        <item>auto</item>
-        <item>en</item>
-        <item>fa</item>
-    </string-array>
 
 </resources>

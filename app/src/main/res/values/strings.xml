@@ -225,7 +225,6 @@
     <string name="pref_header_advanced">Advanced</string>
     <string name="pref_filter_song_summary">Filter songs by length</string>
     <string name="pref_filter_song_title">Filter song duration</string>
-    <string name="pref_language_name">Select language</string>
     <string name="pref_header_general">Theme</string>
     <string name="colors">Colors</string>
     <string name="done">Done</string>

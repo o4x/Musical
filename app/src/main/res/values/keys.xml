@@ -15,7 +15,6 @@
     <string name="key_delete_custom_images" translatable="false">delete_custom_images</string>
     <string name="key_smart_playlist_limit" translatable="false">smart_playlist_limit</string>
     <string name="key_filter_song" translatable="false">filter_song</string>
-    <string name="key_language_name" translatable="false">language_name</string>
     <string name="key_about" translatable="false">about</string>
 
     // about //

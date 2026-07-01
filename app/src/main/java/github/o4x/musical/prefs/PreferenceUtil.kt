@@ -32,7 +32,6 @@ object PreferenceUtil {
     const val DELETE_CACHED_IMAGES = "delete_cached_images"
     const val DELETE_CUSTOM_IMAGES = "delete_custom_images"
     const val SMART_PLAYLIST_LIMIT = "smart_playlist_limit"
-    const val LANGUAGE_NAME = "language_name"
     const val ABOUT = "about"
 
 
@@ -136,8 +135,6 @@ object PreferenceUtil {
     fun rememberLastTab(): Boolean {
         return sharedPreferences.getBoolean(REMEMBER_LAST_TAB, true)
     }
-
-    val languageCode get() = sharedPreferences.getString(LANGUAGE_NAME, "auto")!!
 
     @JvmStatic
     var lastPage: Int
