@@ -31,13 +31,13 @@ class GenreRepository(
         } else songRepository.songs(makeGenreSongCursor(genreId))
     }
 
-    private fun getGenreFromCursor(cursor: Cursor): Genre {
+    private fun getGenreFromCursorWithCount(cursor: Cursor, songCountMap: Map<Long, Int>): Genre {
         val id = cursor.getLong(Genres._ID)
         val name = cursor.getStringOrNull(Genres.NAME)
-        val songs = songs(id)
-        val songCount = songs.size
+        val songCount = songCountMap[id] ?: 0
+        // Skip loading songs for empty genres (saves N IPC calls for genres being deleted).
+        val songs = if (songCount > 0) songRepository.songs(makeGenreSongCursor(id)) else emptyList()
         return Genre(id, name ?: "", songs, songCount)
-
     }
 
     private fun getGenreFromCursorWithOutSongs(cursor: Cursor): Genre {
@@ -84,16 +84,32 @@ class GenreRepository(
         )
     }
 
+    private fun loadGenreSongCounts(): Map<Long, Int> {
+        val countMap = mutableMapOf<Long, Int>()
+        val cursor = contentResolver.query(
+            android.net.Uri.parse("content://media/external/audio/genres/all/members"),
+            arrayOf(Genres.Members.GENRE_ID),
+            null, null, null
+        ) ?: return countMap
+        cursor.use {
+            while (it.moveToNext()) {
+                val genreId = it.getLong(0)
+                countMap[genreId] = (countMap[genreId] ?: 0) + 1
+            }
+        }
+        return countMap
+    }
+
     private fun getGenresFromCursor(cursor: Cursor?): ArrayList<Genre> {
         val genres = arrayListOf<Genre>()
         if (cursor != null) {
+            val songCountMap = loadGenreSongCounts()
             if (cursor.moveToFirst()) {
                 do {
-                    val genre = getGenreFromCursor(cursor)
+                    val genre = getGenreFromCursorWithCount(cursor, songCountMap)
                     if (genre.songCount > 0) {
                         genres.add(genre)
                     } else {
-                        // try to remove the empty genre from the media store
                         try {
                             contentResolver.delete(
                                 Genres.EXTERNAL_CONTENT_URI,
@@ -103,7 +119,6 @@ class GenreRepository(
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
-
                     }
                 } while (cursor.moveToNext())
             }

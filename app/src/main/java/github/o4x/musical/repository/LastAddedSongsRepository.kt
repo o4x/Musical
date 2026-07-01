@@ -18,7 +18,8 @@ class LastAddedRepository(
     }
 
     fun recentSongs(): List<Song> {
-        return getAllRecentSongs().take(smartPlaylistLimit)
+        // Use Bundle LIMIT to fetch only the N newest songs instead of all songs
+        return songRepository.songs(songRepository.makeLastAddedSongsCursor(smartPlaylistLimit))
     }
 
     private fun getAllRecentAlbums(): List<Album> {

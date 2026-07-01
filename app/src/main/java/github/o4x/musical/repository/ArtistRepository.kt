@@ -18,16 +18,14 @@ class ArtistRepository(
 
     fun artist(artistId: Long): Artist {
         if (artistId == Artist.VARIOUS_ARTISTS_ID) {
-            // Get Various Artists
             val songs = songRepository.songs(
                 songRepository.makeSongCursor(
-                    null,
-                    null,
+                    "album_artist = ?",
+                    arrayOf(Artist.VARIOUS_ARTISTS_DISPLAY_NAME),
                     getSongLoaderSortOrder()
                 )
             )
-            val albums = albumRepository.splitIntoAlbums(songs).filter { it.albumArtist == Artist.VARIOUS_ARTISTS_DISPLAY_NAME }
-            return Artist(Artist.VARIOUS_ARTISTS_ID, albums)
+            return Artist(Artist.VARIOUS_ARTISTS_ID, albumRepository.splitIntoAlbums(songs))
         }
 
         val songs = songRepository.songs(

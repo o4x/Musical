@@ -8,9 +8,7 @@ import github.o4x.musical.interfaces.MusicServiceEventListener
 import github.o4x.musical.model.Genre
 import github.o4x.musical.model.Song
 import github.o4x.musical.repository.Repository
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class GenreDetailsViewModel(
     private val realRepository: Repository,
@@ -30,9 +28,9 @@ class GenreDetailsViewModel(
         loadGenreSongs(genre)
     }
 
-    private fun loadGenreSongs(genre: Genre) = viewModelScope.launch {
+    private fun loadGenreSongs(genre: Genre) = viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
         val songs = realRepository.getGenre(genre.id)
-        withContext(Main) { _playListSongs.postValue(songs) }
+        _playListSongs.postValue(songs)
     }
 
     override fun onMediaStoreChanged() {

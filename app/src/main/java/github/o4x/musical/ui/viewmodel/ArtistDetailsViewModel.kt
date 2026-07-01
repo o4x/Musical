@@ -32,11 +32,11 @@ class ArtistDetailsViewModel(
         emit(info)
     }
 
-    fun loadArtistSync(): Artist {
-        return realRepository.artistRepository.artist(artistId)
+    init {
+        fetchArtist()
     }
 
-    private fun fetchArtist() {
+    fun fetchArtist() {
         viewModelScope.launch(IO) {
             artist.postValue(
                 realRepository.artistByIdAsync(artistId)

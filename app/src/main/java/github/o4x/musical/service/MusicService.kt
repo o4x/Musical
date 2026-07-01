@@ -191,9 +191,12 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action != null) {
+        val action = intent?.action ?: return START_NOT_STICKY
+        // Post to the player handler so queue restore always runs on the background
+        // thread before the action is processed, avoiding main-thread Room I/O.
+        playerHandler.post {
             restoreQueuesAndPositionIfNecessary()
-            when (intent.action) {
+            when (action) {
                 ACTION_TOGGLE_PAUSE -> if (isPlaying) pause() else play()
                 ACTION_PAUSE -> pause()
                 ACTION_PLAY -> play()
@@ -204,7 +207,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                     if (!songs.isNullOrEmpty()) {
                         playSongs(songs, shuffleMode)
                     } else {
-                        Toast.makeText(applicationContext, R.string.playlist_is_empty, Toast.LENGTH_LONG).show()
+                        uiThreadHandler.post {
+                            Toast.makeText(applicationContext, R.string.playlist_is_empty, Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
                 ACTION_REWIND -> back(true)
@@ -401,9 +406,15 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 if (playingQueue.isNotEmpty()) prepareNext() else playingNotification?.stop()
             }
             MEDIA_STORE_CHANGED -> {
-                playingQueue = roomRepository.savedPlayingQueue().toMutableList()
-                originalPlayingQueue = roomRepository.savedOriginalPlayingQueue().toMutableList()
-                updateNotification()
+                serviceScope.launch(Dispatchers.IO) {
+                    val queue = roomRepository.savedPlayingQueue().toMutableList()
+                    val originalQueue = roomRepository.savedOriginalPlayingQueue().toMutableList()
+                    withContext(Dispatchers.Main) {
+                        playingQueue = queue
+                        originalPlayingQueue = originalQueue
+                        updateNotification()
+                    }
+                }
             }
         }
     }
@@ -441,8 +452,12 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     @Synchronized
     fun restoreQueuesAndPositionIfNecessary() {
         if (!queuesRestored && playingQueue.isEmpty()) {
-            val restoredQueue = roomRepository.savedPlayingQueue().toMutableList()
-            val restoredOriginalQueue = roomRepository.savedOriginalPlayingQueue().toMutableList()
+            val restoredQueue = kotlinx.coroutines.runBlocking(Dispatchers.IO) {
+                roomRepository.savedPlayingQueue()
+            }.toMutableList()
+            val restoredOriginalQueue = kotlinx.coroutines.runBlocking(Dispatchers.IO) {
+                roomRepository.savedOriginalPlayingQueue()
+            }.toMutableList()
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
             val restoredPosition = prefs.getInt(SAVED_POSITION, -1)
             val restoredPositionInTrack = prefs.getInt(SAVED_POSITION_IN_TRACK, -1)
@@ -478,8 +493,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun saveQueuesImpl() {
-        roomRepository.saveQueue(playingQueue)
-        roomRepository.saveOriginalQueue(originalPlayingQueue)
+        serviceScope.launch(Dispatchers.IO) {
+            roomRepository.saveQueue(playingQueue)
+            roomRepository.saveOriginalQueue(originalPlayingQueue)
+        }
     }
 
     private fun saveState() {

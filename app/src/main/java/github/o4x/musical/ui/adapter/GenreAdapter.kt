@@ -6,18 +6,23 @@ import github.o4x.musical.extensions.toGenreDetail
 import github.o4x.musical.helper.SortOrder
 import github.o4x.musical.model.Genre
 import github.o4x.musical.model.Song
+import github.o4x.musical.repository.GenreRepository
 import github.o4x.musical.ui.activities.MainActivity
 import github.o4x.musical.ui.adapter.base.AbsAdapter
 import github.o4x.musical.ui.adapter.base.MediaEntryViewHolder
 import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.prefs.PreferenceUtil.genreSortOrder
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.*
 
 class GenreAdapter(
     val mainActivity: MainActivity,
     dataSet: List<Genre?>?,
     @LayoutRes itemLayoutRes: Int
-) : AbsAdapter<GenreAdapter.ViewHolder, Genre>(mainActivity, dataSet, itemLayoutRes) {
+) : AbsAdapter<GenreAdapter.ViewHolder, Genre>(mainActivity, dataSet, itemLayoutRes), KoinComponent {
+
+    private val genreRepository: GenreRepository by inject()
 
     override fun getItemId(position: Int): Long {
         return dataSet[position].id
@@ -52,7 +57,7 @@ class GenreAdapter(
     override fun getSongList(genres: List<Genre?>): List<Song> {
         val songs: MutableList<Song> = ArrayList()
         genres.forEach { genre ->
-            songs.addAll(genre?.songs!!) // maybe async in future?
+            if (genre != null) songs.addAll(genreRepository.songs(genre.id))
         }
         return songs
     }

@@ -41,12 +41,14 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     protected int itemLayoutRes;
     @Nullable
     protected RecyclerView recyclerView;
+    protected boolean coloredFooter;
 
     public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes, @MenuRes int menu) {
         super(activity, menu);
         this.activity = activity;
         this.dataSet = dataSet;
         this.itemLayoutRes = itemLayoutRes;
+        this.coloredFooter = PreferenceUtil.isColoredFooter();
     }
 
     public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes) {
@@ -54,6 +56,7 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
         this.activity = activity;
         this.dataSet = dataSet;
         this.itemLayoutRes = itemLayoutRes;
+        this.coloredFooter = PreferenceUtil.isColoredFooter();
     }
 
     public List<I> getDataSet() {
@@ -107,7 +110,7 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
 
     protected GlideLoader.GlideBuilder getImageLoader(@NonNull VH holder) {
         return GlideLoader.with(activity)
-                .withListener(PreferenceUtil.isColoredFooter() ?
+                .withListener(coloredFooter ?
                         new PaletteTargetListener(activity) {
                             @Override
                             public void onColorReady(@NotNull MyPalette colors, @Nullable Bitmap resource) {
@@ -119,7 +122,7 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     protected void setColors(int color, VH holder) {
         if (holder.paletteColorContainer != null) {
             holder.paletteColorContainer.setBackgroundColor(color);
-            if (PreferenceUtil.isColoredFooter()) {
+            if (coloredFooter) {
                 if (holder.title != null) {
                     holder.title.setTextColor(MaterialValueHelper.getPrimaryTextColor(activity, ColorUtil.INSTANCE.isColorLight(color)));
                 }

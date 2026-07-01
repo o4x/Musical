@@ -4,6 +4,7 @@ import github.o4x.musical.App
 import github.o4x.musical.R
 import github.o4x.musical.model.Song
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 
 @Parcelize
@@ -12,6 +13,6 @@ class HistoryPlaylist : AbsSmartPlaylist(
     iconRes = R.drawable.ic_history
 ), KoinComponent {
     override fun songs(): List<Song> {
-        return roomRepository.historySongs()
+        return runBlocking { roomRepository.historySongs() }
     }
 }

@@ -4,6 +4,7 @@ import github.o4x.musical.App
 import github.o4x.musical.R
 import github.o4x.musical.model.Song
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.runBlocking
 
 @Parcelize
 class NotPlayedPlaylist : AbsSmartPlaylist(
@@ -11,6 +12,6 @@ class NotPlayedPlaylist : AbsSmartPlaylist(
     iconRes = R.drawable.ic_music_off
 ) {
     override fun songs(): List<Song> {
-        return roomRepository.notRecentlyPlayedTracks()
+        return runBlocking { roomRepository.notRecentlyPlayedTracks() }
     }
 }

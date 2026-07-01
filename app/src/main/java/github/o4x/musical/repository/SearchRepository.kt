@@ -3,6 +3,8 @@ package github.o4x.musical.repository
 import android.content.Context
 import github.o4x.musical.R
 import github.o4x.musical.model.Genre
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import java.util.*
 
 class SearchRepository(
@@ -15,21 +17,27 @@ class SearchRepository(
     suspend fun searchAll(context: Context, query: String?): MutableList<Any> {
         val results = mutableListOf<Any>()
         query?.let { searchString ->
-            val songs = songRepository.songs(searchString)
-            if (songs.isNotEmpty()) {
-                results.add(context.resources.getString(R.string.songs))
-                results.addAll(songs)
-            }
-            val artists = artistRepository.artists(searchString)
-            if (artists.isNotEmpty()) {
-                results.add(context.resources.getString(R.string.artists))
-                results.addAll(artists)
-            }
+            coroutineScope {
+                val songsDeferred = async { songRepository.songs(searchString) }
+                val artistsDeferred = async { artistRepository.artists(searchString) }
+                val albumsDeferred = async { albumRepository.albums(searchString) }
 
-            val albums = albumRepository.albums(searchString)
-            if (albums.isNotEmpty()) {
-                results.add(context.resources.getString(R.string.albums))
-                results.addAll(albums)
+                val songs = songsDeferred.await()
+                val artists = artistsDeferred.await()
+                val albums = albumsDeferred.await()
+
+                if (songs.isNotEmpty()) {
+                    results.add(context.resources.getString(R.string.songs))
+                    results.addAll(songs)
+                }
+                if (artists.isNotEmpty()) {
+                    results.add(context.resources.getString(R.string.artists))
+                    results.addAll(artists)
+                }
+                if (albums.isNotEmpty()) {
+                    results.add(context.resources.getString(R.string.albums))
+                    results.addAll(albums)
+                }
             }
 //            val genres: List<Genre> = genreRepository.genres().filter { genre ->
 //                genre.name.toLowerCase(Locale.getDefault())

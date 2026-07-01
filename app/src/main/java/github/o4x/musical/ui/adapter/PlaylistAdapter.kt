@@ -18,6 +18,9 @@ import github.o4x.musical.util.MusicUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -29,6 +32,19 @@ class PlaylistAdapter(
 ) : AbsAdapter<PlaylistAdapter.ViewHolder, Playlist>(
     mainActivity, dataSet, itemLayoutRes, R.menu.menu_playlists_selection
 ) {
+    private var adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    override fun onAttachedToRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        if (!adapterScope.isActive) {
+            adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        adapterScope.cancel()
+    }
 
     companion object {
         private const val SMART_PLAYLIST = 0
@@ -50,7 +66,7 @@ class PlaylistAdapter(
         holder.title?.text = playlist.name
 
         holder.loadJob?.cancel()
-        holder.loadJob = CoroutineScope(Dispatchers.IO).launch {
+        holder.loadJob = adapterScope.launch {
             val songs = playlist.songs()
             withContext(Dispatchers.Main) {
                 holder.text?.text = MusicUtil.getSongCountString(activity, songs.size)

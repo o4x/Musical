@@ -39,18 +39,17 @@ class AlbumDetailsViewModel(
         }
     }
 
-    fun loadAlbumSync(): Album {
-        return repository.albumRepository.album(albumId)
+    init {
+        fetchAlbum()
     }
 
-    private fun fetchAlbum() {
+    fun fetchAlbum() {
         viewModelScope.launch(IO) {
             album.postValue(
                 repository.albumById(albumId)
             )
         }
     }
-
 
     override fun onMediaStoreChanged() {
         fetchAlbum()

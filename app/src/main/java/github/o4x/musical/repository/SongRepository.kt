@@ -1,9 +1,11 @@
 package github.o4x.musical.repository
 
 import android.content.ContentUris
+import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import android.provider.MediaStore.Audio.Media
@@ -122,16 +124,27 @@ class SongRepository(private val context: Context) {
     }
 
     fun makeSelection(idList: LongArray): String {
-        var selection = "_id IN ("
-        for (id in idList) {
-            selection += "$id,"
-        }
-        if (idList.isNotEmpty()) {
-            selection = selection.substring(0, selection.length - 1)
-        }
-        selection += ")"
+        return "_id IN (${idList.joinToString(",")})"
+    }
 
-        return selection
+    fun makeLastAddedSongsCursor(limit: Int): Cursor? {
+        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        else
+            Media.EXTERNAL_CONTENT_URI
+        val args = Bundle().apply {
+            putString(ContentResolver.QUERY_ARG_SQL_SELECTION, IS_MUSIC)
+            putStringArray(ContentResolver.QUERY_ARG_SORT_COLUMNS,
+                arrayOf(AudioColumns.DATE_ADDED))
+            putInt(ContentResolver.QUERY_ARG_SORT_DIRECTION,
+                ContentResolver.QUERY_SORT_DIRECTION_DESCENDING)
+            putInt(ContentResolver.QUERY_ARG_LIMIT, limit)
+        }
+        return try {
+            context.contentResolver.query(uri, baseProjection, args, null)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     @JvmOverloads

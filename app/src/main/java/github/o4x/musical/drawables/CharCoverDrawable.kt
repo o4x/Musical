@@ -63,9 +63,10 @@ class CharCoverDrawable(private val coverData: CoverData, private val isClean: B
     }
 
     override fun draw(canvas: Canvas) {
+        val darkMode = isDarkMode
         if (!isClean)
-            drawGradient(canvas, coverData.id.toInt())
-        drawChars(canvas, coverData.text)
+            drawGradient(canvas, coverData.id.toInt(), darkMode)
+        drawChars(canvas, coverData.text, darkMode)
     }
 
     override fun setAlpha(alpha: Int) {
@@ -82,8 +83,8 @@ class CharCoverDrawable(private val coverData: CoverData, private val isClean: B
         return PixelFormat.TRANSLUCENT
     }
 
-    private fun drawGradient(canvas: Canvas, id: Int) {
-        val colors = if (isDarkMode) {
+    private fun drawGradient(canvas: Canvas, id: Int, darkMode: Boolean = isDarkMode) {
+        val colors = if (darkMode) {
             val pos = (id) % COLORS_DARK.size
             COLORS_DARK[abs(pos)]
         } else {
@@ -103,11 +104,11 @@ class CharCoverDrawable(private val coverData: CoverData, private val isClean: B
         gradient.draw(canvas)
     }
 
-    private fun drawChars(canvas: Canvas, text: String) {
+    private fun drawChars(canvas: Canvas, text: String, darkMode: Boolean = isDarkMode) {
         // Render char's
         paint.color =
             ColorUtil.withAlpha(
-                if (isDarkMode) Color.WHITE else Color.BLACK, .1f)
+                if (darkMode) Color.WHITE else Color.BLACK, .1f)
 
         paint.textSize = max(canvas.width, canvas.height) * 1.4f // Text Size
         paint.isFakeBoldText = true
