@@ -1,11 +1,14 @@
 package github.o4x.musical.ui.activities.tageditor
 
 import android.app.SearchManager
+import android.content.ContentUris
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,6 +17,10 @@ import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -64,6 +71,10 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     private var artistArtBitmap: Bitmap? = null
     private var deleteArtistArt = false
 
+    private var pendingFieldKeyValueMap: MutableMap<FieldKey, String?>? = null
+    private var pendingArtworkInfo: TagUtil.ArtworkInfo? = null
+    private var writeRequestLauncher: ActivityResultLauncher<IntentSenderRequest>? = null
+
     @JvmField
     protected var tagUtil: TagUtil? = null
 
@@ -76,6 +87,17 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     val binding by lazy { ActivityTagBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            writeRequestLauncher = registerForActivityResult(
+                ActivityResultContracts.StartIntentSenderForResult()
+            ) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    pendingFieldKeyValueMap?.let { map ->
+                        performTagWrite(map, pendingArtworkInfo)
+                    }
+                }
+            }
+        }
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         showViews()
@@ -306,20 +328,21 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     }
 
     private fun deleteAlbumImage() {
-        setAlbumImageBitmap(null)
+        albumArtBitmap = null
+        albumImageView().setImageDrawable(null)
         deleteAlbumArt = true
         dataChanged()
     }
 
     private fun deleteArtistImage() {
-        setArtistImageBitmap(null)
+        artistArtBitmap = null
+        artistImageView().setImageDrawable(null)
         deleteArtistArt = true
         dataChanged()
     }
 
     private fun save() {
-        val fieldKeyValueMap: MutableMap<FieldKey, String?> = EnumMap(
-            FieldKey::class.java)
+        val fieldKeyValueMap: MutableMap<FieldKey, String?> = EnumMap(FieldKey::class.java)
 
         binding.song.editText?.let {
             if (binding.song.isVisible)
@@ -354,24 +377,56 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
                 fieldKeyValueMap[FieldKey.LYRICS] = it.getSafeString()
         }
 
-        tagUtil?.writeValuesToFiles(fieldKeyValueMap,
-            when {
-                deleteAlbumArt -> TagUtil.ArtworkInfo(id,
-                    null)
-                albumArtBitmap == null -> null
-                else -> TagUtil.ArtworkInfo(
-                    id, albumArtBitmap)
-            })
-
-        when {
-            deleteArtistArt -> {
-                CustomImageUtil(artist).resetCustomImage()
-            }
-            artistArtBitmap != null -> {
-                CustomImageUtil(artist).setCustomImage(artistArtBitmap)
-            }
+        val artworkInfo = when {
+            deleteAlbumArt -> TagUtil.ArtworkInfo(id, null)
+            albumArtBitmap == null -> null
+            else -> TagUtil.ArtworkInfo(id, albumArtBitmap)
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val uris = getSongUris()
+            if (uris.isNotEmpty()) {
+                pendingFieldKeyValueMap = fieldKeyValueMap
+                pendingArtworkInfo = artworkInfo
+                val pendingIntent = MediaStore.createWriteRequest(contentResolver, uris)
+                writeRequestLauncher?.launch(
+                    IntentSenderRequest.Builder(pendingIntent.intentSender).build()
+                )
+                return
+            }
+        }
+        performTagWrite(fieldKeyValueMap, artworkInfo)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun getSongUris(): List<Uri> {
+        val uris = mutableListOf<Uri>()
+        for (path in songPaths) {
+            val cursor = contentResolver.query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                arrayOf(MediaStore.Audio.Media._ID),
+                "${MediaStore.Audio.Media.DATA} = ?",
+                arrayOf(path),
+                null
+            )
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val songId = it.getLong(0)
+                    uris.add(ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId
+                    ))
+                }
+            }
+        }
+        return uris
+    }
+
+    private fun performTagWrite(fieldKeyValueMap: Map<FieldKey, String?>, artworkInfo: TagUtil.ArtworkInfo?) {
+        tagUtil?.writeValuesToFiles(fieldKeyValueMap, artworkInfo)
+        when {
+            deleteArtistArt -> CustomImageUtil(artist).resetCustomImage()
+            artistArtBitmap != null -> CustomImageUtil(artist).setCustomImage(artistArtBitmap)
+        }
         finish()
     }
 

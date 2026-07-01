@@ -12,6 +12,7 @@ import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import github.o4x.musical.R;
 import github.o4x.musical.helper.MyPalette;
@@ -38,6 +39,8 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     protected final AppCompatActivity activity;
     protected List<I> dataSet;
     protected int itemLayoutRes;
+    @Nullable
+    private RecyclerView recyclerView;
 
     public AbsAdapter(@NonNull AppCompatActivity activity, List<I> dataSet, @LayoutRes int itemLayoutRes, @MenuRes int menu) {
         super(activity, menu);
@@ -57,8 +60,25 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
         return dataSet;
     }
 
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
+    }
+
     public void swapDataSet(List<I> dataSet) {
         this.dataSet = dataSet;
+        // End any running animations before notifying to prevent a crash when an
+        // add-animation is still in flight as the dataset is replaced.
+        if (recyclerView != null && recyclerView.getItemAnimator() != null) {
+            recyclerView.getItemAnimator().endAnimations();
+        }
         notifyDataSetChanged();
     }
 
