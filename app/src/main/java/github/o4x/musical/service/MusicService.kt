@@ -229,6 +229,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             unregisterReceiver(becomingNoisyReceiver)
             becomingNoisyReceiverRegistered = false
         }
+        countDownTimerPausable?.cancel()
+        countDownTimerPausable = null
         mediaSession.isActive = false
         quit()
         releaseResources()
@@ -318,7 +320,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
         }
 
         if (albumArtOnLockscreen()) {
-            serviceScope.launch(Dispatchers.IO) {
+            // Glide requests must be started from the main thread; the load itself is async.
+            serviceScope.launch(Dispatchers.Main) {
                 with(getContext()).load(song).into(object : CustomBitmapTarget(Util.getScreenWidth(), Util.getScreenHeight()) {
                     override fun setResource(resource: Bitmap) {
                         super.setResource(resource)
@@ -593,7 +596,11 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     fun getQueueDurationMillis(position: Int): Long {
-        return playingQueue.drop(position + 1).sumOf { it.duration }
+        var duration = 0L
+        for (i in position + 1 until playingQueue.size) {
+            duration += playingQueue[i].duration
+        }
+        return duration
     }
 
     private fun getSongAt(position: Int): Song {

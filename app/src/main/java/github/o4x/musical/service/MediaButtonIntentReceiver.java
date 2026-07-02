@@ -146,8 +146,11 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                             if (DEBUG) Log.v(TAG, "Got headset click, count = " + mClickCounter);
                             mHandler.removeMessages(MSG_HEADSET_DOUBLE_CLICK_TIMEOUT);
 
+                            // Use the application context: the message may sit in the static
+                            // handler queue after the sender (service/activity) is destroyed.
                             Message msg = mHandler.obtainMessage(
-                                    MSG_HEADSET_DOUBLE_CLICK_TIMEOUT, mClickCounter, 0, context);
+                                    MSG_HEADSET_DOUBLE_CLICK_TIMEOUT, mClickCounter, 0,
+                                    context.getApplicationContext());
 
                             long delay = mClickCounter < 3 ? DOUBLE_CLICK : 0;
                             if (mClickCounter >= 3) {

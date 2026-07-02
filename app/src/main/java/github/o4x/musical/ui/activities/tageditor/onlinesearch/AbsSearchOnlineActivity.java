@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -92,6 +93,7 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
 
     @Override
     protected void onDestroy() {
+        handler.removeCallbacks(runnable);
         binding = null;
         super.onDestroy();
     }
@@ -141,7 +143,7 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     }
 
     private void setupHandler() {
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
         runnable = () -> fetchBestMatches(query.trim());
     }
 
