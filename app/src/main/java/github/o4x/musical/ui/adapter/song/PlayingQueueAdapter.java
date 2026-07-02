@@ -67,6 +67,22 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
             holder.title.setTypeface(typeface);
             holder.text.setTypeface(typeface);
         }
+
+        if (holder.icon != null) {
+            if (getItemType(position) == CURRENT) {
+                holder.icon.setVisibility(View.VISIBLE);
+                holder.icon.setImageResource(MusicPlayerRemote.isPlaying() ?
+                        R.drawable.ic_pause : R.drawable.ic_play_arrow);
+                if (holder.imageText != null) {
+                    holder.imageText.setVisibility(View.GONE);
+                }
+            } else {
+                holder.icon.setVisibility(View.GONE);
+                if (holder.imageText != null) {
+                    holder.imageText.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     protected int getItemType(int position) {
