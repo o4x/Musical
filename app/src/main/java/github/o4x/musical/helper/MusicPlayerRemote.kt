@@ -27,7 +27,6 @@ import github.o4x.musical.R
 import github.o4x.musical.model.Song
 import github.o4x.musical.repository.SongRepository
 import github.o4x.musical.service.MusicService
-import github.o4x.musical.prefs.PreferenceUtil
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.File
@@ -41,6 +40,8 @@ object MusicPlayerRemote : KoinComponent {
 
     private var musicServiceRef: WeakReference<MusicService>? = null
 
+    // The backing reference is weak, so read this property once into a local
+    // and use the snapshot; a second read may already return null.
     @JvmStatic
     var musicService: MusicService?
         get() = musicServiceRef?.get()
@@ -50,11 +51,7 @@ object MusicPlayerRemote : KoinComponent {
 
     @JvmStatic
     fun bindToService(context: Context, callback: ServiceConnection): ServiceToken? {
-
-        var realActivity: Activity? = (context as Activity).parent
-        if (realActivity == null) {
-            realActivity = context
-        }
+        val realActivity: Activity = (context as Activity).parent ?: context
 
         val contextWrapper = ContextWrapper(realActivity)
         val intent = Intent(contextWrapper, MusicService::class.java)
@@ -82,9 +79,9 @@ object MusicPlayerRemote : KoinComponent {
         if (token == null) {
             return
         }
-        val mContextWrapper = token.mWrappedContext
-        val mBinder = mConnectionMap.remove(mContextWrapper) ?: return
-        mContextWrapper.unbindService(mBinder)
+        val contextWrapper = token.mWrappedContext
+        val binder = mConnectionMap.remove(contextWrapper) ?: return
+        contextWrapper.unbindService(binder)
         if (mConnectionMap.isEmpty()) {
             musicService = null
         }
@@ -97,70 +94,50 @@ object MusicPlayerRemote : KoinComponent {
 
     @JvmStatic
     val isPlaying: Boolean
-        get() = musicService != null && musicService!!.isPlaying
+        get() = musicService?.isPlaying == true
 
     @JvmStatic
     fun isPlaying(song: Song): Boolean {
-        return if (!isPlaying) {
-            false
-        } else song.id == currentSong.id
+        return isPlaying && song.id == currentSong.id
     }
 
     @JvmStatic
     val currentSong: Song
-        get() = if (musicService != null) {
-            musicService!!.currentSong
-        } else Song.emptySong
+        get() = musicService?.currentSong ?: Song.emptySong
 
     /**
      * Async
      */
     @JvmStatic
     var position: Int
-        get() = if (musicService != null) {
-            musicService!!.position
-        } else -1
+        get() = musicService?.position ?: -1
         set(position) {
-            if (musicService != null) {
-                musicService!!.setPosition(position)
-            }
+            musicService?.setPosition(position)
         }
 
     @JvmStatic
     val playingQueue: List<Song>
-        get() = if (musicService != null) {
-            musicService?.playingQueue as List<Song>
-        } else listOf()
+        get() = musicService?.playingQueue ?: listOf()
 
     @JvmStatic
     val songProgressMillis: Int
-        get() = if (musicService != null) {
-            musicService!!.songProgressMillis
-        } else -1
+        get() = musicService?.songProgressMillis ?: -1
 
     @JvmStatic
     val songDurationMillis: Int
-        get() = if (musicService != null) {
-            musicService!!.songDurationMillis
-        } else -1
+        get() = musicService?.songDurationMillis ?: -1
 
     @JvmStatic
     val repeatMode: Int
-        get() = if (musicService != null) {
-            musicService!!.repeatMode
-        } else MusicService.REPEAT_MODE_NONE
+        get() = musicService?.repeatMode ?: MusicService.REPEAT_MODE_NONE
 
     @JvmStatic
     val shuffleMode: Int
-        get() = if (musicService != null) {
-            musicService!!.shuffleMode
-        } else MusicService.SHUFFLE_MODE_NONE
+        get() = musicService?.shuffleMode ?: MusicService.SHUFFLE_MODE_NONE
 
     @JvmStatic
     val audioSessionId: Int
-        get() = if (musicService != null) {
-            musicService!!.audioSessionId
-        } else -1
+        get() = musicService?.audioSessionId ?: -1
 
     @JvmStatic
     val isServiceConnected: Boolean
@@ -237,16 +214,12 @@ object MusicPlayerRemote : KoinComponent {
      */
     @JvmStatic
     fun openQueue(queue: List<Song>, startPosition: Int, startPlaying: Boolean) {
-        if (!tryToHandleOpenPlayingQueue(
-                queue,
-                startPosition,
-                startPlaying
-            ) && musicService != null
-        ) {
-            if (musicService!!.shuffleMode == MusicService.SHUFFLE_MODE_SHUFFLE)
-                musicService!!.setShuffleMode(MusicService.SHUFFLE_MODE_NONE)
-            musicService?.openQueue(queue, startPosition, startPlaying)
+        if (tryToHandleOpenPlayingQueue(queue, startPosition, startPlaying)) return
+        val service = musicService ?: return
+        if (service.shuffleMode == MusicService.SHUFFLE_MODE_SHUFFLE) {
+            service.setShuffleMode(MusicService.SHUFFLE_MODE_NONE)
         }
+        service.openQueue(queue, startPosition, startPlaying)
     }
 
     /**
@@ -276,203 +249,165 @@ object MusicPlayerRemote : KoinComponent {
 
     @JvmStatic
     fun getQueueDurationMillis(position: Int): Long {
-        return if (musicService != null) {
-            musicService!!.getQueueDurationMillis(position)
-        } else -1
+        return musicService?.getQueueDurationMillis(position) ?: -1
     }
 
     @JvmStatic
     fun seekTo(millis: Int): Int {
-        return if (musicService != null) {
-            musicService!!.seek(millis)
-        } else -1
+        return musicService?.seek(millis) ?: -1
     }
 
     @JvmStatic
     fun cycleRepeatMode(): Boolean {
-        if (musicService != null) {
-            musicService?.cycleRepeatMode()
-            return true
-        }
-        return false
+        val service = musicService ?: return false
+        service.cycleRepeatMode()
+        return true
     }
 
     @JvmStatic
     fun toggleShuffleMode(): Boolean {
-        if (musicService != null) {
-            musicService?.toggleShuffle()
-            return true
-        }
-        return false
+        val service = musicService ?: return false
+        service.toggleShuffle()
+        return true
     }
 
     @JvmStatic
     fun setShuffleMode(shuffleMode: Int): Boolean {
-        if (musicService != null) {
-            musicService!!.setShuffleMode(shuffleMode)
-            return true
-        }
-        return false
+        val service = musicService ?: return false
+        service.setShuffleMode(shuffleMode)
+        return true
     }
 
     @JvmStatic
     fun playNext(song: Song): Boolean {
-        if (musicService != null) {
-            if (playingQueue.size > 0) {
-                musicService?.addSong(position + 1, song)
-            } else {
-                val queue = ArrayList<Song>()
-                queue.add(song)
-                openQueue(queue, 0, false)
-            }
-            Toast.makeText(
-                musicService,
-                musicService!!.resources.getString(R.string.added_title_to_playing_queue),
-                Toast.LENGTH_SHORT
-            ).show()
-            return true
+        val service = musicService ?: return false
+        if (service.playingQueue.isNotEmpty()) {
+            service.addSong(service.position + 1, song)
+        } else {
+            openQueue(listOf(song), 0, false)
         }
-        return false
+        showAddedToQueueToast(service, 1)
+        return true
     }
 
     @JvmStatic
     fun playNext(songs: List<Song>): Boolean {
-        if (musicService != null) {
-            if (playingQueue.size > 0) {
-                musicService?.addSongs(position + 1, songs)
-            } else {
-                openQueue(songs, 0, false)
-            }
-            val toast =
-                if (songs.size == 1) musicService!!.resources.getString(R.string.added_title_to_playing_queue) else musicService!!.resources.getString(
-                    R.string.added_x_titles_to_playing_queue,
-                    songs.size
-                )
-            Toast.makeText(musicService, toast, Toast.LENGTH_SHORT).show()
-            return true
+        val service = musicService ?: return false
+        if (service.playingQueue.isNotEmpty()) {
+            service.addSongs(service.position + 1, songs)
+        } else {
+            openQueue(songs, 0, false)
         }
-        return false
+        showAddedToQueueToast(service, songs.size)
+        return true
     }
 
     @JvmStatic
     fun enqueue(song: Song): Boolean {
-        if (musicService != null) {
-            if (playingQueue.size > 0) {
-                musicService?.addSong(song)
-            } else {
-                val queue = ArrayList<Song>()
-                queue.add(song)
-                openQueue(queue, 0, false)
-            }
-            Toast.makeText(
-                musicService,
-                musicService!!.resources.getString(R.string.added_title_to_playing_queue),
-                Toast.LENGTH_SHORT
-            ).show()
-            return true
+        val service = musicService ?: return false
+        if (service.playingQueue.isNotEmpty()) {
+            service.addSong(song)
+        } else {
+            openQueue(listOf(song), 0, false)
         }
-        return false
+        showAddedToQueueToast(service, 1)
+        return true
     }
 
     @JvmStatic
     fun enqueue(songs: List<Song>): Boolean {
-        if (musicService != null) {
-            if (playingQueue.size > 0) {
-                musicService?.addSongs(songs)
-            } else {
-                openQueue(songs, 0, false)
-            }
-            val toast =
-                if (songs.size == 1) musicService!!.resources.getString(R.string.added_title_to_playing_queue) else musicService!!.resources.getString(
-                    R.string.added_x_titles_to_playing_queue,
-                    songs.size
-                )
-            Toast.makeText(musicService, toast, Toast.LENGTH_SHORT).show()
-            return true
+        val service = musicService ?: return false
+        if (service.playingQueue.isNotEmpty()) {
+            service.addSongs(songs)
+        } else {
+            openQueue(songs, 0, false)
         }
-        return false
+        showAddedToQueueToast(service, songs.size)
+        return true
+    }
+
+    private fun showAddedToQueueToast(service: MusicService, songCount: Int) {
+        val toast = if (songCount == 1) {
+            service.resources.getString(R.string.added_title_to_playing_queue)
+        } else {
+            service.resources.getString(R.string.added_x_titles_to_playing_queue, songCount)
+        }
+        Toast.makeText(service, toast, Toast.LENGTH_SHORT).show()
     }
 
     @JvmStatic
     fun removeFromQueue(song: Song): Boolean {
-        if (musicService != null) {
-            musicService!!.removeSong(song)
-            return true
-        }
-        return false
+        val service = musicService ?: return false
+        service.removeSong(song)
+        return true
     }
 
     @JvmStatic
     fun removeFromQueue(position: Int): Boolean {
-        if (musicService != null && position >= 0 && position < playingQueue.size) {
-            musicService!!.removeSong(position)
-            return true
-        }
-        return false
+        val service = musicService ?: return false
+        if (position !in service.playingQueue.indices) return false
+        service.removeSong(position)
+        return true
     }
 
     @JvmStatic
     fun moveSong(from: Int, to: Int): Boolean {
-        if (musicService != null && from >= 0 && to >= 0 && from < playingQueue.size && to < playingQueue.size) {
-            musicService!!.moveSong(from, to)
-            return true
-        }
-        return false
+        val service = musicService ?: return false
+        val indices = service.playingQueue.indices
+        if (from !in indices || to !in indices) return false
+        service.moveSong(from, to)
+        return true
     }
 
     @JvmStatic
     fun clearQueue(): Boolean {
-        if (musicService != null) {
-            musicService!!.clearQueue()
-            return true
-        }
-        return false
+        val service = musicService ?: return false
+        service.clearQueue()
+        return true
     }
 
     @JvmStatic
     fun playFromUri(uri: Uri) {
-        if (musicService != null) {
+        val service = musicService ?: return
 
-            var songs: List<Song>? = null
-            if (uri.scheme != null && uri.authority != null) {
-                if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
-                    var songId: String? = null
-                    if (uri.authority == "com.android.providers.media.documents") {
-                        songId = getSongIdFromMediaProvider(uri)
-                    } else if (uri.authority == "media") {
-                        songId = uri.lastPathSegment
-                    }
-                    if (songId != null) {
-                        songs = songRepository.songs(songId)
-                    }
+        var songs: List<Song>? = null
+        if (uri.scheme != null && uri.authority != null) {
+            if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+                val songId = when (uri.authority) {
+                    "com.android.providers.media.documents" -> getSongIdFromMediaProvider(uri)
+                    "media" -> uri.lastPathSegment
+                    else -> null
+                }
+                if (songId != null) {
+                    songs = songRepository.songs(songId)
                 }
             }
-            if (songs == null) {
-                var songFile: File? = null
-                if (uri.authority != null && uri.authority == "com.android.externalstorage.documents") {
-                    songFile = File(
-                        Environment.getExternalStorageDirectory(),
-                        uri.path?.split(":".toRegex(), 2)?.get(1)
-                    )
-                }
-                if (songFile == null) {
-                    val path = getFilePathFromUri(musicService!!, uri)
-                    if (path != null)
-                        songFile = File(path)
-                }
-                if (songFile == null && uri.path != null) {
-                    songFile = File(uri.path)
-                }
-                if (songFile != null) {
-                    songs = songRepository.songsByFilePath(songFile.absolutePath)
-                }
+        }
+        if (songs == null) {
+            var songFile: File? = null
+            if (uri.authority == "com.android.externalstorage.documents") {
+                songFile = File(
+                    Environment.getExternalStorageDirectory(),
+                    uri.path?.split(":".toRegex(), 2)?.get(1)
+                )
             }
-            if (songs != null && songs.isNotEmpty()) {
-                openQueue(songs, 0, true)
-            } else {
-                //TODO the file is not listed in the media store
-                println("The file is not listed in the media store")
+            if (songFile == null) {
+                val path = getFilePathFromUri(service, uri)
+                if (path != null)
+                    songFile = File(path)
             }
+            if (songFile == null && uri.path != null) {
+                songFile = File(uri.path)
+            }
+            if (songFile != null) {
+                songs = songRepository.songsByFilePath(songFile.absolutePath)
+            }
+        }
+        if (!songs.isNullOrEmpty()) {
+            openQueue(songs, 0, true)
+        } else {
+            //TODO the file is not listed in the media store
+            println("The file is not listed in the media store")
         }
     }
 
