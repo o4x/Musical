@@ -47,6 +47,16 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:visibility="gone" />
 
+            <github.o4x.musical.views.IconImageView
+                android:id="@+id/icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="16dp"
+                android:scaleType="centerInside"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
         </github.o4x.musical.views.HeightFitSquareLayout>
 
         <LinearLayout
