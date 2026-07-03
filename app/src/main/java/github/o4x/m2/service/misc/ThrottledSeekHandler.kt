@@ -14,7 +14,6 @@ class ThrottledSeekHandler(service: MusicService, private val mHandler: Handler)
     }
 
     fun notifySeek() {
-        serviceRef.get()?.updateMediaSessionPlaybackState()
         mHandler.removeCallbacks(this)
         mHandler.postDelayed(this, THROTTLE)
     }

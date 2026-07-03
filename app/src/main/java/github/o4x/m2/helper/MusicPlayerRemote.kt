@@ -19,7 +19,9 @@ import android.content.*
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.DocumentsContract
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -48,6 +50,21 @@ object MusicPlayerRemote : KoinComponent {
         set(value) { musicServiceRef = value?.let { WeakReference(it) } }
 
     private val songRepository by inject<SongRepository>()
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    /**
+     * ExoPlayer must only be touched from the main thread, but queues are
+     * opened from background coroutines after loading their songs. Runs the
+     * action synchronously when already on the main thread, posts otherwise.
+     */
+    private inline fun runOnMainThread(crossinline action: () -> Unit) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            action()
+        } else {
+            mainHandler.post { action() }
+        }
+    }
 
     @JvmStatic
     fun bindToService(context: Context, callback: ServiceConnection): ServiceToken? {
@@ -213,9 +230,9 @@ object MusicPlayerRemote : KoinComponent {
      * Async
      */
     @JvmStatic
-    fun openQueue(queue: List<Song>, startPosition: Int, startPlaying: Boolean) {
-        if (tryToHandleOpenPlayingQueue(queue, startPosition, startPlaying)) return
-        val service = musicService ?: return
+    fun openQueue(queue: List<Song>, startPosition: Int, startPlaying: Boolean) = runOnMainThread {
+        if (tryToHandleOpenPlayingQueue(queue, startPosition, startPlaying)) return@runOnMainThread
+        val service = musicService ?: return@runOnMainThread
         if (service.shuffleMode == MusicService.SHUFFLE_MODE_SHUFFLE) {
             service.setShuffleMode(MusicService.SHUFFLE_MODE_NONE)
         }
@@ -226,7 +243,7 @@ object MusicPlayerRemote : KoinComponent {
      * Async
      */
     @JvmStatic
-    fun openAndShuffleQueue(queue: List<Song>, startPlaying: Boolean) {
+    fun openAndShuffleQueue(queue: List<Song>, startPlaying: Boolean) = runOnMainThread {
         musicService?.playSongs(queue, MusicService.SHUFFLE_MODE_SHUFFLE, startPlaying)
     }
 

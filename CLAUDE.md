@@ -28,10 +28,10 @@ Koin is used throughout. Modules are wired together in `MainModule.kt`:
 
 The core playback flow runs through a bound `Service`:
 
-1. **`MusicService`** (`service/MusicService.kt`) — the foreground service that owns the playback state, queue, MediaSession, and notification. It broadcasts local intents (`META_CHANGED`, `PLAY_STATE_CHANGED`, `QUEUE_CHANGED`, etc.) when state changes.
+1. **`MusicService`** (`service/MusicService.kt`) — the foreground service that owns the playback state, queue, Media3 `MediaSession`, and notification. It broadcasts local intents (`META_CHANGED`, `PLAY_STATE_CHANGED`, `QUEUE_CHANGED`, etc.) when state changes. All playback calls run on the main thread (ExoPlayer requirement); Room queue persistence runs in coroutines.
 2. **`MusicPlayerRemote`** (`helper/MusicPlayerRemote.kt`) — a singleton `object` that activities/fragments call to control playback. It binds to `MusicService` and delegates all commands.
-3. **`MultiPlayer`** (`service/player/MultiPlayer.kt`) — wraps Android `MediaPlayer` for gapless playback.
-4. **`PlaybackHandler`** (`service/playback/PlaybackHandler.kt`) — a `Handler` on a background looper that manages audio ducking via timed messages.
+3. **`Media3Playback`** (`service/player/Media3Playback.kt`) — wraps Media3 `ExoPlayer`, which owns audio focus (incl. ducking), becoming-noisy pauses, the playback wake lock, and gapless playback (the next track is queued as a second playlist item). The ExoPlayer playlist never holds the full queue — the service does.
+4. The `MediaSession` is built around a `ForwardingPlayer` (`QueueNavigationPlayer` in `MusicService`) that reroutes next/previous/stop from external controllers (notification, headset, lockscreen) into the service's queue logic.
 
 ### UI Layer
 

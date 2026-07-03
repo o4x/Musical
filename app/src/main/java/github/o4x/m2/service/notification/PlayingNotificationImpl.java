@@ -7,7 +7,8 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.media.app.NotificationCompat.MediaStyle;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.session.MediaStyleNotificationHelper;
 
 import github.o4x.m2.R;
 import github.o4x.m2.helper.MyPalette;
@@ -24,6 +25,7 @@ import static github.o4x.m2.service.MusicService.ACTION_REWIND;
 import static github.o4x.m2.service.MusicService.ACTION_SKIP;
 import static github.o4x.m2.service.MusicService.ACTION_TOGGLE_PAUSE;
 
+@androidx.annotation.OptIn(markerClass = UnstableApi.class)
 public class PlayingNotificationImpl extends PlayingNotification {
 
     @Override
@@ -77,7 +79,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
                                 .addAction(playPauseAction)
                                 .addAction(nextAction);
 
-                        builder.setStyle(new MediaStyle().setMediaSession(service.getMediaSession().getSessionToken()).setShowActionsInCompactView(0, 1, 2))
+                        builder.setStyle(new MediaStyleNotificationHelper.MediaStyle(service.getMediaSession()).setShowActionsInCompactView(0, 1, 2))
                                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
                         if (stopped)

@@ -19,12 +19,6 @@
         app:title="@string/pref_header_audio">
 
         <SwitchPreferenceCompat
-            app:defaultValue="true"
-            app:key="@string/key_audio_ducking"
-            app:summary="@string/pref_summary_audio_ducking"
-            app:title="@string/pref_title_audio_ducking" />
-
-        <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="@string/key_gapless_playback"
             app:summary="@string/pref_summary_gapless_playback"
