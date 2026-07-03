@@ -4,7 +4,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     id("kotlin-parcelize")
     alias(libs.plugins.ksp)
     alias(libs.plugins.navigation.safeArgs)
@@ -85,7 +84,6 @@ configure<ApplicationExtension> {
     buildFeatures {
         viewBinding = true
         buildConfig = true
-        compose = true
     }
 
     lint {
@@ -108,32 +106,19 @@ dependencies {
     implementation(project(":recyclerview-fastscroll"))
     implementation(files("libs/jaudiotagger-2.2.4-SNAPSHOT.jar"))
 
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.runtime.livedata)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.koin.androidx.compose)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.legacy.support.core.ui)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)
     implementation(libs.androidx.palette.ktx)
     implementation(libs.androidx.percentlayout)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.viewpager)
     implementation(libs.material)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -152,7 +137,6 @@ dependencies {
     implementation(libs.androidx.gridlayout)
 
     implementation(libs.retrofit)
-    implementation(libs.adapter.rxjava2)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
 
@@ -168,7 +152,7 @@ dependencies {
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
-    implementation("io.insert-koin:koin-android:4.1.1")
+    implementation(libs.koin.android)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
@@ -178,8 +162,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.rxjava2)
-    implementation(libs.androidx.room.guava)
     testImplementation(libs.androidx.room.testing)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
