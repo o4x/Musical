@@ -107,7 +107,7 @@ public abstract class AbsSearchOnlineActivity<A extends SearchOnlineAdapter, LR 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

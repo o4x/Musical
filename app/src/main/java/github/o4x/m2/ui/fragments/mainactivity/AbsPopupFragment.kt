@@ -16,7 +16,7 @@ open class AbsPopupFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(la
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             Util.hideSoftKeyboard(mainActivity)
-            mainActivity.onBackPressed()
+            mainActivity.onBackPressedDispatcher.onBackPressed()
             return true
         }
         return super.onOptionsItemSelected(item)

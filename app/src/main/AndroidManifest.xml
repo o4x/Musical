@@ -38,6 +38,7 @@
         tools:replace="android:supportsRtl"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:enableOnBackInvokedCallback="true"
         android:theme="@style/Base.Theme.Musical">
 
         <meta-data

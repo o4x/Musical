@@ -3,7 +3,6 @@ package github.o4x.m2.ui.activities
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.activity.OnBackPressedCallback
 
 import github.o4x.m2.R
 import github.o4x.m2.ui.activities.base.AbsMusicServiceActivity
@@ -22,14 +21,6 @@ class PlayerActivity : AbsMusicServiceActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.player_fragment_container, playerFragment).commit()
         supportFragmentManager.executePendingTransactions()
-
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                isEnabled = false
-                onBackPressedDispatcher.onBackPressed()
-                isEnabled = true
-            }
-        })
     }
 
     override fun onStart() {
