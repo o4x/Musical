@@ -44,6 +44,8 @@ class Media3Playback(private val context: Context) : Playback, Player.Listener {
 
     private var callbacks: Playback.PlaybackCallbacks? = null
 
+    private var reportedPlayState = false
+
     override var isInitialized = false
         private set
 
@@ -52,8 +54,12 @@ class Media3Playback(private val context: Context) : Playback, Player.Listener {
         openAudioEffectSession()
     }
 
+    // Buffering with playWhenReady set (e.g. right after skipping to another
+    // track) still counts as playing, so the play/pause UI doesn't flicker
+    // during the transition.
     override val isPlaying: Boolean
-        get() = isInitialized && player.isPlaying
+        get() = isInitialized && (player.isPlaying ||
+                (player.playWhenReady && player.playbackState == Player.STATE_BUFFERING))
 
     override val audioSessionId: Int
         get() = player.audioSessionId
@@ -140,7 +146,19 @@ class Media3Playback(private val context: Context) : Playback, Player.Listener {
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
-        callbacks?.onPlayStateChanged()
+        notifyPlayStateChangedIfNeeded()
+    }
+
+    override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+        notifyPlayStateChangedIfNeeded()
+    }
+
+    private fun notifyPlayStateChangedIfNeeded() {
+        val playing = isPlaying
+        if (playing != reportedPlayState) {
+            reportedPlayState = playing
+            callbacks?.onPlayStateChanged()
+        }
     }
 
     override fun onPlayerError(error: PlaybackException) {
