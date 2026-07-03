@@ -82,3 +82,6 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 .idea/deviceManager.xml
+
+# Editor backup files
+*~

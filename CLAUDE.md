@@ -14,7 +14,7 @@ Do NOT add a "Co-Authored-By: Claude" line (or any Claude attribution) to commit
 
 ## Architecture Overview
 
-**Musical** is an Android music player app (package `github.o4x.m2`, minSdk 28, targetSdk 36) written in Kotlin. It uses a mix of traditional View-based UI and Jetpack Compose.
+**Musical** is an Android music player app (package `github.o4x.m2`, minSdk 28, targetSdk 36) written in Kotlin. The UI is traditional View-based (no Jetpack Compose); theming extends the Material 3 Expressive XML themes.
 
 ### Dependency Injection
 
