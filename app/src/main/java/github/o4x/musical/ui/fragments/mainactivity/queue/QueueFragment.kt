@@ -14,12 +14,9 @@ import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentQueueBinding
 import github.o4x.musical.helper.MusicPlayerRemote
 import github.o4x.musical.misc.OverScrollLinearLayoutManager
-import github.o4x.musical.prefs.HomeHeaderPref
-import github.o4x.musical.ui.activities.MusicPickerActivity
 import github.o4x.musical.ui.adapter.song.PlayingQueueAdapter
 import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import github.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
-import github.o4x.musical.ui.fragments.mainactivity.home.HomeFragment.Companion.REQUEST_CODE_SELECT_SONG
 import github.o4x.musical.util.ViewInsetsUtils.applyAppBarPadding
 import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.musical.util.ViewUtil

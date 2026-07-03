@@ -16,11 +16,8 @@ import github.o4x.musical.extensions.showToast
 import github.o4x.musical.extensions.startImagePicker
 import github.o4x.musical.helper.MusicPlayerRemote.openAndShuffleQueue
 import github.o4x.musical.model.Genre
-import github.o4x.musical.prefs.HomeHeaderPref
-import github.o4x.musical.ui.activities.MusicPickerActivity
 import github.o4x.musical.ui.adapter.song.SongAdapter
 import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
-import github.o4x.musical.ui.fragments.mainactivity.home.HomeFragment.Companion.REQUEST_CODE_SELECT_SONG
 import github.o4x.musical.ui.viewmodel.GenreDetailsViewModel
 import github.o4x.musical.util.CustomImageUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel

@@ -48,6 +48,6 @@ val viewModules = module {
     }
 
     viewModel {
-        HomeHeaderViewModel(get())
+        HomeHeaderViewModel()
     }
 }

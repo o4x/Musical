@@ -1,7 +1,5 @@
 package github.o4x.musical.ui.fragments.mainactivity.home
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -10,17 +8,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.core.net.toFile
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.dhaval2404.imagepicker.ImagePicker
-import github.o4x.musical.App
 import github.o4x.musical.R
 import github.o4x.musical.databinding.FragmentHomeBinding
 import github.o4x.musical.extensions.toPlaylistDetail
@@ -28,22 +22,16 @@ import github.o4x.musical.helper.GridHelper
 import github.o4x.musical.helper.homeGridSize
 import github.o4x.musical.model.smartplaylist.HistoryPlaylist
 import github.o4x.musical.model.smartplaylist.LastAddedPlaylist
-import github.o4x.musical.prefs.HomeHeaderPref
-import github.o4x.musical.ui.activities.MusicPickerActivity
 import github.o4x.musical.ui.adapter.home.HomeAdapter
 import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import github.o4x.musical.ui.fragments.mainactivity.AbsQueueFragment
 import github.o4x.musical.ui.viewmodel.HomeHeaderViewModel
 import github.o4x.musical.ui.viewmodel.ScrollPositionViewModel
-import github.o4x.musical.util.MusicUtil
 import github.o4x.musical.util.Util
 import github.o4x.musical.util.ViewInsetsUtils.applyAppBarPadding
 import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
 
 class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
@@ -103,15 +91,6 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.action_search -> mainActivity.openSearch()
-            R.id.action_reset_header -> HomeHeaderPref.setDefault()
-            R.id.action_use_custom -> startHomeHeaderImagePicker()
-            R.id.action_use_song -> {
-                val myIntent = Intent(
-                    requireContext(),
-                    MusicPickerActivity::class.java
-                )
-                startActivityForResult(myIntent, REQUEST_CODE_SELECT_SONG)
-            }
             R.id.action_new_playlist -> CreatePlaylistDialog.create().show(childFragmentManager, "CREATE_PLAYLIST")
             R.id.nav_queue -> navController.navigate(R.id.action_to_queue)
             R.id.nav_library -> navController.navigate(R.id.action_to_library)
@@ -270,48 +249,5 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
                 binding.empty.isVisible = songs.isEmpty()
             }
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_SELECT_IMAGE -> if (resultCode == Activity.RESULT_OK) {
-                data?.data?.let { uri ->
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        if (headerDir.isDirectory) {
-                            try {
-                                val newImage = uri.toFile()
-                                headerDir.listFiles()?.forEach { image ->
-                                    if (image != newImage) image.delete()
-                                }
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }
-                    HomeHeaderPref.customImagePath = uri.toString()
-                }
-            }
-            REQUEST_CODE_SELECT_SONG -> if (resultCode == Activity.RESULT_OK) {
-                data?.data?.let {
-                    HomeHeaderPref.imageSongID = MusicUtil.getSongIDFromFileUri(it)
-                }
-            }
-        }
-    }
-
-    private val headerDir = File(App.getContext().filesDir, "/home_header/")
-
-    private fun startHomeHeaderImagePicker() {
-        ImagePicker.with(this)
-            .saveDir(headerDir)
-            .galleryOnly()
-            .crop()
-            .start(REQUEST_CODE_SELECT_IMAGE)
-    }
-
-    companion object {
-        const val REQUEST_CODE_SELECT_IMAGE = 1600
-        const val REQUEST_CODE_SELECT_SONG = 1700
     }
 }

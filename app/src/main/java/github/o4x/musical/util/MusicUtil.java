@@ -54,10 +54,6 @@ public class MusicUtil {
         return ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
     }
 
-    public static Long getSongIDFromFileUri(Uri songUri) {
-        return ContentUris.parseId(songUri);
-    }
-
     @NonNull
     public static Intent createShareSongFileIntent(@NonNull final Song song, Context context) {
         try {
