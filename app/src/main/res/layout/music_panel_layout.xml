@@ -26,7 +26,7 @@
 
             <fragment
                 android:id="@+id/mini_player_fragment"
-                android:name="github.o4x.musical.ui.fragments.player.MiniPlayerFragment"
+                android:name="github.o4x.m2.ui.fragments.player.MiniPlayerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

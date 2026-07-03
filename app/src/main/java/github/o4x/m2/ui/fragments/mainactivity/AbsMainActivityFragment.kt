@@ -1,0 +1,37 @@
+package github.o4x.m2.ui.fragments.mainactivity
+
+import android.os.Bundle
+import android.view.View
+import androidx.annotation.LayoutRes
+import github.o4x.m2.ui.activities.MainActivity
+import github.o4x.m2.ui.activities.MainActivity.MainActivityFragmentCallbacks
+import github.o4x.m2.ui.fragments.AbsMusicServiceFragment
+import github.o4x.m2.util.primaryColor
+
+abstract class AbsMainActivityFragment(@LayoutRes layout: Int) :
+    AbsMusicServiceFragment(layout), MainActivityFragmentCallbacks {
+
+    val mainActivity: MainActivity by lazy { requireActivity() as MainActivity }
+
+    val libraryViewModel by lazy { mainActivity.libraryViewModel }
+    val navController by lazy { mainActivity.navController }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mainActivity.setMiniPlayerProgressColor(primaryColor())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.backPressCallbacks.add(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mainActivity.backPressCallbacks.remove(this)
+    }
+
+    override fun handleBackPress(): Boolean {
+        return false
+    }
+}

@@ -15,7 +15,7 @@
         android:orientation="vertical"
         tools:ignore="UnusedAttribute,UselessParent">
 
-        <github.o4x.musical.views.WidthFitSquareLayout
+        <github.o4x.m2.views.WidthFitSquareLayout
             android:id="@+id/image_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -27,7 +27,7 @@
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription" />
 
-            <github.o4x.musical.views.IconImageView
+            <github.o4x.m2.views.IconImageView
                 android:id="@+id/icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -37,7 +37,7 @@
                 android:scaleType="centerCrop"
                 android:visibility="gone" />
 
-        </github.o4x.musical.views.WidthFitSquareLayout>
+        </github.o4x.m2.views.WidthFitSquareLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,7 +74,7 @@
 
             </LinearLayout>
 
-            <github.o4x.musical.views.IconImageView
+            <github.o4x.m2.views.IconImageView
                 android:id="@+id/menu"
                 style="@style/OverFlowButtonMini"
                 tools:ignore="ContentDescription" />

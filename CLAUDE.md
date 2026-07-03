@@ -28,7 +28,7 @@ The app uses Gradle version catalogs (`gradle/libs.versions.toml`) for all depen
 
 ## Architecture Overview
 
-**Musical** is an Android music player app (package `github.o4x.musical`, minSdk 28, targetSdk 36) written in Kotlin. It uses a mix of traditional View-based UI and Jetpack Compose.
+**Musical** is an Android music player app (package `github.o4x.m2`, minSdk 28, targetSdk 36) written in Kotlin. It uses a mix of traditional View-based UI and Jetpack Compose.
 
 ### Dependency Injection
 

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <github.o4x.musical.views.SyncPager
+    <github.o4x.m2.views.SyncPager
         android:id="@+id/back_album_art_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <github.o4x.musical.views.WidthFitSquareLayout
+        <github.o4x.m2.views.WidthFitSquareLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
@@ -39,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <github.o4x.musical.views.SyncPager
+            <github.o4x.m2.views.SyncPager
                 android:id="@+id/front_album_art_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -83,11 +83,11 @@
 
             </FrameLayout>
 
-        </github.o4x.musical.views.WidthFitSquareLayout>
+        </github.o4x.m2.views.WidthFitSquareLayout>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/playback_controls_fragment"
-            android:name="github.o4x.musical.ui.fragments.player.PlayerPlaybackControlsFragments"
+            android:name="github.o4x.m2.ui.fragments.player.PlayerPlaybackControlsFragments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

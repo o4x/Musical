@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <github.o4x.musical.views.WidthFitSquareLayout
+    <github.o4x.m2.views.WidthFitSquareLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -16,7 +16,7 @@
             android:scaleType="centerCrop"
             tools:ignore="ContentDescription,UnusedAttribute" />
 
-    </github.o4x.musical.views.WidthFitSquareLayout>
+    </github.o4x.m2.views.WidthFitSquareLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/song_recycler"

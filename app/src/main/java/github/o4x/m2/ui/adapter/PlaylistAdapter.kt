@@ -1,0 +1,141 @@
+package github.o4x.m2.ui.adapter
+
+import android.view.MenuItem
+import android.view.View
+import android.widget.PopupMenu
+import androidx.annotation.LayoutRes
+import github.o4x.m2.R
+import github.o4x.m2.extensions.toPlaylistDetail
+import github.o4x.m2.helper.menu.PlaylistMenuHelper.handleMenuClick
+import github.o4x.m2.helper.menu.PlaylistMenuHelper.handleMultipleItemAction
+import github.o4x.m2.model.Playlist
+import github.o4x.m2.model.Song
+import github.o4x.m2.model.smartplaylist.AbsSmartPlaylist
+import github.o4x.m2.ui.activities.MainActivity
+import github.o4x.m2.ui.adapter.base.AbsAdapter
+import github.o4x.m2.ui.adapter.base.MediaEntryViewHolder
+import github.o4x.m2.util.MusicUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
+class PlaylistAdapter(
+    val mainActivity: MainActivity,
+    dataSet: List<Playlist>,
+    @param:LayoutRes var itemLayoutRes: Int,
+) : AbsAdapter<PlaylistAdapter.ViewHolder, Playlist>(
+    mainActivity, dataSet, itemLayoutRes, R.menu.menu_playlists_selection
+) {
+    private var adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    override fun onAttachedToRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        if (!adapterScope.isActive) {
+            adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        }
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: androidx.recyclerview.widget.RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        adapterScope.cancel()
+    }
+
+    companion object {
+        private const val SMART_PLAYLIST = 0
+        private const val DEFAULT_PLAYLIST = 1
+    }
+
+    override fun getItemId(position: Int): Long {
+        return dataSet[position].id
+    }
+
+    override fun createViewHolder(view: View, viewType: Int): ViewHolder {
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+        val playlist = dataSet[position]
+
+        holder.title?.text = playlist.name
+
+        holder.loadJob?.cancel()
+        holder.loadJob = adapterScope.launch {
+            val songs = playlist.songs()
+            withContext(Dispatchers.Main) {
+                holder.text?.text = MusicUtil.getSongCountString(activity, songs.size)
+                getImageLoader(holder).load(playlist, songs).into(holder.image)
+            }
+        }
+
+//        holder.image?.setImageResource(getIconRes(playlist))
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        holder.loadJob?.cancel()
+        holder.loadJob = null
+    }
+
+    private fun getIconRes(playlist: Playlist): Int {
+        if (playlist is AbsSmartPlaylist) {
+            return playlist.iconRes
+        }
+        return if (MusicUtil.isFavoritePlaylist(
+                activity,
+                playlist
+            )
+        ) R.drawable.ic_star else R.drawable.ic_queue_music
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (dataSet[position] is AbsSmartPlaylist) SMART_PLAYLIST else DEFAULT_PLAYLIST
+    }
+
+    override fun getSectionName(position: Int): String {
+        return  ""
+    }
+
+    override fun getName(`object`: Playlist): String {
+        return `object`.name
+    }
+
+    override fun onMultipleItemAction(menuItem: MenuItem, selection: MutableList<Playlist>) {
+        handleMultipleItemAction(activity, selection, menuItem)
+    }
+
+    inner class ViewHolder(itemView: View) : MediaEntryViewHolder(itemView) {
+        var loadJob: Job? = null
+        override fun onClick(view: View) {
+            val playlist = dataSet[adapterPosition]
+            mainActivity.navController.toPlaylistDetail(playlist)
+        }
+
+        init {
+            if (menu != null) {
+                menu!!.setOnClickListener { view: View? ->
+                    val playlist = dataSet[adapterPosition]
+                    val popupMenu = PopupMenu(activity, view)
+                    popupMenu.inflate(if (getItemViewType() == SMART_PLAYLIST) R.menu.menu_item_smart_playlist else R.menu.menu_item_playlist)
+                    popupMenu.setOnMenuItemClickListener { item: MenuItem? ->
+                        handleMenuClick(
+                            activity, playlist, item!!
+                        )
+                    }
+                    popupMenu.show()
+                }
+            }
+        }
+    }
+
+    override fun loadImage(data: Playlist?, holder: ViewHolder?) {}
+    override fun getSongList(data: MutableList<Playlist>): MutableList<Song> {
+        return mutableListOf()
+    }
+}
