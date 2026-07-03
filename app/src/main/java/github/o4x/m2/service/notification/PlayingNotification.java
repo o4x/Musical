@@ -3,8 +3,10 @@ package github.o4x.m2.service.notification;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ServiceCompat;
 
 import github.o4x.m2.R;
 import github.o4x.m2.service.MusicService;
@@ -41,7 +43,7 @@ public abstract class PlayingNotification {
 
     public synchronized void stop() {
         stopped = true;
-        service.stopForeground(true);
+        ServiceCompat.stopForeground(service, ServiceCompat.STOP_FOREGROUND_REMOVE);
         notificationManager.cancel(NOTIFICATION_ID);
     }
 
@@ -54,11 +56,12 @@ public abstract class PlayingNotification {
         }
 
         if (notifyMode != newNotifyMode && newNotifyMode == NOTIFY_MODE_BACKGROUND) {
-            service.stopForeground(false);
+            ServiceCompat.stopForeground(service, ServiceCompat.STOP_FOREGROUND_DETACH);
         }
 
         if (newNotifyMode == NOTIFY_MODE_FOREGROUND) {
-            service.startForeground(NOTIFICATION_ID, notification);
+            ServiceCompat.startForeground(service, NOTIFICATION_ID, notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
         } else {
             notificationManager.notify(NOTIFICATION_ID, notification);
         }
