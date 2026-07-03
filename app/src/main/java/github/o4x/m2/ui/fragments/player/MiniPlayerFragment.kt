@@ -36,8 +36,6 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMiniPlayerBinding.inflate(inflater, container, false)
-        binding.progressViewModel = serviceActivity.playerViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -50,6 +48,13 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
         super.onViewCreated(view, savedInstanceState)
         view.setOnTouchListener(FlingPlayBackController(serviceActivity))
         setUpMiniPlayer()
+
+        playerViewModel.progress.observe(viewLifecycleOwner) {
+            binding.progressBar.progress = it
+        }
+        playerViewModel.total.observe(viewLifecycleOwner) {
+            binding.progressBar.max = it
+        }
     }
 
     private fun setUpMiniPlayer() {

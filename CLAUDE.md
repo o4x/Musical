@@ -95,6 +95,6 @@ All user preferences are accessed through `PreferenceUtil` (`prefs/PreferenceUti
 
 - **Smart playlists** (`model/smartplaylist/`) extend `AbsSmartPlaylist` and generate negative IDs via `PlaylistIdGenerator` to avoid collisions with MediaStore playlist IDs.
 - **RTL support is disabled** (`android:supportsRtl="false"` in the manifest).
-- **ViewBinding and DataBinding** are both enabled.
-- **kapt** is used for Glide's `@GlideModule` and Room's `@Database` annotation processing; Dagger is also wired but Koin is the active DI framework.
+- **ViewBinding** is used for all layouts (DataBinding is not enabled).
+- **KSP** is used for Glide's `@GlideModule` and Room's `@Database` annotation processing (no kapt). Glide's generated API (GlideApp) is not used — code calls `Glide.with(...)` directly.
 - The debug build appends `.debug` to the applicationId, so debug and release can coexist on device.

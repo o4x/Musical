@@ -1,240 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/player_footer_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@color/grey_800">
 
-    <data>
-        <import type="github.o4x.m2.helper.MusicPlayerRemote" />
-        <import type="github.o4x.m2.helper.PlayPauseButtonOnClickHandler" />
-
-        <variable
-            name="playerViewModel"
-            type="github.o4x.m2.ui.viewmodel.PlayerViewModel" />
-    </data>
-
-    <FrameLayout
-        android:id="@+id/player_footer_frame"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:background="@color/grey_800">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/playerAdd"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="16dp">
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/titleContainer"
+            app:tint="?android:attr/textColorPrimary"
+            app:srcCompat="@drawable/ic_add_circle_outline" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/playerAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/titleContainer"
-                app:tint="?android:attr/textColorPrimary"
-                app:srcCompat="@drawable/ic_add_circle_outline" />
+        <LinearLayout
+            android:id="@+id/titleContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/player_progress_slider"
+            app:layout_constraintEnd_toStartOf="@+id/playerAdd"
+            app:layout_constraintStart_toEndOf="@+id/songFavourite"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/titleContainer"
-                android:layout_width="0dp"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:textAppearance="@style/TextViewHeadline6"
+                android:textColor="?colorOnBackground"
+                android:textStyle="bold"
+                tools:text="@tools:sample/lorem/random" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.75"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingTop="6dp"
+                android:textColor="?colorOnBackground"
                 app:layout_constraintBottom_toTopOf="@+id/player_progress_slider"
-                app:layout_constraintEnd_toStartOf="@+id/playerAdd"
+                app:layout_constraintEnd_toStartOf="@+id/playerMenu"
                 app:layout_constraintStart_toEndOf="@+id/songFavourite"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:layout_editor_absoluteX="48dp"
+                tools:text="@tools:sample/lorem/random" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:gravity="center"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:singleLine="true"
-                    android:textAppearance="@style/TextViewHeadline6"
-                    android:textColor="?colorOnBackground"
-                    android:textStyle="bold"
-                    android:text="@{playerViewModel.currentSong.title}"
-                    tools:text="@tools:sample/lorem/random" />
+        </LinearLayout>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.75"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:paddingTop="6dp"
-                    android:textColor="?colorOnBackground"
-                    android:text="@{playerViewModel.currentSong.artistName}"
-                    app:layout_constraintBottom_toTopOf="@+id/player_progress_slider"
-                    app:layout_constraintEnd_toStartOf="@+id/playerMenu"
-                    app:layout_constraintStart_toEndOf="@+id/songFavourite"
-                    app:layout_constraintTop_toBottomOf="@+id/title"
-                    tools:layout_editor_absoluteX="48dp"
-                    tools:text="@tools:sample/lorem/random" />
-
-            </LinearLayout>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/songFavourite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/titleContainer"
-                app:tint="?android:attr/textColorPrimary"
-                app:srcCompat="@drawable/ic_star_border" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/songFavourite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/titleContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/titleContainer"
+            app:tint="?android:attr/textColorPrimary"
+            app:srcCompat="@drawable/ic_star_border" />
 
 
-            <!--  If layout_width not equals with 0dp when update ui is lagging  -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/player_song_current_progress"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:gravity="center"
-                android:minWidth="40dp"
-                android:singleLine="true"
-                android:textColor="?colorOnBackground"
-                android:textSize="12sp"
-                android:text="@{playerViewModel.progressText}"
-                app:layout_constraintBottom_toBottomOf="@+id/player_progress_slider"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/player_progress_slider"
-                tools:ignore="RtlHardcoded,RtlSymmetry"
-                tools:text="@tools:sample/date/hhmmss" />
+        <!--  If layout_width not equals with 0dp when update ui is lagging  -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/player_song_current_progress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:gravity="center"
+            android:minWidth="40dp"
+            android:singleLine="true"
+            android:textColor="?colorOnBackground"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/player_progress_slider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/player_progress_slider"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            tools:text="@tools:sample/date/hhmmss" />
 
-            <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/player_progress_slider"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:max="@{playerViewModel.total}"
-                android:maxHeight="3dp"
-                android:progress="@{playerViewModel.progress}"
-                android:progressDrawable="@drawable/color_progress_seek"
-                app:layout_constraintTop_toBottomOf="@id/titleContainer"
-                app:layout_constraintBottom_toTopOf="@+id/player_play_pause_button"
-                app:layout_constraintEnd_toStartOf="@id/player_song_total_time"
-                app:layout_constraintStart_toEndOf="@id/player_song_current_progress"
-                tools:progress="20" />
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/player_progress_slider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:maxHeight="3dp"
+            android:progressDrawable="@drawable/color_progress_seek"
+            app:layout_constraintTop_toBottomOf="@id/titleContainer"
+            app:layout_constraintBottom_toTopOf="@+id/player_play_pause_button"
+            app:layout_constraintEnd_toStartOf="@id/player_song_total_time"
+            app:layout_constraintStart_toEndOf="@id/player_song_current_progress"
+            tools:progress="20" />
 
-            <!--  If layout_width not equals with 0dp when update ui is lagging  -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/player_song_total_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:minWidth="40dp"
-                android:singleLine="true"
-                android:textColor="?colorOnBackground"
-                android:textSize="12sp"
-                android:text="@{playerViewModel.totalText}"
-                app:layout_constraintBottom_toBottomOf="@+id/player_progress_slider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/player_progress_slider"
-                tools:ignore="RtlHardcoded,RtlSymmetry"
-                tools:text="@tools:sample/date/hhmmss" />
+        <!--  If layout_width not equals with 0dp when update ui is lagging  -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/player_song_total_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:minWidth="40dp"
+            android:singleLine="true"
+            android:textColor="?colorOnBackground"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/player_progress_slider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/player_progress_slider"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            tools:text="@tools:sample/date/hhmmss" />
 
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/player_repeat_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:onClick="@{() -> MusicPlayerRemote.cycleRepeatMode()}"
-                app:layout_constraintBottom_toBottomOf="@+id/player_prev_button"
-                app:layout_constraintEnd_toStartOf="@+id/player_prev_button"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/player_prev_button"
-                app:srcCompat="@drawable/ic_repeat"
-                app:tint="?android:attr/textColorPrimary"
-                tools:ignore="MissingPrefix"
-                repeatMode="@{playerViewModel.repeatMode}"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/player_repeat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@+id/player_prev_button"
+            app:layout_constraintEnd_toStartOf="@+id/player_prev_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/player_prev_button"
+            app:srcCompat="@drawable/ic_repeat"
+            app:tint="?android:attr/textColorPrimary"
+            tools:ignore="MissingPrefix" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/player_prev_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:onClick="@{() -> MusicPlayerRemote.back()}"
-                app:layout_constraintBottom_toBottomOf="@+id/player_play_pause_button"
-                app:layout_constraintEnd_toStartOf="@+id/player_play_pause_button"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/player_repeat_button"
-                app:layout_constraintTop_toTopOf="@+id/player_play_pause_button"
-                app:srcCompat="@drawable/ic_skip_previous"
-                app:tint="?android:attr/textColorPrimary"
-                tools:ignore="MissingPrefix" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/player_prev_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@+id/player_play_pause_button"
+            app:layout_constraintEnd_toStartOf="@+id/player_play_pause_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/player_repeat_button"
+            app:layout_constraintTop_toTopOf="@+id/player_play_pause_button"
+            app:srcCompat="@drawable/ic_skip_previous"
+            app:tint="?android:attr/textColorPrimary"
+            tools:ignore="MissingPrefix" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/player_play_pause_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:onClick="@{() -> PlayPauseButtonOnClickHandler.playPause()}"
-                app:fabCustomSize="64dp"
-                app:tint="@color/page_background"
-                app:backgroundTint="?colorOnBackground"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/player_next_button"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/player_prev_button"
-                app:srcCompat="@drawable/ic_pause"
-                tools:ignore="ContentDescription" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/player_play_pause_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:background="?android:attr/selectableItemBackground"
+            app:fabCustomSize="64dp"
+            app:tint="@color/page_background"
+            app:backgroundTint="?colorOnBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/player_next_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/player_prev_button"
+            app:srcCompat="@drawable/ic_pause"
+            tools:ignore="ContentDescription" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/player_next_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:onClick="@{() -> MusicPlayerRemote.playNextSong()}"
-                app:layout_constraintBottom_toBottomOf="@+id/player_play_pause_button"
-                app:layout_constraintEnd_toStartOf="@+id/player_shuffle_button"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/player_play_pause_button"
-                app:layout_constraintTop_toTopOf="@+id/player_play_pause_button"
-                app:srcCompat="@drawable/ic_skip_next"
-                app:tint="?android:attr/textColorPrimary"
-                tools:ignore="MissingPrefix" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/player_next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@+id/player_play_pause_button"
+            app:layout_constraintEnd_toStartOf="@+id/player_shuffle_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/player_play_pause_button"
+            app:layout_constraintTop_toTopOf="@+id/player_play_pause_button"
+            app:srcCompat="@drawable/ic_skip_next"
+            app:tint="?android:attr/textColorPrimary"
+            tools:ignore="MissingPrefix" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/player_shuffle_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="16dp"
-                android:scaleType="fitCenter"
-                android:onClick="@{() -> MusicPlayerRemote.toggleShuffleMode()}"
-                app:layout_constraintBottom_toBottomOf="@+id/player_next_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/player_next_button"
-                app:layout_constraintTop_toTopOf="@+id/player_next_button"
-                app:srcCompat="@drawable/ic_shuffle"
-                app:tint="?android:attr/textColorPrimary"
-                tools:ignore="MissingPrefix"
-                shuffleMode="@{playerViewModel.shuffleMode}"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/player_shuffle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@+id/player_next_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/player_next_button"
+            app:layout_constraintTop_toTopOf="@+id/player_next_button"
+            app:srcCompat="@drawable/ic_shuffle"
+            app:tint="?android:attr/textColorPrimary"
+            tools:ignore="MissingPrefix" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </FrameLayout>
-
-</layout>
+</FrameLayout>

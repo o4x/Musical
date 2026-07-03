@@ -4,10 +4,10 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import github.o4x.m2.App
 import github.o4x.m2.imageloader.glide.loader.GlideLoader
-import github.o4x.m2.imageloader.glide.module.GlideApp
 import github.o4x.m2.imageloader.glide.targets.CustomBitmapTarget
 import github.o4x.m2.imageloader.glide.targets.palette.AbsPaletteTargetListener
 import github.o4x.m2.imageloader.glide.transformation.blur.BlurTransformation
@@ -30,7 +30,7 @@ class AlbumCoverPagerAdapter(fm: FragmentManager, dataSet: List<Song>) :
                         super.onResourceReady(resource)
                         if (resource == null) return
                         _binding?.playerImage?.let {
-                            GlideApp.with(App.getContext())
+                            Glide.with(App.getContext())
                                 .asBitmap()
                                 .transition(BitmapTransitionOptions.withCrossFade(300)) // Added ms duration for smoother transition
                                 // Shrink the massive Bitmap before blurring it

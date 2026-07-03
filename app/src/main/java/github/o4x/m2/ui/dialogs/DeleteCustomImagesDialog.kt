@@ -8,7 +8,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import github.o4x.m2.R
 import github.o4x.m2.extensions.showToast
 import github.o4x.m2.helper.MusicPlayerRemote
-import github.o4x.m2.imageloader.glide.module.GlideApp
 import github.o4x.m2.util.CustomImageUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

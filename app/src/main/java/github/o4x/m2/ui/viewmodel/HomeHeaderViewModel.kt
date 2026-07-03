@@ -10,7 +10,7 @@ import github.o4x.m2.App
 import github.o4x.m2.R
 import github.o4x.m2.helper.MyPalette
 import github.o4x.m2.imageloader.glide.loader.GlideLoader
-import github.o4x.m2.imageloader.glide.module.GlideApp
+import com.bumptech.glide.Glide
 import github.o4x.m2.imageloader.glide.targets.CustomBitmapTarget
 import github.o4x.m2.imageloader.glide.targets.palette.PaletteTargetListener
 import github.o4x.m2.interfaces.MusicServiceEventListener
@@ -80,7 +80,7 @@ class HomeHeaderViewModel : ViewModel(),
             }
 
             withContext(Dispatchers.Main) {
-                GlideApp.with(image.context)
+                Glide.with(image.context)
                     .asBitmap()
                     .load(bitmap)
                     .transition(BitmapTransitionOptions.withCrossFade())
