@@ -2,24 +2,19 @@ package github.o4x.musical.ui.viewmodel
 
 import android.content.SharedPreferences
 import android.graphics.Bitmap
-import android.net.Uri
 import android.widget.ImageView
-import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.*
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import github.o4x.musical.App
 import github.o4x.musical.R
-import github.o4x.musical.drawables.CharCoverDrawable
 import github.o4x.musical.helper.MyPalette
 import github.o4x.musical.imageloader.glide.loader.GlideLoader
 import github.o4x.musical.imageloader.glide.module.GlideApp
 import github.o4x.musical.imageloader.glide.targets.CustomBitmapTarget
 import github.o4x.musical.imageloader.glide.targets.palette.PaletteTargetListener
 import github.o4x.musical.interfaces.MusicServiceEventListener
-import github.o4x.musical.prefs.HomeHeaderPref
 import github.o4x.musical.prefs.PreferenceUtil
-import github.o4x.musical.repository.SongRepository
 import github.o4x.musical.util.ColorUtil
 import github.o4x.musical.util.CoverUtil
 import github.o4x.musical.util.Util
@@ -27,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
+class HomeHeaderViewModel : ViewModel(),
     MusicServiceEventListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val posterBitmap = MutableLiveData<Bitmap>()
@@ -36,13 +31,11 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
     init {
         fetchPosterBitmap()
         PreferenceUtil.registerOnSharedPreferenceChangedListener(this)
-        HomeHeaderPref.registerOnSharedPreferenceChangedListener(this)
     }
 
     override fun onCleared() {
         super.onCleared()
         PreferenceUtil.unregisterOnSharedPreferenceChangedListener(this)
-        HomeHeaderPref.unregisterOnSharedPreferenceChangedListener(this)
     }
 
     private fun fetchPosterBitmap() {
@@ -53,44 +46,14 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
             }
         }
 
-        val loader = GlideLoader.with(App.getContext())
+        GlideLoader.with(App.getContext())
             .withListener(listener)
-
-        var finisher: GlideLoader.GlideBuilder.GlideFinisher? = null
-
-        viewModelScope.launch(Dispatchers.IO) {
-            when (HomeHeaderPref.homeHeaderType) {
-                HomeHeaderPref.TYPE_CUSTOM -> {
-                    val uri = Uri.parse(HomeHeaderPref.customImagePath)
-                    finisher = loader
-                        .load(uri)
-                }
-                HomeHeaderPref.TYPE_SONG -> {
-                    val song =
-                        songRepository.song(HomeHeaderPref.imageSongID)
-                    finisher = loader
-                        .load(song)
-                }
-                HomeHeaderPref.TYPE_DEFAULT -> {
-                    finisher = loader.load(R.drawable.unsplash)
-                }
-            }
-
-            withContext(Dispatchers.Main) {
-                if (finisher == null) {
-                    listener.onResourceReady(
-                        CharCoverDrawable.empty()
-                            .toBitmap(Util.getMaxScreenSize(), Util.getMaxScreenSize())
-                    )
-                } else {
-                    finisher?.into(
-                        CustomBitmapTarget(
-                            Util.getMaxScreenSize(), Util.getMaxScreenSize()
-                        )
-                    )
-                }
-            }
-        }
+            .load(R.drawable.unsplash)
+            .into(
+                CustomBitmapTarget(
+                    Util.getMaxScreenSize(), Util.getMaxScreenSize()
+                )
+            )
     }
 
     fun calculateBitmap(image: ImageView, it: Bitmap, w: Int, h: Int) {
@@ -140,14 +103,11 @@ class HomeHeaderViewModel(val songRepository: SongRepository) : ViewModel(),
 
     override fun onShuffleModeChanged() {}
 
-    override fun onMediaStoreChanged() {
-        fetchPosterBitmap()
-    }
+    override fun onMediaStoreChanged() {}
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            PreferenceUtil.DARK_MODE,
-            HomeHeaderPref.CHANGE -> {
+            PreferenceUtil.DARK_MODE -> {
                 fetchPosterBitmap()
             }
         }

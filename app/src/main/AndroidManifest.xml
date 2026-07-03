@@ -44,17 +44,6 @@
             android:value="ca-app-pub-8217710892260661~9779617059"/>
 
         <activity
-            android:name=".ui.activities.MusicPickerActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.PICK" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.OPENABLE" />
-                <data android:mimeType="vnd.android.cursor.dir/audio" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".ui.activities.PlayerActivity"
             android:exported="false" />
 

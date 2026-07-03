@@ -34,14 +34,11 @@ import github.o4x.musical.misc.DialogAsyncTask
 import github.o4x.musical.misc.OverScrollLinearLayoutManager
 import github.o4x.musical.misc.WrappedAsyncTaskLoader
 import github.o4x.musical.model.Song
-import github.o4x.musical.prefs.HomeHeaderPref
 import github.o4x.musical.prefs.PreferenceUtil.startDirectory
-import github.o4x.musical.ui.activities.MusicPickerActivity
 import github.o4x.musical.ui.adapter.SongFileAdapter
 import github.o4x.musical.ui.dialogs.CreatePlaylistDialog
 import github.o4x.musical.ui.fragments.mainactivity.AbsMainActivityFragment
 import github.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment.ListSongsAsyncTask.OnSongsListedCallback
-import github.o4x.musical.ui.fragments.mainactivity.home.HomeFragment.Companion.REQUEST_CODE_SELECT_SONG
 import github.o4x.musical.util.FileUtil
 import github.o4x.musical.util.ViewInsetsUtils.applyAppBarPadding
 import github.o4x.musical.util.ViewInsetsUtils.applySystemBarsPadding
