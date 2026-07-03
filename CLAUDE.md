@@ -2,27 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Build Commands
+## Building and Debugging
 
-```bash
-# Debug build
-./gradlew assembleDebug
-
-# Release build
-./gradlew assembleRelease
-
-# Run instrumented tests
-./gradlew connectedAndroidTest
-
-# Run unit tests
-./gradlew test
-
-# Clean build
-./gradlew clean
-
-# Lint check (abortOnError = false, MissingTranslation and InvalidPackage are disabled)
-./gradlew lint
-```
+The user builds, runs, and debugs the app themselves in Android Studio. Do NOT run Gradle builds, launch the app, or attempt to debug it yourself — just make the code changes and let the user verify them.
 
 The app uses Gradle version catalogs (`gradle/libs.versions.toml`) for all dependency version management.
 
