@@ -8,6 +8,15 @@ plugins {
     id("kotlin-parcelize")
     id("kotlin-kapt")
     alias(libs.plugins.navigation.safeArgs)
+    alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.firebase.crashlytics) apply false
+}
+
+// Firebase (Analytics/Crashlytics) is optional: it activates only when
+// app/google-services.json is present, so the project builds without it.
+if (file("google-services.json").exists()) {
+    apply(plugin = libs.plugins.google.services.get().pluginId)
+    apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
 }
 
 fun getProperties(fileName: String): Properties {
@@ -92,6 +101,10 @@ configurations.all {
 
 
 dependencies {
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":recyclerview-fastscroll"))
     implementation(files("libs/jaudiotagger-2.2.4-SNAPSHOT.jar"))
