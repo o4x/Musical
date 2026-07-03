@@ -32,7 +32,7 @@ import github.o4x.m2.R
 import github.o4x.m2.databinding.ActivityTagBinding
 import github.o4x.m2.extensions.startImagePicker
 import github.o4x.m2.imageloader.glide.loader.GlideLoader
-import github.o4x.m2.imageloader.glide.module.GlideApp
+import com.bumptech.glide.Glide
 import github.o4x.m2.model.Album
 import github.o4x.m2.model.Artist
 import github.o4x.m2.repository.Repository
@@ -456,7 +456,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
     private fun loadImageFromFile(selectedFile: Uri?, forArtist: Boolean? = null) {
         selectedFile?.let {
-            GlideApp.with(this)
+            Glide.with(this)
                 .asBitmap()
                 .load(selectedFile)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -466,7 +466,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
 
     protected fun loadImageFromUrl(url: String?, forArtist: Boolean? = null) {
         url?.let {
-            GlideApp.with(this)
+            Glide.with(this)
                 .asBitmap()
                 .load(url)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

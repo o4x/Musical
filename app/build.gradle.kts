@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-parcelize")
-    id("kotlin-kapt")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.navigation.safeArgs)
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
@@ -84,7 +84,6 @@ configure<ApplicationExtension> {
 
     buildFeatures {
         viewBinding = true
-        dataBinding = true
         buildConfig = true
         compose = true
     }
@@ -161,7 +160,7 @@ dependencies {
     implementation(libs.licensesdialog)
 
     implementation(libs.glide)
-    kapt(libs.compiler)
+    ksp(libs.glide.ksp)
     implementation(libs.okhttp3.integration)
 
     implementation(libs.org.eclipse.egit.github.core)
@@ -178,7 +177,7 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.rxjava2)
     implementation(libs.androidx.room.guava)
     testImplementation(libs.androidx.room.testing)
@@ -187,9 +186,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.common.java8)
     implementation(libs.androidx.lifecycle.service)
-
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
 
     implementation(libs.utilcodex)
     implementation(libs.imagepicker)

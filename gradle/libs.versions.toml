@@ -11,7 +11,6 @@ composeBom = "2026.02.00"
 constraintlayout = "2.2.1"
 coreKtx = "1.17.0"
 coroutinesVersion = "1.10.2"
-daggerVersion = "2.59.1"
 firebaseBom = "34.15.0"
 firebaseCrashlyticsPlugin = "3.0.7"
 fragmentKtx = "1.8.9"
@@ -23,6 +22,7 @@ imagepicker = "2.1"
 koin-bom = "4.1.1"
 koinAndroidxNavigation = "4.1.1"
 kotlin = "2.3.10"
+ksp = "2.3.9"
 legacySupportCoreUi = "1.0.0"
 library = "1.6.1"
 licensesdialog = "2.2.0"
@@ -102,17 +102,15 @@ androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "
 bottomsheets = { module = "com.afollestad.material-dialogs:bottomsheets", version.ref = "materialDialogVersion" }
 bouncescrollview = { module = "com.github.woxingxiao:BounceScrollView", version.ref = "bouncescrollview" }
 color = { module = "com.afollestad.material-dialogs:color", version.ref = "materialDialogVersion" }
-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialogVersion" }
-dagger = { module = "com.google.dagger:dagger", version.ref = "daggerVersion" }
-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerVersion" }
 datetime = { module = "com.afollestad.material-dialogs:datetime", version.ref = "materialDialogVersion" }
 files = { module = "com.afollestad.material-dialogs:files", version.ref = "materialDialogVersion" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }
 input = { module = "com.afollestad.material-dialogs:input", version.ref = "materialDialogVersion" }
@@ -137,5 +135,6 @@ firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin"}
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 navigation-safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 foojay-resolver = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojay" }

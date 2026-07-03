@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
+import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -14,7 +15,6 @@ import com.bumptech.glide.signature.MediaStoreSignature
 import com.bumptech.glide.signature.ObjectKey
 import github.o4x.m2.drawables.CharCoverDrawable
 import github.o4x.m2.drawables.CoverData
-import github.o4x.m2.imageloader.glide.module.GlideApp
 import github.o4x.m2.imageloader.glide.module.artistimage.ArtistImage
 import github.o4x.m2.imageloader.glide.targets.CustomBitmapTarget
 import github.o4x.m2.imageloader.glide.targets.PalettableImageTarget
@@ -34,7 +34,7 @@ class GlideLoader {
 
         @JvmStatic
         fun with(context: Context): GlideBuilder {
-            return GlideBuilder(context, GlideApp.with(context).asBitmap())
+            return GlideBuilder(context, Glide.with(context).asBitmap())
         }
     }
 

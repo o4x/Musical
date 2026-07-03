@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.annotation.ColorInt
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.lifecycleScope
 import github.o4x.m2.R
 import github.o4x.m2.databinding.FragmentPlayerPlaybackControlsBinding
@@ -45,8 +44,6 @@ open class PlayerPlaybackControlsFragments :
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPlayerPlaybackControlsBinding.inflate(inflater, container, false)
-        binding.playerViewModel = serviceActivity.playerViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -63,6 +60,28 @@ open class PlayerPlaybackControlsFragments :
         playerViewModel.isPlaying.observe(viewLifecycleOwner, {
             updatePlayPauseDrawableState()
         })
+        playerViewModel.currentSong.observe(viewLifecycleOwner) { song ->
+            binding.title.text = song.title
+            binding.text.text = song.artistName
+        }
+        playerViewModel.progress.observe(viewLifecycleOwner) {
+            binding.playerProgressSlider.progress = it
+        }
+        playerViewModel.total.observe(viewLifecycleOwner) {
+            binding.playerProgressSlider.max = it
+        }
+        playerViewModel.progressText.observe(viewLifecycleOwner) {
+            binding.playerSongCurrentProgress.text = it
+        }
+        playerViewModel.totalText.observe(viewLifecycleOwner) {
+            binding.playerSongTotalTime.text = it
+        }
+        playerViewModel.repeatMode.observe(viewLifecycleOwner) {
+            setRepeatMode(binding.playerRepeatButton, it)
+        }
+        playerViewModel.shuffleMode.observe(viewLifecycleOwner) {
+            setShuffleMode(binding.playerShuffleButton, it)
+        }
     }
 
     override fun onDestroyView() {
@@ -98,6 +117,11 @@ open class PlayerPlaybackControlsFragments :
         setUpProgressSlider()
         setupFavourite()
         setupMenu()
+
+        binding.playerRepeatButton.setOnClickListener { MusicPlayerRemote.cycleRepeatMode() }
+        binding.playerShuffleButton.setOnClickListener { MusicPlayerRemote.toggleShuffleMode() }
+        binding.playerPrevButton.setOnClickListener { MusicPlayerRemote.back() }
+        binding.playerNextButton.setOnClickListener { MusicPlayerRemote.playNextSong() }
     }
 
     private fun setupFavourite() {
@@ -170,7 +194,6 @@ open class PlayerPlaybackControlsFragments :
 }
 
 
-@BindingAdapter("repeatMode")
 fun setRepeatMode(view: ImageView, mode: Int) {
     when (mode) {
         MusicService.REPEAT_MODE_ALL -> view.setImageResource(R.drawable.ic_repeat)
@@ -181,7 +204,6 @@ fun setRepeatMode(view: ImageView, mode: Int) {
     view.setColorMode(mode != MusicService.REPEAT_MODE_NONE)
 }
 
-@BindingAdapter("shuffleMode")
 fun setShuffleMode(view: ImageView, mode: Int) {
     when (mode) {
         MusicService.SHUFFLE_MODE_SHUFFLE -> view.setColorMode(true)
