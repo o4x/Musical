@@ -27,6 +27,7 @@ class DeleteSongsDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        songsToDelete = requireArguments().getParcelableArrayList("songs")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             deleteRequestLauncher = registerForActivityResult(
                 ActivityResultContracts.StartIntentSenderForResult()
@@ -41,16 +42,16 @@ class DeleteSongsDialog : DialogFragment() {
                         ).show()
                     }
                 }
+                dismiss()
             }
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val songs: List<Song>? = requireArguments().getParcelableArrayList("songs")
-        songsToDelete = songs
+        val songs: List<Song> = songsToDelete!!
         val title: Int
         val content: CharSequence
-        if (songs!!.size > 1) {
+        if (songs.size > 1) {
             title = R.string.delete_songs_title
             val fileList = songs.joinToString("<br/>") { "• ${File(it.data).name}" }
             content = Html.fromHtml(getString(R.string.delete_x_songs, songs.size) + "<br/><br/>" + fileList)
@@ -59,7 +60,11 @@ class DeleteSongsDialog : DialogFragment() {
             val fileName = File(songs[0].data).name
             content = Html.fromHtml(getString(R.string.delete_song_x, songs[0].title) + "<br/><small>" + fileName + "</small>")
         }
+        // noAutoDismiss: on Android 11+ the fragment must stay alive until the system
+        // delete-confirmation result comes back, otherwise the launcher callback
+        // (which removes the songs from the playing queue) is never delivered.
         return MaterialDialog(requireContext())
+            .noAutoDismiss()
             .title(title)
             .message(text = content)
             .positiveButton(R.string.delete_action) {
@@ -80,9 +85,10 @@ class DeleteSongsDialog : DialogFragment() {
                     )
                 } else {
                     MusicUtil.deleteTracks(requireActivity(), songs)
+                    dismiss()
                 }
             }
-            .negativeButton(R.string.cancel)
+            .negativeButton(R.string.cancel) { dismiss() }
     }
 
     companion object {
