@@ -8,6 +8,10 @@ The user builds, runs, and debugs the app themselves in Android Studio. Do NOT r
 
 The app uses Gradle version catalogs (`gradle/libs.versions.toml`) for all dependency version management.
 
+## Git
+
+Do NOT add a "Co-Authored-By: Claude" line (or any Claude attribution) to commit messages.
+
 ## Architecture Overview
 
 **Musical** is an Android music player app (package `github.o4x.m2`, minSdk 28, targetSdk 36) written in Kotlin. It uses a mix of traditional View-based UI and Jetpack Compose.
