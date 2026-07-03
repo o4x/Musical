@@ -164,7 +164,7 @@
         <item name="android:textColor">@color/red_400</item>
     </style>
 
-    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.Material3Expressive.MaterialAlertDialog">
         <item name="android:dialogCornerRadius" tools:targetApi="p">12dp</item>
         <item name="materialAlertDialogBodyTextStyle">
             @style/AppTextAppearance.MaterialAlertDialog.Body
