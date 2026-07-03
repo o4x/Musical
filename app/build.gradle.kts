@@ -23,11 +23,11 @@ fun getProperty(properties: Properties, name: String): String =
     properties.getProperty(name) ?: "$name missing"
 
 configure<ApplicationExtension> {
-    namespace = "github.o4x.musical"
+    namespace = "github.o4x.m2"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "github.o4x.musical"
+        applicationId = "github.o4x.m2"
         minSdk = 28
         targetSdk = 36
         versionCode = 12

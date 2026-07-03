@@ -7,55 +7,55 @@
 
     <fragment
         android:id="@+id/search_fragment"
-        android:name="github.o4x.musical.ui.fragments.mainactivity.search.SearchFragment"
+        android:name="github.o4x.m2.ui.fragments.mainactivity.search.SearchFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/home_fragment"
-        android:name="github.o4x.musical.ui.fragments.mainactivity.home.HomeFragment"
+        android:name="github.o4x.m2.ui.fragments.mainactivity.home.HomeFragment"
         android:label="@string/musical"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/queue_fragment"
-        android:name="github.o4x.musical.ui.fragments.mainactivity.queue.QueueFragment"
+        android:name="github.o4x.m2.ui.fragments.mainactivity.queue.QueueFragment"
         android:label="@string/playing_queue"
         tools:layout="@layout/fragment_queue" />
 
     <fragment
         android:id="@+id/library_fragment"
-        android:name="github.o4x.musical.ui.fragments.mainactivity.library.LibraryFragment"
+        android:name="github.o4x.m2.ui.fragments.mainactivity.library.LibraryFragment"
         android:label="@string/library"
         tools:layout="@layout/fragment_library" />
 
     <fragment
         android:id="@+id/folders_fragment"
-        android:name="github.o4x.musical.ui.fragments.mainactivity.folders.FoldersFragment"
+        android:name="github.o4x.m2.ui.fragments.mainactivity.folders.FoldersFragment"
         android:label="@string/folders"
         tools:layout="@layout/fragment_folder" />
 
     <fragment
         android:id="@+id/timer_fragment"
-        android:name="github.o4x.musical.ui.fragments.mainactivity.timer.TimerFragment"
+        android:name="github.o4x.m2.ui.fragments.mainactivity.timer.TimerFragment"
         android:label="@string/sleep_timer"
         tools:layout="@layout/fragment_timer" />
 
     <fragment
         android:id="@+id/playlist_detail_fragment"
-        android:name="github.o4x.musical.ui.fragments.mainactivity.datails.PlaylistDetailFragment"
+        android:name="github.o4x.m2.ui.fragments.mainactivity.datails.PlaylistDetailFragment"
         android:label="@string/playlists"
         tools:layout="@layout/fragment_detail" />
 
     <fragment
         android:id="@+id/genre_detail_fragment"
-        android:name="github.o4x.musical.ui.fragments.mainactivity.datails.GenreDetailFragment"
+        android:name="github.o4x.m2.ui.fragments.mainactivity.datails.GenreDetailFragment"
         android:label="@string/genres"
         tools:layout="@layout/fragment_detail" />
 
     <activity
         android:id="@+id/settings_activity"
-        android:name="github.o4x.musical.ui.activities.SettingsActivity"
+        android:name="github.o4x.m2.ui.activities.SettingsActivity"
         android:label="@string/settings"
         tools:layout="@layout/activity_settings"/>
 

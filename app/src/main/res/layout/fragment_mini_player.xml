@@ -6,7 +6,7 @@
     <data>
         <variable
             name="progressViewModel"
-            type="github.o4x.musical.ui.viewmodel.PlayerViewModel"/>
+            type="github.o4x.m2.ui.viewmodel.PlayerViewModel"/>
     </data>
 
     <LinearLayout
@@ -46,7 +46,7 @@
             android:layout_height="@dimen/mini_player_height"
             android:orientation="horizontal">
 
-            <github.o4x.musical.views.IconImageView
+            <github.o4x.m2.views.IconImageView
                 android:id="@+id/mini_player_image"
                 android:layout_width="24dp"
                 android:layout_height="24dp"

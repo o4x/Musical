@@ -29,7 +29,7 @@
 -keepattributes Signature
 -keepattributes Exceptions
 -dontwarn javax.annotation.**
--keep class github.o4x.musical.network.models** {*;}
+-keep class github.o4x.m2.network.models** {*;}
 
 # Glide settings
 -keep public class * implements com.bumptech.glide.module.GlideModule
@@ -59,7 +59,7 @@
 #Models
 -keepnames class * extends android.os.Parcelable
 -keepnames class * extends java.io.Serializable
--keep class github.o4x.musical.model.** {*;}
+-keep class github.o4x.m2.model.** {*;}
 
 # Koin Rules
 -keep class org.koin.** { *; }
@@ -71,8 +71,8 @@
 }
 
 # Keep the constructor of any class used in Koin modules
-# Replace 'github.o4x.musical' with your actual package name if different
--keep class github.o4x.musical.** {
+# Replace 'github.o4x.m2' with your actual package name if different
+-keep class github.o4x.m2.** {
     <init>(...);
 }
 

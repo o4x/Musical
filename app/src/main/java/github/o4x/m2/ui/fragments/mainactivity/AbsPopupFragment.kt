@@ -1,0 +1,24 @@
+package github.o4x.m2.ui.fragments.mainactivity
+
+import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import androidx.annotation.LayoutRes
+import github.o4x.m2.util.Util
+
+open class AbsPopupFragment(@LayoutRes layout: Int) : AbsMainActivityFragment(layout) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            Util.hideSoftKeyboard(mainActivity)
+            mainActivity.onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+}

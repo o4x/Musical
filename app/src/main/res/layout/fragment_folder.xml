@@ -38,7 +38,7 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <github.o4x.musical.views.BreadCrumbLayout
+        <github.o4x.m2.views.BreadCrumbLayout
             android:id="@+id/bread_crumbs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height" />

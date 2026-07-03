@@ -21,7 +21,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Musical"
+rootProject.name = "M2"
 
 include(":recyclerview-fastscroll")
 include(":app")

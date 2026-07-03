@@ -14,7 +14,7 @@
         android:padding="2dp"
         android:orientation="horizontal">
 
-        <github.o4x.musical.views.IconImageView
+        <github.o4x.m2.views.IconImageView
             android:id="@+id/drag_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -23,7 +23,7 @@
             app:srcCompat="@drawable/ic_drag_vertical"
             tools:ignore="ContentDescription" />
 
-        <github.o4x.musical.views.HeightFitSquareLayout
+        <github.o4x.m2.views.HeightFitSquareLayout
             android:id="@+id/image_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -47,7 +47,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 android:visibility="gone" />
 
-            <github.o4x.musical.views.IconImageView
+            <github.o4x.m2.views.IconImageView
                 android:id="@+id/icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -57,7 +57,7 @@
                 android:visibility="gone"
                 tools:ignore="ContentDescription" />
 
-        </github.o4x.musical.views.HeightFitSquareLayout>
+        </github.o4x.m2.views.HeightFitSquareLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -90,7 +90,7 @@
                 android:textColor="?android:textColorSecondary" />
         </LinearLayout>
 
-        <github.o4x.musical.views.IconImageView
+        <github.o4x.m2.views.IconImageView
             android:id="@+id/menu"
             style="@style/OverFlowButton"
             android:layout_gravity="center_vertical"

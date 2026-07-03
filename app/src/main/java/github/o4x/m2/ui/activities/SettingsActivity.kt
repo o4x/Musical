@@ -1,0 +1,45 @@
+package github.o4x.m2.ui.activities
+
+import android.os.Bundle
+import android.view.MenuItem
+import androidx.navigation.NavController
+import github.o4x.m2.extensions.findNavController
+import github.o4x.m2.R
+import github.o4x.m2.databinding.ActivitySettingsBinding
+import github.o4x.m2.ui.activities.base.AbsBaseActivity
+
+
+class SettingsActivity : AbsBaseActivity() {
+
+    lateinit var navController: NavController
+
+    private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContentView(binding.root)
+        navController = findNavController(R.id.contentFrame)
+        setupToolbar()
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            binding.toolbar.title = navController.currentDestination?.label
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            if (navController.currentDestination?.id == R.id.mainSettings) {
+                onBackPressed()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+}

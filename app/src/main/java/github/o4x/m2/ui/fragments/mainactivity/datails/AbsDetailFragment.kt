@@ -1,0 +1,87 @@
+package github.o4x.m2.ui.fragments.mainactivity.datails
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
+import github.o4x.m2.R
+import github.o4x.m2.databinding.FragmentDetailBinding
+import github.o4x.m2.misc.OverScrollLinearLayoutManager
+import github.o4x.m2.ui.fragments.mainactivity.AbsPopupFragment
+import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
+import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
+import github.o4x.m2.util.ViewUtil
+import github.o4x.m2.util.accentColor
+
+open class AbsDetailFragment<T, A: RecyclerView.Adapter<*>> : AbsPopupFragment(R.layout.fragment_detail) {
+
+    companion object {
+        const val EXTRA = "extra"
+        const val REQUEST_CODE_SELECT_IMAGE = 1400
+    }
+
+    var data: T? = null
+
+    var adapter: A? = null
+    var wrappedAdapter: RecyclerView.Adapter<*>? = null
+
+    private var _binding: FragmentDetailBinding? = null
+    protected val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mainActivity.setSupportActionBar(binding.toolbar)
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+        binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.recyclerView.applyAppBarPadding()
+
+
+        data = requireArguments().getParcelable(EXTRA)
+
+        setUpRecyclerView()
+    }
+
+    open fun setUpRecyclerView() {
+        ViewUtil.setUpFastScrollRecyclerViewColor(
+            requireContext(),
+            binding.recyclerView,
+            accentColor()
+        )
+        binding.recyclerView.layoutManager = OverScrollLinearLayoutManager(requireContext())
+    }
+
+    fun checkIsEmpty() {
+        binding.empty.visibility =
+            if (adapter!!.itemCount == 0) View.VISIBLE else View.GONE
+    }
+
+    override fun onDestroyView() {
+        binding.recyclerView.adapter = null
+        if (wrappedAdapter != null) {
+            WrapperAdapterUtils.releaseAll(wrappedAdapter)
+            wrappedAdapter = null
+        }
+        adapter = null
+        _binding = null
+        super.onDestroyView()
+    }
+
+    fun setToolbarTitle(title: String?) {
+        binding.toolbar.title = title
+    }
+}

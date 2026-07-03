@@ -24,7 +24,7 @@
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription" />
 
-            <github.o4x.musical.views.IconImageView
+            <github.o4x.m2.views.IconImageView
                 android:id="@+id/icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -71,7 +71,7 @@
 
             </LinearLayout>
 
-            <github.o4x.musical.views.IconImageView
+            <github.o4x.m2.views.IconImageView
                 android:id="@+id/menu"
                 style="@style/OverFlowButtonMini"
                 tools:ignore="ContentDescription" />

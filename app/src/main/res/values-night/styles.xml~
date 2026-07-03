@@ -1,9 +1,9 @@
-in/java/github/o4x/musical/ui/adapter/album/HorizontalAlbumAdapter.kt
-/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/musical/ui/adapter/GenreAdapter.kt
-/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/musical/ui/dialogs/DeletePlaylistDialog.kt
-/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/musical/repository/AlbumRepository.kt
-/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/musical/ui/fragments/mainactivity/library/pager/AbsLibraryPagerRecyclerViewFragment.kt
-/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/musical/views/SyncPager.kt
-/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/build/generated/java/generateSafeArgsDebug/github/o4x/musical/ui/fragments/settings/about/AboutFragmentDirections.kt
-/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/musical/helper/GridHelper.kt
+in/java/github/o4x/m2/ui/adapter/album/HorizontalAlbumAdapter.kt
+/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/m2/ui/adapter/GenreAdapter.kt
+/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/m2/ui/dialogs/DeletePlaylistDialog.kt
+/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/m2/repository/AlbumRepository.kt
+/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/m2/ui/fragments/mainactivity/library/pager/AbsLibraryPagerRecyclerViewFragment.kt
+/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/m2/views/SyncPager.kt
+/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/build/generated/java/generateSafeArgsDebug/github/o4x/m2/ui/fragments/settings/about/AboutFragmentDirections.kt
+/mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/github/o4x/m2/helper/GridHelper.kt
 /mnt/EE1AA12B1AA0F1AF/Users/reza/Workspace/Projects/Musical/app/src/main/java/git

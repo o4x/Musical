@@ -1,28 +1,28 @@
-ontinuation;)Ljava/lang/Object;", "albumInfo", "Lgithub/o4x/musical/network/models/LastFmAlbum;", "artist", "album", "(Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "playlistId", "recentSongs", "topPlayedSongs", "playCountSongs", "observableHistorySongs", "Landroidx/lifecycle/LiveData;", "historySong", "songsFlow", "Lkotlinx/coroutines/flow/Flow;", "albumsFlow", "artistsFlow", "playlistsFlow", "genresFlow", "app_debug"})
+ontinuation;)Ljava/lang/Object;", "albumInfo", "Lgithub/o4x/m2/network/models/LastFmAlbum;", "artist", "album", "(Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "playlistId", "recentSongs", "topPlayedSongs", "playCountSongs", "observableHistorySongs", "Landroidx/lifecycle/LiveData;", "historySong", "songsFlow", "Lkotlinx/coroutines/flow/Flow;", "albumsFlow", "artistsFlow", "playlistsFlow", "genresFlow", "app_debug"})
 public final class Repository {
     @org.jetbrains.annotations.NotNull()
     private final android.content.Context context = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.network.service.LastFMService lastFMService = null;
+    private final github.o4x.m2.network.service.LastFMService lastFMService = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.repository.SongRepository songRepository = null;
+    private final github.o4x.m2.repository.SongRepository songRepository = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.repository.AlbumRepository albumRepository = null;
+    private final github.o4x.m2.repository.AlbumRepository albumRepository = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.repository.ArtistRepository artistRepository = null;
+    private final github.o4x.m2.repository.ArtistRepository artistRepository = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.repository.GenreRepository genreRepository = null;
+    private final github.o4x.m2.repository.GenreRepository genreRepository = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.repository.LastAddedRepository lastAddedRepository = null;
+    private final github.o4x.m2.repository.LastAddedRepository lastAddedRepository = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.repository.PlaylistRepository playlistRepository = null;
+    private final github.o4x.m2.repository.PlaylistRepository playlistRepository = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.repository.SearchRepository searchRepository = null;
+    private final github.o4x.m2.repository.SearchRepository searchRepository = null;
     @org.jetbrains.annotations.NotNull()
-    private final github.o4x.musical.repository.RoomRepository roomRepository = null;
+    private final github.o4x.m2.repository.RoomRepository roomRepository = null;
     
     public Repository(@org.jetbrains.annotations.NotNull()
     android.content.Context context, @org.jetbrains.annotations.NotNull()
-    github.o4x.musical.network.service.LastFMService lastFMService, @org.jetbrains.annotations.NotNull()
-    github.o4x.musical.repository.SongRepository songRepository, @org.jetbrains.annotations.NotNull()
-    github.o4x.musical.repository.AlbumRepository albumRepository, @org.jetbrains.an
+    github.o4x.m2.network.service.LastFMService lastFMService, @org.jetbrains.annotations.NotNull()
+    github.o4x.m2.repository.SongRepository songRepository, @org.jetbrains.annotations.NotNull()
+    github.o4x.m2.repository.AlbumRepository albumRepository, @org.jetbrains.an
