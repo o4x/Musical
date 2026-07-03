@@ -12,7 +12,10 @@ constraintlayout = "2.2.1"
 coreKtx = "1.17.0"
 coroutinesVersion = "1.10.2"
 daggerVersion = "2.59.1"
+firebaseBom = "34.15.0"
+firebaseCrashlyticsPlugin = "3.0.7"
 fragmentKtx = "1.8.9"
+googleServices = "4.5.0"
 glide = "4.16.0"
 gridlayout = "1.1.0"
 gson = "2.13.2"
@@ -105,6 +108,9 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "daggerVersion" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerVersion" }
 datetime = { module = "com.afollestad.material-dialogs:datetime", version.ref = "materialDialogVersion" }
 files = { module = "com.afollestad.material-dialogs:files", version.ref = "materialDialogVersion" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }
@@ -126,6 +132,8 @@ verticalseekbar = { module = "com.h6ah4i.android.widget.verticalseekbar:vertical
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin"}
 navigation-safeArgs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
