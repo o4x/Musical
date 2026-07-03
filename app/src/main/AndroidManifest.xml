@@ -7,8 +7,9 @@
     <!-- Legacy Storage Permissions (Android 12 and below) -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <!-- Has no effect on Android 11+; direct file writes only work up to Android 10 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+        android:maxSdkVersion="29" />
 
     <!-- Android 13+ Granular Media Permissions -->
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />

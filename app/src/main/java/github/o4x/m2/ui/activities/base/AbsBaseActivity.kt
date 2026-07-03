@@ -25,18 +25,27 @@ abstract class AbsBaseActivity : AppCompatActivity() {
     private var permissionDeniedMessage: String? = null
 
     open fun getPermissionsToRequest(): Array<String> {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Android 13+ requires READ_MEDIA_AUDIO
-            arrayOf(
-                Manifest.permission.READ_MEDIA_AUDIO,
-                Manifest.permission.POST_NOTIFICATIONS
-            )
-        } else {
-            // Android 12- requires READ_EXTERNAL_STORAGE
-            arrayOf(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
+        return when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+                // Android 13+ requires READ_MEDIA_AUDIO
+                arrayOf(
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+                // Android 11-12: WRITE_EXTERNAL_STORAGE is auto-denied when targeting
+                // API 30+, so requesting it would leave the app permanently blocked.
+                // Writes go through MediaStore.createWriteRequest/createDeleteRequest.
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+            else -> {
+                // Android 9-10: legacy storage, direct file writes still work
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
         }
     }
 
