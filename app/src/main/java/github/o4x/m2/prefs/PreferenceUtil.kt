@@ -21,7 +21,6 @@ import java.io.File
 object PreferenceUtil {
 
     const val DARK_MODE = "dark_mode"
-    const val AUDIO_DUCKING = "audio_ducking"
     const val GAPLESS_PLAYBACK = "gapless_playback"
     const val COLORED_FOOTER = "colored_footer"
     const val LIBRARY_CATEGORIES = "library_categories"
@@ -158,11 +157,6 @@ object PreferenceUtil {
     @JvmStatic
     fun gaplessPlayback(): Boolean {
         return sharedPreferences.getBoolean(GAPLESS_PLAYBACK, false)
-    }
-
-    @JvmStatic
-    fun audioDucking(): Boolean {
-        return sharedPreferences.getBoolean(AUDIO_DUCKING, true)
     }
 
     @JvmStatic

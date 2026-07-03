@@ -101,7 +101,6 @@
     <string name="pref_title_album_art_on_lockscreen">Show album cover</string>
     <string name="pref_title_ignore_media_store_artwork">Ignore Media Store covers</string>
     <string name="pref_title_gapless_playback">Gapless playback</string>
-    <string name="pref_title_audio_ducking">Reduce volume on focus loss</string>
     <string name="no_audio_ID">Play a song first, then try again.</string>
     <string name="delete_action">Delete</string>
     <string name="clear_action">Clear</string>
@@ -122,7 +121,6 @@
     <string name="song">Song</string>
     <string name="pref_summary_album_art_on_lockscreen">Uses the current songs album cover as lockscreen wallpaper.</string>
     <string name="pref_summary_gapless_playback">Can cause playback issues on some devices.</string>
-    <string name="pref_summary_audio_ducking">Notifications, navigation etc.</string>
     <string name="favorites">Favorites</string>
     <string name="last_added">Last added</string>
     <string name="history">Recently played</string>
