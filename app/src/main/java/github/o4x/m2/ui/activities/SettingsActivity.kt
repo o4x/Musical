@@ -37,7 +37,7 @@ class SettingsActivity : AbsBaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             if (navController.currentDestination?.id == R.id.mainSettings) {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
             }
         }
         return super.onOptionsItemSelected(item)

@@ -78,7 +78,14 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     @JvmField
     protected var tagUtil: TagUtil? = null
 
-    private var isChanged: Boolean = false
+    // Disabled until the user edits something so system back (including the
+    // predictive back animation) stays fully native while there is nothing
+    // to discard.
+    private val discardChangesCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            DiscardTagsDialog.create().show(supportFragmentManager, "TAGS")
+        }
+    }
 
     var album: Album? = null
     lateinit var artist: Artist
@@ -114,17 +121,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
         supportActionBar?.setTitle(R.string.action_tag_editor)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (isChanged) {
-                    DiscardTagsDialog.create().show(supportFragmentManager, "TAGS")
-                } else {
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
-                    isEnabled = true
-                }
-            }
-        })
+        onBackPressedDispatcher.addCallback(this, discardChangesCallback)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -275,7 +272,7 @@ abstract class AbsTagEditorActivity<RM : Serializable> : AbsBaseActivity() {
     protected abstract fun fillViewsWithResult(result: RM)
 
     protected fun dataChanged() {
-        isChanged = true
+        discardChangesCallback.isEnabled = true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
