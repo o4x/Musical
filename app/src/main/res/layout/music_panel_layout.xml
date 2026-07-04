@@ -6,33 +6,24 @@
     android:layout_height="match_parent"
     android:id="@+id/container">
 
-    <LinearLayout
+    <eightbitlab.com.blurview.BlurTarget
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent" />
 
-        <FrameLayout
-            android:id="@+id/content_container"
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/panel_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:blurOverlayColor="@color/mini_player_background">
+
+        <fragment
+            android:id="@+id/mini_player_fragment"
+            android:name="github.o4x.m2.ui.fragments.player.MiniPlayerFragment"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content" />
 
-        <FrameLayout
-            android:id="@+id/panel_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_anchor="@+id/content_container"
-            app:layout_anchorGravity="bottom|center">
-
-            <fragment
-                android:id="@+id/mini_player_fragment"
-                android:name="github.o4x.m2.ui.fragments.player.MiniPlayerFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </FrameLayout>
-
-
-    </LinearLayout>
+    </eightbitlab.com.blurview.BlurView>
 
 </FrameLayout>

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/page_background"
+    android:background="@color/transparent"
     android:clickable="true"
     android:focusable="true"
     android:transitionName="@string/transition_mini_player"
@@ -24,7 +24,7 @@
             android:id="@+id/progress_bar"
             style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="@dimen/mini_player_progress_height"
             app:mpb_showProgressBackground="false"
             app:mpb_progressStyle="horizontal"
             app:mpb_useIntrinsicPadding="false" />

@@ -135,6 +135,7 @@ dependencies {
     implementation(libs.library)
     implementation(libs.advrecyclerview)
     implementation(libs.androidx.gridlayout)
+    implementation(libs.blurview)
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

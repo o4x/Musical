@@ -19,6 +19,7 @@ import github.o4x.m2.ui.viewmodel.ScrollPositionViewModel
 import github.o4x.m2.util.ColorUtil.withAlpha
 import github.o4x.m2.util.Util
 import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
+import github.o4x.m2.util.ViewInsetsUtils.applyMiniPlayerPadding
 import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.m2.util.ViewUtil
 import github.o4x.m2.util.color.MediaNotificationProcessor
@@ -106,6 +107,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         )
         binding.songRecycler.layoutManager = LinearLayoutManager(this)
         binding.songRecycler.adapter = songAdapter
+        binding.songRecycler.applyMiniPlayerPadding()
         songAdapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()

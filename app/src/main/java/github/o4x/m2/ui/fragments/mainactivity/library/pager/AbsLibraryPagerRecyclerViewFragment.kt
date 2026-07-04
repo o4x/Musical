@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import github.o4x.m2.R
 import github.o4x.m2.databinding.FragmentLibraryRecyclerViewBinding
+import github.o4x.m2.util.ViewInsetsUtils.applyMiniPlayerPadding
 import github.o4x.m2.util.ViewUtil
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
 import github.o4x.m2.util.accentColor
@@ -51,6 +52,7 @@ abstract class AbsLibraryPagerRecyclerViewFragment<A : RecyclerView.Adapter<*>, 
         }
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.applyMiniPlayerPadding()
     }
 
     protected fun invalidateLayoutManager() {

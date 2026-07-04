@@ -3,6 +3,7 @@ package github.o4x.m2.ui.activities.base
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
@@ -10,6 +11,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -61,8 +63,17 @@ abstract class AbsBaseActivity : AppCompatActivity() {
         get() = window.decorView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Enable Edge-to-Edge (makes status bar and nav bar transparent)
-        enableEdgeToEdge()
+        // Enable Edge-to-Edge (makes status bar and nav bar transparent).
+        // The default navigationBarStyle applies a translucent scrim that clashes
+        // with the blurred mini player, so force it fully transparent.
+        enableEdgeToEdge(
+            navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT)
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Keep the system from drawing its own contrast scrim over the nav bar
+            // (visible as a differently colored strip in 3-button navigation mode).
+            window.isNavigationBarContrastEnforced = false
+        }
 
         super.onCreate(savedInstanceState)
         volumeControlStream = AudioManager.STREAM_MUSIC
