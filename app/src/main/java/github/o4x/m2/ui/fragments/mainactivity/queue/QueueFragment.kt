@@ -17,6 +17,7 @@ import github.o4x.m2.misc.OverScrollLinearLayoutManager
 import github.o4x.m2.ui.adapter.song.PlayingQueueAdapter
 import github.o4x.m2.ui.dialogs.CreatePlaylistDialog
 import github.o4x.m2.ui.fragments.mainactivity.AbsQueueFragment
+import github.o4x.m2.util.BlurViewUtils.setupBlur
 import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
 import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.m2.util.ViewUtil
@@ -56,6 +57,7 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue), MenuProvider {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.appbarBlur.setupBlur(requireActivity().window, binding.blurTarget)
         binding.queueRecyclerView.applyAppBarPadding(withMiniPlayer = true)
 
         val menuHost: MenuHost = requireActivity()

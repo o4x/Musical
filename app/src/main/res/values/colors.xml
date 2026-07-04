@@ -15,6 +15,8 @@
     <color name="page_background">#FFFFFF</color>
     <!-- Translucent scrim over the blurred content behind the mini player -->
     <color name="mini_player_background">#B3FFFFFF</color>
+    <!-- Translucent scrim over the blurred content behind app bars -->
+    <color name="appbar_background">#B3FFFFFF</color>
     <color name="card_background">#F3F3FA</color>
     <color name="primary_text">#1C1B1F</color>
 

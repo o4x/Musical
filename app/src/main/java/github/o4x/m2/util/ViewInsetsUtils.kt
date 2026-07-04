@@ -121,28 +121,28 @@ object ViewInsetsUtils {
      * @param withMiniPlayer If true, also pads the bottom with the mini player height plus the
      * navigation bar inset (see [applyMiniPlayerPadding]). Both paddings must be applied from a
      * single insets listener, since a view can only hold one.
+     * @param withNavBarInset If true, pads the bottom with the navigation bar inset. Implied by
+     * [withMiniPlayer]; use alone on screens without a mini player (e.g. settings).
      */
     fun View.applyAppBarPadding(
         includeStatusBar: Boolean = true,
         extra: Int = 0,
-        withMiniPlayer: Boolean = false
+        withMiniPlayer: Boolean = false,
+        withNavBarInset: Boolean = withMiniPlayer
     ) {
         val initialPaddingTop = this.paddingTop
         val initialPaddingBottom = this.paddingBottom
         val actionBarSize = context.getActionBarSize() + extra
         val miniPlayerHeight = if (withMiniPlayer) context.getMiniPlayerHeight() else 0
 
-        if (includeStatusBar || withMiniPlayer) {
+        if (includeStatusBar || withNavBarInset) {
             ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
                 val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
                 view.updatePadding(
                     top = initialPaddingTop + actionBarSize +
                             if (includeStatusBar) insets.top else 0,
-                    bottom = if (withMiniPlayer) {
-                        initialPaddingBottom + miniPlayerHeight + insets.bottom
-                    } else {
-                        initialPaddingBottom
-                    }
+                    bottom = initialPaddingBottom + miniPlayerHeight +
+                            if (withNavBarInset) insets.bottom else 0
                 )
                 windowInsets
             }

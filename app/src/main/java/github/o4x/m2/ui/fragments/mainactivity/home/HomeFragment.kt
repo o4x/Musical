@@ -29,6 +29,7 @@ import github.o4x.m2.ui.fragments.mainactivity.AbsQueueFragment
 import github.o4x.m2.ui.viewmodel.HomeHeaderViewModel
 import github.o4x.m2.ui.viewmodel.ScrollPositionViewModel
 import github.o4x.m2.util.Util
+import github.o4x.m2.util.BlurViewUtils.setupBlur
 import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
 import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -77,6 +78,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
         mainActivity.setSupportActionBar(binding.toolbar)
         binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.appbarBlur.setupBlur(requireActivity().window, binding.blurTarget)
         binding.nestedScrollView.applyAppBarPadding(withMiniPlayer = true)
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)

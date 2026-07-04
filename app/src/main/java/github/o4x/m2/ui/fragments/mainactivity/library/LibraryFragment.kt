@@ -22,10 +22,10 @@ import github.o4x.m2.prefs.PreferenceUtil.libraryCategory
 import github.o4x.m2.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
 import github.o4x.m2.prefs.PreferenceUtil.rememberLastTab
 import github.o4x.m2.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
+import github.o4x.m2.util.BlurViewUtils.setupBlur
 import github.o4x.m2.util.Util
 import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.m2.util.accentColor
-import github.o4x.m2.util.surfaceColor
 
 class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPageChangeListener,
     SharedPreferences.OnSharedPreferenceChangeListener, MenuProvider {
@@ -62,7 +62,8 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
         binding.toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        binding.container.applySystemBarsPadding(applyTop = true)
+        binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.appbarBlur.setupBlur(requireActivity().window, binding.blurTarget)
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -91,11 +92,6 @@ class LibraryFragment : AbsMainActivityFragment(R.layout.fragment_library), OnPa
         binding.pager.adapter = pagerAdapter
         binding.tabs.layoutDirection = View.LAYOUT_DIRECTION_LTR;
         binding.tabs.setupWithViewPager(binding.pager)
-        val primaryColor = surfaceColor()
-//        val normalColor = ToolbarContentTintHelper.toolbarSubtitleColor(mainActivity, primaryColor)
-//        val selectedColor = ToolbarContentTintHelper.toolbarTitleColor(mainActivity, primaryColor)
-        binding.tabs.setBackgroundColor(primaryColor)
-//        mainActivity.tabs.setTabTextColors(normalColor, selectedColor)
         binding.tabs.setSelectedTabIndicatorColor(accentColor())
         updateTabVisibility()
         if (rememberLastTab()) {

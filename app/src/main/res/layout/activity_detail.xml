@@ -5,39 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <github.o4x.m2.views.WidthFitSquareLayout
+    <eightbitlab.com.blurview.BlurTarget
+        android:id="@+id/blur_target"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/image"
+        <github.o4x.m2.views.WidthFitSquareLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription,UnusedAttribute" />
+
+        </github.o4x.m2.views.WidthFitSquareLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/song_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            tools:ignore="ContentDescription,UnusedAttribute" />
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
 
-    </github.o4x.m2.views.WidthFitSquareLayout>
+    </eightbitlab.com.blurview.BlurTarget>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/song_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:scrollbars="vertical" />
-
-    <com.google.android.material.appbar.AppBarLayout
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/appbar_blur"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/translucent"
-        app:elevation="0dp"
-        app:liftOnScroll="false"
-        app:backgroundTint="@null"
-        android:id="@+id/appbar">
+        app:blurOverlayColor="@color/appbar_background">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Toolbar" />
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:elevation="0dp"
+            app:liftOnScroll="false"
+            app:backgroundTint="@null"
+            android:id="@+id/appbar">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/Toolbar" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </eightbitlab.com.blurview.BlurView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

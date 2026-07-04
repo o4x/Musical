@@ -16,11 +16,15 @@ import github.o4x.m2.ui.dialogs.DeleteCachedDialog
 import github.o4x.m2.ui.dialogs.DeleteCustomImagesDialog
 import github.o4x.m2.ui.dialogs.SmartPlaylistLimitDialog
 import github.o4x.m2.prefs.PreferenceUtil
+import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // The blurred app bar overlays the list, so pad the list below it.
+        listView.clipToPadding = false
+        listView.applyAppBarPadding(withNavBarInset = true)
         PreferenceUtil.registerOnSharedPreferenceChangedListener(this)
         invalidateSettings()
     }
