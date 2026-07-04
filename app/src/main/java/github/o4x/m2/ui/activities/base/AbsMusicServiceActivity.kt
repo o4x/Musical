@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.IBinder
 import androidx.annotation.RequiresApi
 import github.o4x.m2.R
+import github.o4x.m2.helper.MusicPlayerRemote
 import github.o4x.m2.helper.MusicPlayerRemote.ServiceToken
 import github.o4x.m2.helper.MusicPlayerRemote.bindToService
 import github.o4x.m2.helper.MusicPlayerRemote.unbindFromService
@@ -160,6 +161,10 @@ abstract class AbsMusicServiceActivity : AbsBaseActivity(), MusicServiceEventLis
 
     override fun onHasPermissionsChanged(hasPermissions: Boolean) {
         super.onHasPermissionsChanged(hasPermissions)
+        // On a fresh install the service is created before the media
+        // permission is granted, so the first-launch queue fill found no
+        // songs — retry now that the library is readable.
+        if (hasPermissions) MusicPlayerRemote.fillEmptyQueueWithShuffledSongs()
         val intent = Intent(MusicService.MEDIA_STORE_CHANGED)
         intent.setPackage(packageName)
         intent.putExtra(

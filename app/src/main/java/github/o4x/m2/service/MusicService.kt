@@ -23,6 +23,7 @@ import github.o4x.m2.prefs.PreferenceUtil
 import github.o4x.m2.prefs.PreferenceUtil.registerOnSharedPreferenceChangedListener
 import github.o4x.m2.prefs.PreferenceUtil.unregisterOnSharedPreferenceChangedListener
 import github.o4x.m2.repository.RoomRepository
+import github.o4x.m2.repository.SongRepository
 import github.o4x.m2.service.misc.MediaStoreObserver
 import github.o4x.m2.service.misc.ThrottledSeekHandler
 import github.o4x.m2.service.notification.PlayingNotification
@@ -77,6 +78,7 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
     }
 
     private val roomRepository by inject<RoomRepository>()
+    private val songRepository by inject<SongRepository>()
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
@@ -377,9 +379,43 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                 notHandledMetaChangedForCurrentTrack = true
                 sendChangeInternal(META_CHANGED)
                 sendChangeInternal(QUEUE_CHANGED)
+            } else {
+                fillEmptyQueueWithShuffledSongs()
             }
         }
         queuesRestored = true
+    }
+
+    /**
+     * When there is nothing to restore (e.g. first launch), put all songs
+     * shuffled into the queue instead of leaving it empty. Nothing starts
+     * playing. On a fresh install the service may be created before the
+     * media permission is granted; [fillEmptyQueueWithShuffledSongsAsync]
+     * retries once the permission comes through.
+     */
+    private suspend fun fillEmptyQueueWithShuffledSongs() {
+        val allSongs = withContext(Dispatchers.IO) { songRepository.songs() }
+        if (allSongs.isEmpty() || playingQueue.isNotEmpty()) return
+
+        val shuffled = allSongs.toMutableList()
+        ShuffleHelper.makeShuffleList(shuffled, -1)
+        originalPlayingQueue = shuffled.toMutableList()
+        playingQueue = shuffled.toMutableList()
+        position = 0
+
+        openCurrent()
+        prepareNext()
+        notHandledMetaChangedForCurrentTrack = true
+        saveState()
+        sendChangeInternal(META_CHANGED)
+        sendChangeInternal(QUEUE_CHANGED)
+    }
+
+    fun fillEmptyQueueWithShuffledSongsAsync() {
+        serviceScope.launch {
+            restoreJob.join()
+            fillEmptyQueueWithShuffledSongs()
+        }
     }
 
     fun openQueue(newPlayingQueue: List<Song>?, startPosition: Int, startPlaying: Boolean) {

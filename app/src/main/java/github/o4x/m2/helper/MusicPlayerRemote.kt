@@ -110,6 +110,11 @@ object MusicPlayerRemote : KoinComponent {
     }
 
     @JvmStatic
+    fun fillEmptyQueueWithShuffledSongs() {
+        musicService?.fillEmptyQueueWithShuffledSongsAsync()
+    }
+
+    @JvmStatic
     val isPlaying: Boolean
         get() = musicService?.isPlaying == true
 
