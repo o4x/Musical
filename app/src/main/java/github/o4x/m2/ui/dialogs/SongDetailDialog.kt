@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
@@ -22,7 +21,7 @@ import org.jaudiotagger.tag.TagException
 import java.io.File
 import java.io.IOException
 
-class SongDetailDialog : DialogFragment() {
+class SongDetailDialog : AbsBlurDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context: Activity? = activity
 

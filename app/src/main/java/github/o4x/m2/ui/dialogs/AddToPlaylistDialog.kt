@@ -2,7 +2,6 @@ package github.o4x.m2.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItems
 import github.o4x.m2.R
@@ -12,7 +11,7 @@ import github.o4x.m2.ui.activities.base.AbsMusicServiceActivity
 import github.o4x.m2.util.PlaylistsUtil
 import java.util.*
 
-class AddToPlaylistDialog : DialogFragment() {
+class AddToPlaylistDialog : AbsBlurDialogFragment() {
 
     private val libraryViewModel by lazy {
         (activity as AbsMusicServiceActivity).libraryViewModel

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.InputType
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import github.o4x.m2.R
@@ -12,7 +11,7 @@ import github.o4x.m2.model.Song
 import github.o4x.m2.util.PlaylistsUtil
 import java.util.*
 
-class CreatePlaylistDialog : DialogFragment() {
+class CreatePlaylistDialog : AbsBlurDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog(requireContext())

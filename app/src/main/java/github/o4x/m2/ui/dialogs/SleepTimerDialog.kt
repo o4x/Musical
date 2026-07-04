@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
@@ -20,7 +19,7 @@ import github.o4x.m2.prefs.PreferenceUtil
 import github.o4x.m2.service.MusicService
 import github.o4x.m2.views.timepicker.HmsPicker
 
-class SleepTimerDialog : DialogFragment() {
+class SleepTimerDialog : AbsBlurDialogFragment() {
 
     private var timerUpdater: TimerUpdater? = null
         set(value) {

@@ -2,11 +2,10 @@ package github.o4x.m2.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import github.o4x.m2.R
 
-class SetTagsDialog(private val on: On) : DialogFragment() {
+class SetTagsDialog(private val on: On) : AbsBlurDialogFragment() {
     open class On {
         open fun allTags() {}
         open fun justImage() {}

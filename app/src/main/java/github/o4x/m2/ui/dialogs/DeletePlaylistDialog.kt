@@ -3,14 +3,13 @@ package github.o4x.m2.ui.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Html
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import github.o4x.m2.R
 import github.o4x.m2.model.Playlist
 import github.o4x.m2.util.PlaylistsUtil
 import java.util.*
 
-class DeletePlaylistDialog : DialogFragment() {
+class DeletePlaylistDialog : AbsBlurDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val playlists: ArrayList<Playlist>? = requireArguments().getParcelableArrayList("playlists")

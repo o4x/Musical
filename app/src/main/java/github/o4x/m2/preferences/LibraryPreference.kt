@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -14,8 +13,9 @@ import github.o4x.m2.R
 import github.o4x.m2.model.CategoryInfo
 import github.o4x.m2.ui.adapter.CategoryInfoAdapter
 import github.o4x.m2.prefs.PreferenceUtil
+import github.o4x.m2.ui.dialogs.AbsBlurDialogFragment
 
-class LibraryPreferenceDialog : DialogFragment() {
+class LibraryPreferenceDialog : AbsBlurDialogFragment() {
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
