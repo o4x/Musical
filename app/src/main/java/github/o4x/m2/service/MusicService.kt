@@ -333,10 +333,6 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            PreferenceUtil.GAPLESS_PLAYBACK -> {
-                if (sharedPreferences?.getBoolean(key, false) == true) prepareNext()
-                else playback.setNextDataSource(null)
-            }
             // ALBUM_ART_ON_LOCKSCREEN takes effect when the next track's
             // MediaItem is built; rebuild the queued one right away.
             PreferenceUtil.ALBUM_ART_ON_LOCKSCREEN -> prepareNext()

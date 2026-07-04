@@ -16,17 +16,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:title="@string/pref_header_audio">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:key="@string/key_gapless_playback"
-            app:summary="@string/pref_summary_gapless_playback"
-            app:title="@string/pref_title_gapless_playback" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         app:title="@string/pref_header_interface">
 
         <Preference

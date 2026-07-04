@@ -87,7 +87,7 @@ class Media3Playback(private val context: Context) : Playback, Player.Listener {
             player.removeMediaItem(player.mediaItemCount - 1)
         }
         // …then append the next track so ExoPlayer can play it gaplessly.
-        if (song != null && song.id != -1L && PreferenceUtil.gaplessPlayback()) {
+        if (song != null && song.id != -1L) {
             player.addMediaItem(song.toMediaItem())
         }
     }
