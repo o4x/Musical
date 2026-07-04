@@ -6,6 +6,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.load.engine.cache.LruResourceCache
+import com.bumptech.glide.load.engine.cache.MemorySizeCalculator
 import com.bumptech.glide.module.AppGlideModule
 import github.o4x.m2.imageloader.glide.module.artistimage.ArtistImage
 import github.o4x.m2.imageloader.glide.module.artistimage.ArtistImageFactory
@@ -22,6 +24,13 @@ class MyGlideModule : AppGlideModule() {
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         builder.setLogLevel(Log.ERROR)
+        // Keep roughly four screens' worth of covers in memory (default is two)
+        // so scrolling back through lists redisplays them instantly instead of
+        // re-decoding from disk.
+        val calculator = MemorySizeCalculator.Builder(context)
+            .setMemoryCacheScreens(4f)
+            .build()
+        builder.setMemoryCache(LruResourceCache(calculator.memoryCacheSize.toLong()))
         super.applyOptions(context, builder)
     }
 

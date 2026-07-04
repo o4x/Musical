@@ -11,23 +11,26 @@ import github.o4x.m2.imageloader.glide.targets.palette.AbsPaletteTargetListener
 class PalettableImageTarget(view: ImageView) : ImageViewTarget<Bitmap>(view) {
 
     private var listener: AbsPaletteTargetListener? = null
+
     // Only use in glide loader
     fun setListener(listener: AbsPaletteTargetListener?): PalettableImageTarget {
         this.listener = listener
         return this
     }
 
-    override fun onLoadStarted(placeholder: Drawable?) {
-        super.onLoadStarted(placeholder)
-        placeholder?.let {
-            if (listener?.loadPlaceholderPalette == true)
-                listener?.onResourceReady(it.toBitmap(1,1))
-        }
-    }
-
     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
         super.onResourceReady(resource, transition)
         listener?.onResourceReady(resource)
+    }
+
+    override fun onLoadFailed(errorDrawable: Drawable?) {
+        super.onLoadFailed(errorDrawable)
+        // Songs without artwork land here and show the char cover (the error
+        // drawable); listeners that color the UI from it still need its palette.
+        errorDrawable?.let {
+            if (listener?.loadPlaceholderPalette == true)
+                listener?.onResourceReady(it.toBitmap(1, 1))
+        }
     }
 
     override fun setResource(resource: Bitmap?) {
