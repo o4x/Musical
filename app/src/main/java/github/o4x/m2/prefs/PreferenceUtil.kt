@@ -21,7 +21,6 @@ import java.io.File
 object PreferenceUtil {
 
     const val DARK_MODE = "dark_mode"
-    const val GAPLESS_PLAYBACK = "gapless_playback"
     const val COLORED_FOOTER = "colored_footer"
     const val LIBRARY_CATEGORIES = "library_categories"
     const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
@@ -152,11 +151,6 @@ object PreferenceUtil {
         get() = sharedPreferences.getBoolean(
             COLORED_FOOTER, true
         )
-
-    @JvmStatic
-    fun gaplessPlayback(): Boolean {
-        return sharedPreferences.getBoolean(GAPLESS_PLAYBACK, false)
-    }
 
     @JvmStatic
     fun albumArtOnLockscreen(): Boolean {
