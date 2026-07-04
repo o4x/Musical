@@ -2,6 +2,7 @@ package github.o4x.m2.ui.viewmodel
 
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.widget.ImageView
 import androidx.lifecycle.*
 import androidx.palette.graphics.Palette
@@ -77,6 +78,9 @@ class HomeHeaderViewModel : ViewModel(),
                 paletteBuilder.generate()
             )
             var bitmap = centerCrop(it, w, h)
+            if (!PreferenceUtil.isDarkMode) {
+                bitmap = CoverUtil.overlayColor(bitmap, Color.argb(90, 255, 255, 255))
+            }
             bitmap =
                 CoverUtil.addGradientTo(bitmap)
 //            bitmap = if (PreferenceUtil.isDarkMode ==
