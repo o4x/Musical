@@ -184,54 +184,52 @@ public class MediaNotificationProcessor {
      * be used.
      */
     private void getMediaPalette() {
-        Bitmap bitmap;
-        if (drawable != null) {
-            // We're transforming the builder, let's make sure all baked in RemoteViews are
-            // rebuilt!
+        if (drawable == null) return;
 
-            int width = drawable.getIntrinsicWidth();
-            int height = drawable.getIntrinsicHeight();
-            int area = width * height;
-//            if (area > RESIZE_BITMAP_AREA) {
-                double factor = Math.sqrt((float) RESIZE_BITMAP_AREA / area);
-                width = (int) (factor * width);
-                height = (int) (factor * height);
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+        int area = width * height;
 
-                bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bitmap);
-                drawable.setBounds(0, 0, width, height);
-                drawable.draw(canvas);
+        double factor = Math.sqrt((float) RESIZE_BITMAP_AREA / area);
+        width = (int) (factor * width);
+        height = (int) (factor * height);
 
-                // for the background we only take the left side of the image to ensure
-                // a smooth transition
-                Palette.Builder paletteBuilder = Palette.from(bitmap)
-                        .setRegion(0, 0, bitmap.getWidth() / 2, bitmap.getHeight())
-                        .clearFilters() // we want all colors, red / white / black ones too!
-                        .resizeBitmapArea(RESIZE_BITMAP_AREA);
-                Palette palette = paletteBuilder.generate();
-                backgroundColor = findBackgroundColorAndFilter(drawable);
-                // we want most of the full region again, slightly shifted to the right
-                float textColorStartWidthFraction = 0.4f;
-                paletteBuilder.setRegion((int) (bitmap.getWidth() * textColorStartWidthFraction), 0,
-                        bitmap.getWidth(),
-                        bitmap.getHeight());
-                if (mFilteredBackgroundHsl != null) {
-                    paletteBuilder.addFilter(new Palette.Filter() {
-                        @Override
-                        public boolean isAllowed(int rgb, @NonNull float[] hsl) {
-                            // at least 10 degrees hue difference
-                            float diff = Math.abs(hsl[0] - mFilteredBackgroundHsl[0]);
-                            return diff > 10 && diff < 350;
-                        }
-                    });
+        // Rasterize the drawable once and reuse the same bitmap for both the
+        // background and foreground passes.
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, width, height);
+        drawable.draw(canvas);
+
+        // For the background we only take the left side of the image to ensure
+        // a smooth transition. This palette is also what the background-color
+        // selection needs, so we generate it once and reuse it below.
+        Palette.Builder paletteBuilder = Palette.from(bitmap)
+                .setRegion(0, 0, bitmap.getWidth() / 2, bitmap.getHeight())
+                .clearFilters() // we want all colors, red / white / black ones too!
+                .resizeBitmapArea(RESIZE_BITMAP_AREA);
+        Palette palette = paletteBuilder.generate();
+        backgroundColor = findBackgroundColorAndFilter(palette);
+
+        // We want most of the full region again, slightly shifted to the right.
+        float textColorStartWidthFraction = 0.4f;
+        paletteBuilder.setRegion((int) (bitmap.getWidth() * textColorStartWidthFraction), 0,
+                bitmap.getWidth(),
+                bitmap.getHeight());
+        if (mFilteredBackgroundHsl != null) {
+            paletteBuilder.addFilter(new Palette.Filter() {
+                @Override
+                public boolean isAllowed(int rgb, @NonNull float[] hsl) {
+                    // at least 10 degrees hue difference
+                    float diff = Math.abs(hsl[0] - mFilteredBackgroundHsl[0]);
+                    return diff > 10 && diff < 350;
                 }
-                paletteBuilder.addFilter(mBlackWhiteFilter);
-                palette = paletteBuilder.generate();
-                int foregroundColor = selectForegroundColor(backgroundColor, palette);
-                ensureColors(backgroundColor, foregroundColor);
-            }
-//        }
-
+            });
+        }
+        paletteBuilder.addFilter(mBlackWhiteFilter);
+        palette = paletteBuilder.generate();
+        int foregroundColor = selectForegroundColor(backgroundColor, palette);
+        ensureColors(backgroundColor, foregroundColor);
     }
 
     private int selectForegroundColor(int backgroundColor, Palette palette) {
@@ -327,27 +325,7 @@ public class MediaNotificationProcessor {
                 && (swatch.getPopulation() / (float) RESIZE_BITMAP_AREA > MINIMUM_IMAGE_FRACTION);
     }
 
-    public int findBackgroundColorAndFilter(Drawable drawable) {
-        int width = drawable.getIntrinsicWidth();
-        int height = drawable.getIntrinsicHeight();
-        int area = width * height;
-
-        double factor = Math.sqrt((float) RESIZE_BITMAP_AREA / area);
-        width = (int) (factor * width);
-        height = (int) (factor * height);
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, width, height);
-        drawable.draw(canvas);
-
-        // for the background we only take the left side of the image to ensure
-        // a smooth transition
-        Palette.Builder paletteBuilder = Palette.from(bitmap)
-                .setRegion(0, 0, bitmap.getWidth() / 2, bitmap.getHeight())
-                .clearFilters() // we want all colors, red / white / black ones too!
-                .resizeBitmapArea(RESIZE_BITMAP_AREA);
-        Palette palette = paletteBuilder.generate();
+    public int findBackgroundColorAndFilter(Palette palette) {
         // by default we use the dominant palette
         Palette.Swatch dominantSwatch = palette.getDominantSwatch();
         if (dominantSwatch == null) {
