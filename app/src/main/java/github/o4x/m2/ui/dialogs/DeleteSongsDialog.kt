@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import github.o4x.m2.R
 import github.o4x.m2.helper.MusicPlayerRemote
@@ -20,7 +19,7 @@ import github.o4x.m2.util.MusicUtil
 import java.io.File
 import java.util.*
 
-class DeleteSongsDialog : DialogFragment() {
+class DeleteSongsDialog : AbsBlurDialogFragment() {
 
     private var songsToDelete: List<Song>? = null
     private var deleteRequestLauncher: ActivityResultLauncher<IntentSenderRequest>? = null

@@ -2,7 +2,6 @@ package github.o4x.m2.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
@@ -11,7 +10,7 @@ import github.o4x.m2.extensions.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DeleteCachedDialog : DialogFragment() {
+class DeleteCachedDialog : AbsBlurDialogFragment() {
 
     companion object {
         @JvmStatic

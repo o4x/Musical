@@ -4,13 +4,12 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.InputType
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import github.o4x.m2.R
 import github.o4x.m2.prefs.PreferenceUtil.smartPlaylistLimit
 
-class SmartPlaylistLimitDialog : DialogFragment() {
+class SmartPlaylistLimitDialog : AbsBlurDialogFragment() {
 
     companion object {
         @JvmStatic

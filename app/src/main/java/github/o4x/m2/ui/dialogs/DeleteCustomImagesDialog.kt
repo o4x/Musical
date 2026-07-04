@@ -2,7 +2,6 @@ package github.o4x.m2.ui.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import github.o4x.m2.R
@@ -13,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DeleteCustomImagesDialog : DialogFragment() {
+class DeleteCustomImagesDialog : AbsBlurDialogFragment() {
 
     companion object {
         @JvmStatic

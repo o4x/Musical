@@ -3,13 +3,12 @@ package github.o4x.m2.ui.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import android.text.InputType
-import androidx.fragment.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import github.o4x.m2.R
 import github.o4x.m2.util.PlaylistsUtil
 
-class RenamePlaylistDialog : DialogFragment() {
+class RenamePlaylistDialog : AbsBlurDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val playlistId = requireArguments().getLong(PLAYLIST_ID)
