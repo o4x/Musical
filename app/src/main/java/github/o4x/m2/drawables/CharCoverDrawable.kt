@@ -56,6 +56,20 @@ class CharCoverDrawable(private val coverData: CoverData, private val isClean: B
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+    private val char0 = coverData.text.split(" ").firstOrNull()?.firstOrNull()
+        .toString().uppercase(Locale.ROOT)
+    private val char1 = coverData.text.split(" ").lastOrNull()?.firstOrNull()
+        .toString().uppercase(Locale.ROOT)
+
+    // Gradient and glyph paths are rebuilt only when the size or theme changes;
+    // building them on every draw() made list scrolling visibly more expensive.
+    private var cachedWidth = -1
+    private var cachedHeight = -1
+    private var cachedDarkMode = false
+    private var gradient: GradientDrawable? = null
+    private val path0 = Path()
+    private val path1 = Path()
+
     fun setBlur(radius: Float): CharCoverDrawable {
         paint.maskFilter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
         invalidateSelf()
@@ -63,10 +77,44 @@ class CharCoverDrawable(private val coverData: CoverData, private val isClean: B
     }
 
     override fun draw(canvas: Canvas) {
-        val darkMode = isDarkMode
+        ensureCache(canvas.width, canvas.height, isDarkMode)
         if (!isClean)
-            drawGradient(canvas, coverData.id.toInt(), darkMode)
-        drawChars(canvas, coverData.text, darkMode)
+            gradient?.draw(canvas)
+        canvas.save()
+        canvas.rotate(30f)
+        canvas.drawPath(path0, paint)
+        canvas.drawPath(path1, paint)
+        canvas.restore()
+    }
+
+    private fun ensureCache(width: Int, height: Int, darkMode: Boolean) {
+        if (width == cachedWidth && height == cachedHeight && darkMode == cachedDarkMode) return
+        cachedWidth = width
+        cachedHeight = height
+        cachedDarkMode = darkMode
+
+        if (!isClean) {
+            val id = coverData.id.toInt()
+            val palette = if (darkMode) COLORS_DARK else COLORS
+            gradient = GradientDrawable(
+                GradientDrawable.Orientation.values()[
+                        abs(id % GradientDrawable.Orientation.values().size)
+                ], palette[abs(id % palette.size)]
+            ).apply {
+                cornerRadius = 0f
+                setBounds(0, 0, width, height)
+            }
+        }
+
+        paint.color = ColorUtil.withAlpha(
+            if (darkMode) Color.WHITE else Color.BLACK, .1f)
+        paint.textSize = max(width, height) * 1.4f // Text Size
+        paint.isFakeBoldText = true
+
+        paint.getTextPath(char0, 0, 1, width / -12f, height / 1.3f, path0)
+        path0.close()
+        paint.getTextPath(char1, 0, 1, width / 2f, height / 1.3f, path1)
+        path1.close()
     }
 
     override fun setAlpha(alpha: Int) {
@@ -81,54 +129,6 @@ class CharCoverDrawable(private val coverData: CoverData, private val isClean: B
 
     override fun getOpacity(): Int {
         return PixelFormat.TRANSLUCENT
-    }
-
-    private fun drawGradient(canvas: Canvas, id: Int, darkMode: Boolean = isDarkMode) {
-        val colors = if (darkMode) {
-            val pos = (id) % COLORS_DARK.size
-            COLORS_DARK[abs(pos)]
-        } else {
-            // use custom color for light theme
-            val pos = (id) % COLORS.size
-            COLORS[abs(pos)]
-        }
-
-        val gradient = GradientDrawable(
-            GradientDrawable.Orientation.values()[
-                    abs((id) % GradientDrawable.Orientation.values().size)
-            ], colors
-        )
-        gradient.cornerRadius = 0f
-
-        gradient.setBounds(0, 0, canvas.width, canvas.height)
-        gradient.draw(canvas)
-    }
-
-    private fun drawChars(canvas: Canvas, text: String, darkMode: Boolean = isDarkMode) {
-        // Render char's
-        paint.color =
-            ColorUtil.withAlpha(
-                if (darkMode) Color.WHITE else Color.BLACK, .1f)
-
-        paint.textSize = max(canvas.width, canvas.height) * 1.4f // Text Size
-        paint.isFakeBoldText = true
-
-        canvas.rotate(30f)
-
-        val char0 = text.split(" ").firstOrNull()?.firstOrNull()
-                .toString().uppercase(Locale.ROOT)
-        val char1 = text.split(" ").lastOrNull()?.firstOrNull()
-                .toString().uppercase(Locale.ROOT)
-
-        val path0 = Path()
-        paint.getTextPath(char0, 0, 1, canvas.width / -12f, canvas.height / 1.3f, path0)
-        path0.close()
-        canvas.drawPath(path0, paint)
-
-        val path1 = Path()
-        paint.getTextPath(char1, 0, 1, canvas.width / 2f, canvas.height / 1.3f, path1)
-        path1.close()
-        canvas.drawPath(path1, paint)
     }
 }
 

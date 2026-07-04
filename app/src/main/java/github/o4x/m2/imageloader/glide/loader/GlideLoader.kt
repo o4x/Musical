@@ -208,8 +208,11 @@ class GlideLoader {
 
                 coverData?.let {
 
+                    // The char cover is only a fallback for songs without artwork;
+                    // it must never flash before a real cover, so it is an error
+                    // drawable rather than a placeholder.
                     requestBuilder
-                        .placeholder(
+                        .error(
                             CharCoverDrawable(it).apply {
                                 radius?.let { setBlur(it) }
                             }
