@@ -2,8 +2,12 @@ package github.o4x.m2.ui.activities.details
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
@@ -47,6 +51,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     var displayHeight: Int? = null
     var gradientHeight: Int? = null
     lateinit var colors: MediaNotificationProcessor
+    private var paletteLoaded = false
 
     var songAdapter: DetailsSongAdapter? = null
 
@@ -94,9 +99,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = null
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.post {
-            setAppbarAlpha(0f)
-        }
     }
 
     open fun setupViews() {
@@ -123,7 +125,6 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
             binding.songRecycler.layoutManager?.scrollToPosition(0)
             scrollPositionViewModel.setPosition(0)
             binding.image.translationY = 0f
-            setAppbarAlpha(0f)
         }
 
         binding.songRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -147,18 +148,32 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
 
     fun setAllColors(colors: MediaNotificationProcessor) {
         this.colors = colors
+        this.paletteLoaded = true
         songAdapter?.colors = colors
 
 
         ViewUtil.setScrollBarColor(binding.songRecycler, colors.secondaryTextColor.withAlpha(.3f))
 
         findViewById<View>(android.R.id.content).rootView.setBackgroundColor(colors.backgroundColor)
+
+        // Same treatment as the mini player panel: the palette scrim goes on the
+        // BlurView, which extends behind the status bar.
+        binding.appbarBlur.setOverlayColor(withAlpha(colors.backgroundColor, SCRIM_ALPHA))
+        WindowInsetsControllerCompat(window, window.decorView)
+            .isAppearanceLightStatusBars = colors.isLight
+        tintToolbarContent(colors.primaryTextColor)
     }
 
-    private fun setAppbarAlpha(alpha: Float) {
-        binding.toolbar.setBackgroundColor(
-            withAlpha(colors.backgroundColor, alpha)
-        )
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        // The menu can be inflated after the palette arrived; re-apply the tint.
+        if (paletteLoaded) tintToolbarContent(colors.primaryTextColor)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    private fun tintToolbarContent(@ColorInt color: Int) {
+        binding.toolbar.setNavigationIconTint(color)
+        binding.toolbar.overflowIcon?.setTint(color)
+        binding.toolbar.menu.forEach { it.icon?.setTint(color) }
     }
 
     fun getImageLoader(): GlideLoader.GlideBuilder {
