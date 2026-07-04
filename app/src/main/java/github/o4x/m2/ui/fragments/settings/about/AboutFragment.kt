@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import github.o4x.m2.R
@@ -15,8 +14,6 @@ import github.o4x.m2.util.backgroundColor
 class AboutFragment : PreferenceFragmentCompat() {
 
     companion object {
-        private const val EMAIL = "apps.musical@gmail.com"
-        private const val TELEGRAM = "https://t.me/app_musical"
         private const val GITHUB = "https://github.com/o4x/Musical"
     }
 
@@ -32,30 +29,6 @@ class AboutFragment : PreferenceFragmentCompat() {
     private fun setUpViews() {
         val appVersion = R.string.key_app_version.getPreference()
         appVersion.summary = getCurrentVersionName(requireContext())
-
-        val changelog = R.string.key_changelog.getPreference()
-        changelog.setOnPreferenceClickListener {
-            findNavController().navigate(R.id.action_about_to_changes)
-            return@setOnPreferenceClickListener true
-        }
-
-        val email = R.string.key_email.getPreference()
-        email.summary = EMAIL
-        email.setOnPreferenceClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("mailto:$EMAIL")
-            intent.putExtra(Intent.EXTRA_EMAIL, EMAIL)
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Musical")
-            startActivity(Intent.createChooser(intent, "E-Mail"))
-            return@setOnPreferenceClickListener true
-        }
-
-        val telegram = R.string.key_telegram.getPreference()
-        telegram.summary = TELEGRAM
-        telegram.setOnPreferenceClickListener {
-            openUrl(TELEGRAM)
-            return@setOnPreferenceClickListener true
-        }
 
         val github = R.string.key_github.getPreference()
         github.setOnPreferenceClickListener {

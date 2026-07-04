@@ -59,7 +59,6 @@ object PreferenceUtil {
     const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
     const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
     const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
-    const val LAST_CHANGELOG_VERSION = "last_changelog_version"
     const val START_DIRECTORY = "start_directory"
     const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
     const val INITIALIZED_BLACKLIST = "initialized_blacklist"
@@ -445,15 +444,6 @@ object PreferenceUtil {
         )
     }
 
-
-    @JvmStatic
-    fun setLastChangeLogVersion(version: Int) {
-        sharedPreferences.edit().putInt(LAST_CHANGELOG_VERSION, version).apply()
-    }
-
-    @JvmStatic
-    val lastChangelogVersion: Int
-        get() = sharedPreferences.getInt(LAST_CHANGELOG_VERSION, -1)
 
     @JvmStatic
     fun rememberShuffle(): Boolean {
