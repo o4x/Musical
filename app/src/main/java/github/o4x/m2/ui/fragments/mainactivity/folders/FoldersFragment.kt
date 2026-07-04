@@ -41,6 +41,7 @@ import github.o4x.m2.ui.fragments.mainactivity.AbsMainActivityFragment
 import github.o4x.m2.ui.fragments.mainactivity.folders.FoldersFragment.ListSongsAsyncTask.OnSongsListedCallback
 import github.o4x.m2.util.FileUtil
 import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
+import github.o4x.m2.util.ViewInsetsUtils.applyMiniPlayerPadding
 import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.m2.util.ViewUtil
 import github.o4x.m2.util.accentColor
@@ -150,6 +151,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     private fun setUpRecyclerView() {
         ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity, binding.recyclerView, accentColor())
         binding.recyclerView.layoutManager = OverScrollLinearLayoutManager(requireContext())
+        binding.recyclerView.applyMiniPlayerPadding()
     }
 
     val observer = object : AdapterDataObserver() {

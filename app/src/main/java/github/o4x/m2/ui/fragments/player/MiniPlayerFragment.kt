@@ -137,7 +137,6 @@ open class MiniPlayerFragment : AbsMusicServiceFragment(R.layout.fragment_mini_p
 
     fun setColor(colors: MediaNotificationProcessor) {
         val fg = colors.primaryTextColor
-        binding.container.setBackgroundColor(colors.backgroundColor)
         setProgressColor(fg)
         binding.miniPlayerImage.setColorFilter(fg)
         binding.miniPlayerPlayPauseButton.setColorFilter(fg, PorterDuff.Mode.SRC_IN)

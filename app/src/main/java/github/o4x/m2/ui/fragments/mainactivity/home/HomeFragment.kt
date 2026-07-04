@@ -77,7 +77,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
 
         mainActivity.setSupportActionBar(binding.toolbar)
         binding.appbar.applySystemBarsPadding(applyTop = true)
-        binding.nestedScrollView.applyAppBarPadding()
+        binding.nestedScrollView.applyAppBarPadding(withMiniPlayer = true)
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 

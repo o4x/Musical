@@ -67,7 +67,7 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.appbar.applySystemBarsPadding(applyTop = true)
-        binding.recyclerView.applyAppBarPadding()
+        binding.recyclerView.applyAppBarPadding(withMiniPlayer = true)
 
         val search = binding.toolbarTitle.mainSearch
         searchView = search.findViewById(R.id.search_view)

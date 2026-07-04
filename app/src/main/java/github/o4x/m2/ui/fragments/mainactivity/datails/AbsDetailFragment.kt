@@ -48,7 +48,7 @@ open class AbsDetailFragment<T, A: RecyclerView.Adapter<*>> : AbsPopupFragment(R
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.appbar.applySystemBarsPadding(applyTop = true)
-        binding.recyclerView.applyAppBarPadding()
+        binding.recyclerView.applyAppBarPadding(withMiniPlayer = true)
 
 
         data = requireArguments().getParcelable(EXTRA)

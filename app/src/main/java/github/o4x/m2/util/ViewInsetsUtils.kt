@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import github.o4x.m2.R
 
 /**
  * A toolbox to handle UI overlapping with transparent system bars (Edge-to-Edge).
@@ -97,19 +98,52 @@ object ViewInsetsUtils {
     }
 
     /**
+     * Applies the mini player bar height plus the navigation bar inset as PADDING to the
+     * bottom of a scrolling view, so its content can scroll clear of the overlaid mini
+     * player. Combine with clipToPadding="false" on the scrolling view.
+     */
+    fun View.applyMiniPlayerPadding() {
+        val initialPaddingBottom = this.paddingBottom
+        val miniPlayerHeight = context.getMiniPlayerHeight()
+
+        ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(bottom = initialPaddingBottom + miniPlayerHeight + insets.bottom)
+            windowInsets
+        }
+    }
+
+    /**
      * Applies the height of the AppBar (ActionBar/Toolbar) as PADDING to the top of the view.
      *
      * @param includeStatusBar If true, adds the status bar inset as well. Use true when your
      * AppBar is transparent/overlaying and shifts down due to edge-to-edge.
+     * @param withMiniPlayer If true, also pads the bottom with the mini player height plus the
+     * navigation bar inset (see [applyMiniPlayerPadding]). Both paddings must be applied from a
+     * single insets listener, since a view can only hold one.
      */
-    fun View.applyAppBarPadding(includeStatusBar: Boolean = true, extra: Int = 0) {
+    fun View.applyAppBarPadding(
+        includeStatusBar: Boolean = true,
+        extra: Int = 0,
+        withMiniPlayer: Boolean = false
+    ) {
         val initialPaddingTop = this.paddingTop
+        val initialPaddingBottom = this.paddingBottom
         val actionBarSize = context.getActionBarSize() + extra
+        val miniPlayerHeight = if (withMiniPlayer) context.getMiniPlayerHeight() else 0
 
-        if (includeStatusBar) {
+        if (includeStatusBar || withMiniPlayer) {
             ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
                 val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-                view.updatePadding(top = initialPaddingTop + actionBarSize + insets.top)
+                view.updatePadding(
+                    top = initialPaddingTop + actionBarSize +
+                            if (includeStatusBar) insets.top else 0,
+                    bottom = if (withMiniPlayer) {
+                        initialPaddingBottom + miniPlayerHeight + insets.bottom
+                    } else {
+                        initialPaddingBottom
+                    }
+                )
                 windowInsets
             }
         } else {
@@ -141,6 +175,13 @@ object ViewInsetsUtils {
             }
         }
     }
+
+    /**
+     * Total height of the mini player bar (progress bar + controls row).
+     */
+    private fun Context.getMiniPlayerHeight(): Int =
+        resources.getDimensionPixelSize(R.dimen.mini_player_height) +
+                resources.getDimensionPixelSize(R.dimen.mini_player_progress_height)
 
     /**
      * Helper function to extract the standard actionBarSize from the current context theme.

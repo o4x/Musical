@@ -56,7 +56,7 @@ class QueueFragment : AbsQueueFragment(R.layout.fragment_queue), MenuProvider {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.appbar.applySystemBarsPadding(applyTop = true)
-        binding.queueRecyclerView.applyAppBarPadding()
+        binding.queueRecyclerView.applyAppBarPadding(withMiniPlayer = true)
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
