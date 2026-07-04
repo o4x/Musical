@@ -4,6 +4,9 @@ import android.provider.MediaStore.Audio.AudioColumns
 import github.o4x.m2.model.Album
 import github.o4x.m2.model.Artist
 import github.o4x.m2.prefs.PreferenceUtil
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.map
 
 class ArtistRepository(
     private val songRepository: SongRepository,
@@ -60,6 +63,21 @@ class ArtistRepository(
 
         return splitIntoAlbumArtists(albumRepository.splitIntoAlbums(songs))
     }
+
+    /**
+     * Streams the artist list in growing snapshots as the underlying songs load.
+     * Conflated so regrouping only happens as fast as the collector keeps up;
+     * the last emission covers all songs.
+     */
+    fun artistsFlow(): Flow<List<Artist>> =
+        songRepository.songsFlow(sortOrder = getSongLoaderSortOrder())
+            .conflate()
+            .map { splitIntoArtists(albumRepository.splitIntoAlbums(it)) }
+
+    fun albumArtistsFlow(): Flow<List<Artist>> =
+        songRepository.songsFlow(sortOrder = getSongLoaderSortOrder())
+            .conflate()
+            .map { splitIntoAlbumArtists(albumRepository.splitIntoAlbums(it)) }
 
     fun artists(query: String): List<Artist> {
         val songs = songRepository.songs(

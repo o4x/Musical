@@ -9,7 +9,6 @@ import github.o4x.m2.network.Result
 import github.o4x.m2.network.Result.*
 import github.o4x.m2.network.service.LastFMService
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class Repository(
     val context: Context,
@@ -60,6 +59,8 @@ class Repository(
     suspend fun fetchGenres(): List<Genre> = genreRepository.genres()
 
     suspend fun allSongs(): List<Song> = songRepository.songs()
+
+    fun allSongsFlow(): Flow<List<Song>> = songRepository.songsFlow()
 
     suspend fun search(realContext: Context, query: String?): MutableList<Any> =
         searchRepository.searchAll(realContext, query)
@@ -115,53 +116,11 @@ class Repository(
     suspend fun historySong(): List<Song> =
         roomRepository.historySongs()
 
-    fun songsFlow(): Flow<Result<List<Song>>> = flow {
-        emit(Loading)
-        val data = songRepository.songs()
-        if (data.isEmpty()) {
-            emit(Error(Exception(Throwable("No items"))))
-        } else {
-            emit(Success(data))
-        }
-    }
+    fun albumsFlow(): Flow<List<Album>> = albumRepository.albumsFlow()
 
-    fun albumsFlow(): Flow<Result<List<Album>>> = flow {
-        emit(Loading)
-        val data = albumRepository.albums()
-        if (data.isEmpty()) {
-            emit(Error(Exception(Throwable("No items"))))
-        } else {
-            emit(Success(data))
-        }
-    }
+    fun artistsFlow(): Flow<List<Artist>> = artistRepository.artistsFlow()
 
-    fun artistsFlow(): Flow<Result<List<Artist>>> = flow {
-        emit(Loading)
-        val data = artistRepository.artists()
-        if (data.isEmpty()) {
-            emit(Error(Exception(Throwable("No items"))))
-        } else {
-            emit(Success(data))
-        }
-    }
+    fun albumArtistsFlow(): Flow<List<Artist>> = artistRepository.albumArtistsFlow()
 
-    fun playlistsFlow(): Flow<Result<List<Playlist>>> = flow {
-        emit(Loading)
-        val data = playlistRepository.playlists()
-        if (data.isEmpty()) {
-            emit(Error(Exception(Throwable("No items"))))
-        } else {
-            emit(Success(data))
-        }
-    }
-
-    fun genresFlow(): Flow<Result<List<Genre>>> = flow {
-        emit(Loading)
-        val data = genreRepository.genres()
-        if (data.isEmpty()) {
-            emit(Error(Exception(Throwable("No items"))))
-        } else {
-            emit(Success(data))
-        }
-    }
+    fun genresFlow(): Flow<List<Genre>> = genreRepository.genresFlow()
 }

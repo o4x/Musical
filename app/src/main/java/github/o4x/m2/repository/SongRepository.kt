@@ -18,11 +18,43 @@ import github.o4x.m2.extensions.getString
 import github.o4x.m2.extensions.getStringOrNull
 import github.o4x.m2.model.Song
 import github.o4x.m2.prefs.PreferenceUtil
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SongRepository(private val context: Context) {
 
     fun songs(): List<Song> {
         return songs(makeSongCursor(null, null))
+    }
+
+    /**
+     * Streams all songs from a single cursor pass in growing snapshots: a small first
+     * chunk so the list can render immediately, then larger increments until complete.
+     * Always emits at least once (an empty list when the library is empty).
+     */
+    fun songsFlow(
+        firstChunkSize: Int = FIRST_CHUNK_SIZE,
+        chunkSize: Int = CHUNK_SIZE,
+        sortOrder: String = PreferenceUtil.songSortOrder
+    ): Flow<List<Song>> = flow {
+        val songs = arrayListOf<Song>()
+        var lastEmittedSize = -1
+        makeSongCursor(null, null, sortOrder)?.use { cursor ->
+            var nextEmitSize = firstChunkSize
+            if (cursor.moveToFirst()) {
+                do {
+                    songs.add(getSongFromCursorImpl(cursor))
+                    if (songs.size == nextEmitSize) {
+                        emit(ArrayList(songs))
+                        lastEmittedSize = songs.size
+                        nextEmitSize = songs.size + chunkSize
+                    }
+                } while (cursor.moveToNext())
+            }
+        }
+        if (songs.size != lastEmittedSize) {
+            emit(ArrayList(songs))
+        }
     }
 
     fun songs(cursor: Cursor?): List<Song> {
@@ -186,5 +218,10 @@ class SongRepository(private val context: Context) {
             Log.e("SongRepository", "Generic Error", ex)
             return null
         }
+    }
+
+    companion object {
+        private const val FIRST_CHUNK_SIZE = 50
+        private const val CHUNK_SIZE = 100
     }
 }

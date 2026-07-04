@@ -5,6 +5,9 @@ import github.o4x.m2.helper.SortOrder
 import github.o4x.m2.model.Album
 import github.o4x.m2.model.Song
 import github.o4x.m2.prefs.PreferenceUtil
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.map
 
 class AlbumRepository(private val songRepository: SongRepository) {
 
@@ -18,6 +21,16 @@ class AlbumRepository(private val songRepository: SongRepository) {
         )
         return splitIntoAlbums(songs)
     }
+
+    /**
+     * Streams the album list in growing snapshots as the underlying songs load.
+     * Conflated so regrouping only happens as fast as the collector keeps up;
+     * the last emission covers all songs.
+     */
+    fun albumsFlow(): Flow<List<Album>> =
+        songRepository.songsFlow(sortOrder = getSongLoaderSortOrder())
+            .conflate()
+            .map { splitIntoAlbums(it) }
 
     fun albums(query: String): List<Album> {
         val songs = songRepository.songs(

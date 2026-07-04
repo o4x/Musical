@@ -81,6 +81,16 @@ class RoomRepository(
         return getSortedSongAndClearUpDatabase(queueDao.getQueueSongsSync().queueToIds())
     }
 
+    /**
+     * Resolves only the saved queue entry at [index] — a single Room row and a
+     * single MediaStore lookup — so playback state can be shown while the full
+     * queue restore is still running. Returns null if the entry is gone.
+     */
+    suspend fun savedQueueSongAt(index: Int): Song? {
+        val entity = queueDao.queueSongAt(index) ?: return null
+        return songRepository.song(entity.id).takeIf { it.id != -1L }
+    }
+
     suspend fun saveQueue(songs: List<Song>) {
         queueDao.clearQueueSongs()
         queueDao.insertAllSongs(songs.toQueuesEntity())

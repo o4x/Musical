@@ -76,13 +76,30 @@ public abstract class AbsAdapter<VH extends MediaEntryViewHolder, I>
     }
 
     public void swapDataSet(List<I> dataSet) {
+        List<I> oldDataSet = this.dataSet;
         this.dataSet = dataSet;
         // End any running animations before notifying to prevent a crash when an
         // add-animation is still in flight as the dataset is replaced.
         if (recyclerView != null && recyclerView.getItemAnimator() != null) {
             recyclerView.getItemAnimator().endAnimations();
         }
-        notifyDataSetChanged();
+        if (isAppendOf(oldDataSet, dataSet)) {
+            // Streamed loads grow the previous snapshot; only bind the new tail
+            // instead of rebinding every visible item.
+            notifyItemRangeInserted(oldDataSet.size(), dataSet.size() - oldDataSet.size());
+        } else {
+            notifyDataSetChanged();
+        }
+    }
+
+    private boolean isAppendOf(@Nullable List<I> oldDataSet, @NonNull List<I> newDataSet) {
+        if (oldDataSet == null || oldDataSet == newDataSet) return false;
+        int oldSize = oldDataSet.size();
+        // Snapshots share element instances, so identity of the first and last
+        // shared items is enough to recognize a pure append.
+        return oldSize > 0 && newDataSet.size() > oldSize
+                && newDataSet.get(0) == oldDataSet.get(0)
+                && newDataSet.get(oldSize - 1) == oldDataSet.get(oldSize - 1);
     }
 
     @Override

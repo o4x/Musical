@@ -16,7 +16,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LibraryViewModel(
     private val repository: Repository
@@ -57,8 +56,10 @@ class LibraryViewModel(
                 launch { recentlyPlayed.postValue(repository.historySong()) }
                 launch { recentlyAdded.postValue(repository.recentSongs()) }
             }
-            // Heavy library queries start only after home content is already visible
-            fetchSongs()
+            // Heavy library queries start only after home content is already visible.
+            // Songs stream in first so the visible list paints immediately; the derived
+            // album/artist/genre queries wait instead of competing for the ContentProvider.
+            fetchSongs().join()
             fetchAlbums()
             fetchArtists()
             fetchGenres()
@@ -68,32 +69,40 @@ class LibraryViewModel(
         }
     }
 
-    private fun fetchSongs() {
-        viewModelScope.launch(IO) {
+    // Streaming loads post many small snapshots; keep one job per loader so a
+    // reload cancels the stream still in flight instead of interleaving with it.
+    private var songsJob: Job? = null
+    private var albumsJob: Job? = null
+    private var artistsJob: Job? = null
+    private var genresJob: Job? = null
+
+    private fun fetchSongs(): Job {
+        songsJob?.cancel()
+        return viewModelScope.launch(IO) {
             _isLoading.postValue(true)
-            val result = repository.allSongs()
-            withContext(kotlinx.coroutines.Dispatchers.Main) {
-                songs.value = result
-                _isLoading.value = false
+            repository.allSongsFlow().collect { chunk ->
+                songs.postValue(chunk)
+                _isLoading.postValue(false)
             }
-        }
+        }.also { songsJob = it }
     }
 
     private fun fetchAlbums() {
-        viewModelScope.launch(IO) {
-            albums.postValue(repository.fetchAlbums())
+        albumsJob?.cancel()
+        albumsJob = viewModelScope.launch(IO) {
+            repository.albumsFlow().collect { albums.postValue(it) }
         }
     }
 
     private fun fetchArtists() {
-        if (PreferenceUtil.albumArtistsOnly) {
-            viewModelScope.launch(IO) {
-                artists.postValue(repository.albumArtists())
+        artistsJob?.cancel()
+        artistsJob = viewModelScope.launch(IO) {
+            val flow = if (PreferenceUtil.albumArtistsOnly) {
+                repository.albumArtistsFlow()
+            } else {
+                repository.artistsFlow()
             }
-        } else {
-            viewModelScope.launch(IO) {
-                artists.postValue(repository.fetchArtists())
-            }
+            flow.collect { artists.postValue(it) }
         }
     }
 
@@ -104,8 +113,9 @@ class LibraryViewModel(
     }
 
     private fun fetchGenres() {
-        viewModelScope.launch(IO) {
-            genres.postValue(repository.fetchGenres())
+        genresJob?.cancel()
+        genresJob = viewModelScope.launch(IO) {
+            repository.genresFlow().collect { genres.postValue(it) }
         }
     }
 
