@@ -169,7 +169,7 @@
             app:fabCustomSize="64dp"
             app:tint="@color/page_background"
             app:backgroundTint="?colorOnBackground"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/volume_container"
             app:layout_constraintEnd_toStartOf="@+id/player_next_button"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/player_prev_button"
@@ -207,6 +207,50 @@
             app:srcCompat="@drawable/ic_shuffle"
             app:tint="?android:attr/textColorPrimary"
             tools:ignore="MissingPrefix" />
+
+        <LinearLayout
+            android:id="@+id/volume_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/volume_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_volume_down"
+                app:tint="?android:attr/textColorPrimary"
+                tools:ignore="ContentDescription" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/volume_seek_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_weight="1"
+                android:maxHeight="3dp"
+                android:progressDrawable="@drawable/color_progress_seek" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/volume_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_volume_up"
+                app:tint="?android:attr/textColorPrimary"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
