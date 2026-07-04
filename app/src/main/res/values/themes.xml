@@ -4,11 +4,20 @@
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+        <!-- primaryColor() (mini-player seekbar in Home/Library, app-shortcut icons) reads this -->
+        <item name="colorPrimaryFixed">@color/md_theme_primary</item>
 
         <!-- Secondary brand color -->
         <item name="colorSecondary">@color/md_theme_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
         <item name="colorAccent">@color/md_theme_secondary</item>
+
+        <!-- Keep control colors off the purple M3 defaults -->
+        <item name="colorControlActivated">@color/md_theme_primary</item>
 
         <!-- Background & Surface Colors (Crucial for AMOLED & Light/Dark switching) -->
         <item name="android:colorBackground">@color/page_background</item>

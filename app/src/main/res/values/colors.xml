@@ -6,10 +6,14 @@
     <color name="onLight">@color/black</color>
 
     <!-- Semantic Brand Colors -->
-    <color name="md_theme_primary">#6750A4</color>
+    <color name="md_theme_primary">#5B5D62</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_secondary">#625B71</color>
+    <color name="md_theme_primaryContainer">#E1E2E7</color>
+    <color name="md_theme_onPrimaryContainer">#191C1E</color>
+    <color name="md_theme_secondary">#5F5F5F</color>
     <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#E3E2E2</color>
+    <color name="md_theme_onSecondaryContainer">#1B1C1C</color>
 
     <!-- Light Theme Backgrounds & Surfaces -->
     <color name="page_background">#FFFFFF</color>
