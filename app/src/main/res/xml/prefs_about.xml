@@ -8,28 +8,9 @@
         app:summary="%s"/>
 
     <Preference
-        app:key="@string/key_changelog"
-        app:title="@string/changelog"
-        app:summary="@string/changelog_summary"/>
-
-    <Preference
-        app:key="@string/key_telegram"
-        app:title="@string/telegram_group"
-        app:summary="@string/telegram_group_summary" />
-
-    <Preference
-        app:key="@string/key_email"
-        app:title="@string/email"
-        app:summary="%s"/>
-
-    <Preference
         app:key="@string/key_github"
         app:title="@string/github"
         app:summary="@string/github_fork" />
-
-    <Preference
-        app:key="@string/key_licenses"
-        app:title="@string/licenses" />
 
     <Preference
         app:title="@string/copyright"

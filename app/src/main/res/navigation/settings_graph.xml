@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings_graph"
     app:startDestination="@id/mainSettings">
 
@@ -26,22 +25,6 @@
     <fragment
         android:id="@+id/about"
         android:name="github.o4x.m2.ui.fragments.settings.about.AboutFragment"
-        android:label="@string/action_about">
-
-        <action
-            android:id="@+id/action_about_to_changes"
-            app:destination="@id/change_log"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/change_log"
-        android:name="github.o4x.m2.ui.fragments.settings.about.ChangeLogFragment"
-        android:label="@string/changelog"
-        tools:layout="@layout/fragment_web_view" />
+        android:label="@string/action_about" />
 
 </navigation>
