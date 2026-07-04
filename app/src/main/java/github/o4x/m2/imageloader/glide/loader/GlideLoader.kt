@@ -8,6 +8,7 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
 import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
@@ -51,6 +52,10 @@ class GlideLoader {
                 else
                     DiskCacheStrategy.NONE
             )
+            // Fade covers in as they arrive. withCrossFade() only animates when the
+            // bitmap comes from disk/network (not the memory cache), so cached covers
+            // still appear instantly without a flash.
+            .transition(BitmapTransitionOptions.withCrossFade())
 //            .priority(Priority.LOW)
 
         fun withListener(listener: AbsPaletteTargetListener?): GlideBuilder {
