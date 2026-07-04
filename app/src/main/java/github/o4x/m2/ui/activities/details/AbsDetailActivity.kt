@@ -140,10 +140,12 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     }
 
     fun onScrollChange(scrollY: Int) {
-        // Scroll poster
+        // Scroll poster. Compute the parallax divisor in floating point so that
+        // wide/landscape windows (where displayHeight * 2 < imageHeight) don't
+        // produce an integer 0 divisor and crash with a divide-by-zero.
+        val parallaxDivisor = displayHeight!! * 2f / imageHeight!!
         binding.image.translationY =
-            max(-scrollY / (displayHeight!! * 2 / imageHeight!!), -imageHeight!!)
-                .toFloat()
+            max(-scrollY / parallaxDivisor, -imageHeight!!.toFloat())
     }
 
     fun setAllColors(colors: MediaNotificationProcessor) {
