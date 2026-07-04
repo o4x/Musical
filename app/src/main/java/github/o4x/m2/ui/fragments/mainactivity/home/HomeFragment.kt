@@ -24,6 +24,7 @@ import github.o4x.m2.model.smartplaylist.HistoryPlaylist
 import github.o4x.m2.model.smartplaylist.LastAddedPlaylist
 import github.o4x.m2.ui.adapter.home.HomeAdapter
 import github.o4x.m2.ui.dialogs.CreatePlaylistDialog
+import github.o4x.m2.ui.dialogs.SleepTimerDialog
 import github.o4x.m2.ui.fragments.mainactivity.AbsQueueFragment
 import github.o4x.m2.ui.viewmodel.HomeHeaderViewModel
 import github.o4x.m2.ui.viewmodel.ScrollPositionViewModel
@@ -95,7 +96,7 @@ class HomeFragment : AbsQueueFragment(R.layout.fragment_home), MenuProvider {
             R.id.nav_queue -> navController.navigate(R.id.action_to_queue)
             R.id.nav_library -> navController.navigate(R.id.action_to_library)
             R.id.nav_folders -> navController.navigate(R.id.action_to_folders)
-            R.id.nav_timer -> navController.navigate(R.id.action_to_timer)
+            R.id.nav_timer -> SleepTimerDialog.create().show(childFragmentManager, "SLEEP_TIMER")
             R.id.nav_settings -> navController.navigate(R.id.settings_activity)
             else -> return false
         }

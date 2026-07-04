@@ -36,12 +36,6 @@
         tools:layout="@layout/fragment_folder" />
 
     <fragment
-        android:id="@+id/timer_fragment"
-        android:name="github.o4x.m2.ui.fragments.mainactivity.timer.TimerFragment"
-        android:label="@string/sleep_timer"
-        tools:layout="@layout/fragment_timer" />
-
-    <fragment
         android:id="@+id/playlist_detail_fragment"
         android:name="github.o4x.m2.ui.fragments.mainactivity.datails.PlaylistDetailFragment"
         android:label="@string/playlists"
@@ -88,15 +82,6 @@
     <action
         android:id="@+id/action_to_folders"
         app:destination="@id/folders_fragment"
-        app:popUpTo="@id/home_fragment"
-        app:enterAnim="@anim/fragment_open_enter"
-        app:exitAnim="@anim/fragment_open_exit"
-        app:popEnterAnim="@anim/fragment_close_enter"
-        app:popExitAnim="@anim/fragment_close_exit"/>
-
-    <action
-        android:id="@+id/action_to_timer"
-        app:destination="@id/timer_fragment"
         app:popUpTo="@id/home_fragment"
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_open_exit"
