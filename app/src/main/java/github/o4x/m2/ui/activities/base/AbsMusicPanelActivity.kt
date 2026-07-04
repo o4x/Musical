@@ -19,7 +19,7 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
     companion object {
         // Matches the alpha of @color/mini_player_background (#B3 = 70%)
-        private const val SCRIM_ALPHA = .7f
+        protected const val SCRIM_ALPHA = .7f
     }
 
     lateinit var miniPlayerFragment: MiniPlayerFragment
