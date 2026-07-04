@@ -7,6 +7,7 @@ import com.afollestad.materialdialogs.list.listItems
 import github.o4x.m2.R
 import github.o4x.m2.model.Playlist
 import github.o4x.m2.model.Song
+import github.o4x.m2.ui.activities.base.AbsBaseActivity
 import github.o4x.m2.ui.activities.base.AbsMusicServiceActivity
 import github.o4x.m2.util.PlaylistsUtil
 import java.util.*
@@ -40,8 +41,11 @@ class AddToPlaylistDialog : AbsBlurDialogFragment() {
                         .show(requireActivity().supportFragmentManager, "ADD_TO_PLAYLIST")
                 } else {
                     materialDialog.dismiss()
-                    PlaylistsUtil
-                        .addToPlaylist(requireActivity(), songs, playlists[i - 1].id, true)
+                    val activity = requireActivity() as AbsBaseActivity
+                    val playlistId = playlists[i - 1].id
+                    activity.runPlaylistWriteAction(listOf(playlistId)) {
+                        PlaylistsUtil.addToPlaylist(activity, songs, playlistId, true)
+                    }
                 }
             }
     }

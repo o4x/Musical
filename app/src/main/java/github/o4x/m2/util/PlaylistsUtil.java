@@ -114,32 +114,32 @@ public class PlaylistsUtil {
         Cursor cursor = null;
         int base = 0;
 
+        // A SecurityException here means the app doesn't own the playlist (Android 11+).
+        // It is intentionally propagated so callers can request write access via
+        // AbsBaseActivity.runPlaylistWriteAction and retry.
         try {
-            try {
-                cursor = resolver.query(uri, projection, null, null, null);
+            cursor = resolver.query(uri, projection, null, null, null);
 
-                if (cursor != null && cursor.moveToFirst()) {
-                    base = cursor.getInt(0) + 1;
-                }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+            if (cursor != null && cursor.moveToFirst()) {
+                base = cursor.getInt(0) + 1;
             }
-
-            int numInserted = 0;
-            for (int offSet = 0; offSet < size; offSet += 1000)
-                numInserted += resolver.bulkInsert(uri, makeInsertItems(songs, offSet, 1000, base));
-
-            // Necessary because somehow the MediaStoreObserver doesn't work for playlists
-            context.getContentResolver().notifyChange(uri, null);
-
-
-            if (showToastOnFinish) {
-                Toast.makeText(context, context.getResources().getString(
-                        R.string.inserted_x_songs_into_playlist_x, numInserted, getNameForPlaylist(context, playlistId)), Toast.LENGTH_SHORT).show();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
-        } catch (SecurityException ignored) {
+        }
+
+        int numInserted = 0;
+        for (int offSet = 0; offSet < size; offSet += 1000)
+            numInserted += resolver.bulkInsert(uri, makeInsertItems(songs, offSet, 1000, base));
+
+        // Necessary because somehow the MediaStoreObserver doesn't work for playlists
+        context.getContentResolver().notifyChange(uri, null);
+
+
+        if (showToastOnFinish) {
+            Toast.makeText(context, context.getResources().getString(
+                    R.string.inserted_x_songs_into_playlist_x, numInserted, getNameForPlaylist(context, playlistId)), Toast.LENGTH_SHORT).show();
         }
     }
 

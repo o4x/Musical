@@ -1,6 +1,8 @@
 package github.o4x.m2.ui.activities.base
 
 import android.Manifest
+import android.app.Activity
+import android.content.ContentUris
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -8,11 +10,15 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,6 +31,13 @@ abstract class AbsBaseActivity : AppCompatActivity() {
     private var hadPermissions: Boolean = false
     private lateinit var permissions: Array<String>
     private var permissionDeniedMessage: String? = null
+
+    // On Android 11+ a MediaStore playlist can only be modified by the app that
+    // owns (created) it; touching a playlist created elsewhere throws a
+    // SecurityException. MediaStore.createWriteRequest lets us ask the user for
+    // write access, then retry the mutation once it's granted.
+    private var playlistWriteRequestLauncher: ActivityResultLauncher<IntentSenderRequest>? = null
+    private var pendingPlaylistAction: (() -> Unit)? = null
 
     open fun getPermissionsToRequest(): Array<String> {
         return when {
@@ -78,12 +91,54 @@ abstract class AbsBaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         volumeControlStream = AudioManager.STREAM_MUSIC
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            playlistWriteRequestLauncher = registerForActivityResult(
+                ActivityResultContracts.StartIntentSenderForResult()
+            ) { result ->
+                val action = pendingPlaylistAction
+                pendingPlaylistAction = null
+                if (result.resultCode == Activity.RESULT_OK) {
+                    // Access was granted for the requested playlist URIs; the
+                    // retry should now succeed.
+                    try {
+                        action?.invoke()
+                    } catch (ignored: SecurityException) {
+                    }
+                }
+            }
+        }
+
         permissions = getPermissionsToRequest()
         hadPermissions = hasCriticalPermissions()
         permissionDeniedMessage = null
 
         if (!hadPermissions) {
             requestPermissions()
+        }
+    }
+
+    /**
+     * Runs a MediaStore playlist mutation. If it fails with a [SecurityException]
+     * because the app doesn't own the playlist (Android 11+), prompts the user
+     * for write access to the given playlists and retries [action] once granted.
+     */
+    fun runPlaylistWriteAction(playlistIds: List<Long>, action: () -> Unit) {
+        try {
+            action()
+        } catch (e: SecurityException) {
+            val launcher = playlistWriteRequestLauncher
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && launcher != null) {
+                val uris = playlistIds.map {
+                    ContentUris.withAppendedId(
+                        MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, it
+                    )
+                }
+                val pendingIntent = MediaStore.createWriteRequest(contentResolver, uris)
+                pendingPlaylistAction = action
+                launcher.launch(
+                    IntentSenderRequest.Builder(pendingIntent.intentSender).build()
+                )
+            }
         }
     }
 
