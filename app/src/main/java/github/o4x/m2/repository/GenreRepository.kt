@@ -13,6 +13,8 @@ import github.o4x.m2.extensions.getStringOrNull
 import github.o4x.m2.model.Genre
 import github.o4x.m2.model.Song
 import github.o4x.m2.prefs.PreferenceUtil
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class GenreRepository(
     private val contentResolver: ContentResolver,
@@ -21,6 +23,37 @@ class GenreRepository(
 
     fun genres(): List<Genre> {
         return getGenresFromCursor(makeGenreCursor())
+    }
+
+    /**
+     * Streams genres in growing snapshots. Building each genre needs its own
+     * MediaStore members query, so emitting every few genres lets the list
+     * render long before the last genre is resolved.
+     * Always emits at least once (an empty list when there are no genres).
+     */
+    fun genresFlow(chunkSize: Int = GENRE_CHUNK_SIZE): Flow<List<Genre>> = flow {
+        val genres = arrayListOf<Genre>()
+        var lastEmittedSize = -1
+        makeGenreCursor()?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val songCountMap = loadGenreSongCounts()
+                do {
+                    val genre = getGenreFromCursorWithCount(cursor, songCountMap)
+                    if (genre.songCount > 0) {
+                        genres.add(genre)
+                        if (genres.size % chunkSize == 0) {
+                            emit(ArrayList(genres))
+                            lastEmittedSize = genres.size
+                        }
+                    } else {
+                        deleteEmptyGenre(genre.id)
+                    }
+                } while (cursor.moveToNext())
+            }
+        }
+        if (genres.size != lastEmittedSize) {
+            emit(ArrayList(genres))
+        }
     }
 
     fun songs(genreId: Long): List<Song> {
@@ -110,15 +143,7 @@ class GenreRepository(
                     if (genre.songCount > 0) {
                         genres.add(genre)
                     } else {
-                        try {
-                            contentResolver.delete(
-                                Genres.EXTERNAL_CONTENT_URI,
-                                Genres._ID + " == " + genre.id,
-                                null
-                            )
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
+                        deleteEmptyGenre(genre.id)
                     }
                 } while (cursor.moveToNext())
             }
@@ -139,6 +164,18 @@ class GenreRepository(
     }
 
 
+    private fun deleteEmptyGenre(genreId: Long) {
+        try {
+            contentResolver.delete(
+                Genres.EXTERNAL_CONTENT_URI,
+                Genres._ID + " == " + genreId,
+                null
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun makeGenreCursor(): Cursor? {
         val projection = arrayOf(Genres._ID, Genres.NAME)
         return contentResolver.query(
@@ -150,5 +187,7 @@ class GenreRepository(
         )
     }
 
-
+    companion object {
+        private const val GENRE_CHUNK_SIZE = 5
+    }
 }

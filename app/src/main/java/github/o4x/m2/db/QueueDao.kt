@@ -26,6 +26,9 @@ interface QueueDao {
     @Query("SELECT * FROM QueueEntity")
     suspend fun getQueueSongsSync(): List<QueueEntity>
 
+    @Query("SELECT * FROM QueueEntity ORDER BY uid LIMIT 1 OFFSET :index")
+    suspend fun queueSongAt(index: Int): QueueEntity?
+
     @Query("DELETE from QueueEntity")
     suspend fun clearQueueSongs()
 

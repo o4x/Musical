@@ -317,8 +317,10 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             }
             MEDIA_STORE_CHANGED -> {
                 serviceScope.launch(Dispatchers.IO) {
-                    val queue = roomRepository.savedPlayingQueue().toMutableList()
-                    val originalQueue = roomRepository.savedOriginalPlayingQueue().toMutableList()
+                    val queueDeferred = async { roomRepository.savedPlayingQueue().toMutableList() }
+                    val originalQueueDeferred = async { roomRepository.savedOriginalPlayingQueue().toMutableList() }
+                    val queue = queueDeferred.await()
+                    val originalQueue = originalQueueDeferred.await()
                     withContext(Dispatchers.Main) {
                         playingQueue = queue
                         originalPlayingQueue = originalQueue
@@ -359,28 +361,70 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     private suspend fun restoreQueuesAndPositionIfNecessary() {
         if (!queuesRestored && playingQueue.isEmpty()) {
-            val restoredQueue = withContext(Dispatchers.IO) {
-                roomRepository.savedPlayingQueue()
-            }.toMutableList()
-            val restoredOriginalQueue = withContext(Dispatchers.IO) {
-                roomRepository.savedOriginalPlayingQueue()
-            }.toMutableList()
             val prefs = PreferenceManager.getDefaultSharedPreferences(this@MusicService)
             val restoredPosition = prefs.getInt(SAVED_POSITION, -1)
             val restoredPositionInTrack = prefs.getInt(SAVED_POSITION_IN_TRACK, -1)
 
-            if (restoredQueue.isNotEmpty() && restoredQueue.size == restoredOriginalQueue.size && restoredPosition != -1) {
-                originalPlayingQueue = restoredOriginalQueue
-                playingQueue = restoredQueue
-                position = restoredPosition
-                openCurrent()
-                prepareNext()
-                if (restoredPositionInTrack > 0) seek(restoredPositionInTrack)
-                notHandledMetaChangedForCurrentTrack = true
-                sendChangeInternal(META_CHANGED)
-                sendChangeInternal(QUEUE_CHANGED)
-            } else {
-                fillEmptyQueueWithShuffledSongs()
+            // Phase 1: resolve only the saved current song (one Room row, one
+            // MediaStore lookup) so the notification, mini player and seek
+            // position appear immediately while the full queue still loads.
+            var earlyQueue: MutableList<Song>? = null
+            if (restoredPosition != -1) {
+                val currentSong = withContext(Dispatchers.IO) {
+                    roomRepository.savedQueueSongAt(restoredPosition)
+                }
+                if (currentSong != null) {
+                    earlyQueue = mutableListOf(currentSong)
+                    playingQueue = earlyQueue
+                    originalPlayingQueue = mutableListOf(currentSong)
+                    position = 0
+                    openCurrent()
+                    if (restoredPositionInTrack > 0) seek(restoredPositionInTrack)
+                    notHandledMetaChangedForCurrentTrack = true
+                    sendChangeInternal(META_CHANGED)
+                }
+            }
+
+            // Phase 2: restore the full queues. Both resolve against MediaStore,
+            // so load them in parallel.
+            val (restoredQueue, restoredOriginalQueue) = withContext(Dispatchers.IO) {
+                val queue = async { roomRepository.savedPlayingQueue().toMutableList() }
+                val originalQueue = async { roomRepository.savedOriginalPlayingQueue().toMutableList() }
+                queue.await() to originalQueue.await()
+            }
+
+            // If the user started their own queue while phase 2 was loading,
+            // keep it instead of clobbering it with the restored one.
+            val queueUntouched =
+                if (earlyQueue != null) playingQueue === earlyQueue else playingQueue.isEmpty()
+
+            if (queueUntouched) {
+                if (restoredQueue.isNotEmpty() && restoredQueue.size == restoredOriginalQueue.size && restoredPosition != -1) {
+                    originalPlayingQueue = restoredOriginalQueue
+                    playingQueue = restoredQueue
+                    // Entries deleted from MediaStore shrink the restored queue,
+                    // so the saved position may point past its end.
+                    position = restoredPosition.coerceIn(0, restoredQueue.lastIndex)
+                    val earlySong = earlyQueue?.firstOrNull()
+                    if (earlySong == null || getSongAt(position).id != earlySong.id) {
+                        // Phase 1 didn't run or landed on a different song (entries
+                        // missing from MediaStore shift the queue) — open the right
+                        // one; otherwise keep the already prepared, possibly playing
+                        // track untouched.
+                        openCurrent()
+                        if (restoredPositionInTrack > 0) seek(restoredPositionInTrack)
+                        notHandledMetaChangedForCurrentTrack = true
+                    }
+                    prepareNext()
+                    sendChangeInternal(META_CHANGED)
+                    sendChangeInternal(QUEUE_CHANGED)
+                } else {
+                    // Saved state unusable; drop any phase 1 stub before refilling.
+                    playingQueue = mutableListOf()
+                    originalPlayingQueue = mutableListOf()
+                    position = -1
+                    fillEmptyQueueWithShuffledSongs()
+                }
             }
         }
         queuesRestored = true
