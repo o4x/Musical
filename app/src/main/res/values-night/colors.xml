@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Semantic Brand Colors (Desaturated for Dark Mode) -->
-    <color name="md_theme_primary">#D0BCFF</color>
-    <color name="md_theme_onPrimary">#381E72</color>
-    <color name="md_theme_secondary">#CCC2DC</color>
-    <color name="md_theme_onSecondary">#332D41</color>
+    <color name="md_theme_primary">#C6C6CA</color>
+    <color name="md_theme_onPrimary">#2E3033</color>
+    <color name="md_theme_primaryContainer">#44474A</color>
+    <color name="md_theme_onPrimaryContainer">#E1E2E7</color>
+    <color name="md_theme_secondary">#C7C6C6</color>
+    <color name="md_theme_onSecondary">#303030</color>
+    <color name="md_theme_secondaryContainer">#464646</color>
+    <color name="md_theme_onSecondaryContainer">#E3E2E2</color>
 
     <!-- AMOLED Dark Theme Backgrounds & Surfaces -->
     <color name="page_background">#000000</color>
