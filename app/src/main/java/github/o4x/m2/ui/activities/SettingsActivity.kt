@@ -7,6 +7,8 @@ import github.o4x.m2.extensions.findNavController
 import github.o4x.m2.R
 import github.o4x.m2.databinding.ActivitySettingsBinding
 import github.o4x.m2.ui.activities.base.AbsBaseActivity
+import github.o4x.m2.util.BlurViewUtils.setupBlur
+import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 
 
 class SettingsActivity : AbsBaseActivity() {
@@ -19,6 +21,8 @@ class SettingsActivity : AbsBaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+        binding.appBarLayout.applySystemBarsPadding(applyTop = true)
+        binding.appbarBlur.setupBlur(window, binding.blurTarget)
         navController = findNavController(R.id.contentFrame)
         setupToolbar()
     }

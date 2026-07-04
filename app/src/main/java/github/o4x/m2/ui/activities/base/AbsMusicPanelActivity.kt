@@ -10,6 +10,7 @@ import github.o4x.m2.R
 import github.o4x.m2.databinding.MusicPanelLayoutBinding
 import github.o4x.m2.ui.activities.PlayerActivity
 import github.o4x.m2.ui.fragments.player.MiniPlayerFragment
+import github.o4x.m2.util.BlurViewUtils.setupBlur
 import github.o4x.m2.util.ColorUtil.withAlpha
 import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.m2.util.color.MediaNotificationProcessor
@@ -17,8 +18,6 @@ import github.o4x.m2.util.color.MediaNotificationProcessor
 abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
     companion object {
-        private const val BLUR_RADIUS = 20f
-
         // Matches the alpha of @color/mini_player_background (#B3 = 70%)
         private const val SCRIM_ALPHA = .7f
     }
@@ -53,9 +52,7 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
     }
 
     private fun setUpPanelBlur() {
-        binding.panelContainer.setupWith(binding.contentContainer)
-            .setFrameClearDrawable(window.decorView.background)
-            .setBlurRadius(BLUR_RADIUS)
+        binding.panelContainer.setupBlur(window, binding.contentContainer)
     }
 
     protected abstract fun createContentView(): View?

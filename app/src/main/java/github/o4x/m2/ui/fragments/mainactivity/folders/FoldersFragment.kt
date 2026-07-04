@@ -39,14 +39,13 @@ import github.o4x.m2.ui.adapter.SongFileAdapter
 import github.o4x.m2.ui.dialogs.CreatePlaylistDialog
 import github.o4x.m2.ui.fragments.mainactivity.AbsMainActivityFragment
 import github.o4x.m2.ui.fragments.mainactivity.folders.FoldersFragment.ListSongsAsyncTask.OnSongsListedCallback
+import github.o4x.m2.util.BlurViewUtils.setupBlur
 import github.o4x.m2.util.FileUtil
 import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
-import github.o4x.m2.util.ViewInsetsUtils.applyMiniPlayerPadding
 import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 import github.o4x.m2.util.ViewUtil
 import github.o4x.m2.util.accentColor
 import github.o4x.m2.util.scanPaths
-import github.o4x.m2.util.surfaceColor
 import github.o4x.m2.util.textColorPrimary
 import github.o4x.m2.util.withAlpha
 import github.o4x.m2.views.BreadCrumbLayout.Crumb
@@ -128,7 +127,8 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
         binding.toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-        binding.container.applySystemBarsPadding(applyTop = true)
+        binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.appbarBlur.setupBlur(requireActivity().window, binding.blurTarget)
 
         setUpAppbarColor()
         setUpBreadCrumbs()
@@ -137,9 +137,7 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     }
 
     private fun setUpAppbarColor() {
-        val primaryColor = surfaceColor()
         val textColor = textColorPrimary()
-        binding.breadCrumbs.setBackgroundColor(primaryColor)
         binding.breadCrumbs.setActivatedContentColor(textColor)
         binding.breadCrumbs.setDeactivatedContentColor(textColor.withAlpha(.75f))
     }
@@ -151,7 +149,12 @@ class FoldersFragment : AbsMainActivityFragment(R.layout.fragment_folder), Selec
     private fun setUpRecyclerView() {
         ViewUtil.setUpFastScrollRecyclerViewColor(serviceActivity, binding.recyclerView, accentColor())
         binding.recyclerView.layoutManager = OverScrollLinearLayoutManager(requireContext())
-        binding.recyclerView.applyMiniPlayerPadding()
+        // The folders app bar (toolbar + breadcrumbs) overlays the list, so pad the list
+        // below it in addition to the mini player at the bottom.
+        binding.recyclerView.applyAppBarPadding(
+            extra = resources.getDimensionPixelSize(R.dimen.tab_height),
+            withMiniPlayer = true
+        )
     }
 
     val observer = object : AdapterDataObserver() {

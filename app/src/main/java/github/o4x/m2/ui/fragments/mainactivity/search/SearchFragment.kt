@@ -23,6 +23,7 @@ import github.o4x.m2.extensions.showToast
 import github.o4x.m2.misc.OverScrollLinearLayoutManager
 import github.o4x.m2.ui.adapter.SearchAdapter
 import github.o4x.m2.ui.fragments.mainactivity.AbsPopupFragment
+import github.o4x.m2.util.BlurViewUtils.setupBlur
 import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
 import github.o4x.m2.util.ViewInsetsUtils.applySystemBarsPadding
 import java.util.*
@@ -67,6 +68,7 @@ class SearchFragment : AbsPopupFragment(R.layout.fragment_search), TextWatcher {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.appbarBlur.setupBlur(requireActivity().window, binding.blurTarget)
         binding.recyclerView.applyAppBarPadding(withMiniPlayer = true)
 
         val search = binding.toolbarTitle.mainSearch

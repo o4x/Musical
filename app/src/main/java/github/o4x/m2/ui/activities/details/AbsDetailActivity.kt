@@ -16,6 +16,7 @@ import github.o4x.m2.model.Song
 import github.o4x.m2.ui.activities.base.AbsMusicPanelActivity
 import github.o4x.m2.ui.adapter.song.DetailsSongAdapter
 import github.o4x.m2.ui.viewmodel.ScrollPositionViewModel
+import github.o4x.m2.util.BlurViewUtils.setupBlur
 import github.o4x.m2.util.ColorUtil.withAlpha
 import github.o4x.m2.util.Util
 import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
@@ -54,6 +55,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
 
         setSupportActionBar(binding.toolbar)
         binding.appbar.applySystemBarsPadding(applyTop = true)
+        binding.appbarBlur.setupBlur(window, binding.blurTarget)
 
         setupImage()
         initObserver()

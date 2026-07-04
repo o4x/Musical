@@ -9,6 +9,7 @@ import android.view.View
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import github.o4x.m2.R
+import github.o4x.m2.util.ViewInsetsUtils.applyAppBarPadding
 import github.o4x.m2.util.backgroundColor
 
 class AboutFragment : PreferenceFragmentCompat() {
@@ -23,6 +24,9 @@ class AboutFragment : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // The blurred app bar overlays the list, so pad the list below it.
+        listView.clipToPadding = false
+        listView.applyAppBarPadding(withNavBarInset = true)
         setUpViews()
     }
 
