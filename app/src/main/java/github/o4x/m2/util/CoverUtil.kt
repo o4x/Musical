@@ -16,17 +16,40 @@ object CoverUtil {
 
         canvas.drawBitmap(src, 0f, 0f, null)
 
+        // Multi-stop gradient eased with smoothstep so the fade ramps in and
+        // out gradually instead of the abrupt edges a plain linear alpha ramp
+        // produces. More stops also eliminates visible banding.
+        val steps = 24
+        val positions = FloatArray(steps + 1)
+        val colors = IntArray(steps + 1)
+        for (i in 0..steps) {
+            val t = i.toFloat() / steps
+            val eased = t * t * (3f - 2f * t)
+            val a = ((1f - eased) * 255f).toInt().coerceIn(0, 255)
+            positions[i] = t
+            colors[i] = Color.argb(a, a, a, a)
+        }
+
         val paint = Paint()
-        val shader = LinearGradient(
+        paint.shader = LinearGradient(
             0f,
             if (fromMiddle) h / 2f else 0f,
             0f,
-            h.toFloat(), Color.WHITE, Color.TRANSPARENT, Shader.TileMode.CLAMP
+            h.toFloat(), colors, positions, Shader.TileMode.CLAMP
         )
-        paint.shader = shader
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.MULTIPLY)
         canvas.drawRect(0f, 0f, w.toFloat(), h.toFloat(), paint)
 
+        return result
+    }
+
+    @JvmStatic
+    fun overlayColor(src: Bitmap, color: Int): Bitmap {
+        val result = src.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(result)
+        val paint = Paint()
+        paint.color = color
+        canvas.drawRect(0f, 0f, result.width.toFloat(), result.height.toFloat(), paint)
         return result
     }
 
