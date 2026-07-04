@@ -48,12 +48,23 @@ class HomeHeaderViewModel : ViewModel(),
 
         GlideLoader.with(App.getContext())
             .withListener(listener)
-            .load(R.drawable.unsplash)
+            .load(
+                if (PreferenceUtil.isDarkMode) R.drawable.unsplash_dark
+                else R.drawable.unsplash_light
+            )
             .into(
                 CustomBitmapTarget(
                     Util.getMaxScreenSize(), Util.getMaxScreenSize()
                 )
             )
+    }
+
+    private fun centerCrop(src: Bitmap, w: Int, h: Int): Bitmap {
+        val scale = maxOf(w.toFloat() / src.width, h.toFloat() / src.height)
+        val scaledW = (src.width * scale).toInt().coerceAtLeast(w)
+        val scaledH = (src.height * scale).toInt().coerceAtLeast(h)
+        val scaled = Bitmap.createScaledBitmap(src, scaledW, scaledH, true)
+        return Bitmap.createBitmap(scaled, (scaledW - w) / 2, (scaledH - h) / 2, w, h)
     }
 
     fun calculateBitmap(image: ImageView, it: Bitmap, w: Int, h: Int) {
@@ -65,19 +76,21 @@ class HomeHeaderViewModel : ViewModel(),
                 image.context,
                 paletteBuilder.generate()
             )
-            var bitmap = Bitmap.createScaledBitmap(it, w, h, true)
-            bitmap = if (PreferenceUtil.isDarkMode ==
-                ColorUtil.isColorDark(colors.backgroundColor)
-            ) {
+            var bitmap = centerCrop(it, w, h)
+            bitmap =
                 CoverUtil.addGradientTo(bitmap)
-            } else {
-                CoverUtil.doubleGradient(
-                    colors.backgroundColor,
-                    colors.mightyColor,
-                    w,
-                    h
-                )
-            }
+//            bitmap = if (PreferenceUtil.isDarkMode ==
+//                ColorUtil.isColorDark(colors.backgroundColor)
+//            ) {
+//                CoverUtil.addGradientTo(bitmap)
+//            } else {
+//                CoverUtil.doubleGradient(
+//                    colors.backgroundColor,
+//                    colors.mightyColor,
+//                    w,
+//                    h
+//                )
+//            }
 
             withContext(Dispatchers.Main) {
                 Glide.with(image.context)
