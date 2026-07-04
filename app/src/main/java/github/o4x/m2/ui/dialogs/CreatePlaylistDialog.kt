@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import github.o4x.m2.R
 import github.o4x.m2.model.Song
+import github.o4x.m2.ui.activities.base.AbsBaseActivity
 import github.o4x.m2.util.PlaylistsUtil
 import java.util.*
 
@@ -29,10 +30,13 @@ class CreatePlaylistDialog : AbsBlurDialogFragment() {
                 if (name.isNotEmpty()) {
                     if (!PlaylistsUtil.doesPlaylistExist(requireActivity(), name)) {
                         val playlistId = PlaylistsUtil.createPlaylist(requireActivity(), name)
-                        if (activity != null) {
+                        val act = activity as? AbsBaseActivity
+                        if (act != null) {
                             val songs: ArrayList<Song>? = requireArguments().getParcelableArrayList(SONGS)
                             if (songs != null && songs.isNotEmpty()) {
-                                PlaylistsUtil.addToPlaylist(requireActivity(), songs, playlistId, true)
+                                act.runPlaylistWriteAction(listOf(playlistId)) {
+                                    PlaylistsUtil.addToPlaylist(act, songs, playlistId, true)
+                                }
                             }
                         }
                     } else {

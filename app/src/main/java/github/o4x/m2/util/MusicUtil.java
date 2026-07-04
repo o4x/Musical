@@ -322,7 +322,13 @@ public class MusicUtil {
         if (isFavorite(context, song)) {
             PlaylistsUtil.removeFromPlaylist(context, song, getFavoritesPlaylist(context).getId());
         } else {
-            PlaylistsUtil.addToPlaylist(context, song, getOrCreateFavoritesPlaylist(context).getId(), false);
+            // The favorites playlist is created and owned by the app, so this
+            // normally succeeds. Swallow the SecurityException (which addToPlaylist
+            // now propagates) to keep this fire-and-forget toggle crash-free.
+            try {
+                PlaylistsUtil.addToPlaylist(context, song, getOrCreateFavoritesPlaylist(context).getId(), false);
+            } catch (SecurityException ignored) {
+            }
         }
     }
 
