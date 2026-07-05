@@ -175,9 +175,14 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
             .isAppearanceLightStatusBars = colors.isLight
         tintToolbarContent(colors.primaryTextColor)
 
-        // Cross-fade the root background and the palette scrim (same BlurView the
-        // mini player uses; it extends behind the status bar) so the palette
-        // reveal reads as a smooth transition instead of an abrupt flash.
+        // The mini player foreground (text/icons) can snap; its scrim is cross-faded
+        // below alongside the rest of the chrome.
+        miniPlayerFragment.setColor(colors)
+
+        // Cross-fade the root background, the top app-bar scrim and the mini player
+        // scrim together (they share the same BlurView-based chrome) so the palette
+        // reveal reads as one smooth transition instead of the mini player snapping
+        // a step ahead of the background animating behind it.
         val rootView = findViewById<View>(android.R.id.content).rootView
         val toColor = colors.backgroundColor
         colorAnimator?.cancel()
@@ -187,6 +192,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
                 val blended = it.animatedValue as Int
                 rootView.setBackgroundColor(blended)
                 binding.appbarBlur.setOverlayColor(withAlpha(blended, SCRIM_ALPHA))
+                setMiniPlayerScrimColor(blended)
             }
             start()
         }
@@ -216,8 +222,8 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         return GlideLoader.with(App.getContext())
             .withListener(object : NotificationPaletteTargetListener(this) {
                 override fun onColorReady(colors: MediaNotificationProcessor) {
+                    // setAllColors also cross-fades the mini player scrim in lockstep.
                     setAllColors(colors)
-                    setMiniPlayerColor(colors)
                 }
             }.apply { loadPlaceholderPalette = true })
     }
