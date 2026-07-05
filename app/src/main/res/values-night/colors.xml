@@ -13,9 +13,9 @@
     <!-- AMOLED Dark Theme Backgrounds & Surfaces -->
     <color name="page_background">#000000</color>
     <!-- Translucent scrim over the blurred content behind the mini player -->
-    <color name="mini_player_background">#B3000000</color>
+    <color name="mini_player_background">#80000000</color>
     <!-- Translucent scrim over the blurred content behind app bars -->
-    <color name="appbar_background">#B3000000</color>
+    <color name="appbar_background">#80000000</color>
     <color name="card_background">#121212</color>
     <color name="primary_text">#E6E1E5</color>
 
