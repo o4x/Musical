@@ -216,6 +216,11 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
 
     override fun onBind(intent: Intent): IBinder = musicBind
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        quit()
+    }
+
     private fun restoreState() {
         restorePlayerState()
         handleAndSendChangeInternal(SHUFFLE_MODE_CHANGED)
