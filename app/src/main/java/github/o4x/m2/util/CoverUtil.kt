@@ -8,7 +8,11 @@ import androidx.core.graphics.drawable.toBitmap
 object CoverUtil {
 
     @JvmStatic
-    fun addGradientTo(src: Bitmap, fromMiddle: Boolean = true): Bitmap {
+    fun addGradientTo(
+        src: Bitmap,
+        fromMiddle: Boolean = true,
+        fadeColor: Int = Color.BLACK
+    ): Bitmap {
         val w: Int = src.width
         val h: Int = src.height
         val result = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
@@ -16,18 +20,24 @@ object CoverUtil {
 
         canvas.drawBitmap(src, 0f, 0f, null)
 
-        // Multi-stop gradient eased with smoothstep so the fade ramps in and
-        // out gradually instead of the abrupt edges a plain linear alpha ramp
-        // produces. More stops also eliminates visible banding.
+        // Fade the bottom of the poster toward fadeColor by painting a
+        // transparent -> fadeColor gradient over it with normal alpha blending.
+        // Eased with smoothstep so the fade ramps in gradually (no hard edge)
+        // and split into many stops to avoid visible banding. Using the fade
+        // color's own RGB (instead of a gray multiply) means light mode fades
+        // to white and dark mode fades to black, with no muddy gray in between.
+        val r = Color.red(fadeColor)
+        val g = Color.green(fadeColor)
+        val b = Color.blue(fadeColor)
         val steps = 24
         val positions = FloatArray(steps + 1)
         val colors = IntArray(steps + 1)
         for (i in 0..steps) {
             val t = i.toFloat() / steps
             val eased = t * t * (3f - 2f * t)
-            val a = ((1f - eased) * 255f).toInt().coerceIn(0, 255)
+            val a = (eased * 255f).toInt().coerceIn(0, 255)
             positions[i] = t
-            colors[i] = Color.argb(a, a, a, a)
+            colors[i] = Color.argb(a, r, g, b)
         }
 
         val paint = Paint()
@@ -37,7 +47,6 @@ object CoverUtil {
             0f,
             h.toFloat(), colors, positions, Shader.TileMode.CLAMP
         )
-        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.MULTIPLY)
         canvas.drawRect(0f, 0f, w.toFloat(), h.toFloat(), paint)
 
         return result
