@@ -78,11 +78,10 @@ class HomeHeaderViewModel : ViewModel(),
                 paletteBuilder.generate()
             )
             var bitmap = centerCrop(it, w, h)
-            if (!PreferenceUtil.isDarkMode) {
-                bitmap = CoverUtil.overlayColor(bitmap, Color.argb(90, 255, 255, 255))
-            }
-            bitmap =
-                CoverUtil.addGradientTo(bitmap)
+            bitmap = CoverUtil.addGradientTo(
+                bitmap,
+                fadeColor = if (PreferenceUtil.isDarkMode) Color.BLACK else Color.WHITE
+            )
 //            bitmap = if (PreferenceUtil.isDarkMode ==
 //                ColorUtil.isColorDark(colors.backgroundColor)
 //            ) {
