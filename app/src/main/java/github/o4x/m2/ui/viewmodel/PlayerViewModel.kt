@@ -1,5 +1,6 @@
 package github.o4x.m2.ui.viewmodel
 
+import android.os.Looper
 import android.widget.SeekBar
 import androidx.lifecycle.*
 import github.o4x.m2.App
@@ -17,6 +18,14 @@ class PlayerViewModel : ViewModel(),
     MusicProgressViewUpdateHelper.Callback,
     SeekBar.OnSeekBarChangeListener, MusicServiceEventListener {
 
+    // Deliver immediately when already on the main thread so a freshly registered
+    // observer receives the value synchronously (no empty-first-frame flash);
+    // fall back to postValue when called off the main thread.
+    private fun <T> MutableLiveData<T>.publish(value: T) {
+        if (Looper.myLooper() == Looper.getMainLooper()) this.value = value
+        else this.postValue(value)
+    }
+
       ///////////////////
      // PROGRESS PART //
     ///////////////////
@@ -25,13 +34,13 @@ class PlayerViewModel : ViewModel(),
     private val _total = MutableLiveData<Int>()
 
     private fun updateTimes() {
-        _progress.postValue(MusicPlayerRemote.position)
-        _total.postValue(MusicPlayerRemote.songDurationMillis)
+        _progress.publish(MusicPlayerRemote.position)
+        _total.publish(MusicPlayerRemote.songDurationMillis)
     }
 
     override fun onUpdateProgressViews(progress: Int, total: Int) {
-        _progress.postValue(progress)
-        _total.postValue(total)
+        _progress.publish(progress)
+        _total.publish(total)
     }
 
     fun pause() {
@@ -70,19 +79,19 @@ class PlayerViewModel : ViewModel(),
     private val _isPlaying = MutableLiveData<Boolean>()
     val isPlaying: LiveData<Boolean> = _isPlaying
     private fun updateIsPlaying() {
-        _isPlaying.postValue(MusicPlayerRemote.isPlaying)
+        _isPlaying.publish(MusicPlayerRemote.isPlaying)
     }
 
     private val _repeatMode = MutableLiveData<Int>()
     val repeatMode: LiveData<Int> = _repeatMode
     private fun updateRepeatMode() {
-        _repeatMode.postValue(MusicPlayerRemote.repeatMode)
+        _repeatMode.publish(MusicPlayerRemote.repeatMode)
     }
 
     private val _shuffleMode = MutableLiveData<Int>()
     val shuffleMode: LiveData<Int> = _shuffleMode
     private fun updateShuffleMode() {
-        _shuffleMode.postValue(MusicPlayerRemote.shuffleMode)
+        _shuffleMode.publish(MusicPlayerRemote.shuffleMode)
     }
 
       ///////////
@@ -92,7 +101,7 @@ class PlayerViewModel : ViewModel(),
     private val _queue = MutableLiveData<List<Song>>()
     val queue: LiveData<List<Song>> = _queue
     private fun updateQueue() {
-        _queue.postValue(MusicPlayerRemote.playingQueue)
+        _queue.publish(MusicPlayerRemote.playingQueue)
     }
 
     private val _position = MutableLiveData<Int>()
@@ -100,7 +109,7 @@ class PlayerViewModel : ViewModel(),
     private fun updatePosition() {
         MusicPlayerRemote.position.let {
             if (it >= 0) {
-                _position.postValue(it)
+                _position.publish(it)
             }
         }
     }
@@ -114,7 +123,7 @@ class PlayerViewModel : ViewModel(),
     }
     val currentSong: LiveData<Song> = _currentSong
     private fun updateCurrentSong() {
-        _currentSong.postValue(MusicPlayerRemote.currentSong)
+        _currentSong.publish(MusicPlayerRemote.currentSong)
     }
 
       //////////
