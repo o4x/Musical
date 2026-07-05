@@ -133,8 +133,16 @@ open class PlayerPlaybackControlsFragments :
 
         binding.playerRepeatButton.setOnClickListener { MusicPlayerRemote.cycleRepeatMode() }
         binding.playerShuffleButton.setOnClickListener { MusicPlayerRemote.toggleShuffleMode() }
-        binding.playerPrevButton.setOnClickListener { MusicPlayerRemote.back() }
-        binding.playerNextButton.setOnClickListener { MusicPlayerRemote.playNextSong() }
+        // Route through the pager so the cover animation plays first and the
+        // track switch happens on settle (see PlayerFragment.nextPage/previousPage),
+        // avoiding the mid-animation re-prepare stall. Fall back to a direct call
+        // if this isn't hosted inside PlayerFragment (e.g. reused elsewhere).
+        binding.playerPrevButton.setOnClickListener {
+            (parentFragment as? PlayerFragment)?.previousPage() ?: MusicPlayerRemote.back()
+        }
+        binding.playerNextButton.setOnClickListener {
+            (parentFragment as? PlayerFragment)?.nextPage() ?: MusicPlayerRemote.playNextSong()
+        }
     }
 
     private fun setupFavourite() {

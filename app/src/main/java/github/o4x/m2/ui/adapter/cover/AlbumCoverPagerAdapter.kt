@@ -12,7 +12,6 @@ import github.o4x.m2.imageloader.glide.targets.CustomBitmapTarget
 import github.o4x.m2.imageloader.glide.targets.palette.AbsPaletteTargetListener
 import github.o4x.m2.imageloader.glide.transformation.blur.BlurTransformation
 import github.o4x.m2.model.Song
-import github.o4x.m2.util.Util
 
 class AlbumCoverPagerAdapter(fm: FragmentManager, dataSet: List<Song>) :
     BaseCoverPagerAdapter(fm, dataSet) {
@@ -48,12 +47,19 @@ class AlbumCoverPagerAdapter(fm: FragmentManager, dataSet: List<Song>) :
                     }
                 })
                 .load(song)
-                // We leave this at full screen size so the Front Pager can reuse this cached Bitmap instantly
-                .into(CustomBitmapTarget(Util.getScreenWidth(), Util.getScreenHeight()))
+                // The only consumer of this bitmap is the blur below, which shrinks it
+                // to 300x300 anyway, so decode it small. Decoding at full screen size
+                // here allocated a ~10MB bitmap per page whose detail was immediately
+                // thrown away — and that decode landed while ViewPager prefetched the
+                // next page mid-skip, causing the swipe animation to stutter.
+                .into(CustomBitmapTarget(BLUR_SOURCE_SIZE, BLUR_SOURCE_SIZE))
         }
 
         companion object {
             private const val SONG_ARG = "song"
+            // Source size for the blurred background. The blur pass downscales to
+            // 300x300, so anything at or above that is plenty of detail.
+            private const val BLUR_SOURCE_SIZE = 400
             fun newInstance(song: Song?): AlbumCoverFragment {
                 val frag = AlbumCoverFragment()
                 val args = Bundle()

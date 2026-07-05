@@ -225,13 +225,56 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
         }
     }
 
+    // The page the user swiped to, applied once the pager stops moving.
+    private var pendingPosition = -1
+
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
     override fun onPageSelected(position: Int) {
-        if (position != MusicPlayerRemote.position) {
-            MusicPlayerRemote.position = position
+        // Don't switch tracks here: onPageSelected fires mid-settle, and
+        // MusicPlayerRemote.position re-prepares ExoPlayer and rebuilds the
+        // notification synchronously on the main thread — doing that while the
+        // pager is still animating drops frames. Record it and apply it on idle.
+        pendingPosition = position
+    }
+    override fun onPageScrollStateChanged(state: Int) {
+        if (state == ViewPager.SCROLL_STATE_IDLE) {
+            val target = pendingPosition
+            pendingPosition = -1
+            if (target >= 0 && target != MusicPlayerRemote.position) {
+                MusicPlayerRemote.position = target
+            }
         }
     }
-    override fun onPageScrollStateChanged(state: Int) {}
+
+    // The Next/Prev buttons animate the pager instead of switching the track
+    // directly. The actual (main-thread-heavy) song change then happens once the
+    // pager settles, via onPageScrollStateChanged — the same path a finger swipe
+    // takes — so the animation runs without the re-prepare stalling its frames.
+    fun nextPage() {
+        val pager = _binding?.frontAlbumArtPager ?: return
+        val count = pager.adapter?.count ?: return
+        if (pager.currentItem < count - 1) {
+            pager.setCurrentItem(pager.currentItem + 1, true)
+        } else {
+            // End of the queue: let the service apply repeat/stop semantics.
+            MusicPlayerRemote.playNextSong()
+        }
+    }
+
+    fun previousPage() {
+        // Preserve "restart the current track when we're past the intro".
+        if (MusicPlayerRemote.songProgressMillis > 5000) {
+            MusicPlayerRemote.seekTo(0)
+            return
+        }
+        val pager = _binding?.frontAlbumArtPager ?: return
+        if (pager.currentItem > 0) {
+            pager.setCurrentItem(pager.currentItem - 1, true)
+        } else {
+            // Start of the queue: let the service apply repeat/wrap semantics.
+            MusicPlayerRemote.back()
+        }
+    }
 
     class FadePageTransformer : ViewPager.PageTransformer {
         override fun transformPage(view: View, position: Float) {
@@ -246,6 +289,19 @@ class PlayerFragment : AbsMusicServiceFragment(R.layout.fragment_player),
                 view.translationX = view.width * -position
                 view.alpha = 1.0f - abs(position)
             }
+            // Applying alpha < 1 to this full-screen page (a FrameLayout with a
+            // background + ImageView, so hasOverlappingRendering() is true) makes the
+            // renderer allocate and composite a full-screen off-screen buffer every
+            // frame, which drops frames while two pages cross-fade during a scroll.
+            // Promoting the page to a hardware layer for the duration of the fade
+            // rasterizes it to a GPU texture once, so the per-frame alpha is cheap.
+            // setLayerType() early-returns when the type is unchanged, so calling it
+            // every frame is fine.
+            val fading = view.alpha > 0f && view.alpha < 1f
+            view.setLayerType(
+                if (fading) View.LAYER_TYPE_HARDWARE else View.LAYER_TYPE_NONE,
+                null
+            )
         }
     }
 
