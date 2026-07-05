@@ -73,6 +73,8 @@ public class PlayingQueueAdapter extends SongAdapter implements DraggableItemAda
                 holder.icon.setVisibility(View.VISIBLE);
                 holder.icon.setImageResource(MusicPlayerRemote.isPlaying() ?
                         R.drawable.ic_pause : R.drawable.ic_play_arrow);
+                holder.icon.setColorFilter(ColorExtKt.textColorPrimary(activity),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
                 if (holder.imageText != null) {
                     holder.imageText.setVisibility(View.GONE);
                 }
