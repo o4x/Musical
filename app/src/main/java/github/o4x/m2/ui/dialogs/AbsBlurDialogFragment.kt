@@ -63,7 +63,7 @@ abstract class AbsBlurDialogFragment : DialogFragment() {
     companion object {
         private const val BLUR_RADIUS_DP = 20f
 
-        /** Same 70% scrim alpha as the blurred mini player / app bar backgrounds. */
-        private const val FROSTED_PANEL_ALPHA = 0xB3
+        /** Same 50% scrim alpha as the blurred mini player / app bar backgrounds. */
+        private const val FROSTED_PANEL_ALPHA = 0x80
     }
 }

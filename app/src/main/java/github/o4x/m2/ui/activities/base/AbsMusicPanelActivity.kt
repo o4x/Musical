@@ -18,8 +18,8 @@ import github.o4x.m2.util.color.MediaNotificationProcessor
 abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
 
     companion object {
-        // Matches the alpha of @color/mini_player_background (#B3 = 70%)
-        protected const val SCRIM_ALPHA = .7f
+        // Matches the alpha of @color/mini_player_background (#80 = 50%)
+        protected const val SCRIM_ALPHA = .5f
     }
 
     lateinit var miniPlayerFragment: MiniPlayerFragment
