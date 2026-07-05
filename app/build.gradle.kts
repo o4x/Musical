@@ -38,8 +38,8 @@ configure<ApplicationExtension> {
         applicationId = "github.o4x.m2"
         minSdk = 28
         targetSdk = 36
-        versionCode = 12
-        versionName = "0.1.0 Beta"
+        versionCode = 13
+        versionName = "0.1.1 Beta"
 
         vectorDrawables {
             useSupportLibrary = true
