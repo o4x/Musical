@@ -1,7 +1,10 @@
 package github.o4x.m2.ui.activities.details
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +41,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     companion object {
         const val EXTRA_ID = "extra_id"
         const val TAG_EDITOR_REQUEST = 2001
+        private const val COLOR_FADE_DURATION = 300L
     }
 
     val scrollPositionViewModel by viewModel<ScrollPositionViewModel>()
@@ -52,6 +56,7 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     var gradientHeight: Int? = null
     lateinit var colors: MediaNotificationProcessor
     private var paletteLoaded = false
+    private var colorAnimator: ValueAnimator? = null
 
     var songAdapter: DetailsSongAdapter? = null
 
@@ -75,6 +80,12 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
         binding = ActivityDetailBinding.bind(detailLayoutView)
 
         return contentView
+    }
+
+    override fun onDestroy() {
+        colorAnimator?.cancel()
+        colorAnimator = null
+        super.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -149,21 +160,43 @@ abstract class AbsDetailActivity<T> : AbsMusicPanelActivity() {
     }
 
     fun setAllColors(colors: MediaNotificationProcessor) {
+        // Start the fade from wherever we currently are: the theme background on
+        // the first load, or the previous palette color when the art changes.
+        val fromColor =
+            if (paletteLoaded) this.colors.backgroundColor
+            else resolveThemeColor(android.R.attr.colorBackground)
+
         this.colors = colors
         this.paletteLoaded = true
         songAdapter?.colors = colors
 
-
         ViewUtil.setScrollBarColor(binding.songRecycler, colors.secondaryTextColor.withAlpha(.3f))
-
-        findViewById<View>(android.R.id.content).rootView.setBackgroundColor(colors.backgroundColor)
-
-        // Same treatment as the mini player panel: the palette scrim goes on the
-        // BlurView, which extends behind the status bar.
-        binding.appbarBlur.setOverlayColor(withAlpha(colors.backgroundColor, SCRIM_ALPHA))
         WindowInsetsControllerCompat(window, window.decorView)
             .isAppearanceLightStatusBars = colors.isLight
         tintToolbarContent(colors.primaryTextColor)
+
+        // Cross-fade the root background and the palette scrim (same BlurView the
+        // mini player uses; it extends behind the status bar) so the palette
+        // reveal reads as a smooth transition instead of an abrupt flash.
+        val rootView = findViewById<View>(android.R.id.content).rootView
+        val toColor = colors.backgroundColor
+        colorAnimator?.cancel()
+        colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply {
+            duration = COLOR_FADE_DURATION
+            addUpdateListener {
+                val blended = it.animatedValue as Int
+                rootView.setBackgroundColor(blended)
+                binding.appbarBlur.setOverlayColor(withAlpha(blended, SCRIM_ALPHA))
+            }
+            start()
+        }
+    }
+
+    @ColorInt
+    private fun resolveThemeColor(attr: Int): Int {
+        val typedValue = TypedValue()
+        theme.resolveAttribute(attr, typedValue, true)
+        return typedValue.data
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

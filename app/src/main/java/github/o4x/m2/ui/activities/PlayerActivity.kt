@@ -18,9 +18,12 @@ class PlayerActivity : AbsMusicServiceActivity() {
         setContentView(R.layout.activity_player)
 
         playerFragment = PlayerFragment()
+        // Don't force the transaction to run synchronously here — the framework
+        // executes it before onStart, so the fragment is ready in time. Forcing it
+        // adds an extra synchronous inflate/layout pass just as the open animation
+        // starts, which shows up as jank.
         supportFragmentManager.beginTransaction()
             .replace(R.id.player_fragment_container, playerFragment).commit()
-        supportFragmentManager.executePendingTransactions()
     }
 
     override fun onStart() {
