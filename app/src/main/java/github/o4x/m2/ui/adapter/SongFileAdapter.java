@@ -17,6 +17,7 @@ import github.o4x.m2.imageloader.glide.loader.GlideLoader;
 import github.o4x.m2.imageloader.model.AudioFileCover;
 import github.o4x.m2.ui.adapter.base.AbsMultiSelectAdapter;
 import github.o4x.m2.ui.adapter.base.MediaEntryViewHolder;
+import github.o4x.m2.util.ColorExtKt;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.io.File;
@@ -95,13 +96,13 @@ public class SongFileAdapter extends AbsMultiSelectAdapter<SongFileAdapter.ViewH
 
     @SuppressWarnings("ConstantConditions")
     protected void loadFileImage(File file, final ViewHolder holder) {
-//        final int iconColor = ATHUtil.INSTANCE.resolveColor(activity, R.attr.iconColor);
         if (file.isDirectory()) {
-//            holder.image.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
+            holder.image.setColorFilter(ColorExtKt.colorControlNormal(activity), PorterDuff.Mode.SRC_IN);
             holder.image.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
             holder.image.setScaleType(ImageView.ScaleType.CENTER);
             holder.image.setImageResource(R.drawable.ic_keyboard_arrow_right);
         } else {
+            holder.image.clearColorFilter();
             GlideLoader.with(activity)
                     .load(new AudioFileCover(file.getName(), file.getPath(), file.lastModified()))
                     .into(holder.image);
