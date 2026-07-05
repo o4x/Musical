@@ -362,8 +362,8 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
             val restoredPositionInTrack = prefs.getInt(SAVED_POSITION_IN_TRACK, -1)
 
             // Phase 1: resolve only the saved current song (one Room row, one
-            // MediaStore lookup) so the notification, mini player and seek
-            // position appear immediately while the full queue still loads.
+            // MediaStore lookup) so the notification, mini player, queue strip
+            // and seek position appear immediately while the full queue loads.
             var earlyQueue: MutableList<Song>? = null
             if (restoredPosition != -1) {
                 val currentSong = withContext(Dispatchers.IO) {
@@ -378,6 +378,9 @@ class MusicService : Service(), SharedPreferences.OnSharedPreferenceChangeListen
                     if (restoredPositionInTrack > 0) seek(restoredPositionInTrack)
                     notHandledMetaChangedForCurrentTrack = true
                     sendChangeInternal(META_CHANGED)
+                    // Broadcast-only (no saveState): show the current song in the
+                    // queue strip now instead of waiting for the phase 2 restore.
+                    sendChangeInternal(QUEUE_CHANGED)
                 }
             }
 
