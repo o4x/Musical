@@ -181,6 +181,7 @@
     <string name="app_shortcut_top_tracks_short">Top tracks</string>
     <string name="app_shortcut_last_added_short">Last added</string>
     <string name="playlist_is_empty">Playlist is empty</string>
+    <string name="queue_is_empty">Queue is empty</string>
     <string name="playing_notification_description">The playing notification provides actions for play/pause etc.</string>
     <string name="playing_notification_name">Playing notification</string>
     <string name="restoring_purchase">Restoring purchase…</string>

@@ -149,7 +149,6 @@ dependencies {
     implementation(libs.okhttp3.integration)
 
     implementation(libs.org.eclipse.egit.github.core)
-    implementation(libs.bouncescrollview)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)

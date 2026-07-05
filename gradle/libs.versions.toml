@@ -5,7 +5,6 @@ androidGradlePlugin = "9.2.1"
 annotation = "1.9.1"
 appcompat = "1.7.1"
 blurview = "version-3.2.0"
-bouncescrollview = "1.5-androidx"
 cardview = "1.0.0"
 constraintlayout = "2.2.1"
 coreKtx = "1.17.0"
@@ -73,7 +72,6 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomVersion" }
 bottomsheets = { module = "com.afollestad.material-dialogs:bottomsheets", version.ref = "materialDialogVersion" }
 blurview = { module = "com.github.Dimezis:BlurView", version.ref = "blurview" }
-bouncescrollview = { module = "com.github.woxingxiao:BounceScrollView", version.ref = "bouncescrollview" }
 color = { module = "com.afollestad.material-dialogs:color", version.ref = "materialDialogVersion" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core = { module = "com.afollestad.material-dialogs:core", version.ref = "materialDialogVersion" }

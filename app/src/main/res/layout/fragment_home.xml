@@ -12,194 +12,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/poster"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="match_parent">
 
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/poster"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </FrameLayout>
 
-        <com.xw.repo.widget.BounceScrollView
-            android:id="@+id/nested_scroll_view"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbars="none">
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:scrollbars="none" />
+
+            <TextView
+                android:id="@android:id/empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:animateLayoutChanges="true">
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/empty"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="@dimen/empty_text_size" />
 
-                <View
-                    android:id="@+id/header"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true" />
-
-                <LinearLayout
-                    android:id="@+id/queue_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <FrameLayout
-                        android:id="@+id/queue_parent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <TextView
-                            android:id="@+id/queue_playing_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start|center_vertical"
-                            android:layout_margin="16dp"
-                            android:fontFamily="sans-serif-medium"
-                            android:singleLine="true"
-                            android:text="@string/playing_queue"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="?android:textColorTertiary" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/queue_shuffle_button"
-                            style="@style/Widget.AppCompat.Button.Borderless"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center_vertical"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="@string/shuffle"
-                            android:textAllCaps="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:textColor="?android:textColorTertiary"
-                            app:icon="@drawable/ic_shuffle"
-                            app:iconSize="18dp"
-                            app:iconTint="?android:textColorTertiary" />
-
-                    </FrameLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/queue_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false"
-                        android:overScrollMode="always"
-                        android:paddingVertical="4dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/recently_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <RelativeLayout
-                        android:id="@+id/recently_parent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_margin="16dp"
-                            android:fontFamily="sans-serif-medium"
-                            android:singleLine="true"
-                            android:text="@string/recently_played"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="?android:textColorTertiary" />
-
-                    </RelativeLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recently_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false"
-                        android:overScrollMode="never"
-                        android:paddingVertical="4dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/newly_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <RelativeLayout
-                        android:id="@+id/newly_parent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_margin="16dp"
-                            android:fontFamily="sans-serif-medium"
-                            android:singleLine="true"
-                            android:text="@string/recently_added"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="?android:textColorTertiary" />
-
-                    </RelativeLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/new_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false"
-                        android:overScrollMode="never"
-                        android:paddingVertical="4dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </com.xw.repo.widget.BounceScrollView>
-
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/empty"
-            android:textColor="?android:textColorSecondary"
-            android:textSize="@dimen/empty_text_size" />
-
-    </FrameLayout>
+        </FrameLayout>
 
     </eightbitlab.com.blurview.BlurTarget>
 
