@@ -37,7 +37,9 @@ abstract class AbsQueueFragment(@LayoutRes layout: Int) : AbsMainActivityFragmen
         playerViewModel.isPlaying.observe(viewLifecycleOwner) {
             val currentPosition = playerViewModel.position.value ?: -1
             if (currentPosition != -1) {
-                queueAdapter.notifyItemChanged(currentPosition)
+                // The payload lets adapters refresh the play/pause styling in
+                // place instead of fully rebinding (and flashing) the item.
+                queueAdapter.notifyItemChanged(currentPosition, Unit)
             } else {
                 queueAdapter.notifyDataSetChanged()
             }
