@@ -87,8 +87,17 @@ abstract class AbsMusicPanelActivity : AbsMusicServiceActivity() {
     fun setMiniPlayerColor(colors: MediaNotificationProcessor) {
         // The scrim is drawn by the BlurView over the whole panel (including the
         // navigation bar inset), so the palette color goes there, not on the fragment.
-        binding.panelContainer.setOverlayColor(withAlpha(colors.backgroundColor, SCRIM_ALPHA))
+        setMiniPlayerScrimColor(colors.backgroundColor)
         miniPlayerFragment.setColor(colors)
+    }
+
+    /**
+     * Sets only the panel scrim (not the foreground text/icons), so callers that
+     * cross-fade the palette can drive it in lockstep with the rest of the chrome
+     * instead of snapping it a frame out of step with the animating background.
+     */
+    fun setMiniPlayerScrimColor(@ColorInt backgroundColor: Int) {
+        binding.panelContainer.setOverlayColor(withAlpha(backgroundColor, SCRIM_ALPHA))
     }
 
     fun setMiniPlayerProgressColor(@ColorInt color: Int) {
