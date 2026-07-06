@@ -5,6 +5,10 @@
 
 A clean, local music player for Android with a focus on a smooth playback experience and a polished Material 3 UI.
 
+## Installation
+
+M2 is not yet available on any app store. For now, install it by downloading the latest APK from [GitHub Releases](https://github.com/o4x/M2/releases) or by building from source.
+
 ## Screenshots
 | <img src="screenshots/1.jpg" width="250"/> | <img src="screenshots/2.jpg" width="250"/> | <img src="screenshots/3.jpg" width="250"/> |
 |:---:|:---:|:---:|
