@@ -1,20 +1,19 @@
-# Musical ​​🎶​
+# M2
 
-[![Generic badge](https://img.shields.io/badge/Platform-Android-green.svg)](https://github.com/h4h13/RetroMusicPlayer)
-[![Generic badge](https://img.shields.io/badge/minSdkVersion-21-green.svg)](https://github.com/h4h13/RetroMusicPlayer)
+[![Generic badge](https://img.shields.io/badge/Platform-Android-green.svg)](https://github.com/o4x/M2)
+[![Generic badge](https://img.shields.io/badge/minSdkVersion-28-green.svg)](https://github.com/o4x/M2)
 
-Play your music with musical and use its personalization and attractive features
-
+A clean, local music player for Android with a focus on a smooth playback experience and a polished Material 3 UI.
 
 ## Screenshots
-| <img src="screenshots/github.o4x.m2-1.jpg" width="250"/> | <img src="screenshots/github.o4x.m2-2.jpg" width="250"/> | <img src="screenshots/github.o4x.m2-3.jpg" width="250"/> |
+| <img src="screenshots/1.jpg" width="250"/> | <img src="screenshots/2.jpg" width="250"/> | <img src="screenshots/3.jpg" width="250"/> |
 |:---:|:---:|:---:|
 | Home | Player | Album |
 
 ## Building from source
 
 Requirements:
-- Android Studio (latest stable) or plain Gradle
+- Android Studio (latest stable)
 - JDK 21
 - Android SDK with API 36
 
@@ -28,4 +27,3 @@ To enable it, create your own [Firebase project](https://console.firebase.google
 register two Android apps with the package names `github.o4x.m2` and `github.o4x.m2.debug`
 (the debug build adds a `.debug` suffix), then download the generated
 `google-services.json` into the `app/` directory.
-
